@@ -4226,7 +4226,6 @@ function openProdModal(id) {
     .slice(0, 8);
 
   // URLs
-  const imgHD   = 'https://camaras-de-seguridad-dahua.sstt.cl/img/' + p.codigo + '.webp';
   const pdfUrl  = 'https://camaras-de-seguridad-dahua.sstt.cl/fichatecnica/' + p.codigo + '.pdf';
   const dahuaES = 'https://www.dahuasecurity.com/es/search?keyword=' + encodeURIComponent(p.codigo);
   const dahuaEN = 'https://www.dahuasecurity.com/search?keyword='    + encodeURIComponent(p.codigo);
@@ -4385,7 +4384,6 @@ function openProdModal(id) {
           <img class="pm-img-main" id="pmImgMain" src="${p.img}"
                onerror="this.style.opacity='.15'"
                alt="${p.codigo}" style="margin-top:32px">
-          <a class="pm-img-hd-link" href="${imgHD}" target="_blank">↗ Ver imagen en alta resolución</a>
         </div>
 
         <!-- Info derecha -->
