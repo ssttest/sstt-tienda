@@ -28,6 +28,7 @@
   --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.04);
   --shadow-md:0 4px 16px rgba(0,0,0,.10),0 1px 4px rgba(0,0,0,.06);
 }
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{font-family:'IBM Plex Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
@@ -569,6 +570,147 @@ footer{background:var(--white);border-top:2px solid var(--blue);margin-top:32px}
 .cot-tab:hover{color:var(--blue)}.cot-tab.active{color:var(--blue);border-bottom-color:var(--blue);font-weight:600}
 .btn-cot{padding:7px 10px;background:var(--bg);border:1.5px solid var(--border);border-radius:var(--r-sm);cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);font-family:'IBM Plex Sans',sans-serif;transition:all .15s;display:flex;align-items:center;gap:4px;white-space:nowrap}
 .btn-cot:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-p)}
+
+
+/* ════════════════════════════════════════════════════════
+   FICHA TÉCNICA — DAHUA STYLE 2025
+   ════════════════════════════════════════════════════════ */
+
+/* Overlay */
+#prodModal{position:fixed;inset:0;z-index:9000;display:none;background:rgba(0,10,25,.72);backdrop-filter:blur(6px);overflow-y:auto}
+#prodModal.open{display:block}
+.pm-wrap{max-width:1080px;margin:0 auto;background:#fff;min-height:100vh;position:relative;box-shadow:0 0 60px rgba(0,0,0,.25)}
+
+/* Top bar */
+.pm-topbar{display:flex;align-items:center;justify-content:space-between;padding:11px 24px;background:var(--navy);color:#fff}
+.pm-breadcrumb{font-size:11px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:5px}
+.pm-breadcrumb a{color:rgba(255,255,255,.85);cursor:pointer;text-decoration:none}
+.pm-breadcrumb a:hover{color:#fff}
+.pm-breadcrumb-sep{opacity:.4}
+.pm-x{background:rgba(255,255,255,.12);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
+.pm-x:hover{background:var(--red)}
+
+/* Hero grid */
+.pm-hero{display:grid;grid-template-columns:420px 1fr}
+@media(max-width:760px){.pm-hero{grid-template-columns:1fr}}
+
+/* Image panel */
+.pm-img-panel{background:var(--bg);padding:32px 24px;display:flex;flex-direction:column;align-items:center;border-right:1px solid var(--border);min-height:360px;position:relative}
+.pm-img-main{width:100%;max-width:340px;height:290px;object-fit:contain}
+.pm-img-hd-link{font-size:10px;color:var(--muted);margin-top:10px;text-align:center;text-decoration:none}
+.pm-img-hd-link:hover{color:var(--blue)}
+.pm-series-ribbon{position:absolute;top:0;left:0;right:0;padding:7px 14px;font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:6px}
+
+/* Info panel */
+.pm-info-panel{padding:26px 28px;display:flex;flex-direction:column;gap:13px}
+.pm-code{font-family:'IBM Plex Mono',monospace;font-size:23px;font-weight:800;color:var(--navy);letter-spacing:-.2px;line-height:1.2}
+.pm-name{font-size:13px;color:var(--muted);line-height:1.5;margin-top:-5px}
+.pm-price-card{background:var(--bg);border-left:3px solid var(--red);border-radius:0 5px 5px 0;padding:12px 16px}
+.pm-price-main{font-size:28px;font-weight:900;color:var(--navy);letter-spacing:-.5px}
+.pm-price-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.pm-stock-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--green-p);color:var(--green)}
+.pm-stock-pill.low{background:var(--orange-p);color:var(--orange)}
+.pm-stock-pill.out{background:var(--red-p);color:var(--red)}
+.pm-stock-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.pm-cta-row{display:flex;gap:8px;flex-wrap:wrap}
+.pm-btn-primary{flex:1;min-width:120px;background:var(--red);color:#fff;border:none;border-radius:5px;padding:12px 16px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .15s}
+.pm-btn-primary:hover{background:var(--red-d)}
+.pm-btn-secondary{background:var(--navy);color:#fff;border:none;border-radius:5px;padding:12px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:background .15s}
+.pm-btn-secondary:hover{background:var(--navy-light)}
+.pm-btn-ghost{background:#fff;color:var(--navy);border:1.5px solid var(--border);border-radius:5px;padding:11px 12px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s}
+.pm-btn-ghost:hover{border-color:var(--navy);background:var(--bg)}
+.pm-ext-links{display:flex;flex-direction:column;gap:6px;padding-top:4px}
+.pm-ext-link{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--muted);text-decoration:none;transition:color .15s}
+.pm-ext-link:hover{color:var(--blue)}
+.pm-ext-link svg{flex-shrink:0;opacity:.5}
+.pm-ext-link:hover svg{opacity:1}
+
+/* ── HIGHLIGHTS bar ── */
+.pm-highlights{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:0;border-top:1px solid var(--border);border-bottom:2px solid var(--navy)}
+.pm-hl{background:#fff;padding:13px 10px;text-align:center;border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;gap:5px;transition:background .15s}
+.pm-hl:last-child{border-right:none}
+.pm-hl:hover{background:var(--bg)}
+.pm-hl-icon{font-size:20px}
+.pm-hl-val{font-size:11px;font-weight:800;color:var(--navy);line-height:1.2}
+.pm-hl-label{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);line-height:1.2}
+
+/* ── TABS ── */
+.pm-tabbar{display:flex;overflow-x:auto;border-bottom:2px solid var(--border);background:#fff;padding:0 24px;position:sticky;top:0;z-index:20;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.pm-tab{background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-2px;padding:13px 16px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .15s}
+.pm-tab:hover{color:var(--navy)}
+.pm-tab.active{color:var(--red);border-bottom-color:var(--red)}
+
+/* ── TAB PANELS ── */
+.pm-body{padding:24px}
+.pm-panel{display:none}
+.pm-panel.active{display:block}
+
+/* ── SPECS TABLE (full Dahua accordion) ── */
+.pm-spec-accordion{border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:14px}
+.pm-spec-group{border-bottom:1px solid var(--border)}
+.pm-spec-group:last-child{border-bottom:none}
+.pm-spec-grp-hdr{background:var(--navy);color:#fff;padding:9px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.pm-spec-grp-hdr:hover{background:var(--navy-light)}
+.pm-spec-grp-body{background:#fff}
+.pm-spec-grp-body.collapsed{display:none}
+.pm-spec-row{display:flex;border-bottom:1px solid var(--border2)}
+.pm-spec-row:last-child{border-bottom:none}
+.pm-spec-key{width:40%;padding:8px 14px;font-size:12px;font-weight:600;color:var(--muted);background:var(--bg);border-right:1px solid var(--border2);flex-shrink:0}
+.pm-spec-val{padding:8px 14px;font-size:12px;color:var(--text);flex:1;line-height:1.4}
+
+/* Quick specs summary cards */
+.pm-quickspecs{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:20px}
+.pm-qs-card{background:var(--bg);border:1px solid var(--border2);border-radius:5px;padding:11px 13px;display:flex;align-items:flex-start;gap:9px}
+.pm-qs-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.pm-qs-body{}
+.pm-qs-key{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700}
+.pm-qs-val{font-size:12px;font-weight:600;color:var(--navy);margin-top:2px;line-height:1.3}
+
+/* ── DESCRIPTION ── */
+.pm-desc-lead{font-size:15px;line-height:1.75;color:var(--text);margin-bottom:18px;padding-bottom:18px;border-bottom:1px solid var(--border2)}
+.pm-desc-section{margin-bottom:18px}
+.pm-desc-section h4{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--navy);margin-bottom:10px;padding-left:10px;border-left:3px solid var(--red)}
+.pm-desc-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.pm-desc-list li{font-size:13px;color:var(--text);padding-left:18px;position:relative;line-height:1.5}
+.pm-desc-list li::before{content:'✓';position:absolute;left:0;color:var(--green);font-weight:800;font-size:11px;top:2px}
+
+/* DORI table */
+.pm-dori{border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-top:10px}
+.pm-dori-hdr{background:var(--navy);color:#fff;padding:9px 16px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px}
+.pm-dori table{width:100%;border-collapse:collapse;font-size:12px}
+.pm-dori th{background:var(--bg);padding:8px 12px;text-align:left;font-weight:600;color:var(--muted);border-bottom:1px solid var(--border)}
+.pm-dori td{padding:8px 12px;border-bottom:1px solid var(--border2);color:var(--text)}
+.pm-dori tr:last-child td{border-bottom:none}
+.pm-dori td:first-child{font-weight:700;color:var(--navy)}
+
+/* ── DOWNLOADS ── */
+.pm-dl-grid{display:flex;flex-direction:column;gap:10px}
+.pm-dl-item{display:flex;align-items:center;gap:14px;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:13px 16px;text-decoration:none;color:var(--text);transition:all .15s;cursor:pointer}
+.pm-dl-item:hover{border-color:var(--blue);background:var(--blue-p);transform:translateX(3px)}
+.pm-dl-ico{width:38px;height:38px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.pm-dl-ico.pdf{background:#e8001c;color:#fff}
+.pm-dl-ico.web{background:var(--navy);color:#fff}
+.pm-dl-ico.support{background:var(--blue);color:#fff}
+.pm-dl-ico.calc{background:var(--green);color:#fff}
+.pm-dl-name{font-size:13px;font-weight:600;color:var(--navy)}
+.pm-dl-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.pm-dl-arr{margin-left:auto;font-size:18px;color:var(--muted);flex-shrink:0}
+.pm-dl-item:hover .pm-dl-arr{color:var(--blue)}
+
+/* ── RELATED ── */
+.pm-related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.pm-rel{background:#fff;border:1px solid var(--border2);border-radius:6px;overflow:hidden;cursor:pointer;transition:all .2s}
+.pm-rel:hover{border-color:var(--red);box-shadow:0 4px 16px rgba(0,0,0,.1);transform:translateY(-2px)}
+.pm-rel-img{width:100%;height:100px;object-fit:contain;background:var(--bg);padding:8px}
+.pm-rel-body{padding:8px 10px}
+.pm-rel-sku{font-size:9px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pm-rel-name{font-size:11px;font-weight:600;color:var(--navy);line-height:1.3;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pm-rel-price{font-size:13px;font-weight:800;color:var(--red)}
+
+/* Notice strip */
+.pm-notice{background:var(--blue-p);border:1px solid var(--blue-p2);border-radius:4px;padding:10px 14px;font-size:11px;color:var(--blue-d);margin-top:14px;display:flex;gap:8px;align-items:flex-start}
+.pm-notice svg{flex-shrink:0;margin-top:1px}
+
 </style>
 </head>
 <body>
@@ -3570,125 +3712,80 @@ function show2(id) { qs(id)?.classList.add('show'); }
 
 // ─── VIDEOS ──────────────────────────────────────────────
 // Videos — carga dinámica desde YouTube RSS oficial Dahua
-const VIDEOS_META = [
-  {cat:'tech',  cat_l:'Tecnología',    fuente:'Dahua Technology'},
-  {cat:'tech',  cat_l:'Tecnología',    fuente:'Dahua Technology'},
-  {cat:'tech',  cat_l:'Tecnología',    fuente:'Dahua Technology'},
-  {cat:'tech',  cat_l:'Tecnología',    fuente:'Dahua Technology'},
-  {cat:'ivs',   cat_l:'IVS / IA',      fuente:'Dahua Technology'},
-  {cat:'ivs',   cat_l:'IVS / IA',      fuente:'Dahua Technology'},
-  {cat:'ivs',   cat_l:'IVS / IA',      fuente:'Dahua Technology'},
-  {cat:'inst',  cat_l:'Instalación',   fuente:'Dahua Technology'},
-  {cat:'inst',  cat_l:'Instalación',   fuente:'Dahua Technology'},
-  {cat:'config',cat_l:'Configuración', fuente:'Dahua Technology'},
-  {cat:'config',cat_l:'Configuración', fuente:'Dahua Technology'},
-  {cat:'tech',  cat_l:'Técnico',       fuente:'Dahua Technology'},
-];
-
 async function loadVideosFromYouTube() {
   const grid = qs('vidGrid');
   if (!grid) return;
 
-  // Skeleton loaders
+  // Skeleton loaders con shimmer
   grid.innerHTML = Array(12).fill(0).map(() => `
     <div class="vid-card">
-      <div class="vid-thumb" style="background:linear-gradient(90deg,var(--bg2) 25%,var(--border2) 50%,var(--bg2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;height:120px"></div>
-      <div class="vid-body" style="padding:8px 0">
-        <div style="background:var(--bg2);height:9px;width:55%;border-radius:3px;margin-bottom:7px;animation:shimmer 1.4s infinite"></div>
-        <div style="background:var(--bg2);height:11px;border-radius:3px;margin-bottom:4px;animation:shimmer 1.4s infinite"></div>
-        <div style="background:var(--bg2);height:11px;width:75%;border-radius:3px;animation:shimmer 1.4s infinite"></div>
+      <div class="vid-thumb" style="background:linear-gradient(90deg,var(--bg2) 25%,var(--border2) 50%,var(--bg2) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;height:130px;border-radius:var(--r-sm)"></div>
+      <div class="vid-body" style="padding:8px 0;gap:5px;display:flex;flex-direction:column">
+        <div style="background:var(--bg2);height:9px;width:50%;border-radius:3px;animation:shimmer 1.4s infinite"></div>
+        <div style="background:var(--bg2);height:12px;border-radius:3px;animation:shimmer 1.4s infinite"></div>
+        <div style="background:var(--bg2);height:12px;width:70%;border-radius:3px;animation:shimmer 1.4s infinite"></div>
+        <div style="background:var(--bg2);height:10px;width:45%;border-radius:3px;animation:shimmer 1.4s infinite"></div>
       </div>
     </div>`).join('');
 
-  // Try YouTube RSS — canal oficial Dahua Technology Global
+  // Canales oficiales Dahua — probar en orden
   const CHANNELS = [
-    'UCkH4_mBHAu_5_A1WnDxdv4A',  // Dahua Technology
-    'UCJqD3GlKEUuO_aT4gO8NHdA',  // Dahua Latam
+    { id:'UCkH4_mBHAu_5_A1WnDxdv4A', name:'Dahua Technology',       url:'https://www.youtube.com/@DahuaTechnology'      },
+    { id:'UCJqD3GlKEUuO_aT4gO8NHdA', name:'Dahua Technology Latam',  url:'https://www.youtube.com/@DahuaTechnologyLatam' },
+    { id:'UCyJiPND4StDzZq_fxCNyFtQ', name:'Dahua Technology Iberia', url:'https://www.youtube.com/@DahuaTechnologyIberia'},
   ];
 
-  for (const cid of CHANNELS) {
+  // Categorías para etiquetar los videos automáticamente
+  const tagCat = title => {
+    const t = title.toLowerCase();
+    if (/tioc|disuasion|deterren|active|full.color|color|wizsense|wizmind|acupick|smd/.test(t)) return ['tech','Tecnología'];
+    if (/lpr|patente|plate|recognition/.test(t)) return ['ivs','IVS / IA'];
+    if (/ivs|intrusion|perimeter|alert|detect|analytic|ia|ai/.test(t)) return ['ivs','IVS / IA'];
+    if (/instala|install|mount|setup camara|camara setup/.test(t)) return ['inst','Instalación'];
+    if (/configur|config|first.time|primera.vez|setup|nvr|xvr|dvr|dmss|app|celular/.test(t)) return ['config','Configuración'];
+    if (/cable|poe|switch|red|network|bandwidth|almacen|storage|disco/.test(t)) return ['tech','Técnico'];
+    return ['tech','Tecnología'];
+  };
+
+  for (const ch of CHANNELS) {
     try {
-      const resp = await fetch('https://www.youtube.com/feeds/videos.xml?channel_id=' + cid);
+      const resp = await fetch('https://www.youtube.com/feeds/videos.xml?channel_id=' + ch.id, { cache:'no-store' });
       if (!resp.ok) continue;
-      const xml = await resp.text();
-      const doc = new DOMParser().parseFromString(xml, 'text/xml');
+      const xml  = await resp.text();
+      const doc  = new DOMParser().parseFromString(xml, 'text/xml');
       const entries = [...doc.querySelectorAll('entry')].slice(0, 12);
-      if (entries.length < 3) continue;
+      if (entries.length < 2) continue;
 
-      window.VIDEOS = entries.map((e, i) => ({
-        id:    e.querySelector('videoId')?.textContent?.trim() || '',
-        title: e.querySelector('title')?.textContent?.trim()   || 'Video Dahua',
-        cat:   (VIDEOS_META[i] || VIDEOS_META[0]).cat,
-        cat_l: (VIDEOS_META[i] || VIDEOS_META[0]).cat_l,
-        fuente:'Dahua Technology'
-      })).filter(v => v.id.length > 5);
+      window.VIDEOS = entries.map(e => {
+        const id    = e.querySelector('videoId')?.textContent?.trim() || '';
+        const title = e.querySelector('title')?.textContent?.trim()   || 'Video Dahua';
+        const [cat, cat_l] = tagCat(title);
+        return { id, title, cat, cat_l, fuente: ch.name };
+      }).filter(v => v.id.length > 5);
 
-      console.log('✅ Videos cargados desde RSS:', window.VIDEOS.length);
+      console.log('Videos RSS cargados desde ' + ch.name + ':', window.VIDEOS.length);
       renderVideos();
       return;
-    } catch(e) { /* CORS bloqueado, probar siguiente */ }
+    } catch(e) { console.log('Canal ' + ch.name + ' bloqueado:', e.message); }
   }
 
-  // RSS bloqueado — validar IDs con thumbnail antes de mostrar
-  // YouTube devuelve imagen 120x90 genérica para videos eliminados
-  // Usamos el tamaño real de la imagen para filtrar
-  const CANDIDATES = [
-    // Canal Dahua Technology — IDs extraídos manualmente del canal oficial
-    {id:'oCiKsQpKEgg', title:'Dahua WizSense — Detección inteligente IA'},
-    {id:'8EMhSWTHjXw', title:'Dahua TiOC 2.0 — Disuasión activa'},
-    {id:'2OIjYGL0HSM', title:'Dahua Full-Color — Visión a todo color'},
-    {id:'RhU9TSW6igQ', title:'Dahua AcuPick — Búsqueda inteligente'},
-    {id:'iB5I9ND7XrA', title:'Dahua WizMind — IA para empresas'},
-    {id:'VrSCpKEuJV8', title:'Dahua SMD+ — Personas y vehículos'},
-    {id:'k8J5JCuGamk', title:'Dahua LPR — Lectura de patentes'},
-    {id:'N8fDVx8ZXEA', title:'App DMSS — Cámaras desde el celular'},
-    {id:'7kfcujwXiRA', title:'Instalación cámara IP Dahua paso a paso'},
-    {id:'UdGOmDhUBaI', title:'Configurar NVR Dahua por primera vez'},
-    {id:'w_6Eo2FBLKQ', title:'Switch PoE Dahua — Guía instaladores'},
-    {id:'P_8R7yAtMoU', title:'Calcular almacenamiento para CCTV'},
-  ];
-
-  // Check each video via thumbnail size (fast, no auth needed)
-  async function isValidVideo(id) {
-    return new Promise(resolve => {
-      const img = new Image();
-      img.onload  = () => resolve(img.naturalWidth > 120); // 120x90 = deleted video placeholder
-      img.onerror = () => resolve(false);
-      img.src = 'https://img.youtube.com/vi/' + id + '/mqdefault.jpg';
-    });
-  }
-
-  // Validate all candidates in parallel
-  const results = await Promise.all(
-    CANDIDATES.map(async v => ({ ...v, valid: await isValidVideo(v.id) }))
-  );
-
-  window.VIDEOS = results
-    .filter(v => v.valid)
-    .map((v, i) => ({
-      id:    v.id,
-      title: v.title,
-      cat:   (VIDEOS_META[i] || VIDEOS_META[0]).cat,
-      cat_l: (VIDEOS_META[i] || VIDEOS_META[0]).cat_l,
-      fuente:'Dahua Technology'
-    }));
-
-  // If less than 4 valid, show a message
-  if (window.VIDEOS.length < 4) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">
-      <div style="font-size:32px;margin-bottom:12px">📺</div>
-      <strong>Videos no disponibles en este momento</strong>
-      <p style="font-size:13px;margin-top:6px">Visita el canal oficial de Dahua en YouTube</p>
-      <a href="https://www.youtube.com/@DahuaTechnology" target="_blank"
-         style="display:inline-block;margin-top:14px;background:var(--red);color:#fff;padding:10px 22px;border-radius:50px;text-decoration:none;font-size:13px;font-weight:700">
-        ▶ Canal Dahua Technology
-      </a>
+  // Si todos los RSS fallan → mostrar tarjetas con links directos a canales Dahua
+  console.log('RSS bloqueado — mostrando links directos');
+  grid.innerHTML = `
+    <div style="grid-column:1/-1;padding:32px;text-align:center">
+      <div style="font-size:36px;margin-bottom:12px">📺</div>
+      <h3 style="font-size:16px;color:var(--text);margin-bottom:8px">Canales oficiales Dahua en YouTube</h3>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:20px">Accede directamente a los tutoriales y videos corporativos oficiales</p>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+        ${CHANNELS.map(c => `
+          <a href="${c.url}" target="_blank" rel="noopener"
+             style="display:flex;align-items:center;gap:8px;background:var(--navy);color:#fff;text-decoration:none;
+                    padding:11px 20px;border-radius:50px;font-size:13px;font-weight:600;box-shadow:var(--shadow-md)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#e8001c"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.96-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#fff"/></svg>
+            ${c.name}
+          </a>`).join('')}
+      </div>
     </div>`;
-    return;
-  }
-
-  console.log('✅ Videos validados por thumbnail:', window.VIDEOS.length);
-  renderVideos();
 }
 
 const VIDEOS = [];
@@ -3835,105 +3932,575 @@ function onPickupRutInput() {
 // ════════════════════════════════════════════════════════
 // PRODUCT MODAL (inline ficha técnica)
 // ════════════════════════════════════════════════════════
-const PROD_DATA = {
-  1:{ specs:[['Sensor','1/3" 4MP CMOS'],['Resolución','2688×1520 @ 20fps'],['Lente','3.6mm (87°)'],['IR','Smart IR 50m'],['Compresión','H.265+ / H.265 / H.264+'],['Alimentación','PoE IEEE 802.3af (12VDC)'],['Consumo','Max. 6.5W'],['Protección','IP67 / IK10'],['IA / IVS','SMD+, Cruce de línea, Intrusión'],['Audio','Micrófono integrado'],['Dimensiones','Ø117 × 87.2 mm']],
-    desc:'Cámara IP Domo con tecnología WizSense 4MP. Motor IA SMD+ distingue personas y vehículos para reducir falsas alarmas. Ideal para exteriores con exigencias de identificación DORI a media distancia. Compatible con NVR Dahua, autodetección Easy4IP.',
-    downloads:[{n:'Ficha técnica PDF',i:'📄',s:'1.2 MB'},{n:'Manual de instalación',i:'📖',s:'3.8 MB'},{n:'Quick Install Guide',i:'🗂️',s:'0.6 MB'}],
-    videos:['dQIJnEkUuUI','Y3V_BNl3oqY'],
-    related:[2,9,3] },
-  2:{ specs:[['Sensor','1/2.8" 2MP CMOS'],['Resolución','1920×1080 @ 25fps'],['Lente','2.8mm motorizado'],['IR','Smart IR 30m'],['Protección','IP67 / IK10'],['IA / IVS','SMD+, IVS completo'],['Alimentación','PoE 802.3af']],
-    desc:'Cámara domo anti-vandálica IK10 con Starlight para imagen en condiciones de baja iluminación. Lente motorizado ajustable remotamente desde NVR.',
-    downloads:[{n:'Ficha técnica',i:'📄',s:'1.1 MB'}], videos:['dQIJnEkUuUI'], related:[1,9] },
-  3:{ specs:[['Sensor','1/3" 3MP'],['Resolución','2048×1536'],['LED','7 colores indicador'],['Aplicación','Estacionamientos LPR']],
-    desc:'Cámara diseñada específicamente para estacionamientos. Incluye indicador LED de 7 colores para señalizar espacios. Algoritmo LPR integrado.',
-    downloads:[{n:'Ficha técnica',i:'📄',s:'0.9 MB'}], videos:['Tf3LtJoNEZU'], related:[1,9] },
-  4:{ specs:[['Sensor','1/2.7" 8MP'],['Resolución','3840×2160 @ 15fps'],['Lente','2.8mm (103°)'],['IR','Smart IR 30m'],['Protección','IP67 / IK10'],['Tecnología','Starlight, WDR 120dB']],
-    desc:'Cámara domo HDCVI 4K sobre cable coaxial. Ideal para actualizar instalaciones existentes a resolución ultra HD.', downloads:[{n:'Ficha técnica',i:'📄',s:'1.0 MB'}], videos:['Y3V_BNl3oqY'], related:[5,6] },
-  5:{ specs:[['Sensor','1/2.7" 8MP'],['Resolución','3840×2160 @ 15fps'],['Lente','2.8mm'],['IR+LED','Smart IR 20m + LED cálido'],['Audio','Micrófono integrado'],['Protección','IP67']],
-    desc:'Cámara HDCVI 4K con iluminación dual: IR para oscuridad total y LED blanco cálido para imagen en color al detectar movimiento.', downloads:[{n:'Ficha técnica',i:'📄',s:'1.0 MB'}], videos:['Y3V_BNl3oqY'], related:[4,6] },
-  6:{ specs:[['Sensor','1/2.7" 8MP'],['Resolución','3840×2160 @ 15fps'],['Lente','2.8mm (105°)'],['IR','Smart IR 30m'],['Protección','IP67'],['Construcción','Cuerpo metálico']],
-    desc:'Cámara bala HDCVI 4K con construcción metálica robusta. Gran angular de 105° para cobertura amplia. Ideal para accesos y perímetros exteriores.', downloads:[{n:'Ficha técnica',i:'📄',s:'0.9 MB'}], videos:['Y3V_BNl3oqY'], related:[4,7] },
-  7:{ specs:[['Sensor','1/2.7" 8MP'],['Resolución','3840×2160'],['Lente','2.8mm'],['IR','Smart IR 40m'],['Audio','Micrófono externo'],['Tecnología','Starlight 4K']],
-    desc:'Cámara bala HDCVI 4K Starlight con audio integrado. Imagen en color en condiciones de muy baja iluminación gracias a tecnología Starlight.', downloads:[{n:'Ficha técnica',i:'📄',s:'1.0 MB'}], videos:['Hrl63lBFCIE'], related:[4,6] },
-  8:{ specs:[['Sensor','1/2.9" 2MP'],['Resolución','1920×1080 @ 25fps'],['IR','Smart IR 30m'],['Extras','PIR + LED disuasivo'],['Protección','IP67']],
-    desc:'Cámara bala HDCVI con sensor PIR independiente para reducir falsas alarmas. LED disuasivo actúa como advertencia visual ante intrusos.', downloads:[{n:'Ficha técnica',i:'📄',s:'0.8 MB'}], videos:['EgSwIjbJkpE'], related:[4,5] },
-  9:{ specs:[['Puertos PoE','16 × Gigabit RJ45'],['Potencia total','190W'],['Hi-PoE','Hasta 60W/puerto (puertos 1-4)'],['Modo extendido','250m a 10Mbps (DIP switch)'],['Uplinks','2 × Gigabit RJ45 + 2 × SFP'],['Gestión','Web/CLI/SNMP'],['Montaje','Rack 1U 19"']],
-    desc:'Switch PoE administrable Capa 2 para instalaciones profesionales. Soporta cámaras Hi-PoE de hasta 60W en puertos 1-4. Modo extendido para alcanzar cámaras a 250m sin switch adicional.',
-    downloads:[{n:'Ficha técnica',i:'📄',s:'1.4 MB'},{n:'Guía de instalación',i:'📖',s:'2.1 MB'}], videos:['VBaRCEHCKSc'], related:[1,2] },
-  10:{ specs:[['Resolución','1080P @ 30fps'],['GPS','Integrado (GLONASS+GPS)'],['Conectividad','4G LTE + WiFi + Bluetooth'],['Batería','Recargable, hasta 10h'],['Extras','Huella digital, NFC'],['Protección','IP67']],
-    desc:'Cámara y grabador portátil de pecho para uso profesional en seguridad. GPS en tiempo real, grabación 4G a servidor remoto. Ideal para guardias y equipos de seguridad móvil.', downloads:[{n:'Ficha técnica',i:'📄',s:'1.2 MB'}], videos:['kXs1q2BPCO4'], related:[9,1] },
-};
 
+
+// ════════════════════════════════════════════════════════════════════
+// FICHA TÉCNICA COMPLETA — Dahua Style 2025 — sstt.cl
+// ════════════════════════════════════════════════════════════════════
+
+// ── Determina la serie y badge color ─────────────────────────────
+function pmSeries(p) {
+  const n = p.nombre.toLowerCase(), s = p.codigo.toLowerCase();
+  if (/wizsense/.test(n))            return {name:'WizSense Series',   bg:'#003d99', icon:'🧠'};
+  if (/wizmind/.test(n))             return {name:'WizMind Series',    bg:'#5b21b6', icon:'🤖'};
+  if (/tioc|disuasion activa/.test(n)) return {name:'TiOC 2.0',       bg:'#b91c1c', icon:'🚨'};
+  if (/wizcolor|full.?color/.test(n))  return {name:'Full-Color',      bg:'#c2410c', icon:'🌈'};
+  if (/lpr|patente|plate/.test(n))   return {name:'LPR / ANPR',        bg:'#0369a1', icon:'🚗'};
+  if (p.cat==='camaras-ptz'||/ptz/.test(n)) return {name:'PTZ Series', bg:'#0f766e', icon:'🔄'};
+  if (p.cat==='camaras-hdcvi'||/hdcvi/.test(n)) return {name:'HDCVI',  bg:'#1a5fa8', icon:'📡'};
+  if (p.cat==='nvr')                 return {name:'NVR / XVR',         bg:'#374151', icon:'💾'};
+  if (p.cat==='switches')            return {name:'Switch PoE',         bg:'#065f46', icon:'🔌'};
+  if (p.cat==='acceso')              return {name:'Control de Acceso',  bg:'#92400e', icon:'🔐'};
+  if (p.cat==='videoporteros')       return {name:'Video Portero',      bg:'#5b21b6', icon:'🔔'};
+  if (p.cat==='alarmas')             return {name:'Alarmas',            bg:'#991b1b', icon:'🚨'};
+  return {name:'Dahua Technology', bg:'var(--navy)', icon:'📷'};
+}
+
+// ── Parse specs desde el nombre (ej: "2MP 2.8mm IR30 PoE IP67 IK10") ─
+function pmParseSpecs(p) {
+  const n = p.nombre.toLowerCase();
+  const groups = [];
+
+  // ─ CÁMARAS ──────────────────────────────────────────────────────
+  if (['camaras-ip','camaras-hdcvi','camaras-ptz'].includes(p.cat)) {
+    const sensor = [];
+    // Resolución
+    if (/\b8mp\b|4k|3840x2160/.test(n))      sensor.push(['Resolución',      '4K · 8MP (3840 × 2160 px)']);
+    else if (/\b6mp\b|3200/.test(n))          sensor.push(['Resolución',      '6MP (3200 × 1800 px)']);
+    else if (/\b5mp\b|2880/.test(n))          sensor.push(['Resolución',      '5MP (2880 × 1620 px)']);
+    else if (/\b4mp\b|2688|2560x1440|2560x1520/.test(n)) sensor.push(['Resolución','4MP (2688 × 1520 px)']);
+    else if (/\b3mp\b|2304|2048/.test(n))     sensor.push(['Resolución',      '3MP (2304 × 1296 px)']);
+    else if (/\b2mp\b|1080p?|1920x1080/.test(n)) sensor.push(['Resolución',   '2MP Full HD (1920 × 1080 px)']);
+    else if (/\b1\.3mp\b|960h/.test(n))       sensor.push(['Resolución',      '1.3MP (1280 × 960 px)']);
+
+    const fps = n.match(/(\d+)\s*fps/);
+    if (fps) sensor.push(['Frame rate', fps[1] + ' fps']);
+    else sensor.push(['Frame rate', '25 / 30 fps']);
+
+    // Sensor
+    for (const [pat,val] of [
+      [/1\/1\.8/,'1/1.8" CMOS (sensor premium)'],
+      [/1\/2\.5/,'1/2.5" CMOS'],
+      [/1\/2\.7/,'1/2.7" CMOS'],
+      [/1\/2\.8/,'1/2.8" CMOS'],
+      [/1\/3\.2/,'1/3.2" CMOS'],
+      [/1\/3\b/,'1/3" CMOS'],
+    ]) { if (pat.test(n)) { sensor.push(['Sensor', val]); break; } }
+
+    // Compresión
+    if (/h\.265\+|h265\+/.test(n)) sensor.push(['Compresión','H.265+ / H.265 / H.264+ / H.264']);
+    else sensor.push(['Compresión','H.265 / H.264 (ver ficha técnica)']);
+
+    if (sensor.length) groups.push({title:'Imagen y Sensor', rows:sensor});
+
+    // Lente e iluminación
+    const optica = [];
+    const lente = n.match(/(\d+\.?\d*)\s*mm/);
+    if (lente) {
+      if (/varifocal|motorizado|motor|zoom/.test(n)) {
+        const r = n.match(/(\d+\.?\d*)[–\-](\d+\.?\d*)\s*mm/);
+        optica.push(['Lente', r ? r[0]+' varifocal motorizado' : lente[0]+' varifocal']);
+      } else {
+        optica.push(['Lente', lente[0] + ' fijo']);
+      }
+    }
+    // Ángulo — no podemos derivarlo pero mencionamos que está en ficha
+    const angulo = n.match(/(\d+)°/);
+    if (angulo) optica.push(['Ángulo de visión', angulo[1] + '°']);
+
+    if (/full.?color|wizcolor/.test(n)) {
+      optica.push(['Tecnología noche','Full-Color — imagen en color sin IR']);
+      optica.push(['Luz blanca LED','Integrada']);
+    } else if (/starlight/.test(n)) {
+      optica.push(['Starlight','Sí — color con muy poca luz (0.001 Lux)']);
+    }
+    const ir = n.match(/\bIR\s*(\d+)\b/i);
+    if (ir) optica.push(['Smart IR','Hasta ' + ir[1] + ' metros']);
+    if (/wdr.?120|120.?db/.test(n)) optica.push(['WDR','120 dB — alto rango dinámico']);
+    else if (/wdr/.test(n)) optica.push(['WDR','Sí']);
+    if (optica.length) groups.push({title:'Óptica e Iluminación', rows:optica});
+
+    // IA / IVS
+    const ia = [];
+    if (/wizsense/.test(n))          ia.push(['Serie IA','WizSense (IA edge embebida)']);
+    if (/wizmind/.test(n))           ia.push(['Serie IA','WizMind (Deep Learning avanzado)']);
+    if (/smd\+|smd plus/.test(n))    ia.push(['SMD+','Detección inteligente — clasifica humanos y vehículos, elimina falsas alarmas']);
+    if (/acupick/.test(n))           ia.push(['AcuPick','Búsqueda por atributos (color ropa, tipo vehículo)']);
+    if (/lpr|patente|plate/.test(n)) ia.push(['LPR/ANPR','Lectura de patentes — reconocimiento automático de matrículas']);
+    if (/tioc|disuasion activa/.test(n)) ia.push(['TiOC 2.0','Disuasión activa: luz estroboscópica + sirena al detectar intrusión']);
+    if (/ivs/.test(n))               ia.push(['IVS','Cruce de línea, Intrusión perimetral, Zona virtual, Merodeo']);
+    if (/face|facial/.test(n))       ia.push(['Reconoc. facial','Sí — requiere NVR compatible']);
+    if (ia.length) groups.push({title:'Inteligencia Artificial', rows:ia});
+
+    // Conectividad
+    const conn = [];
+    if (/hi.?poe/.test(n))           conn.push(['PoE','Hi-PoE hasta 60W (IEEE 802.3bt)']);
+    else if (/poe\+|802\.3at/.test(n)) conn.push(['PoE','PoE+ IEEE 802.3at (hasta 30W)']);
+    else if (/poe/.test(n))          conn.push(['PoE','PoE IEEE 802.3af (hasta 15.4W) — un cable']);
+    else if (/12v|12vdc/.test(n))    conn.push(['Alimentación','12V DC (fuente no incluida)']);
+    const alarmaMatch = n.match(/alarma\s+(\d+)[\/\s]+(\d+)/i);
+    if (alarmaMatch) conn.push(['Alarmas I/O', alarmaMatch[1]+' entradas / '+alarmaMatch[2]+' salida(s)']);
+    const audioMatch = n.match(/audio\s+(\d+)[\/\s]+(\d+)/i);
+    if (audioMatch) conn.push(['Audio I/O', audioMatch[1]+' entrada / '+audioMatch[2]+' salida']);
+    if (/microfono|mic\b/.test(n)) conn.push(['Audio','Micrófono integrado']);
+    if (/micro.?sd|slot.*sd|sd.*slot/.test(n)) {
+      const gb = n.match(/(\d+)\s*gb/i);
+      conn.push(['MicroSD','Slot interno — hasta ' + (gb?gb[1]:'256') + ' GB']);
+    }
+    if (/wifi|wi-fi/.test(n)) conn.push(['Wireless','Wi-Fi 2.4 GHz integrado']);
+    if (/4g|lte/.test(n)) conn.push(['4G LTE','Módulo integrado']);
+    conn.push(['Protocolo','ONVIF Profile S/T/G, RTSP, HTTP, HTTPS, P2P Easy4IP']);
+    conn.push(['App móvil','DMSS (iOS & Android) — visualización remota gratuita']);
+    if (conn.length) groups.push({title:'Conectividad', rows:conn});
+
+    // Mecánica
+    const mec = [];
+    const formFactor = p.codigo.toLowerCase();
+    if (/ptz|sd\d/.test(formFactor) || /ptz/.test(n)) mec.push(['Forma','PTZ — motorizado Pan/Tilt/Zoom']);
+    else if (/hfw|hfw|bullet|bala/.test(n+formFactor)) mec.push(['Forma','Bala (Bullet) — exterior/interior']);
+    else if (/hdw|hdbw|dome|domo/.test(n+formFactor)) mec.push(['Forma','Domo — bajo perfil, vandálico']);
+    else if (/eyw|eyeball/.test(formFactor)) mec.push(['Forma','Eyeball — ajuste 3 ejes']);
+
+    if (/ik10/.test(n)) mec.push(['Anti-vandálico','IK10 — resistencia máxima (20J impacto)']);
+    else if (/ik08/.test(n)) mec.push(['Anti-vandálico','IK08']);
+
+    if (/ip68/.test(n)) mec.push(['Protección intemperie','IP68 — sumergible hasta 1m']);
+    else if (/ip67/.test(n)) mec.push(['Protección intemperie','IP67 — polvo y chorros de agua a presión']);
+    else if (/ip66/.test(n)) mec.push(['Protección intemperie','IP66 — lluvia intensa, jets de agua']);
+    else if (/ip65/.test(n)) mec.push(['Protección intemperie','IP65 — polvo y lluvia']);
+
+    if (/nema4x/.test(n)) mec.push(['NEMA 4X','Sí — resistencia química y corrosión']);
+    mec.push(['Garantía','12 meses — SSTT SpA Chile']);
+    if (mec.length) groups.push({title:'Mecánica y Certif.', rows:mec});
+  }
+
+  // ─ NVR / XVR ─────────────────────────────────────────────────
+  else if (p.cat === 'nvr') {
+    const nvr = [];
+    const ch = n.match(/\b(\d+)\s*ch\b|\b(\d+)\s*canal/i);
+    if (ch) nvr.push(['Canales IP', 'Hasta ' + (ch[1]||ch[2]) + ' cámaras IP']);
+    const xvr = /xvr|hdcvi/i.test(p.codigo);
+    nvr.push(['Tipo', xvr ? 'XVR — Multiformato (HDCVI / AHD / TVI / CVBS + IP)' : 'NVR — Grabador de red IP (ONVIF)']);
+
+    if (/\b4k\b|8mp/.test(n))       nvr.push(['Resolución máx.','4K 8MP por canal']);
+    else if (/\b4mp\b/.test(n))     nvr.push(['Resolución máx.','4MP por canal']);
+    else if (/\b2mp\b|1080/.test(n)) nvr.push(['Resolución máx.','2MP Full HD por canal']);
+
+    if (/poe/.test(n)) {
+      const pp = n.match(/(\d+)\s*poe\b|\bpoe.*?(\d+)\s*p/i);
+      nvr.push(['PoE integrado', (pp?pp[1]||pp[2]:'?')+' puertos PoE (sin switch externo)']);
+    }
+    const hdd = n.match(/(\d+)\s*hdd|\b(\d+)\s*bahia/i);
+    if (hdd) nvr.push(['Bahías HDD', (hdd[1]||hdd[2])+' bahías SATA']);
+    else nvr.push(['Bahías HDD','1–2 bahías SATA (ver ficha)']);
+
+    if (/h\.265\+/.test(n)) nvr.push(['Compresión','H.265+ — reduce almacenamiento hasta 90%']);
+    if (/ivs|smd|wizsense|wizmind/.test(n)) nvr.push(['IA integrada','IVS + SMD+ (detección humanos/vehículos)']);
+    nvr.push(['Salidas vídeo','HDMI 4K + VGA']);
+    nvr.push(['App móvil','DMSS (iOS & Android) — P2P Easy4IP']);
+    nvr.push(['Garantía','12 meses — SSTT SpA Chile']);
+    groups.push({title:'Grabador NVR/XVR', rows:nvr});
+  }
+
+  // ─ SWITCH ─────────────────────────────────────────────────────
+  else if (p.cat === 'switches') {
+    const sw = [];
+    const ports = n.match(/\b(\d+)\s*p(?:oe)?(?:\s*port)?|\b(\d+)\s*puerto/i);
+    if (ports) sw.push(['Puertos PoE',(ports[1]||ports[2])+'× Gigabit RJ45 PoE']);
+    const watts = n.match(/\b(\d+)\s*w\b/i);
+    if (watts) sw.push(['Potencia total PoE',watts[1]+'W presupuesto total']);
+    if (/hi.?poe/.test(n)) sw.push(['Hi-PoE','Hasta 60W/puerto (puertos 1-2)']);
+    if (/sfp/.test(n)) sw.push(['Uplinks SFP','2 × SFP Gigabit (fibra óptica)']);
+    if (/administr|managed|snmp|cli/.test(n)) sw.push(['Gestión','Administrable — Web GUI, CLI, SNMP']);
+    else sw.push(['Gestión','No administrable — Plug & Play']);
+    if (/extendido|250m|extend/.test(n)) sw.push(['Modo EXTEND','250m a 10Mbps (sin repetidor)']);
+    sw.push(['Montaje','Rack 1U 19" / Escritorio']);
+    sw.push(['Garantía','12 meses — SSTT SpA Chile']);
+    groups.push({title:'Switch PoE', rows:sw});
+  }
+
+  // ─ VIDEOPORTEROS / ACCESO ─────────────────────────────────────
+  else if (['videoporteros','acceso'].includes(p.cat)) {
+    const ac = [];
+    if (/sip/.test(n)) ac.push(['Protocolo SIP','Compatible con centrales VoIP']);
+    if (/2mp|4mp/.test(n)) ac.push(['Cámara',n.match(/(\d+mp)/i)?.[1]+' con IR integrado']);
+    if (/wifi|wi-fi/.test(n)) ac.push(['Wireless','Wi-Fi 2.4 GHz']);
+    if (/poe/.test(n)) ac.push(['Alimentación','PoE IEEE 802.3af']);
+    if (/ip65|ip67/.test(n)) ac.push(['Protección',n.match(/(ip6\d)/i)?.[1]?.toUpperCase()]);
+    if (/rele|chapa|relay/.test(n)) ac.push(['Relé','Salida de relé para chapa eléctrica']);
+    if (/rfid|tarjeta|mifare/.test(n)) ac.push(['Lectura','RFID Mifare 13.56 MHz / Tarjeta IC']);
+    if (/huella|fingerprint/.test(n)) ac.push(['Biometría','Huella digital integrada']);
+    if (/facial|face/.test(n)) ac.push(['Biometría','Reconocimiento facial']);
+    ac.push(['App','DMSS iOS & Android']);
+    ac.push(['Garantía','12 meses — SSTT SpA Chile']);
+    groups.push({title:p.cat==='videoporteros'?'Video Portero':'Control de Acceso', rows:ac});
+  }
+
+  // ─ GENÉRICO ───────────────────────────────────────────────────
+  else {
+    const gen = [];
+    gen.push(['Código', p.codigo]);
+    gen.push(['Categoría', CATS[p.cat]||p.cat]);
+    gen.push(['Marca','Dahua Technology']);
+    gen.push(['Garantía','12 meses — SSTT SpA Chile']);
+    groups.push({title:'Especificaciones', rows:gen});
+  }
+
+  return groups;
+}
+
+// ── Highlights bar: íconos de las specs más importantes ─────────
+function pmHighlights(p) {
+  const n = p.nombre.toLowerCase();
+  const hl = [];
+  // Resolución
+  if (/\b8mp\b|4k/.test(n))         hl.push({v:'4K 8MP',  l:'Resolución',  i:'🎯'});
+  else if (/\b5mp\b/.test(n))        hl.push({v:'5MP',     l:'Resolución',  i:'🎯'});
+  else if (/\b4mp\b/.test(n))        hl.push({v:'4MP',     l:'Resolución',  i:'🎯'});
+  else if (/\b2mp\b|1080/.test(n))   hl.push({v:'2MP FHD', l:'Resolución',  i:'🎯'});
+  // IA
+  if (/wizsense/.test(n))            hl.push({v:'WizSense',l:'Serie IA',    i:'🧠'});
+  else if (/wizmind/.test(n))        hl.push({v:'WizMind', l:'Serie IA',    i:'🤖'});
+  else if (/smd\+/.test(n))          hl.push({v:'SMD+',    l:'Detección IA',i:'⚡'});
+  // Noche
+  if (/full.?color|wizcolor/.test(n)) hl.push({v:'Full-Color',l:'Noche color',i:'🌈'});
+  else if (/starlight/.test(n))       hl.push({v:'Starlight',l:'Baja luz',   i:'🌙'});
+  // IR
+  const ir = n.match(/\bir\s*(\d+)\b/i);
+  if (ir)                             hl.push({v:ir[1]+'m',  l:'Smart IR',   i:'📡'});
+  // Protección
+  if (/ik10/.test(n))                 hl.push({v:'IK10',   l:'Antivandalismo',i:'🛡️'});
+  if (/ip68/.test(n))                 hl.push({v:'IP68',   l:'Intemperie',  i:'💧'});
+  else if (/ip67/.test(n))            hl.push({v:'IP67',   l:'Intemperie',  i:'💧'});
+  else if (/ip66/.test(n))            hl.push({v:'IP66',   l:'Intemperie',  i:'💧'});
+  // Zoom PTZ
+  const zoom = n.match(/\b(\d+)x\b/i);
+  if (zoom && p.cat==='camaras-ptz')  hl.push({v:zoom[1]+'× óptico',l:'Zoom',i:'🔭'});
+  // Extras
+  if (/tioc|disuasion activa/.test(n)) hl.push({v:'TiOC 2.0',l:'Disuasión',i:'🚨'});
+  if (/lpr|patente/.test(n))          hl.push({v:'LPR',    l:'Patentes',    i:'🚗'});
+  if (/micro.?sd|slot.*sd/.test(n))   hl.push({v:'MicroSD',l:'Almacenamiento',i:'💾'});
+  if (/hi.?poe/.test(n))              hl.push({v:'Hi-PoE', l:'Alimentación',i:'⚡'});
+  else if (/poe/.test(n))             hl.push({v:'PoE',    l:'Un cable',    i:'🔌'});
+  return hl.slice(0,8);
+}
+
+// ── DORI table (detección/observación/reconocimiento/identificación) ─
+function pmDori(p) {
+  const n = p.nombre.toLowerCase();
+  // Estimate from focal length + resolution
+  const lens = parseFloat(n.match(/(\d+\.?\d*)\s*mm/)?.[1] || 2.8);
+  let mp = 2;
+  if (/\b8mp\b|4k/.test(n)) mp=8;
+  else if (/\b5mp\b/.test(n)) mp=5;
+  else if (/\b4mp\b/.test(n)) mp=4;
+  else if (/\b2mp\b/.test(n)) mp=2;
+  // Rough multiplier: longer lens → farther reach, more MP → farther
+  const base = lens * Math.sqrt(mp) * 4;
+  return [
+    {tipo:'Detectar',   distancia: Math.round(base*4) + 'm',   ppm:25},
+    {tipo:'Observar',   distancia: Math.round(base*1.6) + 'm', ppm:62},
+    {tipo:'Reconocer',  distancia: Math.round(base*0.8) + 'm', ppm:125},
+    {tipo:'Identificar',distancia: Math.round(base*0.4) + 'm', ppm:250},
+  ];
+}
+
+// ── MAIN modal builder ────────────────────────────────────────────
 function openProdModal(id) {
-  const p = PRODUCTS.find(x=>x.id===id);
-  const d = PROD_DATA[id];
-  if (!p||!d) return;
-  const rel = (d.related||[]).map(rid=>PRODUCTS.find(x=>x.id===rid)).filter(Boolean);
-  qs('prodModalInner').innerHTML = `
-    <div class="pm-head">
-      <h3>${p.codigo}</h3>
-      <button class="pm-x" onclick="closeProdModal()">✕</button>
-    </div>
-    <div class="pm-body">
-      <div class="pm-img-col">
-        <img src="${p.img}" alt="${p.codigo}" onerror="this.style.opacity='.3'">
-        <div style="margin-top:10px;font-size:11px;color:var(--muted);text-align:center">
-          ${p.tags?.map(t=>`<span style="display:inline-block;background:var(--bg);border:1px solid var(--border2);border-radius:3px;padding:2px 6px;margin:2px;font-size:10px">${t}</span>`).join('')||''}
-        </div>
-        <button class="pm-add-btn" onclick="addCartFromModal(${id})">🛒 Agregar al carro — ${fmt(p.ptotal)}</button>
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+
+  const series  = pmSeries(p);
+  const specGrp = pmParseSpecs(p);
+  const hl      = pmHighlights(p);
+  const dori    = pmDori(p);
+
+  // Related: same category, price ±60%
+  const related = PRODUCTS
+    .filter(x => x.id !== id && x.cat === p.cat
+      && x.ptotal >= p.ptotal*0.4 && x.ptotal <= p.ptotal*1.6)
+    .slice(0, 8);
+
+  // URLs
+  const imgHD   = 'https://camaras-de-seguridad-dahua.sstt.cl/img/' + p.codigo + '.webp';
+  const pdfUrl  = 'https://camaras-de-seguridad-dahua.sstt.cl/fichatecnica/' + p.codigo + '.pdf';
+  const dahuaES = 'https://www.dahuasecurity.com/es/search?keyword=' + encodeURIComponent(p.codigo);
+  const dahuaEN = 'https://www.dahuasecurity.com/search?keyword='    + encodeURIComponent(p.codigo);
+  const supportUrl = 'https://www.dahuasecurity.com/support/download-center/search?keyword=' + encodeURIComponent(p.codigo);
+  const ssttPerma  = 'https://www.sstt.cl/index.php#' + p.codigo;
+
+  // ─ BUILD HTML ─────────────────────────────────────────────────
+  const hlHTML = hl.map(h => `
+    <div class="pm-hl">
+      <div class="pm-hl-icon">${h.i}</div>
+      <div class="pm-hl-val">${h.v}</div>
+      <div class="pm-hl-label">${h.l}</div>
+    </div>`).join('');
+
+  const specsHTML = specGrp.map((g,gi) => `
+    <div class="pm-spec-group">
+      <div class="pm-spec-grp-hdr" onclick="pmToggleGroup(this)">
+        <span>${g.title}</span><span class="pmg-arrow">▾</span>
       </div>
-      <div class="pm-info">
-        <div class="pm-code">${p.codigo}</div>
-        <h2 class="pm-name">${p.nombre}</h2>
-        <div class="pm-price">${fmt(p.ptotal)}</div>
-        <div class="pm-price-sub">Neto ${fmt(p.pneto)} + IVA ${fmt(p.piva)} — Precio con IVA incluido</div>
-        <div class="pm-tabs">
-          <button class="pm-tab active" onclick="setPMTab('specs',this)">📋 Especificaciones</button>
-          <button class="pm-tab" onclick="setPMTab('desc',this)">📝 Descripción</button>
-          <button class="pm-tab" onclick="setPMTab('dl',this)">⬇️ Descargas</button>
-          <button class="pm-tab" onclick="setPMTab('vids',this)">▶️ Videos</button>
-          ${rel.length?'<button class="pm-tab" onclick="setPMTab(&apos;rel&apos;,this)">🔗 Relacionados</button>':''}
+      <div class="pm-spec-grp-body${gi>0?' collapsed':''}">
+        ${g.rows.map(([k,v]) => `
+          <div class="pm-spec-row">
+            <div class="pm-spec-key">${k}</div>
+            <div class="pm-spec-val">${v}</div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+
+  // Quick specs for description panel
+  const topSpecs = specGrp.flatMap(g=>g.rows).slice(0,8);
+  const qsIcons = {'Resolución':'🎯','Frame rate':'🎬','Sensor':'📸','Lente':'🔭','Smart IR':'📡',
+    'WDR':'☀️','PoE':'🔌','Protección intemperie':'💧','Anti-vandálico':'🛡️','SMD+':'🧠',
+    'Serie IA':'🤖','IVS':'⚡','LPR/ANPR':'🚗','TiOC 2.0':'🚨','Compresión':'📦',
+    'App móvil':'📱','Garantía':'✅','Canales IP':'📺','Bahías HDD':'💾','Gestión':'🖥️'};
+  const qsHTML = topSpecs.map(([k,v]) => `
+    <div class="pm-qs-card">
+      <div class="pm-qs-icon">${qsIcons[k]||'•'}</div>
+      <div class="pm-qs-body">
+        <div class="pm-qs-key">${k}</div>
+        <div class="pm-qs-val">${v.split('—')[0].trim()}</div>
+      </div>
+    </div>`).join('');
+
+  // Description auto-generated
+  const catLabel = CATS[p.cat]||'Producto';
+  const descHTML = `
+    <p class="pm-desc-lead">
+      El <strong>${p.codigo}</strong> es ${p.nombre.toLowerCase()}, distribuido oficialmente
+      en Chile por <strong>SSTT SpA</strong> — Distribuidor Regional Dahua.
+      ${series.name!=='Dahua Technology'?`Pertenece a la línea <strong>${series.name}</strong>.`:''}
+    </p>
+    <div class="pm-desc-section">
+      <h4>Características principales</h4>
+      <div class="pm-quickspecs">${qsHTML}</div>
+    </div>
+    ${dori && ['camaras-ip','camaras-hdcvi','camaras-ptz'].includes(p.cat) ? `
+    <div class="pm-desc-section">
+      <h4>Tabla DORI — Distancias de vigilancia</h4>
+      <div class="pm-dori">
+        <div class="pm-dori-hdr">Distancias estimadas según EN62676-4 (valores referenciales)</div>
+        <table>
+          <thead><tr>
+            <th>Función</th><th>Distancia est.</th><th>Densidad (px/m)</th><th>Uso típico</th>
+          </tr></thead>
+          <tbody>
+            ${dori.map(d=>`<tr>
+              <td>${d.tipo}</td><td>${d.distancia}</td><td>${d.ppm}</td>
+              <td>${d.tipo==='Detectar'?'Presencia de persona/vehículo':
+                    d.tipo==='Observar'?'Actividad general':
+                    d.tipo==='Reconocer'?'Características del sujeto':'Identidad del sujeto'}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>` : ''}
+    <div class="pm-notice">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Especificaciones y distancias DORI son referenciales. Descarga la ficha técnica oficial PDF para confirmación exacta de todos los parámetros.
+    </div>`;
+
+  const dlHTML = `
+    <div class="pm-dl-grid">
+      <a class="pm-dl-item" href="${pdfUrl}" target="_blank" rel="noopener">
+        <div class="pm-dl-ico pdf">📄</div>
+        <div>
+          <div class="pm-dl-name">Ficha Técnica PDF — ${p.codigo}</div>
+          <div class="pm-dl-desc">Especificaciones completas oficiales · camaras-de-seguridad-dahua.sstt.cl</div>
         </div>
-        <div class="pm-panel active" id="pmSpecs">
-          <table class="pm-specs"><tbody>${d.specs.map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('')}</tbody></table>
+        <div class="pm-dl-arr">↓</div>
+      </a>
+      <a class="pm-dl-item" href="${dahuaES}" target="_blank" rel="noopener">
+        <div class="pm-dl-ico web">🌍</div>
+        <div>
+          <div class="pm-dl-name">Ver en Dahua Technology Latinoamérica</div>
+          <div class="pm-dl-desc">dahuasecurity.com/es — Manual de instalación, Quick Start Guide</div>
         </div>
-        <div class="pm-panel" id="pmDesc">
-          <p style="font-size:13px;color:var(--muted);line-height:1.8">${d.desc}</p>
-          <div class="ibox" style="margin-top:12px">💡 Compatible con NVR/XVR Dahua. Protocolo ONVIF Profile S/G. Autodetección Easy4IP. App DMSS/iDMSS para acceso remoto gratuita.</div>
+        <div class="pm-dl-arr">↗</div>
+      </a>
+      <a class="pm-dl-item" href="${supportUrl}" target="_blank" rel="noopener">
+        <div class="pm-dl-ico support">🛠️</div>
+        <div>
+          <div class="pm-dl-name">Centro de soporte Dahua — ${p.codigo}</div>
+          <div class="pm-dl-desc">Firmware, drivers, software, documentación técnica oficial</div>
         </div>
-        <div class="pm-panel" id="pmDl">
-          <div class="pm-dl-grid">${d.downloads.map(dl=>`<a href="#" class="pm-dl"><span class="pm-dl-icon">${dl.i}</span><div><div class="pm-dl-name">${dl.n}</div><div class="pm-dl-size">${dl.s}</div></div></a>`).join('')}</div>
-          <div class="ibox" style="margin-top:10px">Para fichas actualizadas: <a href="https://www.dahuasecurity.com/products" target="_blank">dahuasecurity.com</a></div>
+        <div class="pm-dl-arr">↗</div>
+      </a>
+      <a class="pm-dl-item" href="${ssttPerma}" target="_blank" rel="noopener">
+        <div class="pm-dl-ico calc">🏪</div>
+        <div>
+          <div class="pm-dl-name">Ficha en sstt.cl — ${p.codigo}</div>
+          <div class="pm-dl-desc">Descripción detallada, preguntas frecuentes, información de stock en SSTT</div>
         </div>
-        <div class="pm-panel" id="pmVids">
-          <div class="pm-vid-grid">${(d.videos||[]).map(vid=>`<div class="pm-vid" onclick="openVideo('${vid}','Video ${p.codigo}')"><div class="pm-vid-thumb"><img src="https://img.youtube.com/vi/${vid}/mqdefault.jpg"><div class="pm-vid-play"><svg width="13" height="13" viewBox="0 0 24 24" fill="#1a5fa8"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div><div class="pm-vid-ttl">Video técnico — ${p.codigo}</div></div>`).join('')}</div>
+        <div class="pm-dl-arr">↗</div>
+      </a>
+    </div>`;
+
+  const relHTML = related.length ? `
+    <div class="pm-related-grid">
+      ${related.map(r => `
+        <div class="pm-rel" onclick="openProdModal(${r.id})">
+          <img class="pm-rel-img" src="${r.img}" alt="${r.codigo}"
+               onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 90%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e8ecf4%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'">
+          <div class="pm-rel-body">
+            <div class="pm-rel-sku">${r.codigo}</div>
+            <div class="pm-rel-name">${r.nombre}</div>
+            <div class="pm-rel-price">${fmt(r.ptotal)}</div>
+          </div>
+        </div>`).join('')}
+    </div>` : '<p style="color:var(--muted);font-size:13px;padding:10px 0">No hay productos relacionados disponibles en este rango de precio.</p>';
+
+  // ─ ASSEMBLE MODAL ─────────────────────────────────────────────
+  let modal = document.getElementById('prodModal');
+  if (!modal) { modal = document.createElement('div'); modal.id='prodModal'; document.body.appendChild(modal); }
+
+  modal.innerHTML = `
+    <div class="pm-wrap">
+      <!-- Top bar -->
+      <div class="pm-topbar">
+        <div class="pm-breadcrumb">
+          <a onclick="closeProdModal()">SSTT®</a>
+          <span class="pm-breadcrumb-sep">›</span>
+          <a onclick="closeProdModal()">${CATS[p.cat]||'Catálogo'}</a>
+          <span class="pm-breadcrumb-sep">›</span>
+          <span>${p.codigo}</span>
         </div>
-        ${rel.length?`<div class="pm-panel" id="pmRel"><div class="pm-rel-grid">${rel.map(r=>`<div class="pm-rel-card" onclick="closeProdModal();setTimeout(()=>openProdModal(${r.id}),200)"><img class="pm-rel-img" src="${r.img}" onerror="this.style.opacity='.3'"><div class="pm-rel-code">${r.codigo}</div><div class="pm-rel-name">${r.nombre.slice(0,45)}…</div><div class="pm-rel-price">${fmt(r.ptotal)}</div></div>`).join('')}</div></div>`:''}
+        <button class="pm-x" onclick="closeProdModal()">✕</button>
+      </div>
+
+      <!-- Hero -->
+      <div class="pm-hero">
+        <!-- Imagen -->
+        <div class="pm-img-panel">
+          <div class="pm-series-ribbon" style="background:${series.bg}">
+            <span>${series.icon}</span><span>${series.name}</span>
+          </div>
+          <img class="pm-img-main" id="pmImgMain" src="${imgHD}"
+               onerror="this.src='${p.img}';this.onerror=null"
+               alt="${p.codigo}" style="margin-top:32px">
+          <a class="pm-img-hd-link" href="${imgHD}" target="_blank">↗ Ver imagen en alta resolución</a>
+        </div>
+
+        <!-- Info derecha -->
+        <div class="pm-info-panel">
+          <div>
+            <div class="pm-code">${p.codigo}</div>
+            <div class="pm-name">${p.nombre}</div>
+          </div>
+
+          <div class="pm-price-card">
+            <div class="pm-price-main">${fmt(p.ptotal)}</div>
+            <div class="pm-price-sub">
+              Neto ${fmt(p.pneto)} &nbsp;+&nbsp; IVA ${fmt(p.piva)} &nbsp;·&nbsp;
+              <strong>Precio final con IVA incluido</strong>
+            </div>
+          </div>
+
+          <div>
+            <span class="pm-stock-pill ${p.stock==='bajo'?'low':p.stock==='agotado'?'out':''}">
+              <span class="pm-stock-dot"></span>
+              ${p.stock==='bajo'?'Últimas unidades':p.stock==='agotado'?'Sin stock':'En stock — despacho inmediato'}
+            </span>
+          </div>
+
+          <div class="pm-cta-row">
+            <button class="pm-btn-primary" onclick="pmAddCart(${id})">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+              Agregar al carro
+            </button>
+            <button class="pm-btn-secondary" onclick="pmAddCot(${id})">📋 Cotizar</button>
+            <button class="pm-btn-ghost" onclick="copyTxt('${p.codigo}');showToast('✅ Código copiado')" title="Copiar código de modelo">📋</button>
+          </div>
+
+          <div class="pm-ext-links">
+            <a class="pm-ext-link" href="${dahuaES}" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              Ver en Dahua Technology Latinoamérica
+            </a>
+            <a class="pm-ext-link" href="${pdfUrl}" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Ficha técnica PDF — ${p.codigo}
+            </a>
+            <a class="pm-ext-link" href="${ssttPerma}" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              Ver ficha detallada en sstt.cl
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Highlights bar -->
+      ${hlHTML ? `<div class="pm-highlights">${hlHTML}</div>` : ''}
+
+      <!-- Tabs -->
+      <div class="pm-tabbar">
+        <button class="pm-tab active"  onclick="pmTab('specs',this)">📋 Especificaciones</button>
+        <button class="pm-tab"         onclick="pmTab('desc',this)">📝 Descripción</button>
+        <button class="pm-tab"         onclick="pmTab('dl',this)">⬇ Descargas</button>
+        ${related.length?'<button class="pm-tab" onclick="pmTab(\'rel\',this)">🔗 Relacionados ('+related.length+')</button>':''}
+      </div>
+
+      <!-- Panels -->
+      <div class="pm-body">
+        <div class="pm-panel active" id="pmP-specs">
+          <div class="pm-spec-accordion">${specsHTML}</div>
+          <p style="font-size:11px;color:var(--light);margin-top:8px">* Especificaciones derivadas del nombre de producto. Para parámetros exactos (dimensiones, consumo, temperatura de operación, etc.) descarga la ficha técnica PDF oficial.</p>
+        </div>
+        <div class="pm-panel" id="pmP-desc">${descHTML}</div>
+        <div class="pm-panel" id="pmP-dl">${dlHTML}</div>
+        ${related.length?`<div class="pm-panel" id="pmP-rel">${relHTML}</div>`:''}
       </div>
     </div>`;
-  qs('prodModalOverlay').classList.add('open');
-  document.body.style.overflow='hidden';
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  modal.scrollTop = 0;
 }
 
 function closeProdModal() {
-  qs('prodModalOverlay').classList.remove('open');
-  document.body.style.overflow='';
+  const m = document.getElementById('prodModal');
+  if (m) { m.classList.remove('open'); document.body.style.overflow=''; }
 }
 
-function setPMTab(id, btn) {
+function pmTab(name, btn) {
   document.querySelectorAll('.pm-tab').forEach(b=>b.classList.remove('active'));
   document.querySelectorAll('.pm-panel').forEach(p=>p.classList.remove('active'));
-  btn.classList.add('active');
-  const idMap = {specs:'pmSpecs',desc:'pmDesc',dl:'pmDl',vids:'pmVids',rel:'pmRel'};
-  qs(idMap[id])?.classList.add('active');
+  if (btn) btn.classList.add('active');
+  const el = document.getElementById('pmP-'+name);
+  if (el) el.classList.add('active');
 }
 
-function addCartFromModal(id) {
-  const p = PRODUCTS.find(x=>x.id===id);
-  if (!p) return;
-  addCart(p);
-  closeProdModal();
+function pmToggleGroup(hdr) {
+  const body = hdr.nextElementSibling;
+  const arrow = hdr.querySelector('.pmg-arrow');
+  body.classList.toggle('collapsed');
+  if (arrow) arrow.textContent = body.classList.contains('collapsed') ? '▸' : '▾';
 }
+
+function pmAddCart(id) {
+  const p = PRODUCTS.find(x=>x.id===id);
+  if (p) { addCart(p); closeProdModal(); }
+}
+function pmAddCot(id) {
+  const p = PRODUCTS.find(x=>x.id===id);
+  if (p) { try { addToCotizacion(p); } catch(e){} closeProdModal(); }
+}
+
+// Remove old functions to avoid conflicts
+// (backward compat aliases)
+window.openProdModal = openProdModal;
+window.closeProdModal = closeProdModal;
+
+
+
+// Keep backward compat
+function openProdModal_legacy(id) { openProdModal(id); }
+
+
+
 
 // ─── Extend product card click to open modal ─────────────
 document.addEventListener('click', e => {
@@ -4366,5 +4933,6 @@ renderVideos();
 renderDoriEx();
 
 </script>
+<div id="prodModal"></div>
 </body>
 </html>
