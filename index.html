@@ -596,7 +596,7 @@ footer{background:var(--white);border-top:2px solid var(--blue);margin-top:32px}
 
 /* Image panel */
 .pm-img-panel{background:var(--bg);padding:32px 24px;display:flex;flex-direction:column;align-items:center;border-right:1px solid var(--border);min-height:360px;position:relative}
-.pm-img-main{width:100%;max-width:340px;height:290px;object-fit:contain}
+.pm-img-main{width:100%;max-width:300px;height:260px;object-fit:contain;display:block;margin:40px auto 0}
 .pm-img-hd-link{font-size:10px;color:var(--muted);margin-top:10px;text-align:center;text-decoration:none}
 .pm-img-hd-link:hover{color:var(--blue)}
 .pm-series-ribbon{position:absolute;top:0;left:0;right:0;padding:7px 14px;font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#fff;display:flex;align-items:center;gap:6px}
@@ -4382,9 +4382,10 @@ function openProdModal(id) {
           <div class="pm-series-ribbon" style="background:${series.bg}">
             <span>${series.icon}</span><span>${series.name}</span>
           </div>
-          <img class="pm-img-main" id="pmImgMain" src="${imgHD}"
-               onerror="this.src='${p.img}';this.onerror=null"
+          <img class="pm-img-main" id="pmImgMain" src="${p.img}"
+               onerror="this.style.opacity='.15'"
                alt="${p.codigo}" style="margin-top:32px">
+          <a class="pm-img-hd-link" href="${imgHD}" target="_blank" id="pmImgHDLink">↗ Ver imagen HD</a>
           <a class="pm-img-hd-link" href="${imgHD}" target="_blank">↗ Ver imagen en alta resolución</a>
         </div>
 
