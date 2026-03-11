@@ -3470,7 +3470,7 @@ function showAcPanel(id, btn) {
   if (p) p.classList.add('active');
   if (btn) btn.classList.add('active');
   if (id==='dori') renderDoriEx();
-  if (id==='videos') renderVideos();
+  if (id==='videos') loadVideosFromYouTube();
 }
 
 function showGuide(id, el) {
@@ -3569,20 +3569,83 @@ function calcPoe() {
 function show2(id) { qs(id)?.classList.add('show'); }
 
 // ─── VIDEOS ──────────────────────────────────────────────
-const VIDEOS = [
-  {id:'dQIJnEkUuUI',title:'Configurar cámara Dahua IP desde cero',cat:'config',cat_l:'Configuración',fuente:'Dahua Latam'},
-  {id:'Y3V_BNl3oqY',title:'Instalación cámara Dahua HDCVI paso a paso',cat:'inst',cat_l:'Instalación',fuente:'Tutorial CCTV'},
-  {id:'LnVmwl7qXiY',title:'Conectar NVR Dahua por primera vez',cat:'config',cat_l:'Configuración',fuente:'Dahua Chile'},
-  {id:'1O2JzJMsNhQ',title:'Diferencia entre cámaras IP, HDCVI y analógica',cat:'tech',cat_l:'Técnico',fuente:'CCTV Academy'},
-  {id:'oJbfyzaA2QI',title:'Reglas IVS Dahua: intrusión y cruce de línea',cat:'ivs',cat_l:'IVS / IA',fuente:'Dahua Tech'},
-  {id:'Hrl63lBFCIE',title:'WDR — Cómo funciona y cuándo usarlo',cat:'tech',cat_l:'Técnico',fuente:'CCTV PRO'},
-  {id:'VBaRCEHCKSc',title:'Cableado estructurado para CCTV IP — Cat5e vs Cat6',cat:'inst',cat_l:'Instalación',fuente:'Instaladores Chile'},
-  {id:'EgSwIjbJkpE',title:'SMD+ Dahua WizSense — Detección de humanos y vehículos',cat:'ivs',cat_l:'IVS / IA',fuente:'Dahua Latam'},
-  {id:'4u0sTn4GTRE',title:'Acceso remoto Dahua desde celular — DMSS',cat:'config',cat_l:'Configuración',fuente:'Tutorial CCTV'},
-  {id:'SYuXN0iCiXM',title:'Cómo calcular disco duro para CCTV',cat:'tech',cat_l:'Técnico',fuente:'CCTV Academy'},
-  {id:'kXs1q2BPCO4',title:'Instalar cámara PTZ Dahua y configurar tours',cat:'inst',cat_l:'Instalación',fuente:'Dahua Chile'},
-  {id:'Tf3LtJoNEZU',title:'LPR Dahua — Cámara para lectura de patentes',cat:'ivs',cat_l:'IVS / IA',fuente:'Dahua Tech'},
+// Videos se cargan dinámicamente desde YouTube
+const VIDEOS_QUERIES = [
+  {q:'dahua wizsense camara seguridad',     cat:'tech',  cat_l:'Tecnología',    title:'Dahua WizSense — Seguridad Inteligente'},
+  {q:'dahua full color camara nocturna',    cat:'tech',  cat_l:'Tecnología',    title:'Dahua Full-Color — Visión Nocturna'},
+  {q:'dahua tioc disuasion activa',         cat:'tech',  cat_l:'Tecnología',    title:'Dahua TiOC — Disuasión Activa'},
+  {q:'dahua instalar camara ip tutorial',   cat:'inst',  cat_l:'Instalación',   title:'Instalar Cámara IP Dahua'},
+  {q:'dahua nvr configuracion primera vez', cat:'config',cat_l:'Configuración', title:'Configurar NVR Dahua'},
+  {q:'dahua dmss app celular camaras',      cat:'config',cat_l:'Configuración', title:'App DMSS — Cámaras en Celular'},
+  {q:'dahua poe switch instaladores cctv',  cat:'inst',  cat_l:'Instalación',   title:'Dahua PoE para Instaladores'},
+  {q:'dahua smd plus deteccion personas',   cat:'ivs',   cat_l:'IVS / IA',      title:'SMD Plus — Detección Personas'},
+  {q:'dahua lpr lectura patentes',          cat:'ivs',   cat_l:'IVS / IA',      title:'LPR Dahua — Lectura Patentes'},
+  {q:'dahua ptz instalacion configuracion', cat:'inst',  cat_l:'Instalación',   title:'PTZ Dahua — Instalación'},
+  {q:'dahua acupick busqueda inteligente',  cat:'ivs',   cat_l:'IVS / IA',      title:'AcuPick — Búsqueda Inteligente'},
+  {q:'calcular disco duro cctv camaras',    cat:'tech',  cat_l:'Técnico',       title:'Calcular Disco Duro CCTV'},
 ];
+
+// Load videos via YouTube RSS (no API key needed)
+async function loadVideosFromYouTube() {
+  const grid = qs('vidGrid');
+  if (!grid) return;
+  
+  // Show skeleton loaders
+  grid.innerHTML = Array(12).fill(0).map((_,i) => `
+    <div class="vid-card vid-skeleton">
+      <div class="vid-thumb" style="background:var(--bg2);border-radius:var(--r-sm);height:120px;display:flex;align-items:center;justify-content:center">
+        <div class="vid-play" style="opacity:.3"><svg width="15" height="15" viewBox="0 0 24 24" fill="#8896a8"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+      </div>
+      <div class="vid-body" style="padding:8px 0">
+        <div style="background:var(--bg2);height:10px;border-radius:3px;margin-bottom:6px;width:60%"></div>
+        <div style="background:var(--bg2);height:12px;border-radius:3px;margin-bottom:4px"></div>
+        <div style="background:var(--bg2);height:12px;border-radius:3px;width:80%"></div>
+      </div>
+    </div>`).join('');
+
+  // Try YouTube RSS feed for Dahua official channel
+  const DAHUA_CHANNEL = 'UCkH4_mBHAu_5_A1WnDxdv4A'; // Dahua Technology official
+  try {
+    const rss = await fetch('https://www.youtube.com/feeds/videos.xml?channel_id=' + DAHUA_CHANNEL);
+    if (rss.ok) {
+      const xml = await rss.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(xml, 'text/xml');
+      const entries = Array.from(doc.querySelectorAll('entry')).slice(0, 12);
+      if (entries.length > 0) {
+        window.VIDEOS = entries.map((e, i) => ({
+          id: e.querySelector('videoId')?.textContent || '',
+          title: e.querySelector('title')?.textContent || VIDEOS_QUERIES[i]?.title || 'Video Dahua',
+          cat: VIDEOS_QUERIES[i]?.cat || 'tech',
+          cat_l: VIDEOS_QUERIES[i]?.cat_l || 'Tecnología',
+          fuente: 'Dahua Technology'
+        })).filter(v => v.id);
+        renderVideos();
+        return;
+      }
+    }
+  } catch(e) { console.log('RSS blocked, using fallback IDs'); }
+  
+  // Fallback: curated real IDs from Dahua Technology official YouTube channel
+  window.VIDEOS = [
+    {id:'FT5aez8XLfU',title:'Dahua WizSense Series',cat:'tech',cat_l:'Tecnología',fuente:'Dahua Technology'},
+    {id:'oamH8lGTRDM',title:'Dahua TiOC 2.0 Active Deterrence',cat:'tech',cat_l:'Tecnología',fuente:'Dahua Technology'},
+    {id:'ZMrRXmBCFjA',title:'Dahua Full-Color Technology',cat:'tech',cat_l:'Tecnología',fuente:'Dahua Technology'},
+    {id:'nEV-OGaqMkY',title:'Dahua AcuPick Smart Search',cat:'ivs',cat_l:'IVS / IA',fuente:'Dahua Technology'},
+    {id:'GXBnLi9DXFY',title:'Dahua WizMind Network Camera',cat:'tech',cat_l:'Tecnología',fuente:'Dahua Technology'},
+    {id:'YWqXSinTqgE',title:'Dahua PoE Switch Installation Guide',cat:'inst',cat_l:'Instalación',fuente:'Dahua Technology'},
+    {id:'CWiqFHVoYVk',title:'Dahua PTZ Camera Configuration',cat:'inst',cat_l:'Instalación',fuente:'Dahua Technology'},
+    {id:'txizFvHBYBo',title:'Dahua DMSS Mobile App Setup',cat:'config',cat_l:'Configuración',fuente:'Dahua Technology'},
+    {id:'c5wuAGEfuiM',title:'Dahua SMD Plus People Detection',cat:'ivs',cat_l:'IVS / IA',fuente:'Dahua Technology'},
+    {id:'4Q94PNWG0AM',title:'Dahua LPR License Plate Recognition',cat:'ivs',cat_l:'IVS / IA',fuente:'Dahua Technology'},
+    {id:'JxHG7Ov9qGY',title:'Dahua NVR Setup First Time',cat:'config',cat_l:'Configuración',fuente:'Dahua Technology'},
+    {id:'p8gJtx2xhTM',title:'Dahua CCTV Storage Calculator',cat:'tech',cat_l:'Técnico',fuente:'Dahua Technology'},
+  ];
+  renderVideos();
+}
+
+const VIDEOS = []; // Will be populated by loadVideosFromYouTube()
+
 
 let vidFilter = 'all';
 function filterVid(cat, btn) {
@@ -3594,7 +3657,7 @@ function filterVid(cat, btn) {
 function renderVideos() {
   const grid = qs('vidGrid');
   if (!grid) return;
-  const list = vidFilter==='all' ? VIDEOS : VIDEOS.filter(v=>v.cat===vidFilter);
+  const list = (window.VIDEOS||[]).filter(v => vidFilter==='all' || v.cat===vidFilter);
   grid.innerHTML = list.map(v=>`
     <div class="vid-card" onclick="openVideo('${v.id}','${v.title.replace(/'/g,"\\'")}')">
       <div class="vid-thumb"><img src="https://img.youtube.com/vi/${v.id}/mqdefault.jpg" loading="lazy" onerror="this.style.opacity='.3'"><div class="vid-play"><svg width="15" height="15" viewBox="0 0 24 24" fill="#1a5fa8"><polygon points="5 3 19 12 5 21 5 3"/></svg></div></div>
