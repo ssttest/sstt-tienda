@@ -711,6 +711,150 @@ footer{background:var(--white);border-top:2px solid var(--blue);margin-top:32px}
 .pm-notice{background:var(--blue-p);border:1px solid var(--blue-p2);border-radius:4px;padding:10px 14px;font-size:11px;color:var(--blue-d);margin-top:14px;display:flex;gap:8px;align-items:flex-start}
 .pm-notice svg{flex-shrink:0;margin-top:1px}
 
+
+/* ═══════════════════════════════════════════════════════
+   COMPARADOR FLOTANTE — SSTT 2025
+   ═══════════════════════════════════════════════════════ */
+
+/* Barra flotante inferior */
+#cmp-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:8000;
+  background:var(--navy);color:#fff;
+  transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+  box-shadow:0 -4px 24px rgba(0,0,0,.3);
+}
+#cmp-bar.visible{transform:translateY(0)}
+
+.cmp-bar-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;gap:12px;
+  padding:10px 20px;
+}
+.cmp-bar-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:rgba(255,255,255,.6);white-space:nowrap}
+.cmp-slots{display:flex;gap:8px;flex:1;overflow-x:auto}
+
+/* Slot de producto en la barra */
+.cmp-slot{
+  position:relative;background:rgba(255,255,255,.1);border:1.5px dashed rgba(255,255,255,.25);
+  border-radius:6px;width:130px;min-width:130px;height:52px;
+  display:flex;align-items:center;gap:8px;padding:0 8px;
+  transition:all .2s;cursor:default;flex-shrink:0;
+}
+.cmp-slot.filled{background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.3)}
+.cmp-slot-img{width:32px;height:32px;object-fit:contain;border-radius:3px;background:rgba(255,255,255,.1);flex-shrink:0}
+.cmp-slot-info{flex:1;overflow:hidden;min-width:0}
+.cmp-slot-code{font-size:9px;font-family:'IBM Plex Mono',monospace;color:rgba(255,255,255,.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700}
+.cmp-slot-name{font-size:9px;color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.cmp-slot-empty-label{font-size:10px;color:rgba(255,255,255,.3);width:100%;text-align:center}
+.cmp-slot-remove{
+  position:absolute;top:-6px;right:-6px;
+  background:var(--red);color:#fff;border:none;border-radius:50%;
+  width:16px;height:16px;font-size:10px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;line-height:1;
+  opacity:0;transition:opacity .15s;
+}
+.cmp-slot.filled:hover .cmp-slot-remove{opacity:1}
+
+.cmp-bar-actions{display:flex;gap:8px;flex-shrink:0}
+.cmp-btn-compare{
+  background:var(--red);color:#fff;border:none;border-radius:5px;
+  padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;
+  font-family:inherit;white-space:nowrap;transition:background .15s;
+  display:flex;align-items:center;gap:6px;
+}
+.cmp-btn-compare:hover{background:var(--red-d)}
+.cmp-btn-compare:disabled{background:rgba(255,255,255,.15);cursor:not-allowed}
+.cmp-btn-clear{
+  background:rgba(255,255,255,.1);color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.2);
+  border-radius:5px;padding:10px 12px;font-size:12px;cursor:pointer;font-family:inherit;transition:all .15s;
+}
+.cmp-btn-clear:hover{background:rgba(255,255,255,.2);color:#fff}
+
+/* Botón "Comparar" en cada tarjeta de producto */
+.btn-cmp{
+  background:transparent;color:var(--muted);border:1px solid var(--border);
+  border-radius:4px;padding:7px 8px;font-size:10px;font-weight:600;cursor:pointer;
+  font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:4px;white-space:nowrap;
+}
+.btn-cmp:hover{border-color:var(--navy);color:var(--navy);background:var(--bg)}
+.btn-cmp.added{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn-cmp.added:hover{background:var(--red);border-color:var(--red)}
+
+/* ── MODAL COMPARADOR ────────────────────────────────────── */
+#cmpModal{
+  position:fixed;inset:0;z-index:9500;
+  background:rgba(0,10,25,.8);backdrop-filter:blur(6px);
+  display:none;align-items:flex-start;justify-content:center;
+  overflow-y:auto;padding:20px 16px;
+}
+#cmpModal.open{display:flex}
+.cmp-modal-wrap{
+  background:#fff;border-radius:10px;width:100%;max-width:1100px;
+  box-shadow:0 20px 60px rgba(0,0,0,.3);overflow:hidden;
+  animation:cmpIn .25s cubic-bezier(.4,0,.2,1);
+}
+@keyframes cmpIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.cmp-modal-head{
+  background:var(--navy);color:#fff;
+  padding:16px 24px;display:flex;align-items:center;justify-content:space-between;
+}
+.cmp-modal-head h2{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}
+.cmp-modal-x{background:rgba(255,255,255,.15);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.cmp-modal-x:hover{background:var(--red)}
+
+/* Tabla comparativa */
+.cmp-table-wrap{overflow-x:auto;padding:0}
+.cmp-table{width:100%;border-collapse:collapse;min-width:500px}
+
+/* Header de productos */
+.cmp-prod-header{background:var(--bg);border-bottom:2px solid var(--border)}
+.cmp-prod-header th{padding:16px 14px;text-align:center;border-right:1px solid var(--border);vertical-align:top}
+.cmp-prod-header th:first-child{text-align:left;width:160px;background:#fff}
+.cmp-prod-header th:last-child{border-right:none}
+.cmp-th-img{width:70px;height:60px;object-fit:contain;display:block;margin:0 auto 6px}
+.cmp-th-code{font-size:11px;font-family:'IBM Plex Mono',monospace;font-weight:800;color:var(--navy);margin-bottom:3px}
+.cmp-th-name{font-size:10px;color:var(--muted);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cmp-th-price{font-size:14px;font-weight:900;color:var(--red);margin-top:6px}
+.cmp-th-actions{display:flex;gap:5px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.cmp-th-btn-cart{background:var(--red);color:#fff;border:none;border-radius:4px;padding:6px 10px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit}
+.cmp-th-btn-cart:hover{background:var(--red-d)}
+.cmp-th-btn-ficha{background:var(--navy);color:#fff;border:none;border-radius:4px;padding:6px 10px;font-size:10px;font-weight:600;cursor:pointer;font-family:inherit}
+.cmp-th-remove{background:rgba(0,0,0,.06);color:var(--muted);border:none;border-radius:4px;padding:6px 8px;font-size:10px;cursor:pointer;font-family:inherit}
+.cmp-th-remove:hover{background:var(--red-p);color:var(--red)}
+
+/* Filas de specs */
+.cmp-row{border-bottom:1px solid var(--border2)}
+.cmp-row:nth-child(even){background:var(--bg)}
+.cmp-row-group td,.cmp-row-group th{background:var(--navy)!important;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:7px 14px}
+.cmp-row td{padding:9px 14px;font-size:12px;color:var(--text);border-right:1px solid var(--border2);text-align:center;vertical-align:middle}
+.cmp-row td:first-child{text-align:left;font-weight:600;color:var(--muted);background:#fff;font-size:11px;border-right:2px solid var(--border)}
+.cmp-row td:last-child{border-right:none}
+
+/* Indicadores de diferencia */
+.cmp-cell-best{background:var(--green-p)!important;color:var(--green)!important;font-weight:700}
+.cmp-cell-mid{background:var(--yellow-p)!important;color:var(--yellow)!important}
+.cmp-cell-low{background:var(--red-p)!important;color:var(--red-d)!important}
+.cmp-cell-equal{color:var(--muted)}
+
+/* Indicador visual: ícono al lado del valor */
+.cmp-badge-best{display:inline-flex;align-items:center;gap:4px}
+.cmp-badge-best::after{content:'▲';font-size:9px;color:var(--green)}
+.cmp-badge-low::after{content:'▼';font-size:9px;color:var(--red);margin-left:4px}
+
+/* Resumen IA al pie */
+.cmp-summary{padding:20px 24px;border-top:2px solid var(--border);background:var(--bg)}
+.cmp-summary h3{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.cmp-summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.cmp-winner-card{background:#fff;border:1.5px solid var(--border);border-radius:6px;padding:12px 14px}
+.cmp-winner-card.winner{border-color:var(--green);background:var(--green-p)}
+.cmp-winner-title{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700;margin-bottom:4px}
+.cmp-winner-val{font-size:12px;font-weight:700;color:var(--navy)}
+.cmp-winner-desc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes loadbar{0%{transform:translateX(-100%)}50%{transform:translateX(0)}100%{transform:translateX(100%)}width:100%}
 </style>
 </head>
 <body>
@@ -2798,6 +2942,10 @@ function render() {
             <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             Ficha
           </button>
+          <button class="btn-cmp" data-id="${p.id}" onclick="cmpToggle(${p.id})" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Comparar
+          </button>
           <button class="btn-cot" onclick='addToCotizacion(${JSON.stringify(p)})'   title="Guardar en cotización">
             <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
             Cotizar
@@ -4210,7 +4358,7 @@ function pmDori(p) {
 }
 
 // ── MAIN modal builder ────────────────────────────────────────────
-function openProdModal(id) {
+function _pmBuildModal(id) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p) return;
 
@@ -4491,10 +4639,7 @@ function pmAddCot(id) {
   if (p) { try { addToCotizacion(p); } catch(e){} closeProdModal(); }
 }
 
-// Remove old functions to avoid conflicts
-// (backward compat aliases)
-window.openProdModal = openProdModal;
-window.closeProdModal = closeProdModal;
+
 
 
 
@@ -4934,7 +5079,968 @@ updateAuthUI();
 renderVideos();
 renderDoriEx();
 
+
+// ═══════════════════════════════════════════════════════════════════
+// COMPARADOR DE PRODUCTOS — SSTT 2025
+// ═══════════════════════════════════════════════════════════════════
+
+const CMP = {
+  items: [],       // array de product objects
+  MAX: 4,          // máximo 4 productos
+};
+
+// ── Extraer valor numérico de una spec para comparar ─────────────
+function cmpNumVal(val) {
+  if (!val) return null;
+  // Extract leading number (e.g. "4K · 8MP" → 8, "30m" → 30, "IP67" → 67)
+  const m = val.match(/(\d+\.?\d*)/);
+  return m ? parseFloat(m[1]) : null;
+}
+
+// ── Extraer specs resumidas de un producto ───────────────────────
+function cmpGetSpecs(p) {
+  const n = p.nombre.toLowerCase();
+  const specs = {};
+
+  // Resolución → número de MP
+  if      (/\b8mp\b|4k/.test(n))  specs.res = {label:'Resolución', val:'4K 8MP', num:8};
+  else if (/\b6mp\b/.test(n))     specs.res = {label:'Resolución', val:'6MP',    num:6};
+  else if (/\b5mp\b/.test(n))     specs.res = {label:'Resolución', val:'5MP',    num:5};
+  else if (/\b4mp\b/.test(n))     specs.res = {label:'Resolución', val:'4MP',    num:4};
+  else if (/\b3mp\b/.test(n))     specs.res = {label:'Resolución', val:'3MP',    num:3};
+  else if (/\b2mp\b|1080/.test(n))specs.res = {label:'Resolución', val:'2MP FHD',num:2};
+  else                            specs.res = {label:'Resolución', val:'Ver ficha',num:0};
+
+  // IR
+  const ir = n.match(/\bir\s*(\d+)\b/i);
+  specs.ir = {label:'Alcance IR', val: ir ? ir[1]+'m' : '—', num: ir ? parseInt(ir[1]) : 0};
+
+  // Precio
+  specs.price = {label:'Precio c/IVA', val: fmt(p.ptotal), num: p.ptotal};
+
+  // IA
+  let ia = '—', iaScore = 0;
+  if (/wizmind/.test(n))           { ia='WizMind AI';   iaScore=4; }
+  else if (/wizsense/.test(n))     { ia='WizSense';     iaScore=3; }
+  else if (/tioc|disuasion/.test(n)){ ia='TiOC 2.0';   iaScore=3; }
+  else if (/smd\+/.test(n))        { ia='SMD+';         iaScore=2; }
+  else if (/ivs/.test(n))          { ia='IVS';          iaScore=1; }
+  specs.ia = {label:'IA / IVS', val:ia, num:iaScore};
+
+  // Protección
+  let prot = '—', protScore = 0;
+  if (/ip68/.test(n))  { prot='IP68 / IK10'; protScore=5; }
+  else if (/ip67/.test(n)&&/ik10/.test(n)){ prot='IP67 / IK10'; protScore=4; }
+  else if (/ip67/.test(n))  { prot='IP67'; protScore=3; }
+  else if (/ip66/.test(n))  { prot='IP66'; protScore=2; }
+  else if (/ip65/.test(n))  { prot='IP65'; protScore=1; }
+  specs.prot = {label:'Protección', val:prot, num:protScore};
+
+  // PoE
+  let poe='—', poeScore=0;
+  if (/hi.?poe/.test(n))        { poe='Hi-PoE 60W'; poeScore=3; }
+  else if (/poe\+/.test(n))     { poe='PoE+ 30W';   poeScore=2; }
+  else if (/poe/.test(n))       { poe='PoE 15W';    poeScore=1; }
+  specs.poe = {label:'Alimentación', val:poe, num:poeScore};
+
+  // Visión nocturna
+  let noche='IR estándar', nocheScore=1;
+  if (/full.?color|wizcolor/.test(n)) { noche='Full-Color'; nocheScore=4; }
+  else if (/tioc/.test(n))            { noche='TiOC (luz+sirena)'; nocheScore=4; }
+  else if (/starlight/.test(n))       { noche='Starlight'; nocheScore=3; }
+  else if (/smart ir/.test(n))        { noche='Smart IR'; nocheScore=2; }
+  specs.noche = {label:'Visión nocturna', val:noche, num:nocheScore};
+
+  // MicroSD
+  specs.sd = {
+    label:'MicroSD',
+    val: /micro.?sd|sd.*slot/.test(n) ? 'Sí (hasta 256GB)' : 'No',
+    num: /micro.?sd|sd.*slot/.test(n) ? 1 : 0
+  };
+
+  // Audio
+  specs.audio = {
+    label:'Micrófono',
+    val: /mic|microfono|audio/.test(n) ? 'Integrado' : 'No',
+    num: /mic|microfono|audio/.test(n) ? 1 : 0
+  };
+
+  // Tipo forma
+  let forma='—';
+  const c = p.codigo.toLowerCase();
+  if (/ptz|sd\d/.test(c))       forma='PTZ Motorizado';
+  else if (/hfw|bullet/.test(c)) forma='Bala (Bullet)';
+  else if (/hdw|hdbw/.test(c))  forma='Domo';
+  else if (/eyw/.test(c))        forma='Eyeball';
+  specs.forma = {label:'Tipo de cámara', val:forma, num:0};
+
+  return specs;
+}
+
+// ── Determinar qué productos son mejores/peores en cada spec ─────
+function cmpRank(specKey) {
+  // Returns array of {id, class} for each product
+  const nums = CMP.items.map(p => {
+    const sp = cmpGetSpecs(p);
+    return { id: p.id, num: sp[specKey]?.num ?? null };
+  }).filter(x => x.num !== null && x.num > 0);
+
+  if (nums.length < 2) return {}; // no ranking if all same or only 1
+
+  const max = Math.max(...nums.map(x=>x.num));
+  const min = Math.min(...nums.map(x=>x.num));
+  if (max === min) return {}; // all equal
+
+  const result = {};
+  nums.forEach(x => {
+    if (x.num === max)      result[x.id] = 'best';
+    else if (x.num === min) result[x.id] = 'low';
+    else                    result[x.id] = 'mid';
+  });
+
+  // Price is inverted: lower = better
+  if (specKey === 'price') {
+    nums.forEach(x => {
+      if (x.num === min)      result[x.id] = 'best';
+      else if (x.num === max) result[x.id] = 'low';
+      else                    result[x.id] = 'mid';
+    });
+  }
+
+  return result;
+}
+
+// ── Generar resumen inteligente ──────────────────────────────────
+function cmpGenerateSummary() {
+  if (CMP.items.length < 2) return '';
+
+  const winners = {};
+  const specKeys = ['res','ir','ia','prot','noche','sd','audio'];
+  const specLabels = {res:'Mayor resolución',ir:'Mayor alcance IR',ia:'Mejor IA',
+    prot:'Mayor protección',noche:'Mejor visión nocturna',sd:'Almacenamiento local',audio:'Audio'};
+
+  specKeys.forEach(key => {
+    const ranks = cmpRank(key);
+    const winnerId = Object.entries(ranks).find(([,v])=>v==='best')?.[0];
+    if (winnerId) {
+      if (!winners[winnerId]) winners[winnerId] = [];
+      winners[winnerId].push(specLabels[key]);
+    }
+  });
+
+  // Precio mejor
+  const pRanks = cmpRank('price');
+  const cheapId = Object.entries(pRanks).find(([,v])=>v==='best')?.[0];
+  if (cheapId) {
+    if (!winners[cheapId]) winners[cheapId] = [];
+    winners[cheapId].push('Mejor precio');
+  }
+
+  return Object.entries(winners).map(([id, wins]) => {
+    const p = CMP.items.find(x => x.id == id);
+    if (!p) return '';
+    const isOverall = wins.length >= 3;
+    return `
+      <div class="cmp-winner-card ${isOverall?'winner':''}">
+        <div class="cmp-winner-title">${isOverall?'🏆 Más recomendado':'✓ Destaca en'}</div>
+        <div class="cmp-winner-val">${p.codigo}</div>
+        <div class="cmp-winner-desc">${wins.join(' · ')}</div>
+      </div>`;
+  }).join('');
+}
+
+// ── Renderizar el modal de comparación ──────────────────────────
+function cmpRenderModal() {
+  const products = CMP.items;
+  if (products.length < 2) { showToast('⚠️ Agrega al menos 2 productos para comparar'); return; }
+
+  const specKeys  = ['res','ir','ia','prot','noche','poe','sd','audio','forma','price'];
+  const groups = [
+    {label:'Imagen', keys:['res']},
+    {label:'Iluminación', keys:['ir','noche']},
+    {label:'Inteligencia Artificial', keys:['ia']},
+    {label:'Protección', keys:['prot']},
+    {label:'Conectividad', keys:['poe','sd','audio']},
+    {label:'Forma', keys:['forma']},
+    {label:'Precio', keys:['price']},
+  ];
+
+  // Header row: product columns
+  const headerCols = products.map(p => `
+    <th>
+      <img class="cmp-th-img" src="${p.img}" alt="${p.codigo}" onerror="this.style.opacity='.2'">
+      <div class="cmp-th-code">${p.codigo}</div>
+      <div class="cmp-th-name">${p.nombre}</div>
+      <div class="cmp-th-price">${fmt(p.ptotal)}</div>
+      <div class="cmp-th-actions">
+        <button class="cmp-th-btn-cart" onclick="addCart(PRODUCTS.find(x=>x.id===${p.id}));showToast('✅ Agregado')">🛒 Carro</button>
+        <button class="cmp-th-btn-ficha" onclick="closeCmpModal();openProdModal(${p.id})">📋 Ficha</button>
+        <button class="cmp-th-remove" onclick="cmpRemove(${p.id});cmpRenderModal()">✕</button>
+      </div>
+    </th>`).join('');
+
+  // Body rows
+  const bodyRows = groups.map(g => {
+    const groupRow = `
+      <tr class="cmp-row-group">
+        <td colspan="${products.length+1}">${g.label}</td>
+      </tr>`;
+
+    const dataRows = g.keys.map(key => {
+      const ranks = cmpRank(key);
+      const firstSpecs = cmpGetSpecs(products[0]);
+      const label = firstSpecs[key]?.label || key;
+
+      const cells = products.map(p => {
+        const specs = cmpGetSpecs(p);
+        const val   = specs[key]?.val || '—';
+        const rank  = ranks[p.id];
+        const cls   = rank==='best' ? 'cmp-cell-best'
+                    : rank==='low'  ? 'cmp-cell-low'
+                    : rank==='mid'  ? 'cmp-cell-mid'
+                    : 'cmp-cell-equal';
+        const icon  = rank==='best' ? ' <span style="color:var(--green);font-size:11px">▲</span>'
+                    : rank==='low'  ? ' <span style="color:var(--red);font-size:11px">▼</span>'
+                    : '';
+        return `<td class="${cls}">${val}${icon}</td>`;
+      }).join('');
+
+      return `
+        <tr class="cmp-row">
+          <td>${label}</td>
+          ${cells}
+        </tr>`;
+    }).join('');
+
+    return groupRow + dataRows;
+  }).join('');
+
+  const summary = cmpGenerateSummary();
+
+  // Assemble modal
+  let modal = document.getElementById('cmpModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'cmpModal';
+    document.body.appendChild(modal);
+  }
+
+  modal.innerHTML = `
+    <div class="cmp-modal-wrap">
+      <div class="cmp-modal-head">
+        <h2>⚖️ Comparando ${products.length} productos</h2>
+        <button class="cmp-modal-x" onclick="closeCmpModal()">✕</button>
+      </div>
+      <div class="cmp-table-wrap">
+        <table class="cmp-table">
+          <thead>
+            <tr class="cmp-prod-header">
+              <th style="vertical-align:bottom;padding-bottom:12px">
+                <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Característica</div>
+              </th>
+              ${headerCols}
+            </tr>
+          </thead>
+          <tbody>${bodyRows}</tbody>
+        </table>
+      </div>
+      ${summary ? `
+      <div class="cmp-summary">
+        <h3>🤖 Análisis de diferencias</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:12px">
+          <span style="background:var(--green-p);color:var(--green);padding:2px 7px;border-radius:3px;font-weight:700;font-size:11px">▲ Verde</span> = mejor valor en esa categoría &nbsp;·&nbsp;
+          <span style="background:var(--red-p);color:var(--red-d);padding:2px 7px;border-radius:3px;font-weight:700;font-size:11px">▼ Rojo</span> = valor inferior &nbsp;·&nbsp;
+          <span style="background:var(--yellow-p);color:var(--yellow);padding:2px 7px;border-radius:3px;font-weight:700;font-size:11px">Naranja</span> = intermedio
+        </p>
+        <div class="cmp-summary-grid">${summary}</div>
+      </div>` : ''}
+    </div>`;
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCmpModal() {
+  const m = document.getElementById('cmpModal');
+  if (m) { m.classList.remove('open'); document.body.style.overflow=''; }
+}
+
+// ── Barra flotante ───────────────────────────────────────────────
+function cmpUpdateBar() {
+  let bar = document.getElementById('cmp-bar');
+  if (!bar) return;
+
+  const slots = bar.querySelectorAll('.cmp-slot');
+  slots.forEach((slot, i) => {
+    const p = CMP.items[i];
+    if (p) {
+      slot.className = 'cmp-slot filled';
+      slot.innerHTML = `
+        <img class="cmp-slot-img" src="${p.img}" alt="${p.codigo}" onerror="this.style.opacity='.2'">
+        <div class="cmp-slot-info">
+          <div class="cmp-slot-code">${p.codigo}</div>
+          <div class="cmp-slot-name">${p.nombre.substring(0,30)}…</div>
+        </div>
+        <button class="cmp-slot-remove" onclick="cmpRemove(${p.id})" title="Quitar">✕</button>`;
+    } else {
+      slot.className = 'cmp-slot';
+      slot.innerHTML = `<span class="cmp-slot-empty-label">+ Agregar</span>`;
+    }
+  });
+
+  const compareBtn = bar.querySelector('.cmp-btn-compare');
+  if (compareBtn) {
+    compareBtn.disabled = CMP.items.length < 2;
+    compareBtn.textContent = CMP.items.length >= 2
+      ? `⚖️ Comparar (${CMP.items.length})`
+      : '⚖️ Comparar';
+  }
+
+  bar.classList.toggle('visible', CMP.items.length > 0);
+
+  // Update card buttons
+  document.querySelectorAll('.btn-cmp').forEach(btn => {
+    const id = parseInt(btn.dataset.id);
+    const inList = CMP.items.some(x => x.id === id);
+    btn.classList.toggle('added', inList);
+    btn.title = inList ? 'Quitar del comparador' : 'Agregar al comparador';
+    btn.innerHTML = inList
+      ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> En comparador`
+      : `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Comparar`;
+  });
+}
+
+
+
+function cmpRemove(id) {
+  CMP.items = CMP.items.filter(x => x.id !== id);
+  cmpUpdateBar();
+}
+
+function cmpClear() {
+  CMP.items = [];
+  cmpUpdateBar();
+  closeCmpModal();
+}
+
+
+// ════════════════════════════════════════════════════════════════════════
+// SISTEMA PDF + COMPARADOR INTELIGENTE — SSTT 2025
+// ════════════════════════════════════════════════════════════════════════
+
+// ── Caché de specs extraídas desde PDF ──────────────────────────────────
+const PDF_CACHE = {};
+
+// ── Categorías comparables entre sí ─────────────────────────────────────
+const CMP_GROUPS = {
+  'camaras': ['camaras-ip', 'camaras-hdcvi', 'camaras-ptz'],
+  'grabadores': ['nvr'],
+  'redes': ['switches'],
+  'acceso': ['acceso', 'videoporteros'],
+  'alarmas': ['alarmas'],
+};
+
+function cmpGetGroup(cat) {
+  for (const [g, cats] of Object.entries(CMP_GROUPS)) {
+    if (cats.includes(cat)) return g;
+  }
+  return cat; // cada categoría sola
+}
+
+function cmpCompatible(p1, p2) {
+  return cmpGetGroup(p1.cat) === cmpGetGroup(p2.cat);
+}
+
+// ── Leer PDF y extraer specs con Claude API ──────────────────────────────
+async function fetchSpecsFromPDF(producto) {
+  if (PDF_CACHE[producto.codigo]) return PDF_CACHE[producto.codigo];
+
+  const pdfUrl = 'https://camaras-de-seguridad-dahua.sstt.cl/fichatecnica/' + producto.codigo + '.pdf';
+
+  try {
+    // Intentar leer el PDF como base64
+    const resp = await fetch(pdfUrl);
+    if (!resp.ok) throw new Error('PDF no disponible');
+    const buf  = await resp.arrayBuffer();
+    const b64  = btoa(String.fromCharCode(...new Uint8Array(buf)));
+
+    // Llamar a Claude API con el PDF
+    const apiResp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-dangerous-request-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1500,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'document',
+              source: { type: 'base64', media_type: 'application/pdf', data: b64 }
+            },
+            {
+              type: 'text',
+              text: `Extrae las especificaciones técnicas de este datasheet Dahua y devuelve SOLO un objeto JSON válido, sin markdown, sin explicaciones, con esta estructura exacta:
+{
+  "modelo": "",
+  "descripcion_corta": "",
+  "sensor": "",
+  "resolucion": "",
+  "fps": "",
+  "apertura": "",
+  "focal": "",
+  "angulo": "",
+  "iluminacion_min": "",
+  "alcance_ir": "",
+  "wdr": "",
+  "compresion": "",
+  "audio": "",
+  "microfono": "",
+  "alimentacion": "",
+  "consumo_max": "",
+  "poe": "",
+  "proteccion_ip": "",
+  "ik": "",
+  "temperatura_op": "",
+  "dimensiones": "",
+  "peso": "",
+  "micro_sd": "",
+  "ia": "",
+  "smd": "",
+  "ivs": "",
+  "dori_detectar": "",
+  "dori_observar": "",
+  "dori_reconocer": "",
+  "dori_identificar": "",
+  "certificaciones": "",
+  "material_carcasa": "",
+  "salidas_alarma": "",
+  "entradas_alarma": ""
+}
+Si un campo no existe en el PDF pon "—". Solo JSON, nada más.`
+            }
+          ]
+        }]
+      })
+    });
+
+    const data = await apiResp.json();
+    const text = data.content?.[0]?.text || '{}';
+    // Parse JSON safely
+    const clean = text.replace(/```json|```/g, '').trim();
+    const specs = JSON.parse(clean);
+    specs._source = 'pdf';
+    specs._codigo = producto.codigo;
+    PDF_CACHE[producto.codigo] = specs;
+    return specs;
+
+  } catch (e) {
+    console.warn('PDF fetch/parse falló para', producto.codigo, e.message);
+    // Fallback: generar specs desde el nombre del producto
+    const fallback = pmParseSpecsFlat(producto);
+    fallback._source = 'nombre';
+    fallback._codigo = producto.codigo;
+    PDF_CACHE[producto.codigo] = fallback;
+    return fallback;
+  }
+}
+
+// ── Specs flat desde nombre (fallback si PDF no disponible) ─────────────
+function pmParseSpecsFlat(p) {
+  const n = p.nombre.toLowerCase();
+  const s = {};
+
+  if      (/\b8mp\b|4k/.test(n))  s.resolucion = '4K 8MP (3840×2160)';
+  else if (/\b6mp\b/.test(n))     s.resolucion = '6MP (3200×1800)';
+  else if (/\b5mp\b/.test(n))     s.resolucion = '5MP (2880×1620)';
+  else if (/\b4mp\b/.test(n))     s.resolucion = '4MP (2688×1520)';
+  else if (/\b2mp\b|1080/.test(n))s.resolucion = '2MP FHD (1920×1080)';
+  else                            s.resolucion = 'Ver ficha';
+
+  const ir = n.match(/\bir\s*(\d+)/i);
+  s.alcance_ir = ir ? ir[1]+'m' : '—';
+
+  s.ia     = /wizmind/.test(n)?'WizMind AI':/wizsense/.test(n)?'WizSense':/tioc/.test(n)?'TiOC 2.0':/smd\+/.test(n)?'SMD+':'—';
+  s.smd    = /smd\+/.test(n)?'SMD Plus':'—';
+  s.ivs    = /ivs/.test(n)?'Tripwire, Intrusion':'—';
+  s.microfono = /mic|microfono/.test(n)?'Sí':'No';
+  s.micro_sd  = /micro.?sd/.test(n)?'Hasta 256 GB':'—';
+  s.poe    = /hi.?poe/.test(n)?'Hi-PoE 60W':/poe\+/.test(n)?'PoE+ 30W':/poe/.test(n)?'PoE 15.4W':'—';
+
+  if (/ip68/.test(n)) s.proteccion_ip='IP68';
+  else if (/ip67/.test(n)) s.proteccion_ip='IP67';
+  else if (/ip66/.test(n)) s.proteccion_ip='IP66';
+  else s.proteccion_ip='—';
+
+  s.ik = /ik10/.test(n)?'IK10':/ik08/.test(n)?'IK08':'—';
+  s.wdr = /wdr.?120|120.?db/.test(n)?'120 dB':/wdr/.test(n)?'Sí':'—';
+
+  const focal = n.match(/(\d+\.?\d*)\s*mm/);
+  s.focal = focal ? focal[0] : '—';
+
+  s.alimentacion = s.poe !== '—' ? s.poe : '12V DC';
+  s.modelo = p.codigo;
+  s.descripcion_corta = p.nombre;
+  return s;
+}
+
+// ── Abrir ficha con datos del PDF ────────────────────────────────────────
+async function openProdModal(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+
+  // Mostrar ficha inmediatamente con datos del nombre (rápido)
+  _pmBuildModal(id);
+
+  // Luego enriquecer con PDF de forma asíncrona
+  const specsEl = document.getElementById('pmP-specs');
+  if (!specsEl) return;
+
+  // Mostrar loader en el panel specs
+  const loaderHTML = `
+    <div id="pmPdfLoader" style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:32px;text-align:center">
+      <div style="font-size:28px;animation:spin 1.2s linear infinite">⚙️</div>
+      <div style="font-size:14px;font-weight:700;color:var(--navy)">Leyendo ficha técnica oficial PDF…</div>
+      <div style="font-size:12px;color:var(--muted)">Extrayendo especificaciones desde el datasheet Dahua</div>
+      <div style="width:220px;height:4px;background:var(--border);border-radius:2px;overflow:hidden">
+        <div style="height:100%;background:var(--red);animation:loadbar 2s ease-in-out infinite;border-radius:2px"></div>
+      </div>
+    </div>`;
+
+  const accordion = specsEl.querySelector('.pm-spec-accordion');
+  if (accordion) {
+    accordion.insertAdjacentHTML('beforebegin', loaderHTML);
+    accordion.style.opacity = '0.4';
+  }
+
+  try {
+    const specs = await fetchSpecsFromPDF(p);
+    renderPDFSpecs(id, specs, p);
+  } catch(e) {
+    const loader = document.getElementById('pmPdfLoader');
+    if (loader) loader.remove();
+    if (accordion) accordion.style.opacity = '1';
+  }
+}
+
+// ── Renderizar specs reales del PDF en la ficha ─────────────────────────
+function renderPDFSpecs(id, specs, p) {
+  const specsEl = document.getElementById('pmP-specs');
+  if (!specsEl) return;
+
+  const loader = document.getElementById('pmPdfLoader');
+  if (loader) loader.remove();
+
+  const isMock = specs._source === 'nombre';
+  const badge = isMock
+    ? `<div style="background:var(--yellow-p);border:1px solid #daa520;border-radius:4px;padding:7px 12px;font-size:11px;color:var(--yellow);margin-bottom:12px;display:flex;gap:8px;align-items:center">
+        <span>⚠️</span><span>Especificaciones derivadas del nombre del producto. PDF no disponible para este modelo.</span>
+       </div>`
+    : `<div style="background:var(--green-p);border:1px solid #16a34a;border-radius:4px;padding:7px 12px;font-size:11px;color:var(--green);margin-bottom:12px;display:flex;gap:8px;align-items:center">
+        <span>✅</span><span>Especificaciones extraídas del <strong>datasheet oficial PDF Dahua</strong> para <strong>${specs._codigo}</strong></span>
+       </div>`;
+
+  // Build grouped spec table from PDF data
+  const groups = [
+    { title: 'Cámara — Imagen y Sensor', fields: [
+      ['Sensor CMOS', specs.sensor],
+      ['Resolución máxima', specs.resolucion],
+      ['Velocidad fotogramas', specs.fps],
+      ['Apertura máx.', specs.apertura],
+      ['Ilum. mínima', specs.iluminacion_min],
+    ]},
+    { title: 'Óptica', fields: [
+      ['Focal', specs.focal],
+      ['Ángulo de visión', specs.angulo],
+      ['Alcance IR / Luz blanca', specs.alcance_ir],
+      ['WDR', specs.wdr],
+    ]},
+    { title: 'Inteligencia Artificial', fields: [
+      ['Serie / Tecnología IA', specs.ia],
+      ['SMD+', specs.smd],
+      ['IVS / Perimeter Protection', specs.ivs],
+    ]},
+    { title: 'Audio y Almacenamiento', fields: [
+      ['Micrófono integrado', specs.microfono],
+      ['Compresión audio', specs.audio],
+      ['MicroSD', specs.micro_sd],
+    ]},
+    { title: 'Conectividad y Alimentación', fields: [
+      ['Alimentación', specs.alimentacion],
+      ['PoE', specs.poe],
+      ['Consumo máx.', specs.consumo_max],
+      ['Entradas/Salidas alarma', specs.entradas_alarma || '—'],
+    ]},
+    { title: 'Protección y Mecánica', fields: [
+      ['Protección IP', specs.proteccion_ip],
+      ['Anti-vandálico', specs.ik],
+      ['Temperatura operación', specs.temperatura_op],
+      ['Dimensiones', specs.dimensiones],
+      ['Peso neto', specs.peso],
+      ['Material carcasa', specs.material_carcasa],
+    ]},
+  ];
+
+  // DORI table (only if data available)
+  const hasDori = specs.dori_detectar && specs.dori_detectar !== '—';
+  const doriHTML = hasDori ? `
+    <div class="pm-spec-group" style="margin-top:0">
+      <div class="pm-spec-grp-hdr" onclick="pmToggleGroup(this)">
+        <span>Tabla DORI — Distancias de vigilancia (EN-62676-4)</span><span class="pmg-arrow">▾</span>
+      </div>
+      <div class="pm-spec-grp-body">
+        <table style="width:100%;font-size:12px;border-collapse:collapse">
+          <thead>
+            <tr style="background:var(--bg)">
+              <th style="padding:8px 14px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted);font-size:11px">Función</th>
+              <th style="padding:8px 14px;text-align:center;border-bottom:1px solid var(--border);color:var(--muted);font-size:11px">Distancia real (PDF)</th>
+              <th style="padding:8px 14px;text-align:left;border-bottom:1px solid var(--border);color:var(--muted);font-size:11px">Uso</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td style="padding:8px 14px;border-bottom:1px solid var(--border2);font-weight:700;color:var(--navy)">Detectar</td>   <td style="padding:8px 14px;border-bottom:1px solid var(--border2);text-align:center;font-weight:700">${specs.dori_detectar}</td>   <td style="padding:8px 14px;border-bottom:1px solid var(--border2);color:var(--muted)">Presencia persona/vehículo</td></tr>
+            <tr style="background:var(--bg)"><td style="padding:8px 14px;border-bottom:1px solid var(--border2);font-weight:700;color:var(--navy)">Observar</td>   <td style="padding:8px 14px;border-bottom:1px solid var(--border2);text-align:center;font-weight:700">${specs.dori_observar}</td>   <td style="padding:8px 14px;border-bottom:1px solid var(--border2);color:var(--muted)">Actividad general</td></tr>
+            <tr><td style="padding:8px 14px;border-bottom:1px solid var(--border2);font-weight:700;color:var(--navy)">Reconocer</td>  <td style="padding:8px 14px;border-bottom:1px solid var(--border2);text-align:center;font-weight:700">${specs.dori_reconocer}</td>  <td style="padding:8px 14px;border-bottom:1px solid var(--border2);color:var(--muted)">Características del sujeto</td></tr>
+            <tr style="background:var(--bg)"><td style="padding:8px 14px;font-weight:700;color:var(--navy)">Identificar</td> <td style="padding:8px 14px;text-align:center;font-weight:700">${specs.dori_identificar}</td> <td style="padding:8px 14px;color:var(--muted)">Identidad — uso legal</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>` : '';
+
+  const accordionHTML = groups.map((g, gi) => {
+    const rows = g.fields.filter(([,v]) => v && v !== '—' && v !== 'undefined');
+    if (!rows.length) return '';
+    return `
+      <div class="pm-spec-group">
+        <div class="pm-spec-grp-hdr" onclick="pmToggleGroup(this)">
+          <span>${g.title}</span><span class="pmg-arrow">${gi === 0 ? '▾' : '▸'}</span>
+        </div>
+        <div class="pm-spec-grp-body${gi > 0 ? ' collapsed' : ''}">
+          ${rows.map(([k,v]) => `
+            <div class="pm-spec-row">
+              <div class="pm-spec-key">${k}</div>
+              <div class="pm-spec-val">${v}</div>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  }).join('') + doriHTML;
+
+  const notice = `<p style="font-size:11px;color:var(--light);margin-top:10px">
+    ${isMock ? '* Especificaciones derivadas del nombre. Descarga el PDF oficial para confirmación.' 
+              : '* Datos extraídos del datasheet oficial Dahua. Pueden variar según revisión del documento.'}
+  </p>`;
+
+  specsEl.innerHTML = badge + `<div class="pm-spec-accordion">${accordionHTML}</div>` + notice;
+}
+
+// ── COMPARADOR: Toggle con validación de compatibilidad ─────────────────
+function cmpToggle(id) {
+  const p = PRODUCTS.find(x => x.id === id);
+  if (!p) return;
+
+  const idx = CMP.items.findIndex(x => x.id === id);
+
+  if (idx >= 0) {
+    // Quitar
+    CMP.items.splice(idx, 1);
+    showToast('Quitado del comparador');
+    cmpUpdateBar();
+    return;
+  }
+
+  // Validar compatibilidad con productos ya en el comparador
+  if (CMP.items.length > 0) {
+    const incompatible = CMP.items.find(existing => !cmpCompatible(existing, p));
+    if (incompatible) {
+      const g1 = cmpGetGroup(p.cat);
+      const g2 = cmpGetGroup(incompatible.cat);
+      const labels = {
+        'camaras':'Cámaras (IP, HDCVI, PTZ)',
+        'grabadores':'Grabadores NVR/XVR',
+        'redes':'Switches PoE',
+        'acceso':'Control de Acceso / Videoporteros',
+        'alarmas':'Alarmas',
+      };
+      showToastWarning(`⚠️ Solo puedes comparar productos del mismo tipo.\n"${p.codigo}" es ${labels[g1]||g1} y el comparador tiene ${labels[g2]||g2}.`);
+      return;
+    }
+  }
+
+  if (CMP.items.length >= CMP.MAX) {
+    showToastWarning(`⚠️ Máximo ${CMP.MAX} productos a comparar`);
+    return;
+  }
+
+  CMP.items.push(p);
+  showToast(`✅ "${p.codigo}" agregado al comparador`);
+  cmpUpdateBar();
+}
+
+// ── Toast de advertencia (más llamativo) ────────────────────────────────
+function showToastWarning(msg) {
+  let t = document.getElementById('toast');
+  if (!t) { t = document.createElement('div'); t.id='toast'; document.body.appendChild(t); }
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#92400e;color:#fff;padding:12px 22px;border-radius:6px;font-size:13px;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.25);max-width:400px;text-align:center;line-height:1.4;white-space:pre-line';
+  clearTimeout(t._to);
+  t._to = setTimeout(() => t.remove(), 4000);
+}
+
+// ── COMPARADOR: Modal con specs reales del PDF ──────────────────────────
+async function cmpRenderModal() {
+  const products = CMP.items;
+  if (products.length < 2) { showToast('⚠️ Agrega al menos 2 productos para comparar'); return; }
+
+  // Mostrar modal con skeleton loader
+  let modal = document.getElementById('cmpModal');
+  if (!modal) { modal = document.createElement('div'); modal.id='cmpModal'; document.body.appendChild(modal); }
+
+  modal.innerHTML = `
+    <div class="cmp-modal-wrap">
+      <div class="cmp-modal-head">
+        <h2>⚖️ Comparando ${products.length} productos</h2>
+        <button class="cmp-modal-x" onclick="closeCmpModal()">✕</button>
+      </div>
+      <div style="padding:48px;text-align:center">
+        <div style="font-size:32px;animation:spin 1.2s linear infinite;margin-bottom:16px">⚙️</div>
+        <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:8px">Analizando fichas técnicas PDF…</div>
+        <div style="font-size:12px;color:var(--muted)">Extrayendo especificaciones reales de ${products.map(p=>p.codigo).join(', ')}</div>
+        <div style="width:260px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin:20px auto 0">
+          <div style="height:100%;background:var(--red);animation:loadbar 1.8s ease-in-out infinite;border-radius:3px"></div>
+        </div>
+      </div>
+    </div>`;
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Fetch all specs in parallel
+  const allSpecs = await Promise.all(products.map(p => fetchSpecsFromPDF(p)));
+
+  // Now build the full comparison table
+  cmpBuildTable(products, allSpecs, modal);
+}
+
+function cmpBuildTable(products, allSpecs, modal) {
+  // Campos a comparar (en orden de importancia)
+  const COMPARE_FIELDS = [
+    { key:'resolucion',       label:'Resolución',              group:'Imagen',       numeric:true,  higherBetter:true },
+    { key:'sensor',           label:'Sensor CMOS',             group:'Imagen',       numeric:false },
+    { key:'fps',              label:'Frame rate',              group:'Imagen',       numeric:true,  higherBetter:true },
+    { key:'apertura',         label:'Apertura máx.',           group:'Óptica',       numeric:true,  higherBetter:false },
+    { key:'focal',            label:'Distancia focal',         group:'Óptica',       numeric:false },
+    { key:'angulo',           label:'Ángulo de visión',        group:'Óptica',       numeric:true,  higherBetter:true },
+    { key:'alcance_ir',       label:'Alcance IR / Luz',        group:'Óptica',       numeric:true,  higherBetter:true },
+    { key:'iluminacion_min',  label:'Ilum. mínima (lux)',      group:'Óptica',       numeric:true,  higherBetter:false },
+    { key:'wdr',              label:'WDR',                     group:'Imagen',       numeric:false },
+    { key:'ia',               label:'Serie / IA',              group:'Inteligencia', numeric:false },
+    { key:'smd',              label:'SMD+',                    group:'Inteligencia', numeric:false },
+    { key:'ivs',              label:'IVS / Perimeter',         group:'Inteligencia', numeric:false },
+    { key:'microfono',        label:'Micrófono',               group:'Audio',        numeric:false },
+    { key:'micro_sd',         label:'MicroSD',                 group:'Conectividad', numeric:false },
+    { key:'poe',              label:'PoE',                     group:'Conectividad', numeric:false },
+    { key:'alimentacion',     label:'Alimentación',            group:'Conectividad', numeric:false },
+    { key:'consumo_max',      label:'Consumo máx.',            group:'Conectividad', numeric:true, higherBetter:false },
+    { key:'proteccion_ip',    label:'Protección IP',           group:'Protección',   numeric:true, higherBetter:true },
+    { key:'ik',               label:'Anti-vandálico',          group:'Protección',   numeric:false },
+    { key:'temperatura_op',   label:'Temperatura op.',         group:'Mecánica',     numeric:false },
+    { key:'dimensiones',      label:'Dimensiones',             group:'Mecánica',     numeric:false },
+    { key:'peso',             label:'Peso neto',               group:'Mecánica',     numeric:false },
+    { key:'certificaciones',  label:'Certificaciones',         group:'Mecánica',     numeric:false },
+  ];
+
+  // Extract numeric value for comparison
+  function numericVal(str, key) {
+    if (!str || str === '—') return null;
+    // IP rating: extract number after IP
+    if (key === 'proteccion_ip') {
+      const m = str.match(/IP\s*(\d+)/i); return m ? parseInt(m[1]) : null;
+    }
+    // Aperture: F1.0 → lower is better (more light)
+    if (key === 'apertura') {
+      const m = str.match(/F\s*(\d+\.?\d*)/i); return m ? parseFloat(m[1]) : null;
+    }
+    const m = str.match(/(\d+\.?\d*)/);
+    return m ? parseFloat(m[1]) : null;
+  }
+
+  // Determine winner for each field
+  function getFieldRanks(fieldDef) {
+    if (!fieldDef.numeric) return {};
+    const vals = products.map((p, i) => ({
+      id: p.id,
+      num: numericVal(allSpecs[i][fieldDef.key], fieldDef.key)
+    })).filter(x => x.num !== null);
+    if (vals.length < 2) return {};
+    const nums = vals.map(x => x.num);
+    const max = Math.max(...nums), min = Math.min(...nums);
+    if (max === min) return {};
+    const result = {};
+    vals.forEach(x => {
+      const isBest = fieldDef.higherBetter ? x.num === max : x.num === min;
+      const isWorst = fieldDef.higherBetter ? x.num === min : x.num === max;
+      result[x.id] = isBest ? 'best' : isWorst ? 'low' : 'mid';
+    });
+    return result;
+  }
+
+  // Only include fields where at least one product has data
+  const activeFields = COMPARE_FIELDS.filter(f =>
+    allSpecs.some(s => s[f.key] && s[f.key] !== '—' && s[f.key] !== 'undefined')
+  );
+
+  // Group by category
+  const groups = [...new Set(activeFields.map(f => f.group))];
+
+  // Build header
+  const srcBadge = (specs) => specs._source === 'pdf'
+    ? `<span style="background:var(--green-p);color:var(--green);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700">✅ PDF</span>`
+    : `<span style="background:var(--yellow-p);color:var(--yellow);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700">⚠️ Nombre</span>`;
+
+  const headerCols = products.map((p, i) => `
+    <th>
+      <img class="cmp-th-img" src="${p.img}" alt="${p.codigo}" onerror="this.style.opacity='.2'">
+      <div class="cmp-th-code">${p.codigo}</div>
+      <div class="cmp-th-name">${p.nombre}</div>
+      ${srcBadge(allSpecs[i])}
+      <div class="cmp-th-price">${fmt(p.ptotal)}</div>
+      <div class="cmp-th-actions">
+        <button class="cmp-th-btn-cart" onclick="addCart(PRODUCTS.find(x=>x.id===${p.id}));showToast('✅ Agregado')">🛒 Carro</button>
+        <button class="cmp-th-btn-ficha" onclick="closeCmpModal();openProdModal(${p.id})">📋 Ficha</button>
+        <button class="cmp-th-remove" onclick="cmpRemove(${p.id});if(CMP.items.length>=2)cmpBuildTable(CMP.items,CMP.items.map(x=>PDF_CACHE[x.codigo]||pmParseSpecsFlat(x)),document.getElementById('cmpModal'));else closeCmpModal()">✕</button>
+      </div>
+    </th>`).join('');
+
+  // Build body rows
+  let bodyHTML = '';
+  let currentGroup = '';
+  activeFields.forEach(field => {
+    if (field.group !== currentGroup) {
+      currentGroup = field.group;
+      bodyHTML += `<tr class="cmp-row-group"><td colspan="${products.length+1}">${currentGroup}</td></tr>`;
+    }
+    const ranks = getFieldRanks(field);
+    const allVals = products.map((p,i) => allSpecs[i][field.key] || '—');
+    const allSame = new Set(allVals.filter(v=>v!=='—')).size <= 1;
+
+    const cells = products.map((p, i) => {
+      const val  = allSpecs[i][field.key] || '—';
+      const rank = ranks[p.id];
+      const cls  = allSame ? 'cmp-cell-equal'
+                 : rank === 'best' ? 'cmp-cell-best'
+                 : rank === 'low'  ? 'cmp-cell-low'
+                 : rank === 'mid'  ? 'cmp-cell-mid'
+                 : '';
+      const arrow = allSame ? ''
+                  : rank === 'best' ? ' <span style="color:var(--green);font-size:10px;font-weight:900">▲</span>'
+                  : rank === 'low'  ? ' <span style="color:var(--red);font-size:10px;font-weight:900">▼</span>'
+                  : '';
+      return `<td class="${cls}">${val === '—' ? '<span style="color:var(--border)">—</span>' : val}${arrow}</td>`;
+    }).join('');
+
+    bodyHTML += `<tr class="cmp-row"><td>${field.label}</td>${cells}</tr>`;
+  });
+
+  // DORI section
+  const hasDori = allSpecs.some(s => s.dori_detectar && s.dori_detectar !== '—');
+  if (hasDori) {
+    bodyHTML += `<tr class="cmp-row-group"><td colspan="${products.length+1}">Tabla DORI — Distancias reales (EN-62676-4)</td></tr>`;
+    [['dori_detectar','Detectar'],['dori_observar','Observar'],['dori_reconocer','Reconocer'],['dori_identificar','Identificar']].forEach(([key,label]) => {
+      const ranks = getFieldRanks({key, numeric:true, higherBetter:true});
+      const cells = products.map((p,i) => {
+        const val = allSpecs[i][key] || '—';
+        const rank = ranks[p.id];
+        const cls  = rank==='best'?'cmp-cell-best':rank==='low'?'cmp-cell-low':'';
+        const arrow = rank==='best'?' <span style="color:var(--green);font-size:10px">▲</span>':rank==='low'?' <span style="color:var(--red);font-size:10px">▼</span>':'';
+        return `<td class="${cls}">${val}${arrow}</td>`;
+      }).join('');
+      bodyHTML += `<tr class="cmp-row"><td>${label}</td>${cells}</tr>`;
+    });
+  }
+
+  // Summary: who wins overall
+  const winCount = {};
+  products.forEach(p => winCount[p.id] = 0);
+  activeFields.forEach(field => {
+    const ranks = getFieldRanks(field);
+    products.forEach(p => { if (ranks[p.id] === 'best') winCount[p.id]++; });
+  });
+  const maxWins = Math.max(...Object.values(winCount));
+  const summaryCards = products.map((p, i) => {
+    const wins = winCount[p.id];
+    const isChamp = wins === maxWins && maxWins > 0;
+    const winFields = activeFields.filter(f => {
+      const ranks = getFieldRanks(f);
+      return ranks[p.id] === 'best';
+    }).map(f => f.label).slice(0,4);
+    return `
+      <div class="cmp-winner-card${isChamp?' winner':''}">
+        <div class="cmp-winner-title">${isChamp?'🏆 Más recomendado':'📊 Puntuación'}</div>
+        <div class="cmp-winner-val">${p.codigo}</div>
+        <div style="font-size:12px;color:var(--navy);font-weight:700;margin-top:4px">${wins} categorías ganadas</div>
+        ${winFields.length ? `<div class="cmp-winner-desc">Mejor en: ${winFields.join(', ')}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  modal.innerHTML = `
+    <div class="cmp-modal-wrap">
+      <div class="cmp-modal-head">
+        <h2>⚖️ Comparando ${products.length} productos · ${allSpecs.filter(s=>s._source==='pdf').length} con datos PDF</h2>
+        <button class="cmp-modal-x" onclick="closeCmpModal()">✕</button>
+      </div>
+      <div class="cmp-table-wrap">
+        <table class="cmp-table">
+          <thead>
+            <tr class="cmp-prod-header">
+              <th style="vertical-align:bottom;padding-bottom:12px">
+                <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Característica</div>
+                <div style="margin-top:8px;font-size:10px;color:var(--muted)">
+                  <span style="background:var(--green-p);color:var(--green);padding:2px 6px;border-radius:3px">▲ mejor</span><br>
+                  <span style="background:var(--red-p);color:var(--red-d);padding:2px 6px;border-radius:3px;margin-top:3px;display:inline-block">▼ inferior</span>
+                </div>
+              </th>
+              ${headerCols}
+            </tr>
+          </thead>
+          <tbody>${bodyHTML}</tbody>
+        </table>
+      </div>
+      <div class="cmp-summary">
+        <h3>🤖 Análisis comparativo</h3>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px">
+          Comparación basada en ${allSpecs.filter(s=>s._source==='pdf').length > 0 ? 'fichas técnicas PDF oficiales Dahua' : 'datos del catálogo'}.
+          Celdas <span style="background:var(--green-p);color:var(--green);padding:1px 6px;border-radius:3px;font-weight:700">verdes ▲</span> = mejor valor · 
+          <span style="background:var(--red-p);color:var(--red-d);padding:1px 6px;border-radius:3px;font-weight:700">rojas ▼</span> = valor inferior.
+        </p>
+        <div class="cmp-summary-grid">${summaryCards}</div>
+      </div>
+    </div>`;
+}
+
+// ── Alias para compatibilidad ────────────────────────────────────────────
+window.openProdModal = openProdModalWithPDF;
+
 </script>
 <div id="prodModal"></div>
+
+<div id="cmp-bar">
+  <div class="cmp-bar-inner">
+    <div class="cmp-bar-label">⚖️ Comparar</div>
+    <div class="cmp-slots">
+      <div class="cmp-slot"><span class="cmp-slot-empty-label">+ Agregar</span></div>
+      <div class="cmp-slot"><span class="cmp-slot-empty-label">+ Agregar</span></div>
+      <div class="cmp-slot"><span class="cmp-slot-empty-label">+ Agregar</span></div>
+      <div class="cmp-slot"><span class="cmp-slot-empty-label">+ Agregar</span></div>
+    </div>
+    <div class="cmp-bar-actions">
+      <button class="cmp-btn-compare" onclick="cmpRenderModal()" disabled>⚖️ Comparar</button>
+      <button class="cmp-btn-clear" onclick="cmpClear()">✕ Limpiar</button>
+    </div>
+  </div>
+</div>
+<div id="cmpModal"></div>
+
 </body>
 </html>
