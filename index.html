@@ -1174,7 +1174,7 @@ nav {
 
 /* ── COMPARADOR BAR ──────────────────────────────────────────── */
 #cmp-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--black); color: var(--white); padding: 12px 24px; z-index: 700; display: none; border-top: 2px solid var(--red); box-shadow: 0 -4px 20px rgba(0,0,0,.2); animation: slideUp .2s ease }
-#cmp-bar.open { display: flex }
+#cmp-bar.open, #cmp-bar.visible { display: flex }
 #cmp-bar-inner { display: flex; align-items: center; gap: 12px; width: 100%; max-width: 1320px; margin: 0 auto; flex-wrap: wrap }
 #cmp-bar-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: rgba(255,255,255,.5); white-space: nowrap }
 #cmp-slots { display: flex; gap: 8px; flex: 1; flex-wrap: wrap }
@@ -1784,6 +1784,44 @@ footer {
   .sim-cams-col { flex-direction: column; flex: none }
 }
 
+
+/* ── CMP-BAR missing classes fix ─────────────────────────────── */
+.cmp-btn-compare {
+  background: var(--red); color: var(--white); border: none;
+  border-radius: var(--r); padding: 9px 18px; font-size: 13px;
+  font-weight: 700; cursor: pointer; transition: background .15s;
+  display: flex; align-items: center; gap: 6px;
+}
+.cmp-btn-compare:hover:not(:disabled) { background: var(--red2) }
+.cmp-btn-compare:disabled { opacity: .45; cursor: not-allowed }
+.cmp-btn-clear {
+  background: rgba(255,255,255,.08); color: var(--white);
+  border: 1px solid rgba(255,255,255,.15); border-radius: var(--r);
+  padding: 9px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all .15s;
+}
+.cmp-btn-clear:hover { background: rgba(255,255,255,.16) }
+.cmp-slot-img {
+  width: 36px; height: 36px; object-fit: contain;
+  background: rgba(255,255,255,.08); border-radius: 3px; flex-shrink: 0;
+}
+.cmp-slot-info { min-width: 0 }
+.cmp-slot-name { font-size: 10.5px; color: rgba(255,255,255,.65); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px }
+.cmp-slot-remove {
+  background: none; border: none; color: rgba(255,255,255,.4);
+  font-size: 14px; cursor: pointer; padding: 0 0 0 4px; transition: color .15s; flex-shrink: 0;
+}
+.cmp-slot-remove:hover { color: var(--white) }
+.cmp-slot-empty-label { font-size: 12px; color: rgba(255,255,255,.3); font-style: italic }
+.cmp-slot.filled {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+  border-radius: var(--r); padding: 6px 10px;
+}
+
+.cmp-slots { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; align-items: center }
+.cmp-bar-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: rgba(255,255,255,.45); white-space: nowrap; flex-shrink: 0 }
+.cmp-bar-actions { display: flex; gap: 8px; flex-shrink: 0 }
 </style>
 </head>
 <body>
