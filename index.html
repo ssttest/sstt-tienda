@@ -5134,7 +5134,8 @@ async function sendAIMessage() {
   aiChatHistory.push({role:'user', content:text});
   showAITyping();
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    dbg('📡 Enviando a API...');
+    const resp = await fetch('https://sstt-proxy.ryanodina.workers.dev', {
       method:'POST',
       headers:{'Content-Type':'application/json','anthropic-dangerous-request-direct-browser-access':'true','x-api-key': ANTHROPIC_API_KEY},
       body: JSON.stringify({
@@ -6949,11 +6950,10 @@ async function fetchSpecsFromPDF(producto) {
     const b64  = btoa(String.fromCharCode(...new Uint8Array(buf)));
 
     // Llamar a Claude API con el PDF
-    const apiResp = await fetch('https://api.anthropic.com/v1/messages', {
+    const apiResp = await fetch('https://sstt-proxy.ryanodina.workers.dev', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'anthropic-dangerous-request-direct-browser-access': 'true',
         'x-api-key': ANTHROPIC_API_KEY,
       },
       body: JSON.stringify({
@@ -8043,6 +8043,17 @@ async function runAnalysis() {
 
   // Build base64 for Claude Vision (strip header)
   const b64 = sceneCapture.split(',')[1];
+  const debugLog = document.getElementById('analysisDebugLog');
+  function dbg(msg) {
+    console.log('[Scene]', msg);
+    if (debugLog) {
+      debugLog.style.display = 'block';
+      debugLog.innerHTML += msg + '<br>';
+      debugLog.scrollTop = debugLog.scrollHeight;
+    }
+  }
+  dbg('📸 Imagen: ' + Math.round(b64.length/1024) + 'KB');
+  dbg('🔑 Key: ' + (ANTHROPIC_API_KEY ? ANTHROPIC_API_KEY.slice(0,12)+'...' : 'NO KEY'));
 
   // Sample top products for context (limit to ~80 most relevant)
   const prodSample = PRODUCTS.slice(0,80)
@@ -8108,11 +8119,10 @@ Responde en JSON con este formato exacto:
 USA SOLO códigos que existen en el catálogo. Responde ÚNICAMENTE con JSON válido, sin texto adicional.`;
 
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch('https://sstt-proxy.ryanodina.workers.dev', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'anthropic-dangerous-request-direct-browser-access': 'true',
         'x-api-key': ANTHROPIC_API_KEY,
       },
       body: JSON.stringify({
@@ -8142,21 +8152,42 @@ USA SOLO códigos que existen en el catálogo. Responde ÚNICAMENTE con JSON vá
 
     clearInterval(loadInterval);
     const data = await resp.json();
+    console.log('API response:', JSON.stringify(data).slice(0,500));
+    // Check for API-level errors
+    if (data.error) {
+      document.getElementById('analysisLoading').style.display = 'none';
+      document.getElementById('analysisResult').style.display = 'block';
+      document.getElementById('analysisContent').innerHTML = `
+        <div style="color:var(--red);font-weight:700;font-size:15px;margin-bottom:10px">⚠️ Error de API</div>
+        <div style="background:#FFF0F0;border:1px solid #FFCCCC;border-radius:6px;padding:12px;font-size:12px;font-family:monospace;color:#333">${data.error.type}: ${data.error.message}</div>`;
+      return;
+    }
     let raw = data.content?.[0]?.text || '';
+    console.log('Raw AI response:', raw.slice(0,300));
     // Strip markdown fences if present
     raw = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
-    sceneAnalysis = JSON.parse(raw);
+    try {
+      sceneAnalysis = JSON.parse(raw);
+    } catch(parseErr) {
+      document.getElementById('analysisLoading').style.display = 'none';
+      document.getElementById('analysisResult').style.display = 'block';
+      document.getElementById('analysisContent').innerHTML = `
+        <div style="color:var(--red);font-weight:700;font-size:15px;margin-bottom:10px">⚠️ Error al parsear respuesta</div>
+        <div style="background:#FFF0F0;border:1px solid #FFCCCC;border-radius:6px;padding:12px;font-size:12px;font-family:monospace;color:#333;white-space:pre-wrap;overflow:auto;max-height:200px">${raw.slice(0,500)}</div>`;
+      return;
+    }
     renderAnalysisResult();
 
   } catch(e) {
     clearInterval(loadInterval);
     console.error('Scene analysis error:', e);
     document.getElementById('analysisLoading').style.display = 'none';
-    document.getElementById('analysisResult').style.display = 'flex';
+    document.getElementById('analysisResult').style.display = 'block';
+    document.getElementById('analysisResult').style.display = 'block';
     document.getElementById('analysisContent').innerHTML = `
-      <div style="color:var(--red);font-weight:600">⚠️ Error al analizar la escena</div>
-      <p style="margin-top:8px;font-size:13px">Verifica que la API key esté configurada o intenta con otra imagen.</p>
-      <p style="font-size:11px;color:var(--g3);margin-top:6px">${e.message}</p>`;
+      <div style="color:var(--red);font-weight:700;font-size:15px;margin-bottom:10px">⚠️ Error al analizar</div>
+      <div style="background:#FFF0F0;border:1px solid #FFCCCC;border-radius:6px;padding:12px;font-size:12px;font-family:monospace;color:#333;white-space:pre-wrap;word-break:break-all">${e.name}: ${e.message}</div>
+      <p style="font-size:12px;color:#666;margin-top:10px">Revisa la consola del navegador (F12) para más detalles.</p>`;
   }
 }
 
@@ -8541,7 +8572,7 @@ ${a.resumen_instalacion || ''}
     document.getElementById('chatInput').value = '';
     addAIMsg('user', msg);
     showAITyping();
-    fetch('https://api.anthropic.com/v1/messages', {
+    fetch('https://sstt-proxy.ryanodina.workers.dev', {
       method: 'POST',
       headers: { 'Content-Type':'application/json', 'anthropic-dangerous-request-direct-browser-access':'true', 'x-api-key': ANTHROPIC_API_KEY },
       body: JSON.stringify({
@@ -8814,6 +8845,7 @@ window.addEventListener('DOMContentLoaded', () => {
           <div class="analysis-spinner"></div>
           <div class="analysis-loading-txt">Analizando tu escena con IA…</div>
           <div class="analysis-loading-sub" id="analysisLoadingStep">Evaluando iluminación y distancias</div>
+          <div id="analysisDebugLog" style="margin-top:16px;width:100%;max-width:400px;background:rgba(0,0,0,.3);border-radius:6px;padding:10px;font-size:11px;font-family:monospace;color:rgba(255,255,255,.7);text-align:left;max-height:120px;overflow-y:auto;display:none"></div>
         </div>
         <div class="analysis-result" id="analysisResult" style="display:none">
           <div class="analysis-top">
