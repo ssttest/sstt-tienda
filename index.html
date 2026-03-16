@@ -1102,33 +1102,6 @@ nav {
    Mismo estilo que la sección IA pero para Academia
    ══════════════════════════════════════════════════════════════════ */
 
-/* Background dark */
-#secAcademia {
-  background: #060912;
-  position: relative;
-}
-#secAcademia::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 70% 60% at 15% 25%, rgba(0,87,184,.15) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 70% at 85% 55%, rgba(232,0,28,.10) 0%, transparent 55%),
-    #060912;
-  pointer-events: none;
-  z-index: 0;
-}
-#secAcademia > * { position: relative; z-index: 1; }
-
-/* Hero override */
-#secAcademia /* ══ ACADEMIA — Dahua Global 2025 (fondo blanco) ══ */
-.ac-hero {
-  background: linear-gradient(160deg, #0C1A2E 0%, #001E3C 50%, #003870 100%);
-  color: var(--white);
-  padding: 56px 0;
-  position: relative;
-  overflow: hidden;
-}
 .ac-hero::before {
   content: '';
   position: absolute; inset: 0;
