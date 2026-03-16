@@ -7514,17 +7514,17 @@ window.addEventListener('popstate', function(e) {
 // Captura → Análisis IA Claude Vision → Simulación visual
 // ════════════════════════════════════════════════════════════════════
 
-let sceneStream   = null;   // MediaStream activo
-let sceneCapture  = null;   // ImageData capturada (base64)
-let sceneCamFacing = 'environment'; // 'environment' | 'user'
-let sceneStep     = 1;
-let sceneReqs     = new Set(['ver_actividad']); // requisitos seleccionados
-let sceneLuz      = 'luz_mixta';
-let sceneAnalysis = null;   // resultado del análisis IA
-let sceneRecs     = [];     // productos recomendados por IA
+var sceneStream   = null;
+var sceneCapture  = null;
+var sceneCamFacing = 'environment'; // 'environment' | 'user'
+var sceneStep     = 1;
+var sceneReqs     = new Set(['ver_actividad']); // requisitos seleccionados
+var sceneLuz      = 'luz_mixta';
+var sceneAnalysis = null;   // resultado del análisis IA
+var sceneRecs     = [];     // productos recomendados por IA
 
 // Datos del teléfono detectados
-let phoneData = {
+var phoneData = {
   width: 0, height: 0,
   fovH: 78,          // ángulo horizontal estimado (grados)
   focalEq: 26,       // focal equivalente 35mm estimado
