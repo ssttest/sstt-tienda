@@ -8010,6 +8010,7 @@ function inferPhoneSpecs() {
 }
 
 // ── STEP 3: RUN AI ANALYSIS ──────────────────────────────────────
+async function analyzeScene() { return runAnalysis(); }
 async function runAnalysis() {
   if (!sceneCapture) {
     document.getElementById('analysisLoading').style.display = 'none';
