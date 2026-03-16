@@ -1822,6 +1822,12 @@ footer {
 .cmp-slots { display: flex; gap: 8px; flex: 1; flex-wrap: wrap; align-items: center }
 .cmp-bar-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: rgba(255,255,255,.45); white-space: nowrap; flex-shrink: 0 }
 .cmp-bar-actions { display: flex; gap: 8px; flex-shrink: 0 }
+#cmp-bar.open, #cmp-bar.visible { display: flex !important }
+
+/* CMP-BAR animation + body padding */
+#cmp-bar { animation: none }
+#cmp-bar.open { animation: slideUp .2s ease }
+body.cmp-open { padding-bottom: 80px }
 </style>
 </head>
 <body>
@@ -6491,7 +6497,9 @@ function cmpUpdateBar() {
       : '⚖️ Comparar';
   }
 
+  bar.classList.toggle('open', CMP.items.length > 0);
   bar.classList.toggle('visible', CMP.items.length > 0);
+  document.body.classList.toggle('cmp-open', CMP.items.length > 0);
 
   // Update card buttons
   document.querySelectorAll('.btn-cmp').forEach(btn => {
