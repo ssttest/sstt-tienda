@@ -2441,6 +2441,29 @@ body.cmp-open { padding-bottom: 80px }
   /* Also fix the welcome message hero text that appears invisible */
   .ai-hero-inner > div > * { color: rgba(255,255,255,.88) !important; }
   .ai-title, .ai-sub { color: rgba(255,255,255,.88) !important; }
+</style><style id="glass-polish">
+  /* User bubble — explicit glass background */
+  .cmsg.user .cmsg-bbl {
+    background: linear-gradient(135deg,rgba(0,87,184,.38),rgba(0,57,120,.3)) !important;
+    border: 1px solid rgba(100,160,255,.35) !important;
+    color: #fff !important;
+    border-bottom-right-radius: 4px !important;
+  }
+  /* Better line spacing in chat bubbles */
+  .cmsg-bbl br { display: block; margin: 3px 0; content: ''; }
+  .cmsg-bbl br + br { margin-top: 6px; }
+  /* Emoji lines look better with slight indent */
+  .cmsg-bbl { line-height: 1.7 !important; }
+  /* Fix any remaining dark text on dark bg */
+  .cmsg-bbl, .cmsg-bbl * { color: rgba(255,255,255,.90) !important; }
+  .cmsg.user .cmsg-bbl, .cmsg.user .cmsg-bbl * { color: #fff !important; }
+  .cmsg-bbl strong { color: #fff !important; font-weight: 700 !important; }
+  .cmsg-bbl code { color: #7AB4F8 !important; background: rgba(255,255,255,.12) !important; }
+  /* Welcome message specifically */
+  .cmsg:first-child .cmsg-bbl { 
+    background: rgba(255,255,255,.07) !important;
+    border-color: rgba(255,255,255,.12) !important;
+  }
 </style></head>
 <body style="">
 
