@@ -2263,47 +2263,115 @@ body.cmp-open { padding-bottom: 80px }
 .chat-inp-hint { color: rgba(255,255,255,.2) !important; }
 </style>
 <style id="glass-ai">
-#secAsistente{background:#060912;min-height:100vh;position:relative}
-#secAsistente::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 20%,rgba(0,87,184,.18) 0%,transparent 60%),radial-gradient(ellipse 60% 80% at 80% 60%,rgba(232,0,28,.12) 0%,transparent 55%),radial-gradient(ellipse 50% 50% at 50% 100%,rgba(0,180,216,.08) 0%,transparent 50%),#060912;pointer-events:none;z-index:0}
-#secAsistente>*{position:relative;z-index:1}
-.ai-hero{background:transparent!important}
-.hero-badge{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:rgba(255,255,255,.7);border-radius:20px;letter-spacing:1.2px}
-.badge-dot{background:#00ff88;box-shadow:0 0 8px #00ff88,0 0 16px rgba(0,255,136,.4)}
-.ai-title em{font-style:normal;background:linear-gradient(135deg,#E8001C 0%,#FF6B6B 50%,#FF9A9E 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.hchip{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.12)!important;backdrop-filter:blur(10px)!important;color:rgba(255,255,255,.75)!important;border-radius:20px!important}
-.hchip:hover{background:rgba(255,255,255,.13)!important;color:#fff!important;transform:translateY(-2px)!important}
-.cscard{background:rgba(255,255,255,.04)!important;border:1px solid rgba(255,255,255,.09)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important;border-radius:14px!important}
-.cscard-head{background:rgba(255,255,255,.03)!important;border-bottom:1px solid rgba(255,255,255,.07)!important;color:rgba(255,255,255,.35)!important;letter-spacing:.7px!important}
-.mode-b{background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:10px!important;color:rgba(255,255,255,.5)!important;transition:all .2s!important}
-.mode-b:hover{background:rgba(255,255,255,.1)!important;color:rgba(255,255,255,.85)!important;transform:translateY(-1px)!important}
-.mode-b.active{background:rgba(232,0,28,.18)!important;border-color:rgba(232,0,28,.4)!important;color:#FF9AA5!important;box-shadow:0 0 16px rgba(232,0,28,.15)!important}
-.qp-btn{background:rgba(255,255,255,.04)!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:8px!important;color:rgba(255,255,255,.55)!important}
-.qp-btn:hover{background:rgba(255,255,255,.1)!important;color:rgba(255,255,255,.85)!important}
-.chat-box,.chat-hdr,.chat-msgs,.chat-inp-area{background:transparent!important}
-#chatMain{background:rgba(255,255,255,.042);border:1px solid rgba(255,255,255,.10);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border-radius:20px;box-shadow:0 32px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06) inset,0 1px 0 rgba(255,255,255,.15) inset;overflow:hidden}
-.chat-hdr{background:rgba(255,255,255,.04)!important;border-bottom:1px solid rgba(255,255,255,.07)!important}
-.chat-ai-av{background:linear-gradient(135deg,#E8001C,#FF4444)!important;box-shadow:0 4px 14px rgba(232,0,28,.4)!important}
-.chat-hdr-ttl{color:#fff!important}.chat-hdr-sub{color:rgba(255,255,255,.42)!important}
-.chat-online{color:rgba(255,255,255,.4)!important}.chat-online span{background:#00ff88!important;box-shadow:0 0 6px #00ff88!important}
-.chat-msgs{background:transparent!important;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
-.cmsg{animation:msgIn .25s cubic-bezier(.4,0,.2,1)}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
-.cmsg.ai .cmsg-bbl{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.1)!important;backdrop-filter:blur(8px)!important;color:rgba(255,255,255,.88)!important;border-bottom-left-radius:4px!important;box-shadow:0 4px 16px rgba(0,0,0,.2)!important}
-.cmsg.user .cmsg-bbl{background:linear-gradient(135deg,rgba(0,87,184,.35),rgba(0,57,120,.3))!important;border:1px solid rgba(0,87,184,.35)!important;backdrop-filter:blur(8px)!important;color:rgba(255,255,255,.9)!important;border-bottom-right-radius:4px!important}
-.cmsg-av{background:rgba(255,255,255,.1)!important;border:1px solid rgba(255,255,255,.15)!important;color:#FF9AA5!important}
-.cmsg.user .cmsg-av{background:rgba(0,87,184,.25)!important;border-color:rgba(0,87,184,.3)!important;color:#7AB4F8!important}
-.cmsg-time{color:rgba(255,255,255,.25)!important}
-.chat-inp-area{background:rgba(255,255,255,.02)!important;border-top:1px solid rgba(255,255,255,.07)!important}
-.chat-ta{background:rgba(255,255,255,.07)!important;border:1px solid rgba(255,255,255,.12)!important;backdrop-filter:blur(8px)!important;border-radius:12px!important;color:#fff!important;transition:all .2s!important}
-.chat-ta::placeholder{color:rgba(255,255,255,.3)!important}
-.chat-ta:focus{background:rgba(255,255,255,.1)!important;border-color:rgba(0,87,184,.5)!important;box-shadow:0 0 0 3px rgba(0,87,184,.12)!important;outline:none!important}
-.send-b{background:linear-gradient(135deg,#E8001C,#C8001A)!important;border-radius:12px!important;box-shadow:0 4px 14px rgba(232,0,28,.4)!important;width:44px!important;height:44px!important;transition:all .2s!important}
-.send-b:hover{transform:translateY(-2px) scale(1.05)!important;box-shadow:0 8px 20px rgba(232,0,28,.5)!important}
-.cam-scene-btn{background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.14)!important;border-radius:12px!important;color:rgba(255,255,255,.7)!important;height:44px!important;backdrop-filter:blur(8px)!important}
-.cam-scene-btn:hover{background:rgba(255,255,255,.14)!important;color:#fff!important;transform:translateY(-1px)!important}
-.chat-inp-hint{color:rgba(255,255,255,.2)!important}
-.ai-stat{background:rgba(255,255,255,.05)!important;border:1px solid rgba(255,255,255,.1)!important;backdrop-filter:blur(16px)!important;border-radius:12px!important}
-.ai-stat:hover{background:rgba(255,255,255,.09)!important;transform:scale(1.03)!important}
+/* DARK BACKGROUND */
+#secAsistente { background: #060912 !important; min-height: 100vh; position: relative; }
+#secAsistente::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse 80% 60% at 20% 20%,rgba(0,87,184,.18) 0%,transparent 60%), radial-gradient(ellipse 60% 80% at 80% 60%,rgba(232,0,28,.12) 0%,transparent 55%), #060912; pointer-events:none; z-index:0; }
+#secAsistente > * { position:relative; z-index:1; }
+
+/* HERO */
+.ai-hero { background: transparent !important; }
+.hero-badge { background:rgba(255,255,255,.06) !important; border:1px solid rgba(255,255,255,.14) !important; backdrop-filter:blur(12px); color:rgba(255,255,255,.8) !important; border-radius:20px !important; }
+.badge-dot { background:#00ff88 !important; box-shadow:0 0 8px #00ff88 !important; }
+.ai-title { color:#fff !important; }
+.ai-title em { font-style:normal !important; background:linear-gradient(135deg,#E8001C,#FF6B6B,#FF9A9E); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.ai-sub { color:rgba(255,255,255,.55) !important; }
+.hchip { background:rgba(255,255,255,.07) !important; border:1px solid rgba(255,255,255,.14) !important; color:rgba(255,255,255,.8) !important; border-radius:20px !important; }
+.hchip:hover { background:rgba(255,255,255,.14) !important; color:#fff !important; transform:translateY(-2px) !important; }
+.ai-stat { background:rgba(255,255,255,.06) !important; border:1px solid rgba(255,255,255,.1) !important; backdrop-filter:blur(16px) !important; border-radius:12px !important; }
+.ai-stat-n { color:#fff !important; }
+.ai-stat-l { color:rgba(255,255,255,.4) !important; }
+
+/* SIDEBAR */
+.chat-sidebar { color:#fff; }
+.cscard { background:rgba(255,255,255,.05) !important; border:1px solid rgba(255,255,255,.1) !important; backdrop-filter:blur(20px) !important; border-radius:14px !important; overflow:hidden !important; }
+.cscard-head { background:rgba(255,255,255,.04) !important; border-bottom:1px solid rgba(255,255,255,.08) !important; color:rgba(255,255,255,.4) !important; font-size:10.5px !important; letter-spacing:.7px !important; }
+.mode-b { background:rgba(255,255,255,.06) !important; border:1px solid rgba(255,255,255,.1) !important; border-radius:10px !important; color:rgba(255,255,255,.6) !important; font-family:inherit !important; }
+.mode-b:hover { background:rgba(255,255,255,.12) !important; color:#fff !important; transform:translateY(-1px) !important; }
+.mode-b.active { background:rgba(232,0,28,.2) !important; border-color:rgba(232,0,28,.5) !important; color:#FF9AA5 !important; box-shadow:0 0 16px rgba(232,0,28,.2) !important; }
+.qp-btn { background:rgba(255,255,255,.05) !important; border:1px solid rgba(255,255,255,.09) !important; border-radius:8px !important; color:rgba(255,255,255,.6) !important; font-family:inherit !important; }
+.qp-btn:hover { background:rgba(255,255,255,.1) !important; color:#fff !important; }
+#aiRecBody { color:rgba(255,255,255,.6) !important; font-size:11px !important; }
+
+/* MAIN CHAT BOX — EL CRISTAL */
+#chatMain { 
+  background:rgba(255,255,255,.05) !important; 
+  border:1px solid rgba(255,255,255,.12) !important; 
+  backdrop-filter:blur(40px) saturate(180%) !important; 
+  -webkit-backdrop-filter:blur(40px) saturate(180%) !important; 
+  border-radius:20px !important; 
+  box-shadow:0 32px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.07) inset, 0 1px 0 rgba(255,255,255,.18) inset !important; 
+  overflow:hidden !important; 
+}
+
+/* HEADER */
+.chat-hdr { background:rgba(255,255,255,.05) !important; border-bottom:1px solid rgba(255,255,255,.08) !important; }
+.chat-ai-av { background:linear-gradient(135deg,#E8001C,#FF4444) !important; box-shadow:0 4px 14px rgba(232,0,28,.5) !important; }
+.chat-hdr-ttl { color:#fff !important; font-weight:700 !important; }
+.chat-hdr-sub { color:rgba(255,255,255,.45) !important; font-size:11px !important; }
+.chat-online { color:rgba(255,255,255,.45) !important; }
+.chat-online span { background:#00ff88 !important; box-shadow:0 0 6px #00ff88 !important; }
+
+/* MESSAGES */
+.chat-msgs { background:transparent !important; }
+.cmsg { animation:msgIn .25s cubic-bezier(.4,0,.2,1); }
+@keyframes msgIn { from{opacity:0;transform:translateY(8px) scale(.98)} to{opacity:1;transform:none} }
+.cmsg-av { border-radius:50% !important; width:30px !important; height:30px !important; display:flex !important; align-items:center !important; justify-content:center !important; font-size:13px !important; flex-shrink:0 !important; }
+.cmsg.ai .cmsg-av { background:rgba(232,0,28,.25) !important; border:1px solid rgba(232,0,28,.3) !important; color:#FF9AA5 !important; }
+.cmsg.user .cmsg-av { background:rgba(0,87,184,.25) !important; border:1px solid rgba(0,87,184,.3) !important; color:#7AB4F8 !important; }
+
+/* BURBUJAS — el corazón del glass */
+.cmsg-bbl { border-radius:16px !important; padding:12px 16px !important; font-size:13.5px !important; line-height:1.6 !important; max-width:75% !important; }
+.cmsg.ai .cmsg-bbl { 
+  background:rgba(255,255,255,.08) !important; 
+  border:1px solid rgba(255,255,255,.12) !important; 
+  backdrop-filter:blur(8px) !important; 
+  color:rgba(255,255,255,.92) !important; 
+  border-bottom-left-radius:4px !important;
+  box-shadow:0 4px 16px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.1) !important;
+}
+.cmsg.user .cmsg-bbl { 
+  background:linear-gradient(135deg,rgba(0,87,184,.4),rgba(0,57,120,.35)) !important; 
+  border:1px solid rgba(0,87,184,.4) !important; 
+  backdrop-filter:blur(8px) !important; 
+  color:rgba(255,255,255,.95) !important; 
+  border-bottom-right-radius:4px !important;
+  box-shadow:0 4px 16px rgba(0,87,184,.2), inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+.cmsg-time { color:rgba(255,255,255,.28) !important; font-size:10px !important; margin-top:4px !important; }
+
+/* Markdown inside messages */
+.cmsg-bbl h1,.cmsg-bbl h2,.cmsg-bbl h3 { color:#fff !important; font-weight:700 !important; margin:10px 0 5px !important; }
+.cmsg-bbl p { color:rgba(255,255,255,.88) !important; margin:0 0 6px !important; }
+.cmsg-bbl ul,.cmsg-bbl ol { color:rgba(255,255,255,.85) !important; padding-left:18px !important; }
+.cmsg-bbl li { margin-bottom:4px !important; }
+.cmsg-bbl strong { color:#fff !important; font-weight:700 !important; }
+.cmsg-bbl em { color:rgba(255,255,255,.75) !important; }
+.cmsg-bbl code { background:rgba(255,255,255,.12) !important; color:#7AB4F8 !important; padding:1px 5px !important; border-radius:4px !important; font-size:.88em !important; }
+.cmsg-bbl table { width:100% !important; border-collapse:collapse !important; font-size:12px !important; }
+.cmsg-bbl th { background:rgba(255,255,255,.1) !important; color:#fff !important; padding:6px 10px !important; font-weight:700 !important; }
+.cmsg-bbl td { color:rgba(255,255,255,.75) !important; padding:5px 10px !important; border-bottom:1px solid rgba(255,255,255,.07) !important; }
+.cmsg-bbl a { color:#7AB4F8 !important; }
+
+/* TYPING */
+.typing-ind { display:flex !important; gap:5px !important; align-items:center !important; }
+.typing-ind span { width:7px !important; height:7px !important; border-radius:50% !important; background:rgba(255,255,255,.4) !important; animation:typingDot 1.2s infinite !important; }
+.typing-ind span:nth-child(2){animation-delay:.2s !important}
+.typing-ind span:nth-child(3){animation-delay:.4s !important}
+
+/* INPUT */
+.chat-inp-area { background:rgba(255,255,255,.03) !important; border-top:1px solid rgba(255,255,255,.08) !important; }
+.chat-ta { background:rgba(255,255,255,.08) !important; border:1px solid rgba(255,255,255,.14) !important; border-radius:12px !important; color:#fff !important; font-family:inherit !important; }
+.chat-ta::placeholder { color:rgba(255,255,255,.32) !important; }
+.chat-ta:focus { background:rgba(255,255,255,.11) !important; border-color:rgba(0,87,184,.55) !important; box-shadow:0 0 0 3px rgba(0,87,184,.14) !important; outline:none !important; }
+.send-b { background:linear-gradient(135deg,#E8001C,#C8001A) !important; border-radius:12px !important; box-shadow:0 4px 14px rgba(232,0,28,.45) !important; width:44px !important; height:44px !important; border:none !important; }
+.send-b:hover { transform:translateY(-2px) scale(1.06) !important; box-shadow:0 8px 22px rgba(232,0,28,.55) !important; }
+.cam-scene-btn { background:rgba(255,255,255,.09) !important; border:1px solid rgba(255,255,255,.16) !important; border-radius:12px !important; color:rgba(255,255,255,.75) !important; backdrop-filter:blur(8px) !important; }
+.cam-scene-btn:hover { background:rgba(255,255,255,.15) !important; color:#fff !important; transform:translateY(-1px) !important; }
+.chat-inp-hint { color:rgba(255,255,255,.22) !important; }
+
+/* PRODUCT CARDS in chat */
+.cmsg-prod-card, .msg-prod-card { background:rgba(255,255,255,.07) !important; border:1px solid rgba(255,255,255,.12) !important; border-radius:10px !important; transition:all .2s !important; }
+.cmsg-prod-card:hover, .msg-prod-card:hover { background:rgba(255,255,255,.13) !important; border-color:rgba(232,0,28,.4) !important; transform:translateY(-2px) !important; }
 </style></head>
 <body>
 
@@ -3554,8 +3622,8 @@ body.cmp-open { padding-bottom: 80px }
       <div class="cscard-head">🎯 Modo de consulta</div>
       <div class="cscard-body">
         <div class="mode-grid">
-          <button class="mode-b active" id="mAsesor" onclick="setAIMode('asesor')"><span class="mode-b-icon">🤖</span>Técnico</button>
-          <button class="mode-b" id="mRecom" onclick="setAIMode('recomendacion')"><span class="mode-b-icon">🛒</span>Recomendar</button>
+          <button class="mode-b" id="mAsesor" onclick="setAIMode('asesor')"><span class="mode-b-icon">🤖</span>Técnico</button>
+          <button class="mode-b active" id="mRecom" onclick="setAIMode('recomendacion')"><span class="mode-b-icon">🛒</span>Recomendar</button>
           <button class="mode-b" id="mCalc" onclick="setAIMode('calculadora')"><span class="mode-b-icon">🔢</span>Calcular</button>
           <button class="mode-b" id="mIVS" onclick="setAIMode('ivs')"><span class="mode-b-icon">🧠</span>IVS / IA</button>
         </div>
@@ -3687,7 +3755,7 @@ body.cmp-open { padding-bottom: 80px }
     </div></div></div>
     <div class="chat-inp-area">
       <div class="chat-inp-wrap">
-        <textarea id="chatInput" class="chat-ta" placeholder="Ej: Necesito cubrir entrada de vehículos a 15m de noche para leer patentes. ¿Qué cámara me recomiendas?" rows="1" onkeydown="handleChatKey(event)" oninput="autoResizeTA(this)" style="height: 54px;"></textarea>
+        <textarea id="chatInput" class="chat-ta" placeholder="Describe tu proyecto y te recomendaré equipos específicos…" rows="1" onkeydown="handleChatKey(event)" oninput="autoResizeTA(this)" style="height: 54px;"></textarea>
         <button class="cam-scene-btn" id="camSceneBtn" onclick="openSceneAnalyzer()" title="Analizar escena con cámara">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
@@ -9718,4 +9786,4 @@ window.addEventListener('DOMContentLoaded', () => {
 </div>
 
 
-<div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div></body></html>
+<div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div></body></html>
