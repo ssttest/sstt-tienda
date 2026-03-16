@@ -2355,30 +2355,7 @@ body.cmp-open { padding-bottom: 80px }
             inset 0 0 30px rgba(217, 119, 87, 0.1);
         }
       }
-    </style><style id="critical-fix">.app-section{display:none!important}.app-section.active{display:block!important}#secAsistente{background:#fff!important}#secAsistente::before,#secAsistente::after{display:none!important}#secAcademia{background:#fff!important}#secAcademia::before,#secAcademia::after{display:none!important}.products-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:12px!important}</style><style>
-  /* Cart drawer fix - position fixed, slide in/out */
-  .cart-drawer {
-    position: fixed !important;
-    top: 0 !important; right: 0 !important; bottom: 0 !important;
-    width: 420px !important;
-    background: var(--white) !important;
-    z-index: 801 !important;
-    box-shadow: -6px 0 28px rgba(0,0,0,.12) !important;
-    display: flex !important;
-    flex-direction: column !important;
-    transform: translateX(100%) !important;
-    transition: transform .3s cubic-bezier(.4,0,.2,1) !important;
-  }
-  .cart-drawer.open { transform: translateX(0) !important; }
-  .cart-overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:800; display:none; backdrop-filter:blur(3px); }
-  .cart-overlay.open { display:block !important; }
-  /* Cart internals */
-  .cart-head { background:var(--black); color:var(--white); padding:16px 20px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
-  .cart-body { flex:1; overflow-y:auto; padding:16px; }
-  .cart-foot { padding:16px 20px; border-top:1px solid var(--g5); background:var(--g6); flex-shrink:0; }
-  /* Academia section - make sure it shows */
-  #secAcademia.app-section.active { display:block !important; }
-</style></head>
+    </style><style id="critical-fix">.app-section{display:none!important}.app-section.active{display:block!important}#secAsistente{background:#fff!important}#secAsistente::before,#secAsistente::after{display:none!important}#secAcademia{background:#fff!important}#secAcademia::before,#secAcademia::after{display:none!important}.products-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:12px!important}</style><style>.cart-drawer{position:fixed!important;top:0!important;right:0!important;bottom:0!important;width:420px!important;background:var(--white)!important;z-index:801!important;box-shadow:-6px 0 28px rgba(0,0,0,.12)!important;display:flex!important;flex-direction:column!important;transform:translateX(100%)!important;transition:transform .3s cubic-bezier(.4,0,.2,1)!important}.cart-drawer.open{transform:translateX(0)!important}.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:800;display:none;backdrop-filter:blur(3px)}.cart-overlay.open{display:block!important}.cart-head{background:var(--black);color:var(--white);padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}.cart-body{flex:1;overflow-y:auto;padding:16px}.cart-foot{padding:16px 20px;border-top:1px solid var(--g5);background:var(--g6);flex-shrink:0}#secAcademia.app-section.active{display:block!important}</style></head>
 <body>
 
 <div class="demo-banner">
