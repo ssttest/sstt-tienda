@@ -9270,15 +9270,18 @@ USA SOLO códigos que existen en el catálogo. Responde ÚNICAMENTE con JSON vá
     raw = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
     try {
       sceneAnalysis = JSON.parse(raw);
+      goToStep(3);
     } catch(parseErr) {
       document.getElementById('analysisLoading').style.display = 'none';
       document.getElementById('analysisResult').style.display = 'block';
+      goToStep(3);
       document.getElementById('analysisContent').innerHTML = `
         <div style="color:var(--red);font-weight:700;font-size:15px;margin-bottom:10px">⚠️ Error al parsear respuesta</div>
         <div style="background:#FFF0F0;border:1px solid #FFCCCC;border-radius:6px;padding:12px;font-size:12px;font-family:monospace;color:#333;white-space:pre-wrap;overflow:auto;max-height:200px">${raw.slice(0,500)}</div>`;
       return;
     }
     renderAnalysisResult();
+    goToStep(3);
 
   } catch(e) {
     clearInterval(loadInterval);
