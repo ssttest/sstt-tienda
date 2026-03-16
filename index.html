@@ -7614,102 +7614,189 @@ function goToStep(n) {
 
 // ── CAMERA MANAGEMENT ────────────────────────────────────────────
 // ── MULTI-LENS CAMERA SYSTEM ─────────────────────────────────────
-var allCameraDevices = [];   // lista de todos los dispositivos de cámara
-var activeCameraIdx  = 0;    // índice de la cámara activa en allCameraDevices
+// Estrategia: enumerar deviceIds, probar cada uno, medir FOV real
+// via track.getCapabilities() y ordenar de mayor a menor ángulo
+var allCameraDevices  = [];   // [{deviceId, label, fov, focalEq, lensType, stream?}]
+var activeCameraIdx   = 0;
 
-// Inferir tipo de lente desde el label del dispositivo
+// Classify lens from label string
 function inferLensType(label, idx, total) {
   const l = (label || '').toLowerCase();
-  if (l.includes('ultra') || l.includes('wide') || l.includes('gran'))
-    return { icon:'🔭', name:'Gran angular', fov:120, focalEq:13, desc:'Ultra wide' };
-  if (l.includes('tele') || l.includes('zoom') || l.includes('5x') || l.includes('10x') || l.includes('3x'))
-    return { icon:'🔍', name:'Teleobjetivo', fov:28, focalEq:77, desc:'Tele' };
+  if (l.includes('ultra') || l.includes('0.6') || l.includes('0.5'))
+    return { icon:'🔭', name:'Ultra gran angular', fov:120, focalEq:13 };
+  if (l.includes('wide') || l.includes('gran'))
+    return { icon:'🔭', name:'Gran angular', fov:110, focalEq:16 };
+  if (l.includes('tele') || l.includes('3x') || l.includes('5x') || l.includes('10x') || l.includes('zoom'))
+    return { icon:'🔍', name:'Teleobjetivo', fov:28, focalEq:77 };
   if (l.includes('macro'))
-    return { icon:'🔬', name:'Macro', fov:60, focalEq:35, desc:'Macro' };
-  if (l.includes('depth') || l.includes('profun'))
-    return { icon:'📐', name:'Profundidad', fov:70, focalEq:28, desc:'ToF/Depth' };
-  if (l.includes('front') || l.includes('frontal') || l.includes('selfie') || l.includes('user'))
-    return { icon:'🤳', name:'Frontal', fov:78, focalEq:26, desc:'Frontal' };
-  // By position: first back = main, rest = secondary
-  if (idx === 0 && total > 1)
-    return { icon:'📷', name:'Principal', fov:78, focalEq:26, desc:'Main' };
-  if (idx === 1 && total > 2)
-    return { icon:'🔭', name:'Gran angular', fov:110, focalEq:16, desc:'Wide' };
-  if (idx === 2)
-    return { icon:'🔍', name:'Teleobjetivo', fov:30, focalEq:70, desc:'Tele' };
-  return { icon:'📷', name:'Cámara ' + (idx+1), fov:75, focalEq:28, desc:'Rear' };
+    return { icon:'🔬', name:'Macro', fov:60, focalEq:35 };
+  if (l.includes('depth') || l.includes('tof'))
+    return { icon:'📐', name:'Profundidad', fov:70, focalEq:28 };
+  if (l.includes('front') || l.includes('user') || l.includes('selfie') || l.includes('frontal'))
+    return { icon:'🤳', name:'Frontal', fov:78, focalEq:26 };
+  // By index heuristic when labels are generic
+  if (total >= 3) {
+    if (idx === 0) return { icon:'📷', name:'Principal',      fov:78,  focalEq:26 };
+    if (idx === 1) return { icon:'🔭', name:'Gran angular',   fov:110, focalEq:16 };
+    if (idx === 2) return { icon:'🔍', name:'Teleobjetivo',   fov:28,  focalEq:77 };
+    if (idx === 3) return { icon:'🔬', name:'Macro / Extra',  fov:60,  focalEq:35 };
+  }
+  if (total === 2) {
+    if (idx === 0) return { icon:'📷', name:'Principal',    fov:78,  focalEq:26 };
+    if (idx === 1) return { icon:'🔭', name:'Gran angular', fov:110, focalEq:16 };
+  }
+  return { icon:'📷', name:'Cámara ' + (idx+1), fov:75, focalEq:28 };
 }
 
-// Enumerate all cameras and build selector UI
+// Try to get real FOV from track capabilities
+function getRealFov(track) {
+  try {
+    const caps = track.getCapabilities ? track.getCapabilities() : {};
+    // zoom range: low zoom = wide angle
+    if (caps.zoom && caps.zoom.min !== undefined) {
+      // Estimate FOV from min zoom (most wide)
+      const minZoom = caps.zoom.min;
+      if (minZoom <= 0.6) return 120;
+      if (minZoom <= 0.8) return 110;
+      if (minZoom <= 1.0) return 78;
+      if (minZoom <= 2.0) return 52;
+      return 30;
+    }
+    // focallength hint
+    if (caps.focallength) {
+      const f = caps.focallength.min || caps.focallength;
+      if (f < 2) return 120;
+      if (f < 3) return 100;
+      if (f < 4) return 80;
+      if (f < 6) return 55;
+      return 35;
+    }
+  } catch(e) {}
+  return null; // unknown, use inferred
+}
+
 async function enumerateCameras() {
+  // Step 1: request temp permission to unlock device labels
   try {
-    // Must request permission first to get labels
-    const tempStream = await navigator.mediaDevices.getUserMedia({ video: true });
-    tempStream.getTracks().forEach(t => t.stop());
-  } catch(e) {
-    console.warn('Initial permission denied:', e);
-  }
+    const tmp = await navigator.mediaDevices.getUserMedia({ video: { facingMode:'environment' } });
+    tmp.getTracks().forEach(t => t.stop());
+  } catch(e) { console.warn('Temp permission:', e.name); }
+
+  // Step 2: enumerate
+  let devices = [];
   try {
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    allCameraDevices = devices.filter(d => d.kind === 'videoinput');
-    console.log('Cameras found:', allCameraDevices.length, allCameraDevices.map(d=>d.label));
-    return allCameraDevices;
-  } catch(e) {
-    console.error('enumerateDevices error:', e);
-    return [];
+    const all = await navigator.mediaDevices.enumerateDevices();
+    devices = all.filter(d => d.kind === 'videoinput');
+  } catch(e) { return []; }
+
+  if (devices.length === 0) return [];
+
+  // Step 3: separate front/back
+  const backDevices  = devices.filter(d => {
+    const l = (d.label||'').toLowerCase();
+    return !l.includes('front') && !l.includes('user') && !l.includes('selfie') && !l.includes('frontal');
+  });
+  const frontDevices = devices.filter(d => {
+    const l = (d.label||'').toLowerCase();
+    return l.includes('front') || l.includes('user') || l.includes('selfie') || l.includes('frontal');
+  });
+  // If no label distinction, put all as back except last
+  const backList  = backDevices.length  > 0 ? backDevices  : devices.slice(0,-1);
+  const frontList = frontDevices.length > 0 ? frontDevices : devices.slice(-1);
+
+  const total = backList.length;
+
+  // Step 4: build camera objects with inferred types
+  allCameraDevices = [];
+  backList.forEach((d, i) => {
+    const lens = inferLensType(d.label, i, total);
+    allCameraDevices.push({ deviceId: d.deviceId, label: d.label || lens.name, ...lens, facing:'back' });
+  });
+  frontList.forEach((d) => {
+    allCameraDevices.push({ deviceId: d.deviceId, label: d.label || 'Frontal', icon:'🤳', name:'Frontal', fov:78, focalEq:26, facing:'front' });
+  });
+
+  // Step 5: find widest angle (largest FOV) among back cameras → set as default
+  const backCams = allCameraDevices.filter(c => c.facing === 'back');
+  if (backCams.length > 0) {
+    const widestIdx = allCameraDevices.indexOf(
+      backCams.reduce((a,b) => a.fov > b.fov ? a : b)
+    );
+    activeCameraIdx = widestIdx;
   }
+
+  console.log('Cameras enumerated:', allCameraDevices.map(c => `${c.name} (${c.fov}°)`));
+  return allCameraDevices;
 }
 
-// Build lens selector buttons in the UI
 function buildLensSelectorUI(cameras) {
   const wrap = document.getElementById('lensSelectorWrap');
   if (!wrap) return;
-  if (cameras.length <= 1) { wrap.style.display='none'; return; }
+  if (cameras.length <= 1) { wrap.style.display = 'none'; return; }
   wrap.style.display = 'flex';
   wrap.innerHTML = '';
-  cameras.forEach((cam, i) => {
-    const lens = inferLensType(cam.label, i, cameras.length);
+
+  // Sort display: widest first among back, then front
+  const sorted = [...cameras].sort((a,b) => {
+    if (a.facing !== b.facing) return a.facing === 'back' ? -1 : 1;
+    return b.fov - a.fov; // wider first
+  });
+
+  sorted.forEach((cam) => {
+    const realIdx = cameras.indexOf(cam);
     const btn = document.createElement('button');
-    btn.className = 'lens-btn' + (i === activeCameraIdx ? ' active' : '');
-    btn.dataset.idx = i;
-    btn.innerHTML = `<span class="lens-btn-icon">${lens.icon}</span>
-      <span class="lens-btn-name">${lens.name}</span>
-      <span class="lens-btn-fov">~${lens.fov}°</span>`;
-    btn.title = cam.label || lens.desc;
-    btn.onclick = () => switchToCamera(i);
+    btn.className = 'lens-btn' + (realIdx === activeCameraIdx ? ' active' : '');
+    btn.dataset.idx = realIdx;
+    btn.innerHTML = `
+      <span class="lens-btn-icon">${cam.icon}</span>
+      <span class="lens-btn-name">${cam.name}</span>
+      <span class="lens-btn-fov">~${cam.fov}°</span>`;
+    btn.title = cam.label;
+    btn.onclick = () => switchToCamera(realIdx);
     wrap.appendChild(btn);
   });
 }
 
-// Start camera by index in allCameraDevices
 async function startCameraByIndex(idx) {
   const btn = document.getElementById('startCamBtn');
   if (btn) { btn.disabled = true; btn.textContent = 'Activando…'; }
-
   stopCamera();
 
-  try {
-    let constraints;
-    if (allCameraDevices.length > 0 && allCameraDevices[idx]) {
-      // Use exact deviceId for precise lens selection
-      constraints = {
-        video: {
-          deviceId: { exact: allCameraDevices[idx].deviceId },
-          width:  { ideal: 3840 },
-          height: { ideal: 2160 },
-        }
-      };
-    } else {
-      // Fallback: facingMode
-      constraints = {
-        video: {
-          facingMode: { ideal: 'environment' },
-          width: { ideal: 1920 }, height: { ideal: 1080 },
-        }
-      };
-    }
+  const cam = allCameraDevices[idx];
+  let constraints;
 
+  if (cam && cam.deviceId) {
+    constraints = {
+      video: {
+        deviceId: { exact: cam.deviceId },
+        width:  { ideal: 3840 },
+        height: { ideal: 2160 },
+      }
+    };
+  } else {
+    // Universal fallback: request widest possible via zoom=min
+    constraints = {
+      video: {
+        facingMode: { ideal: 'environment' },
+        zoom: { ideal: 0.5 },       // request widest zoom
+        width:  { ideal: 1920 },
+        height: { ideal: 1080 },
+      }
+    };
+  }
+
+  try {
     sceneStream = await navigator.mediaDevices.getUserMedia(constraints);
+
+    // Try to set zoom to minimum (widest) if supported
+    const track = sceneStream.getVideoTracks()[0];
+    try {
+      const caps = track.getCapabilities ? track.getCapabilities() : {};
+      if (caps.zoom) {
+        await track.applyConstraints({ advanced: [{ zoom: caps.zoom.min }] });
+      }
+    } catch(e) { /* zoom not supported, fine */ }
+
     const video = document.getElementById('camPreview');
     video.srcObject = sceneStream;
     video.classList.add('active');
@@ -7720,92 +7807,72 @@ async function startCameraByIndex(idx) {
     document.getElementById('shutterWrap').style.display = 'flex';
     if (btn) btn.style.display = 'none';
 
-    // Update active lens button
     activeCameraIdx = idx;
-    document.querySelectorAll('.lens-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+    document.querySelectorAll('.lens-btn').forEach(b =>
+      b.classList.toggle('active', parseInt(b.dataset.idx) === idx));
 
-    // Read track settings once loaded
     video.addEventListener('loadedmetadata', () => {
-      const track = sceneStream.getVideoTracks()[0];
       const settings = track.getSettings();
       const w = settings.width  || video.videoWidth  || 1920;
       const h = settings.height || video.videoHeight || 1080;
-      phoneData.width  = w;
-      phoneData.height = h;
-      phoneData.sensorMP = Math.round(w*h/1000000*10)/10;
+      phoneData.width     = w;
+      phoneData.height    = h;
+      phoneData.sensorMP  = Math.round(w*h/1000000*10)/10;
 
-      const cam   = allCameraDevices[idx];
-      const lens  = inferLensType(cam ? cam.label : '', idx, allCameraDevices.length);
-      phoneData.fovH     = lens.fov;
-      phoneData.focalEq  = lens.focalEq;
-      phoneData.lensName = lens.name;
+      // Use real FOV if detectable, else inferred
+      const realFov = getRealFov(track);
+      const lensInfo = cam || { name:'Cámara', fov:78, focalEq:26 };
+      phoneData.fovH     = realFov || lensInfo.fov;
+      phoneData.focalEq  = lensInfo.focalEq;
+      phoneData.lensName = lensInfo.name;
 
       document.getElementById('camInfoText').textContent =
-        `${lens.icon} ${lens.name}`;
+        `${lensInfo.icon||'📷'} ${lensInfo.name} · ~${phoneData.fovH}°`;
       document.getElementById('camResBadge').textContent =
         `${w}×${h} · ${phoneData.sensorMP}MP`;
 
-      // Update phone specs panel if visible
-      const psCamera = document.getElementById('psCamera');
-      const psRes    = document.getElementById('psRes');
-      const psAngle  = document.getElementById('psAngle');
-      const psFocal  = document.getElementById('psFocal');
-      if (psCamera) psCamera.textContent = lens.name;
-      if (psRes)    psRes.textContent    = `${w}×${h} · ${phoneData.sensorMP}MP`;
-      if (psAngle)  psAngle.textContent  = `~${lens.fov}° horizontal`;
-      if (psFocal)  psFocal.textContent  = `~${lens.focalEq}mm equiv.`;
+      // Update step 2 specs if visible
+      ['psCamera','psRes','psAngle','psFocal'].forEach((id, i) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const vals = [lensInfo.name, `${w}×${h} · ${phoneData.sensorMP}MP`,
+                      `~${phoneData.fovH}° horizontal`, `~${phoneData.focalEq}mm equiv.`];
+        el.textContent = vals[i];
+      });
     }, { once: true });
 
   } catch(e) {
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = '📷 Activar cámara';
-      btn.style.display = 'flex';
-    }
+    if (btn) { btn.disabled = false; btn.innerHTML = '📷 Activar cámara'; btn.style.display = 'flex'; }
     console.error('Camera error:', e.name, e.message);
     const ph = document.getElementById('capturePlaceholder');
     if (ph) {
-      let msg = '';
-      if (e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError') {
-        msg = '🔒 Permiso denegado<br><small>Toca el candado 🔒 en la URL → Permisos → Cámara → Permitir</small>';
-      } else if (e.name === 'NotFoundError') {
-        msg = '📷 Cámara no encontrada<br><small>Usa "Subir foto" para continuar</small>';
-      } else if (e.name === 'NotReadableError') {
-        msg = '⚠️ Cámara en uso por otra app<br><small>Cierra otras apps y reintenta</small>';
-      } else {
-        msg = '⚠️ ' + e.name + '<br><small>' + e.message + '</small>';
-      }
-      ph.innerHTML = '<div style="font-size:36px;margin-bottom:10px">⚠️</div>' +
-        '<div style="color:#fff;font-size:14px;font-weight:700;text-align:center;line-height:1.6">' + msg + '</div>';
+      const msgs = {
+        NotAllowedError:       '🔒 Permiso denegado<br><small>Toca el candado 🔒 en la URL → Permisos → Cámara → Permitir</small>',
+        PermissionDeniedError: '🔒 Permiso denegado<br><small>Toca el candado 🔒 en la URL → Permisos → Cámara → Permitir</small>',
+        NotFoundError:         '📷 Cámara no encontrada<br><small>Usa "Subir foto" para continuar</small>',
+        NotReadableError:      '⚠️ Cámara en uso por otra app<br><small>Cierra otras apps y reintenta</small>',
+      };
+      const msg = msgs[e.name] || `⚠️ ${e.name}<br><small>${e.message}</small>`;
+      ph.innerHTML = `<div style="font-size:36px;margin-bottom:10px">⚠️</div>
+        <div style="color:#fff;font-size:14px;font-weight:700;text-align:center;line-height:1.7">${msg}</div>`;
       ph.style.display = 'flex';
     }
   }
 }
 
 async function startCamera() {
-  // First enumerate all cameras, then start the first rear camera
   const cameras = await enumerateCameras();
-  // Find first rear/environment camera
-  let startIdx = 0;
-  if (cameras.length > 0) {
-    // Prefer the main rear camera (usually first non-front)
-    const rearIdx = cameras.findIndex(c => {
-      const l = (c.label||'').toLowerCase();
-      return !l.includes('front') && !l.includes('frontal') && !l.includes('selfie') && !l.includes('user');
-    });
-    startIdx = rearIdx >= 0 ? rearIdx : 0;
-  }
   buildLensSelectorUI(cameras);
-  await startCameraByIndex(startIdx);
+  await startCameraByIndex(activeCameraIdx); // starts on widest by default
 }
 
 async function switchCamera() {
-  // Cycle to next camera
   const next = (activeCameraIdx + 1) % Math.max(allCameraDevices.length, 1);
   await switchToCamera(next);
 }
 
 async function switchToCamera(idx) {
+  activeCameraIdx = idx;
   await startCameraByIndex(idx);
 }
 
