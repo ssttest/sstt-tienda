@@ -3596,7 +3596,13 @@ body.cmp-open { padding-bottom: 80px }
       <div class="cmsg-bbl">¿Qué cámara Dahua para entrada edificio 8 metros reconocer rostros?</div>
       
       <div class="cmsg-time">06:30 p.&nbsp;m.</div>
-    </div></div><div class="cmsg ai" id="aiTyping"><div class="cmsg-av">🤖</div><div><div class="typing-ind"><span></span><span></span><span></span></div></div></div></div>
+    </div></div><div class="cmsg ai">
+    <div class="cmsg-av">🤖</div>
+    <div style="flex:1;min-width:0">
+      <div class="cmsg-bbl"><strong style="display:block;margin-top:9px">🎥 Cámara para Edificio a 8 metros</strong><br><br>¡Buena pregunta! Para darte la recomendación más precisa, necesito algunos datos:<br><br>---<br><br><strong style="display:block;margin-top:9px">📋 Preguntas clave:</strong><br><br><strong>1. ¿Qué área quieres cubrir?</strong><br>- 🚪 Entrada/hall principal<br>- 🅿️ Estacionamiento<br>- 🛗 Pasillo/corredor<br>- 🌿 Área exterior/perímetro<br><br><strong>2. ¿Interior o exterior?</strong><br><br><strong>3. ¿Qué necesitas identificar?</strong><br>- 👤 Reconocimiento facial<br>- 🚗 Patentes vehículos<br>- 📍 Vigilancia general<br><br><strong>4. ¿Tienes preferencia de formato?</strong><br>- Domo<br>- Bala/Bullet<br>- Turret<br><br>---<br><br><strong style="display:block;margin-top:9px">💡 Orientación inicial a 8m:</strong><br><br>| Uso | Lente recomendado |<br>|-----|------------------|<br>| Pasillo ancho | <strong>2.8mm</strong> |<br>| Entrada general | <strong>3.6mm</strong> |<br>| Identificación facial | <strong>6mm</strong> |<br>| Estacionamiento largo | <strong>8mm+</strong> |<br><br>---<br><br>¿Me cuentas más detalles del proyecto? 😊<br>Así te recomiendo el modelo <strong>exacto</strong> con ficha técnica incluida.</div>
+      
+      <div class="cmsg-time">06:33 p.&nbsp;m.</div>
+    </div></div></div>
     <div class="chat-inp-area">
       <div class="chat-inp-wrap">
         <textarea id="chatInput" class="chat-ta" placeholder="Ej: Necesito cubrir entrada de vehículos a 15m de noche para leer patentes. ¿Qué cámara me recomiendas?" rows="1" onkeydown="handleChatKey(event)" oninput="autoResizeTA(this)" style="height: 72px;"></textarea>
@@ -5796,222 +5802,29 @@ FORMATO DE RESPUESTA:
 }
 
 async function sendAIMessage() {
-  const inp  = qs('chatInput');
+  const inp = qs('chatInput');
   const text = inp?.value.trim();
   if (!text) return;
-  
   inp.value = ''; if (inp) inp.style.height = '38px';
   qs('sendBtn').disabled = true;
   addAIMsg('user', text);
   aiChatHistory.push({role:'user', content:text});
   showAITyping();
   try {
-    dbg('📡 Enviando a API...');
     const resp = await fetch('https://sstt-proxy.ryanodina.workers.dev', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-dangerous-request-direct-browser-access':'true','x-api-key': ANTHROPIC_API_KEY},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-6', max_tokens:1000,
-        system: buildAISysPrompt(),
-        messages: aiChatHistory.slice(-12),
-      }),
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, system: buildAISysPrompt(), messages: aiChatHistory.slice(-12) }),
     });
-    const data    = await resp.json();
-    const content = data.content?.[0]?.text || 'No pude generar respuesta. Intenta de nuevo.';
+    const data = await resp.json();
+    const content = data.content?.[0]?.text || 'Sin respuesta.';
     aiChatHistory.push({role:'assistant', content});
     const prods = extractAIProds(content);
     hideAITyping();
     addAIMsg('ai', content, prods);
     if (prods.length) updateAIRecSidebar(prods);
-  } catch(e) {
-    hideAITyping();
-    addAIMsg('ai', '⚠️ No pude conectarme al servicio de IA ahora mismo. Escríbenos directamente a ventas@sstt.cl para asistencia técnica.');
-  }
-  qs('sendBtn').disabled = false;
-  inp?.focus();
+  } catch(e) { hideAITyping(); addAIMsg('ai','⚠️ ' + e.message); }
+  qs('sendBtn').disabled = false; inp?.focus();
 }
-
-function addAIMsg(role, content, prods=[]) {
-  const wrap = qs('chatMsgs');
-  const time = new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
-  const isAI = role === 'ai';
-  const div = document.createElement('div');
-  div.className = `cmsg ${role}`;
-  const initials = USER ? (USER.nombre[0]+(USER.apellido?.[0]||'')).toUpperCase() : 'TÚ';
-  div.innerHTML = `
-    <div class="cmsg-av">${isAI?'🤖':initials}</div>
-    <div style="flex:1;min-width:0">
-      <div class="cmsg-bbl">${formatAIContent(content)}</div>
-      ${prods.length ? renderAIProdCards(prods) : ''}
-      <div class="cmsg-time">${time}</div>
-    </div>`;
-  wrap.appendChild(div);
-  wrap.scrollTop = wrap.scrollHeight;
-}
-
-function formatAIContent(t) {
-  return t
-    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g,'<em>$1</em>')
-    .replace(/`(.*?)`/g,'<code style="background:var(--bg);border:1px solid var(--border2);border-radius:2px;padding:1px 4px;font-family:monospace;font-size:11px">$1</code>')
-    .replace(/^#{1,3}\s(.+)$/gm,'<strong style="display:block;margin-top:9px">$1</strong>')
-    .replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>')
-    .replace(/\[PRODS:[^\]]+\]/g,'');
-}
-
-function renderAIProdCards(prods) {
-  return `<div class="cp-row">${prods.map(p=>`
-    <div class="cp-c" onclick="openProdModal(${p.id})">
-      <img class="cp-c-img" src="${p.img}" onerror="this.style.opacity='.3'">
-      <div class="cp-c-code">${p.codigo}</div>
-      <div class="cp-c-name">${p.nombre.slice(0,50)}…</div>
-      <div class="cp-c-price">${fmt(p.ptotal)}</div>
-      <button class="cp-c-add" onclick="event.stopPropagation();addCart(PRODUCTS.find(x=>x.id===${p.id}))">+ Al carro</button>
-    </div>`).join('')}</div>`;
-}
-
-function showAITyping() {
-  const wrap = qs('chatMsgs');
-  const div = document.createElement('div');
-  div.className='cmsg ai'; div.id='aiTyping';
-  div.innerHTML=`<div class="cmsg-av">🤖</div><div><div class="typing-ind"><span></span><span></span><span></span></div></div>`;
-  wrap.appendChild(div); wrap.scrollTop=wrap.scrollHeight;
-}
-function hideAITyping() { qs('aiTyping')?.remove(); }
-
-function extractAIProds(text) {
-  const m = text.match(/\[PRODS:([^\]]+)\]/);
-  if (!m) return [];
-  return m[1].split(',').map(c=>PRODUCTS.find(p=>p.codigo===c.trim())).filter(Boolean);
-}
-
-function updateAIRecSidebar(prods) {
-  qs('aiRecBody').innerHTML = prods.map(p=>`
-    <div class="ai-rec-item" onclick="openProdModal(${p.id})">
-      <img class="ai-rec-thumb" src="${p.img}" onerror="this.style.opacity='.3'">
-      <div>
-        <div class="ai-rec-name">${p.nombre.slice(0,40)}…</div>
-        <div class="ai-rec-price">${fmt(p.ptotal)}</div>
-        <span class="ai-rec-why">IA recomienda</span>
-      </div>
-    </div>`).join('');
-}
-
-function sendAIQuick(text) { const inp=qs('chatInput'); if(inp)inp.value=text; sendAIMessage(); }
-function askChipAI(el) { sendAIQuick(el.textContent.replace(/^[^\s]+\s/,'')); }
-function handleChatKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAIMessage();} }
-function autoResizeTA(el) { el.style.height='38px'; el.style.height=Math.min(el.scrollHeight,120)+'px'; }
-
-// ════════════════════════════════════════════════════════
-// ACADEMIA
-// ════════════════════════════════════════════════════════
-function showAcPanel(id, btn) {
-  document.querySelectorAll('.ac-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.ac-tab').forEach(b=>b.classList.remove('active'));
-  const p = document.getElementById('ac'+id.charAt(0).toUpperCase()+id.slice(1));
-  if (p) p.classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (id==='dori') renderDoriEx();
-  if (id==='videos') loadVideosFromYouTube();
-}
-
-function showGuide(id, el) {
-  document.querySelectorAll('.g-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.g-item').forEach(i=>i.classList.remove('active'));
-  const panel = document.getElementById('g-'+id);
-  if (panel) panel.classList.add('active');
-  if (el) el.classList.add('active');
-}
-
-// ─── CALCULADORAS ────────────────────────────────────────
-function calcLente() {
-  const D=parseFloat(qs('lDist').value)||10, L=parseFloat(qs('lObj').value)||3;
-  const S=parseFloat(qs('lSensor').value)||5.37, mult=parseFloat(qs('lUso').value)||1;
-  const F=(D*S)/L, Fa=F*mult;
-  const ls=[2.8,3.6,4,6,8,12,16];
-  const cl=ls.reduce((a,b)=>Math.abs(b-Fa)<Math.abs(a-Fa)?b:a);
-  qs('lMain').textContent=`Focal recomendada: ${cl}mm (calculado: ${Fa.toFixed(1)}mm)`;
-  qs('lDet').innerHTML=`F = (${D} × ${S}) / ${L} = ${F.toFixed(1)}mm × ajuste ${mult} = <strong>${Fa.toFixed(1)}mm</strong><br>Lente estándar más cercano: <strong>${cl}mm</strong>`;
-  show2('lRes');
-}
-
-function calcDisco() {
-  const c=parseInt(qs('dCams').value)||8, d=parseInt(qs('dDias').value)||30;
-  const b=parseFloat(qs('dRes').value)||1, h=parseInt(qs('dHoras').value)||24;
-  const m=(parseInt(qs('dMovim').value)||100)/100;
-  const gb=(b*c*h*3600/8/1024/1024)*d*m;
-  const tb=gb/1024;
-  qs('dMain').textContent=`${tb.toFixed(2)} TB necesarios`;
-  qs('dDet').innerHTML=`${c} cámaras × ${b}Mbps × ${h}h × ${d} días × ${(m*100).toFixed(0)}% = <strong>${gb.toFixed(0)} GB</strong><br>💿 Disco recomendado: <strong>${tb<=4?'4TB':tb<=8?'8TB':tb<=16?'16TB':'20TB+'}</strong> (+ 10% margen)`;
-  show2('dRes2');
-}
-
-function calcDori() {
-  const W=parseFloat(qs('doRes').value)||2560, F=parseFloat(qs('doFocal').value)||3.6;
-  const S=parseFloat(qs('doSensor').value)||5.37;
-  const ppm=W/S;
-  const dd=(ppm*F/25).toFixed(1), od=(ppm*F/62).toFixed(1);
-  const rd=(ppm*F/125).toFixed(1), id=(ppm*F/250).toFixed(1);
-  qs('doriTbl').innerHTML=`<thead><tr><th>Nivel</th><th>Distancia máx.</th><th>¿Para qué sirve?</th></tr></thead><tbody>
-    <tr><td><span class="dori-d">Detección</span></td><td><strong>${dd}m</strong></td><td>¿Hay alguien ahí?</td></tr>
-    <tr><td><span class="dori-o">Observación</span></td><td><strong>${od}m</strong></td><td>¿Qué hace?</td></tr>
-    <tr><td><span class="dori-r">Reconocimiento</span></td><td><strong>${rd}m</strong></td><td>¿Lo reconocerías?</td></tr>
-    <tr><td><span class="dori-i">Identificación</span></td><td><strong>${id}m</strong></td><td>Identificación forense</td></tr>
-  </tbody>`;
-  show2('doRes2');
-}
-
-function calcTension() {
-  const R=parseFloat(qs('tCable').value)||22.8, L=parseInt(qs('tDist').value)||50;
-  const I=parseInt(qs('tCorr').value)||400, V=parseInt(qs('tVolt').value)||12;
-  const dv=(2*R*(I/1000)*L)/1000, pct=(dv/V)*100, vf=V-dv;
-  qs('tMain').textContent=`Caída: ${dv.toFixed(2)}V (${pct.toFixed(1)}%)`;
-  qs('tDet').innerHTML=`ΔV = 2 × ${R}Ω/km × ${I/1000}A × ${L}m / 1000 = <strong>${dv.toFixed(2)}V</strong><br>Tensión en cámara: ${V}V − ${dv.toFixed(2)}V = <strong>${vf.toFixed(2)}V</strong>`;
-  show2('tRes');
-  if (pct>20) { qs('tWarn').textContent=`⚠️ Caída ${pct.toFixed(1)}% > 20%. Usa cable mayor sección o fuente más cercana.`; show2('tWarn'); qs('tOk').classList.remove('show'); }
-  else { qs('tOk').textContent=`✅ Caída ${pct.toFixed(1)}% dentro del rango aceptable. La cámara operará correctamente.`; show2('tOk'); qs('tWarn').classList.remove('show'); }
-}
-
-function calcAngulo() {
-  const F=parseFloat(qs('aFocal').value)||3.6;
-  const [Sh,Sv]=qs('aSensor').value.split(',').map(Number);
-  const D=parseFloat(qs('aDist').value)||10;
-  const aH=2*Math.atan(Sh/(2*F))*180/Math.PI, aV=2*Math.atan(Sv/(2*F))*180/Math.PI;
-  const wH=2*D*Math.tan(aH/2*Math.PI/180), wV=2*D*Math.tan(aV/2*Math.PI/180);
-  qs('aMain').textContent=`H: ${aH.toFixed(1)}° / V: ${aV.toFixed(1)}°`;
-  qs('aDet').innerHTML=`Ángulo H = <strong>${aH.toFixed(1)}°</strong> | Ángulo V = <strong>${aV.toFixed(1)}°</strong><br>A ${D}m cubre: <strong>${wH.toFixed(1)}m × ${wV.toFixed(1)}m</strong>`;
-  show2('aRes');
-}
-
-function addPoeRow() {
-  const row=document.createElement('div'); row.className='poe-row';
-  row.style.cssText='display:grid;grid-template-columns:1fr 45px 26px;gap:5px;margin-bottom:5px;align-items:center';
-  row.innerHTML=`<select class="poe-tipo" style="padding:5px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:11px;font-family:'IBM Plex Sans',sans-serif;background:var(--bg)"><option value="8">Estándar PoE 802.3af (8W)</option><option value="15">PoE+ 802.3at (15W)</option><option value="25">PTZ PoE++ (25W)</option><option value="60">Hi-PoE (60W)</option><option value="5">Económica (5W)</option></select>
-  <input type="number" value="1" min="1" max="64" style="width:100%;padding:5px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:11px;text-align:center">
-  <button onclick="this.closest('.poe-row').remove()" style="background:var(--red-p);border:1px solid var(--red);border-radius:3px;padding:3px 5px;cursor:pointer;color:var(--red);font-size:11px">✕</button>`;
-  document.getElementById('poeCams').appendChild(row);
-}
-
-function calcPoe() {
-  let total=0;
-  document.querySelectorAll('.poe-row').forEach(r=>{
-    const w=parseFloat(r.querySelector('.poe-tipo').value)||8;
-    const q=parseInt(r.querySelector('input[type=number]').value)||1;
-    total+=w*q;
-  });
-  const sw=parseInt(qs('poeSwitch').value)||190, mg=(parseInt(qs('poeMarg').value)||20)/100;
-  const needed=total*(1+mg), ok=needed<=sw;
-  qs('poeMain').textContent=`${total}W + ${(total*mg).toFixed(0)}W margen = ${needed.toFixed(0)}W`;
-  qs('poeDet').innerHTML=`Switch disponible: <strong>${sw}W</strong><br>Necesario con margen: <strong>${needed.toFixed(0)}W</strong><br>${ok?`✅ Margen libre: <strong>${(sw-needed).toFixed(0)}W</strong>`:`❌ Excede en <strong>${(needed-sw).toFixed(0)}W</strong>`}`;
-  show2('poeRes');
-  if (!ok) { qs('poeWarn').textContent=`⚠️ Switch de ${sw}W insuficiente. Necesitas al menos ${Math.ceil(needed/10)*10}W.`; show2('poeWarn'); qs('poeOk').classList.remove('show'); }
-  else { qs('poeOk').textContent=`✅ Switch suficiente con ${((sw-needed)/sw*100).toFixed(0)}% de capacidad libre.`; show2('poeOk'); qs('poeWarn').classList.remove('show'); }
-}
-
-function show2(id) { qs(id)?.classList.add('show'); }
-
-// ─── VIDEOS ──────────────────────────────────────────────
-// Videos — carga dinámica desde YouTube RSS oficial Dahua
 async function loadVideosFromYouTube() {
   const grid = qs('vidGrid');
   if (!grid) return;
