@@ -2372,8 +2372,47 @@ body.cmp-open { padding-bottom: 80px }
 /* PRODUCT CARDS in chat */
 .cmsg-prod-card, .msg-prod-card { background:rgba(255,255,255,.07) !important; border:1px solid rgba(255,255,255,.12) !important; border-radius:10px !important; transition:all .2s !important; }
 .cmsg-prod-card:hover, .msg-prod-card:hover { background:rgba(255,255,255,.13) !important; border-color:rgba(232,0,28,.4) !important; transform:translateY(-2px) !important; }
+</style><style id="glass-fix">
+/* FORCE ALL TEXT IN AI SECTION TO WHITE */
+#secAsistente * { color: rgba(255,255,255,.88); }
+#secAsistente .cmsg-bbl * { color: rgba(255,255,255,.88) !important; }
+#secAsistente .cmsg.ai .cmsg-bbl { 
+  color: rgba(255,255,255,.92) !important;
+  background: rgba(255,255,255,.08) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+}
+#secAsistente .cmsg.user .cmsg-bbl { 
+  color: #fff !important;
+  background: linear-gradient(135deg,rgba(0,87,184,.4),rgba(0,57,120,.35)) !important;
+  border: 1px solid rgba(0,87,184,.4) !important;
+}
+#secAsistente strong { color: #fff !important; font-weight: 700 !important; }
+#secAsistente em { color: rgba(255,255,255,.8) !important; }
+#secAsistente a { color: #7AB4F8 !important; }
+#secAsistente h1,#secAsistente h2,#secAsistente h3 { color: #fff !important; }
+#secAsistente p { color: rgba(255,255,255,.88) !important; }
+#secAsistente li { color: rgba(255,255,255,.85) !important; }
+#secAsistente td { color: rgba(255,255,255,.8) !important; }
+#secAsistente th { color: #fff !important; }
+#secAsistente code { color: #7AB4F8 !important; background: rgba(255,255,255,.1) !important; }
+
+/* SIDEBAR TEXTS */
+.cscard * { color: rgba(255,255,255,.75) !important; }
+.cscard-head { color: rgba(255,255,255,.4) !important; }
+.mode-b { color: rgba(255,255,255,.65) !important; }
+.mode-b.active { color: #FF9AA5 !important; }
+.qp-btn { color: rgba(255,255,255,.65) !important; }
+.chat-hdr-ttl { color: #fff !important; }
+.chat-hdr-sub { color: rgba(255,255,255,.45) !important; }
+.cmsg-time { color: rgba(255,255,255,.28) !important; }
+.chat-inp-hint { color: rgba(255,255,255,.22) !important; }
+.ai-stat-n { color: #fff !important; }
+.ai-stat-l { color: rgba(255,255,255,.4) !important; }
+.ai-title { color: #fff !important; }
+.ai-sub { color: rgba(255,255,255,.55) !important; }
+.hchip { color: rgba(255,255,255,.82) !important; }
 </style></head>
-<body>
+<body style="">
 
 <div class="demo-banner">
   🔧 <strong>Maqueta funcional SSTT®</strong> — Buscador, carro, filtros y cotización de despacho funcionan en tiempo real. Las integraciones Bsale / WebPay requieren el backend PHP.
@@ -9492,7 +9531,386 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
-<div id="prodModal"></div>
+<div id="prodModal" class="">
+    <div class="pm-wrap">
+      <!-- Top bar -->
+      <div class="pm-topbar">
+        <div class="pm-breadcrumb">
+          <a onclick="closeProdModal()">SSTT®</a>
+          <span class="pm-breadcrumb-sep">›</span>
+          <a onclick="closeProdModal()">Cámaras IP</a>
+          <span class="pm-breadcrumb-sep">›</span>
+          <span>IPC-HDW3449HN-AS-PV-0280B</span>
+        </div>
+        <button class="pm-x" onclick="closeProdModal()">✕</button>
+      </div>
+
+      <!-- Hero -->
+      <div class="pm-hero">
+        <!-- Imagen -->
+        <div class="pm-img-panel">
+          <div class="pm-series-ribbon" style="background:var(--navy)">
+            <span>📷</span><span>Dahua Technology</span>
+          </div>
+          <img class="pm-img-main" id="pmImgMain" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_IPC-HDW3449HN-AS-PV-0280B.webp" onerror="this.style.opacity='.15'" alt="IPC-HDW3449HN-AS-PV-0280B" style="margin-top:32px">
+        </div>
+
+        <!-- Info derecha -->
+        <div class="pm-info-panel">
+          <div>
+            <div class="pm-code">IPC-HDW3449HN-AS-PV-0280B</div>
+            <div class="pm-name">Cámara Dahua IP domo con Inteligencia artificial 4MP 2.8mm LED 30m  PoE IP67 MicroSD Alarm in/out</div>
+          </div>
+
+          <div class="pm-price-card">
+            <div class="pm-price-main">$149.900</div>
+            <div class="pm-price-sub">
+              Neto $125.966 &nbsp;+&nbsp; IVA $23.934 &nbsp;·&nbsp;
+              <strong>Precio final con IVA incluido</strong>
+            </div>
+          </div>
+
+          <div>
+            <span class="pm-stock-pill ">
+              <span class="pm-stock-dot"></span>
+              En stock — despacho inmediato
+            </span>
+          </div>
+
+          <div class="pm-cta-row">
+            <button class="pm-btn-primary" onclick="pmAddCart(313)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+              Agregar al carro
+            </button>
+            <button class="pm-btn-secondary" onclick="pmAddCot(313)">📋 Cotizar</button>
+            <button class="pm-btn-ghost" onclick="copyTxt('IPC-HDW3449HN-AS-PV-0280B');showToast('✅ Código copiado')" title="Copiar código de modelo">📋</button>
+          </div>
+
+          <div class="pm-ext-links">
+            <a class="pm-ext-link" href="https://www.dahuasecurity.com/es/search?keyword=IPC-HDW3449HN-AS-PV-0280B" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              Ver en Dahua Technology Latinoamérica
+            </a>
+            <a class="pm-ext-link" href="https://camaras-de-seguridad-dahua.sstt.cl/fichatecnica/IPC-HDW3449HN-AS-PV-0280B.pdf" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              Ficha técnica PDF — IPC-HDW3449HN-AS-PV-0280B
+            </a>
+            <a class="pm-ext-link" href="https://www.sstt.cl/index.php#IPC-HDW3449HN-AS-PV-0280B" target="_blank" rel="noopener">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              Ver ficha detallada en sstt.cl
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Highlights bar -->
+      <div class="pm-highlights">
+    <div class="pm-hl">
+      <div class="pm-hl-icon">🎯</div>
+      <div class="pm-hl-val">4MP</div>
+      <div class="pm-hl-label">Resolución</div>
+    </div>
+    <div class="pm-hl">
+      <div class="pm-hl-icon">💧</div>
+      <div class="pm-hl-val">IP67</div>
+      <div class="pm-hl-label">Intemperie</div>
+    </div>
+    <div class="pm-hl">
+      <div class="pm-hl-icon">💾</div>
+      <div class="pm-hl-val">MicroSD</div>
+      <div class="pm-hl-label">Almacenamiento</div>
+    </div>
+    <div class="pm-hl">
+      <div class="pm-hl-icon">🔌</div>
+      <div class="pm-hl-val">PoE</div>
+      <div class="pm-hl-label">Un cable</div>
+    </div></div>
+
+      <!-- Tabs -->
+      <div class="pm-tabbar">
+        <button class="pm-tab active" onclick="pmTab('specs',this)">📋 Especificaciones</button>
+        <button class="pm-tab" onclick="pmTab('desc',this)">📝 Descripción</button>
+        <button class="pm-tab" onclick="pmTab('dl',this)">⬇ Descargas</button>
+        <button class="pm-tab" onclick="pmTab('rel',this)">🔗 Relacionados (8)</button>
+      </div>
+
+      <!-- Panels -->
+      <div class="pm-body">
+        <div class="pm-panel active" id="pmP-specs"><div style="background:var(--yellow-p);border:1px solid #daa520;border-radius:4px;padding:7px 12px;font-size:11px;color:var(--yellow);margin-bottom:12px;display:flex;gap:8px;align-items:center">
+        <span>⚠️</span><span>Especificaciones derivadas del nombre del producto. PDF no disponible para este modelo.</span>
+       </div><div class="pm-spec-accordion">
+      <div class="pm-spec-group">
+        <div class="pm-spec-grp-hdr" onclick="pmToggleGroup(this)">
+          <span>Cámara — Imagen y Sensor</span><span class="pmg-arrow">▾</span>
+        </div>
+        <div class="pm-spec-grp-body">
+          
+            <div class="pm-spec-row">
+              <div class="pm-spec-key">Resolución máxima</div>
+              <div class="pm-spec-val">4MP (2688×1520)</div>
+            </div>
+        </div>
+      </div>
+      <div class="pm-spec-group">
+        <div class="pm-spec-grp-hdr" onclick="pmToggleGroup(this)">
+          <span>Óptica</span><span class="pmg-arrow">▸</span>
+        </div>
+        <div class="pm-spec-grp-body collapsed">
+          
+            <div class="pm-spec-row">
+              <div class="pm-spec-key">Focal</div>
+              <div class="pm-spec-val">2.8mm</div>
+            </div>
+        </div>
+      </div>
+      <div class="pm-spec-group">
+        <div class="pm-spec-grp-hdr" onclick="pmToggleGroup(this)">
+          <span>Audio y Almacenamiento</span><span class="pmg-arrow">▸</span>
+        </div>
+        <div class="pm-spec-grp-body collapsed">
+          
+            <div class="pm-spec-row">
+              <div class="pm-spec-key">Micrófono integrado</div>
+              <div class="pm-spec-val">Sí</div>
+            </div>
+            <div class="pm-spec-row">
+              <div class="pm-spec-key">MicroSD</div>
+              <div class="pm-spec-val">Hasta 256 GB</div>
+            </div>
+        </div>
+      </div>
+      <div class="pm-spec-group">
+        <div class="pm-spec-grp-hdr" onclick="pmToggleGroup(this)">
+          <span>Conectividad y Alimentación</span><span class="pmg-arrow">▸</span>
+        </div>
+        <div class="pm-spec-grp-body collapsed">
+          
+            <div class="pm-spec-row">
+              <div class="pm-spec-key">Alimentación</div>
+              <div class="pm-spec-val">PoE 15.4W</div>
+            </div>
+            <div class="pm-spec-row">
+              <div class="pm-spec-key">PoE</div>
+              <div class="pm-spec-val">PoE 15.4W</div>
+            </div>
+        </div>
+      </div>
+      <div class="pm-spec-group">
+        <div class="pm-spec-grp-hdr" onclick="pmToggleGroup(this)">
+          <span>Protección y Mecánica</span><span class="pmg-arrow">▸</span>
+        </div>
+        <div class="pm-spec-grp-body collapsed">
+          
+            <div class="pm-spec-row">
+              <div class="pm-spec-key">Protección IP</div>
+              <div class="pm-spec-val">IP67</div>
+            </div>
+        </div>
+      </div></div><p style="font-size:11px;color:var(--light);margin-top:10px">
+    * Especificaciones derivadas del nombre. Descarga el PDF oficial para confirmación.
+  </p></div>
+        <div class="pm-panel" id="pmP-desc">
+    <p class="pm-desc-lead">
+      El <strong>IPC-HDW3449HN-AS-PV-0280B</strong> es cámara dahua ip domo con inteligencia artificial 4mp 2.8mm led 30m  poe ip67 microsd alarm in/out, distribuido oficialmente
+      en Chile por <strong>SSTT SpA</strong> — Distribuidor Regional Dahua.
+      
+    </p>
+    <div class="pm-desc-section">
+      <h4>Características principales</h4>
+      <div class="pm-quickspecs">
+    <div class="pm-qs-card">
+      <div class="pm-qs-icon">🎯</div>
+      <div class="pm-qs-body">
+        <div class="pm-qs-key">Resolución</div>
+        <div class="pm-qs-val">4MP (2688 × 1520 px)</div>
+      </div>
+    </div>
+    <div class="pm-qs-card">
+      <div class="pm-qs-icon">🎬</div>
+      <div class="pm-qs-body">
+        <div class="pm-qs-key">Frame rate</div>
+        <div class="pm-qs-val">25 / 30 fps</div>
+      </div>
+    </div>
+    <div class="pm-qs-card">
+      <div class="pm-qs-icon">📦</div>
+      <div class="pm-qs-body">
+        <div class="pm-qs-key">Compresión</div>
+        <div class="pm-qs-val">H.265 / H.264 (ver ficha técnica)</div>
+      </div>
+    </div>
+    <div class="pm-qs-card">
+      <div class="pm-qs-icon">🔭</div>
+      <div class="pm-qs-body">
+        <div class="pm-qs-key">Lente</div>
+        <div class="pm-qs-val">2.8mm fijo</div>
+      </div>
+    </div>
+    <div class="pm-qs-card">
+      <div class="pm-qs-icon">🔌</div>
+      <div class="pm-qs-body">
+        <div class="pm-qs-key">PoE</div>
+        <div class="pm-qs-val">PoE IEEE 802.3af (hasta 15.4W)</div>
+      </div>
+    </div>
+    <div class="pm-qs-card">
+      <div class="pm-qs-icon">•</div>
+      <div class="pm-qs-body">
+        <div class="pm-qs-key">MicroSD</div>
+        <div class="pm-qs-val">Slot interno</div>
+      </div>
+    </div>
+    <div class="pm-qs-card">
+      <div class="pm-qs-icon">•</div>
+      <div class="pm-qs-body">
+        <div class="pm-qs-key">Protocolo</div>
+        <div class="pm-qs-val">ONVIF Profile S/T/G, RTSP, HTTP, HTTPS, P2P Easy4IP</div>
+      </div>
+    </div>
+    <div class="pm-qs-card">
+      <div class="pm-qs-icon">📱</div>
+      <div class="pm-qs-body">
+        <div class="pm-qs-key">App móvil</div>
+        <div class="pm-qs-val">DMSS (iOS &amp; Android)</div>
+      </div>
+    </div></div>
+    </div>
+    
+    <div class="pm-desc-section">
+      <h4>Tabla DORI — Distancias de vigilancia</h4>
+      <div class="pm-dori">
+        <div class="pm-dori-hdr">Distancias estimadas según EN62676-4 (valores referenciales)</div>
+        <table>
+          <thead><tr>
+            <th>Función</th><th>Distancia est.</th><th>Densidad (px/m)</th><th>Uso típico</th>
+          </tr></thead>
+          <tbody>
+            <tr>
+              <td>Detectar</td><td>90m</td><td>25</td>
+              <td>Presencia de persona/vehículo</td>
+            </tr><tr>
+              <td>Observar</td><td>36m</td><td>62</td>
+              <td>Actividad general</td>
+            </tr><tr>
+              <td>Reconocer</td><td>18m</td><td>125</td>
+              <td>Características del sujeto</td>
+            </tr><tr>
+              <td>Identificar</td><td>9m</td><td>250</td>
+              <td>Identidad del sujeto</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="pm-notice">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      Especificaciones y distancias DORI son referenciales. Descarga la ficha técnica oficial PDF para confirmación exacta de todos los parámetros.
+    </div></div>
+        <div class="pm-panel" id="pmP-dl">
+    <div class="pm-dl-grid">
+      <a class="pm-dl-item" href="https://camaras-de-seguridad-dahua.sstt.cl/fichatecnica/IPC-HDW3449HN-AS-PV-0280B.pdf" target="_blank" rel="noopener">
+        <div class="pm-dl-ico pdf">📄</div>
+        <div>
+          <div class="pm-dl-name">Ficha Técnica PDF — IPC-HDW3449HN-AS-PV-0280B</div>
+          <div class="pm-dl-desc">Especificaciones completas oficiales · camaras-de-seguridad-dahua.sstt.cl</div>
+        </div>
+        <div class="pm-dl-arr">↓</div>
+      </a>
+      <a class="pm-dl-item" href="https://www.dahuasecurity.com/es/search?keyword=IPC-HDW3449HN-AS-PV-0280B" target="_blank" rel="noopener">
+        <div class="pm-dl-ico web">🌍</div>
+        <div>
+          <div class="pm-dl-name">Ver en Dahua Technology Latinoamérica</div>
+          <div class="pm-dl-desc">dahuasecurity.com/es — Manual de instalación, Quick Start Guide</div>
+        </div>
+        <div class="pm-dl-arr">↗</div>
+      </a>
+      <a class="pm-dl-item" href="https://www.dahuasecurity.com/support/download-center/search?keyword=IPC-HDW3449HN-AS-PV-0280B" target="_blank" rel="noopener">
+        <div class="pm-dl-ico support">🛠️</div>
+        <div>
+          <div class="pm-dl-name">Centro de soporte Dahua — IPC-HDW3449HN-AS-PV-0280B</div>
+          <div class="pm-dl-desc">Firmware, drivers, software, documentación técnica oficial</div>
+        </div>
+        <div class="pm-dl-arr">↗</div>
+      </a>
+      <a class="pm-dl-item" href="https://www.sstt.cl/index.php#IPC-HDW3449HN-AS-PV-0280B" target="_blank" rel="noopener">
+        <div class="pm-dl-ico calc">🏪</div>
+        <div>
+          <div class="pm-dl-name">Ficha en sstt.cl — IPC-HDW3449HN-AS-PV-0280B</div>
+          <div class="pm-dl-desc">Descripción detallada, preguntas frecuentes, información de stock en SSTT</div>
+        </div>
+        <div class="pm-dl-arr">↗</div>
+      </a>
+    </div></div>
+        <div class="pm-panel" id="pmP-rel">
+    <div class="pm-related-grid">
+      
+        <div class="pm-rel" onclick="openProdModal(1)">
+          <img class="pm-rel-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_IPC-HDBW2841RP-ZS.webp" alt="IPC-HDBW2841RP-ZS" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 90%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e8ecf4%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'">
+          <div class="pm-rel-body">
+            <div class="pm-rel-sku">IPC-HDBW2841RP-ZS</div>
+            <div class="pm-rel-name">Cámara Dahua IP domo 8MP 2.7-13.5mm Motor IR30 PoE IP67 IK10 Soporta Micro SD</div>
+            <div class="pm-rel-price">$199.900</div>
+          </div>
+        </div>
+        <div class="pm-rel" onclick="openProdModal(124)">
+          <img class="pm-rel-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW2802EN-A-0280B.webp" alt="DH-HAC-HFW2802EN-A-0280B" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 90%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e8ecf4%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'">
+          <div class="pm-rel-body">
+            <div class="pm-rel-sku">DH-HAC-HFW2802EN-A-0280B</div>
+            <div class="pm-rel-name">Cámara Dahua HDCVI Bala 4K 2.8mm IR40 Starlight Audio in IP67</div>
+            <div class="pm-rel-price">$69.900</div>
+          </div>
+        </div>
+        <div class="pm-rel" onclick="openProdModal(125)">
+          <img class="pm-rel-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1809TN-A-LED-0280B.webp" alt="HAC-HFW1809TN-A-LED-0280B" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 90%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e8ecf4%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'">
+          <div class="pm-rel-body">
+            <div class="pm-rel-sku">HAC-HFW1809TN-A-LED-0280B</div>
+            <div class="pm-rel-name">Cámara Dahua HDCVI Bala 4K 2.8mm LED 20M Full-Color microfono IP67</div>
+            <div class="pm-rel-price">$72.900</div>
+          </div>
+        </div>
+        <div class="pm-rel" onclick="openProdModal(126)">
+          <img class="pm-rel-img" src="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 90%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e8ecf4%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E" alt="HAC-HFW1801RN-Z-IRE6-27135-" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 90%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e8ecf4%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'">
+          <div class="pm-rel-body">
+            <div class="pm-rel-sku">HAC-HFW1801RN-Z-IRE6-27135-</div>
+            <div class="pm-rel-name">Cámara Dahua HDCVI Bala 4K 2160p 2.7-13.5mm motor IR60 IP67</div>
+            <div class="pm-rel-price">$82.900</div>
+          </div>
+        </div>
+        <div class="pm-rel" onclick="openProdModal(128)">
+          <img class="pm-rel-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1809THN-A-PV-0360B.webp" alt="HAC-ME1809THN-A-PV-0360B" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 90%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e8ecf4%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'">
+          <div class="pm-rel-body">
+            <div class="pm-rel-sku">HAC-ME1809THN-A-PV-0360B</div>
+            <div class="pm-rel-name">Cámara Dahua HDCVI Bala 4K 3.6mm Active Deterrence IR y LED 40M microfono IP67</div>
+            <div class="pm-rel-price">$89.900</div>
+          </div>
+        </div>
+        <div class="pm-rel" onclick="openProdModal(129)">
+          <img class="pm-rel-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1500RN-Z-IRE6-2712-S2.webp" alt="HAC-HFW1500RN-Z-IRE6-2712-S2" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 90%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e8ecf4%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'">
+          <div class="pm-rel-body">
+            <div class="pm-rel-sku">HAC-HFW1500RN-Z-IRE6-2712-S2</div>
+            <div class="pm-rel-name">Cámara Dahua HDCVI Bala 5MP 2.7-12mm motor IR60 IP67</div>
+            <div class="pm-rel-price">$64.900</div>
+          </div>
+        </div>
+        <div class="pm-rel" onclick="openProdModal(130)">
+          <img class="pm-rel-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW2501TN-Z-A.webp" alt="DH-HAC-HFW2501TN-Z-A" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 90%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e8ecf4%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'">
+          <div class="pm-rel-body">
+            <div class="pm-rel-sku">DH-HAC-HFW2501TN-Z-A</div>
+            <div class="pm-rel-name">Camara Dahua HDCVI Bala 5MP 2.7-13.5mm Motor IR80 Starlight Audio in IP67</div>
+            <div class="pm-rel-price">$79.900</div>
+          </div>
+        </div>
+        <div class="pm-rel" onclick="openProdModal(141)">
+          <img class="pm-rel-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1509THN-A-PV-0360B-S2.webp" alt="HAC-ME1509THN-A-PV-0360B-S2" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 90%22%3E%3Crect width=%22100%25%22 height=%22100%25%22 fill=%22%23e8ecf4%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 text-anchor=%22middle%22 font-size=%2228%22%3E📷%3C/text%3E%3C/svg%3E'">
+          <div class="pm-rel-body">
+            <div class="pm-rel-sku">HAC-ME1509THN-A-PV-0360B-S2</div>
+            <div class="pm-rel-name">Cámara Dahua HDCVI Bala 5MP 3.6mm Active Deterrence IR y LED 40M microfono IP67</div>
+            <div class="pm-rel-price">$74.900</div>
+          </div>
+        </div>
+    </div></div>
+      </div>
+    </div></div>
 
 <div id="cmp-bar">
   <div class="cmp-bar-inner">
@@ -9786,4 +10204,4 @@ window.addEventListener('DOMContentLoaded', () => {
 </div>
 
 
-<div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div></body></html>
+<div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div></body></html>
