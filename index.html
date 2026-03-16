@@ -2411,7 +2411,23 @@ body.cmp-open { padding-bottom: 80px }
 .ai-title { color: #fff !important; }
 .ai-sub { color: rgba(255,255,255,.55) !important; }
 .hchip { color: rgba(255,255,255,.82) !important; }
-</style><style>.scene-modal-box{max-width:860px!important}.step2-grid{grid-template-columns:200px 1fr!important}@media(max-width:680px){.step2-grid{grid-template-columns:1fr!important}.step2-preview-col{order:2}.step2-form-col{order:1}}#sceneContext{width:100%!important;min-height:80px!important}.req-opt{font-size:12.5px!important;padding:7px 12px!important}.dist-slider{width:100%!important}</style></head>
+</style><style>.scene-modal-box{max-width:860px!important}.step2-grid{grid-template-columns:200px 1fr!important}@media(max-width:680px){.step2-grid{grid-template-columns:1fr!important}.step2-preview-col{order:2}.step2-form-col{order:1}}#sceneContext{width:100%!important;min-height:80px!important}.req-opt{font-size:12.5px!important;padding:7px 12px!important}.dist-slider{width:100%!important}</style><style>.scene-modal-box{max-width:860px!important}.step2-grid{grid-template-columns:200px 1fr!important}@media(max-width:680px){.step2-grid{grid-template-columns:1fr!important}.step2-preview-col{order:2}.step2-form-col{order:1}}#sceneContext{width:100%!important;min-height:80px!important}.req-opt{font-size:12.5px!important;padding:7px 12px!important}.dist-slider{width:100%!important}</style><style id="glass-fix2">
+    /* Fix cp-c-add button — was white text on light bg */
+    .cp-c-add { 
+      background: var(--red) !important; 
+      color: #fff !important; 
+      border: none !important;
+    }
+    .cp-c-add:hover { background: var(--red2) !important; }
+    /* Fix ALL buttons that might have similar issue */
+    #secAsistente button { color: inherit !important; }
+    .btn-add, .btn-primary, .arec-add { color: #fff !important; }
+    /* Fix catalogue cards in sidebar recommendations */
+    .cp-c { background: rgba(255,255,255,.05) !important; border: 1px solid rgba(255,255,255,.1) !important; border-radius: 8px !important; overflow: hidden !important; }
+    .cp-c-name { color: rgba(255,255,255,.85) !important; }
+    .cp-c-price { color: #fff !important; font-weight: 700 !important; }
+    .cp-c-code { color: #7AB4F8 !important; }
+  </style></head>
 <body style="">
 
 <div class="demo-banner">
