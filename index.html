@@ -2156,6 +2156,50 @@ nav {
 #cmp-bar { animation: none }
 #cmp-bar.open { animation: slideUp .2s ease }
 body.cmp-open { padding-bottom: 80px }
+
+/* ── LENS SELECTOR ───────────────────────────────────────────── */
+.lens-selector {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: var(--r-lg);
+}
+.lens-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255,255,255,.08);
+  border: 1.5px solid rgba(255,255,255,.15);
+  border-radius: var(--r);
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: all .2s;
+  color: rgba(255,255,255,.7);
+  font-family: var(--font);
+  min-width: 70px;
+}
+.lens-btn:hover {
+  background: rgba(255,255,255,.18);
+  border-color: rgba(255,255,255,.4);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+.lens-btn.active {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--white);
+  box-shadow: var(--shadow-r);
+}
+.lens-btn-icon { font-size: 20px; line-height: 1 }
+.lens-btn-name { font-size: 11px; font-weight: 700; letter-spacing: .2px }
+.lens-btn-fov  { font-size: 9.5px; color: rgba(255,255,255,.5); font-family: var(--font-m) }
+.lens-btn.active .lens-btn-fov { color: rgba(255,255,255,.75) }
+
 </style>
 </head>
 <body>
@@ -7569,29 +7613,118 @@ function goToStep(n) {
 }
 
 // ── CAMERA MANAGEMENT ────────────────────────────────────────────
-async function startCamera() {
-  const btn = document.getElementById('startCamBtn');
-  btn.disabled = true;
-  btn.textContent = 'Activando…';
+// ── MULTI-LENS CAMERA SYSTEM ─────────────────────────────────────
+var allCameraDevices = [];   // lista de todos los dispositivos de cámara
+var activeCameraIdx  = 0;    // índice de la cámara activa en allCameraDevices
+
+// Inferir tipo de lente desde el label del dispositivo
+function inferLensType(label, idx, total) {
+  const l = (label || '').toLowerCase();
+  if (l.includes('ultra') || l.includes('wide') || l.includes('gran'))
+    return { icon:'🔭', name:'Gran angular', fov:120, focalEq:13, desc:'Ultra wide' };
+  if (l.includes('tele') || l.includes('zoom') || l.includes('5x') || l.includes('10x') || l.includes('3x'))
+    return { icon:'🔍', name:'Teleobjetivo', fov:28, focalEq:77, desc:'Tele' };
+  if (l.includes('macro'))
+    return { icon:'🔬', name:'Macro', fov:60, focalEq:35, desc:'Macro' };
+  if (l.includes('depth') || l.includes('profun'))
+    return { icon:'📐', name:'Profundidad', fov:70, focalEq:28, desc:'ToF/Depth' };
+  if (l.includes('front') || l.includes('frontal') || l.includes('selfie') || l.includes('user'))
+    return { icon:'🤳', name:'Frontal', fov:78, focalEq:26, desc:'Frontal' };
+  // By position: first back = main, rest = secondary
+  if (idx === 0 && total > 1)
+    return { icon:'📷', name:'Principal', fov:78, focalEq:26, desc:'Main' };
+  if (idx === 1 && total > 2)
+    return { icon:'🔭', name:'Gran angular', fov:110, focalEq:16, desc:'Wide' };
+  if (idx === 2)
+    return { icon:'🔍', name:'Teleobjetivo', fov:30, focalEq:70, desc:'Tele' };
+  return { icon:'📷', name:'Cámara ' + (idx+1), fov:75, focalEq:28, desc:'Rear' };
+}
+
+// Enumerate all cameras and build selector UI
+async function enumerateCameras() {
   try {
-    const constraints = {
-      video: {
-        facingMode: { ideal: sceneCamFacing },
-        width:  { ideal: 1920 },
-        height: { ideal: 1080 },
-      }
-    };
+    // Must request permission first to get labels
+    const tempStream = await navigator.mediaDevices.getUserMedia({ video: true });
+    tempStream.getTracks().forEach(t => t.stop());
+  } catch(e) {
+    console.warn('Initial permission denied:', e);
+  }
+  try {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    allCameraDevices = devices.filter(d => d.kind === 'videoinput');
+    console.log('Cameras found:', allCameraDevices.length, allCameraDevices.map(d=>d.label));
+    return allCameraDevices;
+  } catch(e) {
+    console.error('enumerateDevices error:', e);
+    return [];
+  }
+}
+
+// Build lens selector buttons in the UI
+function buildLensSelectorUI(cameras) {
+  const wrap = document.getElementById('lensSelectorWrap');
+  if (!wrap) return;
+  if (cameras.length <= 1) { wrap.style.display='none'; return; }
+  wrap.style.display = 'flex';
+  wrap.innerHTML = '';
+  cameras.forEach((cam, i) => {
+    const lens = inferLensType(cam.label, i, cameras.length);
+    const btn = document.createElement('button');
+    btn.className = 'lens-btn' + (i === activeCameraIdx ? ' active' : '');
+    btn.dataset.idx = i;
+    btn.innerHTML = `<span class="lens-btn-icon">${lens.icon}</span>
+      <span class="lens-btn-name">${lens.name}</span>
+      <span class="lens-btn-fov">~${lens.fov}°</span>`;
+    btn.title = cam.label || lens.desc;
+    btn.onclick = () => switchToCamera(i);
+    wrap.appendChild(btn);
+  });
+}
+
+// Start camera by index in allCameraDevices
+async function startCameraByIndex(idx) {
+  const btn = document.getElementById('startCamBtn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Activando…'; }
+
+  stopCamera();
+
+  try {
+    let constraints;
+    if (allCameraDevices.length > 0 && allCameraDevices[idx]) {
+      // Use exact deviceId for precise lens selection
+      constraints = {
+        video: {
+          deviceId: { exact: allCameraDevices[idx].deviceId },
+          width:  { ideal: 3840 },
+          height: { ideal: 2160 },
+        }
+      };
+    } else {
+      // Fallback: facingMode
+      constraints = {
+        video: {
+          facingMode: { ideal: 'environment' },
+          width: { ideal: 1920 }, height: { ideal: 1080 },
+        }
+      };
+    }
+
     sceneStream = await navigator.mediaDevices.getUserMedia(constraints);
     const video = document.getElementById('camPreview');
     video.srcObject = sceneStream;
     video.classList.add('active');
+
     document.getElementById('capturePlaceholder').style.display = 'none';
     document.getElementById('camGrid').style.display = 'block';
     document.getElementById('camInfoBar').style.display = 'flex';
     document.getElementById('shutterWrap').style.display = 'flex';
-    document.getElementById('switchCamBtn').style.display = 'flex';
-    btn.style.display = 'none';
-    // Detect camera track settings
+    if (btn) btn.style.display = 'none';
+
+    // Update active lens button
+    activeCameraIdx = idx;
+    document.querySelectorAll('.lens-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+
+    // Read track settings once loaded
     video.addEventListener('loadedmetadata', () => {
       const track = sceneStream.getVideoTracks()[0];
       const settings = track.getSettings();
@@ -7599,47 +7732,81 @@ async function startCamera() {
       const h = settings.height || video.videoHeight || 1080;
       phoneData.width  = w;
       phoneData.height = h;
-      phoneData.sensorMP = Math.round(w*h/1000000 * 10)/10;
-      const facingLabel = (settings.facingMode === 'environment') ? 'Cámara trasera' : 'Cámara frontal';
-      document.getElementById('camInfoText').textContent = facingLabel;
-      document.getElementById('camResBadge').textContent = `${w}×${h}`;
-    });
+      phoneData.sensorMP = Math.round(w*h/1000000*10)/10;
+
+      const cam   = allCameraDevices[idx];
+      const lens  = inferLensType(cam ? cam.label : '', idx, allCameraDevices.length);
+      phoneData.fovH     = lens.fov;
+      phoneData.focalEq  = lens.focalEq;
+      phoneData.lensName = lens.name;
+
+      document.getElementById('camInfoText').textContent =
+        `${lens.icon} ${lens.name}`;
+      document.getElementById('camResBadge').textContent =
+        `${w}×${h} · ${phoneData.sensorMP}MP`;
+
+      // Update phone specs panel if visible
+      const psCamera = document.getElementById('psCamera');
+      const psRes    = document.getElementById('psRes');
+      const psAngle  = document.getElementById('psAngle');
+      const psFocal  = document.getElementById('psFocal');
+      if (psCamera) psCamera.textContent = lens.name;
+      if (psRes)    psRes.textContent    = `${w}×${h} · ${phoneData.sensorMP}MP`;
+      if (psAngle)  psAngle.textContent  = `~${lens.fov}° horizontal`;
+      if (psFocal)  psFocal.textContent  = `~${lens.focalEq}mm equiv.`;
+    }, { once: true });
+
   } catch(e) {
-    btn.disabled = false;
-    btn.innerHTML = '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Activar cámara';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '📷 Activar cámara';
+      btn.style.display = 'flex';
+    }
     console.error('Camera error:', e.name, e.message);
-    // Show detailed error in placeholder
     const ph = document.getElementById('capturePlaceholder');
     if (ph) {
       let msg = '';
       if (e.name === 'NotAllowedError' || e.name === 'PermissionDeniedError') {
-        msg = '🔒 Permiso denegado<br><small>Toca el candado 🔒 en la barra URL → Permisos → Cámara → Permitir<br>Luego recarga la página</small>';
+        msg = '🔒 Permiso denegado<br><small>Toca el candado 🔒 en la URL → Permisos → Cámara → Permitir</small>';
       } else if (e.name === 'NotFoundError') {
-        msg = '📷 No se encontró cámara en este dispositivo<br><small>Usa "Subir foto" para continuar</small>';
+        msg = '📷 Cámara no encontrada<br><small>Usa "Subir foto" para continuar</small>';
       } else if (e.name === 'NotReadableError') {
-        msg = '⚠️ Cámara en uso por otra app<br><small>Cierra otras apps con cámara y reintenta</small>';
-      } else if (!navigator.mediaDevices) {
-        msg = '🔒 Requiere HTTPS<br><small>Accede desde ssttest.github.io (no desde IP local)</small>';
+        msg = '⚠️ Cámara en uso por otra app<br><small>Cierra otras apps y reintenta</small>';
       } else {
-        msg = '⚠️ Error: ' + e.name + '<br><small>' + e.message + '</small>';
+        msg = '⚠️ ' + e.name + '<br><small>' + e.message + '</small>';
       }
-      ph.innerHTML = '<div style="font-size:36px;margin-bottom:10px">⚠️</div><div style="color:#fff;font-size:14px;font-weight:700;text-align:center;line-height:1.6">' + msg + '</div>';
+      ph.innerHTML = '<div style="font-size:36px;margin-bottom:10px">⚠️</div>' +
+        '<div style="color:#fff;font-size:14px;font-weight:700;text-align:center;line-height:1.6">' + msg + '</div>';
       ph.style.display = 'flex';
     }
   }
 }
 
+async function startCamera() {
+  // First enumerate all cameras, then start the first rear camera
+  const cameras = await enumerateCameras();
+  // Find first rear/environment camera
+  let startIdx = 0;
+  if (cameras.length > 0) {
+    // Prefer the main rear camera (usually first non-front)
+    const rearIdx = cameras.findIndex(c => {
+      const l = (c.label||'').toLowerCase();
+      return !l.includes('front') && !l.includes('frontal') && !l.includes('selfie') && !l.includes('user');
+    });
+    startIdx = rearIdx >= 0 ? rearIdx : 0;
+  }
+  buildLensSelectorUI(cameras);
+  await startCameraByIndex(startIdx);
+}
+
 async function switchCamera() {
-  sceneCamFacing = sceneCamFacing === 'environment' ? 'user' : 'environment';
-  stopCamera();
-  document.getElementById('startCamBtn').style.display = 'flex';
-  document.getElementById('startCamBtn').disabled = false;
-  document.getElementById('startCamBtn').innerHTML = '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Activar cámara';
-  document.getElementById('camPreview').classList.remove('active');
-  document.getElementById('capturePlaceholder').style.display = 'flex';
-  document.getElementById('camGrid').style.display = 'none';
-  document.getElementById('shutterWrap').style.display = 'none';
-  await startCamera();
+  // Cycle to next camera
+  const next = (activeCameraIdx + 1) % Math.max(allCameraDevices.length, 1);
+  await switchToCamera(next);
+}
+
+async function switchToCamera(idx) {
+  await startCameraByIndex(idx);
 }
 
 function stopCamera() {
@@ -8477,7 +8644,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
         <!-- Controls -->
         <div class="capture-controls">
-          <div class="capture-btns-row">
+          <!-- Lens selector — filled dynamically after enumeration -->
+        <div id="lensSelectorWrap" class="lens-selector" style="display:none"></div>
+
+        <div class="capture-btns-row">
             <button class="cap-btn cap-btn-primary" id="startCamBtn" onclick="startCamera()">
               <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
               Activar cámara
