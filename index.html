@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
+<html lang="es"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SSTT® — Cámaras de Seguridad Dahua®</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════════════════════════════════
    SSTT® — DAHUA GLOBAL INTERNATIONAL — Design System Exacto 2025
@@ -1147,625 +1145,30 @@ nav {
 .video-title { font-size: 13px; font-weight: 600; color: var(--black); line-height: 1.4 }
 .video-channel { font-size: 11px; color: var(--g3); margin-top: 4px }
 
-/* ══════════════════════════════════════════════════════════════════
-   SECCIÓN IA — Glass Morphism 2025
-   Fondo: gradiente oscuro profundo con partículas de luz
-   Chat: cristal flotante con backdrop-filter blur
-   Mensajes: burbujas glass con bordes luminosos
-   ══════════════════════════════════════════════════════════════════ */
-
-/* ── HERO SECTION ─────────────────────────────────────────────── */
-#secAsistente {
-  background: #060912;
-  min-height: 100vh;
-  position: relative;
-}
-
-/* Fondo animado con gradientes de luz */
-#secAsistente::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(0,87,184,.18) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 80% at 80% 60%, rgba(232,0,28,.12) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 50% at 50% 100%, rgba(0,180,216,.08) 0%, transparent 50%),
-    #060912;
-  pointer-events: none;
-  z-index: 0;
-  animation: bgShift 12s ease-in-out infinite alternate;
-}
-@keyframes bgShift {
-  0%   { opacity: 1 }
-  50%  { opacity: .85 }
-  100% { opacity: 1 }
-}
-
-/* Noise texture overlay */
-#secAsistente::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-  opacity: .4;
-  pointer-events: none;
-  z-index: 0;
-}
-
-#secAsistente > * { position: relative; z-index: 1; }
-
-.ai-hero {
-  background: transparent;
-  color: var(--white);
-  padding: 52px 0 40px;
-  position: relative;
-  z-index: 1;
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.14);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: rgba(255,255,255,.7);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 20px;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  margin-bottom: 18px;
-}
-.badge-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: #00ff88;
-  box-shadow: 0 0 8px #00ff88, 0 0 16px rgba(0,255,136,.4);
-  animation: pulse-green 2s ease-in-out infinite;
-}
-@keyframes pulse-green {
-  0%,100% { opacity:1; transform:scale(1) }
-  50%      { opacity:.6; transform:scale(1.4) }
-}
-
-.ai-title {
-  font-family: var(--font-d);
-  font-size: 52px;
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -.5px;
-  margin-bottom: 12px;
-  color: var(--white);
-}
-.ai-title em {
-  font-style: normal;
-  background: linear-gradient(135deg, #E8001C 0%, #FF6B6B 50%, #FF9A9E 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.ai-sub {
-  font-size: 15px;
-  color: rgba(255,255,255,.5);
-  max-width: 520px;
-  line-height: 1.7;
-  margin-bottom: 28px;
-}
-
-/* Hero chips — glass pills */
-.hero-chips { display: flex; flex-wrap: wrap; gap: 7px; }
-.hchip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid rgba(255,255,255,.12);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  color: rgba(255,255,255,.75);
-  font-size: 12px;
-  font-weight: 500;
-  padding: 7px 14px;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all .2s cubic-bezier(.4,0,.2,1);
-  font-family: var(--font);
-  user-select: none;
-}
-.hchip:hover {
-  background: rgba(255,255,255,.12);
-  border-color: rgba(255,255,255,.28);
-  color: var(--white);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,.3);
-}
-.hchip-cam {
-  background: rgba(232,0,28,.15) !important;
-  border-color: rgba(232,0,28,.35) !important;
-  color: #FF9AA5 !important;
-}
-.hchip-cam:hover {
-  background: rgba(232,0,28,.28) !important;
-}
-
-/* AI Stats column */
-.ai-stats-col { display: flex; flex-direction: column; gap: 10px; }
-.ai-stat {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.1);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 12px;
-  padding: 16px 22px;
-  text-align: center;
-  transition: all .2s;
-}
-.ai-stat:hover {
-  background: rgba(255,255,255,.09);
-  border-color: rgba(255,255,255,.2);
-  transform: scale(1.03);
-}
-.ai-stat-n {
-  font-family: var(--font-d);
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--white);
-  line-height: 1;
-}
-.ai-stat-l {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: .6px;
-  color: rgba(255,255,255,.4);
-  margin-top: 4px;
-  font-weight: 600;
-}
-
-/* ── CHAT LAYOUT ──────────────────────────────────────────────── */
-.chat-layout {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 16px;
-  padding-bottom: 40px;
-  align-items: start;
-}
-
-/* ── SIDEBAR — Glass cards ────────────────────────────────────── */
-.chat-sidebar { display: flex; flex-direction: column; gap: 10px; }
-
-.cscard {
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.09);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 14px;
-  overflow: hidden;
-  transition: border-color .2s;
-}
-.cscard:hover { border-color: rgba(255,255,255,.15); }
-
-.cscard-head {
-  padding: 11px 14px;
-  font-size: 10.5px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .7px;
-  color: rgba(255,255,255,.35);
-  border-bottom: 1px solid rgba(255,255,255,.07);
-  background: rgba(255,255,255,.03);
-}
-.cscard-body { padding: 10px; }
-
-/* Mode buttons */
-.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.mode-b {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 10px;
-  color: rgba(255,255,255,.5);
-  padding: 10px 6px;
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  font-family: var(--font);
-}
-.mode-b:hover {
-  background: rgba(255,255,255,.1);
-  color: rgba(255,255,255,.85);
-  border-color: rgba(255,255,255,.2);
-  transform: translateY(-1px);
-}
-.mode-b.active {
-  background: rgba(232,0,28,.18);
-  border-color: rgba(232,0,28,.4);
-  color: #FF9AA5;
-  box-shadow: 0 0 16px rgba(232,0,28,.15), inset 0 1px 0 rgba(255,255,255,.1);
-}
-.mode-b-icon { font-size: 18px; }
-
-/* Quick buttons */
-.qp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
-.qp-btn {
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.08);
-  border-radius: 8px;
-  color: rgba(255,255,255,.55);
-  padding: 8px 6px;
-  font-size: 10.5px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .2s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  font-family: var(--font);
-  line-height: 1.3;
-  text-align: center;
-}
-.qp-btn:hover {
-  background: rgba(255,255,255,.09);
-  color: rgba(255,255,255,.85);
-  border-color: rgba(255,255,255,.18);
-}
-.qp-btn-icon { font-size: 16px; }
-
-/* Recommended sidebar */
-#aiRecSidebar .arec-mini {
-  background: rgba(255,255,255,.05);
-  border: 1px solid rgba(255,255,255,.09);
-  border-radius: 8px;
-  padding: 8px 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-  cursor: pointer;
-  transition: all .15s;
-}
-#aiRecSidebar .arec-mini:hover {
-  background: rgba(255,255,255,.1);
-  border-color: rgba(232,0,28,.35);
-}
-
-/* ── MAIN CHAT — THE STAR: Glass floating card ────────────────── */
-.chat-main {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Chat box: el cristal flotante */
-.chat-box {
-  background: rgba(255,255,255,.042);
-  border: 1px solid rgba(255,255,255,.10);
-  backdrop-filter: blur(40px) saturate(180%);
-  -webkit-backdrop-filter: blur(40px) saturate(180%);
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow:
-    0 32px 80px rgba(0,0,0,.5),
-    0 0 0 1px rgba(255,255,255,.06) inset,
-    0 1px 0 rgba(255,255,255,.15) inset;
-  transition: box-shadow .3s;
-}
-.chat-box:focus-within {
-  box-shadow:
-    0 32px 80px rgba(0,0,0,.55),
-    0 0 0 1px rgba(0,87,184,.3) inset,
-    0 0 32px rgba(0,87,184,.08),
-    0 1px 0 rgba(255,255,255,.15) inset;
-}
-
-/* Chat header */
-.chat-hdr {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 18px;
-  background: rgba(255,255,255,.04);
-  border-bottom: 1px solid rgba(255,255,255,.07);
-}
-.chat-ai-av {
-  width: 38px; height: 38px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #E8001C, #FF4444);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(232,0,28,.4);
-}
-.chat-hdr-ttl {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--white);
-  letter-spacing: .1px;
-}
-.chat-hdr-sub {
-  font-size: 11px;
-  color: rgba(255,255,255,.42);
-  margin-top: 2px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.chat-online {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  color: rgba(255,255,255,.4);
-  flex-shrink: 0;
-}
-.chat-online span {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: #00ff88;
-  box-shadow: 0 0 6px #00ff88;
-  animation: pulse-green 2s infinite;
-}
-
-/* Messages area */
-.chat-msgs {
-  height: 420px;
-  overflow-y: auto;
-  padding: 20px 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,.1) transparent;
-  background: transparent;
-}
-.chat-msgs::-webkit-scrollbar { width: 4px; }
-.chat-msgs::-webkit-scrollbar-track { background: transparent; }
-.chat-msgs::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 2px; }
-
-/* Message rows */
-.msg-row {
-  display: flex;
-  gap: 10px;
-  align-items: flex-end;
-  animation: msgIn .25s cubic-bezier(.4,0,.2,1);
-}
-@keyframes msgIn {
-  from { opacity:0; transform: translateY(8px) scale(.98) }
-  to   { opacity:1; transform: none }
-}
-.msg-row.user { flex-direction: row-reverse; }
-
-/* Avatars */
-.msg-av {
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 13px;
-  margin-bottom: 2px;
-}
-.msg-row.ai .msg-av {
-  background: linear-gradient(135deg, rgba(232,0,28,.3), rgba(255,107,107,.2));
-  border: 1px solid rgba(232,0,28,.3);
-  color: #FF9AA5;
-}
-.msg-row.user .msg-av {
-  background: linear-gradient(135deg, rgba(0,87,184,.3), rgba(0,180,216,.2));
-  border: 1px solid rgba(0,87,184,.3);
-  color: #7AB4F8;
-}
-
-/* Message bubbles — GLASS */
-.msg-text {
-  max-width: 72%;
-  padding: 12px 16px;
-  border-radius: 16px;
-  font-size: 13.5px;
-  line-height: 1.6;
-  position: relative;
-}
-.msg-row.ai .msg-text {
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: rgba(255,255,255,.88);
-  border-bottom-left-radius: 4px;
-  box-shadow: 0 4px 16px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.08);
-}
-.msg-row.user .msg-text {
-  background: linear-gradient(135deg, rgba(0,87,184,.35), rgba(0,57,120,.3));
-  border: 1px solid rgba(0,87,184,.35);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: rgba(255,255,255,.9);
-  border-bottom-right-radius: 4px;
-  box-shadow: 0 4px 16px rgba(0,87,184,.15), inset 0 1px 0 rgba(255,255,255,.1);
-}
-.msg-time {
-  font-size: 10px;
-  color: rgba(255,255,255,.25);
-  margin-top: 4px;
-  padding: 0 4px;
-  text-align: right;
-}
-.msg-row.ai .msg-time { text-align: left; }
-
-/* Typing indicator */
-.typing-row .msg-text {
-  background: rgba(255,255,255,.06) !important;
-  padding: 14px 18px !important;
-}
-.typing-dots { display: flex; gap: 5px; align-items: center; }
-.typing-dots span {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.4);
-  animation: typingDot 1.2s infinite;
-}
-.typing-dots span:nth-child(2){animation-delay:.2s}
-.typing-dots span:nth-child(3){animation-delay:.4s}
-
-/* Product cards in chat */
-.msg-prods {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-.msg-prod-card {
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.1);
-  border-radius: 10px;
-  padding: 8px 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  transition: all .2s;
-  backdrop-filter: blur(6px);
-}
-.msg-prod-card:hover {
-  background: rgba(255,255,255,.12);
-  border-color: rgba(232,0,28,.4);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,.3);
-}
-.msg-prod-img { width: 36px; height: 36px; object-fit: contain; border-radius: 5px; background: rgba(255,255,255,.06); }
-.msg-prod-code { font-family: var(--font-m); font-size: 10px; color: #7AB4F8; font-weight: 600; }
-.msg-prod-name { font-size: 11.5px; color: rgba(255,255,255,.8); font-weight: 500; }
-.msg-prod-price { font-family: var(--font-d); font-size: 14px; font-weight: 800; color: var(--white); }
-
-/* ── CHAT INPUT AREA ──────────────────────────────────────────── */
-.chat-inp-area {
-  padding: 12px 14px 14px;
-  border-top: 1px solid rgba(255,255,255,.07);
-  background: rgba(255,255,255,.02);
-}
-.chat-inp-row {
-  display: flex;
-  gap: 8px;
-  align-items: flex-end;
-}
-
-/* The textarea — glass input */
-.chat-ta {
-  flex: 1;
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.12);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 12px;
-  padding: 11px 15px;
-  font-size: 14px;
-  color: var(--white);
-  font-family: var(--font);
-  outline: none;
-  resize: none;
-  line-height: 1.5;
-  transition: all .2s;
-  min-height: 44px;
-  max-height: 120px;
-}
-.chat-ta::placeholder { color: rgba(255,255,255,.3); }
-.chat-ta:focus {
-  background: rgba(255,255,255,.1);
-  border-color: rgba(0,87,184,.5);
-  box-shadow: 0 0 0 3px rgba(0,87,184,.12), inset 0 1px 0 rgba(255,255,255,.08);
-}
-
-/* Send button */
-.send-b {
-  background: linear-gradient(135deg, #E8001C, #C8001A);
-  border: none;
-  border-radius: 12px;
-  width: 44px; height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(232,0,28,.4);
-  transition: all .2s;
-}
-.send-b:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 8px 20px rgba(232,0,28,.5);
-}
-.send-b:active { transform: scale(.95); }
-.send-b:disabled { opacity: .4; transform: none; cursor: not-allowed; }
-
-/* Cam scene button */
-.cam-scene-btn {
-  background: rgba(255,255,255,.08);
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 12px;
-  color: rgba(255,255,255,.7);
-  padding: 0 14px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .2s;
-  white-space: nowrap;
-  backdrop-filter: blur(8px);
-  font-family: var(--font);
-  flex-shrink: 0;
-}
-.cam-scene-btn:hover {
-  background: rgba(255,255,255,.14);
-  border-color: rgba(255,255,255,.25);
-  color: var(--white);
-  transform: translateY(-1px);
-}
-
-/* Hint text */
-.chat-inp-hint {
-  font-size: 10.5px;
-  color: rgba(255,255,255,.2);
-  margin-top: 8px;
-  text-align: center;
-  letter-spacing: .1px;
-}
-
-/* Markdown inside messages */
-.msg-text h1,.msg-text h2,.msg-text h3 { color: var(--white); font-family: var(--font-d); margin: 10px 0 5px; }
-.msg-text h3 { font-size: 14px; font-weight: 700; }
-.msg-text p { margin: 0 0 6px; }
-.msg-text ul,.msg-text ol { padding-left: 16px; margin: 5px 0; }
-.msg-text li { margin-bottom: 3px; }
-.msg-text strong { color: var(--white); font-weight: 700; }
-.msg-text code { background: rgba(255,255,255,.1); padding: 1px 5px; border-radius: 4px; font-family: var(--font-m); font-size: .9em; color: #7AB4F8; }
-.msg-text table { width: 100%; border-collapse: collapse; margin: 8px 0; font-size: 12px; }
-.msg-text th { background: rgba(255,255,255,.1); padding: 6px 10px; text-align: left; color: var(--white); font-weight: 700; }
-.msg-text td { padding: 5px 10px; border-bottom: 1px solid rgba(255,255,255,.06); color: rgba(255,255,255,.75); }
-.msg-text tr:last-child td { border-bottom: none; }
-
-/* ── RESPONSIVE ───────────────────────────────────────────────── */
-@media(max-width:900px){
-  .chat-layout { grid-template-columns: 1fr; }
-  .chat-sidebar { display: none; }
-  .ai-title { font-size: 34px; }
-}
-@media(max-width:600px){
-  .ai-title { font-size: 28px; }
-  .chat-msgs { height: 340px; }
-}
+/* ── AI SECTION ──────────────────────────────────────────────── */
+.ai-hero { background: linear-gradient(160deg, #0C1A2E, #001E3C, #003870); color: var(--white); padding: 48px 0; position: relative; overflow: hidden }
+.ai-chat-box { background: var(--white); border: 1px solid var(--g5); border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow-md) }
+.ai-chat-head { background: var(--black); color: var(--white); padding: 14px 18px; display: flex; align-items: center; gap: 10px }
+.ai-chat-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--red); color: var(--white); font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0 }
+.ai-chat-name { font-size: 14px; font-weight: 700 }
+.ai-chat-status { font-size: 11px; color: rgba(255,255,255,.5); margin-top: 1px }
+.ai-msgs { height: 400px; overflow-y: auto; padding: 16px; background: var(--g6); display: flex; flex-direction: column; gap: 12px }
+.ai-msg { display: flex; gap: 10px; align-items: flex-start }
+.ai-msg.user { flex-direction: row-reverse }
+.ai-bubble { max-width: 75%; padding: 11px 14px; border-radius: var(--r-lg); font-size: 13.5px; line-height: 1.55 }
+.ai-msg.bot .ai-bubble { background: var(--white); border: 1px solid var(--g5); color: var(--black) }
+.ai-msg.user .ai-bubble { background: var(--black); color: var(--white) }
+.ai-msg-avatar { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 13px }
+.ai-msg.bot .ai-msg-avatar { background: var(--black); color: var(--white) }
+.ai-msg.user .ai-msg-avatar { background: var(--black); color: var(--white) }
+.ai-chat-footer { padding: 12px 16px; border-top: 1px solid var(--g5); display: flex; gap: 8px; background: var(--white) }
+.ai-input { flex: 1; border: 1.5px solid var(--g5); border-radius: var(--r); padding: 10px 16px; font-size: 14px; outline: none; transition: border-color .2s; font-family: var(--font) }
+.ai-input:focus { border-color: var(--blue) }
+.ai-send { background: var(--red); color: var(--white); border: none; border-radius: var(--r); padding: 10px 20px; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: background .15s }
+.ai-send:hover { background: var(--red2) }
+.ai-typing { display: flex; gap: 4px; align-items: center; padding: 4px 0 }
+.ai-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--g3); animation: typingDot 1.2s infinite }
+.ai-dot:nth-child(2){animation-delay:.2s} .ai-dot:nth-child(3){animation-delay:.4s}
 
 /* ── COMPARADOR BAR ──────────────────────────────────────────── */
 #cmp-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--black); color: var(--white); padding: 12px 24px; z-index: 700; display: none; border-top: 2px solid var(--red); box-shadow: 0 -4px 20px rgba(0,0,0,.2); animation: slideUp .2s ease }
@@ -2795,23 +2198,70 @@ body.cmp-open { padding-bottom: 80px }
 .lens-btn-fov  { font-size: 9.5px; color: rgba(255,255,255,.5); font-family: var(--font-m) }
 .lens-btn.active .lens-btn-fov { color: rgba(255,255,255,.75) }
 
-
-/* ── Glass atmosphere orbs ─────────────────────────────────────── */
-#secAsistente .ai-hero::after {
-  content: '';
-  position: absolute;
-  width: 400px; height: 400px;
-  right: 5%; top: -80px;
-  background: radial-gradient(circle, rgba(0,87,184,.12) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  filter: blur(40px);
-}
-/* Wrap background */
-#secAsistente .wrap { position: relative; z-index: 1; }
-
 </style>
-</head>
+<style id="claude-agent-animation-styles">
+      @keyframes claude-pulse {
+        0% {
+          box-shadow: 
+            inset 0 0 10px rgba(217, 119, 87, 0.5),
+            inset 0 0 20px rgba(217, 119, 87, 0.3),
+            inset 0 0 30px rgba(217, 119, 87, 0.1);
+        }
+        50% {
+          box-shadow: 
+            inset 0 0 15px rgba(217, 119, 87, 0.7),
+            inset 0 0 25px rgba(217, 119, 87, 0.5),
+            inset 0 0 35px rgba(217, 119, 87, 0.2);
+        }
+        100% {
+          box-shadow: 
+            inset 0 0 10px rgba(217, 119, 87, 0.5),
+            inset 0 0 20px rgba(217, 119, 87, 0.3),
+            inset 0 0 30px rgba(217, 119, 87, 0.1);
+        }
+      }
+    </style><style id="glass-override">
+#secAsistente { background: #060912; min-height: 100vh; position: relative; }
+#secAsistente::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 60% at 20% 20%, rgba(0,87,184,.18) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 80% 60%, rgba(232,0,28,.12) 0%, transparent 55%), radial-gradient(ellipse 50% 50% at 50% 100%, rgba(0,180,216,.08) 0%, transparent 50%), #060912; pointer-events: none; z-index: 0; }
+#secAsistente > * { position: relative; z-index: 1; }
+.ai-hero { background: transparent !important; }
+.hero-badge { background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.14); backdrop-filter: blur(12px); color: rgba(255,255,255,.7); border-radius: 20px; letter-spacing: 1.2px; }
+.badge-dot { background: #00ff88; box-shadow: 0 0 8px #00ff88, 0 0 16px rgba(0,255,136,.4); }
+.ai-title em { font-style: normal; background: linear-gradient(135deg, #E8001C 0%, #FF6B6B 50%, #FF9A9E 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.hchip { background: rgba(255,255,255,.06) !important; border: 1px solid rgba(255,255,255,.12) !important; backdrop-filter: blur(10px); color: rgba(255,255,255,.75) !important; border-radius: 20px !important; transition: all .2s !important; }
+.hchip:hover { background: rgba(255,255,255,.13) !important; border-color: rgba(255,255,255,.3) !important; color: #fff !important; transform: translateY(-2px); }
+.cscard { background: rgba(255,255,255,.04) !important; border: 1px solid rgba(255,255,255,.09) !important; backdrop-filter: blur(20px); border-radius: 14px !important; }
+.cscard-head { background: rgba(255,255,255,.03) !important; border-bottom: 1px solid rgba(255,255,255,.07) !important; color: rgba(255,255,255,.35) !important; font-size: 10.5px !important; letter-spacing: .7px !important; }
+.mode-b { background: rgba(255,255,255,.05) !important; border: 1px solid rgba(255,255,255,.08) !important; border-radius: 10px !important; color: rgba(255,255,255,.5) !important; transition: all .2s !important; }
+.mode-b:hover { background: rgba(255,255,255,.1) !important; color: rgba(255,255,255,.85) !important; transform: translateY(-1px); }
+.mode-b.active { background: rgba(232,0,28,.18) !important; border-color: rgba(232,0,28,.4) !important; color: #FF9AA5 !important; box-shadow: 0 0 16px rgba(232,0,28,.15) !important; }
+.qp-btn { background: rgba(255,255,255,.04) !important; border: 1px solid rgba(255,255,255,.08) !important; border-radius: 8px !important; color: rgba(255,255,255,.55) !important; }
+.qp-btn:hover { background: rgba(255,255,255,.09) !important; color: rgba(255,255,255,.85) !important; }
+.chat-box, .chat-hdr ~ * { background: rgba(255,255,255,.042); border: 1px solid rgba(255,255,255,.10); backdrop-filter: blur(40px) saturate(180%); -webkit-backdrop-filter: blur(40px) saturate(180%); border-radius: 20px; box-shadow: 0 32px 80px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.06) inset, 0 1px 0 rgba(255,255,255,.15) inset; }
+.chat-hdr { background: rgba(255,255,255,.04) !important; border-bottom: 1px solid rgba(255,255,255,.07) !important; }
+.chat-ai-av { background: linear-gradient(135deg,#E8001C,#FF4444) !important; box-shadow: 0 4px 14px rgba(232,0,28,.4) !important; }
+.chat-hdr-ttl { color: #fff !important; }
+.chat-hdr-sub { color: rgba(255,255,255,.42) !important; }
+.chat-online span { background: #00ff88; box-shadow: 0 0 6px #00ff88; }
+.chat-online { color: rgba(255,255,255,.4) !important; }
+.chat-msgs { background: transparent !important; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.1) transparent; }
+.cmsg { animation: msgIn .25s cubic-bezier(.4,0,.2,1); }
+@keyframes msgIn { from{opacity:0;transform:translateY(8px) scale(.98)} to{opacity:1;transform:none} }
+.cmsg.ai .cmsg-bbl { background: rgba(255,255,255,.07) !important; border: 1px solid rgba(255,255,255,.1) !important; backdrop-filter: blur(8px) !important; color: rgba(255,255,255,.88) !important; border-bottom-left-radius: 4px !important; box-shadow: 0 4px 16px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.08) !important; }
+.cmsg.user .cmsg-bbl { background: linear-gradient(135deg,rgba(0,87,184,.35),rgba(0,57,120,.3)) !important; border: 1px solid rgba(0,87,184,.35) !important; backdrop-filter: blur(8px) !important; color: rgba(255,255,255,.9) !important; border-bottom-right-radius: 4px !important; box-shadow: 0 4px 16px rgba(0,87,184,.15), inset 0 1px 0 rgba(255,255,255,.1) !important; }
+.cmsg-av { background: rgba(255,255,255,.1) !important; border: 1px solid rgba(255,255,255,.15) !important; color: #FF9AA5 !important; }
+.cmsg.user .cmsg-av { background: rgba(0,87,184,.25) !important; border-color: rgba(0,87,184,.3) !important; color: #7AB4F8 !important; }
+.cmsg-time { color: rgba(255,255,255,.25) !important; }
+.chat-inp-area { background: rgba(255,255,255,.02) !important; border-top: 1px solid rgba(255,255,255,.07) !important; }
+.chat-ta { background: rgba(255,255,255,.07) !important; border: 1px solid rgba(255,255,255,.12) !important; backdrop-filter: blur(8px) !important; border-radius: 12px !important; color: #fff !important; }
+.chat-ta::placeholder { color: rgba(255,255,255,.3) !important; }
+.chat-ta:focus { background: rgba(255,255,255,.1) !important; border-color: rgba(0,87,184,.5) !important; box-shadow: 0 0 0 3px rgba(0,87,184,.12) !important; }
+.send-b { background: linear-gradient(135deg,#E8001C,#C8001A) !important; border-radius: 12px !important; box-shadow: 0 4px 14px rgba(232,0,28,.4) !important; width: 44px !important; height: 44px !important; }
+.send-b:hover { transform: translateY(-2px) scale(1.05) !important; box-shadow: 0 8px 20px rgba(232,0,28,.5) !important; }
+.cam-scene-btn { background: rgba(255,255,255,.08) !important; border: 1px solid rgba(255,255,255,.14) !important; border-radius: 12px !important; color: rgba(255,255,255,.7) !important; height: 44px !important; backdrop-filter: blur(8px) !important; }
+.cam-scene-btn:hover { background: rgba(255,255,255,.14) !important; color: #fff !important; transform: translateY(-1px) !important; }
+.chat-inp-hint { color: rgba(255,255,255,.2) !important; }
+</style></head>
 <body>
 
 <div class="demo-banner">
@@ -2824,7 +2274,7 @@ body.cmp-open { padding-bottom: 80px }
     <div class="topbar-l">
       <span>📍 Santiago, Chile — Lun a Vie 9:00–18:00 hrs</span>
       <a href="#">☎ +56 2 2xxx xxxx</a>
-      <a href="#"><span class="__cf_email__" data-cfemail="afd9cac1dbcedcefdcdcdbdb81ccc3">[email&#160;protected]</span></a>
+      <a href="#"><span class="__cf_email__" data-cfemail="afd9cac1dbcedcefdcdcdbdb81ccc3">[email&nbsp;protected]</span></a>
     </div>
     <div class="topbar-r">
       <span style="opacity:.7;font-size:11px">Despachamos con:</span>
@@ -2862,10 +2312,9 @@ body.cmp-open { padding-bottom: 80px }
 
     <div class="search-wrap">
       <div class="search-form">
-        <input type="text" id="searchInput" class="search-input"
-          placeholder="Buscar cámara, NVR, switch o código de producto…" autocomplete="off">
+        <input type="text" id="searchInput" class="search-input" placeholder="Buscar cámara, NVR, switch o código de producto…" autocomplete="off">
         <button class="search-btn" id="searchBtn">
-          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
           Buscar
         </button>
       </div>
@@ -2873,33 +2322,33 @@ body.cmp-open { padding-bottom: 80px }
     </div>
 
     <div style="display:flex;gap:8px;align-items:center">
-      <button class="hbtn" id="loginBtn" onclick="openModal()" style="display:none">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <button class="hbtn" id="loginBtn" onclick="openModal()" style="display: flex;">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         Ingresar
       </button>
       <div class="user-pill" id="userPill" style="display:none" onclick="toggleUserMenu()">
         <div class="user-avatar" id="userAvatar">?</div>
         <span id="userNameShort">Usuario</span>
-        <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
         <div class="user-menu" id="userMenu">
           <div class="um-header"><div class="um-name" id="umName">—</div><div class="um-email" id="umEmail">—</div></div>
           <div class="um-item" onclick="closeCart();openModal('pedidos')">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Mis pedidos</div>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>Mis pedidos</div>
           <div class="um-item" onclick="openModal('perfil')">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Mi perfil</div>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>Mi perfil</div>
           <div class="um-sep"></div>
           <div class="um-item logout" onclick="logout()">
-            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>Cerrar sesión</div>
+            <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>Cerrar sesión</div>
         </div>
       </div>
-      <button class="hbtn" id="loginBtnVis" onclick="openModal()">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <button class="hbtn" id="loginBtnVis" onclick="openModal()" style="display: flex;">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         Ingresar
       </button>
       <button class="hbtn" id="cartToggle" style="position:relative;background:var(--navy);color:#fff;border-color:var(--navy)">
-        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
         Carro
-        <span class="cart-cnt" id="cartCount">0</span>
+        <span class="cart-cnt" id="cartCount">3</span>
       </button>
     </div>
   </div>
@@ -2907,16 +2356,16 @@ body.cmp-open { padding-bottom: 80px }
 <!-- MODULE NAV -->
 <nav class="module-nav">
   <div class="wrap module-nav-inner">
-    <button data-sec="catalogo" class="mnav-tab active" onclick="showSection('catalogo',this)">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/><rect x="15" y="14" width="7" height="7"/><rect x="2" y="14" width="7" height="7"/></svg>
+    <button data-sec="catalogo" class="mnav-tab" onclick="showSection('catalogo',this)">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="7" height="7"></rect><rect x="15" y="3" width="7" height="7"></rect><rect x="15" y="14" width="7" height="7"></rect><rect x="2" y="14" width="7" height="7"></rect></svg>
       Catálogo
     </button>
-    <button data-sec="asistente" class="mnav-tab" onclick="showSection('asistente',this)">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <button data-sec="asistente" class="mnav-tab active" onclick="showSection('asistente',this)">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
       Asistente IA CCTV
     </button>
     <button data-sec="academia" class="mnav-tab" onclick="showSection('academia',this)">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"></path><path d="M6 12v5c3 3 9 3 12 0v-5"></path></svg>
       Academia CCTV
     </button>
     <div style="margin-left:auto;display:flex;align-items:center;gap:10px;padding-right:4px">
@@ -2927,7 +2376,7 @@ body.cmp-open { padding-bottom: 80px }
 </nav>
 
 <!-- SECCIÓN: CATÁLOGO (default) -->
-<div class="app-section active" id="secCatalogo">
+<div class="app-section" id="secCatalogo">
 
 
 <!-- MOBILE SEARCH -->
@@ -2935,7 +2384,7 @@ body.cmp-open { padding-bottom: 80px }
   <div class="search-form">
     <input type="text" id="mSearch" class="search-input" placeholder="Buscar producto o código…">
     <button class="search-btn" onclick="doSearch(document.getElementById('mSearch').value)">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
     </button>
   </div>
 </div>
@@ -2959,11 +2408,11 @@ body.cmp-open { padding-bottom: 80px }
       </p>
       <div class="hero-btns">
         <button class="btn-hero-primary" onclick="document.getElementById('navInner').scrollIntoView({behavior:'smooth'})">
-          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/><rect x="15" y="14" width="7" height="7"/><rect x="2" y="14" width="7" height="7"/></svg>
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="7" height="7"></rect><rect x="15" y="3" width="7" height="7"></rect><rect x="15" y="14" width="7" height="7"></rect><rect x="2" y="14" width="7" height="7"></rect></svg>
           Ver catálogo completo
         </button>
         <button data-sec="asistente" class="btn-hero-outline" onclick="showSection('asistente',document.querySelectorAll('.mnav-tab')[1])">
-          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
           Consultar con IA
         </button>
       </div>
@@ -3047,10 +2496,49 @@ body.cmp-open { padding-bottom: 80px }
   <aside class="sidebar">
     <div class="scard">
       <div class="scard-head">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><circle cx="3" cy="6" r="1.5" fill="currentColor"/><circle cx="3" cy="12" r="1.5" fill="currentColor"/><circle cx="3" cy="18" r="1.5" fill="currentColor"/></svg>
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="3" cy="6" r="1.5" fill="currentColor"></circle><circle cx="3" cy="12" r="1.5" fill="currentColor"></circle><circle cx="3" cy="18" r="1.5" fill="currentColor"></circle></svg>
         Categorías
       </div>
-      <div class="scard-body" id="catSidebar"></div>
+      <div class="scard-body" id="catSidebar"><div class="sb-cat active" onclick="setCat('todas')">
+    <span style="display:flex;align-items:center;gap:6px">🏠 Todos los productos</span>
+    <span class="sb-cnt">1079</span>
+  </div><div style="padding:8px 16px 3px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--light)">📷 Cámaras</div><div class="sb-cat" onclick="setCat('camaras-ip')">
+        <span>Cámaras IP</span>
+        <span class="sb-cnt">376</span>
+      </div><div class="sb-cat" onclick="setCat('camaras-hdcvi')">
+        <span>Cámaras HDCVI</span>
+        <span class="sb-cnt">24</span>
+      </div><div class="sb-cat" onclick="setCat('camaras-ptz')">
+        <span>Cámaras PTZ</span>
+        <span class="sb-cnt">36</span>
+      </div><div style="padding:8px 16px 3px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--light)">💾 Grabadores</div><div class="sb-cat" onclick="setCat('nvr')">
+        <span>NVR / XVR</span>
+        <span class="sb-cnt">132</span>
+      </div><div style="padding:8px 16px 3px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--light)">🔌 Redes</div><div class="sb-cat" onclick="setCat('switches')">
+        <span>Switches PoE</span>
+        <span class="sb-cnt">24</span>
+      </div><div class="sb-cat" onclick="setCat('redes')">
+        <span>Redes</span>
+        <span class="sb-cnt">6</span>
+      </div><div style="padding:8px 16px 3px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--light)">🔐 Seguridad</div><div class="sb-cat" onclick="setCat('alarmas')">
+        <span>Alarmas</span>
+        <span class="sb-cnt">28</span>
+      </div><div class="sb-cat" onclick="setCat('acceso')">
+        <span>Control Acceso</span>
+        <span class="sb-cnt">15</span>
+      </div><div class="sb-cat" onclick="setCat('videoporteros')">
+        <span>Videoporteros</span>
+        <span class="sb-cnt">13</span>
+      </div><div style="padding:8px 16px 3px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--light)">📦 Otros</div><div class="sb-cat" onclick="setCat('accesorios')">
+        <span>Accesorios</span>
+        <span class="sb-cnt">403</span>
+      </div><div class="sb-cat" onclick="setCat('licencias')">
+        <span>Licencias</span>
+        <span class="sb-cnt">14</span>
+      </div><div class="sb-cat" onclick="setCat('especiales')">
+        <span>Especiales</span>
+        <span class="sb-cnt">8</span>
+      </div></div>
     </div>
 
     <div class="scard">
@@ -3080,7 +2568,7 @@ body.cmp-open { padding-bottom: 80px }
   <div class="catalog-area content">
     <div class="rbar">
       <div class="rbar-l">
-        <strong id="pageTitle">Todos los productos</strong> — <span id="resCount" style="color:var(--muted)"></span>
+        <strong id="pageTitle">Todos los productos</strong> — <span id="resCount" style="color:var(--muted)">1.079 productos encontrados</span>
         <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px">
           <button class="fchip active" onclick="setChip(this,'')">Todos</button>
           <button class="fchip" onclick="setChip(this,'nuevo')">✦ Nuevos</button>
@@ -3096,8 +2584,524 @@ body.cmp-open { padding-bottom: 80px }
         </select>
       </div>
     </div>
-    <div class="products-grid" id="grid"></div>
-    <div class="pagination" id="pag"></div>
+    <div class="products-grid" id="grid">
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(1)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_IPC-HDBW2841RP-ZS.webp" alt="IPC-HDBW2841RP-ZS" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3EIPC-HDBW2841%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>IPC-HDBW2841RP-ZS</span>
+          <button class="copy-btn" onclick="copyTxt('IPC-HDBW2841RP-ZS')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(1)" style="cursor:pointer">Cámara Dahua IP domo 8MP 2.7-13.5mm Motor IR30 PoE IP67 IK10 Soporta Micro SD</div>
+        <div class="pcard-tags"><span class="ptag">8MP</span><span class="ptag">PoE</span><span class="ptag">IP67</span><span class="ptag">IR 30</span></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $167.983 + IVA $31.917</div>
+          <div class="price-total">$199.900</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:1,&quot;codigo&quot;:&quot;IPC-HDBW2841RP-ZS&quot;,&quot;nombre&quot;:&quot;Cámara Dahua IP domo 8MP 2.7-13.5mm Motor IR30 PoE IP67 IK10 Soporta Micro SD&quot;,&quot;cat&quot;:&quot;camaras-ip&quot;,&quot;pneto&quot;:167983,&quot;piva&quot;:31917,&quot;ptotal&quot;:199900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.3,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_IPC-HDBW2841RP-ZS.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(1)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="1" onclick="cmpToggle(1)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:1,&quot;codigo&quot;:&quot;IPC-HDBW2841RP-ZS&quot;,&quot;nombre&quot;:&quot;Cámara Dahua IP domo 8MP 2.7-13.5mm Motor IR30 PoE IP67 IK10 Soporta Micro SD&quot;,&quot;cat&quot;:&quot;camaras-ip&quot;,&quot;pneto&quot;:167983,&quot;piva&quot;:31917,&quot;ptotal&quot;:199900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.3,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_IPC-HDBW2841RP-ZS.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(2)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-SD40212TN-HN-S2.webp" alt="DH-SD40212TN-HN-S2" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3EDH-SD40212TN%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>DH-SD40212TN-HN-S2</span>
+          <button class="copy-btn" onclick="copyTxt('DH-SD40212TN-HN-S2')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(2)" style="cursor:pointer">Cámara Dahua IP PTZ 2MP 12X PoE+ Alarma 2/1 Audio 1/1 Slot MicroSD Starlight IVS IP66 IK10</div>
+        <div class="pcard-tags"><span class="ptag">2MP</span><span class="ptag">PoE</span><span class="ptag">IP66</span><span class="ptag">Starlight</span><span class="ptag">PTZ</span></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $336.050 + IVA $63.850</div>
+          <div class="price-total">$399.900</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:2,&quot;codigo&quot;:&quot;DH-SD40212TN-HN-S2&quot;,&quot;nombre&quot;:&quot;Cámara Dahua IP PTZ 2MP 12X PoE+ Alarma 2/1 Audio 1/1 Slot MicroSD Starlight IVS IP66 IK10&quot;,&quot;cat&quot;:&quot;camaras-ip&quot;,&quot;pneto&quot;:336050,&quot;piva&quot;:63850,&quot;ptotal&quot;:399900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.3,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-SD40212TN-HN-S2.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(2)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="2" onclick="cmpToggle(2)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:2,&quot;codigo&quot;:&quot;DH-SD40212TN-HN-S2&quot;,&quot;nombre&quot;:&quot;Cámara Dahua IP PTZ 2MP 12X PoE+ Alarma 2/1 Audio 1/1 Slot MicroSD Starlight IVS IP66 IK10&quot;,&quot;cat&quot;:&quot;camaras-ip&quot;,&quot;pneto&quot;:336050,&quot;piva&quot;:63850,&quot;ptotal&quot;:399900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.3,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-SD40212TN-HN-S2.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(3)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SD60230U-HNI-SL.webp" alt="SD60230U-HNI-SL" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3ESD60230U-HNI%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>SD60230U-HNI-SL</span>
+          <button class="copy-btn" onclick="copyTxt('SD60230U-HNI-SL')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(3)" style="cursor:pointer">Cámara Dahua IP PTZ 2MP 30X Hi PoE Alarma 7/2 Audio 1/1 Slot MicroSD Starlight IVS IP68 IK10 Nema4X</div>
+        <div class="pcard-tags"><span class="ptag">2MP</span><span class="ptag">PoE</span><span class="ptag">IK10</span><span class="ptag">Starlight</span><span class="ptag">PTZ</span></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $1.680.588 + IVA $319.312</div>
+          <div class="price-total">$1.999.900</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:3,&quot;codigo&quot;:&quot;SD60230U-HNI-SL&quot;,&quot;nombre&quot;:&quot;Cámara Dahua IP PTZ 2MP 30X Hi PoE Alarma 7/2 Audio 1/1 Slot MicroSD Starlight IVS IP68 IK10 Nema4X&quot;,&quot;cat&quot;:&quot;camaras-ip&quot;,&quot;pneto&quot;:1680588,&quot;piva&quot;:319312,&quot;ptotal&quot;:1999900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.3,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SD60230U-HNI-SL.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(3)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="3" onclick="cmpToggle(3)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:3,&quot;codigo&quot;:&quot;SD60230U-HNI-SL&quot;,&quot;nombre&quot;:&quot;Cámara Dahua IP PTZ 2MP 30X Hi PoE Alarma 7/2 Audio 1/1 Slot MicroSD Starlight IVS IP68 IK10 Nema4X&quot;,&quot;cat&quot;:&quot;camaras-ip&quot;,&quot;pneto&quot;:1680588,&quot;piva&quot;:319312,&quot;ptotal&quot;:1999900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.3,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SD60230U-HNI-SL.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(4)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SEI180U.webp" alt="SEI180U" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3ESEI180U%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>SEI180U</span>
+          <button class="copy-btn" onclick="copyTxt('SEI180U')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(4)" style="cursor:pointer">Soporte tipo U para electroimán de retención 180K SSTT</div>
+        <div class="pcard-tags"></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $5.798 + IVA $1.102</div>
+          <div class="price-total">$6.900</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:4,&quot;codigo&quot;:&quot;SEI180U&quot;,&quot;nombre&quot;:&quot;Soporte tipo U para electroimán de retención 180K SSTT&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:5798,&quot;piva&quot;:1102,&quot;ptotal&quot;:6900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SEI180U.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(4)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="4" onclick="cmpToggle(4)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:4,&quot;codigo&quot;:&quot;SEI180U&quot;,&quot;nombre&quot;:&quot;Soporte tipo U para electroimán de retención 180K SSTT&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:5798,&quot;piva&quot;:1102,&quot;ptotal&quot;:6900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SEI180U.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(5)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PTZ19245UN-IRB-N-B.webp" alt="PTZ19245UN-IRB-N-B" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3EPTZ19245UN-I%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>PTZ19245UN-IRB-N-B</span>
+          <button class="copy-btn" onclick="copyTxt('PTZ19245UN-IRB-N-B')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(5)" style="cursor:pointer">2MP 45x Starlight IR Network Positioning System</div>
+        <div class="pcard-tags"><span class="ptag">2MP</span><span class="ptag">Starlight</span></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $2.186.258 + IVA $415.389</div>
+          <div class="price-total">$2.601.647</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:5,&quot;codigo&quot;:&quot;PTZ19245UN-IRB-N-B&quot;,&quot;nombre&quot;:&quot;2MP 45x Starlight IR Network Positioning System&quot;,&quot;cat&quot;:&quot;camaras-ptz&quot;,&quot;pneto&quot;:2186258,&quot;piva&quot;:415389,&quot;ptotal&quot;:2601647,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:1.2,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PTZ19245UN-IRB-N-B.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(5)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="5" onclick="cmpToggle(5)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:5,&quot;codigo&quot;:&quot;PTZ19245UN-IRB-N-B&quot;,&quot;nombre&quot;:&quot;2MP 45x Starlight IR Network Positioning System&quot;,&quot;cat&quot;:&quot;camaras-ptz&quot;,&quot;pneto&quot;:2186258,&quot;piva&quot;:415389,&quot;ptotal&quot;:2601647,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:1.2,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PTZ19245UN-IRB-N-B.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(6)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-PFA101.webp" alt="DH-PFA101" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3EDH-PFA101%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>DH-PFA101</span>
+          <button class="copy-btn" onclick="copyTxt('DH-PFA101')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(6)" style="cursor:pointer">Adaptador montura para camaras domo DAHUA</div>
+        <div class="pcard-tags"></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $6.639 + IVA $1.261</div>
+          <div class="price-total">$7.900</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:6,&quot;codigo&quot;:&quot;DH-PFA101&quot;,&quot;nombre&quot;:&quot;Adaptador montura para camaras domo DAHUA&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:6639,&quot;piva&quot;:1261,&quot;ptotal&quot;:7900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-PFA101.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(6)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="6" onclick="cmpToggle(6)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:6,&quot;codigo&quot;:&quot;DH-PFA101&quot;,&quot;nombre&quot;:&quot;Adaptador montura para camaras domo DAHUA&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:6639,&quot;piva&quot;:1261,&quot;ptotal&quot;:7900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-PFA101.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(7)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-PFA102.webp" alt="DH-PFA102" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3EDH-PFA102%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>DH-PFA102</span>
+          <button class="copy-btn" onclick="copyTxt('DH-PFA102')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(7)" style="cursor:pointer">Adaptador montura PFA102 para camaras domo DAHUA</div>
+        <div class="pcard-tags"></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $5.798 + IVA $1.102</div>
+          <div class="price-total">$6.900</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:7,&quot;codigo&quot;:&quot;DH-PFA102&quot;,&quot;nombre&quot;:&quot;Adaptador montura PFA102 para camaras domo DAHUA&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:5798,&quot;piva&quot;:1102,&quot;ptotal&quot;:6900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-PFA102.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(7)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="7" onclick="cmpToggle(7)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:7,&quot;codigo&quot;:&quot;DH-PFA102&quot;,&quot;nombre&quot;:&quot;Adaptador montura PFA102 para camaras domo DAHUA&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:5798,&quot;piva&quot;:1102,&quot;ptotal&quot;:6900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-PFA102.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(8)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-PFA103.webp" alt="DH-PFA103" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3EDH-PFA103%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>DH-PFA103</span>
+          <button class="copy-btn" onclick="copyTxt('DH-PFA103')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(8)" style="cursor:pointer">Adaptador montura PFA103 para camaras domo DAHUA</div>
+        <div class="pcard-tags"></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $4.958 + IVA $942</div>
+          <div class="price-total">$5.900</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:8,&quot;codigo&quot;:&quot;DH-PFA103&quot;,&quot;nombre&quot;:&quot;Adaptador montura PFA103 para camaras domo DAHUA&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:4958,&quot;piva&quot;:942,&quot;ptotal&quot;:5900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-PFA103.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(8)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="8" onclick="cmpToggle(8)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:8,&quot;codigo&quot;:&quot;DH-PFA103&quot;,&quot;nombre&quot;:&quot;Adaptador montura PFA103 para camaras domo DAHUA&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:4958,&quot;piva&quot;:942,&quot;ptotal&quot;:5900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-PFA103.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(9)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFA110.webp" alt="PFA110" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3EPFA110%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>PFA110</span>
+          <button class="copy-btn" onclick="copyTxt('PFA110')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(9)" style="cursor:pointer">Adaptador Montura PTZ PFA110</div>
+        <div class="pcard-tags"><span class="ptag">PTZ</span></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $5.798 + IVA $1.102</div>
+          <div class="price-total">$6.900</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:9,&quot;codigo&quot;:&quot;PFA110&quot;,&quot;nombre&quot;:&quot;Adaptador Montura PTZ PFA110&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:5798,&quot;piva&quot;:1102,&quot;ptotal&quot;:6900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFA110.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(9)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="9" onclick="cmpToggle(9)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:9,&quot;codigo&quot;:&quot;PFA110&quot;,&quot;nombre&quot;:&quot;Adaptador Montura PTZ PFA110&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:5798,&quot;piva&quot;:1102,&quot;ptotal&quot;:6900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFA110.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(10)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFA111.webp" alt="PFA111" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3EPFA111%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>PFA111</span>
+          <button class="copy-btn" onclick="copyTxt('PFA111')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(10)" style="cursor:pointer">Adaptador Montura PTZ PFA111</div>
+        <div class="pcard-tags"><span class="ptag">PTZ</span></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $4.958 + IVA $942</div>
+          <div class="price-total">$5.900</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:10,&quot;codigo&quot;:&quot;PFA111&quot;,&quot;nombre&quot;:&quot;Adaptador Montura PTZ PFA111&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:4958,&quot;piva&quot;:942,&quot;ptotal&quot;:5900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFA111.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(10)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="10" onclick="cmpToggle(10)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:10,&quot;codigo&quot;:&quot;PFA111&quot;,&quot;nombre&quot;:&quot;Adaptador Montura PTZ PFA111&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:4958,&quot;piva&quot;:942,&quot;ptotal&quot;:5900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFA111.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(11)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFA114.webp" alt="PFA114" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3EPFA114%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>PFA114</span>
+          <button class="copy-btn" onclick="copyTxt('PFA114')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(11)" style="cursor:pointer">Adaptador Montura PTZ PFA114</div>
+        <div class="pcard-tags"><span class="ptag">PTZ</span></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $4.958 + IVA $942</div>
+          <div class="price-total">$5.900</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:11,&quot;codigo&quot;:&quot;PFA114&quot;,&quot;nombre&quot;:&quot;Adaptador Montura PTZ PFA114&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:4958,&quot;piva&quot;:942,&quot;ptotal&quot;:5900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFA114.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(11)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="11" onclick="cmpToggle(11)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:11,&quot;codigo&quot;:&quot;PFA114&quot;,&quot;nombre&quot;:&quot;Adaptador Montura PTZ PFA114&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:4958,&quot;piva&quot;:942,&quot;ptotal&quot;:5900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFA114.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="pcard">
+      <div class="pcard-img-wrap" onclick="openProdModal(12)" style="cursor:pointer">
+        <img class="pcard-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFM790.webp" alt="PFM790" loading="lazy" onerror="this.src='data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23e8ecf4'/%3E%3Ctext x='50' y='45' font-size='28' text-anchor='middle' fill='%23aab4c8'%3E📷%3C/text%3E%3Ctext x='50' y='65' font-size='9' text-anchor='middle' fill='%23aab4c8'%3EPFM790%3C/text%3E%3C/svg%3E'">
+        <span class="pbadge pb-stock">Stock Normal</span>
+        <div class="pcard-quickview">👁 Ver ficha técnica</div>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-code">
+          <span>PFM790</span>
+          <button class="copy-btn" onclick="copyTxt('PFM790')" title="Copiar código">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          </button>
+        </div>
+        <div class="pcard-name" onclick="openProdModal(12)" style="cursor:pointer">Aislador de ruido por fuente de alimentacion</div>
+        <div class="pcard-tags"></div>
+        <div class="pcard-price">
+          <div class="price-neto">Neto $4.118 + IVA $782</div>
+          <div class="price-total">$4.900</div>
+          <div class="price-sub">Precio final con IVA incluido</div>
+        </div>
+        <div class="pcard-actions">
+          <button class="btn-add" onclick="addCart({&quot;id&quot;:12,&quot;codigo&quot;:&quot;PFM790&quot;,&quot;nombre&quot;:&quot;Aislador de ruido por fuente de alimentacion&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:4118,&quot;piva&quot;:782,&quot;ptotal&quot;:4900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFM790.webp&quot;})">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+            Agregar al carro
+          </button>
+          <button class="btn-ficha" onclick="openProdModal(12)" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            Ficha
+          </button>
+          <button class="btn-cmp" data-id="12" onclick="cmpToggle(12)" title="Agregar al comparador">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Comparar
+          </button>
+          <button class="btn-cot" onclick="addToCotizacion({&quot;id&quot;:12,&quot;codigo&quot;:&quot;PFM790&quot;,&quot;nombre&quot;:&quot;Aislador de ruido por fuente de alimentacion&quot;,&quot;cat&quot;:&quot;accesorios&quot;,&quot;pneto&quot;:4118,&quot;piva&quot;:782,&quot;ptotal&quot;:4900,&quot;stock&quot;:&quot;normal&quot;,&quot;nuevo&quot;:0,&quot;peso&quot;:0.15,&quot;img&quot;:&quot;https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFM790.webp&quot;})" title="Guardar en cotización">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            Cotizar
+          </button>
+          <button class="btn-wish" onclick="this.classList.toggle('on')">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div></div>
+    <div class="pagination" id="pag"><button class="ppage" disabled="" onclick="goPage(0)">‹</button><button class="ppage active" onclick="goPage(1)">1</button><button class="ppage " onclick="goPage(2)">2</button><button class="ppage" disabled="">…</button><button class="ppage " onclick="goPage(90)">90</button><button class="ppage" onclick="goPage(2)">›</button></div>
   </div>
 </div>
 
@@ -3107,27 +3111,55 @@ body.cmp-open { padding-bottom: 80px }
   <div class="cart-head">
     <div>
       <div class="cart-head-title">
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
         Tu Carro de Compras
       </div>
-      <div class="cart-head-sub" id="cartSub">0 productos · www.sstt.cl</div>
+      <div class="cart-head-sub" id="cartSub">3 productos · www.sstt.cl</div>
     </div>
     <button class="cart-x" onclick="closeCart()">
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
   </div>
   <div class="cart-body" id="cartBody">
-    <div class="cart-empty" id="cartEmpty">
-      <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#ccc" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    <div class="cart-empty" id="cartEmpty" style="display: none;">
+      <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#ccc" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
       <p>Tu carro está vacío</p>
       <small>Agrega productos desde el catálogo</small>
     </div>
-    <div id="cartItems"></div>
+    <div id="cartItems">
+    <div class="citem">
+      <img class="citem-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-SD40212TN-HN-S2.webp" onerror="this.style.opacity='.3'">
+      <div>
+        <div class="citem-name">Cámara Dahua IP PTZ 2MP 12X PoE+ Alarma 2/1 Audio …</div>
+        <div class="citem-code">DH-SD40212TN-HN-S2</div>
+        <div class="citem-qty">
+          <button class="qbtn" onclick="changeQty(2,-1)">−</button>
+          <span class="qval">1</span>
+          <button class="qbtn" onclick="changeQty(2,1)">+</button>
+          <button class="citem-del" onclick="removeCart(2)">✕</button>
+        </div>
+      </div>
+      <div class="citem-price">$399.900</div>
+    </div>
+    <div class="citem">
+      <img class="citem-img" src="https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_IPC-HDBW2841RP-ZS.webp" onerror="this.style.opacity='.3'">
+      <div>
+        <div class="citem-name">Cámara Dahua IP domo 8MP 2.7-13.5mm Motor IR30 PoE…</div>
+        <div class="citem-code">IPC-HDBW2841RP-ZS</div>
+        <div class="citem-qty">
+          <button class="qbtn" onclick="changeQty(1,-1)">−</button>
+          <span class="qval">2</span>
+          <button class="qbtn" onclick="changeQty(1,1)">+</button>
+          <button class="citem-del" onclick="removeCart(1)">✕</button>
+        </div>
+      </div>
+      <div class="citem-price">$399.800</div>
+    </div></div>
   </div>
-  <div class="cart-foot" id="cartFoot" style="display:none">
+  <div class="cart-foot" id="cartFoot" style="display: block;">
 
     <!-- LOGIN PROMPT (visible si no está logueado) -->
-    <div class="cs" id="loginPrompt" style="background:var(--blue-p);border-color:var(--blue-p2)">
+    <div class="cs" id="loginPrompt" style="background: var(--blue-p); border-color: var(--blue-p2); display: flex;">
       <div style="display:flex;align-items:center;gap:10px;justify-content:space-between">
         <div>
           <div style="font-size:12px;font-weight:700;color:var(--blue-d)">¿Tienes cuenta?</div>
@@ -3160,14 +3192,14 @@ body.cmp-open { padding-bottom: 80px }
       </div>
       <div class="field-msg" id="rutMsg"></div>
       <div class="rut-verified-badge" id="rutBadge">
-        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"></path></svg>
         RUT válido — listo para facturar
       </div>
 
       <!-- Campos extra para factura -->
       <div class="factura-fields" id="facturaFields">
         <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:8px;display:flex;align-items:center;gap:5px">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
           Datos para factura electrónica (Bsale)
         </div>
         <input type="text" id="cRazon" class="finput" placeholder="Razón social *">
@@ -3182,7 +3214,7 @@ body.cmp-open { padding-bottom: 80px }
     </div>
     <div class="cs">
       <div class="cs-title">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><path d="M16 8h4l3 3v5h-7V8z"></path><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
         Despacho / Retiro
         <button class="cotizar-btn" id="cotizarBtnShow" onclick="cotizar()" style="display:none">Cotizar envío</button>
       </div>
@@ -3201,7 +3233,7 @@ body.cmp-open { padding-bottom: 80px }
       <div id="secDespacho">
         <input type="text" id="cComuna" class="finput" placeholder="Comuna de despacho (ej: Providencia)" style="margin-bottom:6px">
         <button class="cotizar-btn" onclick="cotizar()" style="display:inline-flex;align-items:center;gap:5px;margin-bottom:6px">
-          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><path d="M16 8h4l3 3v5h-7V8z"></path><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
           Cotizar envío
         </button>
         <div class="ship-opts" id="shipOpts"><span class="ship-ph">Ingresa tu comuna y presiona "Cotizar envío"</span></div>
@@ -3210,7 +3242,7 @@ body.cmp-open { padding-bottom: 80px }
       <!-- SECCIÓN RETIRO EN TIENDA -->
       <div id="secRetiro" style="display:none">
         <div style="background:var(--green-p);border:1px solid #b0dfc0;border-radius:var(--r-sm);padding:10px 12px;font-size:12px;color:var(--green);margin-bottom:10px;display:flex;gap:8px">
-          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
           <div><strong>Retiro gratuito en nuestras instalaciones</strong><br>
           📍 Santiago — Av. Ejemplo 1234, Of. 501 · Lun a Vie 9:00–18:00 hrs<br>
           ⏱️ Disponible para retiro en 1-2 horas hábiles tras confirmación de pago</div>
@@ -3263,7 +3295,7 @@ body.cmp-open { padding-bottom: 80px }
             <div><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">N° de guía / OT</label>
             <input type="text" id="cGuiaTransporte" class="finput" placeholder="N° de guía o nota de retiro" style="margin:0"></div>
           </div>
-          <input type="text" id="cOtraEmpresa" class="finput" placeholder="Nombre de la empresa (si seleccionaste Otra)" style="margin-bottom:6px;display:none" id="cOtraEmpresa">
+          <input type="text" id="cOtraEmpresa" class="finput" placeholder="Nombre de la empresa (si seleccionaste Otra)" style="margin-bottom:6px;display:none">
           <input type="text" id="cRutChofer" class="finput" placeholder="RUT del conductor que retira (opcional)" style="margin:0">
         </div>
 
@@ -3290,21 +3322,21 @@ body.cmp-open { padding-bottom: 80px }
       </div>
     </div>
     <div class="totals">
-      <div class="trow"><span>Subtotal neto</span><span id="tNeto">$0</span></div>
-      <div class="trow"><span>IVA (19%)</span><span id="tIva">$0</span></div>
+      <div class="trow"><span>Subtotal neto</span><span id="tNeto">$672.016</span></div>
+      <div class="trow"><span>IVA (19%)</span><span id="tIva">$127.683</span></div>
       <div class="trow"><span id="tShipLbl">Despacho</span><span id="tShip">—</span></div>
-      <div class="trow trow-total"><span>Total</span><span id="tTotal">$0</span></div>
+      <div class="trow trow-total"><span>Total</span><span id="tTotal">$799.699</span></div>
     </div>
     <div class="cs">
       <div class="cs-title">Método de pago</div>
       <div class="pay-opts" id="payOpts">
-        <label class="pay-opt on" onclick="selPay(this)"><input type="radio" name="p" value="webpay" checked><span class="pay-name">WebPay Plus</span><span class="pay-sub">Débito / Crédito</span></label>
+        <label class="pay-opt on" onclick="selPay(this)"><input type="radio" name="p" value="webpay" checked=""><span class="pay-name">WebPay Plus</span><span class="pay-sub">Débito / Crédito</span></label>
         <label class="pay-opt" onclick="selPay(this)"><input type="radio" name="p" value="transferencia"><span class="pay-name">Transferencia</span><span class="pay-sub">BCI / Santander</span></label>
         <label class="pay-opt" onclick="selPay(this)"><input type="radio" name="p" value="khipu"><span class="pay-name">Khipu</span><span class="pay-sub">Pago con tu banco</span></label>
       </div>
     </div>
     <button class="pay-now-btn" onclick="checkout()">
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
       Finalizar compra
     </button>
     <div class="pay-badges">
@@ -3317,12 +3349,12 @@ body.cmp-open { padding-bottom: 80px }
 </aside>
 
 <!-- LOGIN / REGISTRO MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="e=>e.target===this&&closeModal()">
+<div class="modal-overlay" id="modalOverlay" onclick="e=&gt;e.target===this&amp;&amp;closeModal()">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-head">
       <h3 id="modalTitle">Mi cuenta SSTT®</h3>
       <button class="modal-x" onclick="closeModal()">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
       </button>
     </div>
     <div class="modal-body">
@@ -3430,16 +3462,16 @@ body.cmp-open { padding-bottom: 80px }
 
 <!-- TOAST -->
 <div class="toast" id="toast">
-  <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+  <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"></path></svg>
   <span id="toastMsg"></span>
 </div>
 
 <!-- MOBILE NAV -->
 <nav class="mobile-nav">
-  <button class="mnav-item on" onclick="setNav(this,'todas')"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Inicio</span></button>
-  <button class="mnav-item" onclick="setNav(this,'camaras-ip')"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg><span>Catálogo</span></button>
-  <button class="mnav-item" onclick="openCart()"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Carro</span></button>
-  <button class="mnav-item"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Cuenta</span></button>
+  <button class="mnav-item on" onclick="setNav(this,'todas')"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg><span>Inicio</span></button>
+  <button class="mnav-item" onclick="setNav(this,'camaras-ip')"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><path d="M8 21h8M12 17v4"></path></svg><span>Catálogo</span></button>
+  <button class="mnav-item" onclick="openCart()"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg><span>Carro</span></button>
+  <button class="mnav-item"><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg><span>Cuenta</span></button>
 </nav>
 
 <!-- FOOTER -->
@@ -3447,7 +3479,7 @@ body.cmp-open { padding-bottom: 80px }
 </div><!-- /secCatalogo -->
 
 <!-- SECCIÓN: ASISTENTE IA -->
-<div class="app-section" id="secAsistente">
+<div class="app-section active" id="secAsistente">
 <div class="ai-hero">
   <div class="wrap ai-hero-inner">
     <div>
@@ -3509,7 +3541,6 @@ body.cmp-open { padding-bottom: 80px }
     </div>
   </aside>
   <div class="chat-main" id="chatMain">
-    <div class="chat-box">
     <div class="chat-hdr">
       <div class="chat-ai-av">🤖</div>
       <div>
@@ -3535,19 +3566,49 @@ body.cmp-open { padding-bottom: 80px }
           <div class="cmsg-time">Ahora</div>
         </div>
       </div>
-    </div>
+    <div class="cmsg user">
+    <div class="cmsg-av">TÚ</div>
+    <div style="flex:1;min-width:0">
+      <div class="cmsg-bbl">¿Qué cámara Dahua recomiendas para vigilar la entrada de un edificio a 8 metros, necesito reconocer rostros?</div>
+      
+      <div class="cmsg-time">06:15 p.&nbsp;m.</div>
+    </div></div><div class="cmsg ai">
+    <div class="cmsg-av">🤖</div>
+    <div style="flex:1;min-width:0">
+      <div class="cmsg-bbl">⚠️ No pude conectarme al servicio de IA ahora mismo. Escríbenos directamente a ventas@sstt.cl para asistencia técnica.</div>
+      
+      <div class="cmsg-time">06:15 p.&nbsp;m.</div>
+    </div></div><div class="cmsg user">
+    <div class="cmsg-av">TÚ</div>
+    <div style="flex:1;min-width:0">
+      <div class="cmsg-bbl">¿Qué cámara Dahua recomiendas para vigilar la entrada de un edificio a 8 metros, necesito reconocer rostros?</div>
+      
+      <div class="cmsg-time">06:16 p.&nbsp;m.</div>
+    </div></div><div class="cmsg ai">
+    <div class="cmsg-av">🤖</div>
+    <div style="flex:1;min-width:0">
+      <div class="cmsg-bbl">⚠️ No pude conectarme al servicio de IA ahora mismo. Escríbenos directamente a ventas@sstt.cl para asistencia técnica.</div>
+      
+      <div class="cmsg-time">06:16 p.&nbsp;m.</div>
+    </div></div><div class="cmsg user">
+    <div class="cmsg-av">TÚ</div>
+    <div style="flex:1;min-width:0">
+      <div class="cmsg-bbl">¿Qué cámara Dahua para entrada edificio 8 metros reconocer rostros?</div>
+      
+      <div class="cmsg-time">06:30 p.&nbsp;m.</div>
+    </div></div><div class="cmsg ai" id="aiTyping"><div class="cmsg-av">🤖</div><div><div class="typing-ind"><span></span><span></span><span></span></div></div></div></div>
     <div class="chat-inp-area">
       <div class="chat-inp-wrap">
-        <textarea id="chatInput" class="chat-ta" placeholder="Ej: Necesito cubrir entrada de vehículos a 15m de noche para leer patentes. ¿Qué cámara me recomiendas?" rows="1" onkeydown="handleChatKey(event)" oninput="autoResizeTA(this)"></textarea>
+        <textarea id="chatInput" class="chat-ta" placeholder="Ej: Necesito cubrir entrada de vehículos a 15m de noche para leer patentes. ¿Qué cámara me recomiendas?" rows="1" onkeydown="handleChatKey(event)" oninput="autoResizeTA(this)" style="height: 72px;"></textarea>
         <button class="cam-scene-btn" id="camSceneBtn" onclick="openSceneAnalyzer()" title="Analizar escena con cámara">
           <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-            <circle cx="12" cy="13" r="4"/>
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
           </svg>
           <span>Analizar escena</span>
         </button>
-        <button class="send-b" id="sendBtn" onclick="sendAIMessage()">
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        <button class="send-b" id="sendBtn" onclick="sendAIMessage()" disabled="">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
         </button>
       </div>
       <div class="chat-inp-hint">Enter para enviar · Shift+Enter nueva línea · 📷 Analiza tu escena real con IA · Respuestas por Claude IA</div>
@@ -3589,7 +3650,7 @@ body.cmp-open { padding-bottom: 80px }
     <div class="cc-hd" style="background:var(--blue-p)"><span class="cc-ico">🔭</span><div><div class="cc-ttl">Lente Focal</div><div class="cc-sub2">Focal óptima según escena</div></div></div>
     <div class="cc-body">
       <div class="frow2"><div class="cfield"><label>Distancia (m)</label><input type="number" id="lDist" value="10" min="0.5" step="0.5"></div><div class="cfield"><label>Ancho objeto (m)</label><input type="number" id="lObj" value="3" min="0.1" step="0.1"></div></div>
-      <div class="cfield"><label>Tamaño sensor</label><select id="lSensor"><option value="6.4">1/2" (6.4mm)</option><option value="5.37" selected>1/2.7" (5.37mm)</option><option value="5.12">1/2.8" (5.12mm)</option><option value="4.8">1/3" (4.8mm)</option></select></div>
+      <div class="cfield"><label>Tamaño sensor</label><select id="lSensor"><option value="6.4">1/2" (6.4mm)</option><option value="5.37" selected="">1/2.7" (5.37mm)</option><option value="5.12">1/2.8" (5.12mm)</option><option value="4.8">1/3" (4.8mm)</option></select></div>
       <div class="cfield"><label>Uso principal</label><select id="lUso"><option value="1">General / vigilancia</option><option value="2">Lectura de patentes</option><option value="1.5">Reconocimiento facial</option><option value="0.5">Gran angular</option></select></div>
       <button class="calc-btn2" onclick="calcLente()">Calcular focal</button>
       <div class="calc-res" id="lRes"><div class="cr-main" id="lMain"></div><div class="cr-det" id="lDet"></div></div>
@@ -3600,7 +3661,7 @@ body.cmp-open { padding-bottom: 80px }
     <div class="cc-hd" style="background:#fef0e6"><span class="cc-ico">💾</span><div><div class="cc-ttl">Disco Duro</div><div class="cc-sub2">Almacenamiento necesario</div></div></div>
     <div class="cc-body">
       <div class="frow2"><div class="cfield"><label>N° cámaras</label><input type="number" id="dCams" value="8" min="1"></div><div class="cfield"><label>Días retención</label><input type="number" id="dDias" value="30" min="1" max="365"></div></div>
-      <div class="cfield"><label>Resolución / bitrate</label><select id="dRes"><option value="0.5">1080P H.265+ (~0.5 Mbps)</option><option value="1" selected>4MP H.265+ (~1 Mbps)</option><option value="2">8MP/4K H.265+ (~2 Mbps)</option><option value="4">8MP H.264 (~4 Mbps)</option></select></div>
+      <div class="cfield"><label>Resolución / bitrate</label><select id="dRes"><option value="0.5">1080P H.265+ (~0.5 Mbps)</option><option value="1" selected="">4MP H.265+ (~1 Mbps)</option><option value="2">8MP/4K H.265+ (~2 Mbps)</option><option value="4">8MP H.264 (~4 Mbps)</option></select></div>
       <div class="frow2"><div class="cfield"><label>Horas/día</label><input type="number" id="dHoras" value="24" min="1" max="24"></div><div class="cfield"><label>% grabación</label><input type="number" id="dMovim" value="100" min="10" max="100"></div></div>
       <button class="calc-btn2" onclick="calcDisco()" style="background:var(--orange)">Calcular almacenamiento</button>
       <div class="calc-res" id="dRes2"><div class="cr-main" id="dMain"></div><div class="cr-det" id="dDet"></div></div>
@@ -3610,8 +3671,8 @@ body.cmp-open { padding-bottom: 80px }
   <div class="calc-card">
     <div class="cc-hd" style="background:var(--green-p)"><span class="cc-ico">🎯</span><div><div class="cc-ttl">DORI (EN 62676-4)</div><div class="cc-sub2">Distancias detección→identificación</div></div></div>
     <div class="cc-body">
-      <div class="cfield"><label>Resolución horizontal</label><select id="doRes"><option value="1920">1920px — 1080P</option><option value="2560" selected>2560px — 4MP</option><option value="2688">2688px — 4MP Dahua</option><option value="3840">3840px — 8MP/4K</option></select></div>
-      <div class="frow2"><div class="cfield"><label>Focal (mm)</label><select id="doFocal"><option value="2.8">2.8mm</option><option value="3.6" selected>3.6mm</option><option value="4">4mm</option><option value="6">6mm</option><option value="8">8mm</option><option value="12">12mm</option></select></div><div class="cfield"><label>Sensor</label><select id="doSensor"><option value="5.37" selected>1/2.7" (5.37)</option><option value="5.12">1/2.8" (5.12)</option><option value="4.8">1/3" (4.8)</option><option value="6.4">1/2" (6.4)</option></select></div></div>
+      <div class="cfield"><label>Resolución horizontal</label><select id="doRes"><option value="1920">1920px — 1080P</option><option value="2560" selected="">2560px — 4MP</option><option value="2688">2688px — 4MP Dahua</option><option value="3840">3840px — 8MP/4K</option></select></div>
+      <div class="frow2"><div class="cfield"><label>Focal (mm)</label><select id="doFocal"><option value="2.8">2.8mm</option><option value="3.6" selected="">3.6mm</option><option value="4">4mm</option><option value="6">6mm</option><option value="8">8mm</option><option value="12">12mm</option></select></div><div class="cfield"><label>Sensor</label><select id="doSensor"><option value="5.37" selected="">1/2.7" (5.37)</option><option value="5.12">1/2.8" (5.12)</option><option value="4.8">1/3" (4.8)</option><option value="6.4">1/2" (6.4)</option></select></div></div>
       <button class="calc-btn2" onclick="calcDori()" style="background:var(--green)">Calcular DORI</button>
       <div class="calc-res" id="doRes2"><table class="dori-tbl" id="doriTbl"></table></div>
     </div>
@@ -3620,9 +3681,9 @@ body.cmp-open { padding-bottom: 80px }
   <div class="calc-card">
     <div class="cc-hd" style="background:var(--yellow-p)"><span class="cc-ico">⚡</span><div><div class="cc-ttl">Caída de Tensión</div><div class="cc-sub2">Cámaras con fuente 12VDC/24VAC</div></div></div>
     <div class="cc-body">
-      <div class="cfield"><label>Sección del cable</label><select id="tCable"><option value="36">2×0.5mm² (36 Ω/km)</option><option value="22.8" selected>2×0.75mm² (22.8 Ω/km)</option><option value="14.4">2×1.0mm² (14.4 Ω/km)</option><option value="9.2">2×1.5mm² (9.2 Ω/km)</option></select></div>
+      <div class="cfield"><label>Sección del cable</label><select id="tCable"><option value="36">2×0.5mm² (36 Ω/km)</option><option value="22.8" selected="">2×0.75mm² (22.8 Ω/km)</option><option value="14.4">2×1.0mm² (14.4 Ω/km)</option><option value="9.2">2×1.5mm² (9.2 Ω/km)</option></select></div>
       <div class="frow2"><div class="cfield"><label>Longitud (m)</label><input type="number" id="tDist" value="50" min="1"></div><div class="cfield"><label>Corriente (mA)</label><input type="number" id="tCorr" value="400" min="50" step="50"></div></div>
-      <div class="cfield"><label>Tensión fuente</label><select id="tVolt"><option value="12" selected>12 VDC</option><option value="24">24 VAC</option></select></div>
+      <div class="cfield"><label>Tensión fuente</label><select id="tVolt"><option value="12" selected="">12 VDC</option><option value="24">24 VAC</option></select></div>
       <button class="calc-btn2" onclick="calcTension()" style="background:var(--yellow)">Calcular caída</button>
       <div class="calc-res" id="tRes"><div class="cr-main" id="tMain"></div><div class="cr-det" id="tDet"></div><div class="cr-warn2" id="tWarn"></div><div class="cr-ok2" id="tOk"></div></div>
     </div>
@@ -3632,7 +3693,7 @@ body.cmp-open { padding-bottom: 80px }
     <div class="cc-hd" style="background:#f0eaff"><span class="cc-ico">📐</span><div><div class="cc-ttl">Ángulo de Visión</div><div class="cc-sub2">Campo visual y cobertura</div></div></div>
     <div class="cc-body">
       <div class="cfield"><label>Focal del lente (mm)</label><input type="number" id="aFocal" value="3.6" min="1" step="0.1"></div>
-      <div class="cfield"><label>Tamaño sensor</label><select id="aSensor"><option value="6.4,4.8">1/2" — 6.4×4.8mm</option><option value="5.37,4.04" selected>1/2.7" — 5.37×4.04mm</option><option value="5.12,3.84">1/2.8" — 5.12×3.84mm</option><option value="4.8,3.6">1/3" — 4.8×3.6mm</option></select></div>
+      <div class="cfield"><label>Tamaño sensor</label><select id="aSensor"><option value="6.4,4.8">1/2" — 6.4×4.8mm</option><option value="5.37,4.04" selected="">1/2.7" — 5.37×4.04mm</option><option value="5.12,3.84">1/2.8" — 5.12×3.84mm</option><option value="4.8,3.6">1/3" — 4.8×3.6mm</option></select></div>
       <div class="cfield"><label>Distancia escena (m)</label><input type="number" id="aDist" value="10" min="1" step="0.5"></div>
       <button class="calc-btn2" onclick="calcAngulo()" style="background:#6a20c0">Calcular ángulo</button>
       <div class="calc-res" id="aRes"><div class="cr-main" id="aMain"></div><div class="cr-det" id="aDet"></div></div>
@@ -3717,7 +3778,7 @@ body.cmp-open { padding-bottom: 80px }
     </tbody>
   </table>
   <h4 style="font-size:13px;font-weight:700;margin-bottom:10px;padding-left:8px;border-left:3px solid var(--blue)">Distancias calculadas por modelo de cámara</h4>
-  <div id="doriExTable"></div>
+  <div id="doriExTable"><table class="dtbl"><thead><tr><th>Cámara</th><th class="dori-d">Detección</th><th class="dori-o">Observación</th><th class="dori-r">Reconocimiento</th><th class="dori-i">Identificación</th></tr></thead><tbody><tr><td><strong>2MP 1080P</strong></td><td class="dori-d">51m</td><td class="dori-o">21m</td><td class="dori-r">10m</td><td class="dori-i">5m</td></tr><tr><td><strong>4MP 3.6mm</strong></td><td class="dori-d">72m</td><td class="dori-o">29m</td><td class="dori-r">14m</td><td class="dori-i">7m</td></tr><tr><td><strong>4MP 6mm</strong></td><td class="dori-d">120m</td><td class="dori-o">48m</td><td class="dori-r">24m</td><td class="dori-i">12m</td></tr><tr><td><strong>8MP 4K 3.6mm</strong></td><td class="dori-d">108m</td><td class="dori-o">44m</td><td class="dori-r">22m</td><td class="dori-i">11m</td></tr><tr><td><strong>8MP 4K 6mm</strong></td><td class="dori-d">180m</td><td class="dori-o">73m</td><td class="dori-r">36m</td><td class="dori-i">18m</td></tr></tbody></table></div>
   <div class="ibox" style="margin-top:14px">💡 <strong>Para patentes vehiculares:</strong> Se recomienda nivel Identificación (250px/m) o superior con lente 6-8mm apuntando directamente a la zona de paso.</div>
 </div>
 </div><!-- /acDori -->
@@ -3736,7 +3797,7 @@ body.cmp-open { padding-bottom: 80px }
 <div class="vmod" id="vmod" onclick="if(event.target===this)closeVideo()">
   <div class="vmod-inner">
     <div class="vmod-hd"><span id="vmodTitle">Video</span><button class="vmod-x" onclick="closeVideo()">✕</button></div>
-    <div class="vmod-frame"><iframe id="vmodFrame" frameborder="0" allowfullscreen allow="autoplay;encrypted-media"></iframe></div>
+    <div class="vmod-frame"><iframe id="vmodFrame" frameborder="0" allowfullscreen="" allow="autoplay;encrypted-media"></iframe></div>
   </div>
 </div>
 <footer>
@@ -5738,7 +5799,7 @@ async function sendAIMessage() {
   const inp  = qs('chatInput');
   const text = inp?.value.trim();
   if (!text) return;
-
+  
   inp.value = ''; if (inp) inp.style.height = '38px';
   qs('sendBtn').disabled = true;
   addAIMsg('user', text);
@@ -5748,7 +5809,7 @@ async function sendAIMessage() {
     dbg('📡 Enviando a API...');
     const resp = await fetch('https://sstt-proxy.ryanodina.workers.dev', {
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:{'Content-Type':'application/json','anthropic-dangerous-request-direct-browser-access':'true','x-api-key': ANTHROPIC_API_KEY},
       body: JSON.stringify({
         model:'claude-sonnet-4-6', max_tokens:1000,
         system: buildAISysPrompt(),
@@ -5775,14 +5836,14 @@ function addAIMsg(role, content, prods=[]) {
   const time = new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'});
   const isAI = role === 'ai';
   const div = document.createElement('div');
-  div.className = `msg-row ${isAI ? 'ai' : 'user'}`;
+  div.className = `cmsg ${role}`;
   const initials = USER ? (USER.nombre[0]+(USER.apellido?.[0]||'')).toUpperCase() : 'TÚ';
   div.innerHTML = `
-    <div class="msg-av">${isAI?'🤖':initials}</div>
+    <div class="cmsg-av">${isAI?'🤖':initials}</div>
     <div style="flex:1;min-width:0">
-      <div class="msg-text">${formatAIContent(content)}</div>
+      <div class="cmsg-bbl">${formatAIContent(content)}</div>
       ${prods.length ? renderAIProdCards(prods) : ''}
-      <div class="msg-time">${time}</div>
+      <div class="cmsg-time">${time}</div>
     </div>`;
   wrap.appendChild(div);
   wrap.scrollTop = wrap.scrollHeight;
@@ -5812,8 +5873,8 @@ function renderAIProdCards(prods) {
 function showAITyping() {
   const wrap = qs('chatMsgs');
   const div = document.createElement('div');
-  div.className='msg-row ai typing-row'; div.id='aiTyping';
-  div.innerHTML=`<div class="msg-av">🤖</div><div class="msg-text"><div class="typing-dots"><span></span><span></span><span></span></div></div>`;
+  div.className='cmsg ai'; div.id='aiTyping';
+  div.innerHTML=`<div class="cmsg-av">🤖</div><div><div class="typing-ind"><span></span><span></span><span></span></div></div>`;
   wrap.appendChild(div); wrap.scrollTop=wrap.scrollHeight;
 }
 function hideAITyping() { qs('aiTyping')?.remove(); }
@@ -7564,7 +7625,8 @@ async function fetchSpecsFromPDF(producto) {
     const apiResp = await fetch('https://sstt-proxy.ryanodina.workers.dev', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
@@ -8732,7 +8794,8 @@ USA SOLO códigos que existen en el catálogo. Responde ÚNICAMENTE con JSON vá
     const resp = await fetch('https://sstt-proxy.ryanodina.workers.dev', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-api-key': ANTHROPIC_API_KEY,
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
@@ -9183,7 +9246,7 @@ ${a.resumen_instalacion || ''}
     showAITyping();
     fetch('https://sstt-proxy.ryanodina.workers.dev', {
       method: 'POST',
-      headers: { 'Content-Type':'application/json' },
+      headers: { 'Content-Type':'application/json', 'anthropic-dangerous-request-direct-browser-access':'true', 'x-api-key': ANTHROPIC_API_KEY },
       body: JSON.stringify({
         model:'claude-sonnet-4-6', max_tokens:1000,
         system: buildAISysPrompt(),
@@ -9285,7 +9348,7 @@ window.addEventListener('DOMContentLoaded', () => {
       <div class="cmp-slot"><span class="cmp-slot-empty-label">+ Agregar</span></div>
     </div>
     <div class="cmp-bar-actions">
-      <button class="cmp-btn-compare" onclick="cmpRenderModal()" disabled>⚖️ Comparar</button>
+      <button class="cmp-btn-compare" onclick="cmpRenderModal()" disabled="">⚖️ Comparar</button>
       <button class="cmp-btn-clear" onclick="cmpClear()">✕ Limpiar</button>
     </div>
   </div>
@@ -9329,7 +9392,7 @@ window.addEventListener('DOMContentLoaded', () => {
       <div class="scene-panel active" id="sceneStep1">
         <div class="capture-area" id="captureArea">
           <!-- Video preview -->
-          <video id="camPreview" class="cam-preview" autoplay playsinline muted></video>
+          <video id="camPreview" class="cam-preview" autoplay="" playsinline="" muted=""></video>
           <!-- Captured photo -->
           <canvas id="captureCanvas" class="capture-canvas" style="display:none"></canvas>
           <!-- Overlay grid para encuadre -->
@@ -9357,15 +9420,15 @@ window.addEventListener('DOMContentLoaded', () => {
 
         <div class="capture-btns-row">
             <button class="cap-btn cap-btn-primary" id="startCamBtn" onclick="startCamera()">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
               Activar cámara
             </button>
             <button class="cap-btn cap-btn-secondary" onclick="switchCamera()" id="switchCamBtn" style="display:none">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6"></path><path d="M23 20v-6h-6"></path><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
               Cambiar cámara
             </button>
             <label class="cap-btn cap-btn-outline" for="uploadPhoto">
-              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
               Subir foto
               <input type="file" id="uploadPhoto" accept="image/*" style="display:none" onchange="loadUploadedPhoto(event)">
             </label>
@@ -9440,7 +9503,7 @@ window.addEventListener('DOMContentLoaded', () => {
             <div class="step2-actions">
               <button class="cap-btn cap-btn-outline" onclick="goToStep(1)">← Volver</button>
               <button class="cap-btn cap-btn-primary" onclick="analyzeScene()">
-                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 Analizar con IA →
               </button>
             </div>
@@ -9524,8 +9587,7 @@ window.addEventListener('DOMContentLoaded', () => {
         <div style="font-size:16px;font-weight:700;font-family:var(--font-d)">🔑 Configurar API de IA</div>
         <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px">console.anthropic.com</div>
       </div>
-      <button onclick="document.getElementById('apiKeyModal').style.display='none'"
-        style="background:rgba(255,255,255,.1);color:#fff;border:none;width:28px;height:28px;border-radius:50%;font-size:15px;cursor:pointer">✕</button>
+      <button onclick="document.getElementById('apiKeyModal').style.display='none'" style="background:rgba(255,255,255,.1);color:#fff;border:none;width:28px;height:28px;border-radius:50%;font-size:15px;cursor:pointer">✕</button>
     </div>
     <!-- Body -->
     <div style="padding:22px 20px">
@@ -9540,12 +9602,7 @@ window.addEventListener('DOMContentLoaded', () => {
       
       <div style="margin-bottom:14px">
         <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#666;margin-bottom:6px">Tu API Key</div>
-        <input id="apiKeyInput" type="password"
-          placeholder="sk-ant-api03-..."
-          style="width:100%;border:1.5px solid #E0E0E0;border-radius:4px;padding:10px 12px;font-size:14px;font-family:monospace;outline:none;transition:border-color .15s"
-          onfocus="this.style.borderColor='#0057B8'"
-          onblur="this.style.borderColor='#E0E0E0'"
-          value="">
+        <input id="apiKeyInput" type="password" placeholder="sk-ant-api03-..." style="width:100%;border:1.5px solid #E0E0E0;border-radius:4px;padding:10px 12px;font-size:14px;font-family:monospace;outline:none;transition:border-color .15s" onfocus="this.style.borderColor='#0057B8'" onblur="this.style.borderColor='#E0E0E0'" value="">
         <div style="font-size:11px;color:#999;margin-top:5px">Se guarda solo en tu navegador (localStorage). Nunca se sube a ningún servidor.</div>
       </div>
 
@@ -9559,13 +9616,10 @@ window.addEventListener('DOMContentLoaded', () => {
       </div>
 
       <div style="display:flex;gap:8px">
-        <button onclick="saveApiKey()"
-          style="flex:1;background:#E8001C;color:#fff;border:none;border-radius:4px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s"
-          onmouseover="this.style.background='#C8001A'" onmouseout="this.style.background='#E8001C'">
+        <button onclick="saveApiKey()" style="flex:1;background:#E8001C;color:#fff;border:none;border-radius:4px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s" onmouseover="this.style.background='#C8001A'" onmouseout="this.style.background='#E8001C'">
           ✅ Guardar y activar IA
         </button>
-        <button onclick="document.getElementById('apiKeyModal').style.display='none'"
-          style="background:#F5F5F5;color:#333;border:1.5px solid #E0E0E0;border-radius:4px;padding:12px 16px;font-size:13px;font-weight:600;cursor:pointer">
+        <button onclick="document.getElementById('apiKeyModal').style.display='none'" style="background:#F5F5F5;color:#333;border:1.5px solid #E0E0E0;border-radius:4px;padding:12px 16px;font-size:13px;font-weight:600;cursor:pointer">
           Cancelar
         </button>
       </div>
@@ -9575,5 +9629,5 @@ window.addEventListener('DOMContentLoaded', () => {
   </div>
 </div>
 
-</body>
-</html>
+
+<div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div></body></html>
