@@ -2706,6 +2706,166 @@ body.cmp-open { padding-bottom: 80px }
     background: linear-gradient(135deg,rgba(0,87,184,.45),rgba(0,57,120,.38)) !important;
     border: 1px solid rgba(100,160,255,.4) !important;
   }
+</style><style id="glass-academia">
+/* ── ACADEMIA GLASS MORPHISM ───────────────────────── */
+
+/* Fondo oscuro igual que sección IA */
+#secAcademia {
+  background: #060912 !important;
+  position: relative;
+}
+#secAcademia::before {
+  content: '';
+  position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 15% 25%, rgba(0,87,184,.16) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 85% 55%, rgba(232,0,28,.10) 0%, transparent 55%),
+    #060912;
+  pointer-events: none; z-index: 0;
+}
+#secAcademia > * { position: relative; z-index: 1; }
+
+/* Hero ya tiene fondo oscuro — solo ajustar */
+.ac-hero { position: relative; z-index: 1; }
+.ac-title { color: #fff !important; }
+.ac-sub { color: rgba(255,255,255,.55) !important; }
+.ac-stat {
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  backdrop-filter: blur(16px) !important;
+  border-radius: 12px !important;
+  transition: all .2s !important;
+}
+.ac-stat:hover { background: rgba(255,255,255,.10) !important; transform: scale(1.03) !important; }
+.ac-stat-n { color: #fff !important; }
+.ac-stat-l { color: rgba(255,255,255,.4) !important; }
+
+/* TABS BAR — glass */
+#secAcademia .ac-tabs-bar {
+  background: rgba(255,255,255,.04) !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  position: sticky; top: 114px; z-index: 10;
+}
+#secAcademia .ac-tab {
+  color: rgba(255,255,255,.45) !important;
+  border-bottom: 3px solid transparent !important;
+  transition: all .15s !important;
+}
+#secAcademia .ac-tab:hover {
+  color: rgba(255,255,255,.85) !important;
+  background: rgba(255,255,255,.06) !important;
+}
+#secAcademia .ac-tab.active {
+  color: #FF9AA5 !important;
+  border-bottom-color: #E8001C !important;
+}
+
+/* PANELS background */
+#secAcademia .ac-panel { background: transparent !important; }
+
+/* CALCULADORAS — glass cards */
+#secAcademia .calc-card {
+  background: rgba(255,255,255,.05) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border-radius: 14px !important;
+  transition: all .2s !important;
+  overflow: hidden !important;
+}
+#secAcademia .calc-card:hover {
+  background: rgba(255,255,255,.09) !important;
+  border-color: rgba(255,255,255,.18) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 36px rgba(0,0,0,.4) !important;
+}
+#secAcademia .calc-head {
+  background: rgba(255,255,255,.06) !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  color: #fff !important;
+}
+#secAcademia .calc-body { background: transparent !important; }
+#secAcademia .calc-label { color: rgba(255,255,255,.45) !important; }
+#secAcademia .calc-input,
+#secAcademia .calc-select {
+  background: rgba(255,255,255,.07) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  color: #fff !important;
+  border-radius: 8px !important;
+}
+#secAcademia .calc-input:focus,
+#secAcademia .calc-select:focus {
+  background: rgba(255,255,255,.11) !important;
+  border-color: rgba(0,87,184,.5) !important;
+  outline: none !important;
+}
+#secAcademia .calc-input::placeholder { color: rgba(255,255,255,.3) !important; }
+#secAcademia .calc-select option { background: #0d1117 !important; color: #fff !important; }
+#secAcademia .calc-btn {
+  background: linear-gradient(135deg, #E8001C, #C8001A) !important;
+  border-radius: 8px !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 14px rgba(232,0,28,.35) !important;
+  transition: all .2s !important;
+}
+#secAcademia .calc-btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 20px rgba(232,0,28,.45) !important;
+}
+#secAcademia .calc-result {
+  background: rgba(0,87,184,.2) !important;
+  border: 1px solid rgba(0,87,184,.35) !important;
+  border-radius: 8px !important;
+  color: #7AB4F8 !important;
+  font-weight: 600 !important;
+}
+
+/* GUÍAS — glass cards */
+#secAcademia .guia-card {
+  background: rgba(255,255,255,.05) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-radius: 14px !important;
+  transition: all .2s !important;
+}
+#secAcademia .guia-card:hover {
+  background: rgba(255,255,255,.09) !important;
+  border-color: rgba(232,0,28,.35) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 36px rgba(0,0,0,.4) !important;
+}
+#secAcademia .guia-icon { font-size: 28px !important; }
+#secAcademia .guia-title { color: #fff !important; font-weight: 700 !important; }
+#secAcademia .guia-desc { color: rgba(255,255,255,.55) !important; }
+
+/* VIDEOS — glass cards */
+#secAcademia .video-card {
+  background: rgba(255,255,255,.05) !important;
+  border: 1px solid rgba(255,255,255,.10) !important;
+  backdrop-filter: blur(16px) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  transition: all .2s !important;
+}
+#secAcademia .video-card:hover {
+  border-color: rgba(232,0,28,.35) !important;
+  transform: translateY(-3px) !important;
+  box-shadow: 0 12px 36px rgba(0,0,0,.4) !important;
+}
+#secAcademia .video-info { background: transparent !important; }
+#secAcademia .video-title { color: rgba(255,255,255,.9) !important; }
+#secAcademia .video-channel { color: rgba(255,255,255,.4) !important; }
+
+/* ALL TEXT white */
+#secAcademia h1,#secAcademia h2,#secAcademia h3,
+#secAcademia h4,#secAcademia label { color: rgba(255,255,255,.88) !important; }
+#secAcademia p { color: rgba(255,255,255,.6) !important; }
+#secAcademia strong { color: #fff !important; }
 </style></head>
 <body style="">
 
@@ -10499,4 +10659,4 @@ window.addEventListener('DOMContentLoaded', () => {
 </div>
 
 
-<div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div></body></html>
+<div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 1; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 0; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div></body></html>
