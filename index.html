@@ -1102,6 +1102,33 @@ nav {
    Mismo estilo que la sección IA pero para Academia
    ══════════════════════════════════════════════════════════════════ */
 
+/* Background dark */
+#secAcademia {
+  background: #060912;
+  position: relative;
+}
+#secAcademia::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 15% 25%, rgba(0,87,184,.15) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 70% at 85% 55%, rgba(232,0,28,.10) 0%, transparent 55%),
+    #060912;
+  pointer-events: none;
+  z-index: 0;
+}
+#secAcademia > * { position: relative; z-index: 1; }
+
+/* Hero override */
+#secAcademia /* ══ ACADEMIA — Dahua Global 2025 (fondo blanco) ══ */
+.ac-hero {
+  background: linear-gradient(160deg, #0C1A2E 0%, #001E3C 50%, #003870 100%);
+  color: var(--white);
+  padding: 56px 0;
+  position: relative;
+  overflow: hidden;
+}
 .ac-hero::before {
   content: '';
   position: absolute; inset: 0;
@@ -2307,7 +2334,28 @@ body.cmp-open { padding-bottom: 80px }
 @media(max-width:600px){ .ai-title { font-size: 28px; } .chat-msgs { height: 360px; } }
 
 </style>
-<style>.products-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:12px!important}.pcard{width:auto!important}</style></head>
+<style>.products-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:12px!important}.pcard{width:auto!important}</style><style id="claude-agent-animation-styles">
+      @keyframes claude-pulse {
+        0% {
+          box-shadow: 
+            inset 0 0 10px rgba(217, 119, 87, 0.5),
+            inset 0 0 20px rgba(217, 119, 87, 0.3),
+            inset 0 0 30px rgba(217, 119, 87, 0.1);
+        }
+        50% {
+          box-shadow: 
+            inset 0 0 15px rgba(217, 119, 87, 0.7),
+            inset 0 0 25px rgba(217, 119, 87, 0.5),
+            inset 0 0 35px rgba(217, 119, 87, 0.2);
+        }
+        100% {
+          box-shadow: 
+            inset 0 0 10px rgba(217, 119, 87, 0.5),
+            inset 0 0 20px rgba(217, 119, 87, 0.3),
+            inset 0 0 30px rgba(217, 119, 87, 0.1);
+        }
+      }
+    </style><style id="critical-fix">.app-section{display:none!important}.app-section.active{display:block!important}#secAsistente{background:#fff!important}#secAsistente::before,#secAsistente::after{display:none!important}#secAcademia{background:#fff!important}#secAcademia::before,#secAcademia::after{display:none!important}.products-grid{display:grid!important;grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:12px!important}</style></head>
 <body>
 
 <div class="demo-banner">
@@ -2402,11 +2450,11 @@ body.cmp-open { padding-bottom: 80px }
 <!-- MODULE NAV -->
 <nav class="module-nav">
   <div class="wrap module-nav-inner">
-    <button data-sec="catalogo" class="mnav-tab active" onclick="showSection('catalogo',this)">
+    <button data-sec="catalogo" class="mnav-tab" onclick="showSection('catalogo',this)">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="7" height="7"></rect><rect x="15" y="3" width="7" height="7"></rect><rect x="15" y="14" width="7" height="7"></rect><rect x="2" y="14" width="7" height="7"></rect></svg>
       Catálogo
     </button>
-    <button data-sec="asistente" class="mnav-tab" onclick="showSection('asistente',this)">
+    <button data-sec="asistente" class="mnav-tab active" onclick="showSection('asistente',this)">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
       Asistente IA CCTV
     </button>
@@ -2422,7 +2470,7 @@ body.cmp-open { padding-bottom: 80px }
 </nav>
 
 <!-- SECCIÓN: CATÁLOGO (default) -->
-<div class="app-section active" id="secCatalogo">
+<div class="app-section" id="secCatalogo">
 
 
 <!-- MOBILE SEARCH -->
@@ -3525,7 +3573,7 @@ body.cmp-open { padding-bottom: 80px }
 </div><!-- /secCatalogo -->
 
 <!-- SECCIÓN: ASISTENTE IA -->
-<div class="app-section" id="secAsistente">
+<div class="app-section active" id="secAsistente">
 <div class="ai-hero">
   <div class="wrap ai-hero-inner">
     <div>
@@ -9645,4 +9693,4 @@ window.addEventListener('DOMContentLoaded', () => {
 </div>
 
 
-</div></body></html>
+</div><div id="claude-agent-glow-border" style="position: fixed; inset: 0px; pointer-events: none; z-index: 2147483646; opacity: 0; transition: opacity 0.3s ease-in-out; animation: 2s ease-in-out 0s infinite normal none running claude-pulse; box-shadow: rgba(217, 119, 87, 0.5) 0px 0px 10px inset, rgba(217, 119, 87, 0.3) 0px 0px 20px inset, rgba(217, 119, 87, 0.1) 0px 0px 30px inset;"></div></body></html>
