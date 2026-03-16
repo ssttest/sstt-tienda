@@ -2411,7 +2411,98 @@ body.cmp-open { padding-bottom: 80px }
 .ai-title { color: #fff !important; }
 .ai-sub { color: rgba(255,255,255,.55) !important; }
 .hchip { color: rgba(255,255,255,.82) !important; }
-</style></head>
+</style><style id="scene-layout-fix">
+/* Scene modal full width */
+.scene-modal-box {
+  max-width: 860px !important;
+  width: 100% !important;
+}
+
+/* Step 2 grid: dar más espacio al formulario */
+.step2-grid {
+  grid-template-columns: 220px 1fr !important;
+  gap: 16px !important;
+}
+
+/* En móvil: columna única, formulario arriba */
+@media(max-width: 700px) {
+  .step2-grid {
+    grid-template-columns: 1fr !important;
+    grid-template-rows: auto auto !important;
+  }
+  .step2-preview-col {
+    order: 2 !important;
+  }
+  .step2-form-col {
+    order: 1 !important;
+  }
+}
+
+/* Textarea más alta y ancha */
+#sceneContext {
+  width: 100% !important;
+  min-height: 80px !important;
+  rows: 4 !important;
+  font-size: 14px !important;
+}
+
+/* Formulario usa todo el espacio disponible */
+.step2-form-col {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+/* req-options más espaciosas */
+.req-options {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 7px !important;
+}
+.req-opt {
+  font-size: 12.5px !important;
+  padding: 7px 12px !important;
+  white-space: nowrap !important;
+}
+
+/* Dist slider full width */
+.dist-slider-wrap {
+  width: 100% !important;
+}
+.dist-slider {
+  width: 100% !important;
+}
+
+/* Modal padding on mobile */
+@media(max-width: 500px) {
+  .scene-modal-box {
+    border-radius: 0 !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+  }
+  .scene-panel {
+    padding: 14px !important;
+  }
+  .step2-img-wrap {
+    max-height: 160px !important;
+  }
+}
+</style><style id="scene-layout-fix">
+.scene-modal-box { max-width:860px!important; width:100%!important; }
+.step2-grid { grid-template-columns:200px 1fr!important; gap:14px!important; }
+@media(max-width:680px){
+  .step2-grid{grid-template-columns:1fr!important;}
+  .step2-preview-col{order:2!important;} .step2-form-col{order:1!important;}
+}
+#sceneContext{width:100%!important;min-height:80px!important;font-size:14px!important;}
+.step2-form-col{min-width:0!important;width:100%!important;}
+.req-options{display:flex!important;flex-wrap:wrap!important;gap:7px!important;}
+.req-opt{font-size:12.5px!important;padding:7px 12px!important;}
+.dist-slider{width:100%!important;}
+@media(max-width:500px){
+  .scene-modal-box{border-radius:0!important;max-height:100vh!important;}
+  .scene-panel{padding:14px!important;}
+  .step2-img-wrap{max-height:160px!important;}
+}</style></head>
 <body style="">
 
 <div class="demo-banner">
