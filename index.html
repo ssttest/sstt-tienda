@@ -1418,8 +1418,6 @@ nav {
 .cmp-slot { display: flex; align-items: center; gap: 7px; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: var(--r); padding: 6px 10px; font-size: 11.5px; color: var(--white) }
 .cmp-slot img { width: 28px; height: 28px; object-fit: contain; background: rgba(255,255,255,.08); border-radius: 2px }
 .cmp-slot-code { font-family: var(--font-m); font-size: 10px; color: rgba(255,255,255,.7) }
-.cmp-slot-del { background: none; border: none; color: rgba(255,255,255,.4); font-size: 14px; cursor: pointer; transition: color .15s; padding: 0 0 0 4px }
-.cmp-slot-del:hover { color: var(--white) }
 .btn-do-cmp { background: var(--red); color: var(--white); border: none; border-radius: var(--r); padding: 9px 18px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: background .15s }
 .btn-do-cmp:hover { background: var(--red2) }
 .btn-clr-cmp { background: rgba(255,255,255,.07); color: var(--white); border: 1px solid rgba(255,255,255,.15); border-radius: var(--r); padding: 9px 14px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .15s }
@@ -2365,8 +2363,6 @@ nav {
   width: 36px; height: 36px; object-fit: contain;
   background: rgba(255,255,255,.08); border-radius: 3px; flex-shrink: 0;
 }
-.cmp-slot-info { min-width: 0 }
-.cmp-slot-name { font-size: 10.5px; color: rgba(255,255,255,.65); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px }
 .cmp-slot-remove {
   background: none; border: none; color: rgba(255,255,255,.4);
   font-size: 14px; cursor: pointer; padding: 0 0 0 4px; transition: color .15s; flex-shrink: 0;
@@ -2957,8 +2953,6 @@ nav {
   width: 36px; height: 36px; object-fit: contain;
   background: rgba(255,255,255,.08); border-radius: 3px; flex-shrink: 0;
 }
-.cmp-slot-info { min-width: 0 }
-.cmp-slot-name { font-size: 10.5px; color: rgba(255,255,255,.65); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px }
 .cmp-slot-remove {
   background: none; border: none; color: rgba(255,255,255,.4);
   font-size: 14px; cursor: pointer; padding: 0 0 0 4px; transition: color .15s; flex-shrink: 0;
@@ -3798,19 +3792,6 @@ nav {
 /* ════════════════════════════════════
    COMPARADOR BAR — single clean rules
    ════════════════════════════════════ */
-#cmp-bar {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  background: #1a1a1a;
-  color: #fff;
-  padding: 10px 24px;
-  z-index: 999;
-  display: none;
-  border-top: 3px solid #E8001C;
-  box-shadow: 0 -4px 20px rgba(0,0,0,.3);
-}
-#cmp-bar.open { display: flex !important }
-#cmp-bar.visible { display: flex !important }
 #cmp-bar .cmp-bar-inner {
   display: flex;
   align-items: center;
@@ -3820,7 +3801,586 @@ nav {
   margin: 0 auto;
   flex-wrap: wrap;
 }
-body.cmp-open { padding-bottom: 72px }
+
+
+/* ════════════════════════════════════════════════════
+   COMPARADOR FLOTANTE — panel lateral derecho
+   ════════════════════════════════════════════════════ */
+
+/* Botón flotante */
+#cmpFab {
+  position: fixed;
+  right: 20px;
+  bottom: 88px;         /* encima del bottom-nav móvil */
+  z-index: 600;
+}
+#cmpFab.show { display: block !important }
+
+.cmp-fab-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #1A1A1A;
+  color: #fff;
+  border: none;
+  border-radius: 28px;
+  padding: 12px 18px 12px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,.25);
+  transition: all .2s;
+  font-family: var(--font);
+  white-space: nowrap;
+}
+.cmp-fab-btn:hover {
+  background: var(--red);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(232,0,28,.35);
+}
+.cmp-fab-label { font-size: 13px; font-weight: 700 }
+.cmp-fab-badge {
+  background: var(--red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+}
+.cmp-fab-btn:hover .cmp-fab-badge {
+  background: #fff;
+  color: var(--red);
+}
+
+/* Overlay */
+/* Panel */
+/* Panel header */
+.cmp-panel-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  background: #1A1A1A;
+  color: #fff;
+  flex-shrink: 0;
+}
+.cmp-panel-hdr-l {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+}
+.cmp-panel-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,.5);
+  background: rgba(255,255,255,.1);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-family: var(--font-m);
+}
+.cmp-panel-close {
+  background: rgba(255,255,255,.1);
+  color: #fff;
+  border: none;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.cmp-panel-close:hover { background: rgba(255,255,255,.25) }
+
+/* Panel body */
+.cmp-panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+}
+.cmp-panel-hint {
+  font-size: 12.5px;
+  color: var(--g3);
+  text-align: center;
+  padding: 24px 12px;
+  line-height: 1.6;
+}
+.cmp-panel-hint strong { color: var(--black) }
+
+/* Individual slot */
+.cmp-pslot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--g6);
+  border: 1px solid var(--g5);
+  border-radius: var(--r-lg);
+  padding: 10px 12px;
+  transition: all .15s;
+  position: relative;
+}
+.cmp-pslot:hover { border-color: var(--red); background: var(--red-p) }
+.cmp-pslot-img {
+  width: 48px; height: 48px;
+  object-fit: contain;
+  background: #fff;
+  border-radius: var(--r);
+  border: 1px solid var(--g5);
+  flex-shrink: 0;
+  padding: 4px;
+}
+.cmp-pslot-info { flex: 1; min-width: 0 }
+.cmp-pslot-code {
+  font-family: var(--font-m);
+  font-size: 10px;
+  color: var(--blue);
+  font-weight: 600;
+}
+.cmp-pslot-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--black);
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cmp-pslot-price {
+  font-family: var(--font-d);
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--black);
+  margin-top: 2px;
+}
+.cmp-pslot-del {
+  background: none;
+  border: none;
+  color: var(--g4);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all .15s;
+  flex-shrink: 0;
+}
+.cmp-pslot-del:hover {
+  color: var(--red);
+  background: var(--red-p);
+}
+
+/* Empty slots */
+.cmp-pslot-empty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px dashed var(--g4);
+  border-radius: var(--r-lg);
+  padding: 12px;
+  color: var(--g4);
+  font-size: 12px;
+}
+.cmp-pslot-empty-n {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--g5);
+  color: var(--g3);
+  font-size: 11px;
+  font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Footer */
+.cmp-panel-footer {
+  padding: 14px;
+  border-top: 1px solid var(--g5);
+  background: var(--g6);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.cmp-panel-btn-compare {
+  width: 100%;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: var(--r);
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background .15s;
+  font-family: var(--font);
+  box-shadow: 0 3px 12px rgba(232,0,28,.3);
+}
+.cmp-panel-btn-compare:hover:not(:disabled) { background: var(--red2) }
+.cmp-panel-btn-compare:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.cmp-panel-btn-clear {
+  width: 100%;
+  background: #fff;
+  color: var(--g2);
+  border: 1.5px solid var(--g5);
+  border-radius: var(--r);
+  padding: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: var(--font);
+}
+.cmp-panel-btn-clear:hover { border-color: var(--black); color: var(--black) }
+
+/* Remove old bottom-bar classes to avoid conflicts */
+#cmp-bar { display: none !important }
+.cmp-slots, .cmp-bar-label, .cmp-bar-actions,
+.cmp-slot, .cmp-btn-compare, .cmp-btn-clear { /* kept for compat */ }
+
+@media(max-width:480px){
+  #cmpFab { bottom: 72px; right: 14px }
+}
+
+/* ═══════════════════════════════════════════════════════
+   ACADEMIA CCTV — CSS completo
+   ═══════════════════════════════════════════════════════ */
+
+/* Hero */
+.ac-hero-inner { display:grid; grid-template-columns:1fr auto; align-items:center; gap:32px; position:relative; z-index:1 }
+.ac-title { font-family:var(--font-d); font-size:40px; font-weight:800; line-height:1.05; margin-bottom:10px; letter-spacing:-.3px }
+.ac-sub   { font-size:14px; color:rgba(255,255,255,.6); line-height:1.65; max-width:500px }
+.ac-stats { display:flex; gap:10px }
+.ac-stat  { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); border-radius:var(--r); padding:14px 20px; text-align:center; min-width:80px }
+.ac-stat-n { font-family:var(--font-d); font-size:34px; font-weight:800; color:#fff; line-height:1 }
+.ac-stat-l { font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:rgba(255,255,255,.4); margin-top:4px; font-weight:500 }
+
+/* Tabs */
+.ac-tabs-bar { background:var(--white); border-bottom:1px solid var(--g5); display:flex; overflow-x:auto; scrollbar-width:none; position:sticky; top:114px; z-index:10 }
+.ac-tabs-bar::-webkit-scrollbar { display:none }
+.ac-tab { padding:13px 22px; font-size:13px; font-weight:600; color:var(--g3); background:transparent; border:none; border-bottom:3px solid transparent; cursor:pointer; transition:all .15s; white-space:nowrap; font-family:var(--font) }
+.ac-tab:hover { color:var(--black); background:var(--g6) }
+.ac-tab.active { color:var(--red); border-bottom-color:var(--red) }
+
+/* Panels */
+.ac-panel { display:none; padding:28px 0; min-height:400px }
+.ac-panel.active { display:block }
+
+/* ── CALCULADORAS ─────────────────────────────────────── */
+.calc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-bottom:32px }
+.calc-card { background:var(--white); border:1px solid var(--g5); border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--shadow-xs); transition:box-shadow .2s,transform .2s }
+.calc-card:hover { box-shadow:var(--shadow-md); transform:translateY(-2px) }
+.cc-hd { display:flex; align-items:center; gap:12px; padding:14px 18px; border-bottom:1px solid var(--g5) }
+.cc-ico { font-size:22px; flex-shrink:0 }
+.cc-ttl { font-size:14px; font-weight:700; color:var(--black) }
+.cc-sub2 { font-size:11.5px; color:var(--g3); margin-top:1px }
+.cc-body { padding:16px 18px }
+.frow2 { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:10px }
+.cfield { display:flex; flex-direction:column; gap:4px }
+.cfield label { font-size:11px; font-weight:700; color:var(--g3); text-transform:uppercase; letter-spacing:.3px }
+.cfield input,.cfield select {
+  border:1.5px solid var(--g5); border-radius:var(--r-sm);
+  padding:8px 10px; font-size:13px; color:var(--black);
+  background:var(--g6); outline:none; width:100%;
+  transition:border-color .15s; font-family:var(--font);
+}
+.cfield input:focus,.cfield select:focus { border-color:var(--blue); background:var(--white) }
+.calc-btn2 {
+  width:100%; background:var(--red); color:var(--white); border:none;
+  border-radius:var(--r-sm); padding:10px; font-size:13px; font-weight:700;
+  cursor:pointer; transition:background .15s; font-family:var(--font);
+  margin-top:6px;
+}
+.calc-btn2:hover { background:var(--red2) }
+.calc-res {
+  margin-top:10px; background:var(--blue-p); border:1px solid var(--blue-p2);
+  border-radius:var(--r-sm); padding:12px 14px; font-size:14px;
+  font-weight:600; color:var(--blue); display:none;
+}
+.calc-res.show { display:block }
+.cr-main { font-size:18px; font-weight:800; color:var(--black); margin-bottom:4px }
+.cr-det  { font-size:12px; color:var(--g2); line-height:1.5 }
+.cr-ok2  { color:var(--green); font-weight:700 }
+.cr-warn2{ color:var(--orange); font-weight:700 }
+
+/* PoE calc */
+.poe-row  { display:flex; align-items:center; justify-content:space-between; padding:7px 0; border-bottom:1px solid var(--g5); font-size:13px }
+.poe-tipo { font-weight:600; color:var(--black) }
+.ibox { background:var(--blue-p); border:1px solid var(--blue-p2); border-radius:var(--r-sm); padding:10px 12px; font-size:12.5px; color:var(--blue); margin-top:8px }
+.obox { background:var(--green-p); border:1px solid #b8e8ca; border-radius:var(--r-sm); padding:10px 12px; font-size:12.5px; color:var(--green); margin-top:8px }
+.wbox { background:var(--orange-p); border:1px solid #f0c8a0; border-radius:var(--r-sm); padding:10px 12px; font-size:12.5px; color:var(--orange); margin-top:8px }
+
+/* ── GUÍAS ────────────────────────────────────────────── */
+.guides-layout { display:grid; grid-template-columns:200px 1fr; gap:0; min-height:500px; border:1px solid var(--g5); border-radius:var(--r-lg); overflow:hidden; background:var(--white) }
+.g-nav { background:var(--g6); border-right:1px solid var(--g5); padding:8px 0 }
+.g-nav-hd { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.6px; color:var(--g3); padding:8px 16px 6px }
+.g-item { display:flex; align-items:center; gap:8px; padding:9px 16px; font-size:13px; color:var(--g2); cursor:pointer; transition:all .12s; border-left:3px solid transparent }
+.g-item:hover { background:var(--white); color:var(--black) }
+.g-item.active { background:var(--white); color:var(--red); border-left-color:var(--red); font-weight:600 }
+.g-panel { display:none; padding:28px 32px; overflow-y:auto }
+.g-panel.active { display:block }
+.g-ttl { font-family:var(--font-d); font-size:26px; font-weight:700; color:var(--black); margin-bottom:8px }
+.g-intro { font-size:14px; color:var(--g2); line-height:1.7; margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid var(--g5) }
+.g-sec { margin-bottom:24px }
+.g-sec h4 { font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:var(--g3); margin-bottom:12px }
+.g-content { font-size:13.5px; color:var(--g1); line-height:1.7 }
+.g-content ul { padding-left:18px; margin:8px 0 }
+.g-content li { margin-bottom:6px }
+.g-content strong { color:var(--black); font-weight:700 }
+.g-content .tip { background:var(--blue-p); border-left:3px solid var(--blue); padding:10px 14px; border-radius:0 var(--r-sm) var(--r-sm) 0; font-size:13px; margin:12px 0 }
+.g-content .warn { background:var(--orange-p); border-left:3px solid var(--orange); padding:10px 14px; border-radius:0 var(--r-sm) var(--r-sm) 0; font-size:13px; margin:12px 0 }
+.g-content table { width:100%; border-collapse:collapse; font-size:12.5px; margin:12px 0 }
+.g-content th { background:var(--black); color:var(--white); padding:8px 12px; text-align:left; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.3px }
+.g-content td { padding:8px 12px; border-bottom:1px solid var(--g5); color:var(--g1) }
+.g-content tr:nth-child(even) td { background:var(--g6) }
+
+/* ── VIDEOS ──────────────────────────────────────────── */
+.vid-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; padding-top:16px }
+.vid-card { background:var(--white); border:1px solid var(--g5); border-radius:var(--r-lg); overflow:hidden; cursor:pointer; transition:all .2s }
+.vid-card:hover { box-shadow:var(--shadow-md); transform:translateY(-2px); border-color:var(--red) }
+.vid-thumb { position:relative; background:#000; aspect-ratio:16/9; overflow:hidden }
+.vid-thumb img { width:100%; height:100%; object-fit:cover; opacity:.85; transition:opacity .2s }
+.vid-card:hover .vid-thumb img { opacity:1 }
+.vid-play { position:absolute; inset:0; display:flex; align-items:center; justify-content:center }
+.vid-play svg { width:44px; height:44px; filter:drop-shadow(0 2px 8px rgba(0,0,0,.4)) }
+.vid-body { padding:12px 14px }
+.vid-cat  { font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:var(--red); margin-bottom:4px }
+.vid-ttl  { font-size:13px; font-weight:600; color:var(--black); line-height:1.4 }
+.vid-meta { font-size:11px; color:var(--g3); margin-top:4px }
+.vid-filter-bar { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:4px }
+.vid-filter-btn { padding:5px 13px; border-radius:20px; border:1.5px solid var(--g5); background:var(--white); color:var(--g2); font-size:11.5px; font-weight:600; cursor:pointer; transition:all .15s; font-family:var(--font) }
+.vid-filter-btn:hover { border-color:var(--black); color:var(--black) }
+.vid-filter-btn.active { background:var(--black); color:var(--white); border-color:var(--black) }
+
+/* ── DORI TABLE ──────────────────────────────────────── */
+.dori-tbl { overflow-x:auto }
+.dtbl { width:100%; border-collapse:collapse; font-size:13px }
+.dtbl th { background:var(--black); color:var(--white); padding:10px 14px; text-align:left; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px }
+.dtbl td { padding:10px 14px; border-bottom:1px solid var(--g5); vertical-align:middle }
+.dtbl tr:last-child td { border-bottom:none }
+.dtbl tr:nth-child(even) td { background:var(--g6) }
+.dori-d { background:var(--blue-p)!important; color:var(--blue); font-weight:700; border-radius:3px; padding:3px 8px; display:inline-block }
+.dori-o { background:#FFF9E6!important; color:#A06800; font-weight:700; border-radius:3px; padding:3px 8px; display:inline-block }
+.dori-r { background:var(--orange-p)!important; color:var(--orange); font-weight:700; border-radius:3px; padding:3px 8px; display:inline-block }
+.dori-i { background:var(--red-p)!important; color:var(--red); font-weight:700; border-radius:3px; padding:3px 8px; display:inline-block }
+
+@media(max-width:768px){
+  .ac-hero-inner { grid-template-columns:1fr }
+  .ac-stats { display:none }
+  .guides-layout { grid-template-columns:1fr }
+  .g-nav { display:flex; overflow-x:auto; border-right:none; border-bottom:1px solid var(--g5) }
+  .g-item { white-space:nowrap; border-left:none; border-bottom:3px solid transparent }
+  .g-item.active { border-bottom-color:var(--red); border-left-color:transparent }
+  .frow2 { grid-template-columns:1fr }
+}
+
+/* ═══════════════════════════════════════════════════
+   COMPARADOR PANEL LATERAL — Glass iOS
+   ═══════════════════════════════════════════════════ */
+
+/* Panel lateral derecho */
+/* Empty slot */
+/* Filled slot */
+/* Winner badge on slot */
+/* Floating trigger button */
+/* Mobile */
+@media(max-width:480px){
+  }
+
+
+/* ═══════════════════════════════════════════════
+   COMPARADOR PANEL — único set CSS definitivo
+   ═══════════════════════════════════════════════ */
+#cmpOverlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.45);
+  z-index: 800;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+#cmpOverlay.open { display: block }
+
+#cmpPanel {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: 360px;
+  background: rgba(18,18,22,.94);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-left: 1px solid rgba(255,255,255,.1);
+  z-index: 801;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform .32s cubic-bezier(.4,0,.2,1);
+  box-shadow: -12px 0 48px rgba(0,0,0,.35);
+}
+#cmpPanel.open { transform: translateX(0) }
+
+#cmpPanelHdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 18px 16px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  flex-shrink: 0;
+}
+#cmpPanelSlots {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  scrollbar-width: thin;
+}
+#cmpPanelFooter {
+  padding: 14px 16px 28px;
+  border-top: 1px solid rgba(255,255,255,.08);
+  flex-shrink: 0;
+}
+#cmpPanelBtn {
+  width: 100%;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: not-allowed;
+  transition: all .2s;
+  font-family: var(--font);
+  opacity: .4;
+}
+#cmpPanelBtn:not([disabled]) {
+  opacity: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(232,0,28,.4);
+}
+#cmpPanelBtn:not([disabled]):hover {
+  background: var(--red2);
+  transform: translateY(-1px);
+}
+.cmp-panel-slot-empty {
+  border: 1.5px dashed rgba(255,255,255,.15);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: rgba(255,255,255,.28);
+  font-size: 13px;
+  min-height: 76px;
+}
+.cmp-panel-slot {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  animation: fadeUp .2s ease;
+}
+.cmp-panel-slot:hover { background: rgba(255,255,255,.11) }
+.cmp-slot-thumb {
+  width: 52px; height: 52px;
+  background: rgba(255,255,255,.1);
+  border-radius: 10px;
+  object-fit: contain;
+  padding: 4px;
+  flex-shrink: 0;
+}
+.cmp-slot-info { flex: 1; min-width: 0 }
+.cmp-slot-sku { font-family: var(--font-m); font-size: 10px; color: rgba(255,255,255,.45); font-weight: 600; margin-bottom: 2px }
+.cmp-slot-name { font-size: 12.5px; font-weight: 600; color: #fff; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.cmp-slot-price { font-family: var(--font-d); font-size: 15px; font-weight: 800; color: rgba(255,255,255,.85); margin-top: 2px }
+.cmp-slot-del {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  color: rgba(255,255,255,.4);
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; cursor: pointer; flex-shrink: 0; transition: all .15s;
+}
+.cmp-slot-del:hover { background: rgba(232,0,28,.35); border-color: var(--red); color: #fff }
+#cmpTrigger {
+  position: fixed;
+  bottom: 24px; right: 24px;
+  width: 54px; height: 54px;
+  background: var(--black);
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 750;
+  box-shadow: 0 4px 20px rgba(0,0,0,.4), 0 0 0 3px rgba(232,0,28,.35);
+  transition: all .2s;
+}
+#cmpTrigger.show { display: flex }
+#cmpTrigger:hover { transform: scale(1.1) translateY(-2px) }
+#cmpTriggerCount {
+  position: absolute;
+  top: -4px; right: -4px;
+  background: var(--red);
+  color: #fff;
+  font-size: 11px; font-weight: 800;
+  min-width: 20px; height: 20px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0 5px;
+  font-family: var(--font);
+  border: 2px solid var(--black);
+}
+@media(max-width:480px){ #cmpPanel { width: 100% } }
+
+
+/* ── TOAST ── */
+#toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a1a1a;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  z-index: 9999;
+  white-space: nowrap;
+  border: 1px solid rgba(255,255,255,.1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+  transform: translateX(-50%) translateY(8px);
+}
+#toast.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(-50%) translateY(0);
+}
 
 </style>
 </head>
@@ -7750,6 +8310,7 @@ function _pmBuildModal(id) {
       </div>
     </div>`;
 
+  closeCmpPanel();
   modal.classList.add('open');
   document.body.style.overflow = 'hidden';
   modal.scrollTop = 0;
@@ -8524,51 +9085,93 @@ function closeCmpModal() {
 
 // ── Barra flotante ───────────────────────────────────────────────
 function cmpUpdateBar() {
-  let bar = document.getElementById('cmp-bar');
-  if (!bar) return;
+  const n = CMP.items.length;
 
-  const slots = bar.querySelectorAll('.cmp-slot');
-  slots.forEach((slot, i) => {
-    const p = CMP.items[i];
-    if (p) {
-      slot.className = 'cmp-slot filled';
-      slot.innerHTML = `
-        <img class="cmp-slot-img" src="${p.img}" alt="${p.codigo}" onerror="this.style.opacity='.2'">
-        <div class="cmp-slot-info">
-          <div class="cmp-slot-code">${p.codigo}</div>
-          <div class="cmp-slot-name">${p.nombre.substring(0,30)}…</div>
-        </div>
-        <button class="cmp-slot-remove" onclick="cmpRemove(${p.id})" title="Quitar">✕</button>`;
-    } else {
-      slot.className = 'cmp-slot';
-      slot.innerHTML = `<span class="cmp-slot-empty-label">+ Agregar</span>`;
-    }
-  });
-
-  const compareBtn = bar.querySelector('.cmp-btn-compare');
-  if (compareBtn) {
-    compareBtn.disabled = CMP.items.length < 2;
-    compareBtn.textContent = CMP.items.length >= 2
-      ? `⚖️ Comparar (${CMP.items.length})`
-      : '⚖️ Comparar';
+  // Update trigger button
+  const trigger = document.getElementById('cmpTrigger');
+  if (trigger) {
+    trigger.classList.toggle('show', n > 0);
+    const cnt = document.getElementById('cmpTriggerCount');
+    if (cnt) cnt.textContent = n;
   }
 
-  bar.classList.toggle('open', CMP.items.length > 0);
-  bar.classList.toggle('visible', CMP.items.length > 0);
-  document.body.classList.toggle('cmp-open', CMP.items.length > 0);
+  // Update panel slots
+  const slotsEl = document.getElementById('cmpPanelSlots');
+  if (!slotsEl) return;
+  slotsEl.innerHTML = '';
 
-  // Update card buttons
-  document.querySelectorAll('.btn-cmp').forEach(btn => {
-    const id = parseInt(btn.dataset.id);
+  // Filled slots
+  CMP.items.forEach(p => {
+    const slot = document.createElement('div');
+    slot.className = 'cmp-panel-slot';
+    slot.style.position = 'relative';
+    slot.innerHTML = `
+      <img class="cmp-slot-thumb" src="${p.img}" alt="${p.codigo}"
+           onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 60 60%22%3E%3Crect fill=%22%23333%22 width=%2260%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 font-size=%2222%22 text-anchor=%22middle%22%3E📷%3C/text%3E%3C/svg%3E'">
+      <div class="cmp-slot-info">
+        <div class="cmp-slot-sku">${p.codigo}</div>
+        <div class="cmp-slot-name">${p.nombre}</div>
+        <div class="cmp-slot-price">${fmt(p.ptotal)}</div>
+      </div>
+      <button class="cmp-slot-del" onclick="cmpRemove(${p.id})" title="Quitar">✕</button>`;
+    slotsEl.appendChild(slot);
+  });
+
+  // Empty slots (up to MAX)
+  for (let i = n; i < CMP.MAX; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'cmp-panel-slot-empty';
+    empty.innerHTML = `<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> Agregar producto`;
+    slotsEl.appendChild(empty);
+  }
+
+  // Update panel count
+  const countEl = document.getElementById('cmpPanelCount');
+  if (countEl) countEl.textContent = n === 0 ? 'Sin productos' : `${n} producto${n!==1?'s':''}`;
+
+  // Update compare button
+  const btn = document.getElementById('cmpPanelBtn');
+  if (btn) {
+    if (n >= 2) {
+      btn.removeAttribute('disabled');
+    } else {
+      btn.setAttribute('disabled', '');
+    }
+    btn.textContent = n >= 2 ? `⚖️ Comparar (${n} productos)` : '⚖️ Comparar ahora';
+  }
+
+  // Update card buttons state
+  document.querySelectorAll('.btn-cmp').forEach(b => {
+    const id = parseInt(b.dataset.id);
     const inList = CMP.items.some(x => x.id === id);
-    btn.classList.toggle('added', inList);
-    btn.title = inList ? 'Quitar del comparador' : 'Agregar al comparador';
-    btn.innerHTML = inList
-      ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> En comparador`
-      : `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Comparar`;
+    b.classList.toggle('added', inList);
+    b.title = inList ? 'Quitar del comparador' : 'Agregar al comparador';
+    b.innerHTML = inList
+      ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> En comp.`
+      : `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Comp.`;
   });
 }
 
+function openCmpPanel() {
+  const panel = document.getElementById('cmpPanel');
+  const overlay = document.getElementById('cmpOverlay');
+  if (panel) { panel.classList.add('open'); panel.style.transform = 'translateX(0)'; }
+  if (overlay) { overlay.classList.add('open'); overlay.style.display = 'block'; }
+}
+
+function closeCmpPanel() {
+  const panel = document.getElementById('cmpPanel');
+  const overlay = document.getElementById('cmpOverlay');
+  if (panel) { panel.classList.remove('open'); panel.style.transform = 'translateX(100%)'; }
+  if (overlay) { overlay.classList.remove('open'); overlay.style.display = 'none'; }
+}
+
+function cmpClearAll() {
+  CMP.items = [];
+  cmpUpdateBar();
+  closeCmpPanel();
+  showToast('Comparador vacío');
+}
 
 
 function cmpRemove(id) {
@@ -8580,6 +9183,7 @@ function cmpClear() {
   CMP.items = [];
   cmpUpdateBar();
   closeCmpModal();
+  closeCmpPanel();
 }
 
 
@@ -8935,6 +9539,7 @@ function cmpToggle(id) {
   CMP.items.push(p);
   showToast(`✅ "${p.codigo}" agregado al comparador`);
   cmpUpdateBar();
+  openCmpPanel();
 }
 
 // ── Toast de advertencia (más llamativo) ────────────────────────────────
@@ -10340,21 +10945,24 @@ window.addEventListener('DOMContentLoaded', () => {
 </script>
 <div id="prodModal"></div>
 
-<div id="cmp-bar">
-  <div class="cmp-bar-inner">
-    <div class="cmp-bar-label">⚖️ Comparar</div>
-    <div class="cmp-slots">
-      <div class="cmp-slot"><span class="cmp-slot-empty-label">+ Agregar</span></div>
-      <div class="cmp-slot"><span class="cmp-slot-empty-label">+ Agregar</span></div>
-      <div class="cmp-slot"><span class="cmp-slot-empty-label">+ Agregar</span></div>
-      <div class="cmp-slot"><span class="cmp-slot-empty-label">+ Agregar</span></div>
-    </div>
-    <div class="cmp-bar-actions">
-      <button class="cmp-btn-compare" onclick="cmpRenderModal()" disabled>⚖️ Comparar</button>
-      <button class="cmp-btn-clear" onclick="cmpClear()">✕ Limpiar</button>
-    </div>
-  </div>
+<!-- ── COMPARADOR FLOTANTE (panel lateral derecho) ── -->
+<!-- Botón flotante -->
+<div id="cmpFab" style="display:none">
+  <button class="cmp-fab-btn" onclick="toggleCmpPanel()">
+    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path d="M18 20V10M12 20V4M6 20v-6"/>
+    </svg>
+    <span class="cmp-fab-label">Comparar</span>
+    <span class="cmp-fab-badge" id="cmpFabBadge">0</span>
+  </button>
 </div>
+
+<!-- Overlay -->
+<div id="cmpPanelOverlay" onclick="toggleCmpPanel()"></div>
+
+<!-- Panel deslizante -->
+
+
 <div id="cmpModal"></div>
 
 
@@ -10638,6 +11246,42 @@ window.addEventListener('DOMContentLoaded', () => {
       <div id="apiKeyStatus" style="margin-top:10px;font-size:12px;text-align:center;display:none"></div>
     </div>
   </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     COMPARADOR PANEL LATERAL — Glass iOS style
+     ═══════════════════════════════════════════════════ -->
+<div id="cmpOverlay" onclick="closeCmpPanel()"></div>
+
+<div id="cmpPanel">
+  <div id="cmpPanelHdr">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:36px;height:36px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 2px 10px rgba(232,0,28,.4);flex-shrink:0">⚖️</div>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#fff">Comparador</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.5)" id="cmpPanelCount">0 productos</div>
+      </div>
+    </div>
+    <button onclick="closeCmpPanel()" style="background:rgba(255,255,255,.1);color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.25)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">✕</button>
+  </div>
+
+  <div id="cmpPanelSlots"></div>
+
+  <div id="cmpPanelFooter">
+    <div style="font-size:11px;color:rgba(255,255,255,.35);margin-bottom:12px;text-align:center" id="cmpHint">Agrega 2–4 productos para comparar lado a lado</div>
+    <button id="cmpPanelBtn" onclick="cmpRenderModal()" disabled>
+      ⚖️ Comparar ahora
+    </button>
+    <button onclick="cmpClearAll()" style="width:100%;background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:9px;font-size:12px;font-weight:600;cursor:pointer;margin-top:8px;font-family:var(--font);transition:all .15s" onmouseover="this.style.background='rgba(255,255,255,.12)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
+      Limpiar selección
+    </button>
+  </div>
+</div>
+
+<!-- Trigger button: shows when items added -->
+<div id="cmpTrigger" onclick="openCmpPanel()" style="display:none">
+  <span id="cmpTriggerCount">0</span>
+  ⚖️
 </div>
 
 </body>
