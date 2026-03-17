@@ -6844,10 +6844,13 @@ function checkout() {
 function copyTxt(txt) { navigator.clipboard?.writeText(txt).then(()=>showToast(`Código ${txt} copiado`)); }
 
 function showToast(msg, ms=2800) {
-  qs('toastMsg').textContent=msg;
-  qs('toast').classList.add('show');
+  const toastEl = document.getElementById('toast');
+  const toastMsg = document.getElementById('toastMsg');
+  if (!toastEl) return;
+  if (toastMsg) toastMsg.textContent = msg;
+  toastEl.classList.add('show');
   clearTimeout(showToast._t);
-  showToast._t=setTimeout(()=>qs('toast').classList.remove('show'), ms);
+  showToast._t = setTimeout(() => toastEl.classList.remove('show'), ms);
 }
 
 // ══════════════════════════════════════════════════════════════
