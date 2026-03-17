@@ -4382,7 +4382,166 @@ nav {
   transform: translateX(-50%) translateY(0);
 }
 
+
+/* ── CART ITEMS (citem classes used by renderCart) ── */
+.citem {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0,0,0,.055);
+  align-items: flex-start;
+}
+.citem:last-child { border-bottom: none }
+.citem-img {
+  width: 60px; height: 60px;
+  object-fit: contain;
+  background: rgba(250,250,252,.95);
+  border-radius: 14px;
+  flex-shrink: 0;
+  padding: 5px;
+  border: 1px solid rgba(0,0,0,.06);
+}
+.citem > div { flex: 1; min-width: 0 }
+.citem-name {
+  font-size: 12.5px;
+  color: var(--black);
+  font-weight: 500;
+  line-height: 1.35;
+  margin: 3px 0 5px;
+}
+.citem-code {
+  font-family: var(--font-m);
+  font-size: 10px;
+  color: var(--blue);
+  font-weight: 600;
+}
+.citem-qty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.qbtn {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(0,0,0,.07);
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: background .15s;
+  color: var(--black);
+}
+.qbtn:hover { background: rgba(0,0,0,.14) }
+.qval {
+  font-size: 15px;
+  font-weight: 700;
+  min-width: 22px;
+  text-align: center;
+}
+.citem-price {
+  font-family: var(--font-d);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--black);
+}
+.citem-del {
+  background: none; border: none;
+  color: rgba(0,0,0,.2);
+  padding: 4px; cursor: pointer;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 2px;
+  transition: color .15s;
+}
+.citem-del:hover { color: var(--red) }
+
+
+/* Google Places Autocomplete styling */
+.pac-container {
+  z-index: 9999 !important;
+  font-family: 'Noto Sans', Arial, sans-serif !important;
+  font-size: 13px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,.12) !important;
+  border: 1px solid #E0E0E0 !important;
+  overflow: hidden !important;
+  margin-top: 4px !important;
+}
+.pac-item {
+  padding: 10px 14px !important;
+  cursor: pointer !important;
+  border-top: 1px solid #F5F5F5 !important;
+  line-height: 1.4 !important;
+}
+.pac-item:first-child { border-top: none !important; }
+.pac-item:hover { background: #F5F5F5 !important; }
+.pac-item-query { font-size: 13px !important; color: #1A1A1A !important; font-weight: 600 !important; }
+.pac-matched { color: #E8001C !important; }
+.pac-icon { display: none !important; }
+.pac-item-selected { background: #EAF1FB !important; }
+
+/* Validated address fields */
+input[data-validated="1"] {
+  border-color: var(--green) !important;
+  background: var(--green-p) !important;
+}
+input[data-validated="1"]::after {
+  content: '✅';
+}
+
+/* Address fields get a subtle hint */
+#cDirFact, #cDir {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23BBB' stroke-width='2'%3E%3Cpath d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/%3E%3Ccircle cx='12' cy='10' r='3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 12px center;
+  padding-left: 36px !important;
+}
+
 </style>
+
+<!-- Google Places Autocomplete — configurable via localStorage('sstt_gmaps_key') -->
+<script>
+window._GMAPS_LOADED = false;
+window._GMAPS_CALLBACKS = [];
+window._gmapsReady = function() {
+  window._GMAPS_LOADED = true;
+  window._GMAPS_CALLBACKS.forEach(cb => cb());
+  window._GMAPS_CALLBACKS = [];
+  if (typeof initAddressAutocomplete === 'function') initAddressAutocomplete();
+};
+
+// Load Maps API with key from localStorage or prompt user
+(function() {
+  const key = localStorage.getItem('sstt_gmaps_key');
+  if (!key) return; // Will show fallback hint in cart
+  const s = document.createElement('script');
+  s.src = 'https://maps.googleapis.com/maps/api/js?key=' + key + '&libraries=places&callback=_gmapsReady&language=es&region=CL';
+  s.async = true; s.defer = true;
+  s.onerror = function() { console.warn('[SSTT] Google Maps API key inválida o sin permisos Places'); };
+  document.head.appendChild(s);
+})();
+</script>
+
+
+  <!-- Google Places Autocomplete -->
+  <script>
+    window._gmapsLoaded = false;
+    window._gmapsCallbacks = [];
+    function loadGMapsAPI(apiKey) {
+      if (window._gmapsLoaded) { window._gmapsCallbacks.forEach(fn=>fn()); window._gmapsCallbacks=[]; return; }
+      const s = document.createElement('script');
+      s.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=_onGMapsReady&language=es&region=CL`;
+      s.async = true; s.defer = true;
+      document.head.appendChild(s);
+    }
+    window._onGMapsReady = function() {
+      window._gmapsLoaded = true;
+      window._gmapsCallbacks.forEach(fn=>fn());
+      window._gmapsCallbacks = [];
+    };
+  </script>
 </head>
 <body>
 
@@ -4744,12 +4903,21 @@ nav {
         </div>
         <input type="text" id="cRazon" class="finput" placeholder="Razón social *">
         <input type="text" id="cGiro" class="finput" placeholder="Giro comercial *">
-        <input type="text" id="cDirFact" class="finput" placeholder="Dirección de facturación *">
+        <div style="position:relative">
+  <input type="text" id="cDirFact" class="finput" placeholder="Dirección de facturación *" style="margin:0;padding-right:32px" autocomplete="off">
+  <span id="cDirFactPin" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:.4">📍</span>
+</div>
+<div id="gmapsHint" style="display:none;font-size:11px;color:var(--orange);margin:-4px 0 6px;padding:6px 10px;background:var(--orange-p);border-radius:6px;cursor:pointer" onclick="configGMapsKey()">
+  📍 <strong>Autocompletar con Google Maps</strong> — <span style="text-decoration:underline">Configurar API key</span>
+</div>
         <input type="text" id="cComunaFact" class="finput" placeholder="Comuna de facturación">
       </div>
 
       <div class="frow" style="margin-top:6px"><input type="tel" id="cTel" class="finput" placeholder="Teléfono" style="margin:0"><input type="text" id="cRegion" class="finput" placeholder="Región" value="RM" style="margin:0"></div>
-      <input type="text" id="cDir" class="finput" placeholder="Dirección de despacho *" style="margin-top:6px">
+      <div style="position:relative;margin-top:6px">
+  <input type="text" id="cDir" class="finput" placeholder="Dirección de despacho *" style="margin:0;padding-right:32px" autocomplete="off">
+  <span id="cDirPin" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:.4">📍</span>
+</div>
       <div class="frow" style="margin-top:6px"><input type="text" id="cComuna" class="finput" placeholder="Comuna de despacho (ej: 13101)" style="margin:0"></div>
     </div>
     <div class="cs">
@@ -11399,8 +11567,411 @@ window.addEventListener('DOMContentLoaded', () => {
   `;
   document.head.appendChild(style);
 
+  // 8. Fix cart layout — cartFoot was overflowing and crushing cartBody
+  const cartStyle = document.createElement('style');
+  cartStyle.textContent = `
+    #cartDrawer { display:flex!important; flex-direction:column!important; overflow:hidden!important; }
+    #cartBody { flex:1!important; overflow-y:auto!important; min-height:120px!important; }
+    #cartFoot { flex-shrink:0!important; overflow-y:auto!important; max-height:65vh!important; }
+    .cart-foot { flex-shrink:0!important; overflow-y:auto!important; max-height:65vh!important; }
+    .cart-body { flex:1!important; overflow-y:auto!important; min-height:120px!important; }
+  `;
+  document.head.appendChild(cartStyle);
+
+  // 9. Scroll cart to top when opened
+  const origOpenCart = window.openCart;
+  if (origOpenCart) {
+    window.openCart = function() {
+      origOpenCart();
+      setTimeout(() => {
+        const cb = document.getElementById('cartBody');
+        if (cb) cb.scrollTop = 0;
+      }, 50);
+    };
+  }
+
+  // 9. Fix cart items visibility — ensure .citem elements are not hidden
+  const origRenderCart = window.renderCart;
+  if (origRenderCart) {
+    window.renderCart = function() {
+      origRenderCart();
+      // After render, scroll cart to top so items are visible first
+      setTimeout(() => {
+        const cb = document.getElementById('cartBody');
+        if (cb) cb.scrollTop = 0;
+      }, 10);
+    };
+  }
+
+  // 8. Patch openCart to also init Google Maps autocomplete
+  const _origOC = window.openCart;
+  window.openCart = function() {
+    if (_origOC) _origOC();
+    setTimeout(() => {
+      const apiKey = localStorage.getItem('sstt_gmaps_key');
+      if (apiKey && typeof initPlacesAutocomplete === 'function') {
+        initPlacesAutocomplete();
+      } else if (!apiKey) {
+        // Show hint in despacho area
+        const cDirParent = document.getElementById('cDir')?.parentElement;
+        if (cDirParent && !document.getElementById('gmapsHintDespacho')) {
+          const hint = document.createElement('div');
+          hint.id = 'gmapsHintDespacho';
+          hint.style.cssText = 'font-size:11px;color:var(--blue);margin:4px 0 2px;cursor:pointer;display:flex;align-items:center;gap:5px;padding:6px 10px;background:var(--blue-p);border-radius:6px';
+          hint.innerHTML = '📍 <span onclick="configGMapsKey()" style="text-decoration:underline;cursor:pointer">Activar autocompletado de direcciones con Google Maps</span>';
+          cDirParent.insertAdjacentElement('afterend', hint);
+        }
+      }
+    }, 400);
+  };
+
   console.log('[REPAIR] DOM repair complete');
 })();
+
+
+// ════════════════════════════════════════════════════════
+// GOOGLE PLACES AUTOCOMPLETE — Direcciones validadas
+// ════════════════════════════════════════════════════════
+
+function initAddressAutocomplete() {
+  if (!window.google?.maps?.places) return;
+
+  const fields = ['address_components', 'formatted_address', 'geometry'];
+
+  function makeAutocomplete(inputId, comunaId, context) {
+    const input = document.getElementById(inputId);
+    if (!input) return null;
+
+    const ac = new google.maps.places.Autocomplete(input, {
+      componentRestrictions: { country: 'cl' },
+      fields,
+      types: ['address']
+    });
+
+    // Style the dropdown
+    const pacObserver = new MutationObserver(() => {
+      const container = document.querySelector('.pac-container');
+      if (container) {
+        container.style.zIndex = '9999';
+        container.style.fontFamily = 'Noto Sans, Arial, sans-serif';
+        container.style.fontSize = '13px';
+        container.style.borderRadius = '8px';
+        container.style.boxShadow = '0 4px 20px rgba(0,0,0,.12)';
+        container.style.border = '1px solid #E0E0E0';
+        container.style.overflow = 'hidden';
+        container.style.marginTop = '4px';
+      }
+    });
+    pacObserver.observe(document.body, { childList: true });
+
+    ac.addListener('place_changed', () => {
+      const place = ac.getPlace();
+      if (!place.address_components) return;
+
+      // Extract components
+      let streetNumber = '', route = '', comuna = '', region = '';
+      for (const comp of place.address_components) {
+        const types = comp.types;
+        if (types.includes('street_number'))   streetNumber = comp.long_name;
+        if (types.includes('route'))           route = comp.long_name;
+        if (types.includes('locality') || types.includes('sublocality_level_1')) 
+                                               comuna = comp.long_name;
+        if (types.includes('administrative_area_level_1')) 
+                                               region = comp.short_name;
+      }
+
+      // Fill address field with validated address
+      const fullAddress = place.formatted_address
+        .replace(', Chile', '')
+        .replace(', Región Metropolitana de Santiago', '')
+        .replace(', Región Metropolitana', '');
+      input.value = fullAddress;
+      input.style.borderColor = 'var(--green)';
+      input.style.background = 'var(--green-p)';
+      input.setAttribute('data-validated', '1');
+      input.setAttribute('data-lat', place.geometry?.location?.lat() || '');
+      input.setAttribute('data-lng', place.geometry?.location?.lng() || '');
+
+      // Fill comuna field
+      if (comunaId && comuna) {
+        const comunaEl = document.getElementById(comunaId);
+        if (comunaEl) {
+          comunaEl.value = comuna;
+          comunaEl.style.borderColor = 'var(--green)';
+          comunaEl.style.background = 'var(--green-p)';
+        }
+      }
+
+      // Fill region if available and it's the shipping section
+      if (context === 'despacho' && region) {
+        const regionEl = document.getElementById('cRegion');
+        if (regionEl && !regionEl.value) regionEl.value = region;
+        // Also fill the cotizacion commune field
+        const cotInput = document.getElementById('cotComunaInput');
+        if (cotInput && comuna) cotInput.value = comuna;
+      }
+
+      // Show validated badge
+      showToast('✅ Dirección validada por Google Maps');
+    });
+
+    // On blur — if not validated, reset styling
+    input.addEventListener('blur', function() {
+      if (!this.getAttribute('data-validated')) {
+        this.style.borderColor = '';
+        this.style.background = '';
+      }
+    });
+
+    // On input change — reset validation
+    input.addEventListener('input', function() {
+      this.removeAttribute('data-validated');
+      this.style.borderColor = '';
+      this.style.background = '';
+    });
+
+    return ac;
+  }
+
+  // Init all 4 fields
+  makeAutocomplete('cDirFact',    'cComunaFact', 'facturacion');
+  makeAutocomplete('cDir',        'cComuna',     'despacho');
+
+  // Also handle the cotizacion despacho input (if exists)
+  const cotDir = document.getElementById('cotDir');
+  if (cotDir) makeAutocomplete('cotDir', 'cotComuna', 'despacho');
+}
+
+// Call when cart opens to ensure autocomplete is bound to visible inputs
+const _origOpenCart = window.openCart;
+window.openCart = function() {
+  if (_origOpenCart) _origOpenCart();
+  setTimeout(() => {
+    if (window.google?.maps?.places) initAddressAutocomplete();
+    updateGMapsHint();
+  }, 300);
+};
+
+// Also init on DOMContentLoaded in case Google already loaded
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    if (window.google?.maps?.places) initAddressAutocomplete();
+  });
+} else {
+  if (window.google?.maps?.places) initAddressAutocomplete();
+}
+
+
+function configGMapsKey() {
+  const current = localStorage.getItem('sstt_gmaps_key') || '';
+  const key = prompt('Ingresa tu Google Maps API Key (debe tener Places API habilitada):', current);
+  if (key === null) return;
+  if (key.trim()) {
+    localStorage.setItem('sstt_gmaps_key', key.trim());
+    showToast('✅ API Key guardada — recarga la página para activar autocompletado');
+    setTimeout(() => location.reload(), 1500);
+  } else {
+    localStorage.removeItem('sstt_gmaps_key');
+    showToast('🗑 API Key eliminada');
+  }
+}
+
+// Show/hide gmaps hint based on key presence
+function updateGMapsHint() {
+  const hint = document.getElementById('gmapsHint');
+  if (!hint) return;
+  const key = localStorage.getItem('sstt_gmaps_key');
+  // Show hint only if no key AND cart is open
+  hint.style.display = (!key && !window._GMAPS_LOADED) ? 'block' : 'none';
+}
+
+
+
+// ════════════════════════════════════════════════════════════════════════════
+// GOOGLE PLACES AUTOCOMPLETE — Dirección de despacho y facturación
+// ════════════════════════════════════════════════════════════════════════════
+
+// Storage key for GMaps API key
+const GMAPS_KEY_STORAGE = 'sstt_gmaps_key';
+
+function configGMapsKey() {
+  const saved = localStorage.getItem(GMAPS_KEY_STORAGE) || '';
+  const key = prompt('🗺️ Ingresa tu Google Maps API Key\n(obtén una en console.cloud.google.com)', saved);
+  if (key && key.trim()) {
+    localStorage.setItem(GMAPS_KEY_STORAGE, key.trim());
+    initPlacesAutocomplete();
+    showToast('✅ Google Maps configurado');
+  }
+}
+
+function initPlacesAutocomplete() {
+  const apiKey = localStorage.getItem(GMAPS_KEY_STORAGE);
+  if (!apiKey) return;
+
+  const doInit = () => {
+    setupAutocomplete('cDir',     'cComuna',     null,         'despacho');
+    setupAutocomplete('cDirFact', 'cComunaFact', 'cRegion',    'facturación');
+    // Show pin icons as green when ready
+    ['cDirPin','cDirFactPin'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) { el.style.opacity = '1'; el.textContent = '📍'; }
+    });
+  };
+
+  if (window._gmapsLoaded) {
+    doInit();
+  } else {
+    window._gmapsCallbacks.push(doInit);
+    loadGMapsAPI(apiKey);
+  }
+}
+
+function setupAutocomplete(inputId, comunaId, regionId, label) {
+  const input = document.getElementById(inputId);
+  if (!input || !window.google?.maps?.places) return;
+
+  // Restrict to Chile, prefer street addresses
+  const ac = new google.maps.places.Autocomplete(input, {
+    componentRestrictions: { country: 'cl' },
+    types: ['address'],
+    fields: ['address_components','formatted_address','geometry'],
+    language: 'es'
+  });
+
+  // Style the pac-container (autocomplete dropdown)
+  if (!document.getElementById('gmaps-style')) {
+    const style = document.createElement('style');
+    style.id = 'gmaps-style';
+    style.textContent = `
+      .pac-container {
+        border-radius: 8px !important;
+        border: 1.5px solid var(--g5) !important;
+        box-shadow: 0 8px 24px rgba(0,0,0,.12) !important;
+        font-family: var(--font) !important;
+        z-index: 9999 !important;
+        margin-top: 4px !important;
+      }
+      .pac-item {
+        padding: 8px 14px !important;
+        font-size: 13px !important;
+        cursor: pointer !important;
+        border-top: 1px solid var(--g5) !important;
+        line-height: 1.4 !important;
+      }
+      .pac-item:first-child { border-top: none !important; }
+      .pac-item:hover, .pac-item-selected { background: var(--g6) !important; }
+      .pac-item-query { font-weight: 600 !important; color: var(--black) !important; }
+      .pac-matched { color: var(--red) !important; font-weight: 700 !important; }
+      .pac-icon { display: none !important; }
+    `;
+    document.head.appendChild(style);
+  }
+
+  ac.addListener('place_changed', () => {
+    const place = ac.getPlace();
+    if (!place.address_components) return;
+
+    // Extract components
+    const get = (type) => {
+      const comp = place.address_components.find(c => c.types.includes(type));
+      return comp ? comp.long_name : '';
+    };
+    const getShort = (type) => {
+      const comp = place.address_components.find(c => c.types.includes(type));
+      return comp ? comp.short_name : '';
+    };
+
+    // Build full street address (street + number)
+    const street     = get('route');
+    const number     = get('street_number');
+    const comune     = get('locality') || get('sublocality_level_1') || get('administrative_area_level_3');
+    const region     = get('administrative_area_level_1');
+    const postalCode = get('postal_code');
+
+    // Set the address field to formatted street address
+    const fullStreet = number ? `${street} ${number}` : street;
+    input.value = fullStreet || place.formatted_address;
+
+    // Mark input as verified
+    input.style.borderColor = 'var(--green)';
+    input.style.background = 'var(--green-p)';
+    const pin = document.getElementById(inputId === 'cDir' ? 'cDirPin' : 'cDirFactPin');
+    if (pin) pin.textContent = '✅';
+
+    // Fill related fields
+    if (comunaId) {
+      const comunaEl = document.getElementById(comunaId);
+      if (comunaEl && comune) {
+        comunaEl.value = comune;
+        comunaEl.style.borderColor = 'var(--green)';
+      }
+    }
+    if (regionId) {
+      const regionEl = document.getElementById(regionId);
+      if (regionEl && region) {
+        regionEl.value = region;
+        regionEl.style.borderColor = 'var(--green)';
+      }
+    }
+
+    // Show confirmation toast
+    showToast(`📍 ${label === 'despacho' ? 'Despacho' : 'Facturación'}: ${comune || place.formatted_address}`);
+  });
+
+  // Reset visual state on manual edit
+  input.addEventListener('input', () => {
+    input.style.borderColor = '';
+    input.style.background = '';
+    const pin = document.getElementById(inputId === 'cDir' ? 'cDirPin' : 'cDirFactPin');
+    if (pin) { pin.textContent = '📍'; pin.style.opacity = '1'; }
+  });
+
+  console.log(`[GMaps] Autocomplete ready for #${inputId}`);
+}
+
+// ── Auto-init when cart opens ──────────────────────────────────────────────
+const _origOpenCart = typeof openCart === 'function' ? openCart : null;
+function openCartWithMaps() {
+  if (_origOpenCart) _origOpenCart();
+  // Init autocomplete after a short delay so inputs are visible
+  setTimeout(() => {
+    const apiKey = localStorage.getItem(GMAPS_KEY_STORAGE);
+    if (apiKey) {
+      initPlacesAutocomplete();
+    } else {
+      // Show hint to configure
+      const hint = document.getElementById('gmapsHint');
+      if (hint) hint.style.display = 'block';
+    }
+  }, 300);
+}
+
+// Patch openCart
+document.addEventListener('DOMContentLoaded', () => {
+  // Try to init on page load too (cart might already be open)
+  const apiKey = localStorage.getItem(GMAPS_KEY_STORAGE);
+  if (apiKey) {
+    setTimeout(initPlacesAutocomplete, 1000);
+  }
+});
+
+// Also show gmapsHint in despacho section
+function _showGMapsHintIfNeeded() {
+  const apiKey = localStorage.getItem(GMAPS_KEY_STORAGE);
+  const cDir = document.getElementById('cDir');
+  if (cDir && !apiKey) {
+    // Insert hint after cDir if not already there
+    let hint = document.getElementById('gmapsHintDespacho');
+    if (!hint && cDir.parentElement) {
+      hint = document.createElement('div');
+      hint.id = 'gmapsHintDespacho';
+      hint.style.cssText = 'font-size:11px;color:var(--blue);margin:4px 0 2px;cursor:pointer;display:flex;align-items:center;gap:5px';
+      hint.innerHTML = '📍 <span style="text-decoration:underline" onclick="configGMapsKey()">Activar autocompletado con Google Maps</span>';
+      cDir.parentElement.insertAdjacentElement('afterend', hint);
+    }
+  }
+}
+
 </script>
 
 </body>
