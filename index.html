@@ -11292,5 +11292,70 @@ window.addEventListener('DOMContentLoaded', () => {
   ⚖️
 </div>
 
+
+<script>
+/* ── REPAIR SCRIPT: Fix DOM structure if elements are misplaced ── */
+(function() {
+  // 1. Move prodModal to body if it's inside any section
+  const prodModal = document.getElementById('prodModal');
+  if (prodModal && prodModal.parentElement !== document.body) {
+    document.body.appendChild(prodModal);
+  }
+
+  // 2. Move secAcademia to correct position (after secAsistente) if misplaced
+  const secAcademia = document.getElementById('secAcademia');
+  const secAsistente = document.getElementById('secAsistente');
+  if (secAcademia && secAsistente && secAsistente.contains(secAcademia)) {
+    secAsistente.parentNode.insertBefore(secAcademia, secAsistente.nextSibling);
+  }
+
+  // 3. Move any other misplaced modals/sections
+  ['sceneModal','cmpModal','vmod'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.parentElement !== document.body && 
+        el.parentElement?.classList?.contains('app-section')) {
+      document.body.appendChild(el);
+    }
+  });
+
+  // 4. Fix showToast to never crash
+  const origShowToast = window.showToast;
+  window.showToast = function(msg, ms) {
+    try {
+      let t = document.getElementById('toast');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'toast';
+        t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;z-index:9999;white-space:nowrap;display:none;align-items:center;gap:8px';
+        document.body.appendChild(t);
+      }
+      t.textContent = msg || '';
+      t.style.display = 'flex';
+      clearTimeout(window._toastT);
+      window._toastT = setTimeout(() => { t.style.display = 'none'; }, ms || 2800);
+    } catch(e) { console.warn('toast error:', e); }
+  };
+
+  // 5. Fix openCmpPanel / closeCmpPanel
+  window.openCmpPanel = function() {
+    const p = document.getElementById('cmpPanel');
+    const o = document.getElementById('cmpOverlay');
+    if (p) { p.classList.add('open'); p.style.transform = 'translateX(0)'; }
+    if (o) { o.classList.add('open'); o.style.display = 'block'; }
+  };
+  window.closeCmpPanel = function() {
+    const p = document.getElementById('cmpPanel');
+    const o = document.getElementById('cmpOverlay');
+    if (p) { p.classList.remove('open'); p.style.transform = 'translateX(100%)'; }
+    if (o) { o.classList.remove('open'); o.style.display = 'none'; }
+  };
+
+  // 6. Fix body overflow that can get stuck
+  document.body.style.overflow = '';
+
+  console.log('[REPAIR] DOM repair complete');
+})();
+</script>
+
 </body>
 </html>
