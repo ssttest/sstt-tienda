@@ -11353,6 +11353,52 @@ window.addEventListener('DOMContentLoaded', () => {
   // 6. Fix body overflow that can get stuck
   document.body.style.overflow = '';
 
+  // 7. Fix cmpModal CSS — ensure it's always a proper fixed overlay
+  const existingCmpModal = document.getElementById('cmpModal');
+  if (existingCmpModal) {
+    // It already exists — fix its position
+    existingCmpModal.style.position = 'fixed';
+    existingCmpModal.style.inset = '0';
+    existingCmpModal.style.zIndex = '950';
+    existingCmpModal.style.background = 'rgba(0,0,0,.55)';
+    existingCmpModal.style.display = existingCmpModal.classList.contains('open') ? 'flex' : 'none';
+    existingCmpModal.style.alignItems = 'flex-start';
+    existingCmpModal.style.justifyContent = 'center';
+    existingCmpModal.style.overflowY = 'auto';
+    existingCmpModal.style.padding = '20px';
+  }
+
+  // Patch cmpRenderModal to always fix styles after opening
+  const origCmpRenderModal = window.cmpRenderModal;
+  if (origCmpRenderModal) {
+    window.cmpRenderModal = function() {
+      origCmpRenderModal();
+      const m = document.getElementById('cmpModal');
+      if (m) {
+        m.style.cssText = 'position:fixed!important;inset:0!important;z-index:950!important;background:rgba(0,0,0,.55)!important;display:flex!important;align-items:flex-start!important;justify-content:center!important;overflow-y:auto!important;padding:20px!important;backdrop-filter:blur(4px)';
+      }
+    };
+  }
+
+  // Patch closeCmpModal too
+  const origCloseCmpModal = window.closeCmpModal;
+  window.closeCmpModal = function() {
+    if (origCloseCmpModal) origCloseCmpModal();
+    const m = document.getElementById('cmpModal');
+    if (m) { m.style.display = 'none'; m.classList.remove('open'); }
+    document.body.style.overflow = '';
+  };
+
+  // Inject guaranteed CSS for modal-overlay
+  const style = document.createElement('style');
+  style.textContent = `
+    .modal-overlay { position:fixed!important; inset:0!important; z-index:900!important; background:rgba(0,0,0,.5); display:none; align-items:center; justify-content:center; backdrop-filter:blur(4px); overflow-y:auto; padding:20px; }
+    .modal-overlay.open { display:flex!important; }
+    #cmpModal.open { display:flex!important; position:fixed!important; inset:0!important; z-index:950!important; align-items:flex-start!important; justify-content:center!important; overflow-y:auto!important; padding:20px!important; }
+    #prodModal.open { display:flex!important; position:fixed!important; inset:0!important; z-index:850!important; overflow-y:auto!important; padding:30px 16px!important; align-items:flex-start!important; justify-content:center!important; }
+  `;
+  document.head.appendChild(style);
+
   console.log('[REPAIR] DOM repair complete');
 })();
 </script>
