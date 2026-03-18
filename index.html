@@ -4786,22 +4786,15 @@ window._gmapsReady = function() {
 <!-- HEADER -->
 <header>
   <div class="wrap header-inner">
-    <a href="#" class="logo" onclick="showSection('catalogo',document.querySelector('.mnav-tab'))">
-      <div class="logo-mark">
-        <div class="logo-mark-main">
-          <div class="logo-a-wrap">
-            <div class="logo-swoosh"></div>
-            <span class="logo-a">a</span>
-          </div>
-          <span class="logo-rest">SSTT</span>
-        </div>
-        <div class="logo-tech">Technology</div>
-      </div>
+    <a href="#" class="logo" onclick="showSection('catalogo',document.querySelector('.mnav-tab'))" style="display:flex;align-items:center;gap:14px;text-decoration:none">
+      <img src="data:image/png;base64,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"
+           alt="Dahua Technology"
+           style="height:46px;width:auto;object-fit:contain;display:block">
       <div class="logo-divider"></div>
       <div class="logo-dist">
-        <span class="logo-dist-main">Distribuidor Oficial</span>
-        <span class="logo-dist-sub">Dahua Technology · Chile</span>
-        <span class="logo-dist-badge">OFICIAL</span>
+        <span class="logo-dist-main">SSTT SpA</span>
+        <span class="logo-dist-sub">Distribuidor Oficial · Dahua Technology · Chile</span>
+        
       </div>
     </a>
 
@@ -5499,13 +5492,6 @@ window._gmapsReady = function() {
         </div>
       </div>
     </div>
-    <!-- API KEY BANNER — se oculta cuando hay key -->
-    <div id="aiKeyBanner" style="display:none;display:none;background:#FFF3E8;border:1px solid #F0C88A;border-radius:10px;padding:11px 15px;margin:0 14px 10px;align-items:center;gap:10px;font-size:12.5px;color:#8B5000">
-      <span style="font-size:18px;flex-shrink:0">🔑</span>
-      <div style="flex:1">
-        <strong>IA no activada</strong> — ingresa tu API Key de Anthropic para usar el asistente y el analizador de escena.
-        <a href="https://console.anthropic.com" target="_blank" style="color:#0057B8;font-weight:600;display:block;margin-top:2px;font-size:11.5px">→ Obtener key en console.anthropic.com</a>
-      </div>
       <button onclick="showApiKeyModal()" style="background:#E8001C;color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:var(--font)">⚙️ Configurar</button>
     </div>
     <div class="chat-inp-area">
@@ -6854,7 +6840,16 @@ const CATS = {
 // ═══════════════════════════════════════════════════
 // API via Cloudflare Worker proxy — key guardada en Cloudflare, no en el browser
 const PROXY_URL = 'https://sstt-proxy.ryanodina.workers.dev';
-let ANTHROPIC_API_KEY = ''; // ya no se necesita en el browser
+let ANTHROPIC_API_KEY = ''; // API key en Cloudflare Worker — no se necesita en el browser
+
+// API key no requerida — Cloudflare Worker tiene la key
+function showApiKeyModal() {}
+function closeApiKeyModal() {}
+function saveApiKey() {}
+function clearApiKey() {}
+function showApiKeyStatus() {}
+async function testAndSaveApiKey() {}
+
 
 let S = {
   q:'', cat:'todas', sort:'', chipFilter:'',
@@ -9180,11 +9175,7 @@ renderCart();
 updateAuthUI();
 renderVideos();
 renderDoriEx();
-// Show API key banner if not configured
-if (!ANTHROPIC_API_KEY) {
-  const banner = document.getElementById('aiKeyBanner');
-  if (banner) banner.style.display = 'flex';
-}
+// API key en Cloudflare Worker — no se necesita configurar en el browser
 // Set initial history entry so first "back" goes to #catalogo not exits
 if (!window.location.hash) {
   window.history.replaceState({ section:'catalogo', cat:'todas', q:'', page:1 }, '', '#catalogo');
@@ -11288,125 +11279,19 @@ window.addEventListener('DOMContentLoaded', () => {
 // ════════════════════════════════════════════════
 // API KEY MANAGEMENT
 // ════════════════════════════════════════════════
-function showApiKeyModal() {
-  const modal = document.getElementById('apiKeyModal');
-  modal.style.display = 'flex';
-  const inp = document.getElementById('apiKeyInput');
-  if (inp) {
-    inp.value = ANTHROPIC_API_KEY || '';
-    inp.type = 'password';
-  }
-  // Reset status
-  const st = document.getElementById('apiKeyStatus');
-  if (st) st.style.display = 'none';
-  // Reset button
-  const btn = document.getElementById('apiKeySaveBtn');
-  const ico = document.getElementById('apiKeySaveBtnIcon');
-  const txt = document.getElementById('apiKeySaveBtnTxt');
-  if (btn) btn.disabled = false;
-  if (ico) ico.textContent = '✅';
-  if (txt) txt.textContent = 'Guardar y probar';
-  setTimeout(() => inp?.focus(), 120);
-}
 
-function closeApiKeyModal() {
-  document.getElementById('apiKeyModal').style.display = 'none';
-}
 
-function toggleApiKeyVis() {
-  const inp = document.getElementById('apiKeyInput');
-  const btn = document.getElementById('apiKeyVisBtn');
-  if (!inp) return;
-  inp.type = inp.type === 'password' ? 'text' : 'password';
-  if (btn) btn.textContent = inp.type === 'password' ? '👁' : '🙈';
-}
 
-function clearApiKey() {
-  ANTHROPIC_API_KEY = '';
-  localStorage.removeItem('sstt_apikey');
-  const inp = document.getElementById('apiKeyInput');
-  if (inp) inp.value = '';
-  showApiKeyStatus('🗑 API Key borrada', '#555', '#F5F5F5', '#E0E0E0');
-  updateApiKeyIndicator();
-  // Show banner
-  const banner = document.getElementById('aiKeyBanner');
-  if (banner) banner.style.display = 'flex';
-}
 
-function showApiKeyStatus(msg, color, bg, border) {
-  const st = document.getElementById('apiKeyStatus');
-  if (!st) return;
-  st.style.cssText = `display:flex;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;margin-bottom:14px;align-items:center;gap:8px;color:${color};background:${bg};border:1px solid ${border}`;
-  st.textContent = msg;
-}
 
-async function testAndSaveApiKey() {
-  const inp = document.getElementById('apiKeyInput');
-  const key = inp?.value.trim();
-  if (!key) {
-    showApiKeyStatus('⚠️ Ingresa tu API Key primero', '#8B5000', '#FFF3E8', '#F0C88A');
-    inp?.focus(); return;
-  }
-  if (!key.startsWith('sk-ant-')) {
-    showApiKeyStatus('⚠️ La key debe comenzar con sk-ant-api03- — verifica que la copiaste completa', '#C8001A', '#FFF0F2', '#FFCCCC');
-    inp?.focus(); return;
-  }
 
-  // Loading state
-  const btn = document.getElementById('apiKeySaveBtn');
-  const ico = document.getElementById('apiKeySaveBtnIcon');
-  const txt = document.getElementById('apiKeySaveBtnTxt');
-  if (btn) btn.disabled = true;
-  if (ico) ico.textContent = '⏳';
-  if (txt) txt.textContent = 'Verificando…';
-  showApiKeyStatus('🔄 Probando conexión con Anthropic…', '#0057B8', '#EAF1FB', '#C0D4F0');
 
-  try {
-    const resp = await fetch(PROXY_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 10,
-        messages: [{ role: 'user', content: 'ok' }]
-      })
-    });
-    const data = await resp.json();
 
-    if (data.error) {
-      const msg = data.error.type === 'authentication_error'
-        ? '❌ API Key inválida — verifica que la copiaste completa desde console.anthropic.com'
-        : data.error.type === 'permission_error'
-        ? '⚠️ Sin créditos — recarga créditos en console.anthropic.com/settings/billing'
-        : `❌ Error: \${data.error.message}`;
-      showApiKeyStatus(msg, '#C8001A', '#FFF0F2', '#FFCCCC');
-      if (btn) btn.disabled = false;
-      if (ico) ico.textContent = '✅';
-      if (txt) txt.textContent = 'Guardar y probar';
-      return;
-    }
 
-    // ✅ Éxito
-    ANTHROPIC_API_KEY = key;
-    localStorage.setItem('sstt_apikey', key);
-    showApiKeyStatus('✅ Conexión exitosa — IA activada correctamente', '#1A7F3C', '#EAF6EE', '#B8E8CA');
-    updateApiKeyIndicator();
-    // Hide banner
-    const banner = document.getElementById('aiKeyBanner');
-    if (banner) banner.style.display = 'none';
-    showToast('✅ IA activada — ya puedes usar el asistente y el analizador de escena');
-    setTimeout(closeApiKeyModal, 1800);
 
-  } catch(e) {
-    showApiKeyStatus('❌ No se pudo conectar a Anthropic — revisa tu conexión a internet', '#C8001A', '#FFF0F2', '#FFCCCC');
-    if (btn) btn.disabled = false;
-    if (ico) ico.textContent = '✅';
-    if (txt) txt.textContent = 'Guardar y probar';
-  }
-}
 
-// Alias legacy
-function saveApiKey() { testAndSaveApiKey(); }
+
+
 
 function updateApiKeyIndicator() {
   // Con Cloudflare Worker proxy la IA siempre está activa
@@ -11426,7 +11311,7 @@ window.addEventListener('DOMContentLoaded', () => {
     cfgBtn.className = 'chat-cfg-btn';
     cfgBtn.innerHTML = '⚙️ API';
     cfgBtn.title = 'Configurar API Key';
-    cfgBtn.onclick = showApiKeyModal;
+    cfgBtn.onclick = function() {}; // API en Worker
     cfgBtn.style.cssText = 'margin-left:auto;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;transition:background .15s;flex-shrink:0';
     chatHdr.appendChild(cfgBtn);
   }
@@ -11671,73 +11556,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 <!-- ══════════════ MODAL: API KEY CONFIG ══════════════ -->
-<div id="apiKeyModal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px">
-  <div style="background:#fff;border-radius:14px;width:100%;max-width:500px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.35);animation:fadeUp .22s ease">
 
-    <!-- Header -->
-    <div style="background:#1A1A1A;color:#fff;padding:18px 22px;display:flex;align-items:center;justify-content:space-between">
-      <div>
-        <div style="font-size:17px;font-weight:700;font-family:var(--font-d)">🔑 Configurar IA — API Key Anthropic</div>
-        <div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:3px">Se guarda solo en tu navegador · Nunca sale de tu dispositivo</div>
-      </div>
-      <button onclick="closeApiKeyModal()" style="background:rgba(255,255,255,.12);color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
-    </div>
-
-    <!-- Body -->
-    <div style="padding:22px">
-
-      <!-- Status badge (hidden until test) -->
-      <div id="apiKeyStatus" style="display:none;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;margin-bottom:14px;display:none;align-items:center;gap:8px"></div>
-
-      <!-- Key input -->
-      <div style="margin-bottom:16px">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#666;margin-bottom:7px">Tu API Key</div>
-        <div style="position:relative">
-          <input id="apiKeyInput" type="password"
-            placeholder="sk-ant-api03-..."
-            autocomplete="off" spellcheck="false"
-            style="width:100%;border:1.5px solid #E0E0E0;border-radius:6px;padding:11px 44px 11px 12px;font-size:14px;font-family:monospace;outline:none;transition:border-color .2s;color:#1A1A1A"
-            onfocus="this.style.borderColor='#0057B8'"
-            onblur="this.style.borderColor='#E0E0E0'"
-            onkeydown="if(event.key==='Enter')saveApiKey()">
-          <button onclick="toggleApiKeyVis()" id="apiKeyVisBtn" title="Mostrar/ocultar"
-            style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:#999;padding:2px">👁</button>
-        </div>
-        <div style="font-size:11px;color:#999;margin-top:5px;line-height:1.5">
-          Obtén tu key en <a href="https://console.anthropic.com/keys" target="_blank" style="color:#0057B8;font-weight:600">console.anthropic.com/keys</a> (cuenta separada de Claude.ai, requiere créditos ~$5 USD)
-        </div>
-      </div>
-
-      <!-- Info box -->
-      <div style="background:#F5F5F5;border-radius:8px;padding:13px 15px;margin-bottom:18px;font-size:12.5px;color:#555;line-height:1.75">
-        <strong style="color:#1A1A1A">¿Cómo obtener la key?</strong><br>
-        1. <a href="https://console.anthropic.com" target="_blank" style="color:#0057B8">console.anthropic.com</a> → crear cuenta<br>
-        2. Billing → cargar créditos (mín. $5 USD · ~$0.003 por consulta)<br>
-        3. API Keys → <strong>Create Key</strong> → copiar (empieza con <code style="background:#E8E8E8;padding:1px 5px;border-radius:3px;font-size:11px">sk-ant-</code>)
-      </div>
-
-      <!-- Buttons -->
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button onclick="testAndSaveApiKey()" id="apiKeySaveBtn"
-          style="flex:1;min-width:160px;background:#E8001C;color:#fff;border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:7px"
-          onmouseover="this.style.background='#C8001A'" onmouseout="this.style.background='#E8001C'">
-          <span id="apiKeySaveBtnIcon">✅</span> <span id="apiKeySaveBtnTxt">Guardar y probar</span>
-        </button>
-        <button onclick="clearApiKey()"
-          style="background:#F5F5F5;color:#555;border:1.5px solid #E0E0E0;border-radius:8px;padding:13px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;font-family:var(--font)"
-          onmouseover="this.style.background='#EBEBEB'" onmouseout="this.style.background='#F5F5F5'">
-          🗑 Borrar key
-        </button>
-        <button onclick="closeApiKeyModal()"
-          style="background:#fff;color:#555;border:1.5px solid #E0E0E0;border-radius:8px;padding:13px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;font-family:var(--font)"
-          onmouseover="this.style.background='#F5F5F5'" onmouseout="this.style.background='#fff'">
-          Cancelar
-        </button>
-      </div>
-
-    </div>
-  </div>
-</div>
 
 <!-- ═══════════════════════════════════════════════════
      COMPARADOR PANEL LATERAL — Glass iOS style
