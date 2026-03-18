@@ -10275,7 +10275,7 @@ function goToStep(n) {
     drawToCanvas('step2Canvas', sceneCapture);
     inferPhoneSpecs();
   }
-  if (n===3) runAnalysis();
+  // n===3: el análisis se lanza desde el botón, no desde goToStep
   if (n===4) renderSimulation();
 }
 
@@ -10677,6 +10677,41 @@ function inferPhoneSpecs() {
 }
 
 // ── STEP 3: RUN AI ANALYSIS ──────────────────────────────────────
+
+// Navegar al paso sin re-lanzar runAnalysis
+function _goToStepUI(n) {
+  sceneStep = n;
+  [1,2,3,4].forEach(i => {
+    document.getElementById('sceneStep'+i)?.classList.toggle('active', i===n);
+    const ind = document.getElementById('step'+i+'Ind');
+    if (ind) {
+      ind.classList.toggle('active', i===n);
+      ind.classList.toggle('done', i<n);
+    }
+  });
+  if (n===4) renderSimulation();
+}
+
+// ── COMPRIMIR IMAGEN PARA ANÁLISIS IA (reduce payload al Worker) ──────────────
+function compressImage(dataUrl, maxSize, quality) {
+  return new Promise(resolve => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      let w = img.width, h = img.height;
+      if (w > maxSize || h > maxSize) {
+        if (w > h) { h = Math.round(h * maxSize / w); w = maxSize; }
+        else       { w = Math.round(w * maxSize / h); h = maxSize; }
+      }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => resolve(dataUrl); // fallback sin comprimir
+    img.src = dataUrl;
+  });
+}
+
 async function analyzeScene() { return runAnalysis(); }
 async function runAnalysis() {
   if (!sceneCapture) {
@@ -10708,8 +10743,9 @@ async function runAnalysis() {
     if (si < steps.length) stepEl.textContent = steps[si++];
   }, 1200);
 
-  // Build base64 for Claude Vision (strip header)
-  const b64 = sceneCapture.split(',')[1];
+  // Comprimir imagen antes de enviar (max 800px, calidad 0.7) para no superar límite Worker
+  const compressedCapture = await compressImage(sceneCapture, 800, 0.72);
+  const b64 = compressedCapture.split(',')[1];
   const debugLog = document.getElementById('analysisDebugLog');
   function dbg(msg) {
     console.log('[Scene]', msg);
@@ -10722,9 +10758,12 @@ async function runAnalysis() {
   dbg('📸 Imagen: ' + Math.round(b64.length/1024) + 'KB');
   dbg('🔑 Key: ' + (ANTHROPIC_API_KEY ? ANTHROPIC_API_KEY.slice(0,12)+'...' : 'NO KEY'));
 
-  // Sample top products for context (limit to ~80 most relevant)
-  const prodSample = PRODUCTS.slice(0,80)
-    .map(p => `${p.codigo}: ${p.nombre} $${p.ptotal?.toLocaleString('es-CL')||'—'}`)
+  // Sample productos más relevantes según categorías comunes (reducido para no superar límite Worker)
+  const camCats = ['camaras-ip','camaras-hdcvi','camaras-ptz'];
+  const prodSample = PRODUCTS
+    .filter(p => camCats.includes(p.cat))
+    .slice(0, 30)
+    .map(p => `${p.codigo}: ${p.nombre.slice(0,60)} $${p.ptotal?.toLocaleString('es-CL')||'—'}`)
     .join('\n');
 
   const systemPrompt = `Eres el Asesor Técnico de SSTT®, distribuidor Dahua Chile. 
@@ -10834,18 +10873,18 @@ USA SOLO códigos que existen en el catálogo. Responde ÚNICAMENTE con JSON vá
     raw = raw.replace(/```json\n?/g,'').replace(/```\n?/g,'').trim();
     try {
       sceneAnalysis = JSON.parse(raw);
-      goToStep(3);
+      _goToStepUI(3);
     } catch(parseErr) {
       document.getElementById('analysisLoading').style.display = 'none';
       document.getElementById('analysisResult').style.display = 'block';
-      goToStep(3);
+      _goToStepUI(3);
       document.getElementById('analysisContent').innerHTML = `
         <div style="color:var(--red);font-weight:700;font-size:15px;margin-bottom:10px">⚠️ Error al parsear respuesta</div>
         <div style="background:#FFF0F0;border:1px solid #FFCCCC;border-radius:6px;padding:12px;font-size:12px;font-family:monospace;color:#333;white-space:pre-wrap;overflow:auto;max-height:200px">${raw.slice(0,500)}</div>`;
       return;
     }
     renderAnalysisResult();
-    goToStep(3);
+    _goToStepUI(3);
 
   } catch(e) {
     clearInterval(loadInterval);
