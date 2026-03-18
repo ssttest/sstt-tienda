@@ -12575,37 +12575,16 @@ async function oiAnalyze() {
   oiSetStatus('🔄 La IA está leyendo el pedido y buscando productos en el catálogo…', 'loading');
 
   // Preparar catálogo para el prompt
-  const catalogoTxt = PRODUCTS.map(p => p.codigo+'|'+p.nombre.slice(0,60)+'|'+p.ptotal).join('\n');
-
   const systemPrompt = `Eres un asistente de ventas de SSTT SpA, distribuidor Dahua Chile.
-Tu tarea es leer una lista de pedido (puede ser imagen de correo, captura de pantalla o texto) e identificar los productos solicitados.
-
-CATÁLOGO DISPONIBLE (formato: CODIGO|NOMBRE|PRECIO):
-${catalogoTxt}
+Tu tarea es leer una lista de pedido (imagen o texto) y extraer los productos solicitados.
 
 INSTRUCCIONES:
-- Analiza el pedido e identifica cada ítem con su cantidad
-- Para cada ítem, busca el código más parecido en el catálogo (normaliza: ignora DH- prefijo, -N/-P sufijos, lentes como 0280=2.8mm)
-- Si hay coincidencia clara, incluye el código del catálogo
-- Si no hay coincidencia exacta, busca la opción más similar
-- Responde SOLO con JSON válido, sin markdown
+- Extrae cada ítem del pedido con su cantidad y código/descripción
+- NO busques en catálogo — solo extrae lo que dice el pedido
+- Responde SOLO con JSON válido, sin markdown, sin texto adicional
 
-FORMATO DE RESPUESTA:
-{
-  "items": [
-    {
-      "qty": número,
-      "descripcion_original": "texto tal como aparece en el pedido",
-      "codigo_catalogo": "CODIGO_EXACTO o null si no encontrado",
-      "nombre_catalogo": "nombre del producto encontrado o null",
-      "precio_unitario": número o null,
-      "confianza": "alta|media|baja",
-      "nota": "explicación breve si hay dudas"
-    }
-  ],
-  "resumen": "resumen en 1 línea del pedido",
-  "no_encontrados": ["lista de ítems sin match en el catálogo"]
-}`;
+FORMATO EXACTO:
+{"items":[{"qty":1,"codigo_pedido":"CODIGO-TAL-COMO-APARECE","descripcion":"descripcion breve"}],"resumen":"resumen 1 linea"}`;
 
   try {
     let messages;
@@ -12648,8 +12627,9 @@ Responde SOLO con el JSON indicado.`
 
     let raw = data.content?.[0]?.text || '';
     raw = raw.replace(/```json[\s\S]?/g,'').replace(/```/g,'').trim();
-    const result = JSON.parse(raw);
-
+    const resultRaw = JSON.parse(raw);
+    // JS hace el match con el catálogo (más confiable que pedirle a la IA)
+    const result = oiMatchCatalog(resultRaw);
     oiRenderResult(result);
 
   } catch(e) {
@@ -12659,6 +12639,69 @@ Responde SOLO con el JSON indicado.`
     ico.textContent = '🤖';
     txt.textContent = 'Reintentar';
   }
+}
+
+function oiMatchCatalog(raw) {
+  // Normaliza un código para comparación
+  function norm(s) {
+    return (s||'').toUpperCase()
+      .replace(/^DH-/,'')
+      .replace(/-[NP](-|$)/g,'$1')
+      .replace(/\b0(\d)(\d\d)\b/g,(_,a,b)=>a+b)
+      .replace(/[-_\s]/g,'');
+  }
+
+  const items = (raw.items || []).map(item => {
+    const qCode = item.codigo_pedido || '';
+    const qNorm = norm(qCode);
+    const qLow  = qCode.toLowerCase();
+
+    // Buscar en catálogo por múltiples criterios
+    let best = null, bestScore = 0;
+
+    for (const p of PRODUCTS) {
+      const pNorm = norm(p.codigo);
+      const pLow  = p.codigo.toLowerCase();
+      let score = 0;
+
+      if (pLow  === qLow)             score = 100;
+      else if (pNorm === qNorm)       score = 99;
+      else if (pLow.startsWith(qLow)) score = 90;
+      else if (pNorm.startsWith(qNorm)) score = 88;
+      else if (qNorm.startsWith(pNorm) && pNorm.length > 5) score = 85;
+      else if (pLow.includes(qLow) && qLow.length > 5)     score = 75;
+      else if (pNorm.includes(qNorm) && qNorm.length > 5)  score = 72;
+      else {
+        // Variante: probar sin sufijos como -S2, -S3, -S4, -S6
+        const qBase = qNorm.replace(/-?S\d+$/, '');
+        const pBase = pNorm.replace(/-?S\d+$/, '');
+        if (qBase.length > 6 && pBase === qBase) score = 82;
+        else if (qBase.length > 6 && pBase.startsWith(qBase)) score = 70;
+      }
+
+      if (score > bestScore) { bestScore = score; best = p; }
+      if (score === 100) break;
+    }
+
+    const confianza = bestScore >= 90 ? 'alta' : bestScore >= 70 ? 'media' : bestScore > 0 ? 'baja' : null;
+
+    return {
+      qty: item.qty || 1,
+      descripcion_original: item.descripcion || item.codigo_pedido,
+      codigo_pedido: qCode,
+      codigo_catalogo: best && bestScore >= 60 ? best.codigo : null,
+      nombre_catalogo: best && bestScore >= 60 ? best.nombre : null,
+      precio_unitario: best && bestScore >= 60 ? best.ptotal : null,
+      confianza: confianza || 'baja',
+      score: bestScore,
+    };
+  });
+
+  const noEncontrados = items
+    .filter(i => !i.codigo_catalogo)
+    .map(i => i.codigo_pedido || i.descripcion_original);
+
+  return { items, resumen: raw.resumen || '', no_encontrados: noEncontrados };
 }
 
 function oiRenderResult(result) {
