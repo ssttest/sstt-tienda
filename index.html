@@ -89,6 +89,7 @@ body {
   background: var(--white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 a  { color:inherit; text-decoration:none }
 button { font-family:var(--font); cursor:pointer }
@@ -4499,6 +4500,101 @@ input[data-validated="1"]::after {
   padding-left: 36px !important;
 }
 
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE PRINCIPAL — mobile first
+   ═══════════════════════════════════════════════════ */
+
+/* ── Tablet / small desktop ── */
+@media(max-width:1024px){
+  .header-inner { grid-template-columns: auto 1fr auto; gap:12px; }
+  .logo-divider, .logo-dist { display:none }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-techs { display:none }
+  .hero-stats { flex-wrap:wrap; gap:16px; }
+  .main-wrap { grid-template-columns: 180px 1fr; }
+}
+
+/* ── Mobile (≤768px) ── */
+@media(max-width:768px){
+  /* Header */
+  .topbar { display:none }
+  .header-inner {
+    grid-template-columns: 1fr auto;
+    gap: 10px;
+    height: 56px;
+    padding: 0 14px;
+  }
+  .logo-divider, .logo-dist { display:none }
+  .search-wrap { display:none }
+  .mob-search { display:block }
+  .hbtn span { display:none }
+  .hbtn { padding:8px 10px; gap:0 }
+
+  /* Module nav */
+  .module-nav { top: 56px }
+  nav { top: 102px }
+
+  /* Hero */
+  .hero { padding: 36px 0 40px }
+  .hero-inner { grid-template-columns: 1fr; gap:24px; }
+  .hero-techs { display:none }
+  .hero-title { font-size:34px }
+  .hero-sub { font-size:13px; margin-bottom:20px }
+  .hero-btns { gap:8px }
+  .hero-stats { flex-wrap:wrap; gap:0; padding-top:20px; }
+  .hero-stat { margin-right:16px; padding-right:16px; margin-bottom:8px; }
+  .hero-stat-n { font-size:28px }
+
+  /* Main layout — sidebar colapsa */
+  .main-wrap { grid-template-columns: 1fr }
+  .sidebar {
+    position: static;
+    max-height: none;
+    border-right: none;
+    border-bottom: 1px solid var(--g5);
+    display: none;
+  }
+  .sidebar.open { display: block }
+
+  /* Catalog */
+  .catalog-area { padding: 12px }
+  .rbar { flex-direction:column; gap:8px; }
+  .rbar-r { width:100%; justify-content:space-between; }
+
+  /* Cards */
+  .pcard-actions {
+    grid-template-columns: 1fr auto auto;
+    gap:4px;
+  }
+
+  /* Cart drawer — full screen on mobile */
+  .cart-drawer {
+    top: 0; right: 0; bottom: 0;
+    width: 100% !important;
+    border-radius: 0 !important;
+  }
+
+  /* bcrum bar */
+  .bcrum-bar .wrap { flex-direction:column; gap:4px; }
+}
+
+/* ── Botón filtros mobile ── */
+@media(max-width:768px){
+  .mob-filter-btn { display:flex !important }
+}
+/* ── Small mobile (≤480px) ── */
+@media(max-width:480px){
+  .hero-title { font-size:28px }
+  .hero-stat { border-right:none; margin-right:12px; padding-right:0 }
+  .logo-a, .logo-rest { font-size:26px }
+  .btn-hero-primary, .btn-hero-outline { padding:11px 18px; font-size:13px }
+  .pcard-name { font-size:12px }
+  .price-total { font-size:19px }
+  .cart-drawer { border-radius:0 !important }
+  .cs { border-radius:12px }
+}
+
 </style>
 
 <!-- Google Places Autocomplete — configurable via localStorage('sstt_gmaps_key') -->
@@ -4907,18 +5003,27 @@ window._gmapsReady = function() {
   <input type="text" id="cDirFact" class="finput" placeholder="Dirección de facturación *" style="margin:0;padding-right:32px" autocomplete="off">
   <span id="cDirFactPin" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:.4">📍</span>
 </div>
+        <input type="text" id="cDeptoFact" class="finput" placeholder="Dpto / Oficina / Local (opcional)">
+        <div class="frow">
+          <input type="text" id="cComunaFact" class="finput" placeholder="Comuna facturación" style="margin:0" readonly>
+          <input type="text" id="cRegionFact" class="finput" placeholder="Región facturación" style="margin:0" readonly>
+        </div>
 <div id="gmapsHint" style="display:none;font-size:11px;color:var(--orange);margin:-4px 0 6px;padding:6px 10px;background:var(--orange-p);border-radius:6px;cursor:pointer" onclick="configGMapsKey()">
   📍 <strong>Autocompletar con Google Maps</strong> — <span style="text-decoration:underline">Configurar API key</span>
 </div>
-        <input type="text" id="cComunaFact" class="finput" placeholder="Comuna de facturación">
+        <input type="text" id="cComunaFact" class="finput" placeholder="Comuna facturación" readonly>
       </div>
 
-      <div class="frow" style="margin-top:6px"><input type="tel" id="cTel" class="finput" placeholder="Teléfono" style="margin:0"><input type="text" id="cRegion" class="finput" placeholder="Región" value="RM" style="margin:0"></div>
+      <input type="tel" id="cTel" class="finput" placeholder="Teléfono" style="margin-top:6px">
       <div style="position:relative;margin-top:6px">
   <input type="text" id="cDir" class="finput" placeholder="Dirección de despacho *" style="margin:0;padding-right:32px" autocomplete="off">
   <span id="cDirPin" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:.4">📍</span>
 </div>
-      <div class="frow" style="margin-top:6px"><input type="text" id="cComuna" class="finput" placeholder="Comuna de despacho (ej: 13101)" style="margin:0"></div>
+      <input type="text" id="cDepto" class="finput" placeholder="Dpto / Casa / Oficina / Local (opcional)" style="margin-top:6px">
+      <div class="frow" style="margin-top:6px">
+        <input type="text" id="cComuna" class="finput" placeholder="Comuna" style="margin:0" readonly>
+        <input type="text" id="cRegionAuto" class="finput" placeholder="Región" style="margin:0" readonly>
+      </div>
     </div>
     <div class="cs">
       <div class="cs-title">
@@ -11702,13 +11807,22 @@ function initAddressAutocomplete() {
         }
       }
 
-      // Fill region if available and it's the shipping section
-      if (context === 'despacho' && region) {
-        const regionEl = document.getElementById('cRegion');
-        if (regionEl && !regionEl.value) regionEl.value = region;
-        // Also fill the cotizacion commune field
-        const cotInput = document.getElementById('cotComunaInput');
-        if (cotInput && comuna) cotInput.value = comuna;
+      // Fill region automatically
+      if (region) {
+        // Despacho: fill cRegionAuto (new inline field)
+        if (context === 'despacho' || inputId === 'cDir') {
+          const rEl = document.getElementById('cRegionAuto');
+          if (rEl) { rEl.value = region; rEl.style.borderColor='var(--green)'; rEl.style.background='var(--green-p)'; }
+          const rEl2 = document.getElementById('cRegion');
+          if (rEl2) rEl2.value = region;
+          const cotInput = document.getElementById('cotComunaInput');
+          if (cotInput && comuna) cotInput.value = comuna;
+        }
+        // Facturación: fill cRegionFact
+        if (context === 'facturación' || inputId === 'cDirFact') {
+          const rEl = document.getElementById('cRegionFact');
+          if (rEl) { rEl.value = region; rEl.style.borderColor='var(--green)'; rEl.style.background='var(--green-p)'; }
+        }
       }
 
       // Show validated badge
