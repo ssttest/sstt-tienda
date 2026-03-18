@@ -5106,9 +5106,24 @@ window._gmapsReady = function() {
       </div>
       <div class="cart-head-sub" id="cartSub">0 productos · www.sstt.cl</div>
     </div>
-    <button class="cart-x" onclick="closeCart()">
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-    </button>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button onclick="openOrderImport()" title="Cargar pedido desde imagen o texto"
+        style="display:flex;align-items:center;gap:6px;background:rgba(0,87,184,.1);color:var(--blue);
+               border:1.5px solid rgba(0,87,184,.2);border-radius:10px;padding:7px 12px;
+               font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--font);
+               white-space:nowrap"
+        onmouseover="this.style.background='rgba(0,87,184,.18)'"
+        onmouseout="this.style.background='rgba(0,87,184,.1)'">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+        </svg>
+        Cargar pedido
+      </button>
+      <button class="cart-x" onclick="closeCart()">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
   </div>
   <div class="cart-body" id="cartBody">
     <div class="cart-empty" id="cartEmpty">
@@ -12448,7 +12463,375 @@ function _showGMapsHintIfNeeded() {
   }
 }
 
+
+
+// ════════════════════════════════════════════════════════════════
+// IMPORTADOR DE PEDIDO CON IA
+// ════════════════════════════════════════════════════════════════
+let oiMode = 'img'; // 'img' | 'txt'
+let oiImageB64 = null;
+let oiImageType = 'image/jpeg';
+
+function openOrderImport() {
+  document.getElementById('orderImportModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  oiReset();
+}
+function closeOrderImport() {
+  document.getElementById('orderImportModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function setOITab(mode) {
+  oiMode = mode;
+  const imgPanel = document.getElementById('oiImgPanel');
+  const txtPanel = document.getElementById('oiTxtPanel');
+  const imgTab   = document.getElementById('oimgTab');
+  const txtTab   = document.getElementById('otxtTab');
+  const isImg    = mode === 'img';
+  imgPanel.style.display = isImg ? 'block' : 'none';
+  txtPanel.style.display = isImg ? 'none'  : 'block';
+  imgTab.style.background     = isImg ? '#fff' : 'transparent';
+  imgTab.style.color          = isImg ? 'var(--black)' : 'var(--g3)';
+  imgTab.style.boxShadow      = isImg ? '0 2px 8px rgba(0,0,0,.1)' : 'none';
+  txtTab.style.background     = !isImg ? '#fff' : 'transparent';
+  txtTab.style.color          = !isImg ? 'var(--black)' : 'var(--g3)';
+  txtTab.style.boxShadow      = !isImg ? '0 2px 8px rgba(0,0,0,.1)' : 'none';
+}
+
+function oiReset() {
+  oiImageB64 = null;
+  document.getElementById('oiImgPreview').style.display = 'none';
+  document.getElementById('oiDropZone').style.display = 'block';
+  document.getElementById('oiStatus').style.display = 'none';
+  document.getElementById('oiTextInput').value = '';
+  const btn = document.getElementById('oiAnalyzeBtn');
+  const ico = document.getElementById('oiAnalyzeBtnIcon');
+  const txt = document.getElementById('oiAnalyzeBtnTxt');
+  btn.disabled = false;
+  ico.textContent = '🤖';
+  txt.textContent = 'Interpretar y agregar al carro';
+  setOITab('img');
+}
+
+function oiHandleDrop(e) {
+  e.preventDefault();
+  e.currentTarget.style.borderColor = 'var(--g4)';
+  e.currentTarget.style.background  = 'rgba(0,87,184,.03)';
+  const file = e.dataTransfer.files[0];
+  if (file) oiLoadFile(file);
+}
+
+function oiFileSelected(e) {
+  const file = e.target.files[0];
+  if (file) oiLoadFile(file);
+}
+
+function oiLoadFile(file) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const result = e.target.result;
+    oiImageB64  = result.split(',')[1];
+    oiImageType = file.type || 'image/jpeg';
+    // Preview
+    document.getElementById('oiDropZone').style.display = 'none';
+    document.getElementById('oiImgPreview').style.display = 'block';
+    document.getElementById('oiPreviewImg').src = result;
+    document.getElementById('oiFileName').textContent = file.name + ' · ' + Math.round(file.size/1024) + ' KB';
+  };
+  reader.readAsDataURL(file);
+}
+
+function oiSetStatus(msg, type) {
+  // type: 'loading' | 'success' | 'error' | 'info'
+  const el = document.getElementById('oiStatus');
+  const styles = {
+    loading: 'background:var(--blue-p);border:1px solid var(--blue-p2);color:var(--blue)',
+    success: 'background:var(--green-p);border:1px solid #B8E8CA;color:var(--green)',
+    error:   'background:var(--red-p);border:1px solid #FFCCCC;color:var(--red)',
+    info:    'background:var(--g6);border:1px solid var(--g5);color:var(--g2)',
+  };
+  el.style.cssText = 'display:block;margin-top:12px;border-radius:10px;padding:11px 14px;font-size:13px;font-weight:500;' + (styles[type] || styles.info);
+  el.innerHTML = msg;
+}
+
+async function oiAnalyze() {
+  const btn = document.getElementById('oiAnalyzeBtn');
+  const ico = document.getElementById('oiAnalyzeBtnIcon');
+  const txt = document.getElementById('oiAnalyzeBtnTxt');
+
+  // Validar input
+  if (oiMode === 'img' && !oiImageB64) {
+    oiSetStatus('⚠️ Selecciona o arrastra una imagen primero', 'error'); return;
+  }
+  if (oiMode === 'txt' && !document.getElementById('oiTextInput').value.trim()) {
+    oiSetStatus('⚠️ Ingresa el texto del pedido primero', 'error'); return;
+  }
+
+  // Loading state
+  btn.disabled = true;
+  ico.textContent = '⏳';
+  txt.textContent = 'Interpretando pedido…';
+  oiSetStatus('🔄 La IA está leyendo el pedido y buscando productos en el catálogo…', 'loading');
+
+  // Preparar catálogo para el prompt
+  const catalogoTxt = PRODUCTS.map(p => p.codigo+'|'+p.nombre.slice(0,60)+'|'+p.ptotal).join('\n');
+
+  const systemPrompt = `Eres un asistente de ventas de SSTT SpA, distribuidor Dahua Chile.
+Tu tarea es leer una lista de pedido (puede ser imagen de correo, captura de pantalla o texto) e identificar los productos solicitados.
+
+CATÁLOGO DISPONIBLE (formato: CODIGO|NOMBRE|PRECIO):
+${catalogoTxt}
+
+INSTRUCCIONES:
+- Analiza el pedido e identifica cada ítem con su cantidad
+- Para cada ítem, busca el código más parecido en el catálogo (normaliza: ignora DH- prefijo, -N/-P sufijos, lentes como 0280=2.8mm)
+- Si hay coincidencia clara, incluye el código del catálogo
+- Si no hay coincidencia exacta, busca la opción más similar
+- Responde SOLO con JSON válido, sin markdown
+
+FORMATO DE RESPUESTA:
+{
+  "items": [
+    {
+      "qty": número,
+      "descripcion_original": "texto tal como aparece en el pedido",
+      "codigo_catalogo": "CODIGO_EXACTO o null si no encontrado",
+      "nombre_catalogo": "nombre del producto encontrado o null",
+      "precio_unitario": número o null,
+      "confianza": "alta|media|baja",
+      "nota": "explicación breve si hay dudas"
+    }
+  ],
+  "resumen": "resumen en 1 línea del pedido",
+  "no_encontrados": ["lista de ítems sin match en el catálogo"]
+}`;
+
+  try {
+    let messages;
+    if (oiMode === 'img') {
+      // Comprimir imagen primero
+      const compressed = await compressImage('data:' + oiImageType + ';base64,' + oiImageB64, 1200, 0.82);
+      const b64c = compressed.split(',')[1];
+      messages = [{
+        role: 'user',
+        content: [
+          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: b64c } },
+          { type: 'text', text: 'Lee este pedido/correo y extrae todos los productos con sus cantidades. Responde SOLO con el JSON indicado.' }
+        ]
+      }];
+    } else {
+      const textoInput = document.getElementById('oiTextInput').value.trim();
+      messages = [{
+        role: 'user',
+        content: `Lee este pedido y extrae todos los productos con sus cantidades:
+
+${textoInput}
+
+Responde SOLO con el JSON indicado.`
+      }];
+    }
+
+    const resp = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 2000,
+        system: systemPrompt,
+        messages
+      })
+    });
+
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+
+    let raw = data.content?.[0]?.text || '';
+    raw = raw.replace(/```json[\s\S]?/g,'').replace(/```/g,'').trim();
+    const result = JSON.parse(raw);
+
+    oiRenderResult(result);
+
+  } catch(e) {
+    console.error('OI error:', e);
+    oiSetStatus('❌ Error: ' + e.message, 'error');
+    btn.disabled = false;
+    ico.textContent = '🤖';
+    txt.textContent = 'Reintentar';
+  }
+}
+
+function oiRenderResult(result) {
+  const btn = document.getElementById('oiAnalyzeBtn');
+  const ico = document.getElementById('oiAnalyzeBtnIcon');
+  const txt = document.getElementById('oiAnalyzeBtnTxt');
+
+  const items   = result.items || [];
+  const found   = items.filter(i => i.codigo_catalogo);
+  const missing = result.no_encontrados || items.filter(i => !i.codigo_catalogo).map(i => i.descripcion_original);
+
+  if (!found.length) {
+    oiSetStatus('⚠️ No se encontraron productos en el catálogo. Verifica el pedido.', 'error');
+    btn.disabled = false; ico.textContent = '🤖'; txt.textContent = 'Reintentar';
+    return;
+  }
+
+  // Agregar al carro
+  let added = 0;
+  found.forEach(item => {
+    const prod = PRODUCTS.find(p => p.codigo === item.codigo_catalogo);
+    if (!prod) return;
+    const qty = item.qty || 1;
+    // Verificar si ya está en el carro
+    const existing = S.cart.find(c => c.id === prod.id);
+    if (existing) {
+      existing.qty += qty;
+    } else {
+      S.cart.push({ ...prod, qty });
+    }
+    added++;
+  });
+
+  saveCart(); renderCart(); updateBadge();
+
+  // Construir resumen visual
+  const rowsHTML = found.map(i => {
+    const confColor = i.confianza === 'alta' ? 'var(--green)' : i.confianza === 'media' ? 'var(--orange)' : 'var(--red)';
+    return `<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05);font-size:12px">
+      <span style="background:var(--black);color:#fff;font-weight:800;font-size:10px;padding:2px 7px;border-radius:20px;flex-shrink:0">${i.qty}×</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${i.nombre_catalogo || i.codigo_catalogo}</div>
+        <div style="font-size:10.5px;font-family:monospace;color:var(--blue)">${i.codigo_catalogo}</div>
+      </div>
+      <span style="font-size:10px;font-weight:700;color:${confColor};flex-shrink:0">${i.confianza==='alta'?'✓ exacto':i.confianza==='media'?'~ similar':'? revisar'}</span>
+    </div>`;
+  }).join('');
+
+  const missingHTML = missing.length
+    ? `<div style="margin-top:8px;padding:8px 10px;background:var(--orange-p);border-radius:8px;font-size:11.5px;color:var(--orange)">
+        ⚠️ Sin match en catálogo: ${missing.join(', ')}
+       </div>` : '';
+
+  oiSetStatus(`
+    <div style="font-weight:700;font-size:14px;margin-bottom:8px">✅ ${added} producto${added>1?'s':''} agregado${added>1?'s':''} al carro</div>
+    ${rowsHTML}
+    ${missingHTML}
+  `, 'success');
+
+  btn.disabled = false;
+  ico.textContent = '✅';
+  txt.textContent = 'Agregar de nuevo / actualizar';
+
+  // Mostrar feedback si hay no encontrados
+  if (missing.length) {
+    showToast(`✅ ${added} productos al carro · ⚠️ ${missing.length} sin match`);
+  } else {
+    showToast(`✅ ${added} productos agregados al carro desde el pedido`);
+  }
+}
+
+// Cerrar modal al hacer clic en el fondo
+document.getElementById('orderImportModal')?.addEventListener('click', function(e) {
+  if (e.target === this) closeOrderImport();
+});
+
 </script>
 
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODAL IMPORTAR PEDIDO — IA lee imagen o texto y llena carro
+     ═══════════════════════════════════════════════════════════ -->
+<div id="orderImportModal" style="display:none;position:fixed;inset:0;z-index:1200;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:20px">
+  <div style="background:rgba(255,255,255,.92);backdrop-filter:blur(40px) saturate(180%);
+    -webkit-backdrop-filter:blur(40px) saturate(180%);
+    border:1px solid rgba(255,255,255,.8);border-radius:22px;
+    width:100%;max-width:560px;overflow:hidden;
+    box-shadow:0 40px 100px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.9);
+    animation:fadeUp .22s cubic-bezier(.32,.72,0,1)">
+
+    <!-- Header -->
+    <div style="background:rgba(26,26,26,.95);padding:18px 22px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:#fff;font-family:var(--font-d);display:flex;align-items:center;gap:8px">
+          🤖 Cargar pedido con IA
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">Adjunta una imagen o pega el texto del pedido</div>
+      </div>
+      <button onclick="closeOrderImport()" style="background:rgba(255,255,255,.1);color:#fff;border:none;
+        width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;
+        align-items:center;justify-content:center;transition:background .15s"
+        onmouseover="this.style.background='rgba(255,255,255,.22)'"
+        onmouseout="this.style.background='rgba(255,255,255,.1)'">✕</button>
+    </div>
+
+    <!-- Body -->
+    <div style="padding:20px 22px">
+
+      <!-- Tabs imagen / texto -->
+      <div style="display:flex;background:rgba(0,0,0,.06);border-radius:12px;padding:3px;margin-bottom:16px">
+        <button id="oimgTab" onclick="setOITab('img')"
+          style="flex:1;padding:8px;border-radius:10px;border:none;font-size:13px;font-weight:700;
+          cursor:pointer;transition:all .2s;font-family:var(--font);background:#fff;
+          color:var(--black);box-shadow:0 2px 8px rgba(0,0,0,.1)">
+          📷 Imagen / Foto
+        </button>
+        <button id="otxtTab" onclick="setOITab('txt')"
+          style="flex:1;padding:8px;border-radius:10px;border:none;font-size:13px;font-weight:700;
+          cursor:pointer;transition:all .2s;font-family:var(--font);background:transparent;color:var(--g3)">
+          📝 Texto / Email
+        </button>
+      </div>
+
+      <!-- Panel imagen -->
+      <div id="oiImgPanel">
+        <div id="oiDropZone" onclick="document.getElementById('oiFileInput').click()"
+          style="border:2px dashed var(--g4);border-radius:14px;padding:28px 20px;text-align:center;
+          cursor:pointer;transition:all .2s;background:rgba(0,87,184,.03)"
+          ondragover="event.preventDefault();this.style.borderColor='var(--blue)';this.style.background='var(--blue-p)'"
+          ondragleave="this.style.borderColor='var(--g4)';this.style.background='rgba(0,87,184,.03)'"
+          ondrop="oiHandleDrop(event)">
+          <div style="font-size:36px;margin-bottom:8px">📋</div>
+          <div style="font-size:14px;font-weight:700;color:var(--black);margin-bottom:4px">Arrastra la imagen aquí</div>
+          <div style="font-size:12px;color:var(--g3)">o toca para seleccionar · JPG, PNG, PDF</div>
+        </div>
+        <input type="file" id="oiFileInput" accept="image/*,.pdf" style="display:none" onchange="oiFileSelected(event)">
+        <div id="oiImgPreview" style="display:none;margin-top:12px;text-align:center">
+          <img id="oiPreviewImg" style="max-height:140px;max-width:100%;border-radius:10px;
+            box-shadow:0 4px 16px rgba(0,0,0,.12);object-fit:contain">
+          <div style="font-size:11px;color:var(--g3);margin-top:6px" id="oiFileName"></div>
+        </div>
+      </div>
+
+      <!-- Panel texto -->
+      <div id="oiTxtPanel" style="display:none">
+        <textarea id="oiTextInput" placeholder="Pega aquí el correo o lista del cliente&#10;&#10;Ej:&#10;28 cámaras HAC-HFW1509TLMN-IL-A-0360B-S2&#10;4 cámaras IPC-HDBW1439E1P-A-IL-0280B-S6&#10;3 XVR XVR5116H-4KL-I3&#10;..."
+          style="width:100%;height:160px;border:1.5px solid var(--g5);border-radius:12px;
+          padding:12px 14px;font-size:13px;font-family:var(--font);resize:none;outline:none;
+          background:rgba(245,245,247,.8);color:var(--black);line-height:1.6;transition:border-color .2s"
+          onfocus="this.style.borderColor='var(--blue)'"
+          onblur="this.style.borderColor='var(--g5)'"></textarea>
+      </div>
+
+      <!-- Status / resultado -->
+      <div id="oiStatus" style="display:none;margin-top:12px;border-radius:10px;padding:11px 14px;
+        font-size:13px;font-weight:500"></div>
+
+      <!-- Botón analizar -->
+      <button id="oiAnalyzeBtn" onclick="oiAnalyze()"
+        style="width:100%;margin-top:14px;background:var(--red);color:#fff;border:none;
+        border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;
+        transition:all .2s;font-family:var(--font);display:flex;align-items:center;
+        justify-content:center;gap:8px;
+        box-shadow:0 6px 20px rgba(232,0,28,.3)"
+        onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 8px 26px rgba(232,0,28,.4)'"
+        onmouseout="this.style.transform='';this.style.boxShadow='0 6px 20px rgba(232,0,28,.3)'">
+        <span id="oiAnalyzeBtnIcon">🤖</span>
+        <span id="oiAnalyzeBtnTxt">Interpretar y agregar al carro</span>
+      </button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
