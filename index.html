@@ -12550,15 +12550,34 @@ function oiFileSelected(e) {
 }
 
 function oiLoadFile(file) {
+  const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+  oiImageType = isPDF ? 'application/pdf' : (file.type || 'image/jpeg');
   const reader = new FileReader();
   reader.onload = (e) => {
     const result = e.target.result;
-    oiImageB64  = result.split(',')[1];
-    oiImageType = file.type || 'image/jpeg';
+    oiImageB64 = result.split(',')[1];
     // Preview
     document.getElementById('oiDropZone').style.display = 'none';
     document.getElementById('oiImgPreview').style.display = 'block';
-    document.getElementById('oiPreviewImg').src = result;
+    const prevImg = document.getElementById('oiPreviewImg');
+    if (isPDF) {
+      prevImg.style.display = 'none';
+      // Mostrar icono PDF en lugar de imagen
+      let pdfIcon = document.getElementById('oiPdfIcon');
+      if (!pdfIcon) {
+        pdfIcon = document.createElement('div');
+        pdfIcon.id = 'oiPdfIcon';
+        pdfIcon.style.cssText = 'font-size:52px;text-align:center;padding:12px 0';
+        pdfIcon.textContent = '📄';
+        prevImg.parentNode.insertBefore(pdfIcon, prevImg);
+      }
+      pdfIcon.style.display = 'block';
+    } else {
+      prevImg.style.display = 'block';
+      prevImg.src = result;
+      const pdfIcon = document.getElementById('oiPdfIcon');
+      if (pdfIcon) pdfIcon.style.display = 'none';
+    }
     document.getElementById('oiFileName').textContent = file.name + ' · ' + Math.round(file.size/1024) + ' KB';
   };
   reader.readAsDataURL(file);
@@ -12611,25 +12630,36 @@ FORMATO EXACTO:
   try {
     let messages;
     if (oiMode === 'img') {
-      // Comprimir imagen primero
-      const compressed = await compressImage('data:' + oiImageType + ';base64,' + oiImageB64, 1200, 0.82);
-      const b64c = compressed.split(',')[1];
-      messages = [{
-        role: 'user',
-        content: [
-          { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: b64c } },
-          { type: 'text', text: 'Lee este pedido/correo y extrae todos los productos con sus cantidades. Responde SOLO con el JSON indicado.' }
-        ]
-      }];
+      const isPDF = oiImageType === 'application/pdf';
+      if (isPDF) {
+        // PDF → enviar como document (Anthropic lo soporta nativamente)
+        messages = [{
+          role: 'user',
+          content: [
+            {
+              type: 'document',
+              source: { type: 'base64', media_type: 'application/pdf', data: oiImageB64 }
+            },
+            { type: 'text', text: 'Lee este documento (factura, cotización o pedido) y extrae todos los productos con sus cantidades y códigos. Responde SOLO con el JSON indicado.' }
+          ]
+        }];
+      } else {
+        // Imagen → comprimir y enviar como image
+        const compressed = await compressImage('data:' + oiImageType + ';base64,' + oiImageB64, 1200, 0.82);
+        const b64c = compressed.split(',')[1];
+        messages = [{
+          role: 'user',
+          content: [
+            { type: 'image', source: { type: 'base64', media_type: 'image/jpeg', data: b64c } },
+            { type: 'text', text: 'Lee esta imagen (correo, captura, lista) y extrae todos los productos con sus cantidades. Responde SOLO con el JSON indicado.' }
+          ]
+        }];
+      }
     } else {
       const textoInput = document.getElementById('oiTextInput').value.trim();
       messages = [{
         role: 'user',
-        content: `Lee este pedido y extrae todos los productos con sus cantidades:
-
-${textoInput}
-
-Responde SOLO con el JSON indicado.`
+        content: 'Lee este pedido y extrae todos los productos con sus cantidades:\n\n' + textoInput + '\n\nResponde SOLO con el JSON indicado.'
       }];
     }
 
