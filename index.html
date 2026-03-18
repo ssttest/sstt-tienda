@@ -11336,7 +11336,7 @@ function clearApiKey() {
 function showApiKeyStatus(msg, color, bg, border) {
   const st = document.getElementById('apiKeyStatus');
   if (!st) return;
-  st.style.cssText = \`display:flex;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;margin-bottom:14px;align-items:center;gap:8px;color:\${color};background:\${bg};border:1px solid \${border}\`;
+  st.style.cssText = `display:flex;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;margin-bottom:14px;align-items:center;gap:8px;color:${color};background:${bg};border:1px solid ${border}`;
   st.textContent = msg;
 }
 
@@ -11378,7 +11378,7 @@ async function testAndSaveApiKey() {
         ? '❌ API Key inválida — verifica que la copiaste completa desde console.anthropic.com'
         : data.error.type === 'permission_error'
         ? '⚠️ Sin créditos — recarga créditos en console.anthropic.com/settings/billing'
-        : \`❌ Error: \${data.error.message}\`;
+        : `❌ Error: \${data.error.message}`;
       showApiKeyStatus(msg, '#C8001A', '#FFF0F2', '#FFCCCC');
       if (btn) btn.disabled = false;
       if (ico) ico.textContent = '✅';
@@ -12254,9 +12254,9 @@ function setupAutocomplete(inputId, comunaId, regionId, label) {
 }
 
 // ── Auto-init when cart opens ──────────────────────────────────────────────
-const _origOpenCart = typeof openCart === 'function' ? openCart : null;
+// _origOpenCart ya declarado arriba
 function openCartWithMaps() {
-  if (_origOpenCart) _origOpenCart();
+  if (window._origOpenCart) window._origOpenCart();
   // Init autocomplete after a short delay so inputs are visible
   setTimeout(() => {
     const apiKey = localStorage.getItem(GMAPS_KEY_STORAGE);
