@@ -12626,7 +12626,17 @@ Responde SOLO con el JSON indicado.`
     if (data.error) throw new Error(data.error.message);
 
     let raw = data.content?.[0]?.text || '';
-    raw = raw.replace(/```json[\s\S]?/g,'').replace(/```/g,'').trim();
+    console.log('[OI] Raw response length:', raw.length);
+    console.log('[OI] Raw preview:', raw.slice(0, 300));
+    // Limpiar markdown fences
+    raw = raw.replace(/```json\s*/g,'').replace(/```\s*/g,'').trim();
+    // Extraer solo el bloque JSON (desde { hasta el último })
+    const jsonStart = raw.indexOf('{');
+    const jsonEnd   = raw.lastIndexOf('}');
+    if (jsonStart >= 0 && jsonEnd > jsonStart) {
+      raw = raw.slice(jsonStart, jsonEnd + 1);
+    }
+    console.log('[OI] Clean JSON length:', raw.length);
     const resultRaw = JSON.parse(raw);
     // JS hace el match con el catálogo (más confiable que pedirle a la IA)
     const result = oiMatchCatalog(resultRaw);
@@ -12634,7 +12644,9 @@ Responde SOLO con el JSON indicado.`
 
   } catch(e) {
     console.error('OI error:', e);
-    oiSetStatus('❌ Error: ' + e.message, 'error');
+    // Mostrar fragmento de raw para depurar
+    const rawPreview = typeof raw !== 'undefined' ? raw.slice(0,200) : 'N/A';
+    oiSetStatus('❌ ' + e.message + '<br><small style="font-family:monospace;opacity:.7">' + rawPreview + '</small>', 'error');
     btn.disabled = false;
     ico.textContent = '🤖';
     txt.textContent = 'Reintentar';
