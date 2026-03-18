@@ -981,30 +981,57 @@ nav {
 /* ── AUTOCOMPLETE ────────────────────────────────────────────── */
 .sd {
   position: absolute;
-  top: calc(100% + 6px); left: 0; right: 0;
-  background: var(--white);
-  border: 1.5px solid var(--g5);
-  border-radius: var(--r-lg);
-  box-shadow: var(--shadow-lg);
+  top: calc(100% + 8px); left: 0; right: 0;
+  background: rgba(255,255,255,.88);
+  backdrop-filter: blur(48px) saturate(200%) brightness(1.04);
+  -webkit-backdrop-filter: blur(48px) saturate(200%) brightness(1.04);
+  border: 1px solid rgba(255,255,255,.75);
+  border-radius: 18px;
+  box-shadow:
+    0 32px 80px rgba(0,0,0,.16),
+    0 8px 24px rgba(0,0,0,.09),
+    inset 0 1px 0 rgba(255,255,255,.9),
+    inset 0 -1px 0 rgba(0,0,0,.03);
   z-index: 600;
-  max-height: 340px;
+  max-height: 480px;
   overflow-y: auto;
+  overflow-x: hidden;
   display: none;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,.15) transparent;
 }
-.sd.open { display: block }
+.sd.show { display: block; animation: sdFadeIn .18s cubic-bezier(.32,.72,0,1) }
+@keyframes sdFadeIn {
+  from { opacity:0; transform:translateY(-6px) scale(.98) }
+  to   { opacity:1; transform:translateY(0)    scale(1)   }
+}
 .sd-item {
   display: flex; align-items: center; gap: 12px;
-  padding: 10px 16px;
+  padding: 10px 14px;
   cursor: pointer;
-  transition: background .1s;
+  transition: background .12s;
   border-bottom: 1px solid var(--g5);
 }
-.sd-item:last-child { border-bottom: none }
-.sd-item:hover { background: var(--g6) }
-.sd-img { width: 38px; height: 38px; object-fit: contain; border-radius: 3px; background: var(--g6); flex-shrink: 0 }
-.sd-code { font-family: var(--font-m); font-size: 10.5px; color: var(--blue); font-weight: 600 }
-.sd-name { font-size: 12.5px; color: var(--black); line-height: 1.3 }
-.sd-price { margin-left: auto; font-family: var(--font-d); font-size: 15px; font-weight: 800; color: var(--black); flex-shrink: 0 }
+.sd-item:last-child { border-bottom: none !important }
+.sd-item:hover, .sd-item.active { background: rgba(0,0,0,.04) }
+.sd-img {
+  width: 46px; height: 46px; object-fit: contain; flex-shrink: 0;
+  background: rgba(245,245,247,.9); border-radius: 11px; padding: 4px;
+  border: 1px solid rgba(0,0,0,.06); box-shadow: 0 2px 8px rgba(0,0,0,.07);
+}
+.sd-code { font-family: var(--font-m); font-size: 10.5px; color: var(--blue); font-weight: 600; letter-spacing: .2px }
+.sd-name { font-size: 12.5px; font-weight: 500; color: var(--black); line-height: 1.35;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.sd-price { margin-left: auto; font-family: var(--font-d); font-size: 15px; font-weight: 800;
+  color: var(--black); white-space: nowrap; flex-shrink: 0 }
+.sd-score { font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 20px;
+  white-space: nowrap; flex-shrink: 0 }
+.sd-hdr-row { padding: 10px 16px 7px; font-size: 10.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .6px; color: var(--g3);
+  border-bottom: 1px solid rgba(0,0,0,.055);
+  display: flex; justify-content: space-between; align-items: center; }
+.sd-empty { padding: 20px 16px; text-align: center; font-size: 13px; color: var(--g3) }
+.sd-section { padding: 6px 0 }
 
 /* ── MOB SEARCH ──────────────────────────────────────────────── */
 .mob-search { display: none; padding: 12px 16px; background: var(--white); border-bottom: 1px solid var(--g5) }
@@ -4799,9 +4826,16 @@ window._gmapsReady = function() {
     </a>
 
     <div class="search-wrap">
-      <div class="search-form">
-        <input type="text" id="searchInput" class="search-input"
-          placeholder="Buscar cámara, NVR, switch o código de producto…" autocomplete="off">
+      <div class="search-form" style="position:relative">
+        <div style="position:relative;flex:1;display:flex;align-items:center">
+          <input type="text" id="searchGhost" readonly tabindex="-1" aria-hidden="true"
+            style="position:absolute;inset:0;border:none;background:transparent;padding:10px 16px;
+                   font-size:14px;color:#BBBBBB;pointer-events:none;outline:none;
+                   font-family:inherit;white-space:nowrap;overflow:hidden">
+          <input type="text" id="searchInput" class="search-input"
+            placeholder="Buscar cámara, NVR, switch o código…" autocomplete="off"
+            style="background:transparent;position:relative;z-index:1">
+        </div>
         <button class="search-btn" id="searchBtn">
           <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
           Buscar
@@ -6896,21 +6930,95 @@ function renderCatSidebar() {
   qs('catSidebar').innerHTML = h;
 }
 
-// ── Filtrar productos ────────────────────────────────────────
+// ── Motor de búsqueda fuzzy para códigos Dahua ───────────────
+// Normaliza un código eliminando variantes comunes:
+// DH- prefijo, -N/-P (NTSC/PAL), lente 0280→2.8mm, separadores
+function normalizeCode(s) {
+  return s.toUpperCase()
+    .replace(/^DH-/,'')           // quitar prefijo DH-
+    .replace(/-?[NP]/g,'')      // quitar -N o -P (NTSC/PAL)
+    .replace(/0(\d)(\d\d)/g,(_,a,b)=>a+b) // 0280→280, 0360→360
+    .replace(/[-_\s]/g,'');       // quitar separadores
+}
+
+// Score de coincidencia 0-100 entre query y producto
+function matchScore(p, rawQ) {
+  const q        = rawQ.toLowerCase().trim();
+  const qNorm    = normalizeCode(q);
+  const nombre   = p.nombre.toLowerCase();
+  const codigo   = p.codigo.toLowerCase();
+  const codigoN  = normalizeCode(p.codigo);
+
+  if (!q) return 100;
+
+  // ── Coincidencias exactas / altas ──
+  if (codigo === q)                          return 100;
+  if (codigoN === qNorm)                     return 99;
+  if (codigo.startsWith(q))                  return 95;
+  if (codigoN.startsWith(qNorm))             return 93;
+  if (codigo.includes(q))                    return 88;
+  if (codigoN.includes(qNorm))               return 85;
+
+  // ── Nombre exacto ──
+  if (nombre === q)                          return 92;
+  if (nombre.startsWith(q))                  return 80;
+
+  // ── Palabras del query en el nombre ──
+  const words = q.split(/\s+/).filter(w => w.length > 1);
+  if (words.length > 0) {
+    const matched = words.filter(w => nombre.includes(w) || codigo.includes(w));
+    const ratio   = matched.length / words.length;
+    if (ratio === 1)   return 75;
+    if (ratio >= 0.75) return 60;
+    if (ratio >= 0.5)  return 45;
+    if (ratio > 0)     return 30;
+  }
+
+  // ── Fragmento en nombre ──
+  if (nombre.includes(q))                    return 55;
+
+  // ── Código parcial tolerante (ignorar 1 char diferente) ──
+  if (qNorm.length >= 4) {
+    // Verificar si qNorm es substring de codigoN con 1 inserción/omisión
+    for (let i = 0; i <= codigoN.length - qNorm.length + 1; i++) {
+      const chunk = codigoN.slice(i, i + qNorm.length);
+      let diff = 0;
+      for (let j = 0; j < qNorm.length; j++) {
+        if (chunk[j] !== qNorm[j]) diff++;
+        if (diff > 1) break;
+      }
+      if (diff <= 1) return 40;
+    }
+  }
+
+  return 0;
+}
+
 function getFiltered() {
   let list = [...PRODUCTS];
   if (S.cat !== 'todas') list = list.filter(p => p.cat === S.cat);
+
   if (S.q) {
-    const q = S.q.toLowerCase();
-    list = list.filter(p => p.codigo.toLowerCase().includes(q) || p.nombre.toLowerCase().includes(q));
+    // Calcular score para cada producto y filtrar los que tienen score > 0
+    list = list
+      .map(p => ({ p, score: matchScore(p, S.q) }))
+      .filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .map(x => { x.p._score = x.score; return x.p; });
+  } else {
+    list.forEach(p => p._score = 0);
   }
+
   if (S.chipFilter === 'nuevo') list = list.filter(p => p.nuevo);
   if (S.chipFilter === 'bajo')  list = list.filter(p => p.stock === 'bajo');
   if (S.priceMin) list = list.filter(p => p.ptotal >= S.priceMin);
   if (S.priceMax) list = list.filter(p => p.ptotal <= S.priceMax);
-  if (S.sort === 'precio_asc')  list.sort((a,b) => a.ptotal - b.ptotal);
-  if (S.sort === 'precio_desc') list.sort((a,b) => b.ptotal - a.ptotal);
-  if (S.sort === 'nuevo')       list.sort((a,b) => b.nuevo - a.nuevo);
+  // Solo aplicar sort manual si no hay búsqueda activa (la búsqueda ya ordena por score)
+  if (!S.q) {
+    if (S.sort === 'precio_asc')  list.sort((a,b) => a.ptotal - b.ptotal);
+    if (S.sort === 'precio_desc') list.sort((a,b) => b.ptotal - a.ptotal);
+    if (S.sort === 'nuevo')       list.sort((a,b) => b.nuevo - a.nuevo);
+  }
   return list;
 }
 
@@ -6971,6 +7079,7 @@ function render() {
       <div class="pcard-body">
         <div class="pcard-code">
           <span>${p.codigo}</span>
+          ${S.q && p._score ? '<span style="font-size:9px;font-weight:800;padding:1px 6px;border-radius:3px;color:#fff;margin-left:2px;background:'+(p._score>=90?'#1A7F3C':p._score>=70?'#0057B8':p._score>=45?'#C05000':'#888')+'">'+p._score+'%</span>' : ''}
           <button class="copy-btn" onclick="copyTxt('${p.codigo}')" title="Copiar código">
             <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           </button>
@@ -7052,30 +7161,148 @@ function doSearch(q) { S.q=q.trim(); S.page=1; render(); qs('sd').classList.remo
 
 // ── Autocomplete ─────────────────────────────────────────────
 let sdTimer;
+// ── Ghost text + Autocomplete inteligente ─────────────────
+
+function updateGhost(q) {
+  const ghost = document.getElementById('searchGhost');
+  if (!ghost) return;
+  if (!q || q.length < 1) { ghost.value = ''; return; }
+  const qL = q.toLowerCase();
+  const qN = normalizeCode(q);
+  // Buscar código que contenga el query en cualquier posición
+  let best = null;
+  // 1. Empieza exacto
+  best = PRODUCTS.find(p => p.codigo.toLowerCase().startsWith(qL));
+  // 2. Código normalizado empieza igual
+  if (!best) best = PRODUCTS.find(p => normalizeCode(p.codigo).startsWith(qN));
+  // 3. Código contiene el query (hacia adelante desde cualquier posición)
+  if (!best) {
+    const found = PRODUCTS.find(p => {
+      const c = p.codigo.toLowerCase();
+      const i = c.indexOf(qL);
+      return i > 0; // contiene pero no empieza — mostrar desde el inicio
+    });
+    if (found) { ghost.value = ''; return; } // no completar si está en el medio
+  }
+  // 4. Top score
+  if (!best) {
+    const top = PRODUCTS.map(p=>({p,s:matchScore(p,q)})).filter(x=>x.s>=80).sort((a,b)=>b.s-a.s);
+    if (top.length) best = top[0].p;
+  }
+  if (!best) { ghost.value = ''; return; }
+  const code = best.codigo;
+  ghost.value = code.toLowerCase().startsWith(qL) ? q + code.slice(q.length) : '';
+}
+
+function acceptGhost() {
+  const ghost = document.getElementById('searchGhost');
+  const inp = qs('searchInput');
+  if (ghost && ghost.value && ghost.value !== inp.value) {
+    inp.value = ghost.value;
+    ghost.value = '';
+    doSearch(inp.value);
+    return true;
+  }
+  return false;
+}
+
+function scoreColor(s) { return s>=90?'#1A7F3C':s>=70?'#0057B8':s>=45?'#C05000':'#999'; }
+function scoreLabel(s) { return s>=90?'Exacto':s>=70?'Muy similar':s>=45?'Similar':'Parcial'; }
+
+function hlText(text, q, maxLen) {
+  const t = maxLen && text.length > maxLen ? text.slice(0, maxLen) + '…' : text;
+  const idx = t.toLowerCase().indexOf(q.toLowerCase());
+  if (idx < 0) return t;
+  return t.slice(0,idx)
+    + '<mark style="background:rgba(255,204,0,.35);color:inherit;border-radius:2px;padding:0 1px">'
+    + t.slice(idx, idx+q.length) + '</mark>' + t.slice(idx+q.length);
+}
+
+function renderSD(q) {
+  const sdEl = qs('sd');
+  if (!q || q.length < 1) { sdEl.classList.remove('show'); return; }
+  const results = PRODUCTS
+    .map(p => ({ p, score: matchScore(p, q) }))
+    .filter(x => x.score > 0)
+    .sort((a,b) => b.score - a.score)
+    .slice(0, 10);
+  if (!results.length) {
+    sdEl.innerHTML = `<div class="sd-empty">Sin resultados para <strong>"${q}"</strong></div>`;
+    sdEl.classList.add('show'); return;
+  }
+  const rows = results.map((x,i) => {
+    const {p, score} = x;
+    const col = scoreColor(score);
+    const lbl = scoreLabel(score);
+    const fallbackImg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ctext y='28' font-size='22'%3E📷%3C/text%3E%3C/svg%3E";
+    return `<div class="sd-item" data-idx="${i}" data-code="${p.codigo}" onclick="selectSD(this.dataset.code)">
+      <img class="sd-img" src="${p.img}" onerror="this.src='${fallbackImg}'">
+      <div style="flex:1;min-width:0;overflow:hidden">
+        <div class="sd-name">${hlText(p.nombre, q, 62)}</div>
+        <div class="sd-code">${hlText(p.codigo, q, 0)}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
+        <div class="sd-price">${fmt(p.ptotal)}</div>
+        <span class="sd-score" style="background:${col}22;color:${col}">${score}% ${lbl}</span>
+      </div>
+    </div>`;
+  }).join('');
+  const count = results.length;
+  sdEl.innerHTML = `
+    <div class="sd-hdr-row">
+      <span>Sugerencias</span>
+      <span style="font-weight:400;font-size:10px">${count} resultado${count>1?'s':''} · Tab o → para completar</span>
+    </div>
+    <div class="sd-section">${rows}</div>`;
+  sdEl.classList.add('show');
+  sdIdx = -1;
+}
+
 qs('searchInput').addEventListener('input', e => {
   const q = e.target.value.trim();
   clearTimeout(sdTimer);
-  if (q.length < 2) { qs('sd').classList.remove('show'); return; }
+  updateGhost(q);
   sdTimer = setTimeout(() => {
-    const res = PRODUCTS.filter(p =>
-      p.codigo.toLowerCase().includes(q.toLowerCase()) ||
-      p.nombre.toLowerCase().includes(q.toLowerCase())
-    ).slice(0,5);
-    if (!res.length) { qs('sd').classList.remove('show'); return; }
-    qs('sd').innerHTML = '<div class="sd-hd">Sugerencias</div>' + res.map(p=>`
-      <div class="sd-item" onclick="selectSD('${p.codigo}')">
-        <div class="sd-thumb"><img src="${p.img}" onerror="this.style.display='none'"></div>
-        <div style="flex:1;min-width:0"><div class="sd-name">${p.nombre.slice(0,60)}…</div><div class="sd-meta">${p.codigo}</div></div>
-        <div class="sd-price">${fmt(p.ptotal)}</div>
-      </div>`).join('');
-    qs('sd').classList.add('show');
-  }, 180);
+    renderSD(q);
+    S.q = q; S.page = 1;
+    clearTimeout(window._renderTimer);
+    window._renderTimer = setTimeout(() => render(), 220);
+  }, 80);
 });
 
-qs('searchInput').addEventListener('keydown', e => { if(e.key==='Enter') doSearch(e.target.value); });
+qs('searchInput').addEventListener('keydown', e => {
+  const items = qs('sd').querySelectorAll('.sd-item');
+  const inp = e.target;
+  const atEnd = inp.selectionStart === inp.value.length;
+  // Tab o → al final acepta el ghost
+  if ((e.key === 'Tab' || (e.key === 'ArrowRight' && atEnd)) && acceptGhost()) {
+    e.preventDefault(); return;
+  }
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    sdIdx = Math.min(sdIdx+1, items.length-1);
+    items.forEach((el,i) => el.style.background = i===sdIdx ? 'var(--g6)' : '');
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    sdIdx = Math.max(sdIdx-1, -1);
+    items.forEach((el,i) => el.style.background = i===sdIdx ? 'var(--g6)' : '');
+  } else if (e.key === 'Enter') {
+    if (sdIdx >= 0 && items[sdIdx]) { selectSD(items[sdIdx].dataset.code); }
+    else { doSearch(inp.value); }
+  } else if (e.key === 'Escape') {
+    qs('sd').classList.remove('show');
+    const g = document.getElementById('searchGhost'); if(g) g.value='';
+  }
+});
+
 qs('searchBtn').addEventListener('click', () => doSearch(qs('searchInput').value));
 document.addEventListener('click', e => { if (!e.target.closest('.search-wrap')) qs('sd').classList.remove('show'); });
-function selectSD(code) { qs('searchInput').value=code; doSearch(code); }
+function selectSD(code) {
+  qs('searchInput').value = code;
+  const g = document.getElementById('searchGhost'); if(g) g.value='';
+  doSearch(code);
+  qs('sd').classList.remove('show');
+}
 
 // Nav click
 document.querySelectorAll('.nav-link[data-cat]').forEach(el => {
