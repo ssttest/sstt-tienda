@@ -5106,19 +5106,30 @@ window._gmapsReady = function() {
       </div>
       <div class="cart-head-sub" id="cartSub">0 productos · www.sstt.cl</div>
     </div>
-    <div style="display:flex;align-items:center;gap:8px">
+    <div style="display:flex;align-items:center;gap:6px">
       <button onclick="openOrderImport()" title="Cargar pedido desde imagen o texto"
-        style="display:flex;align-items:center;gap:6px;background:rgba(0,87,184,.1);color:var(--blue);
-               border:1.5px solid rgba(0,87,184,.2);border-radius:10px;padding:7px 12px;
-               font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--font);
-               white-space:nowrap"
+        style="display:flex;align-items:center;gap:5px;background:rgba(0,87,184,.1);color:var(--blue);
+               border:1.5px solid rgba(0,87,184,.2);border-radius:10px;padding:7px 11px;
+               font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--font);white-space:nowrap"
         onmouseover="this.style.background='rgba(0,87,184,.18)'"
         onmouseout="this.style.background='rgba(0,87,184,.1)'">
-        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
         </svg>
         Cargar pedido
+      </button>
+      <button id="clearCartBtn" onclick="confirmClearCart()" title="Vaciar carro" style="display:none;
+        align-items:center;gap:5px;background:rgba(232,0,28,.08);color:var(--red);
+        border:1.5px solid rgba(232,0,28,.2);border-radius:10px;padding:7px 11px;
+        font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--font);white-space:nowrap"
+        onmouseover="this.style.background='rgba(232,0,28,.16)'"
+        onmouseout="this.style.background='rgba(232,0,28,.08)'">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
+        </svg>
+        Vaciar
       </button>
       <button class="cart-x" onclick="closeCart()">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -7422,6 +7433,9 @@ function updateBadge() {
 
 function renderCart() {
   const items=qs('cartItems'), empty=qs('cartEmpty'), foot=qs('cartFoot');
+  // Mostrar/ocultar botón vaciar
+  const clearBtn = document.getElementById('clearCartBtn');
+  if (clearBtn) clearBtn.style.display = S.cart.length ? 'flex' : 'none';
   if (!S.cart.length) { empty.style.display='flex'; items.innerHTML=''; foot.style.display='none'; return; }
   empty.style.display='none'; foot.style.display='block';
   items.innerHTML = S.cart.map(p=>`
@@ -7454,6 +7468,13 @@ function calcTotals() {
 }
 
 function openCart()  { qs('cartOverlay').classList.add('open'); qs('cartDrawer').classList.add('open'); }
+function confirmClearCart() {
+  if (!S.cart.length) return;
+  if (!confirm('¿Vaciar el carro? Se eliminarán todos los productos.')) return;
+  S.cart = []; saveCart(); renderCart(); updateBadge();
+  showToast('🗑 Carro vaciado');
+}
+
 function closeCart() { qs('cartOverlay').classList.remove('open'); qs('cartDrawer').classList.remove('open'); }
 qs('cartToggle').addEventListener('click', () => qs('cartDrawer').classList.contains('open')?closeCart():openCart());
 qs('cartOverlay').addEventListener('click', closeCart);
@@ -12504,6 +12525,7 @@ function oiReset() {
   document.getElementById('oiImgPreview').style.display = 'none';
   document.getElementById('oiDropZone').style.display = 'block';
   document.getElementById('oiStatus').style.display = 'none';
+  const pb = document.getElementById('oiPostBtns'); if(pb) pb.style.display='none';
   document.getElementById('oiTextInput').value = '';
   const btn = document.getElementById('oiAnalyzeBtn');
   const ico = document.getElementById('oiAnalyzeBtnIcon');
@@ -12774,14 +12796,21 @@ function oiRenderResult(result) {
   `, 'success');
 
   btn.disabled = false;
-  ico.textContent = '✅';
-  txt.textContent = 'Agregar de nuevo / actualizar';
+  ico.textContent = '🔄';
+  txt.textContent = 'Volver a interpretar';
 
-  // Mostrar feedback si hay no encontrados
+  // Mostrar botones confirmar/cerrar
+  const postBtns = document.getElementById('oiPostBtns');
+  if (postBtns) postBtns.style.display = 'flex';
+
+  // Scroll al resultado
+  const statusEl = document.getElementById('oiStatus');
+  if (statusEl) setTimeout(() => statusEl.scrollTop = 0, 50);
+
   if (missing.length) {
     showToast(`✅ ${added} productos al carro · ⚠️ ${missing.length} sin match`);
   } else {
-    showToast(`✅ ${added} productos agregados al carro desde el pedido`);
+    showToast(`✅ ${added} productos agregados al carro`);
   }
 }
 
@@ -12869,17 +12898,34 @@ document.getElementById('orderImportModal')?.addEventListener('click', function(
           onblur="this.style.borderColor='var(--g5)'"></textarea>
       </div>
 
-      <!-- Status / resultado -->
+      <!-- Status / resultado con scroll -->
       <div id="oiStatus" style="display:none;margin-top:12px;border-radius:10px;padding:11px 14px;
-        font-size:13px;font-weight:500"></div>
+        font-size:13px;font-weight:500;max-height:280px;overflow-y:auto;scrollbar-width:thin"></div>
+
+      <!-- Botones post-match (confirmar/cerrar) — visibles solo tras match exitoso -->
+      <div id="oiPostBtns" style="display:none;gap:8px;margin-top:10px">
+        <button onclick="closeOrderImport();openCart()"
+          style="flex:1;background:var(--green);color:#fff;border:none;border-radius:12px;
+          padding:12px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);
+          display:flex;align-items:center;justify-content:center;gap:6px;transition:all .15s"
+          onmouseover="this.style.background='#0f6830'" onmouseout="this.style.background='var(--green)'">
+          ✅ Confirmar y ver carro
+        </button>
+        <button onclick="closeOrderImport()"
+          style="background:var(--g6);color:var(--g2);border:1.5px solid var(--g5);border-radius:12px;
+          padding:12px 16px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font);
+          transition:all .15s"
+          onmouseover="this.style.background='var(--g5)'" onmouseout="this.style.background='var(--g6)'">
+          Cerrar
+        </button>
+      </div>
 
       <!-- Botón analizar -->
       <button id="oiAnalyzeBtn" onclick="oiAnalyze()"
         style="width:100%;margin-top:14px;background:var(--red);color:#fff;border:none;
         border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;
         transition:all .2s;font-family:var(--font);display:flex;align-items:center;
-        justify-content:center;gap:8px;
-        box-shadow:0 6px 20px rgba(232,0,28,.3)"
+        justify-content:center;gap:8px;box-shadow:0 6px 20px rgba(232,0,28,.3)"
         onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 8px 26px rgba(232,0,28,.4)'"
         onmouseout="this.style.transform='';this.style.boxShadow='0 6px 20px rgba(232,0,28,.3)'">
         <span id="oiAnalyzeBtnIcon">🤖</span>
