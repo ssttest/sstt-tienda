@@ -5342,7 +5342,7 @@ window._gmapsReady = function() {
         <label class="pay-opt" onclick="selPay(this)"><input type="radio" name="p" value="khipu"><span class="pay-name">Khipu</span><span class="pay-sub">Pago con tu banco</span></label>
       </div>
     </div>
-    <button onclick="generarCotizacionPDF()"
+    <button onclick="abrirModalCotizacion()"
       style="width:100%;background:var(--black);color:#fff;border:none;border-radius:16px;
              padding:14px;font-size:14px;font-weight:700;display:flex;align-items:center;
              justify-content:center;gap:8px;cursor:pointer;transition:all .18s;
@@ -5350,7 +5350,7 @@ window._gmapsReady = function() {
              box-shadow:0 4px 16px rgba(0,0,0,.18)"
       onmouseover="this.style.background='#333';this.style.transform='translateY(-1px)'"
       onmouseout="this.style.background='var(--black)';this.style.transform=''">
-      📄 Generar Cotización PDF
+      📄 Generar Cotización
     </button>
     <button class="pay-now-btn" onclick="checkout()">
       <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
@@ -13083,6 +13083,297 @@ function generarCotizacionPDF() {
   showToast('📄 Cotización generada y descargada');
 }
 
+
+// ════════════════════════════════════════════════════════════════
+// MODAL OPCIONES COTIZACIÓN
+// ════════════════════════════════════════════════════════════════
+let cotOpt = 'solo';   // 'solo' | 'fichas'
+let cotEnv = 'pdf';    // 'pdf'  | 'email'
+
+function abrirModalCotizacion() {
+  if (!S.cart || !S.cart.length) { showToast('⚠️ El carro está vacío'); return; }
+  document.getElementById('cotModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  // Reset estado
+  cotOpt = 'solo'; cotEnv = 'pdf';
+  setCotOpt('solo'); setCotEnv('pdf');
+  document.getElementById('cotStatus').style.display = 'none';
+  const btn = document.getElementById('cotGenBtn');
+  document.getElementById('cotGenIco').textContent = '📄';
+  document.getElementById('cotGenTxt').textContent = 'Generar cotización';
+  btn.disabled = false;
+}
+
+function cerrarModalCotizacion() {
+  document.getElementById('cotModal').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+function setCotOpt(val) {
+  cotOpt = val;
+  const optSolo   = document.getElementById('cotOptSolo');
+  const optFichas = document.getElementById('cotOptFichas');
+  const rSolo     = document.getElementById('cotRadioSolo');
+  const rFichas   = document.getElementById('cotRadioFichas');
+
+  // Solo
+  const isSolo = val === 'solo';
+  optSolo.style.border   = isSolo ? '2px solid var(--black)' : '2px solid var(--g5)';
+  optSolo.style.background = isSolo ? 'rgba(26,26,26,.06)' : 'transparent';
+  rSolo.innerHTML = isSolo ? '<div style="width:10px;height:10px;border-radius:50%;background:var(--black)"></div>' : '';
+  rSolo.style.borderColor = isSolo ? 'var(--black)' : 'var(--g4)';
+
+  // Fichas
+  const isFichas = val === 'fichas';
+  optFichas.style.border   = isFichas ? '2px solid var(--red)' : '2px solid var(--g5)';
+  optFichas.style.background = isFichas ? 'var(--red-p)' : 'transparent';
+  rFichas.innerHTML = isFichas ? '<div style="width:10px;height:10px;border-radius:50%;background:var(--red)"></div>' : '';
+  rFichas.style.borderColor = isFichas ? 'var(--red)' : 'var(--g4)';
+}
+
+function setCotEnv(val) {
+  cotEnv = val;
+  const envPDF   = document.getElementById('cotEnvPDF');
+  const envEmail = document.getElementById('cotEnvEmail');
+  const emailFld = document.getElementById('cotEmailField');
+
+  const isPDF = val === 'pdf';
+  envPDF.style.border   = isPDF ? '2px solid var(--black)' : '2px solid var(--g5)';
+  envPDF.style.background = isPDF ? 'rgba(26,26,26,.06)' : 'transparent';
+  envEmail.style.border   = !isPDF ? '2px solid var(--blue)' : '2px solid var(--g5)';
+  envEmail.style.background = !isPDF ? 'var(--blue-p)' : 'transparent';
+  emailFld.style.display = !isPDF ? 'block' : 'none';
+}
+
+function cotSetStatus(msg, type) {
+  const el = document.getElementById('cotStatus');
+  const styles = {
+    loading: 'background:var(--blue-p);border:1px solid var(--blue-p2);color:var(--blue)',
+    success: 'background:var(--green-p);border:1px solid #B8E8CA;color:var(--green)',
+    error:   'background:var(--red-p);border:1px solid #FFCCCC;color:var(--red)',
+  };
+  el.style.cssText = 'display:block;border-radius:10px;padding:10px 14px;font-size:13px;font-weight:500;margin-bottom:14px;' + styles[type];
+  el.innerHTML = msg;
+}
+
+async function ejecutarCotizacion() {
+  const btn = document.getElementById('cotGenBtn');
+  const ico = document.getElementById('cotGenIco');
+  const txt = document.getElementById('cotGenTxt');
+  btn.disabled = true;
+
+  if (cotOpt === 'fichas') {
+    ico.textContent = '⏳';
+    txt.textContent = 'Generando PDF con fichas…';
+    cotSetStatus('🔄 Descargando fichas técnicas de los productos…', 'loading');
+    try {
+      await generarCotizacionConFichas();
+    } catch(e) {
+      cotSetStatus('❌ Error: ' + e.message, 'error');
+      btn.disabled = false; ico.textContent = '📄'; txt.textContent = 'Reintentar';
+      return;
+    }
+  } else {
+    ico.textContent = '⏳';
+    txt.textContent = 'Generando PDF…';
+    generarCotizacionPDF();
+  }
+
+  if (cotEnv === 'email') {
+    const email = document.getElementById('cotEmailInput').value.trim();
+    const subject = encodeURIComponent('Cotización SSTT SpA');
+    const body = encodeURIComponent('Estimado cliente,\n\nAdjunto encontrará nuestra cotización.\n\nSaludos,\nSST SpA\nventas@sstt.cl');
+    cotSetStatus('✅ PDF generado · Abriendo cliente de correo…', 'success');
+    setTimeout(() => {
+      window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    }, 800);
+  } else {
+    cotSetStatus('✅ PDF generado y descargado correctamente', 'success');
+  }
+
+  ico.textContent = '✅';
+  txt.textContent = 'Generado correctamente';
+  setTimeout(cerrarModalCotizacion, 2200);
+}
+
+// ── Cotización + fichas técnicas (descarga PDFs individuales y los concatena) ──
+async function generarCotizacionConFichas() {
+  const { jsPDF } = window.jspdf;
+
+  // Paso 1: generar el PDF de cotización base (sin guardar)
+  const docCot = buildCotizacionDoc();
+
+  // Paso 2: para cada producto único, intentar cargar su ficha técnica PDF
+  const uniqueProds = [...new Map(S.cart.map(i => [i.codigo, i])).values()];
+  const fichaBase = 'https://camaras-de-seguridad-dahua.sstt.cl/fichatecnica/';
+
+  let fichasOk = 0, fichasFail = 0;
+  const fichasData = [];
+
+  cotSetStatus(`🔄 Descargando fichas técnicas (0/${uniqueProds.length})…`, 'loading');
+
+  for (let i = 0; i < uniqueProds.length; i++) {
+    const p = uniqueProds[i];
+    cotSetStatus(`🔄 Descargando ficha ${i+1}/${uniqueProds.length}: ${p.codigo}…`, 'loading');
+    try {
+      const resp = await fetch(fichaBase + p.codigo + '.pdf');
+      if (!resp.ok) throw new Error('no disponible');
+      const buf  = await resp.arrayBuffer();
+      const b64  = btoa(String.fromCharCode(...new Uint8Array(buf)));
+      fichasData.push({ codigo: p.codigo, b64 });
+      fichasOk++;
+    } catch(e) {
+      fichasFail++;
+      console.log(`Ficha no disponible: ${p.codigo}`);
+    }
+  }
+
+  cotSetStatus(`✅ ${fichasOk} ficha(s) descargada(s)${fichasFail ? ` · ${fichasFail} no disponible(s)` : ''} · Generando PDF final…`, 'loading');
+
+  if (fichasData.length === 0) {
+    // Sin fichas disponibles — solo generar la cotización normal
+    showToast('ℹ️ No se encontraron fichas técnicas disponibles — generando solo cotización');
+    generarCotizacionPDF();
+    return;
+  }
+
+  // Paso 3: usar pdf-lib para concatenar cotización + fichas
+  // Como pdf-lib no está cargado, usamos jsPDF con páginas adicionales
+  // Agregar páginas de "portada de ficha" con link al PDF
+  const doc = docCot;
+
+  fichasData.forEach(({ codigo, b64 }) => {
+    doc.addPage();
+    // Página de portada de ficha técnica
+    doc.setFillColor(26,26,26);
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255,255,255);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(16);
+    doc.text('FICHA TÉCNICA', 105, 18, { align: 'center' });
+    doc.setFontSize(13);
+    doc.text(codigo, 105, 30, { align: 'center' });
+
+    // Embed de la imagen del producto
+    const prod = PRODUCTS.find(p => p.codigo === codigo);
+    if (prod) {
+      try {
+        // Nota: las imágenes externas no se pueden embeber directamente en jsPDF
+        // Mostrar los datos del producto como texto formateado
+        doc.setTextColor(30,30,30);
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(9);
+        doc.text(prod.nombre, 14, 55, { maxWidth: 182 });
+        doc.setFont('helvetica','bold');
+        doc.setFontSize(12);
+        doc.text('$ ' + prod.ptotal.toLocaleString('es-CL'), 14, 68);
+        doc.setFont('helvetica','normal');
+        doc.setFontSize(8);
+        doc.setTextColor(100,100,100);
+        doc.text('Descargar ficha técnica completa:', 14, 80);
+        doc.setTextColor(0,87,184);
+        const url = 'https://camaras-de-seguridad-dahua.sstt.cl/fichatecnica/' + codigo + '.pdf';
+        doc.text(url, 14, 86);
+        doc.link(14, 82, 182, 8, { url });
+        doc.setTextColor(100,100,100);
+        doc.setFontSize(7.5);
+        doc.text('(La ficha técnica completa en PDF está disponible en el link superior)', 14, 94);
+      } catch(e) {}
+    }
+  });
+
+  // Número de cotización
+  const numCot = 'MAQUETA-' + Date.now().toString().slice(-6);
+  doc.save('cotizacion-fichas-' + numCot + '.pdf');
+}
+
+// Función que construye el doc jsPDF de cotización y lo retorna (sin guardar)
+function buildCotizacionDoc() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+  const pw = 210, ph = 297, ml = 14, mr = 14, cw = pw - ml - mr;
+  const numCot = 'MAQUETA-' + Date.now().toString().slice(-6);
+  const fecha  = new Date().toLocaleDateString('es-CL');
+
+  try { doc.addImage('data:image/png;base64,' + SSTT_LOGO_B64, 'PNG', ml, 8, 44, 14); } catch(e) {}
+
+  doc.setFontSize(7.5); doc.setTextColor(80,80,80);
+  ['SSTT SPA','76.047.629-3','General José Artigas 3028','Nuñoa  Santiago','ventas@sstt.cl','222042119']
+    .forEach((t,i) => doc.text(t, ml, 26 + i*4));
+
+  const boxX = pw - mr - 60;
+  doc.setFillColor(220,0,28); doc.rect(boxX, 8, 60, 22, 'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold');
+  doc.setFontSize(8);  doc.text('RUT: 76.047.629-3', boxX+30, 14, {align:'center'});
+  doc.setFontSize(11); doc.text('COTIZACION', boxX+30, 20, {align:'center'});
+  doc.setFontSize(10); doc.text('Nº ' + numCot, boxX+30, 26, {align:'center'});
+  doc.setFontSize(8);  doc.text('S.I.I. - NUNOA', boxX+30, 31, {align:'center'});
+
+  doc.setDrawColor(200,200,200); doc.setLineWidth(0.3);
+  doc.line(ml, 52, pw-mr, 52);
+  doc.setTextColor(80,80,80); doc.setFontSize(8); doc.setFont('helvetica','normal');
+  doc.text('FECHA:  ' + fecha, pw-mr-45, 57);
+
+  let y = 56;
+  [['RAZÓN SOCIAL:','*** MAQUETA DE PRUEBAS ***'],['RUT:','99.999.999-9'],
+   ['GIRO:','Maqueta - Documento de prueba'],['DIRECCIÓN:','Dirección de prueba 123'],
+   ['COMUNA:','Santiago']].forEach(([l,v]) => {
+    doc.setFont('helvetica','bold'); doc.text(l, ml, y);
+    doc.setFont('helvetica','normal'); doc.text(v, ml+28, y); y+=5;
+  });
+  y += 3;
+
+  const colCant=ml, colCod=ml+14, colDesc=ml+48, colPrecio=pw-mr-34, colSub=pw-mr-1;
+  doc.setFillColor(240,240,240); doc.rect(ml, y, cw, 7, 'F');
+  doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(30,30,30);
+  ['Cant','Código','Descripción'].forEach((t,i) => doc.text(t, [colCant+1,colCod,colDesc][i], y+4.5));
+  doc.text('Precio', colPrecio, y+4.5, {align:'right'});
+  doc.text('Subtotal', colSub, y+4.5, {align:'right'});
+  y += 7;
+  doc.setDrawColor(180,180,180); doc.line(ml, y, pw-mr, y);
+
+  doc.setFont('helvetica','normal'); doc.setFontSize(7.5);
+  let neto = 0;
+  S.cart.forEach((item, idx) => {
+    const sub = item.ptotal * item.qty; neto += item.pneto * item.qty;
+    if (idx%2===1) { doc.setFillColor(250,250,250); doc.rect(ml,y,cw,8,'F'); }
+    doc.setTextColor(30,30,30);
+    doc.text(String(item.qty), colCant+2, y+3.5, {align:'center'});
+    doc.setFont('helvetica','bold'); doc.setFontSize(7);
+    doc.text(item.codigo.slice(0,22), colCod, y+3.5);
+    doc.setFont('helvetica','normal'); doc.setFontSize(7.5);
+    doc.splitTextToSize(item.nombre, colPrecio-colDesc-4).slice(0,2)
+       .forEach((l,li) => doc.text(l, colDesc, y+3.5+li*3.5));
+    doc.text(fmtPeso(item.ptotal), colPrecio, y+3.5, {align:'right'});
+    doc.text(fmtPeso(sub), colSub, y+3.5, {align:'right'});
+    doc.setDrawColor(220,220,220); doc.line(ml, y+8, pw-mr, y+8);
+    y += 8;
+    if (y > ph-60) { doc.addPage(); y=20; }
+  });
+
+  y += 4;
+  const iva=Math.round(neto*0.19), total=neto+iva;
+  const totX=pw-mr-70;
+  doc.setDrawColor(200,200,200); doc.setLineWidth(0.3); doc.rect(totX,y,70,22,'S');
+  doc.setFontSize(8.5); doc.setFont('helvetica','normal'); doc.setTextColor(60,60,60);
+  doc.text('NETO:', totX+4, y+6); doc.text(fmtPeso(neto), totX+67, y+6, {align:'right'});
+  doc.text('I.V.A. 19%:', totX+4, y+12); doc.text(fmtPeso(iva), totX+67, y+12, {align:'right'});
+  doc.setFont('helvetica','bold'); doc.setFontSize(10); doc.setTextColor(30,30,30);
+  doc.text('TOTAL:', totX+4, y+20); doc.text(fmtPeso(total), totX+67, y+20, {align:'right'});
+
+  y += 30;
+  doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(100,100,100);
+  doc.text('Estimado Cliente:', ml, y); y += 4;
+  doc.splitTextToSize('Confirmar que lo cotizado corresponde a lo que desea comprar.', cw)
+     .forEach(l => { doc.text(l, ml, y); y+=4; });
+  doc.setDrawColor(180,180,180); doc.line(ml, ph-20, pw-mr, ph-20);
+  doc.setFontSize(7); doc.setTextColor(150,150,150);
+  doc.text('SSTT SpA  ·  ventas@sstt.cl  ·  www.sstt.cl', pw/2, ph-15, {align:'center'});
+  doc.text('*** DOCUMENTO DE MAQUETA — NO TIENE VALIDEZ TRIBUTARIA ***', pw/2, ph-10, {align:'center'});
+
+  return doc;
+}
+
 </script>
 
 
@@ -13195,6 +13486,134 @@ function generarCotizacionPDF() {
         <span id="oiAnalyzeBtnIcon">🤖</span>
         <span id="oiAnalyzeBtnTxt">Interpretar y agregar al carro</span>
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MODAL OPCIONES COTIZACIÓN
+     ═══════════════════════════════════════════════════════════ -->
+<div id="cotModal" style="display:none;position:fixed;inset:0;z-index:1200;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:20px"
+  onclick="if(event.target===this)cerrarModalCotizacion()">
+  <div style="background:rgba(255,255,255,.93);backdrop-filter:blur(40px) saturate(180%);
+    -webkit-backdrop-filter:blur(40px) saturate(180%);
+    border:1px solid rgba(255,255,255,.8);border-radius:24px;
+    width:100%;max-width:440px;overflow:hidden;
+    box-shadow:0 40px 100px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.9);
+    animation:fadeUp .22s cubic-bezier(.32,.72,0,1)">
+
+    <!-- Header -->
+    <div style="background:rgba(26,26,26,.96);padding:18px 22px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-size:16px;font-weight:800;color:#fff;font-family:var(--font-d);display:flex;align-items:center;gap:8px">
+          📄 Opciones de Cotización
+        </div>
+        <div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:2px">Selecciona qué incluir y cómo enviar</div>
+      </div>
+      <button onclick="cerrarModalCotizacion()" style="background:rgba(255,255,255,.1);color:#fff;border:none;
+        width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;
+        align-items:center;justify-content:center"
+        onmouseover="this.style.background='rgba(255,255,255,.22)'"
+        onmouseout="this.style.background='rgba(255,255,255,.1)'">✕</button>
+    </div>
+
+    <div style="padding:20px 22px">
+
+      <!-- Sección: ¿Qué incluir? -->
+      <div style="font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;
+        color:var(--g3);margin-bottom:10px">¿Qué incluir?</div>
+
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px">
+
+        <!-- Opción: Solo cotización -->
+        <label id="cotOptSolo" onclick="setCotOpt('solo')" style="display:flex;align-items:center;gap:12px;
+          padding:12px 14px;border-radius:14px;border:2px solid var(--black);
+          background:rgba(26,26,26,.06);cursor:pointer;transition:all .18s">
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--black);
+            display:flex;align-items:center;justify-content:center;flex-shrink:0" id="cotRadioSolo">
+            <div style="width:10px;height:10px;border-radius:50%;background:var(--black)"></div>
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:13.5px;color:var(--black)">Solo cotización</div>
+            <div style="font-size:11.5px;color:var(--g3);margin-top:1px">PDF con la lista de productos y precios</div>
+          </div>
+          <span style="margin-left:auto;font-size:20px">📄</span>
+        </label>
+
+        <!-- Opción: Cotización + fichas técnicas -->
+        <label id="cotOptFichas" onclick="setCotOpt('fichas')" style="display:flex;align-items:center;gap:12px;
+          padding:12px 14px;border-radius:14px;border:2px solid var(--g5);
+          background:transparent;cursor:pointer;transition:all .18s">
+          <div style="width:20px;height:20px;border-radius:50%;border:2px solid var(--g4);
+            display:flex;align-items:center;justify-content:center;flex-shrink:0" id="cotRadioFichas">
+          </div>
+          <div>
+            <div style="font-weight:700;font-size:13.5px;color:var(--black)">Cotización + fichas técnicas</div>
+            <div style="font-size:11.5px;color:var(--g3);margin-top:1px">Un PDF completo: cotización + datasheets de cada producto</div>
+          </div>
+          <span style="margin-left:auto;font-size:20px">📎</span>
+        </label>
+
+      </div>
+
+      <!-- Sección: ¿Cómo enviar? -->
+      <div style="font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;
+        color:var(--g3);margin-bottom:10px">¿Cómo enviar?</div>
+
+      <div style="display:flex;gap:8px;margin-bottom:18px">
+
+        <label id="cotEnvPDF" onclick="setCotEnv('pdf')" style="flex:1;display:flex;flex-direction:column;align-items:center;
+          gap:6px;padding:12px 8px;border-radius:14px;border:2px solid var(--black);
+          background:rgba(26,26,26,.06);cursor:pointer;transition:all .18s;text-align:center">
+          <span style="font-size:24px">💾</span>
+          <div style="font-weight:700;font-size:12px;color:var(--black)">Descargar PDF</div>
+          <div style="font-size:10px;color:var(--g3)">Guardar en tu dispositivo</div>
+        </label>
+
+        <label id="cotEnvEmail" onclick="setCotEnv('email')" style="flex:1;display:flex;flex-direction:column;align-items:center;
+          gap:6px;padding:12px 8px;border-radius:14px;border:2px solid var(--g5);
+          background:transparent;cursor:pointer;transition:all .18s;text-align:center">
+          <span style="font-size:24px">✉️</span>
+          <div style="font-weight:700;font-size:12px;color:var(--black)">Enviar por email</div>
+          <div style="font-size:10px;color:var(--g3)">Ingresa el email destino</div>
+        </label>
+
+      </div>
+
+      <!-- Campo email (oculto hasta seleccionar envío por email) -->
+      <div id="cotEmailField" style="display:none;margin-bottom:16px">
+        <div style="font-size:11px;font-weight:700;color:var(--g2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px">
+          Email destino
+        </div>
+        <input id="cotEmailInput" type="email" placeholder="cliente@empresa.cl"
+          style="width:100%;border:1.5px solid var(--g5);border-radius:10px;padding:10px 14px;
+          font-size:14px;font-family:var(--font);outline:none;transition:border-color .2s;
+          background:rgba(245,245,247,.8)"
+          onfocus="this.style.borderColor='var(--blue)'"
+          onblur="this.style.borderColor='var(--g5)'">
+        <div style="font-size:10.5px;color:var(--g3);margin-top:5px">
+          💡 Por ahora abre tu cliente de correo con el PDF adjunto (integración SMTP próximamente)
+        </div>
+      </div>
+
+      <!-- Estado / progreso -->
+      <div id="cotStatus" style="display:none;border-radius:10px;padding:10px 14px;
+        font-size:13px;font-weight:500;margin-bottom:14px"></div>
+
+      <!-- Botón generar -->
+      <button id="cotGenBtn" onclick="ejecutarCotizacion()"
+        style="width:100%;background:var(--red);color:#fff;border:none;border-radius:14px;
+        padding:14px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;
+        font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;
+        box-shadow:0 6px 20px rgba(232,0,28,.28)"
+        onmouseover="this.style.transform='translateY(-1px)'"
+        onmouseout="this.style.transform=''">
+        <span id="cotGenIco">📄</span>
+        <span id="cotGenTxt">Generar cotización</span>
+      </button>
+
     </div>
   </div>
 </div>
