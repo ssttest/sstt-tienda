@@ -4805,6 +4805,7 @@ window._gmapsReady = function() {
       window._gmapsCallbacks = [];
     };
   </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
 
@@ -5341,6 +5342,16 @@ window._gmapsReady = function() {
         <label class="pay-opt" onclick="selPay(this)"><input type="radio" name="p" value="khipu"><span class="pay-name">Khipu</span><span class="pay-sub">Pago con tu banco</span></label>
       </div>
     </div>
+    <button onclick="generarCotizacionPDF()"
+      style="width:100%;background:var(--black);color:#fff;border:none;border-radius:16px;
+             padding:14px;font-size:14px;font-weight:700;display:flex;align-items:center;
+             justify-content:center;gap:8px;cursor:pointer;transition:all .18s;
+             font-family:var(--font);margin-bottom:10px;
+             box-shadow:0 4px 16px rgba(0,0,0,.18)"
+      onmouseover="this.style.background='#333';this.style.transform='translateY(-1px)'"
+      onmouseout="this.style.background='var(--black)';this.style.transform=''">
+      📄 Generar Cotización PDF
+    </button>
     <button class="pay-now-btn" onclick="checkout()">
       <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Finalizar compra
@@ -12848,6 +12859,229 @@ function oiRenderResult(result) {
 document.getElementById('orderImportModal')?.addEventListener('click', function(e) {
   if (e.target === this) closeOrderImport();
 });
+
+
+// ════════════════════════════════════════════════════════════════
+// GENERADOR DE COTIZACIÓN PDF — Formato SSTT SpA
+// ════════════════════════════════════════════════════════════════
+const SSTT_LOGO_B64 = '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';
+
+function fmtPeso(n) {
+  return '$ ' + Math.round(n).toLocaleString('es-CL');
+}
+
+function generarCotizacionPDF() {
+  if (!S.cart || S.cart.length === 0) {
+    showToast('⚠️ El carro está vacío'); return;
+  }
+
+  const { jsPDF } = window.jspdf;
+  if (!jsPDF) {
+    showToast('⚠️ Error cargando jsPDF'); return;
+  }
+
+  const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+  const pw = 210; // page width mm
+  const ph = 297; // page height mm
+  const ml = 14;  // margin left
+  const mr = 14;  // margin right
+  const cw = pw - ml - mr; // content width
+
+  // Número de cotización ficticio para maqueta
+  const numCot = 'MAQUETA-' + Date.now().toString().slice(-6);
+  const fecha  = new Date().toLocaleDateString('es-CL');
+
+  // ── HEADER ──────────────────────────────────────────────────
+  // Logo Dahua izquierda
+  try {
+    doc.addImage('data:image/png;base64,' + SSTT_LOGO_B64, 'PNG', ml, 8, 44, 14);
+  } catch(e) { /* si falla el logo, continuar */ }
+
+  // Datos SSTT SpA izquierda bajo el logo
+  doc.setFontSize(7.5);
+  doc.setTextColor(80,80,80);
+  doc.text('SSTT SPA', ml, 26);
+  doc.text('76.047.629-3', ml, 30);
+  doc.text('General José Artigas 3028', ml, 34);
+  doc.text('Nuñoa  Santiago', ml, 38);
+  doc.text('ventas@sstt.cl', ml, 42);
+  doc.text('222042119', ml, 46);
+
+  // Caja roja derecha — COTIZACION
+  const boxX = pw - mr - 60;
+  const boxW = 60;
+  doc.setFillColor(220, 0, 28);
+  doc.rect(boxX, 8, boxW, 22, 'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(8);
+  doc.setFont('helvetica','bold');
+  doc.text('RUT: 76.047.629-3', boxX + boxW/2, 14, {align:'center'});
+  doc.setFontSize(11);
+  doc.text('COTIZACION', boxX + boxW/2, 20, {align:'center'});
+  doc.setFontSize(10);
+  doc.text('Nº ' + numCot, boxX + boxW/2, 26, {align:'center'});
+  doc.setFontSize(8);
+  doc.text('S.I.I. - NUNOA', boxX + boxW/2, 31, {align:'center'});
+
+  // Línea separadora
+  doc.setDrawColor(200,200,200);
+  doc.setLineWidth(0.3);
+  doc.line(ml, 52, pw - mr, 52);
+
+  // FECHA
+  doc.setTextColor(80,80,80);
+  doc.setFontSize(8);
+  doc.setFont('helvetica','normal');
+  doc.text('FECHA:  ' + fecha, pw - mr - 45, 57);
+
+  // ── DATOS CLIENTE (MAQUETA) ──────────────────────────────────
+  let y = 56;
+  doc.setFontSize(8);
+  doc.setFont('helvetica','bold');
+  doc.setTextColor(30,30,30);
+
+  const campos = [
+    ['RAZÓN SOCIAL:', '*** MAQUETA DE PRUEBAS ***'],
+    ['RUT:',          '99.999.999-9'],
+    ['GIRO:',         'Maqueta - Documento de prueba'],
+    ['DIRECCIÓN:',    'Dirección de prueba 123'],
+    ['COMUNA:',       'Santiago'],
+  ];
+  campos.forEach(([label, val]) => {
+    doc.setFont('helvetica','bold');
+    doc.text(label, ml, y);
+    doc.setFont('helvetica','normal');
+    doc.text(val, ml + 28, y);
+    y += 5;
+  });
+
+  y += 3;
+
+  // ── TABLA DE PRODUCTOS ───────────────────────────────────────
+  // Header de tabla
+  const colCant  = ml;
+  const colCod   = ml + 14;
+  const colDesc  = ml + 48;
+  const colPrecio= pw - mr - 34;
+  const colSub   = pw - mr - 1;
+
+  doc.setFillColor(240,240,240);
+  doc.rect(ml, y, cw, 7, 'F');
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(8);
+  doc.setTextColor(30,30,30);
+  doc.text('Cant', colCant + 1, y + 4.5);
+  doc.text('Código', colCod, y + 4.5);
+  doc.text('Descripción', colDesc, y + 4.5);
+  doc.text('Precio', colPrecio, y + 4.5, {align:'right'});
+  doc.text('Subtotal', colSub, y + 4.5, {align:'right'});
+  y += 7;
+
+  // Línea bajo header
+  doc.setDrawColor(180,180,180);
+  doc.line(ml, y, pw - mr, y);
+
+  // Filas de productos
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(7.5);
+  let neto = 0;
+
+  S.cart.forEach((item, idx) => {
+    const subtotal = item.ptotal * item.qty;
+    neto += item.pneto * item.qty;
+
+    // Fondo alterno
+    if (idx % 2 === 1) {
+      doc.setFillColor(250,250,250);
+      doc.rect(ml, y, cw, 8, 'F');
+    }
+
+    doc.setTextColor(30,30,30);
+    doc.text(String(item.qty), colCant + 2, y + 3.5, {align:'center'});
+
+    // Código (puede ser largo — truncar)
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(7);
+    const codTxt = item.codigo.length > 22 ? item.codigo.slice(0,22) : item.codigo;
+    doc.text(codTxt, colCod, y + 3.5);
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(7.5);
+
+    // Descripción — wrap si es larga
+    const maxDescW = colPrecio - colDesc - 4;
+    const descLines = doc.splitTextToSize(item.nombre, maxDescW);
+    const lineH = 3.5;
+    descLines.slice(0,2).forEach((line, li) => {
+      doc.text(line, colDesc, y + 3.5 + li * lineH);
+    });
+
+    doc.setTextColor(30,30,30);
+    doc.text(fmtPeso(item.ptotal), colPrecio, y + 3.5, {align:'right'});
+    doc.text(fmtPeso(subtotal), colSub, y + 3.5, {align:'right'});
+
+    doc.setDrawColor(220,220,220);
+    doc.line(ml, y + 8, pw - mr, y + 8);
+    y += 8;
+
+    // Nueva página si se acaba el espacio
+    if (y > ph - 60) {
+      doc.addPage();
+      y = 20;
+    }
+  });
+
+  // ── TOTALES ──────────────────────────────────────────────────
+  y += 4;
+  const iva   = Math.round(neto * 0.19);
+  const total = neto + iva;
+
+  const totX = pw - mr - 70;
+  const totW = 70;
+
+  // Caja totales
+  doc.setDrawColor(200,200,200);
+  doc.setLineWidth(0.3);
+  doc.rect(totX, y, totW, 22, 'S');
+
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica','normal');
+  doc.setTextColor(60,60,60);
+
+  doc.text('NETO:', totX + 4, y + 6);
+  doc.text(fmtPeso(neto), totX + totW - 3, y + 6, {align:'right'});
+
+  doc.text('I.V.A. 19%:', totX + 4, y + 12);
+  doc.text(fmtPeso(iva), totX + totW - 3, y + 12, {align:'right'});
+
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(10);
+  doc.setTextColor(30,30,30);
+  doc.text('TOTAL:', totX + 4, y + 20);
+  doc.text(fmtPeso(total), totX + totW - 3, y + 20, {align:'right'});
+
+  // ── NOTA PIE ─────────────────────────────────────────────────
+  y += 30;
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(7.5);
+  doc.setTextColor(100,100,100);
+  doc.text('Estimado Cliente:', ml, y);
+  y += 4;
+  const nota = 'Confirmar que lo cotizado corresponde a lo que desea comprar. Si desea despacho favor de indicar los datos para su envío.';
+  const notaLines = doc.splitTextToSize(nota, cw);
+  notaLines.forEach(line => { doc.text(line, ml, y); y += 4; });
+
+  // Línea inferior
+  doc.setDrawColor(180,180,180);
+  doc.line(ml, ph - 20, pw - mr, ph - 20);
+  doc.setFontSize(7);
+  doc.setTextColor(150,150,150);
+  doc.text('SSTT SpA  ·  ventas@sstt.cl  ·  www.sstt.cl  ·  +56 2 2xxx xxxx', pw/2, ph - 15, {align:'center'});
+  doc.text('*** DOCUMENTO DE MAQUETA — NO TIENE VALIDEZ TRIBUTARIA ***', pw/2, ph - 10, {align:'center'});
+
+  // ── DESCARGAR ────────────────────────────────────────────────
+  doc.save('cotizacion-' + numCot + '.pdf');
+  showToast('📄 Cotización generada y descargada');
+}
 
 </script>
 
