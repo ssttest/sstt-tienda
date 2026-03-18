@@ -5499,6 +5499,15 @@ window._gmapsReady = function() {
         </div>
       </div>
     </div>
+    <!-- API KEY BANNER — se oculta cuando hay key -->
+    <div id="aiKeyBanner" style="display:none;display:none;background:#FFF3E8;border:1px solid #F0C88A;border-radius:10px;padding:11px 15px;margin:0 14px 10px;align-items:center;gap:10px;font-size:12.5px;color:#8B5000">
+      <span style="font-size:18px;flex-shrink:0">🔑</span>
+      <div style="flex:1">
+        <strong>IA no activada</strong> — ingresa tu API Key de Anthropic para usar el asistente y el analizador de escena.
+        <a href="https://console.anthropic.com" target="_blank" style="color:#0057B8;font-weight:600;display:block;margin-top:2px;font-size:11.5px">→ Obtener key en console.anthropic.com</a>
+      </div>
+      <button onclick="showApiKeyModal()" style="background:#E8001C;color:#fff;border:none;border-radius:6px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:var(--font)">⚙️ Configurar</button>
+    </div>
     <div class="chat-inp-area">
       <div class="chat-inp-wrap">
         <textarea id="chatInput" class="chat-ta" placeholder="Ej: Necesito cubrir entrada de vehículos a 15m de noche para leer patentes. ¿Qué cámara me recomiendas?" rows="1" onkeydown="handleChatKey(event)" oninput="autoResizeTA(this)"></textarea>
@@ -6843,7 +6852,9 @@ const CATS = {
 // ═══════════════════════════════════════════════════
 // API KEY — Pega tu key de console.anthropic.com aquí
 // ═══════════════════════════════════════════════════
-let ANTHROPIC_API_KEY = localStorage.getItem('sstt_apikey') || '';
+// API via Cloudflare Worker proxy — key guardada en Cloudflare, no en el browser
+const PROXY_URL = 'https://sstt-proxy.ryanodina.workers.dev';
+let ANTHROPIC_API_KEY = ''; // ya no se necesita en el browser
 
 let S = {
   q:'', cat:'todas', sort:'', chipFilter:'',
@@ -7739,15 +7750,7 @@ async function sendAIMessage() {
   const text = inp?.value.trim();
   if (!text) return;
   
-  // Check API key
-  if (!ANTHROPIC_API_KEY) {
-    const key = prompt('🔑 Ingresa tu API Key de Anthropic para activar el Asesor IA:\n(Se guarda localmente en este navegador)');
-    if (!key) return;
-    ANTHROPIC_API_KEY = key.trim();
-    localStorage.setItem('sstt_apikey', ANTHROPIC_API_KEY);
-    // Remove banner if exists
-    document.getElementById('aiKeyBanner')?.remove();
-  }
+  // API via proxy — no se necesita key en el browser
 
   inp.value = ''; if (inp) inp.style.height = '38px';
   qs('sendBtn').disabled = true;
@@ -7756,14 +7759,9 @@ async function sendAIMessage() {
   showAITyping();
   try {
     dbg('📡 Enviando a API...');
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    const resp = await fetch(PROXY_URL, {
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': ANTHROPIC_API_KEY,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-request-direct-browser-access':'true'
-      },
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         model:'claude-sonnet-4-6', max_tokens:1000,
         system: buildAISysPrompt(),
@@ -9628,10 +9626,10 @@ async function fetchSpecsFromPDF(producto) {
     const b64  = btoa(String.fromCharCode(...new Uint8Array(buf)));
 
     // Llamar a Claude API con el PDF
-    const apiResp = await fetch('https://sstt-proxy.ryanodina.workers.dev', {
+    const apiResp = await fetch(PROXY_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
@@ -10255,6 +10253,7 @@ var phoneData = {
 
 // ── ABRIR / CERRAR MODAL ─────────────────────────────────────────
 function openSceneAnalyzer() {
+  // API via Cloudflare Worker — no se necesita key en el browser
   const modal = document.getElementById('sceneModal');
   modal.classList.add('open');
   goToStep(1);
@@ -10796,10 +10795,10 @@ Responde en JSON con este formato exacto:
 USA SOLO códigos que existen en el catálogo. Responde ÚNICAMENTE con JSON válido, sin texto adicional.`;
 
   try {
-    const resp = await fetch('https://sstt-proxy.ryanodina.workers.dev', {
+    const resp = await fetch(PROXY_URL, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
@@ -11251,9 +11250,9 @@ ${a.resumen_instalacion || ''}
     document.getElementById('chatInput').value = '';
     addAIMsg('user', msg);
     showAITyping();
-    fetch('https://sstt-proxy.ryanodina.workers.dev', {
+    fetch(PROXY_URL, {
       method: 'POST',
-      headers: { 'Content-Type':'application/json' },
+      headers: {'Content-Type':'application/json'},
       body: JSON.stringify({
         model:'claude-sonnet-4-6', max_tokens:1000,
         system: buildAISysPrompt(),
@@ -11293,36 +11292,127 @@ function showApiKeyModal() {
   const modal = document.getElementById('apiKeyModal');
   modal.style.display = 'flex';
   const inp = document.getElementById('apiKeyInput');
-  if (inp) inp.value = ANTHROPIC_API_KEY || '';
-  // Focus input after animation
-  setTimeout(() => inp?.focus(), 100);
+  if (inp) {
+    inp.value = ANTHROPIC_API_KEY || '';
+    inp.type = 'password';
+  }
+  // Reset status
+  const st = document.getElementById('apiKeyStatus');
+  if (st) st.style.display = 'none';
+  // Reset button
+  const btn = document.getElementById('apiKeySaveBtn');
+  const ico = document.getElementById('apiKeySaveBtnIcon');
+  const txt = document.getElementById('apiKeySaveBtnTxt');
+  if (btn) btn.disabled = false;
+  if (ico) ico.textContent = '✅';
+  if (txt) txt.textContent = 'Guardar y probar';
+  setTimeout(() => inp?.focus(), 120);
 }
 
-function saveApiKey() {
+function closeApiKeyModal() {
+  document.getElementById('apiKeyModal').style.display = 'none';
+}
+
+function toggleApiKeyVis() {
+  const inp = document.getElementById('apiKeyInput');
+  const btn = document.getElementById('apiKeyVisBtn');
+  if (!inp) return;
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+  if (btn) btn.textContent = inp.type === 'password' ? '👁' : '🙈';
+}
+
+function clearApiKey() {
+  ANTHROPIC_API_KEY = '';
+  localStorage.removeItem('sstt_apikey');
+  const inp = document.getElementById('apiKeyInput');
+  if (inp) inp.value = '';
+  showApiKeyStatus('🗑 API Key borrada', '#555', '#F5F5F5', '#E0E0E0');
+  updateApiKeyIndicator();
+  // Show banner
+  const banner = document.getElementById('aiKeyBanner');
+  if (banner) banner.style.display = 'flex';
+}
+
+function showApiKeyStatus(msg, color, bg, border) {
+  const st = document.getElementById('apiKeyStatus');
+  if (!st) return;
+  st.style.cssText = \`display:flex;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;margin-bottom:14px;align-items:center;gap:8px;color:\${color};background:\${bg};border:1px solid \${border}\`;
+  st.textContent = msg;
+}
+
+async function testAndSaveApiKey() {
   const inp = document.getElementById('apiKeyInput');
   const key = inp?.value.trim();
-  if (!key || !key.startsWith('sk-ant-')) {
-    const status = document.getElementById('apiKeyStatus');
-    status.style.display = 'block';
-    status.style.color = '#C8001A';
-    status.textContent = '⚠️ La key debe comenzar con sk-ant- — verifica que la copiaste completa';
-    return;
+  if (!key) {
+    showApiKeyStatus('⚠️ Ingresa tu API Key primero', '#8B5000', '#FFF3E8', '#F0C88A');
+    inp?.focus(); return;
   }
-  ANTHROPIC_API_KEY = key;
-  localStorage.setItem('sstt_apikey', key);
-  document.getElementById('apiKeyModal').style.display = 'none';
-  showToast('✅ API Key guardada — IA activada');
-  // Show indicator in chat header
-  updateApiKeyIndicator();
+  if (!key.startsWith('sk-ant-')) {
+    showApiKeyStatus('⚠️ La key debe comenzar con sk-ant-api03- — verifica que la copiaste completa', '#C8001A', '#FFF0F2', '#FFCCCC');
+    inp?.focus(); return;
+  }
+
+  // Loading state
+  const btn = document.getElementById('apiKeySaveBtn');
+  const ico = document.getElementById('apiKeySaveBtnIcon');
+  const txt = document.getElementById('apiKeySaveBtnTxt');
+  if (btn) btn.disabled = true;
+  if (ico) ico.textContent = '⏳';
+  if (txt) txt.textContent = 'Verificando…';
+  showApiKeyStatus('🔄 Probando conexión con Anthropic…', '#0057B8', '#EAF1FB', '#C0D4F0');
+
+  try {
+    const resp = await fetch(PROXY_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 10,
+        messages: [{ role: 'user', content: 'ok' }]
+      })
+    });
+    const data = await resp.json();
+
+    if (data.error) {
+      const msg = data.error.type === 'authentication_error'
+        ? '❌ API Key inválida — verifica que la copiaste completa desde console.anthropic.com'
+        : data.error.type === 'permission_error'
+        ? '⚠️ Sin créditos — recarga créditos en console.anthropic.com/settings/billing'
+        : \`❌ Error: \${data.error.message}\`;
+      showApiKeyStatus(msg, '#C8001A', '#FFF0F2', '#FFCCCC');
+      if (btn) btn.disabled = false;
+      if (ico) ico.textContent = '✅';
+      if (txt) txt.textContent = 'Guardar y probar';
+      return;
+    }
+
+    // ✅ Éxito
+    ANTHROPIC_API_KEY = key;
+    localStorage.setItem('sstt_apikey', key);
+    showApiKeyStatus('✅ Conexión exitosa — IA activada correctamente', '#1A7F3C', '#EAF6EE', '#B8E8CA');
+    updateApiKeyIndicator();
+    // Hide banner
+    const banner = document.getElementById('aiKeyBanner');
+    if (banner) banner.style.display = 'none';
+    showToast('✅ IA activada — ya puedes usar el asistente y el analizador de escena');
+    setTimeout(closeApiKeyModal, 1800);
+
+  } catch(e) {
+    showApiKeyStatus('❌ No se pudo conectar a Anthropic — revisa tu conexión a internet', '#C8001A', '#FFF0F2', '#FFCCCC');
+    if (btn) btn.disabled = false;
+    if (ico) ico.textContent = '✅';
+    if (txt) txt.textContent = 'Guardar y probar';
+  }
 }
 
+// Alias legacy
+function saveApiKey() { testAndSaveApiKey(); }
+
 function updateApiKeyIndicator() {
+  // Con Cloudflare Worker proxy la IA siempre está activa
   const hdr = document.querySelector('.chat-hdr-sub');
-  if (!hdr) return;
-  if (ANTHROPIC_API_KEY) {
-    hdr.innerHTML = 'Experto Dahua · DORI · IVS · PoE · Almacenamiento · Óptica &nbsp;<span style="background:#0A7A38;color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;letter-spacing:.3px">IA ACTIVA</span>';
-  } else {
-    hdr.innerHTML = 'Experto Dahua · DORI · IVS · PoE · Almacenamiento · Óptica &nbsp;<span style="background:#C85000;color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;letter-spacing:.3px;cursor:pointer" onclick="showApiKeyModal()">⚙ CONFIGURAR IA</span>';
+  if (hdr) {
+    hdr.innerHTML = 'Experto Dahua · DORI · IVS · PoE · Almacenamiento · Óptica &nbsp;<span style="background:#0A7A38;color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:3px;letter-spacing:.3px">IA ACTIVA ✓</span>';
   }
 }
 
@@ -11581,69 +11671,70 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 <!-- ══════════════ MODAL: API KEY CONFIG ══════════════ -->
-<div id="apiKeyModal" style="
-  display:none; position:fixed; inset:0; z-index:2000;
-  background:rgba(0,0,0,.6); backdrop-filter:blur(6px);
-  align-items:center; justify-content:center; padding:20px;
-">
-  <div style="
-    background:#fff; border-radius:12px; width:100%; max-width:480px;
-    overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.3);
-    animation:fadeUp .22s ease;
-  ">
+<div id="apiKeyModal" style="display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:14px;width:100%;max-width:500px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,.35);animation:fadeUp .22s ease">
+
     <!-- Header -->
-    <div style="background:#1A1A1A;color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between">
+    <div style="background:#1A1A1A;color:#fff;padding:18px 22px;display:flex;align-items:center;justify-content:space-between">
       <div>
-        <div style="font-size:16px;font-weight:700;font-family:var(--font-d)">🔑 Configurar API de IA</div>
-        <div style="font-size:11px;color:rgba(255,255,255,.5);margin-top:2px">console.anthropic.com</div>
+        <div style="font-size:17px;font-weight:700;font-family:var(--font-d)">🔑 Configurar IA — API Key Anthropic</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.45);margin-top:3px">Se guarda solo en tu navegador · Nunca sale de tu dispositivo</div>
       </div>
-      <button onclick="document.getElementById('apiKeyModal').style.display='none'"
-        style="background:rgba(255,255,255,.1);color:#fff;border:none;width:28px;height:28px;border-radius:50%;font-size:15px;cursor:pointer">✕</button>
+      <button onclick="closeApiKeyModal()" style="background:rgba(255,255,255,.12);color:#fff;border:none;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center">✕</button>
     </div>
+
     <!-- Body -->
-    <div style="padding:22px 20px">
-      <div style="background:#FFF3E8;border:1px solid #F0C88A;border-radius:6px;padding:10px 14px;font-size:12.5px;color:#8B5000;margin-bottom:16px;display:flex;gap:8px;align-items:flex-start">
-        <span style="font-size:16px;flex-shrink:0">⚠️</span>
-        <div>
-          <strong>Tu plan Pro de Claude.ai no incluye la API.</strong><br>
-          Necesitas una cuenta separada en <strong>console.anthropic.com</strong> con créditos cargados (~$5 USD mínimo).
-          Costo estimado: <strong>&lt;$0.01 USD por consulta</strong>.
+    <div style="padding:22px">
+
+      <!-- Status badge (hidden until test) -->
+      <div id="apiKeyStatus" style="display:none;border-radius:8px;padding:10px 14px;font-size:13px;font-weight:600;margin-bottom:14px;display:none;align-items:center;gap:8px"></div>
+
+      <!-- Key input -->
+      <div style="margin-bottom:16px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#666;margin-bottom:7px">Tu API Key</div>
+        <div style="position:relative">
+          <input id="apiKeyInput" type="password"
+            placeholder="sk-ant-api03-..."
+            autocomplete="off" spellcheck="false"
+            style="width:100%;border:1.5px solid #E0E0E0;border-radius:6px;padding:11px 44px 11px 12px;font-size:14px;font-family:monospace;outline:none;transition:border-color .2s;color:#1A1A1A"
+            onfocus="this.style.borderColor='#0057B8'"
+            onblur="this.style.borderColor='#E0E0E0'"
+            onkeydown="if(event.key==='Enter')saveApiKey()">
+          <button onclick="toggleApiKeyVis()" id="apiKeyVisBtn" title="Mostrar/ocultar"
+            style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:#999;padding:2px">👁</button>
+        </div>
+        <div style="font-size:11px;color:#999;margin-top:5px;line-height:1.5">
+          Obtén tu key en <a href="https://console.anthropic.com/keys" target="_blank" style="color:#0057B8;font-weight:600">console.anthropic.com/keys</a> (cuenta separada de Claude.ai, requiere créditos ~$5 USD)
         </div>
       </div>
-      
-      <div style="margin-bottom:14px">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#666;margin-bottom:6px">Tu API Key</div>
-        <input id="apiKeyInput" type="password"
-          placeholder="sk-ant-api03-..."
-          style="width:100%;border:1.5px solid #E0E0E0;border-radius:4px;padding:10px 12px;font-size:14px;font-family:monospace;outline:none;transition:border-color .15s"
-          onfocus="this.style.borderColor='#0057B8'"
-          onblur="this.style.borderColor='#E0E0E0'"
-          value="">
-        <div style="font-size:11px;color:#999;margin-top:5px">Se guarda solo en tu navegador (localStorage). Nunca se sube a ningún servidor.</div>
+
+      <!-- Info box -->
+      <div style="background:#F5F5F5;border-radius:8px;padding:13px 15px;margin-bottom:18px;font-size:12.5px;color:#555;line-height:1.75">
+        <strong style="color:#1A1A1A">¿Cómo obtener la key?</strong><br>
+        1. <a href="https://console.anthropic.com" target="_blank" style="color:#0057B8">console.anthropic.com</a> → crear cuenta<br>
+        2. Billing → cargar créditos (mín. $5 USD · ~$0.003 por consulta)<br>
+        3. API Keys → <strong>Create Key</strong> → copiar (empieza con <code style="background:#E8E8E8;padding:1px 5px;border-radius:3px;font-size:11px">sk-ant-</code>)
       </div>
 
-      <div style="background:#F5F5F5;border-radius:6px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#555;line-height:1.7">
-        <strong>Pasos para obtener tu key:</strong><br>
-        1. Ve a <a href="https://console.anthropic.com" target="_blank" style="color:#0057B8;font-weight:600">console.anthropic.com</a><br>
-        2. Crea cuenta (distinta a Claude.ai)<br>
-        3. Agrega tarjeta → compra créditos ($5 mínimo)<br>
-        4. Menú: <strong>API Keys → Create Key</strong><br>
-        5. Copia la key (empieza con <code style="background:#E8E8E8;padding:1px 5px;border-radius:3px">sk-ant-</code>) y pégala arriba
-      </div>
-
-      <div style="display:flex;gap:8px">
-        <button onclick="saveApiKey()"
-          style="flex:1;background:#E8001C;color:#fff;border:none;border-radius:4px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s"
+      <!-- Buttons -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button onclick="testAndSaveApiKey()" id="apiKeySaveBtn"
+          style="flex:1;min-width:160px;background:#E8001C;color:#fff;border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:7px"
           onmouseover="this.style.background='#C8001A'" onmouseout="this.style.background='#E8001C'">
-          ✅ Guardar y activar IA
+          <span id="apiKeySaveBtnIcon">✅</span> <span id="apiKeySaveBtnTxt">Guardar y probar</span>
         </button>
-        <button onclick="document.getElementById('apiKeyModal').style.display='none'"
-          style="background:#F5F5F5;color:#333;border:1.5px solid #E0E0E0;border-radius:4px;padding:12px 16px;font-size:13px;font-weight:600;cursor:pointer">
+        <button onclick="clearApiKey()"
+          style="background:#F5F5F5;color:#555;border:1.5px solid #E0E0E0;border-radius:8px;padding:13px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;font-family:var(--font)"
+          onmouseover="this.style.background='#EBEBEB'" onmouseout="this.style.background='#F5F5F5'">
+          🗑 Borrar key
+        </button>
+        <button onclick="closeApiKeyModal()"
+          style="background:#fff;color:#555;border:1.5px solid #E0E0E0;border-radius:8px;padding:13px 16px;font-size:13px;font-weight:600;cursor:pointer;transition:background .15s;font-family:var(--font)"
+          onmouseover="this.style.background='#F5F5F5'" onmouseout="this.style.background='#fff'">
           Cancelar
         </button>
       </div>
 
-      <div id="apiKeyStatus" style="margin-top:10px;font-size:12px;text-align:center;display:none"></div>
     </div>
   </div>
 </div>
