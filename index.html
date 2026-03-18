@@ -1272,8 +1272,10 @@ nav {
   font-size: 10px; font-weight: 700; padding: 3px 10px;
   background: rgba(0,0,0,.06); color: var(--g3); border-radius: 20px;
 }
-.pb2-wp { background: #1e8f4e; color: #fff }
-.pb2-bs { background: rgba(0,87,184,.1); color: var(--blue) }
+.pb2-wp  { background: #1e8f4e; color: #fff }
+.pb2-tr  { background: #0057B8; color: #fff }
+.pb2-kh  { background: #6B21A8; color: #fff }
+.pb2-bs  { background: rgba(0,87,184,.1); color: var(--blue) }
 
 /* Cart count on header button */
 .cart-cnt {
@@ -4595,6 +4597,122 @@ input[data-validated="1"]::after {
   .cs { border-radius:12px }
 }
 
+
+/* ══════════════════════════════════════════════════════════════════
+   RESPONSIVE CONSOLIDADO — mobile-first, todos los breakpoints
+   320px fold cerrado · 480px móvil · 768px tablet · 1024px laptop
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Tablet y móvil grande (≤ 1024px) ───────────────────────────── */
+@media(max-width:1024px) {
+  .header-inner { grid-template-columns: auto 1fr auto; gap:12px; height:60px }
+  .logo-a, .logo-rest { font-size:26px }
+  .logo-divider, .logo-dist { display:none }
+  .main-wrap { grid-template-columns: 180px 1fr }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-techs { display:none }
+  .hero-title { font-size:42px }
+  .ai-hero-inner { grid-template-columns: 1fr }
+  .ai-stats-col { flex-direction:row; gap:8px }
+  .chat-layout { grid-template-columns: 1fr }
+  .chat-sidebar { display:none }
+}
+
+/* ── Tablet (≤ 768px) ───────────────────────────────────────────── */
+@media(max-width:768px) {
+  /* Topbar simplificado */
+  .topbar-l > span, .topbar-l > a { display:none }
+  .topbar-l > span:first-child { display:flex }
+  /* Header */
+  .header-inner { grid-template-columns: auto 1fr auto; height:56px; padding:0 16px }
+  .search-wrap { display:none }
+  .mob-search { display:block }
+  .hbtn span { display:none }
+  /* Sidebar oculto, layout 1col */
+  .main-wrap { grid-template-columns: 1fr }
+  .sidebar { display:none }
+  /* Hero */
+  .hero { padding:36px 0 40px }
+  .hero-title { font-size:34px }
+  .hero-stats { flex-wrap:wrap; gap:16px }
+  /* Catálogo */
+  .cp-row { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap:8px }
+  .catalog-area { padding:12px }
+  /* Módulo nav */
+  .module-nav-inner { gap:0 }
+  .mnav-tab { padding:0 14px; font-size:12.5px }
+  /* Carro drawer */
+  .cart-drawer { width:100%; top:0; right:0; bottom:0; border-radius:0 }
+  /* Academia */
+  .ac-hero-inner { grid-template-columns:1fr }
+  .ac-stats { flex-wrap:wrap }
+  .calc-grid { grid-template-columns:1fr }
+  .videos-grid, .guias-grid { grid-template-columns:1fr }
+  /* Comparador modal */
+  .cmp-modal-wrap { max-height:100vh; border-radius:0 }
+  /* Ficha producto */
+  .pm-hero { grid-template-columns:1fr !important }
+  .pm-img-panel { border-right:none !important; border-bottom:1px solid var(--g5) !important }
+  .pm-wrap { margin:0; border-radius:0 }
+  /* Chat */
+  .ai-title { font-size:32px }
+  .chat-msgs { height:320px }
+  .hero-chips { display:none }
+}
+
+/* ── Móvil grande (≤ 600px) ─────────────────────────────────────── */
+@media(max-width:600px) {
+  .header-inner { gap:8px }
+  .hero-title { font-size:28px }
+  .hero-sub { font-size:13px }
+  .hero-btns { flex-direction:column; gap:8px }
+  .btn-hero-primary, .btn-hero-outline { width:100%; justify-content:center }
+  .cp-row { grid-template-columns: repeat(2,1fr); gap:6px }
+  .pcard-body { padding:10px 12px }
+  .price-total { font-size:19px }
+  /* Nav categorías horizontal scroll */
+  nav { display:block }
+  .nav-inner { gap:0 }
+  .nav-link { padding:0 12px; font-size:12px }
+  /* Comparador panel */
+  .cmp-panel { width:100% !important; right:0 }
+  /* Carro */
+  .frow { grid-template-columns:1fr }
+  .totals { padding:10px 12px }
+  .pay-now-btn { font-size:14px; padding:14px }
+  /* Ficha */
+  .pm-tabbar { gap:0 }
+  .pm-tab { padding:0 12px; font-size:12px }
+  .pm-quickspecs { grid-template-columns:1fr 1fr }
+  /* Academia */
+  .ac-tabs-bar { gap:0 }
+  .ac-tab { padding:10px 14px; font-size:12px }
+}
+
+/* ── Móvil pequeño / Fold cerrado (≤ 400px) ─────────────────────── */
+@media(max-width:400px) {
+  .logo-a, .logo-rest { font-size:22px }
+  .hero-title { font-size:24px }
+  .cp-row { grid-template-columns: repeat(2,1fr); gap:4px }
+  .pccard-name { font-size:11.5px }
+  .price-total { font-size:17px }
+  .pccard-actions { grid-template-columns:1fr auto auto }
+  .btn-add { font-size:10.5px; padding:7px 8px }
+  .cart-drawer { width:100vw }
+  .module-nav-inner { gap:0 }
+  .mnav-tab { padding:0 10px; font-size:11.5px }
+  /* Topbar mínimo */
+  .topbar-r { gap:8px }
+  .topbar-r a { font-size:11px }
+}
+
+/* ── Escritorio amplio (≥ 1440px) ───────────────────────────────── */
+@media(min-width:1440px) {
+  .wrap { max-width:1400px }
+  .cp-row { grid-template-columns: repeat(auto-fill, minmax(220px,1fr)) }
+  .hero-title { font-size:64px }
+  .chat-msgs { height:520px }
+}
 </style>
 
 <!-- Google Places Autocomplete — configurable via localStorage('sstt_gmaps_key') -->
@@ -4655,9 +4773,9 @@ window._gmapsReady = function() {
     </div>
     <div class="topbar-r">
       <span style="opacity:.7;font-size:11px">Despachamos con:</span>
-      <span class="c-pill">Chilexpress</span>
-      <span class="c-pill">Starken</span>
-      <span class="c-pill">Bluexpress</span>
+      <span class="c-pill ci-chx" style="border-radius:3px;padding:2px 8px;font-size:10px;font-weight:900;letter-spacing:.2px">Chilexpress</span>
+      <span class="c-pill ci-stk" style="border-radius:3px;padding:2px 8px;font-size:10px;font-weight:900;letter-spacing:.2px">Starken</span>
+      <span class="c-pill ci-blx" style="border-radius:3px;padding:2px 8px;font-size:10px;font-weight:900;letter-spacing:.2px">Bluexpress</span>
       <span style="opacity:.3">|</span>
       <a href="#">Cómo comprar</a>
       <a href="#">Post-venta</a>
@@ -5154,8 +5272,8 @@ window._gmapsReady = function() {
     </button>
     <div class="pay-badges">
       <span class="pb2 pb2-wp">WebPay Plus</span>
-      <span class="pb2">Transferencia</span>
-      <span class="pb2">Khipu</span>
+      <span class="pb2 pb2-tr">Transferencia BCI</span>
+      <span class="pb2 pb2-kh">Khipu</span>
       <span class="pb2 pb2-bs">Boleta/Factura Bsale</span>
     </div>
   </div>
