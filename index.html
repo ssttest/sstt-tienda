@@ -910,21 +910,30 @@ nav {
 }
 
 /* Price — Dahua: precio grande y prominente */
-.pcard-price { margin-top: auto; padding-top: 6px }
+.pcard-price {
+  margin-top: auto;
+  padding-top: 6px;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.price-neto { font-size: 11px; color: var(--g3); }
 .price-total {
   font-family: var(--font-d);
   font-size: 22px;
   font-weight: 800;
   color: var(--black);
   letter-spacing: -.3px;
-  line-height: 1;
+  line-height: 1.1;
 }
-.price-sub { font-size: 10.5px; color: var(--g3); margin-top: 2px }
+.price-sub { font-size: 10px; color: var(--g3); margin-top: 1px }
 
 /* Card actions */
 .pcard-actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  grid-template-rows: auto auto;
   gap: 5px;
   padding: 8px 10px 10px;
   border-top: 1px solid var(--g5);
@@ -4848,8 +4857,8 @@ input[data-validated="1"]::after {
   .pcard-body { padding:8px 10px }
   .pcard-name { font-size:12.5px; -webkit-line-clamp:3; line-clamp:3 }
   .price-total { font-size:18px }
-  .pcard-actions { gap:4px }
-  .pca-btn { font-size:9.5px; padding:7px 3px; border-radius:8px; }
+  .pcard-actions { gap:3px; grid-template-columns:1fr 1fr !important; }
+  .pca-btn { font-size:9px; padding:6px 2px; border-radius:8px; }
   .pcard-img-wrap { height:110px }
   /* Nav categorías horizontal scroll */
   nav { display:block }
@@ -4878,7 +4887,8 @@ input[data-validated="1"]::after {
   .catalog-area { padding:2px 2px }
   .pcard-name { font-size:12px }
   .price-total { font-size:16px }
-  .pca-btn { font-size:9px; padding:6px 2px; }
+  .pcard-actions { gap:2px; grid-template-columns:1fr 1fr !important; }
+  .pca-btn { font-size:8.5px; padding:5px 2px; }
   .cart-drawer { width:100vw }
   .module-nav-inner { gap:0 }
   .mnav-tab { padding:0 10px; font-size:11.5px }
@@ -7887,6 +7897,13 @@ function render() {
           <button class="pca-btn pca-btn-light" data-id="${p.id}" onclick="cmpToggle(${p.id});this.classList.toggle('added')" title="Comparar">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 8 22 12 18 16"/><polyline points="6 8 2 12 6 16"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
             <span>Comparar</span>
+          </button>
+          <button class="pca-btn pca-btn-light" onclick="copyTxt('${p.codigo}');showToast('✅ Código copiado')" title="Copiar código">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <rect x="8" y="8" width="12" height="14" rx="2"/>
+              <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h3"/>
+            </svg>
+            <span>Copiar</span>
           </button>
         </div>
       </div>
@@ -15810,6 +15827,57 @@ function updateMnavBadge() {
   badge.textContent = total;
   badge.style.display = total>0 ? 'flex' : 'none';
 }
+
+// ── Saltar el hero con un scroll ─────────────────────────────
+(function() {
+  const hero = document.querySelector('.hero');
+  if (!hero) return;
+
+  let heroSkipped = false;
+  let ticking = false;
+
+  function getCatalogTop() {
+    // El catálogo está justo después del hero
+    const catalog = hero.nextElementSibling;
+    return catalog ? catalog.getBoundingClientRect().top + window.scrollY : 0;
+  }
+
+  window.addEventListener('wheel', function(e) {
+    // Solo actuar si el usuario está en el hero (visible en pantalla)
+    const heroRect = hero.getBoundingClientRect();
+    const heroVisible = heroRect.top < window.innerHeight && heroRect.bottom > 0;
+
+    if (!heroVisible) { heroSkipped = false; return; }
+
+    // Si scroll hacia abajo y hero aún visible → saltar al catálogo
+    if (e.deltaY > 0 && !ticking) {
+      ticking = true;
+      const targetY = getCatalogTop() - 60; // offset header
+      window.scrollTo({ top: targetY, behavior: 'smooth' });
+      setTimeout(() => { ticking = false; }, 600);
+    }
+  }, { passive: true });
+
+  // También con touch en móvil
+  let touchStartY = 0;
+  window.addEventListener('touchstart', function(e) {
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener('touchend', function(e) {
+    const heroRect = hero.getBoundingClientRect();
+    const heroVisible = heroRect.top < window.innerHeight * 0.5 && heroRect.bottom > 0;
+    if (!heroVisible) return;
+
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    if (dy > 40 && !ticking) { // swipe up > 40px
+      ticking = true;
+      window.scrollTo({ top: getCatalogTop() - 60, behavior: 'smooth' });
+      setTimeout(() => { ticking = false; }, 600);
+    }
+  }, { passive: true });
+})();
+
 </script>
 </body>
 </html>
