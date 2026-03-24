@@ -16095,10 +16095,21 @@ var aiHistory = [];
 function aiToggle() {
   aiPanelOpen = !aiPanelOpen;
   var p = document.getElementById('aiPanel');
-  if (aiPanelOpen) { p.classList.add('open'); document.getElementById('aiInp').focus(); }
-  else p.classList.remove('open');
+  if (aiPanelOpen) {
+    p.style.display = 'flex';
+    p.classList.add('open');
+    setTimeout(function(){ document.getElementById('aiInp').focus(); }, 100);
+  } else {
+    p.style.display = 'none';
+    p.classList.remove('open');
+  }
 }
-function aiClose() { aiPanelOpen = false; document.getElementById('aiPanel').classList.remove('open'); }
+function aiClose() {
+  aiPanelOpen = false;
+  var p = document.getElementById('aiPanel');
+  p.style.display = 'none';
+  p.classList.remove('open');
+}
 
 function aiAddMsg(role, content, prods) {
   var msgs = document.getElementById('aiMsgs');
@@ -16257,7 +16268,7 @@ document.addEventListener('click', function(e) {
 
 
 <!-- ASISTENTE FLOTANTE SSTT -->
-<div id="aiPanel">
+<div id="aiPanel" style="display:none;position:fixed!important;z-index:2147483646!important">
   <div class="aip-head">
     <svg width="28" height="28" viewBox="0 0 40 40" fill="none" flex-shrink="0" style="flex-shrink:0">
       <defs>
@@ -16321,7 +16332,7 @@ document.addEventListener('click', function(e) {
   </div>
 </div>
 
-<button id="aiFab" onclick="aiToggle()" title="Asesor IA SSTT">
+<button id="aiFab" onclick="aiToggle()" title="Asesor IA SSTT" style="position:fixed!important;bottom:28px!important;right:28px!important;z-index:2147483647!important;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#1a73e8,#8b5cf6,#e8001c);border:none;cursor:pointer;display:flex!important;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(26,115,232,.5);visibility:visible!important;opacity:1!important">
   <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
     <defs>
       <linearGradient id="gF" x1="0" y1="0" x2="1" y2="1">
