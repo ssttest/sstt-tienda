@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="referrer" content="no-referrer">
+<meta name="referrer" content="no-referrer-when-downgrade">
 <link rel="preconnect" href="https://camaras-de-seguridad-dahua.sstt.cl">
 <link rel="dns-prefetch" href="https://camaras-de-seguridad-dahua.sstt.cl">
 <title>SSTT® — Cámaras de Seguridad Dahua®</title>
@@ -924,11 +924,37 @@ nav {
 /* Card actions */
 .pcard-actions {
   display: grid;
-  grid-template-columns: 1fr auto auto auto;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 5px;
-  padding: 8px 14px 12px;
+  padding: 8px 10px 10px;
   border-top: 1px solid var(--g5);
 }
+/* Botón base — icono arriba, texto abajo */
+.pca-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: var(--font);
+  font-size: 10.5px;
+  font-weight: 700;
+  transition: all .15s;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+.pca-btn:active { transform: scale(.95); }
+.pca-btn-red   { background: var(--red);   color: #fff;           }
+.pca-btn-red:hover { background: var(--red2); }
+.pca-btn-dark  { background: var(--black); color: #fff;           }
+.pca-btn-dark:hover { background: #333; }
+.pca-btn-light { background: var(--g6);   color: var(--black); border: 1px solid var(--g5); }
+.pca-btn-light:hover { background: var(--g5); }
+.pca-btn-light.added { background: var(--black); color: #fff; border-color: var(--black); }
 .btn-add {
   background: var(--red);
   color: var(--white);
@@ -982,6 +1008,27 @@ nav {
 
 /* Pagination */
 .pag { display: flex; justify-content: center; gap: 4px; margin-top: 24px; flex-wrap: wrap }
+
+/* ── Tech badges flotantes sobre imagen ── */
+.tech-badge {
+  position: absolute;
+  bottom: 6px; left: 6px;
+  font-size: 9px; font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 20px;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 2;
+  pointer-events: none;
+}
+.tech-badge + .tech-badge { left: auto; right: 6px; }
+.tech-fc   { background: rgba(255,100,20,.75);  color:#fff; }
+.tech-ws   { background: rgba(0,60,180,.75);    color:#fff; }
+.tech-wm   { background: rgba(80,0,180,.75);    color:#fff; }
+.tech-tioc { background: rgba(200,0,20,.78);    color:#fff; }
+.tech-sl   { background: rgba(0,130,80,.75);    color:#fff; }
 .pg-btn {
   background: var(--white);
   border: 1.5px solid var(--g5);
@@ -4801,8 +4848,8 @@ input[data-validated="1"]::after {
   .pcard-body { padding:8px 10px }
   .pcard-name { font-size:12.5px; -webkit-line-clamp:3; line-clamp:3 }
   .price-total { font-size:18px }
-  .btn-add { font-size:11px; padding:8px 6px }
   .pcard-actions { gap:4px }
+  .pca-btn { font-size:9.5px; padding:7px 3px; border-radius:8px; }
   .pcard-img-wrap { height:110px }
   /* Nav categorías horizontal scroll */
   nav { display:block }
@@ -4831,7 +4878,7 @@ input[data-validated="1"]::after {
   .catalog-area { padding:2px 2px }
   .pcard-name { font-size:12px }
   .price-total { font-size:16px }
-  .btn-add { font-size:10px; padding:7px 5px }
+  .pca-btn { font-size:9px; padding:6px 2px; }
   .cart-drawer { width:100vw }
   .module-nav-inner { gap:0 }
   .mnav-tab { padding:0 10px; font-size:11.5px }
@@ -4986,6 +5033,13 @@ window._gmapsReady = function() {
     };
   </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+// Configurar worker de pdf.js
+if (window.pdfjsLib) {
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+</script>
 </head>
 <body>
 
@@ -5093,7 +5147,7 @@ window._gmapsReady = function() {
     </button>
     <div style="margin-left:auto;display:flex;align-items:center;gap:10px;padding-right:4px">
       <span style="font-size:11px;color:rgba(255,255,255,.4)">Distribuidor Oficial</span>
-      <div style="background:var(--red);color:#fff;font-size:9px;font-weight:800;padding:3px 8px;border-radius:3px;letter-spacing:.3px">DAHUA CHILE</div>
+      
     </div>
   </div>
 </nav>
@@ -7669,26 +7723,90 @@ const BADGE_MAP = {normal:['Stock Normal','pb-stock'],bajo:['Últimas unidades',
 
 
 // ── Fallback inteligente de imágenes ─────────────────────────────
-const IMG_BASE = 'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_';
-function imgFallback(el, codigo, cat) {
-  el.classList.remove('loading');
-  // Intentar variantes del código
-  const tried = el.dataset.tried ? el.dataset.tried.split(',') : [];
-  const variants = [
-    'DH-' + codigo,          // con prefijo DH-
-    codigo.replace(/^DH-/,''), // sin prefijo DH-
-    codigo.replace(/-N$/,''), // sin sufijo -N
-    codigo.replace(/-P$/,''), // sin sufijo -P
-  ].filter(v => v !== codigo && !tried.includes(v));
+const IMG_ORIGIN = 'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_';
+const PDF_BASE   = 'https://cdn1.dori.cl/fichatecnica/';
+// Proxy de imagen via Cloudflare Worker (envía Referer correcto al servidor sstt.cl)
+const IMG_BASE   = PROXY_URL + '/img?url=' + encodeURIComponent(IMG_ORIGIN).replace(/%20/g,'+');
 
-  if (variants.length > 0) {
-    tried.push(codigo);
-    el.dataset.tried = tried.join(',');
-    el.src = IMG_BASE + variants[0] + '.webp';
+// Función helper para construir URL de imagen via proxy
+function imgProxyUrl(codigo) {
+  const direct = IMG_ORIGIN + codigo + '.webp';
+  return PROXY_URL + '/img?url=' + encodeURIComponent(direct);
+}
+const _pdfImgCache = {}; // cache codigo → dataURL
+
+// Extraer imagen de la primera página del PDF de ficha técnica
+async function extractPdfImage(codigo, imgEl) {
+  if (_pdfImgCache[codigo]) {
+    imgEl.src = _pdfImgCache[codigo];
     return;
   }
-  // Sin más variantes — mostrar placeholder con ícono de categoría
+  const pdfUrl = PDF_BASE + codigo + '.pdf';
+  try {
+    const pdf  = await pdfjsLib.getDocument({ url: pdfUrl, cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/', cMapPacked: true }).promise;
+    const page = await pdf.getPage(1);
+    // Escalar para obtener ~300px de ancho
+    const viewport = page.getViewport({ scale: 1 });
+    const scale    = 300 / viewport.width;
+    const vp       = page.getViewport({ scale });
+    const canvas   = document.createElement('canvas');
+    canvas.width   = Math.round(vp.width);
+    canvas.height  = Math.round(vp.height);
+    const ctx = canvas.getContext('2d');
+    await page.render({ canvasContext: ctx, viewport: vp }).promise;
+    // Recortar la mitad superior izquierda donde suele estar la foto del producto
+    const cropCanvas = document.createElement('canvas');
+    const cw = Math.round(canvas.width * 0.55);
+    const ch = Math.round(canvas.height * 0.38);
+    cropCanvas.width  = cw;
+    cropCanvas.height = ch;
+    const cctx = cropCanvas.getContext('2d');
+    cctx.drawImage(canvas, 0, 0, cw * 1.5, ch * 1.8, 0, 0, cw, ch);
+    const dataUrl = cropCanvas.toDataURL('image/jpeg', 0.85);
+    _pdfImgCache[codigo] = dataUrl;
+    imgEl.src = dataUrl;
+    imgEl.style.display = '';
+    imgEl.classList.remove('loading');
+    const ph = imgEl.previousElementSibling;
+    if (ph && ph.classList.contains('pcard-img-ph')) ph.style.display = 'none';
+  } catch(e) {
+    console.warn('PDF img failed for', codigo, e.message);
+    // Mostrar placeholder
+    imgEl.style.display = 'none';
+    const ph = imgEl.previousElementSibling;
+    if (ph && ph.classList.contains('pcard-img-ph')) ph.style.display = 'flex';
+  }
+}
+function imgFallback(el, codigo, cat) {
+  el.classList.remove('loading');
+  const tried = el.dataset.tried ? el.dataset.tried.split(',') : [];
+
+  // Variantes a intentar en orden
+  const variants = [
+    codigo.replace(/^DH-/,''),    // sin prefijo DH-
+    'DH-' + codigo,               // con prefijo DH-
+    codigo.replace(/-N$/,''),     // sin sufijo -N
+    codigo.replace(/-P$/,''),     // sin sufijo -P
+    codigo.replace(/-(S[2-9]|S1[0-9])$/,''), // sin sufijo -S2,-S6 etc
+  ].filter(v => v !== codigo && v.length > 3 && !tried.includes(v));
+
+  if (variants.length > 0) {
+    tried.push(el.src.includes('DH-') ? codigo : 'orig');
+    el.dataset.tried = tried.join(',');
+    el.src = imgProxyUrl(variants[0]);
+    return;
+  }
+  // Último recurso: extraer imagen del PDF de ficha técnica
+  if (!el.dataset.triedPdf && window.pdfjsLib) {
+    el.dataset.triedPdf = '1';
+    el.style.display = 'none'; // ocultar mientras carga
+    extractPdfImage(codigo, el);
+    return;
+  }
+  // Sin más opciones — mostrar placeholder
   el.style.display = 'none';
+  const ph = el.previousElementSibling;
+  if (ph && ph.classList.contains('pcard-img-ph')) ph.style.display = 'flex';
 }
 
 // ── Ícono por categoría ──────────────────────────────────
@@ -7726,11 +7844,20 @@ function render() {
           <div class="pcard-img-ph-icon">${catIcon(p.cat)}</div>
           <div class="pcard-img-ph-code">${p.codigo}</div>
         </div>
-        <img class="pcard-img loading" src="${p.img}" alt="${p.codigo}" loading="lazy"
-             referrerpolicy="no-referrer"
+        <img class="pcard-img loading" src="${imgProxyUrl(p.codigo)}" alt="${p.codigo}" loading="lazy"
              onload="this.classList.remove('loading');this.previousElementSibling.style.display='none'"
              onerror="imgFallback(this,'${p.codigo}','${p.cat}')">
         <span class="pbadge ${cls}">${lbl}</span>
+        ${(()=>{
+          const n = p.nombre.toLowerCase();
+          const badges = [];
+          if (/full.?color|wizcolor/.test(n)) badges.push('<span class="tech-badge tech-fc">Full-Color</span>');
+          if (/wizsense/.test(n)) badges.push('<span class="tech-badge tech-ws">WizSense</span>');
+          if (/wizmind/.test(n)) badges.push('<span class="tech-badge tech-wm">WizMind</span>');
+          if (/tioc|active.?deter|disuasion/.test(n)) badges.push('<span class="tech-badge tech-tioc">TiOC</span>');
+          if (/starlight/.test(n)) badges.push('<span class="tech-badge tech-sl">Starlight</span>');
+          return badges.join('');
+        })()}
         <div class="pcard-quickview" onclick="openProdModal(${p.id})">👁 Ver ficha técnica</div>
       </div>
       <div class="pcard-body">
@@ -7749,24 +7876,17 @@ function render() {
           <div class="price-sub">Precio final con IVA incluido</div>
         </div>
         <div class="pcard-actions">
-          <button class="btn-add" onclick='addCart(${JSON.stringify(p)})'>
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-            Agregar al carro
+          <button class="pca-btn pca-btn-red" onclick='addCart(${JSON.stringify(p)})' title="Comprar">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+            <span>Comprar</span>
           </button>
-          <button class="btn-ficha" onclick="openProdModal(${p.id})" title="Ver ficha técnica" style="background:var(--navy);color:#fff;border:none;border-radius:4px;padding:8px 10px;font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px">
-            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            Ficha
+          <button class="pca-btn pca-btn-dark" onclick="openProdModal(${p.id})" title="Ver ficha técnica">
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <span>Ficha</span>
           </button>
-          <button class="btn-cmp" data-id="${p.id}" onclick="cmpToggle(${p.id})" title="Agregar al comparador">
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Comparar
-          </button>
-          <button class="btn-cot" onclick='addToCotizacion(${JSON.stringify(p)})'   title="Guardar en cotización">
-            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            Cotizar
-          </button>
-          <button class="btn-wish" onclick="this.classList.toggle('on')">
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          <button class="pca-btn pca-btn-light" data-id="${p.id}" onclick="cmpToggle(${p.id});this.classList.toggle('added')" title="Comparar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 8 22 12 18 16"/><polyline points="6 8 2 12 6 16"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+            <span>Comparar</span>
           </button>
         </div>
       </div>
@@ -7775,15 +7895,28 @@ function render() {
 
   // Paginación
   if (pages <= 1) { qs('pag').innerHTML=''; return; }
-  let ph = `<button class="ppage" ${S.page===1?'disabled':''} onclick="goPage(${S.page-1})">‹</button>`;
+  const pagWrap = qs('pag');
+  pagWrap.style.cssText = 'display:flex;justify-content:center;align-items:center;gap:0;margin-top:20px;padding:0 12px';
+
+  const pgBtn = (label, page, active, disabled) => {
+    const s = disabled
+      ? 'background:none;border:none;color:var(--g4);cursor:default;padding:0 10px;font-size:14px;height:40px;display:flex;align-items:center;'
+      : active
+        ? 'background:var(--black);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:14px;min-width:40px;height:40px;cursor:pointer;font-family:var(--font);padding:0 8px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);'
+        : 'background:rgba(255,255,255,.8);backdrop-filter:blur(8px);color:var(--black);border:1px solid rgba(0,0,0,.08);border-radius:10px;font-size:14px;font-weight:500;min-width:40px;height:40px;cursor:pointer;font-family:var(--font);padding:0 8px;display:flex;align-items:center;justify-content:center;transition:all .15s;';
+    const onclick = disabled ? '' : `onclick="goPage(${page})"`;
+    return `<button style="${s}" ${disabled?'disabled':''} ${onclick}>${label}</button>`;
+  };
+
+  let ph = pgBtn('‹', S.page-1, false, S.page===1);
   for (let i=1; i<=pages; i++) {
-    if (i===1||i===pages||Math.abs(i-S.page)<=1)
-      ph += `<button class="ppage ${i===S.page?'active':''}" onclick="goPage(${i})">${i}</button>`;
+    if (i===1 || i===pages || Math.abs(i-S.page)<=1)
+      ph += pgBtn(i, i, i===S.page, false);
     else if (Math.abs(i-S.page)===2)
-      ph += `<button class="ppage" disabled>…</button>`;
+      ph += pgBtn('…', null, false, true);
   }
-  ph += `<button class="ppage" ${S.page===pages?'disabled':''} onclick="goPage(${S.page+1})">›</button>`;
-  qs('pag').innerHTML = ph;
+  ph += pgBtn('›', S.page+1, false, S.page===pages);
+  pagWrap.innerHTML = ph;
 }
 
 function goPage(n) { S.page=n; render(); window.scrollTo({top:0,behavior:'smooth'}); }
@@ -7893,7 +8026,7 @@ function renderSD(q) {
     const lbl = scoreLabel(score);
     const fallbackImg = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ctext y='28' font-size='22'%3E📷%3C/text%3E%3C/svg%3E";
     return `<div class="sd-item" data-idx="${i}" data-code="${p.codigo}" onclick="selectSD(this.dataset.code)">
-      <img class="sd-img" src="${p.img}" onerror="this.src='${fallbackImg}'">
+      <img class="sd-img" src="${imgProxyUrl(p.codigo)}" onerror="this.src='${fallbackImg}'">
       <div style="flex:1;min-width:0;overflow:hidden">
         <div class="sd-name">${hlText(p.nombre, q, 62)}</div>
         <div class="sd-code">${hlText(p.codigo, q, 0)}</div>
@@ -8011,7 +8144,7 @@ function renderCart() {
   empty.style.display='none'; foot.style.display='block';
   items.innerHTML = S.cart.map(p=>`
     <div class="citem">
-      <img class="citem-img" src="${p.img}" onerror="this.style.opacity='.3'">
+      <img class="citem-img" src="${imgProxyUrl(p.codigo)}" onerror="this.style.opacity='.3'">
       <div>
         <div class="citem-name">${p.nombre.length>50?p.nombre.slice(0,50)+'…':p.nombre}</div>
         <div class="citem-code">${p.codigo}</div>
@@ -9100,7 +9233,7 @@ function formatAIContent(t) {
 function renderAIProdCards(prods) {
   return `<div class="cp-row">${prods.map(p=>`
     <div class="cp-c" onclick="openProdModal(${p.id})">
-      <img class="cp-c-img" src="${p.img}" onerror="this.style.opacity='.3'">
+      <img class="cp-c-img" src="${imgProxyUrl(p.codigo)}" onerror="this.style.opacity='.3'">
       <div class="cp-c-code">${p.codigo}</div>
       <div class="cp-c-name">${p.nombre.slice(0,50)}…</div>
       <div class="cp-c-price">${fmt(p.ptotal)}</div>
@@ -9126,7 +9259,7 @@ function extractAIProds(text) {
 function updateAIRecSidebar(prods) {
   qs('aiRecBody').innerHTML = prods.map(p=>`
     <div class="ai-rec-item" onclick="openProdModal(${p.id})">
-      <img class="ai-rec-thumb" src="${p.img}" onerror="this.style.opacity='.3'">
+      <img class="ai-rec-thumb" src="${imgProxyUrl(p.codigo)}" onerror="this.style.opacity='.3'">
       <div>
         <div class="ai-rec-name">${p.nombre.slice(0,40)}…</div>
         <div class="ai-rec-price">${fmt(p.ptotal)}</div>
@@ -9760,7 +9893,7 @@ function _pmBuildModal(id) {
     .slice(0, 8);
 
   // URLs
-  const pdfUrl  = 'https://camaras-de-seguridad-dahua.sstt.cl/fichatecnica/' + p.codigo + '.pdf';
+  const pdfUrl  = 'https://cdn1.dori.cl/fichatecnica/' + p.codigo + '.pdf';
   const dahuaES = 'https://www.dahuasecurity.com/es/search?keyword=' + encodeURIComponent(p.codigo);
   const dahuaEN = 'https://www.dahuasecurity.com/search?keyword='    + encodeURIComponent(p.codigo);
   const supportUrl = 'https://www.dahuasecurity.com/support/download-center/search?keyword=' + encodeURIComponent(p.codigo);
@@ -9846,7 +9979,7 @@ function _pmBuildModal(id) {
         <div class="pm-dl-ico pdf">📄</div>
         <div>
           <div class="pm-dl-name">Ficha Técnica PDF — ${p.codigo}</div>
-          <div class="pm-dl-desc">Especificaciones completas oficiales · camaras-de-seguridad-dahua.sstt.cl</div>
+          <div class="pm-dl-desc">Especificaciones completas · cdn1.dori.cl</div>
         </div>
         <div class="pm-dl-arr">↓</div>
       </a>
@@ -9916,7 +10049,7 @@ function _pmBuildModal(id) {
             <span>${series.icon}</span><span>${series.name}</span>
           </div>
           <img class="pm-img-main" id="pmImgMain" 
-               src="${p.img}"
+               src="${imgProxyUrl(p.codigo)}"
                onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect width=%22200%22 height=%22200%22 fill=%22%23f5f5f5%22/%3E%3Ctext x=%2250%25%22 y=%2252%25%22 text-anchor=%22middle%22 font-size=%2248%22%3E📷%3C/text%3E%3C/svg%3E'"
                alt="${p.codigo}">
         </div>
@@ -9953,17 +10086,9 @@ function _pmBuildModal(id) {
           </div>
 
           <div class="pm-ext-links">
-            <a class="pm-ext-link" href="${dahuaES}" target="_blank" rel="noopener">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              Ver en Dahua Technology Latinoamérica
-            </a>
             <a class="pm-ext-link" href="${pdfUrl}" target="_blank" rel="noopener">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
               Ficha técnica PDF — ${p.codigo}
-            </a>
-            <a class="pm-ext-link" href="${ssttPerma}" target="_blank" rel="noopener">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-              Ver ficha detallada en sstt.cl
             </a>
           </div>
         </div>
@@ -10661,7 +10786,7 @@ function cmpRenderModal() {
   // Header row: product columns
   const headerCols = products.map(p => `
     <th>
-      <img class="cmp-th-img" src="${p.img}" alt="${p.codigo}" onerror="this.style.opacity='.2'">
+      <img class="cmp-th-img" src="${imgProxyUrl(p.codigo)}" alt="${p.codigo}" onerror="this.style.opacity='.2'">
       <div class="cmp-th-code">${p.codigo}</div>
       <div class="cmp-th-name">${p.nombre}</div>
       <div class="cmp-th-price">${fmt(p.ptotal)}</div>
@@ -10783,7 +10908,7 @@ function cmpUpdateBar() {
     slot.className = 'cmp-panel-slot';
     slot.style.position = 'relative';
     slot.innerHTML = `
-      <img class="cmp-slot-thumb" src="${p.img}" alt="${p.codigo}"
+      <img class="cmp-slot-thumb" src="${imgProxyUrl(p.codigo)}" alt="${p.codigo}"
            onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 60 60%22%3E%3Crect fill=%22%23333%22 width=%2260%22 height=%2260%22/%3E%3Ctext x=%2250%25%22 y=%2255%25%22 font-size=%2222%22 text-anchor=%22middle%22%3E📷%3C/text%3E%3C/svg%3E'">
       <div class="cmp-slot-info">
         <div class="cmp-slot-sku">${p.codigo}</div>
@@ -10897,7 +11022,7 @@ function cmpCompatible(p1, p2) {
 async function fetchSpecsFromPDF(producto) {
   if (PDF_CACHE[producto.codigo]) return PDF_CACHE[producto.codigo];
 
-  const pdfUrl = 'https://camaras-de-seguridad-dahua.sstt.cl/fichatecnica/' + producto.codigo + '.pdf';
+  const pdfUrl = 'https://cdn1.dori.cl/fichatecnica/' + producto.codigo + '.pdf';
 
   try {
     // Intentar leer el PDF como base64
@@ -11342,7 +11467,7 @@ function cmpBuildTable(products, allSpecs, modal) {
 
   const headerCols = products.map((p, i) => `
     <th>
-      <img class="cmp-th-img" src="${p.img}" alt="${p.codigo}" onerror="this.style.opacity='.2'">
+      <img class="cmp-th-img" src="${imgProxyUrl(p.codigo)}" alt="${p.codigo}" onerror="this.style.opacity='.2'">
       <div class="cmp-th-code">${p.codigo}</div>
       <div class="cmp-th-name">${p.nombre}</div>
       ${srcBadge(allSpecs[i])}
@@ -15159,7 +15284,7 @@ function mRenderSD(q) {
       onclick="mSelectSD(this.dataset.code)"
       style="padding:10px 14px;display:flex;align-items:center;gap:10px;
       border-bottom:1px solid rgba(0,0,0,.05);cursor:pointer">
-      <img class="sd-img" src="${p.img}" onerror="this.src='${fallbackImg}'"
+      <img class="sd-img" src="${imgProxyUrl(p.codigo)}" onerror="this.src='${fallbackImg}'"
         style="width:36px;height:36px;border-radius:6px;object-fit:contain;background:var(--g6)">
       <div style="flex:1;min-width:0;overflow:hidden">
         <div style="font-size:12.5px;font-weight:600;color:var(--black);
