@@ -16099,20 +16099,52 @@ var aiAutoMic = false;  // modo voz conversacional continuo
 function aiSpeak(text) {
   if (!window.speechSynthesis) return;
   window.speechSynthesis.cancel();
-  // Limpiar HTML tags y limitar largo para TTS
   var clean = text.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-  if (clean.length > 400) clean = clean.slice(0, 400) + '...';
-  var utt = new SpeechSynthesisUtterance(clean);
-  utt.lang = 'es-CL';
-  utt.rate = 1.05;
-  utt.pitch = 1.0;
-  // Buscar voz en español
+  if (clean.length > 450) clean = clean.slice(0, 450) + '.';
+
+  // Prioridad de voces: naturales primero
+  var voicePriority = [
+    'Microsoft Raul',      // Voz masculina natural MX
+    'Microsoft Sabina',    // Voz femenina natural MX
+    'Google español',      // Google TTS
+    'Paulina',             // macOS español
+    'Monica',              // macOS español
+    'Marisol',             // macOS español
+    'Jorge',               // Windows español
+  ];
+
+  function doSpeak(voices) {
+    var utt = new SpeechSynthesisUtterance(clean);
+    utt.lang = 'es-MX';
+    utt.rate = 0.95;   // un poco más lento = más natural
+    utt.pitch = 1.0;
+    utt.volume = 1.0;
+
+    // Seleccionar la mejor voz disponible
+    var chosen = null;
+    for (var i = 0; i < voicePriority.length; i++) {
+      chosen = voices.find(function(v){ return v.name.indexOf(voicePriority[i]) >= 0; });
+      if (chosen) break;
+    }
+    // Fallback: cualquier voz en español
+    if (!chosen) chosen = voices.find(function(v){ return v.lang.startsWith('es'); });
+    if (chosen) utt.voice = chosen;
+
+    aiSpeaking = true;
+    utt.onend = function(){ aiSpeaking = false; };
+    utt.onerror = function(){ aiSpeaking = false; };
+    window.speechSynthesis.speak(utt);
+  }
+
   var voices = window.speechSynthesis.getVoices();
-  var esVoice = voices.find(function(v){ return v.lang.startsWith('es'); });
-  if (esVoice) utt.voice = esVoice;
-  aiSpeaking = true;
-  utt.onend = function(){ aiSpeaking = false; };
-  window.speechSynthesis.speak(utt);
+  if (voices.length) {
+    doSpeak(voices);
+  } else {
+    // Esperar que carguen las voces (primera vez)
+    window.speechSynthesis.onvoiceschanged = function() {
+      doSpeak(window.speechSynthesis.getVoices());
+    };
+  }
 }
 function aiStopSpeech() {
   if (window.speechSynthesis) window.speechSynthesis.cancel();
