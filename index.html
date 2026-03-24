@@ -16091,6 +16091,33 @@ var aiPanelOpen = false;
 var aiRec = null;
 var aiRecording = false;
 var aiHistory = [];
+var aiLastProds = [];   // últimos productos sugeridos
+var aiSpeaking = false; // TTS activo
+var aiAutoMic = false;  // modo voz conversacional continuo
+
+// ── Text-to-Speech ────────────────────────────────────────────
+function aiSpeak(text) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  // Limpiar HTML tags y limitar largo para TTS
+  var clean = text.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  if (clean.length > 400) clean = clean.slice(0, 400) + '...';
+  var utt = new SpeechSynthesisUtterance(clean);
+  utt.lang = 'es-CL';
+  utt.rate = 1.05;
+  utt.pitch = 1.0;
+  // Buscar voz en español
+  var voices = window.speechSynthesis.getVoices();
+  var esVoice = voices.find(function(v){ return v.lang.startsWith('es'); });
+  if (esVoice) utt.voice = esVoice;
+  aiSpeaking = true;
+  utt.onend = function(){ aiSpeaking = false; };
+  window.speechSynthesis.speak(utt);
+}
+function aiStopSpeech() {
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  aiSpeaking = false;
+}
 
 function aiToggle() {
   aiPanelOpen = !aiPanelOpen;
@@ -16172,11 +16199,15 @@ function aiSend() {
   }
   var catCtx = catLines.join('\n');
 
-  var sys = 'Eres el asesor de ventas de SSTT SpA, distribuidor oficial Dahua Chile.\n' +
-    'Cuando el cliente pide productos, devuelve al final de tu respuesta EXACTAMENTE:\n' +
-    'PRODUCTOS:["CODIGO1","CODIGO2","CODIGO3"] (máximo 6 codigos exactos del catalogo)\n' +
-    'Si pide kit completo incluye camara + grabador + disco + accesorios.\n' +
-    'Responde siempre en espanol, sé conciso y util.\n\n' +
+  var sys = 'Eres el asesor de ventas de SSTT SpA, distribuidor oficial Dahua Chile. Estás en una conversación de voz.\n\n' +
+    'REGLAS IMPORTANTES:\n' +
+    '1. Responde SIEMPRE en español, de forma natural y concisa (máx 3 oraciones para voz).\n' +
+    '2. Haz UNA sola contrapregunta a la vez para afinar la necesidad (no bombardees con preguntas).\n' +
+    '3. Cuando tengas suficiente info (tecnología, cantidad, presupuesto aproximado), sugiere productos.\n' +
+    '4. Al sugerir productos, incluye EXACTAMENTE al final: PRODUCTOS:["COD1","COD2"] (máx 8 códigos del catálogo).\n' +
+    '5. Si el cliente dice "agrega al carro" o "agregar todo", responde confirmando con los productos.\n' +
+    '6. Para kits: incluye cámaras + grabador compatible + disco duro + balun si es HDCVI + fuente de poder.\n' +
+    '7. Sé empático y usa lenguaje simple, no técnico en exceso.\n\n' +
     'CATALOGO (codigo|nombre|precio|categoria):\n' + catCtx;
 
   var msgs = aiHistory.slice(-6);
@@ -16216,46 +16247,149 @@ function aiSend() {
       setTimeout(function(){ render(); showSection('catalogo'); }, 400);
     }
 
-    var html = raw
+    var cleanHtml = raw
       .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
       .replace(/\*([^*]+)\*/g, '<em>$1</em>')
       .replace(/\n\n/g, '<br><br>')
       .replace(/\n/g, '<br>');
-    aiAddMsg('bot', html, prods);
+
+    // Guardar productos sugeridos
+    if (prods.length) aiLastProds = prods;
+
+    // Mostrar botón "Agregar todo al carro" si hay productos
+    if (prods.length) {
+      cleanHtml += '<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">' +
+        '<button onclick="aiAddAllToCart()" style="background:#e8001c;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:var(--font)">' +
+          '<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>' +
+          'Agregar todo al carro (' + prods.length + ')' +
+        '</button>' +
+        '<button onclick="aiOpenCart()" style="background:#1a1a1a;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)">' +
+          'Ver carro' +
+        '</button>' +
+      '</div>';
+    }
+
+    aiAddMsg('bot', cleanHtml, prods);
+
+    // Hablar la respuesta (versión corta)
+    var speakText = raw.replace(/PRODUCTOS:\s*\[[^\]]+\]/g,'').replace(/FILTRAR:[^\n\r]+/g,'').trim();
+    aiSpeak(speakText);
+
+    // Si modo voz activo → rearmar micrófono automáticamente después de que TTS termine
+    if (aiAutoMic) {
+      var checkTTS = setInterval(function(){
+        if (!window.speechSynthesis || !window.speechSynthesis.speaking) {
+          clearInterval(checkTTS);
+          setTimeout(function(){ if (aiAutoMic && aiPanelOpen) aiMic(); }, 600);
+        }
+      }, 300);
+    }
   })
   .catch(function(e){ aiTypingStop(); aiAddMsg('bot', 'Error de conexión: ' + e.message); });
 }
 
+function aiAddAllToCart() {
+  if (!aiLastProds.length) return;
+  aiLastProds.forEach(function(p) {
+    var full = PRODUCTS.find(function(x){ return x.id === p.id; });
+    if (full) addCart(full);
+  });
+  showToast('✅ ' + aiLastProds.length + ' productos agregados al carro');
+  aiClose();
+  setTimeout(openCart, 400);
+}
+
+function aiOpenCart() {
+  aiClose();
+  setTimeout(openCart, 200);
+}
+
 // ── Reconocimiento de voz ──────────────────────────────────────
-function aiMic() {
+// Instancia única de SpeechRecognition — el browser solo pide permiso una vez
+var aiSR = null;
+function aiInitSR() {
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { aiAddMsg('bot', '⚠️ Tu navegador no soporta voz. Usa Chrome o Edge.'); return; }
-  if (aiRecording) { aiRec && aiRec.stop(); return; }
-  aiRec = new SR();
-  aiRec.lang = 'es-CL';
-  aiRec.interimResults = false;
-  aiRec.maxAlternatives = 1;
-  aiRec.onstart = function() {
+  if (!SR) return null;
+  if (aiSR) return aiSR;
+  aiSR = new SR();
+  aiSR.lang = 'es-CL';
+  aiSR.interimResults = false;
+  aiSR.continuous = false;
+  aiSR.maxAlternatives = 1;
+  aiSR.onstart = function() {
     aiRecording = true;
+    aiStopSpeech();
     document.getElementById('aiMicBtn').classList.add('rec');
     document.getElementById('aiFab').classList.add('listening');
     document.getElementById('aiWave').classList.add('on');
     if (!aiPanelOpen) aiToggle();
   };
-  aiRec.onresult = function(e) {
+  aiSR.onresult = function(e) {
     var t = e.results[0][0].transcript;
     document.getElementById('aiInp').value = t;
+    aiMicStop();
     aiSend();
   };
-  aiRec.onerror = function() { aiAddMsg('bot', '⚠️ No te escuché. Intenta de nuevo.'); aiMicStop(); };
-  aiRec.onend = function() { aiMicStop(); };
-  aiRec.start();
+  aiSR.onerror = function(e) {
+    if (e.error !== 'aborted') aiAddMsg('bot', '⚠️ No te escuché bien. Intenta de nuevo.');
+    aiMicStop();
+  };
+  aiSR.onend = function() { aiMicStop(); };
+  return aiSR;
 }
+
+function aiMic() {
+  var sr = aiInitSR();
+  if (!sr) { aiAddMsg('bot', '⚠️ Tu navegador no soporta voz. Usa Chrome o Edge.'); return; }
+  if (aiRecording) {
+    try { sr.stop(); } catch(e) {}
+    aiMicStop();
+    return;
+  }
+  try {
+    // Reiniciar estado sin destruir la instancia (mantiene el permiso)
+    sr.abort();
+    setTimeout(function() {
+      try { sr.start(); } catch(e) { aiAddMsg('bot', '⚠️ Error al iniciar micrófono: ' + e.message); }
+    }, 100);
+  } catch(e) {
+    try { sr.start(); } catch(e2) { aiAddMsg('bot', '⚠️ Error de micrófono: ' + e2.message); }
+  }
+}
+
 function aiMicStop() {
   aiRecording = false;
   document.getElementById('aiMicBtn').classList.remove('rec');
   document.getElementById('aiFab').classList.remove('listening');
   document.getElementById('aiWave').classList.remove('on');
+}
+
+// Pre-inicializar SR al cargar (solicita permiso una sola vez)
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(function() {
+    if (window.SpeechRecognition || window.webkitSpeechRecognition) {
+      aiInitSR(); // crea la instancia pero NO la inicia aún
+    }
+  }, 2000);
+});
+
+function aiToggleVoiceMode() {
+  aiAutoMic = !aiAutoMic;
+  var btn = document.getElementById('aiVoiceMode');
+  if (btn) {
+    btn.style.background = aiAutoMic ? 'linear-gradient(135deg,#1a73e8,#8b5cf6)' : '#f5f5f7';
+    btn.style.color = aiAutoMic ? '#fff' : '#666';
+    btn.style.border = aiAutoMic ? 'none' : '1.5px solid #e5e5e7';
+    btn.title = aiAutoMic ? 'Modo voz activo — click para desactivar' : 'Activar modo conversación voz';
+  }
+  if (aiAutoMic) {
+    if (!aiPanelOpen) aiToggle();
+    aiAddMsg('bot', '🎙️ <strong>Modo conversación activado.</strong> Hablaré la respuesta y esperaré tu siguiente pregunta. Toca el botón de voz para comenzar.');
+    aiSpeak('Modo conversación activado. Toca el micrófono para comenzar.');
+  } else {
+    aiStopSpeech();
+    aiAddMsg('bot', '⏹️ Modo conversación desactivado.');
+  }
 }
 
 // Cerrar al hacer click fuera
@@ -16312,17 +16446,18 @@ document.addEventListener('click', function(e) {
           '</div>',
         '</div>',
       '</div>',
-      '<div id="aiWaveDiv" style="display:none;align-items:center;justify-content:center;gap:3px;padding:7px 13px;margin:0 13px 7px;background:rgba(26,115,232,.06);border-radius:12px">',
+      '<div id="aiWave" style="display:none;align-items:center;justify-content:center;gap:3px;padding:7px 13px;margin:0 13px 7px;background:rgba(26,115,232,.06);border-radius:12px">',
         [1,2,3,4,5,6,7].map(function(i){ return '<div style="width:3px;height:'+(6+i*3)+'px;border-radius:2px;background:linear-gradient(to top,#1a73e8,#8b5cf6);animation:aimWave .8s ease-in-out infinite;animation-delay:'+(i*0.07)+'s"></div>'; }).join(''),
         '<span style="font-size:10.5px;color:#1a73e8;font-weight:600;margin-left:7px">Escuchando…</span>',
       '</div>',
-      '<div id="aiChipsDiv" style="display:flex;gap:4px;flex-wrap:wrap;padding:0 12px 8px">',
+      '<div id="aiChips" style="display:flex;gap:4px;flex-wrap:wrap;padding:0 12px 8px">',
         ['📹 Full-Color IP 2.8mm','🖥️ Grabador 16ch 5MP','🏗️ Kit 4 cámaras HDCVI','🔭 Exterior IK10','📡 Varifocal HDCVI 8MP','💰 4 IP más baratas']
           .map(function(t){ return '<span onclick="aiChip(this)" style="background:rgba(26,115,232,.07);color:#1a73e8;border:1px solid rgba(26,115,232,.18);border-radius:14px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">'+t+'</span>'; }).join(''),
       '</div>',
       '<div style="padding:9px 11px;border-top:1px solid #e5e5e7;display:flex;gap:7px;align-items:center;flex-shrink:0">',
-        '<input id="aiInpEl" placeholder="Escribe o usa el micrófono…" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();aiSend();}" style="flex:1;border:1.5px solid #e5e5e7;border-radius:20px;padding:8px 13px;font-size:13.5px;outline:none;background:#f5f5f7;font-family:inherit">',
-        '<button onclick="aiMic()" id="aiMicBtnEl" style="width:36px;height:36px;border-radius:50%;border:none;background:linear-gradient(135deg,#1a73e8,#8b5cf6);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">',
+        '<input id="aiInp" placeholder="Escribe o usa el micrófono…" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();aiSend();}" style="flex:1;border:1.5px solid #e5e5e7;border-radius:20px;padding:8px 13px;font-size:13.5px;outline:none;background:#f5f5f7;font-family:inherit">',
+        '<button id="aiVoiceMode" onclick="aiToggleVoiceMode()" title="Modo conversación voz" style="width:36px;height:36px;border-radius:50%;border:none;background:#f5f5f7;border:1.5px solid #e5e5e7;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">🎙️</button>',
+        '<button onclick="aiMic()" id="aiMicBtn" style="width:36px;height:36px;border-radius:50%;border:none;background:linear-gradient(135deg,#1a73e8,#8b5cf6);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">',
           '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 19v3M8 22h8"/></svg>',
         '</button>',
         '<button onclick="aiSend()" style="width:36px;height:36px;border-radius:50%;border:none;background:#e8001c;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">',
