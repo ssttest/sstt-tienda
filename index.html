@@ -16191,12 +16191,23 @@ function aiSend() {
   aiHistory.push({role:'user', content: q});
   aiTypingStart();
 
-  // Catálogo resumido — solo primeros 600 productos para no sobrecargar
-  var catLines = [];
-  for (var i = 0; i < Math.min(PRODUCTS.length, 600); i++) {
-    var p = PRODUCTS[i];
-    catLines.push(p.codigo + '|' + p.nombre.slice(0,55) + '|$' + p.ptotal + '|' + p.cat);
+  // Filtrar catálogo relevante según la consulta (max 80 productos → ~5k tokens)
+  var q_lower = (aiHistory.length ? aiHistory[aiHistory.length-1].content : '').toLowerCase();
+  var words = q_lower.split(/\s+/).filter(function(w){ return w.length > 3; });
+  var relevant = PRODUCTS.filter(function(p) {
+    var n = (p.nombre + ' ' + p.codigo + ' ' + p.cat).toLowerCase();
+    return words.some(function(w){ return n.includes(w); });
+  });
+  // Si no hay match suficiente, agregar los más baratos por categoría detectada
+  if (relevant.length < 20) {
+    var cats = ['camaras-ip','camaras-hdcvi','nvr','switches','accesorios'];
+    var catMatch = cats.find(function(c){ return q_lower.includes(c.replace('-',' ')) || q_lower.includes(c); });
+    var extra = PRODUCTS.filter(function(p){ return !catMatch || p.cat === catMatch; })
+      .sort(function(a,b){ return a.ptotal - b.ptotal; }).slice(0, 40);
+    extra.forEach(function(p){ if (!relevant.find(function(r){ return r.id===p.id; })) relevant.push(p); });
   }
+  var catSlice = relevant.slice(0, 80);
+  var catLines = catSlice.map(function(p){ return p.codigo+'|'+p.nombre.slice(0,50)+'|$'+p.ptotal+'|'+p.cat; });
   var catCtx = catLines.join('\n');
 
   var sys = 'Eres el asesor de ventas de SSTT SpA, distribuidor oficial Dahua Chile. Estás en una conversación de voz.\n\n' +
@@ -16210,12 +16221,12 @@ function aiSend() {
     '7. Sé empático y usa lenguaje simple, no técnico en exceso.\n\n' +
     'CATALOGO (codigo|nombre|precio|categoria):\n' + catCtx;
 
-  var msgs = aiHistory.slice(-6);
+  var msgs = aiHistory.slice(-4);
 
   fetch(PROXY_URL, {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:900, system:sys, messages:msgs})
+    body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:400, system:sys, messages:msgs})
   })
   .then(function(r){ return r.json(); })
   .then(function(data) {
