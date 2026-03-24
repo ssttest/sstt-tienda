@@ -16267,83 +16267,97 @@ document.addEventListener('click', function(e) {
 
 
 
-<!-- ASISTENTE FLOTANTE SSTT -->
-<div id="aiPanel" style="display:none;position:fixed!important;z-index:2147483646!important">
-  <div class="aip-head">
-    <svg width="28" height="28" viewBox="0 0 40 40" fill="none" flex-shrink="0" style="flex-shrink:0">
-      <defs>
-        <linearGradient id="gH" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stop-color="#4285f4"/>
-          <stop offset="50%" stop-color="#8b5cf6"/>
-          <stop offset="100%" stop-color="#e8001c"/>
-        </linearGradient>
-      </defs>
-      <path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gH)"/>
-      <path d="M20 14C20 14 21.5 19 26 19C26 19 21.5 20 20 25C20 25 18.5 20 14 19C14 19 18.5 19 20 14Z" fill="white" opacity=".55"/>
-    </svg>
-    <div class="aip-head-info">
-      <div class="aip-head-title">Asesor SSTT®</div>
-      <div class="aip-head-sub">IA · Catálogo Dahua Chile · Voz activada</div>
-    </div>
-    <button class="aip-close" onclick="aiClose()">✕</button>
-  </div>
 
-  <div class="aip-msgs" id="aiMsgs">
-    <div class="aim bot">
-      <div class="aim-av">✦</div>
-      <div class="aim-bub">
-        Hola 👋 Soy tu asesor Dahua. Puedo ayudarte a elegir equipos por texto o por voz.<br><br>
-        Ejemplos: <em>"cámara exterior IK10"</em>, <em>"grabador 16 canales 5MP"</em>, <em>"kit 4 cámaras HDCVI básico"</em>
-      </div>
-    </div>
-  </div>
+<script>
+// ── INYECCIÓN ASISTENTE FLOTANTE ──────────────────────────────
+(function() {
+  function injectAssistant() {
+    if (document.getElementById('aiFab')) return;
 
-  <div class="aim-wave" id="aiWave">
-    <div class="aim-wave-b"></div><div class="aim-wave-b"></div>
-    <div class="aim-wave-b"></div><div class="aim-wave-b"></div>
-    <div class="aim-wave-b"></div><div class="aim-wave-b"></div>
-    <div class="aim-wave-b"></div>
-    <span class="aim-wave-t">Escuchando…</span>
-  </div>
+    // ── Estilos ──
+    var style = document.createElement('style');
+    style.textContent = [
+      '@keyframes gemSpin{to{transform:rotate(360deg)}}',
+      '@keyframes gemPulse{0%,100%{filter:drop-shadow(0 0 3px rgba(255,255,255,.5))}50%{filter:drop-shadow(0 0 9px #fff)}}',
+      '@keyframes aimBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px);background:#1a73e8}}',
+      '@keyframes aimWave{0%,100%{transform:scaleY(1);opacity:.7}50%{transform:scaleY(2);opacity:1}}',
+      '@keyframes micPulse2{0%,100%{box-shadow:0 0 0 0 rgba(232,0,28,.4)}50%{box-shadow:0 0 0 8px rgba(232,0,28,0)}}',
+    ].join('');
+    document.head.appendChild(style);
 
-  <div class="aim-chips" id="aiChips">
-    <span class="aim-chip" onclick="aiChip(this)">📹 Full-Color IP 2.8mm</span>
-    <span class="aim-chip" onclick="aiChip(this)">🖥️ Grabador 16ch 5MP</span>
-    <span class="aim-chip" onclick="aiChip(this)">🏗️ Kit 4 cámaras HDCVI</span>
-    <span class="aim-chip" onclick="aiChip(this)">🔭 Exterior certificada IK10</span>
-    <span class="aim-chip" onclick="aiChip(this)">📡 Varifocal HDCVI 8MP</span>
-    <span class="aim-chip" onclick="aiChip(this)">💰 4 IP más baratas</span>
-  </div>
+    // ── Panel ──
+    var panel = document.createElement('div');
+    panel.id = 'aiPanel';
+    panel.style.cssText = 'display:none;position:fixed;bottom:94px;right:28px;z-index:2147483646;width:370px;max-height:72vh;background:rgba(255,255,255,.95);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.8);border-radius:22px;box-shadow:0 24px 64px rgba(0,0,0,.18);flex-direction:column;overflow:hidden;font-family:system-ui,sans-serif';
+    if (window.innerWidth <= 768) {
+      panel.style.right = '8px'; panel.style.left = '8px'; panel.style.width = 'auto';
+      panel.style.bottom = '116px'; panel.style.maxHeight = '64vh';
+    }
+    panel.innerHTML = [
+      '<div style="background:linear-gradient(135deg,#0d1b4b,#1a1a2e);padding:13px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-radius:22px 22px 0 0">',
+        '<svg width="26" height="26" viewBox="0 0 40 40" fill="none" style="flex-shrink:0">',
+          '<defs><linearGradient id="gH2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4285f4"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#e8001c"/></linearGradient></defs>',
+          '<path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gH2)"/>',
+          '<path d="M20 14C20 14 21.5 19 26 19C26 19 21.5 20 20 25C20 25 18.5 20 14 19C14 19 18.5 19 20 14Z" fill="white" opacity=".55"/>',
+        '</svg>',
+        '<div style="flex:1"><div style="font-size:14px;font-weight:800;color:#fff">Asesor SSTT®</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:1px">IA · Catálogo Dahua Chile · Voz</div></div>',
+        '<button onclick="aiClose()" style="background:rgba(255,255,255,.12);color:#fff;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">✕</button>',
+      '</div>',
+      '<div id="aiMsgs" style="flex:1;overflow-y:auto;padding:13px;display:flex;flex-direction:column;gap:9px;scrollbar-width:thin">',
+        '<div style="display:flex;gap:7px;align-items:flex-start">',
+          '<div style="width:25px;height:25px;border-radius:50%;background:linear-gradient(135deg,#1a73e8,#8b5cf6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">✦</div>',
+          '<div style="max-width:83%;padding:9px 12px;border-radius:4px 16px 16px 16px;background:#f5f5f7;font-size:13px;line-height:1.5">',
+            'Hola 👋 Soy tu asesor Dahua. Puedo ayudarte a elegir equipos por <b>texto</b> o por <b>voz</b>.<br><br>',
+            'Prueba: <i>"cámara exterior IK10"</i>, <i>"grabador 16ch 5MP"</i>, <i>"kit 4 cámaras HDCVI básico"</i>',
+          '</div>',
+        '</div>',
+      '</div>',
+      '<div id="aiWaveDiv" style="display:none;align-items:center;justify-content:center;gap:3px;padding:7px 13px;margin:0 13px 7px;background:rgba(26,115,232,.06);border-radius:12px">',
+        [1,2,3,4,5,6,7].map(function(i){ return '<div style="width:3px;height:'+(6+i*3)+'px;border-radius:2px;background:linear-gradient(to top,#1a73e8,#8b5cf6);animation:aimWave .8s ease-in-out infinite;animation-delay:'+(i*0.07)+'s"></div>'; }).join(''),
+        '<span style="font-size:10.5px;color:#1a73e8;font-weight:600;margin-left:7px">Escuchando…</span>',
+      '</div>',
+      '<div id="aiChipsDiv" style="display:flex;gap:4px;flex-wrap:wrap;padding:0 12px 8px">',
+        ['📹 Full-Color IP 2.8mm','🖥️ Grabador 16ch 5MP','🏗️ Kit 4 cámaras HDCVI','🔭 Exterior IK10','📡 Varifocal HDCVI 8MP','💰 4 IP más baratas']
+          .map(function(t){ return '<span onclick="aiChip(this)" style="background:rgba(26,115,232,.07);color:#1a73e8;border:1px solid rgba(26,115,232,.18);border-radius:14px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">'+t+'</span>'; }).join(''),
+      '</div>',
+      '<div style="padding:9px 11px;border-top:1px solid #e5e5e7;display:flex;gap:7px;align-items:center;flex-shrink:0">',
+        '<input id="aiInpEl" placeholder="Escribe o usa el micrófono…" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();aiSend();}" style="flex:1;border:1.5px solid #e5e5e7;border-radius:20px;padding:8px 13px;font-size:13.5px;outline:none;background:#f5f5f7;font-family:inherit">',
+        '<button onclick="aiMic()" id="aiMicBtnEl" style="width:36px;height:36px;border-radius:50%;border:none;background:linear-gradient(135deg,#1a73e8,#8b5cf6);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">',
+          '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 19v3M8 22h8"/></svg>',
+        '</button>',
+        '<button onclick="aiSend()" style="width:36px;height:36px;border-radius:50%;border:none;background:#e8001c;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">',
+          '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 2 11 13M22 2 15 22 11 13 2 9l20-7z"/></svg>',
+        '</button>',
+      '</div>',
+    ].join('');
+    document.body.appendChild(panel);
 
-  <div class="aip-inp">
-    <input class="aip-inp-txt" id="aiInp" placeholder="Escribe o usa el micrófono…"
-      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();aiSend();}">
-    <button class="aip-btn-mic" id="aiMicBtn" onclick="aiMic()" title="Hablar">
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-        <rect x="9" y="2" width="6" height="11" rx="3"/>
-        <path d="M5 11a7 7 0 0 0 14 0M12 19v3M8 22h8"/>
-      </svg>
-    </button>
-    <button class="aip-btn-send" onclick="aiSend()" title="Enviar">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-        <path d="M22 2 11 13M22 2 15 22 11 13 2 9l20-7z"/>
-      </svg>
-    </button>
-  </div>
-</div>
+    // ── Botón FAB ──
+    var fab = document.createElement('button');
+    fab.id = 'aiFab';
+    fab.title = 'Asesor IA SSTT';
+    fab.setAttribute('onclick', 'aiToggle()');
+    fab.style.cssText = 'position:fixed;bottom:28px;right:28px;z-index:2147483647;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#1a73e8 0%,#8b5cf6 50%,#e8001c 100%);box-shadow:0 4px 20px rgba(26,115,232,.5),0 2px 8px rgba(0,0,0,.2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s';
+    if (window.innerWidth <= 768) {
+      fab.style.bottom = '66px'; fab.style.right = '14px';
+      fab.style.width = '50px'; fab.style.height = '50px';
+    }
+    fab.innerHTML = '<svg width="30" height="30" viewBox="0 0 40 40" fill="none" style="animation:gemSpin 9s linear infinite,gemPulse 2.5s ease-in-out infinite"><defs><linearGradient id="gFab2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="rgba(255,255,255,.6)"/></linearGradient></defs><path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gFab2)"/><path d="M20 14C20 14 21.5 19 26 19C26 19 21.5 20 20 25C20 25 18.5 20 14 19C14 19 18.5 19 20 14Z" fill="white" opacity=".45"/></svg>';
+    fab.onmouseover = function(){ this.style.transform = 'scale(1.1)'; };
+    fab.onmouseout  = function(){ this.style.transform = ''; };
+    document.body.appendChild(fab);
 
-<button id="aiFab" onclick="aiToggle()" title="Asesor IA SSTT" style="position:fixed!important;bottom:28px!important;right:28px!important;z-index:2147483647!important;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#1a73e8,#8b5cf6,#e8001c);border:none;cursor:pointer;display:flex!important;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(26,115,232,.5);visibility:visible!important;opacity:1!important">
-  <svg width="30" height="30" viewBox="0 0 40 40" fill="none">
-    <defs>
-      <linearGradient id="gF" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#fff"/>
-        <stop offset="100%" stop-color="rgba(255,255,255,.6)"/>
-      </linearGradient>
-    </defs>
-    <path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gF)"/>
-    <path d="M20 14C20 14 21.5 19 26 19C26 19 21.5 20 20 25C20 25 18.5 20 14 19C14 19 18.5 19 20 14Z" fill="white" opacity=".45"/>
-  </svg>
-</button>
+    console.log('[SSTT] Asistente flotante inyectado ✅');
+  }
 
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectAssistant);
+  } else {
+    injectAssistant();
+  }
+  // También intentar después de 1s por si algo lo sobreescribe
+  setTimeout(injectAssistant, 1000);
+})();
+</script>
 </body>
 </html>
