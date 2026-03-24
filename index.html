@@ -16330,9 +16330,19 @@ function aiInitSR() {
   aiSR.onstart = function() {
     aiRecording = true;
     aiStopSpeech();
-    document.getElementById('aiMicBtn').classList.add('rec');
-    document.getElementById('aiFab').classList.add('listening');
-    document.getElementById('aiWave').classList.add('on');
+    // Mostrar sonograma en FAB y panel
+    var star = document.getElementById('aiFabStar');
+    var sono = document.getElementById('aiFabSono');
+    var sonoH = document.getElementById('aiSonoHeader');
+    var wave = document.getElementById('aiWave');
+    if (star) star.style.display = 'none';
+    if (sono) sono.style.display = 'flex';
+    if (sonoH) sonoH.style.display = 'flex';
+    if (wave) { wave.style.display = 'flex'; }
+    var micBtn = document.getElementById('aiMicBtn');
+    if (micBtn) { micBtn.style.background = '#e8001c'; micBtn.style.borderColor = '#e8001c'; }
+    var fab = document.getElementById('aiFab');
+    if (fab) { fab.style.borderColor = '#e8001c'; fab.style.boxShadow = '0 0 0 3px rgba(232,0,28,.25),0 4px 20px rgba(232,0,28,.4)'; }
     if (!aiPanelOpen) aiToggle();
   };
   aiSR.onresult = function(e) {
@@ -16370,9 +16380,19 @@ function aiMic() {
 
 function aiMicStop() {
   aiRecording = false;
-  document.getElementById('aiMicBtn').classList.remove('rec');
-  document.getElementById('aiFab').classList.remove('listening');
-  document.getElementById('aiWave').classList.remove('on');
+  // Restaurar FAB y ocultar sonograma
+  var star = document.getElementById('aiFabStar');
+  var sono = document.getElementById('aiFabSono');
+  var sonoH = document.getElementById('aiSonoHeader');
+  var wave = document.getElementById('aiWave');
+  if (star) star.style.display = '';
+  if (sono) sono.style.display = 'none';
+  if (sonoH) sonoH.style.display = 'none';
+  if (wave) wave.style.display = 'none';
+  var micBtn = document.getElementById('aiMicBtn');
+  if (micBtn) { micBtn.style.background = '#1a1a1a'; micBtn.style.borderColor = 'rgba(232,0,28,.3)'; }
+  var fab = document.getElementById('aiFab');
+  if (fab) { fab.style.borderColor = '#e8001c'; fab.style.boxShadow = '0 4px 20px rgba(232,0,28,.35),0 2px 8px rgba(0,0,0,.3)'; }
 }
 
 // Pre-inicializar SR al cargar (solicita permiso una sola vez)
@@ -16419,81 +16439,205 @@ document.addEventListener('click', function(e) {
   function injectAssistant() {
     if (document.getElementById('aiFab')) return;
 
-    // ── Estilos ──
-    var style = document.createElement('style');
-    style.textContent = [
-      '@keyframes gemSpin{to{transform:rotate(360deg)}}',
-      '@keyframes gemPulse{0%,100%{filter:drop-shadow(0 0 3px rgba(255,255,255,.5))}50%{filter:drop-shadow(0 0 9px #fff)}}',
-      '@keyframes aimBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px);background:#1a73e8}}',
-      '@keyframes aimWave{0%,100%{transform:scaleY(1);opacity:.7}50%{transform:scaleY(2);opacity:1}}',
-      '@keyframes micPulse2{0%,100%{box-shadow:0 0 0 0 rgba(232,0,28,.4)}50%{box-shadow:0 0 0 8px rgba(232,0,28,0)}}',
-    ].join('');
-    document.head.appendChild(style);
+    // ── Keyframes ──
+    var st = document.createElement('style');
+    st.textContent =
+      '@keyframes ssttSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}' +
+      '@keyframes ssttPulse{0%,100%{opacity:.85}50%{opacity:1}}' +
+      '@keyframes ssttBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}' +
+      '@keyframes ssttBar{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}' +
+      '@keyframes ssttFadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}' +
+      '#aiFab:hover{transform:scale(1.08)!important}' +
+      '#aiFab.listening{animation:ssttPulse .6s ease-in-out infinite}' +
+      '.sstt-bar{display:inline-block;width:3px;border-radius:3px;margin:0 2px;background:linear-gradient(to top,#e8001c,#ff6b6b);transform-origin:bottom;animation:ssttBar .7s ease-in-out infinite}' +
+      '.sstt-bar:nth-child(1){height:8px;animation-delay:0s}' +
+      '.sstt-bar:nth-child(2){height:14px;animation-delay:.1s}' +
+      '.sstt-bar:nth-child(3){height:20px;animation-delay:.2s}' +
+      '.sstt-bar:nth-child(4){height:26px;animation-delay:.05s}' +
+      '.sstt-bar:nth-child(5){height:20px;animation-delay:.15s}' +
+      '.sstt-bar:nth-child(6){height:14px;animation-delay:.25s}' +
+      '.sstt-bar:nth-child(7){height:8px;animation-delay:.1s}' +
+      '.sstt-bar:nth-child(8){height:16px;animation-delay:.3s}' +
+      '.sstt-bar:nth-child(9){height:22px;animation-delay:.08s}' +
+      '.sstt-bar:nth-child(10){height:12px;animation-delay:.22s}' +
+      '.sstt-bar:nth-child(11){height:18px;animation-delay:.12s}' +
+      '.sstt-bar:nth-child(12){height:10px;animation-delay:.18s}' +
+      '#aiPanel{animation:ssttFadeUp .2s cubic-bezier(.32,.72,0,1)}';
+    document.head.appendChild(st);
 
-    // ── Panel ──
-    var panel = document.createElement('div');
-    panel.id = 'aiPanel';
-    panel.style.cssText = 'display:none;position:fixed;bottom:94px;right:28px;z-index:2147483646;width:370px;max-height:72vh;background:rgba(255,255,255,.95);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);border:1px solid rgba(255,255,255,.8);border-radius:22px;box-shadow:0 24px 64px rgba(0,0,0,.18);flex-direction:column;overflow:hidden;font-family:system-ui,sans-serif';
-    if (window.innerWidth <= 768) {
-      panel.style.right = '8px'; panel.style.left = '8px'; panel.style.width = 'auto';
-      panel.style.bottom = '116px'; panel.style.maxHeight = '64vh';
+    // Colores de marca SSTT
+    var RED  = '#e8001c';
+    var DARK = '#1a1a1a';
+    var NAVY = '#0a1628';
+
+    // ── Calcular posición segura (dentro del viewport) ──
+    var isMobile = window.innerWidth < 700;
+    var fabSize  = isMobile ? 52 : 60;
+    var fabRight = Math.min(20, window.innerWidth * 0.04);
+    var fabBot   = isMobile ? 68 : 24;
+
+    // ── Sonograma SVG animado para el FAB ──
+    function makeSonogram(size, color) {
+      var bars = [8,14,20,26,22,16,10,18,24,14,20,8];
+      var svgW = bars.length * 7;
+      var svgH = 28;
+      var barsHtml = bars.map(function(h, i) {
+        return '<rect x="'+(i*7+1)+'" y="'+(svgH-h)+'" width="4" height="'+h+'" rx="2" fill="'+color+'" opacity="0.9">' +
+          '<animateTransform attributeName="transform" type="scale" values="1 1;1 '+(0.3+Math.random()*0.7)+';1 1" ' +
+          'dur="'+(0.5+i*0.08)+'s" repeatCount="indefinite" additive="sum"/>' +
+          '</rect>';
+      }).join('');
+      return '<svg width="'+svgW+'" height="'+svgH+'" viewBox="0 0 '+svgW+' '+svgH+'" style="overflow:visible">'+barsHtml+'</svg>';
     }
-    panel.innerHTML = [
-      '<div style="background:linear-gradient(135deg,#0d1b4b,#1a1a2e);padding:13px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-radius:22px 22px 0 0">',
-        '<svg width="26" height="26" viewBox="0 0 40 40" fill="none" style="flex-shrink:0">',
-          '<defs><linearGradient id="gH2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#4285f4"/><stop offset="50%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#e8001c"/></linearGradient></defs>',
-          '<path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gH2)"/>',
-          '<path d="M20 14C20 14 21.5 19 26 19C26 19 21.5 20 20 25C20 25 18.5 20 14 19C14 19 18.5 19 20 14Z" fill="white" opacity=".55"/>',
-        '</svg>',
-        '<div style="flex:1"><div style="font-size:14px;font-weight:800;color:#fff">Asesor SSTT®</div><div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:1px">IA · Catálogo Dahua Chile · Voz</div></div>',
-        '<button onclick="aiClose()" style="background:rgba(255,255,255,.12);color:#fff;border:none;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">✕</button>',
-      '</div>',
-      '<div id="aiMsgs" style="flex:1;overflow-y:auto;padding:13px;display:flex;flex-direction:column;gap:9px;scrollbar-width:thin">',
-        '<div style="display:flex;gap:7px;align-items:flex-start">',
-          '<div style="width:25px;height:25px;border-radius:50%;background:linear-gradient(135deg,#1a73e8,#8b5cf6);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0">✦</div>',
-          '<div style="max-width:83%;padding:9px 12px;border-radius:4px 16px 16px 16px;background:#f5f5f7;font-size:13px;line-height:1.5">',
-            'Hola 👋 Soy tu asesor Dahua. Puedo ayudarte a elegir equipos por <b>texto</b> o por <b>voz</b>.<br><br>',
-            'Prueba: <i>"cámara exterior IK10"</i>, <i>"grabador 16ch 5MP"</i>, <i>"kit 4 cámaras HDCVI básico"</i>',
-          '</div>',
-        '</div>',
-      '</div>',
-      '<div id="aiWave" style="display:none;align-items:center;justify-content:center;gap:3px;padding:7px 13px;margin:0 13px 7px;background:rgba(26,115,232,.06);border-radius:12px">',
-        [1,2,3,4,5,6,7].map(function(i){ return '<div style="width:3px;height:'+(6+i*3)+'px;border-radius:2px;background:linear-gradient(to top,#1a73e8,#8b5cf6);animation:aimWave .8s ease-in-out infinite;animation-delay:'+(i*0.07)+'s"></div>'; }).join(''),
-        '<span style="font-size:10.5px;color:#1a73e8;font-weight:600;margin-left:7px">Escuchando…</span>',
-      '</div>',
-      '<div id="aiChips" style="display:flex;gap:4px;flex-wrap:wrap;padding:0 12px 8px">',
-        ['📹 Full-Color IP 2.8mm','🖥️ Grabador 16ch 5MP','🏗️ Kit 4 cámaras HDCVI','🔭 Exterior IK10','📡 Varifocal HDCVI 8MP','💰 4 IP más baratas']
-          .map(function(t){ return '<span onclick="aiChip(this)" style="background:rgba(26,115,232,.07);color:#1a73e8;border:1px solid rgba(26,115,232,.18);border-radius:14px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">'+t+'</span>'; }).join(''),
-      '</div>',
-      '<div style="padding:9px 11px;border-top:1px solid #e5e5e7;display:flex;gap:7px;align-items:center;flex-shrink:0">',
-        '<input id="aiInp" placeholder="Escribe o usa el micrófono…" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();aiSend();}" style="flex:1;border:1.5px solid #e5e5e7;border-radius:20px;padding:8px 13px;font-size:13.5px;outline:none;background:#f5f5f7;font-family:inherit">',
-        '<button id="aiVoiceMode" onclick="aiToggleVoiceMode()" title="Modo conversación voz" style="width:36px;height:36px;border-radius:50%;border:none;background:#f5f5f7;border:1.5px solid #e5e5e7;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px">🎙️</button>',
-        '<button onclick="aiMic()" id="aiMicBtn" style="width:36px;height:36px;border-radius:50%;border:none;background:linear-gradient(135deg,#1a73e8,#8b5cf6);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">',
-          '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 19v3M8 22h8"/></svg>',
-        '</button>',
-        '<button onclick="aiSend()" style="width:36px;height:36px;border-radius:50%;border:none;background:#e8001c;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">',
-          '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 2 11 13M22 2 15 22 11 13 2 9l20-7z"/></svg>',
-        '</button>',
-      '</div>',
-    ].join('');
-    document.body.appendChild(panel);
 
-    // ── Botón FAB ──
+    // ── FAB — logo Gemini con colores SSTT ──
     var fab = document.createElement('button');
     fab.id = 'aiFab';
     fab.title = 'Asesor IA SSTT';
-    fab.setAttribute('onclick', 'aiToggle()');
-    fab.style.cssText = 'position:fixed;bottom:28px;right:28px;z-index:2147483647;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#1a73e8 0%,#8b5cf6 50%,#e8001c 100%);box-shadow:0 4px 20px rgba(26,115,232,.5),0 2px 8px rgba(0,0,0,.2);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s';
-    if (window.innerWidth <= 768) {
-      fab.style.bottom = '66px'; fab.style.right = '14px';
-      fab.style.width = '50px'; fab.style.height = '50px';
-    }
-    fab.innerHTML = '<svg width="30" height="30" viewBox="0 0 40 40" fill="none" style="animation:gemSpin 9s linear infinite,gemPulse 2.5s ease-in-out infinite"><defs><linearGradient id="gFab2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="rgba(255,255,255,.6)"/></linearGradient></defs><path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gFab2)"/><path d="M20 14C20 14 21.5 19 26 19C26 19 21.5 20 20 25C20 25 18.5 20 14 19C14 19 18.5 19 20 14Z" fill="white" opacity=".45"/></svg>';
-    fab.onmouseover = function(){ this.style.transform = 'scale(1.1)'; };
-    fab.onmouseout  = function(){ this.style.transform = ''; };
+    fab.onclick = function(){ aiToggle(); };
+    fab.style.cssText = [
+      'position:fixed',
+      'bottom:'+fabBot+'px',
+      'right:'+fabRight+'px',
+      'z-index:2147483647',
+      'width:'+fabSize+'px',
+      'height:'+fabSize+'px',
+      'border-radius:50%',
+      'background:'+DARK,
+      'border:2px solid '+RED,
+      'box-shadow:0 4px 20px rgba(232,0,28,.35),0 2px 8px rgba(0,0,0,.3)',
+      'cursor:pointer',
+      'display:flex',
+      'align-items:center',
+      'justify-content:center',
+      'transition:transform .18s,box-shadow .18s',
+      'overflow:hidden',
+    ].join(';');
+
+    // Interior: estrella Gemini en rojo SSTT + sonograma oculto
+    fab.innerHTML =
+      '<div id="aiFabInner" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:relative">' +
+        '<div id="aiFabStar" style="transition:opacity .3s">' +
+          '<svg width="28" height="28" viewBox="0 0 40 40" fill="none" style="animation:ssttSpin 10s linear infinite">' +
+            '<defs><linearGradient id="gSST" x1="0" y1="0" x2="1" y2="1">' +
+              '<stop offset="0%" stop-color="#fff"/>' +
+              '<stop offset="40%" stop-color="#ffcccc"/>' +
+              '<stop offset="100%" stop-color="'+RED+'"/>' +
+            '</linearGradient></defs>' +
+            '<path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gSST)"/>' +
+            '<path d="M20 14C20 14 21.5 19 26 19C26 19 21.5 20 20 25C20 25 18.5 20 14 19C14 19 18.5 19 20 14Z" fill="white" opacity=".5"/>' +
+          '</svg>' +
+        '</div>' +
+        '<div id="aiFabSono" style="display:none;align-items:center;justify-content:center;height:100%">' +
+          '<div class="sstt-bar"></div><div class="sstt-bar"></div><div class="sstt-bar"></div>' +
+          '<div class="sstt-bar"></div><div class="sstt-bar"></div><div class="sstt-bar"></div>' +
+          '<div class="sstt-bar"></div>' +
+        '</div>' +
+      '</div>';
     document.body.appendChild(fab);
 
-    console.log('[SSTT] Asistente flotante inyectado ✅');
+    // ── Panel de chat ──
+    var panelW = Math.min(370, window.innerWidth - 16);
+    var panelRight = Math.max(8, Math.min(fabRight, window.innerWidth - panelW - 8));
+    var panelBot = fabBot + fabSize + 10;
+
+    var panel = document.createElement('div');
+    panel.id = 'aiPanel';
+    panel.style.cssText = [
+      'display:none',
+      'position:fixed',
+      'bottom:'+panelBot+'px',
+      'right:'+panelRight+'px',
+      'z-index:2147483646',
+      'width:'+panelW+'px',
+      'max-height:72vh',
+      'background:rgba(255,255,255,.97)',
+      'backdrop-filter:blur(40px) saturate(180%)',
+      '-webkit-backdrop-filter:blur(40px) saturate(180%)',
+      'border:1.5px solid rgba(232,0,28,.15)',
+      'border-radius:20px',
+      'box-shadow:0 20px 60px rgba(0,0,0,.18),0 0 0 1px rgba(255,255,255,.8)',
+      'flex-direction:column',
+      'overflow:hidden',
+      'font-family:system-ui,-apple-system,sans-serif',
+    ].join(';');
+
+    // Sonograma header (visible cuando graba)
+    var sonoHeader = '<div id="aiSonoHeader" style="display:none;align-items:center;justify-content:center;gap:2px;padding:10px 16px;background:rgba(232,0,28,.06);border-bottom:1px solid rgba(232,0,28,.1)">' +
+      [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20].map(function(i){
+        return '<div class="sstt-bar" style="animation-delay:'+(i*0.05)+'s"></div>';
+      }).join('') +
+      '<span style="font-size:11px;color:'+RED+';font-weight:700;margin-left:8px;letter-spacing:.5px">ESCUCHANDO</span>' +
+    '</div>';
+
+    panel.innerHTML =
+      // Header
+      '<div style="background:'+DARK+';padding:12px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-radius:20px 20px 0 0">' +
+        '<svg width="24" height="24" viewBox="0 0 40 40" fill="none" style="flex-shrink:0;animation:ssttSpin 10s linear infinite">' +
+          '<defs><linearGradient id="gHP" x1="0" y1="0" x2="1" y2="1">' +
+            '<stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="'+RED+'"/>' +
+          '</linearGradient></defs>' +
+          '<path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gHP)"/>' +
+        '</svg>' +
+        '<div style="flex:1">' +
+          '<div style="font-size:13px;font-weight:800;color:#fff;letter-spacing:.2px">Asesor SSTT®</div>' +
+          '<div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:1px">Dahua Chile · IA + Voz</div>' +
+        '</div>' +
+        '<button onclick="aiToggleVoiceMode()" id="aiVoiceMode" title="Modo conversación" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s">🎙️</button>' +
+        '<button onclick="aiClose()" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;margin-left:4px">✕</button>' +
+      '</div>' +
+      // Sonograma header
+      sonoHeader +
+      // Mensajes
+      '<div id="aiMsgs" style="flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;scrollbar-width:thin">' +
+        '<div style="display:flex;gap:7px;align-items:flex-start">' +
+          '<div style="width:24px;height:24px;border-radius:50%;background:'+DARK+';border:1.5px solid '+RED+';color:'+RED+';display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;font-weight:800">✦</div>' +
+          '<div style="max-width:85%;padding:9px 12px;border-radius:4px 16px 16px 16px;background:#f5f5f7;font-size:13px;line-height:1.5;color:#1a1a1a">' +
+            'Hola 👋 Soy tu asesor Dahua. Puedo ayudarte por <b>texto</b> o <b>voz</b>.<br><br>' +
+            'Prueba: <em>"cámara exterior IK10"</em> o <em>"kit 4 cámaras HDCVI"</em>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      // Onda de voz (fallback texto)
+      '<div id="aiWave" style="display:none;align-items:center;justify-content:center;gap:2px;padding:6px 14px;margin:0 12px 6px;background:rgba(232,0,28,.05);border-radius:10px;border:1px solid rgba(232,0,28,.12)">' +
+        [1,2,3,4,5,6,7,8,9,10].map(function(i){ return '<div class="sstt-bar" style="animation-delay:'+(i*0.07)+'s"></div>'; }).join('') +
+        '<span style="font-size:10px;color:'+RED+';font-weight:700;margin-left:8px">Escuchando…</span>' +
+      '</div>' +
+      // Chips
+      '<div id="aiChips" style="display:flex;gap:4px;flex-wrap:wrap;padding:0 12px 8px">' +
+        ['📹 Full-Color IP 2.8mm','🖥️ Grabador 16ch 5MP','🏗️ Kit 4 cámaras HDCVI','🔭 Exterior IK10','📡 Varifocal 8MP','💰 Las 4 IP más baratas']
+          .map(function(t){ return '<span onclick="aiChip(this)" style="background:rgba(232,0,28,.06);color:'+RED+';border:1px solid rgba(232,0,28,.2);border-radius:14px;padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap">'+t+'</span>'; }).join('') +
+      '</div>' +
+      // Input
+      '<div style="padding:8px 10px;border-top:1px solid #e5e5e7;display:flex;gap:6px;align-items:center;flex-shrink:0">' +
+        '<input id="aiInp" placeholder="Escribe o usa el micrófono…" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();aiSend();}" style="flex:1;border:1.5px solid #e5e5e7;border-radius:20px;padding:8px 12px;font-size:13px;outline:none;background:#f9f9f9;font-family:inherit;color:#1a1a1a">' +
+        '<button onclick="aiMic()" id="aiMicBtn" title="Hablar" style="width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(232,0,28,.3);background:#1a1a1a;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s">' +
+          '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 19v3M8 22h8"/></svg>' +
+        '</button>' +
+        '<button onclick="aiSend()" title="Enviar" style="width:36px;height:36px;border-radius:50%;border:none;background:'+RED+';color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">' +
+          '<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 2 11 13M22 2 15 22 11 13 2 9l20-7z"/></svg>' +
+        '</button>' +
+      '</div>';
+
+    document.body.appendChild(panel);
+
+    // Actualizar posición en resize
+    window.addEventListener('resize', function() {
+      var mob = window.innerWidth < 700;
+      var fs = mob ? 52 : 60;
+      var fr = Math.min(20, window.innerWidth * 0.04);
+      var fb = mob ? 68 : 24;
+      var pw = Math.min(370, window.innerWidth - 16);
+      var pr = Math.max(8, Math.min(fr, window.innerWidth - pw - 8));
+      var pb = fb + fs + 10;
+      fab.style.width  = fs+'px'; fab.style.height = fs+'px';
+      fab.style.right  = fr+'px'; fab.style.bottom = fb+'px';
+      panel.style.width  = pw+'px';
+      panel.style.right  = pr+'px';
+      panel.style.bottom = pb+'px';
+    });
+
+    console.log('[SSTT] Asistente inyectado ✅');
   }
 
   if (document.readyState === 'loading') {
@@ -16501,8 +16645,7 @@ document.addEventListener('click', function(e) {
   } else {
     injectAssistant();
   }
-  // También intentar después de 1s por si algo lo sobreescribe
-  setTimeout(injectAssistant, 1000);
+  setTimeout(injectAssistant, 800);
 })();
 </script>
 </body>
