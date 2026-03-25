@@ -6475,6 +6475,18 @@ if (window.pdfjsLib) {
     <div class="g-item" onclick="showGuide('storage',this)">💾 Almacenamiento</div>
     <div class="g-item" onclick="showGuide('cableado',this)">🔧 Cableado</div>
     <div class="g-item" onclick="showGuide('fuentes',this)">⚡ Fuentes de poder</div>
+    <div class="g-item" onclick="showGuide('configuracion',this)">⚙️ Configuración inicial</div>
+    <div class="g-item" onclick="showGuide('acceso-remoto',this)">📱 Acceso remoto DMSS</div>
+    <div class="g-item" onclick="showGuide('grabacion',this)">📹 Modos de grabación</div>
+    <div class="g-item" onclick="showGuide('acupick',this)">🔍 AcuPick búsqueda IA</div>
+    <div class="g-item" onclick="showGuide('ivs2',this)">🎯 IVS configuración avanzada</div>
+    <div class="g-item" onclick="showGuide('troubleshoot',this)">🔧 Resolución de problemas</div>
+    <div class="g-item" onclick="showGuide('configuracion',this)">⚙️ Configuración inicial</div>
+    <div class="g-item" onclick="showGuide('acceso-remoto',this)">📱 Acceso remoto DMSS</div>
+    <div class="g-item" onclick="showGuide('grabacion',this)">📹 Modos de grabación</div>
+    <div class="g-item" onclick="showGuide('acupick',this)">🔍 AcuPick — Búsqueda IA</div>
+    <div class="g-item" onclick="showGuide('ivs2',this)">🎯 IVS avanzado</div>
+    <div class="g-item" onclick="showGuide('troubleshoot',this)">🛠️ Problemas frecuentes</div>
   </div>
   <div class="g-content" id="gContent">
     <div class="g-panel active" id="g-tipos"><div class="g-ttl">📷 Tipos de cámaras CCTV</div><p class="g-intro">La elección depende de la aplicación, entorno y presupuesto. Aquí explicamos las principales tecnologías disponibles en Chile.</p><div class="g-sec"><h3>Cámaras IP (Red)</h3><p>Transmiten señal digital a través de Ethernet. Son la tecnología más moderna y versátil.</p><ul><li><strong>Resolución:</strong> desde 1MP hasta 32MP</li><li><strong>Alimentación:</strong> PoE — un solo cable para datos y energía</li><li><strong>Distancia:</strong> máximo 100m por segmento UTP sin switch</li><li><strong>IA embebida:</strong> WizSense, WizMind, IVS, LPR</li><li><strong>Ideal para:</strong> instalaciones nuevas, máxima resolución o IA</li></ul><div class="ibox">💡 Para instalaciones nuevas en Chile, usa IP siempre que el presupuesto lo permita. La diferencia de calidad es notable en 4MP o superior.</div></div><div class="g-sec"><h3>Cámaras HDCVI (Dahua)</h3><p>Señal HD sobre cable coaxial RG59 o RG6. Tecnología analógica de alta definición de Dahua.</p><ul><li><strong>Resolución:</strong> 1MP a 8MP (4K)</li><li><strong>Distancia:</strong> hasta 500m con RG59 en 1080P, 300m en 4K</li><li><strong>Multiformato:</strong> compatible con AHD, TVI y analógico estándar</li><li><strong>Ideal para:</strong> renovación de instalaciones coaxiales existentes</li></ul></div><div class="g-sec"><h3>Comparativa rápida</h3><table class="dtbl"><thead><tr><th>Característica</th><th>IP</th><th>HDCVI</th></tr></thead><tbody><tr><td>Resolución máx.</td><td>32MP</td><td>8MP (4K)</td></tr><tr><td>Distancia sin equipo extra</td><td>100m (UTP)</td><td>500m (RG59)</td></tr><tr><td>Un cable para todo</td><td>✅ PoE</td><td>❌ coaxial + alimentación</td></tr><tr><td>IA / IVS avanzado</td><td>✅ WizSense/WizMind</td><td>⚠️ Limitado en XVR</td></tr><tr><td>Renovar coaxial existente</td><td>❌</td><td>✅ Ideal</td></tr></tbody></table></div></div>
@@ -6487,6 +6499,130 @@ if (window.pdfjsLib) {
     <div class="g-panel" id="g-storage"><div class="g-ttl">💾 Almacenamiento y discos duros</div><p class="g-intro">El dimensionamiento del disco es crítico. Un disco mal calculado significa pérdida de evidencia.</p><div class="g-sec"><h3>Fórmula de cálculo</h3><p>GB/día = (bitrate_Mbps × 3600 × horas) / 8 / 1024 × número_cámaras</p><div class="ibox">💡 Usa la calculadora de disco duro en la pestaña Calculadoras para obtener resultados precisos según tu configuración.</div></div><div class="g-sec"><h3>Discos recomendados para CCTV</h3><ul><li>WD Purple / Seagate Skyhawk: diseñados para grabación continua 24/7</li><li>No usar discos de PC convencionales — se degradan rápido con grabación continua</li><li>Agregar 10% de margen sobre el cálculo teórico</li></ul></div></div>
     <div class="g-panel" id="g-cableado"><div class="g-ttl">🔧 Cableado para CCTV</div><p class="g-intro">La calidad del cableado determina la vida útil y el rendimiento del sistema.</p><div class="g-sec"><h3>Cámaras IP — Cable UTP</h3><ul><li>Cat5e: suficiente para la mayoría de cámaras IP hasta 100m</li><li>Cat6: recomendado para cámaras 4K o Hi-PoE (60W)</li><li>No usar Cat3 ni cable telefónico — causará problemas de PoE</li><li>Máximo 100m por segmento (estándar IEEE)</li></ul></div><div class="g-sec"><h3>Cámaras HDCVI — Cable Coaxial</h3><ul><li>RG59: estándar, hasta 500m en 1080P y 300m en 4K</li><li>RG6: mayor sección, mejor para distancias largas en 4K</li><li>Cable síamés: coaxial + bifilar de alimentación en una vaina</li></ul></div></div>
     <div class="g-panel" id="g-fuentes"><div class="g-ttl">⚡ Fuentes de poder para CCTV</div><p class="g-intro">La alimentación es uno de los puntos más críticos. Una fuente mal dimensionada provoca reinicios y daño a los equipos.</p><div class="g-sec"><h3>Consumo típico cámaras Dahua</h3><table class="dtbl"><thead><tr><th>Tipo de cámara</th><th>Consumo promedio</th><th>Pico</th></tr></thead><tbody><tr><td>HDCVI domo 2MP</td><td>3.5W (300mA @ 12V)</td><td>5W</td></tr><tr><td>HDCVI bala 4K</td><td>5W (420mA @ 12V)</td><td>7W</td></tr><tr><td>IP 4MP PoE estándar</td><td>6W</td><td>10W</td></tr><tr><td>IP PTZ 2MP</td><td>20W</td><td>40W</td></tr></tbody></table></div><div class="g-sec"><h3>Regla de dimensionamiento</h3><p>Suma el consumo de todas las cámaras y multiplica por <strong>1.3 (30% de margen)</strong>.</p><div class="obox">✅ Ejemplo: 8 cámaras × 5W = 40W. Con margen: 40 × 1.3 = <strong>52W mínimo</strong> → Usar fuente 60W o 10A/12V.</div></div></div>
+
+    <div class="g-panel" id="g-configuracion"><div class="g-ttl">⚙️ Configuración inicial de equipos Dahua</div><p class="g-intro">Guía paso a paso para poner en marcha grabadores y cámaras Dahua por primera vez, basada en la DahuaWiki oficial.</p>
+    <div class="g-sec"><h3>NVR / XVR — Primera configuración</h3><ol>
+    <li><strong>Inicialización:</strong> Al encender por primera vez aparece el asistente. Define contraseña de admin (mín. 8 caracteres, combina letras y números).</li>
+    <li><strong>Fecha y hora:</strong> Configura zona horaria America/Santiago (UTC-4 o UTC-3 en verano).</li>
+    <li><strong>Agregar cámaras IP:</strong> Usa Smart Add → el NVR detecta automáticamente las cámaras Dahua en la misma red PoE.</li>
+    <li><strong>Configurar grabación:</strong> Menú Almacenamiento → Programación. Elige entre: Continua, Movimiento o Mixta.</li>
+    <li><strong>Formatear disco:</strong> Menú Almacenamiento → Administrador HDD → selecciona disco → Formatear. <em>Siempre formatea el disco en el grabador antes de usarlo.</em></li>
+    </ol><div class="ibox">💡 Si olvidaste la contraseña, usa el botón físico de reset o contacta a SSTT para recuperación de acceso.</div></div>
+    <div class="g-sec"><h3>Cámara IP — Configuración standalone</h3><ol>
+    <li>Localiza la cámara con ConfigTool de Dahua en la misma red.</li>
+    <li>Define IP estática: Configuración → Red → TCP/IP → Tipo: Estático.</li>
+    <li>Activa la contraseña inicial (la cámara viene sin password de fábrica).</li>
+    <li>Configura resolución: Configuración → Cámara → Codificación → elige calidad y FPS.</li>
+    <li>Configura grabación en SD: Almacenamiento → Programación → habilita canal.</li>
+    </ol></div>
+    <div class="g-sec"><h3>Acceso remoto P2P (sin IP pública)</h3><ol>
+    <li>En el NVR: Configuración → Red → P2P → Habilitar.</li>
+    <li>Anota el número de serie (S/N) del dispositivo.</li>
+    <li>Instala la app DMSS en tu smartphone.</li>
+    <li>Agrega dispositivo por SN → ingresa usuario y contraseña del NVR.</li>
+    <li>El P2P usa los servidores de Dahua como intermediario — funciona sin abrir puertos.</li>
+    </ol><div class="wbox">⚠️ El P2P requiere conexión a internet en el grabador. Verifica que el router permita tráfico saliente en puertos 80, 443 y UDP.</div></div></div>
+
+    <div class="g-panel" id="g-acupick"><div class="g-ttl">🔍 AcuPick — Búsqueda inteligente por descripción</div><p class="g-intro">AcuPick es la tecnología de búsqueda facial y de características de Dahua. Permite encontrar personas u objetos específicos en horas de grabación en segundos.</p>
+    <div class="g-sec"><h3>¿Cómo funciona?</h3><p>AcuPick analiza las grabaciones y extrae atributos de personas y vehículos:</p>
+    <ul><li>👤 Personas: género, color de ropa, sombrero, mochila, paraguas</li><li>🚗 Vehículos: color, tipo, patente (con cámara LPR)</li><li>🔍 Búsqueda por imagen: sube una foto y encuentra coincidencias</li></ul></div>
+    <div class="g-sec"><h3>Requisitos para AcuPick</h3><ul>
+    <li>NVR compatible: serie NVR4/5/6/7/8 con firmware 2023 o superior</li>
+    <li>Cámaras WizSense o WizMind (SMD+ activado)</li>
+    <li>La cámara debe tener activada la detección humana en IVS</li>
+    </ul><div class="obox">✅ En el NVR: Smart Search → AcuPick → selecciona canales → define período → filtra por atributos.</div></div>
+    <div class="g-sec"><h3>Búsqueda en UI local vs DMSS</h3><table class="dtbl"><thead><tr><th>Interfaz</th><th>Capacidades</th></tr></thead><tbody>
+    <tr><td>UI Local NVR</td><td>Búsqueda completa, exportar clips, sin límite de resultados</td></tr>
+    <tr><td>App DMSS</td><td>Búsqueda básica, visualización remota de resultados</td></tr>
+    <tr><td>SmartPSS Lite</td><td>Gestión multicámara, reportes, exportación masiva</td></tr>
+    </tbody></table></div></div>
+
+    <div class="g-panel" id="g-acceso-remoto"><div class="g-ttl">📱 Acceso remoto — DMSS y SmartPSS</div><p class="g-intro">Dahua ofrece múltiples formas de acceso remoto. Elige la que mejor se adapte a tu caso de uso.</p>
+    <div class="g-sec"><h3>App DMSS (móvil)</h3><ul>
+    <li><strong>Disponible:</strong> Android e iOS — busca "DMSS" en la tienda</li>
+    <li><strong>Agregar por P2P:</strong> usa el número de serie del NVR, no necesita IP pública</li>
+    <li><strong>Agregar por IP/dominio:</strong> requiere IP pública fija o DDNS configurado</li>
+    <li><strong>Funciones:</strong> live view, playback, push notifications, AcuPick básico, PTZ control</li>
+    </ul><div class="ibox">💡 Activa las notificaciones push para recibir alertas de movimiento o IVS directamente en tu teléfono.</div></div>
+    <div class="g-sec"><h3>SmartPSS Lite (PC)</h3><ul>
+    <li>Gestión de hasta 256 dispositivos simultáneos</li>
+    <li>Video Wall configurable, mapas de planta (E-Map)</li>
+    <li>Reportes de conteo de personas, heat map</li>
+    <li>Acceso por P2P (número de serie) o IP directa</li>
+    </ul></div>
+    <div class="g-sec"><h3>Acceso por reenvío de puertos</h3><table class="dtbl"><thead><tr><th>Puerto</th><th>Protocolo</th><th>Uso</th></tr></thead><tbody>
+    <tr><td>37777</td><td>TCP</td><td>Protocolo propietario Dahua (SmartPSS/DMSS)</td></tr>
+    <tr><td>80 / 443</td><td>HTTP/HTTPS</td><td>Interfaz web del grabador</td></tr>
+    <tr><td>554</td><td>RTSP</td><td>Stream de video RTSP (VLC, integraciones)</td></tr>
+    </tbody></table><div class="wbox">⚠️ Nunca expongas el puerto 80 del NVR directamente a internet sin HTTPS. Usa VPN o P2P siempre que sea posible.</div></div></div>
+
+    <div class="g-panel" id="g-ivs2"><div class="g-ttl">🎯 IVS — Configuración avanzada de reglas</div><p class="g-intro">Guía práctica para configurar las reglas IVS en cámaras y grabadores Dahua. Basado en la documentación oficial de DahuaWiki.</p>
+    <div class="g-sec"><h3>Cruce de línea (Tripwire)</h3><ol>
+    <li>IVS → Nueva regla → Tipo: Cruce de línea</li>
+    <li>Dibuja la línea virtual en la imagen</li>
+    <li>Define dirección: A→B (solo una dirección) o ambas</li>
+    <li>Activa Filtro de objetivo: Humano y/o Vehículo para reducir falsas alarmas</li>
+    <li>Configura acción: grabar, enviar email, activar alarma salida</li>
+    </ol></div>
+    <div class="g-sec"><h3>Intrusión (Intrusion)</h3><ol>
+    <li>IVS → Nueva regla → Tipo: Intrusión</li>
+    <li>Dibuja el polígono de la zona protegida</li>
+    <li>Define tiempo mínimo dentro de zona (p.ej. 2 segundos para evitar falsas alarmas)</li>
+    <li>Filtro: solo Humano para mayor precisión</li>
+    </ol><div class="ibox">💡 Para perímetros de bodegas o patios: usa Intrusión con tiempo mínimo 3-5s y filtro Humano solamente.</div></div>
+    <div class="g-sec"><h3>Conteo de personas</h3><ul>
+    <li>Dibuja la línea de conteo en el punto de acceso</li>
+    <li>Define qué dirección es "entrada" y cuál "salida"</li>
+    <li>Los reportes se exportan desde SmartPSS o la interfaz web</li>
+    <li>Útil para aforo en locales comerciales</li>
+    </ul></div></div>
+
+    <div class="g-panel" id="g-grabacion"><div class="g-ttl">📹 Modos de grabación y programación</div><p class="g-intro">Configura correctamente la grabación para optimizar el espacio en disco y asegurar la evidencia cuando la necesitas.</p>
+    <div class="g-sec"><h3>Modos disponibles</h3><table class="dtbl"><thead><tr><th>Modo</th><th>Descripción</th><th>Uso recomendado</th></tr></thead><tbody>
+    <tr><td>Continua</td><td>Graba las 24 horas sin interrupción</td><td>Zonas críticas, accesos, cajas</td></tr>
+    <tr><td>Movimiento</td><td>Solo graba cuando detecta movimiento</td><td>Bodegas, patios con bajo tráfico</td></tr>
+    <tr><td>Alarma</td><td>Graba al activarse una entrada de alarma física</td><td>Salas de servidores, zonas sensibles</td></tr>
+    <tr><td>IVS</td><td>Graba al dispararse una regla IVS (cruce de línea, etc.)</td><td>Perímetros inteligentes</td></tr>
+    <tr><td>SMD+</td><td>Graba solo con Humano o Vehículo detectado</td><td>Reemplaza movimiento en WizSense</td></tr>
+    </tbody></table></div>
+    <div class="g-sec"><h3>Resolución de grabación Dahua</h3><ul>
+    <li>El NVR graba en la resolución máxima de la cámara (hasta el límite del canal)</li>
+    <li>Puedes configurar un stream secundario de baja resolución para acceso remoto</li>
+    <li>H.265+ reduce hasta 70% el espacio versus H.264 con la misma calidad visual</li>
+    </ul><div class="obox">✅ Usa H.265+ siempre que sea posible. Reduce dramáticamente el tamaño de los archivos y permite guardar más días de grabación.</div></div>
+    <div class="g-sec"><h3>Solapamiento de grabación (Overlap)</h3><p>Cuando el disco se llena, el NVR sobrescribe automáticamente las grabaciones más antiguas (modo circular). Configura el porcentaje de disco reservado en Almacenamiento → Configuración avanzada.</p></div></div>
+
+    <div class="g-panel" id="g-troubleshoot"><div class="g-ttl">🔧 Resolución de problemas frecuentes</div><p class="g-intro">Los problemas más comunes en sistemas Dahua y cómo resolverlos. Basado en la guía oficial de DahuaWiki.</p>
+    <div class="g-sec"><h3>Cámara no aparece en el NVR</h3><ul>
+    <li>✅ Verifica que la cámara esté en la misma subred que el NVR (ej: 192.168.1.x)</li>
+    <li>✅ Comprueba el cable UTP con un tester — un cable malo es la causa #1</li>
+    <li>✅ El puerto PoE debe estar encendido: NVR → Red → Configuración PoE</li>
+    <li>✅ Usa ConfigTool para localizar la cámara independientemente del NVR</li>
+    <li>✅ Resetea la cámara al estado de fábrica si tiene contraseña desconocida</li>
+    </ul></div>
+    <div class="g-sec"><h3>Sin imagen o imagen en negro</h3><ul>
+    <li>Verifica resolución: la cámara no puede grabar a mayor resolución que el canal del NVR</li>
+    <li>Desactiva H.265 y prueba con H.264 para compatibilidad con grabadores antiguos</li>
+    <li>Revisa el ancho de banda: NVR → Sistema → Recursos de red</li>
+    <li>Para HDCVI: verifica que el XVR esté en modo CVI (no AHD o TVI)</li>
+    </ul></div>
+    <div class="g-sec"><h3>Acceso remoto no funciona (P2P)</h3><ul>
+    <li>NVR debe tener acceso a internet → prueba hacer ping a 8.8.8.8 desde el NVR</li>
+    <li>P2P habilitado: Configuración → Red → P2P → debe mostrar "En línea"</li>
+    <li>Verifica que el router no bloquee tráfico UDP saliente</li>
+    <li>Si el estado es "Sin conexión", espera 2 minutos o reinicia el NVR</li>
+    </ul></div>
+    <div class="g-sec"><h3>Disco no reconocido</h3><ul>
+    <li>Formatea el disco desde el NVR antes de usarlo (aunque sea nuevo)</li>
+    <li>Verifica compatibilidad en la lista oficial: NVR → Almacenamiento → Compatible HDDs</li>
+    <li>Un disco de PC no formateado para CCTV puede funcionar inicialmente pero degradarse rápido</li>
+    </ul></div>
+    <div class="g-sec"><h3>Reset de contraseña</h3><p>Si perdiste la contraseña del NVR o cámara:</p><ul>
+    <li><strong>Opción 1:</strong> Botón físico RESET en el equipo (mantener 5 segundos)</li>
+    <li><strong>Opción 2:</strong> Recuperación por email de seguridad configurado en DMSS</li>
+    <li><strong>Opción 3:</strong> Contacta a SSTT con el número de serie para generación de código de desbloqueo</li>
+    </ul></div></div>
+
   </div><!-- /g-content -->
 </div><!-- /guides-layout -->
 </div><!-- /acGuias -->
@@ -16699,16 +16835,31 @@ function aiSend() {
   var catLines = contextProds.slice(0, 80).map(function(p){ return p.codigo+'|'+p.nombre.slice(0,50)+'|$'+p.ptotal+'|'+p.cat; });
   var catCtx = catLines.join('\n');
 
-  var sys = 'Eres el asesor de ventas de SSTT SpA, distribuidor oficial Dahua Chile. Estás en una conversación de voz.\n\n' +
-    'REGLAS IMPORTANTES:\n' +
-    '1. Responde SIEMPRE en español, de forma natural y concisa (máx 3 oraciones para voz).\n' +
-    '2. Haz UNA sola contrapregunta a la vez para afinar la necesidad (no bombardees con preguntas).\n' +
-    '3. Cuando tengas suficiente info (tecnología, cantidad, presupuesto aproximado), sugiere productos.\n' +
-    '4. Al sugerir productos, incluye EXACTAMENTE al final: PRODUCTOS:["COD1","COD2"] (máx 8 códigos del catálogo).\n' +
-    '5. Si el cliente dice "agrega al carro" o "agregar todo", responde confirmando con los productos.\n' +
-    '6. Para kits: incluye cámaras + grabador compatible + disco duro + balun si es HDCVI + fuente de poder.\n' +
-    '7. Sé empático y usa lenguaje simple, no técnico en exceso.\n\n' +
-    'CATALOGO (codigo|nombre|precio|categoria):\n' + catCtx;
+  var sys = 'Eres el asesor técnico-comercial de SSTT SpA, distribuidor oficial Dahua Chile. Tienes conocimiento completo de la DahuaWiki oficial.\n\n' +
+    '=== CONOCIMIENTO TÉCNICO (DahuaWiki) ===\n' +
+    'TECNOLOGÍAS CÁMARAS:\n' +
+    '- IP: Ethernet UTP Cat5e/6. PoE: 802.3af=15.4W, 802.3at=30W, 802.3bt=60-90W, Hi-PoE=60W. Distancia máx 100m (250m con switch PFS en modo extendido vía DIP switch). Resolución hasta 32MP. IA: WizSense (SMD+ humano/vehículo), WizMind (reconocimiento facial), TiOC (triple cámara + disuasión activa), Full-Color (LED visible 24/7).\n' +
+    '- HDCVI: coaxial RG59 o RG6. 500m en 1080P, 300m en 4K. Multiformato: HDCVI+AHD+TVI+analógico estándar. XVR debe estar en modo CVI para cámaras HDCVI.\n' +
+    '- PTZ IP: zoom óptico 4x hasta 45x. Auto-tracking. Protocolo Dahua o ONVIF. Hi-PoE necesario para modelos grandes.\n' +
+    'RESOLUCIONES: HD/720P=1MP, FullHD/1080P=2MP, 4MP, 5MP, 4K/UHD/2160P=8MP, 12MP.\n' +
+    'GRABADORES NVR (para IP): 4/8/16/32/64/128 canales. Smart Add detecta cámaras automáticamente en red. Algunos con PoE integrado. AcuPick para búsqueda inteligente. Puertos remotos: 37777(TCP), 80/443(HTTP), 554(RTSP).\n' +
+    'GRABADORES XVR (para HDCVI): soporta HDCVI+AHD+TVI+analógico+IP simultáneamente. Hasta 4K. H.265+ ahorra 70% espacio vs H.264.\n' +
+    'CONFIGURACIÓN INICIAL: 1)Inicializar contraseña admin 2)Fecha/hora Santiago UTC-4 3)Smart Add cámaras 4)Formatear HDD en grabador 5)Programar grabación.\n' +
+    'ACCESO REMOTO P2P: NVR→Red→P2P→Habilitar. App DMSS (iOS/Android) con número de serie del NVR. SmartPSS Lite para PC gestiona hasta 256 dispositivos. Sin IP pública necesaria con P2P.\n' +
+    'IVS REGLAS: Cruce de línea (dirección A→B o ambas), Intrusión (polígono + tiempo mínimo), Conteo personas (bidireccional), Objeto abandonado/faltante. Filtro Humano+Vehículo elimina 90% falsas alarmas.\n' +
+    'ACUPICK: búsqueda en grabaciones por atributos (ropa, género, vehículo, patente). Requiere NVR serie 4/5/6/7/8 + cámaras WizSense.\n' +
+    'MODOS GRABACIÓN: Continua, Movimiento, SMD+ (solo humano/vehículo), IVS, Alarma física. Disco en modo circular (sobrescribe lo más antiguo).\n' +
+    'TROUBLESHOOTING: Cámara no aparece→verificar subred/cable/PoE. Sin imagen→verificar resolución del canal/H.265 compatibilidad. P2P falla→verificar internet en NVR (ping 8.8.8.8). Disco no reconocido→formatear desde el NVR. Reset contraseña→botón físico RESET 5s.\n' +
+    'CABLEADO: Cat5e para IP estándar, Cat6 para 4K/HiPoE. RG59 para HDCVI. Cable síamés coaxial+bifilar para HDCVI sin fuente separada.\n' +
+    'DISCOS: WD Purple o Seagate SkyHawk para grabación 24/7. Fórmula: GB/día=(bitrate_Mbps×3600×horas)/8/1024×N_cámaras.\n\n' +
+    '=== REGLAS ===\n' +
+    '1. Español, conciso, máx 3-4 oraciones para respuesta de voz.\n' +
+    '2. Una sola contrapregunta por turno.\n' +
+    '3. Productos: PRODUCTOS:["COD1","COD2"] al final (máx 8 códigos exactos del catálogo).\n' +
+    '4. Kits HDCVI: cámaras HAC + XVR + disco + fuente 12V + balun si van por UTP.\n' +
+    '5. Kits IP: cámaras IPC + NVR + disco + switch PoE si NVR no tiene PoE integrado.\n' +
+    '6. Configuración: da pasos concretos del menú Dahua cuando pregunten cómo hacer algo.\n\n' +
+    'CATALOGO:\n' + catCtx;
 
   var msgs = aiHistory.slice(-4);
 
@@ -16806,9 +16957,11 @@ function aiAskAPI() {
     if (!contextProds.length) contextProds = PRODUCTS.slice(0,80);
     var catLines = contextProds.slice(0,80).map(function(p){ return p.codigo+'|'+p.nombre.slice(0,50)+'|$'+p.ptotal+'|'+p.cat; });
     var catCtx = catLines.join('\n');
-    var sys = 'Eres el asesor de ventas de SSTT SpA, distribuidor oficial Dahua Chile.\n' +
-      'Responde en español, sé conciso y útil. Sugiere los productos más adecuados.\n' +
-      'Al final incluye: PRODUCTOS:["COD1","COD2"] con los códigos exactos.\n\n' +
+    var sys = 'Eres el asesor técnico-comercial de SSTT SpA, distribuidor oficial Dahua Chile con conocimiento completo de DahuaWiki.\n' +
+      'Resoluciones: 720P=1MP, 1080P=2MP, 4K=8MP. Tecnologías: IP(PoE/UTP/100m), HDCVI(coaxial/500m).\n' +
+      'Series IA: WizSense(SMD+), WizMind(facial), TiOC(disuasión), Full-Color(LED).\n' +
+      'Grabadores: NVR para IP, XVR para HDCVI+IP.\n' +
+      'Responde en español, conciso. Al final: PRODUCTOS:["COD1","COD2"] con los códigos exactos.\n\n' +
       'CATALOGO:\n' + catCtx;
     fetch(PROXY_URL, {method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:400, system:sys, messages:aiHistory.slice(-4)})
