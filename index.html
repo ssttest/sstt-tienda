@@ -16086,6 +16086,261 @@ function updateMnavBadge() {
 
 
 
+
+// ════════════════════════════════════════════════════════════════
+// MOTOR DE BÚSQUEDA LOCAL — 1079 productos sin tokens API
+// ════════════════════════════════════════════════════════════════
+var aiLocalEngine = (function() {
+
+  // Diccionario de sinónimos y términos técnicos → palabras clave
+  var SYNONYMS = {
+    'grabador':   ['nvr','xvr','dvr','grabador'],
+    'nvr':        ['nvr','grabador','grabadores'],
+    'xvr':        ['xvr','grabador','hdcvi'],
+    'camara':     ['camara','cámara','ipc','hfw','hdw','sd','hac'],
+    'domo':       ['domo','dome','hdw','hdbw'],
+    'bala':       ['bala','bullet','hfw','hac-hfw'],
+    'ptz':        ['ptz','speed','posicionadora'],
+    'exterior':   ['exterior','outdoor','ip67','ip66','ip68'],
+    'interior':   ['interior','indoor'],
+    'hdcvi':      ['hdcvi','cvi','hac','analogica','analogico'],
+    'ip':         ['ipc','ip','poe'],
+    'fullcolor':  ['full-color','fullcolor','wizcolor','color','full color'],
+    'full-color': ['full-color','fullcolor','color'],
+    'wizsense':   ['wizsense','wiz','ia','inteligencia'],
+    'tioc':       ['tioc','active','deterrence','disuasion'],
+    'starlight':  ['starlight','sl'],
+    'varifocal':  ['varifocal','motorizado','motor','zoom','vf','zs'],
+    'ik10':       ['ik10','ik09','impacto'],
+    'poe':        ['poe','switch','switches'],
+    'switch':     ['switch','poe'],
+    '4k':         ['4k','8mp','4k'],
+    '8mp':        ['8mp','4k'],
+    '5mp':        ['5mp','5 mp'],
+    '4mp':        ['4mp','4 mp'],
+    '2mp':        ['2mp','1080p'],
+    '1mp':        ['1mp','720p'],
+    '16ch':       ['16','16ch','16 canal','dieciséis'],
+    '8ch':        ['8','8ch','8 canal','ocho canal'],
+    '4ch':        ['4','4ch','4 canal','cuatro canal'],
+    '32ch':       ['32','32ch','32 canal'],
+    '2.8':        ['2.8mm','2.8'],
+    '3.6':        ['3.6mm','3.6'],
+    '6mm':        ['6mm'],
+    'balun':      ['balun','conector','utp'],
+    'disco':      ['disco','hdd','wd','seagate','2tb','4tb'],
+    'fuente':     ['fuente','alimentacion','power'],
+    'kit':        ['kit','kits'],
+    'barato':     ['barato','economico','precio','menor precio'],
+    'mas barato': ['barato','economico'],
+    'accesorio':  ['accesorio','accesorios','adaptador'],
+  };
+
+  // Categorías detectables
+  var CAT_MAP = {
+    'camara ip':    'camaras-ip',
+    'cámara ip':    'camaras-ip',
+    'ip':           'camaras-ip',
+    'hdcvi':        'camaras-hdcvi',
+    'cvi':          'camaras-hdcvi',
+    'analogic':     'camaras-hdcvi',
+    'ptz':          'camaras-ptz',
+    'speed dome':   'camaras-ptz',
+    'grabador':     'nvr',
+    'nvr':          'nvr',
+    'xvr':          'nvr',
+    'dvr':          'nvr',
+    'switch':       'switches',
+    'poe':          'switches',
+    'accesorio':    'accesorios',
+    'balun':        'accesorios',
+    'disco':        'accesorios',
+    'alarma':       'alarmas',
+    'portero':      'videoporteros',
+    'control acceso': 'acceso',
+  };
+
+  function normalize(s) {
+    return (s||'').toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[áàä]/g,'a').replace(/[éèë]/g,'e')
+      .replace(/[íìï]/g,'i').replace(/[óòö]/g,'o')
+      .replace(/[úùü]/g,'u').replace(/ñ/g,'n');
+  }
+
+  function expandQuery(q) {
+    var n = normalize(q);
+    var terms = new Set(n.split(/\s+/).filter(function(w){ return w.length > 1; }));
+    // Agregar sinónimos
+    Object.keys(SYNONYMS).forEach(function(key) {
+      if (n.includes(normalize(key))) {
+        SYNONYMS[key].forEach(function(s){ terms.add(normalize(s)); });
+      }
+    });
+    return Array.from(terms);
+  }
+
+  function detectCat(q) {
+    var n = normalize(q);
+    var found = null;
+    Object.keys(CAT_MAP).forEach(function(k) {
+      if (n.includes(normalize(k))) found = CAT_MAP[k];
+    });
+    return found;
+  }
+
+  function detectChannels(q) {
+    var m = q.match(/(\d+)\s*(?:ch|canal|canales)/i);
+    if (m) return parseInt(m[1]);
+    if (/dieciséis|dieciseis|16/i.test(q)) return 16;
+    if (/ocho|8\s*ch/i.test(q)) return 8;
+    if (/cuatro|4\s*ch/i.test(q)) return 4;
+    if (/treinta|32/i.test(q)) return 32;
+    return null;
+  }
+
+  function detectMp(q) {
+    var m = q.match(/(\d+)\s*mp/i);
+    if (m) return parseInt(m[1]);
+    if (/4k|4 k/i.test(q)) return 8;
+    if (/1080|full\s*hd/i.test(q)) return 2;
+    return null;
+  }
+
+  function detectLens(q) {
+    var m = q.match(/([\d.]+)\s*mm/i);
+    return m ? parseFloat(m[1]) : null;
+  }
+
+  function detectBudget(q) {
+    var m = q.match(/\$?\s*([\d.,]+)\s*(?:mil|k|pesos|clp)?/i);
+    if (m) {
+      var n = parseFloat(m[1].replace(/[.,]/g,''));
+      if (n > 100 && n < 100000000) return n;
+    }
+    return null;
+  }
+
+  function scoreProduct(p, terms, cat, channels, mp, lens) {
+    var pn = normalize(p.nombre + ' ' + p.codigo + ' ' + p.cat);
+    var score = 0;
+
+    // Matches de términos
+    terms.forEach(function(t) {
+      if (t.length < 2) return;
+      if (pn.includes(t)) {
+        score += t.length > 4 ? 3 : 1; // palabras largas valen más
+      }
+    });
+
+    // Categoría exacta
+    if (cat && p.cat === cat) score += 5;
+
+    // Canales (para grabadores)
+    if (channels && (p.cat === 'nvr' || normalize(p.nombre).includes('canal'))) {
+      var cn = normalize(p.nombre);
+      if (cn.includes(channels+'ch') || cn.includes(channels+' ch') ||
+          cn.includes(channels+' canal') || cn.includes('ch'+channels)) {
+        score += 8;
+      }
+    }
+
+    // Megapíxeles
+    if (mp) {
+      var mpStr = mp + 'mp';
+      if (normalize(p.nombre).includes(mpStr) || p.nombre.includes(mp+'MP')) score += 5;
+    }
+
+    // Lente
+    if (lens) {
+      if (p.nombre.includes(lens+'mm') || p.nombre.includes(lens.toFixed(1)+'mm')) score += 4;
+    }
+
+    return score;
+  }
+
+  // Búsqueda principal — devuelve resultados rankeados sin API
+  function search(query) {
+    var terms = expandQuery(query);
+    var cat = detectCat(query);
+    var channels = detectChannels(query);
+    var mp = detectMp(query);
+    var lens = detectLens(query);
+    var budget = detectBudget(query);
+    var wantCheap = /barato|economico|mas barat|precio bajo|menor precio|baratas/i.test(query);
+    var wantKit = /kit|sistema completo|instalacion|proyecto/i.test(query);
+
+    // Puntuar todos los productos
+    var scored = PRODUCTS.map(function(p) {
+      return { p: p, score: scoreProduct(p, terms, cat, channels, mp, lens) };
+    }).filter(function(x){ return x.score > 0; });
+
+    // Ordenar por score, luego por precio si quiere barato
+    scored.sort(function(a, b) {
+      if (a.score !== b.score) return b.score - a.score;
+      if (wantCheap) return a.p.ptotal - b.p.ptotal;
+      return 0;
+    });
+
+    // Filtrar por presupuesto
+    if (budget) {
+      scored = scored.filter(function(x){ return x.p.ptotal <= budget; });
+    }
+
+    return {
+      results: scored.slice(0, 12).map(function(x){ return x.p; }),
+      cat: cat,
+      channels: channels,
+      mp: mp,
+      lens: lens,
+      budget: budget,
+      wantCheap: wantCheap,
+      wantKit: wantKit,
+      totalFound: scored.length
+    };
+  }
+
+  // Generar respuesta de texto en español sin API
+  function generateResponse(query, searchResult) {
+    var r = searchResult;
+    var prods = r.results;
+    if (!prods.length) return null; // sin resultados → ir a API
+
+    var parts = [];
+
+    if (r.wantKit) {
+      // Para kits, combinar cámaras + grabador + accesorios
+      var cameras = prods.filter(function(p){ return p.cat.includes('camara'); }).slice(0,4);
+      var recorders = PRODUCTS.filter(function(p){
+        return p.cat === 'nvr' && scoreProduct(p, expandQuery(query), null, r.channels, null, null) > 0;
+      }).sort(function(a,b){ return a.ptotal - b.ptotal; }).slice(0,2);
+      var discs = PRODUCTS.filter(function(p){
+        return normalize(p.nombre).includes('disco') || normalize(p.nombre).includes('hdd');
+      }).sort(function(a,b){ return a.ptotal - b.ptotal; }).slice(0,1);
+
+      prods = cameras.concat(recorders).concat(discs);
+      parts.push('Para tu kit encontré ' + cameras.length + ' cámara' + (cameras.length>1?'s':'') + ', ' + recorders.length + ' grabador' + (recorders.length>1?'es':'') + ' compatible' + (recorders.length>1?'s':''));
+    } else if (r.wantCheap) {
+      parts.push('Aquí tienes las opciones más económicas' + (r.cat ? ' en ' + r.cat.replace('-',' ') : ''));
+    } else if (r.channels) {
+      parts.push('Encontré ' + r.totalFound + ' grabador' + (r.totalFound>1?'es':'') + ' de ' + r.channels + ' canales');
+    } else if (r.mp) {
+      parts.push('Hay ' + r.totalFound + ' cámara' + (r.totalFound>1?'s':'') + ' de ' + r.mp + 'MP disponibles');
+    } else {
+      parts.push('Encontré ' + r.totalFound + ' producto' + (r.totalFound>1?'s':'') + ' que coinciden');
+    }
+
+    if (r.budget) {
+      parts.push('dentro de tu presupuesto de ' + new Intl.NumberFormat('es-CL').format(r.budget));
+    }
+
+    parts.push('. Te muestro los más relevantes:');
+    return parts.join(' ');
+  }
+
+  return { search: search, generateResponse: generateResponse, normalize: normalize };
+})();
+
 // ── ASISTENTE FLOTANTE ──────────────────────────────────────────
 var aiPanelOpen = false;
 var aiRec = null;
@@ -16221,25 +16476,44 @@ function aiSend() {
   document.getElementById('aiChips').style.display = 'none';
   aiAddMsg('user', q);
   aiHistory.push({role:'user', content: q});
+
+  // ── PASO 1: Búsqueda local en los 1079 productos (0 tokens) ──
+  var localResult = aiLocalEngine.search(q);
+  var localResponse = localResult.results.length >= 2 ? aiLocalEngine.generateResponse(q, localResult) : null;
+
+  // Si la consulta es puramente de producto y tenemos buenos resultados → responder sin API
+  var isPureProductQuery = /\d+mp|\d+ch|canal|camara|cámara|grabador|nvr|xvr|switch|poe|kit|barato|varifocal|fullcolor|wizsense|tioc|exterior|interior|domo|bala|ptz/i.test(q);
+
+  if (isPureProductQuery && localResult.results.length >= 2) {
+    // Respuesta inmediata sin API
+    aiLastProds = localResult.results.slice(0, 8);
+    var respText = localResponse || ('Encontré ' + localResult.totalFound + ' resultados en el catálogo:');
+
+    // Agregar botones de acción
+    var actionBtns = '<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">' +
+      '<button onclick="aiAddAllToCart()" style="background:#e8001c;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;font-family:var(--font)">' +
+        '<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>' +
+        'Agregar todo al carro (' + aiLastProds.length + ')' +
+      '</button>' +
+      '<button onclick="aiAskAPI()" style="background:#1a1a1a;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)">🤖 Pedir asesoría IA</button>' +
+    '</div>';
+
+    aiAddMsg('bot', respText + actionBtns, aiLastProds);
+    aiSpeak(respText);
+
+    // Filtrar catálogo visible también
+    if (localResult.cat) {
+      setTimeout(function(){ S.cat = localResult.cat; S.page = 1; render(); }, 500);
+    }
+    return; // ← SIN llamada a API
+  }
+
+  // ── PASO 2: Consulta conversacional → API con catálogo filtrado ──
   aiTypingStart();
 
-  // Filtrar catálogo relevante según la consulta (max 80 productos → ~5k tokens)
-  var q_lower = (aiHistory.length ? aiHistory[aiHistory.length-1].content : '').toLowerCase();
-  var words = q_lower.split(/\s+/).filter(function(w){ return w.length > 3; });
-  var relevant = PRODUCTS.filter(function(p) {
-    var n = (p.nombre + ' ' + p.codigo + ' ' + p.cat).toLowerCase();
-    return words.some(function(w){ return n.includes(w); });
-  });
-  // Si no hay match suficiente, agregar los más baratos por categoría detectada
-  if (relevant.length < 20) {
-    var cats = ['camaras-ip','camaras-hdcvi','nvr','switches','accesorios'];
-    var catMatch = cats.find(function(c){ return q_lower.includes(c.replace('-',' ')) || q_lower.includes(c); });
-    var extra = PRODUCTS.filter(function(p){ return !catMatch || p.cat === catMatch; })
-      .sort(function(a,b){ return a.ptotal - b.ptotal; }).slice(0, 40);
-    extra.forEach(function(p){ if (!relevant.find(function(r){ return r.id===p.id; })) relevant.push(p); });
-  }
-  var catSlice = relevant.slice(0, 80);
-  var catLines = catSlice.map(function(p){ return p.codigo+'|'+p.nombre.slice(0,50)+'|$'+p.ptotal+'|'+p.cat; });
+  // Pasar los resultados locales como contexto pre-filtrado
+  var contextProds = localResult.results.length > 0 ? localResult.results : PRODUCTS.slice(0, 80);
+  var catLines = contextProds.slice(0, 80).map(function(p){ return p.codigo+'|'+p.nombre.slice(0,50)+'|$'+p.ptotal+'|'+p.cat; });
   var catCtx = catLines.join('\n');
 
   var sys = 'Eres el asesor de ventas de SSTT SpA, distribuidor oficial Dahua Chile. Estás en una conversación de voz.\n\n' +
@@ -16329,6 +16603,47 @@ function aiSend() {
     }
   })
   .catch(function(e){ aiTypingStop(); aiAddMsg('bot', 'Error de conexión: ' + e.message); });
+}
+
+function aiAskAPI() {
+  // Reenviar la última consulta del usuario pero forzando respuesta API
+  var lastUser = '';
+  for (var i = aiHistory.length - 1; i >= 0; i--) {
+    if (aiHistory[i].role === 'user') { lastUser = aiHistory[i].content; break; }
+  }
+  if (lastUser) {
+    // Agregar contexto explícito para que la IA dé asesoría
+    var inp = document.getElementById('aiInp');
+    if (inp) inp.value = 'Dame tu recomendación experta para: ' + lastUser;
+    // Remover el flag que activa el motor local
+    aiTypingStart();
+    var q2 = 'Dame tu recomendación experta para: ' + lastUser;
+    aiHistory.push({role:'user', content: q2});
+    var contextProds = aiLocalEngine.search(lastUser).results;
+    if (!contextProds.length) contextProds = PRODUCTS.slice(0,80);
+    var catLines = contextProds.slice(0,80).map(function(p){ return p.codigo+'|'+p.nombre.slice(0,50)+'|$'+p.ptotal+'|'+p.cat; });
+    var catCtx = catLines.join('\n');
+    var sys = 'Eres el asesor de ventas de SSTT SpA, distribuidor oficial Dahua Chile.\n' +
+      'Responde en español, sé conciso y útil. Sugiere los productos más adecuados.\n' +
+      'Al final incluye: PRODUCTOS:["COD1","COD2"] con los códigos exactos.\n\n' +
+      'CATALOGO:\n' + catCtx;
+    fetch(PROXY_URL, {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:400, system:sys, messages:aiHistory.slice(-4)})
+    }).then(function(r){ return r.json(); }).then(function(data) {
+      aiTypingStop();
+      if (data.error) { aiAddMsg('bot','Error: '+data.error.message); return; }
+      var raw = (data.content&&data.content[0]&&data.content[0].text)||'';
+      aiHistory.push({role:'assistant',content:raw});
+      var prods2=[];
+      var pm=raw.match(/PRODUCTOS:\s*\[([^\]]+)\]/);
+      if(pm){try{var cods=JSON.parse('['+pm[1]+']');cods.forEach(function(c){var f=PRODUCTS.find(function(p){return p.codigo===c||p.codigo.replace(/^DH-/,'')===c.replace(/^DH-/,'');});if(f)prods2.push(f);});}catch(e){}raw=raw.replace(/PRODUCTOS:\s*\[[^\]]+\]/,'').trim();}
+      if(prods2.length) aiLastProds=prods2;
+      var cleanHtml=raw.replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');
+      if(prods2.length) cleanHtml+='<div style="margin-top:10px"><button onclick="aiAddAllToCart()" style="background:#e8001c;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)">Agregar todo al carro ('+prods2.length+')</button></div>';
+      aiAddMsg('bot',cleanHtml,prods2);
+      aiSpeak(raw.replace(/<[^>]+>/g,'').slice(0,300));
+    }).catch(function(e){ aiTypingStop(); aiAddMsg('bot','Error: '+e.message); });
+  }
 }
 
 function aiAddAllToCart() {
