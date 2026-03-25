@@ -16572,7 +16572,14 @@ function aiToggle() {
   if (aiPanelOpen) {
     p.style.display = 'flex';
     p.classList.add('open');
-    setTimeout(function(){ document.getElementById('aiInp').focus(); }, 100);
+    setTimeout(function(){
+      document.getElementById('aiInp').focus();
+      // Si solo hay 1 mensaje (bienvenida) y no hay wizard aún → mostrar opciones
+      var msgs = document.getElementById('aiMsgs');
+      if (msgs && msgs.children.length <= 1 && typeof aiShowWelcome === 'function') {
+        aiShowWelcome();
+      }
+    }, 200);
   } else {
     p.style.display = 'none';
     p.classList.remove('open');
@@ -16642,15 +16649,22 @@ function aiSend() {
   var localResponse = localResult.results.length >= 2 ? aiLocalEngine.generateResponse(q, localResult) : null;
 
   // Si la consulta es puramente de producto y tenemos buenos resultados → responder sin API
-  // Si el usuario dice solo "cámara" o "grabador" sin más detalle → activar wizard
-  var isVagueQuery = /^(camara|cámara|grabador|nvr|xvr|kit|switch)s?$/i.test(q.trim()) ||
-                     /^quiero?\s+(una?\s+)?(camara|cámara|grabador|kit)s?$/i.test(q.trim());
-  if (isVagueQuery && !Object.keys(aiGuideState).length) {
-    aiGuideState.tipo = q.trim().toLowerCase().includes('grabador')||q.trim().toLowerCase().includes('nvr')||q.trim().toLowerCase().includes('xvr') ? 'grabador' :
-                        q.trim().toLowerCase().includes('kit') ? 'kit' : 'camara';
-    aiGuideNext('tipo', aiGuideState.tipo, q);
+  // ── Detectar consultas vagas → activar wizard guiado ──
+  // Activa wizard si la consulta NO tiene especificaciones técnicas concretas
+  var hasSpecs = /\d+mp|\d+\s*ch|\d+\s*canal|\d+mm|varifocal|fullcolor|full.color|wizsense|tioc|ik10|exterior|interior|domo|bala|ptz|1080|720p|4k|full.?hd/i.test(q);
+  var isProductIntent = /camara|cámara|grabador|nvr|xvr|kit|switch|recorder/i.test(q);
+
+  if (isProductIntent && !hasSpecs) {
+    // Consulta vaga → wizard
+    var tipo = /grabador|nvr|xvr|recorder/i.test(q) ? 'grabador' :
+               /kit|sistema|completo/i.test(q) ? 'kit' :
+               /switch|poe.*switch/i.test(q) ? 'switch' : 'camara';
+    aiGuideState = {}; // reset limpio
+    aiGuideState.tipo = tipo;
+    aiGuideNext('tipo', tipo, q);
     return;
   }
+
   var isPureProductQuery = /\d+mp|\d+ch|canal|camara|cámara|grabador|nvr|xvr|switch|poe|kit|barato|varifocal|fullcolor|wizsense|tioc|exterior|interior|domo|bala|ptz|full.?hd|\d+k|1080|720p/i.test(q);
 
   if (isPureProductQuery && localResult.results.length >= 2) {
@@ -17153,10 +17167,15 @@ document.addEventListener('click', function(e) {
     });
 
     console.log('[SSTT] Asistente inyectado ✅');
-    // Mostrar wizard de bienvenida
-    setTimeout(function(){
-      if (typeof aiShowWelcome === 'function') aiShowWelcome();
-    }, 300);
+    // Mostrar wizard de bienvenida — esperar a que el JS principal esté listo
+    function tryShowWelcome(attempts) {
+      if (typeof aiShowWelcome === 'function') {
+        aiShowWelcome();
+      } else if (attempts > 0) {
+        setTimeout(function(){ tryShowWelcome(attempts-1); }, 200);
+      }
+    }
+    setTimeout(function(){ tryShowWelcome(10); }, 500);
   }
 
   if (document.readyState === 'loading') {
