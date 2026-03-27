@@ -771,21 +771,13 @@ nav {
   flex-direction: column;
   transition: all .2s cubic-bezier(.4,0,.2,1);
   position: relative;
-  animation: fadeUp .25s ease both;
 }
 .pcard:hover {
   border-color: var(--red);
   box-shadow: 0 4px 20px rgba(232,0,28,.07), 0 2px 8px rgba(0,0,0,.06);
   transform: translateY(-2px);
 }
-.pcard:nth-child(1){animation-delay:0s}
-.pcard:nth-child(2){animation-delay:.04s}
-.pcard:nth-child(3){animation-delay:.08s}
-.pcard:nth-child(4){animation-delay:.12s}
-.pcard:nth-child(5){animation-delay:.15s}
-.pcard:nth-child(6){animation-delay:.17s}
-.pcard:nth-child(7){animation-delay:.19s}
-.pcard:nth-child(8){animation-delay:.21s}
+
 
 .pcard-img-wrap {
   position: relative;
@@ -814,6 +806,10 @@ nav {
 .pcard-img-ph-icon { font-size: 32px; opacity: .35 }
 .pcard-img-ph-code { font-size: 9px; font-family: var(--font-m); color: var(--g4);
   text-align: center; padding: 0 8px; word-break: break-all; line-height: 1.3 }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 @keyframes imgShimmer {
   0%   { background-position: -400px 0 }
   100% { background-position: 400px 0 }
@@ -1033,11 +1029,21 @@ nav {
   pointer-events: none;
 }
 .tech-badge + .tech-badge { left: auto; right: 6px; }
-.tech-fc   { background: rgba(255,100,20,.75);  color:#fff; }
-.tech-ws   { background: rgba(0,60,180,.75);    color:#fff; }
-.tech-wm   { background: rgba(80,0,180,.75);    color:#fff; }
-.tech-tioc { background: rgba(200,0,20,.78);    color:#fff; }
-.tech-sl   { background: rgba(0,130,80,.75);    color:#fff; }
+.tech-fc      { background: rgba(255,90,10,.82);   color:#fff; }  /* Full-Color / WizColor */
+.tech-ws      { background: rgba(0,55,180,.82);   color:#fff; }  /* WizSense */
+.tech-wm      { background: rgba(75,0,185,.82);   color:#fff; }  /* WizMind */
+.tech-tioc    { background: rgba(200,0,20,.85);   color:#fff; }  /* TiOC */
+.tech-sl      { background: rgba(0,125,75,.82);   color:#fff; }  /* Starlight */
+.tech-acu     { background: rgba(0,130,160,.82);  color:#fff; }  /* AcuPick */
+.tech-smd     { background: rgba(30,30,30,.82);   color:#fff; }  /* SMD 4.0 */
+.tech-xh      { background: rgba(40,90,200,.82);  color:#fff; }  /* Xinghan */
+.tech-4k      { background: rgba(160,10,10,.82);  color:#fff; }  /* 4K/8MP */
+.tech-ik10    { background: rgba(100,60,0,.82);   color:#fff; }  /* IK10 */
+.tech-varifocal { background: rgba(0,100,80,.82); color:#fff; }  /* Varifocal */
+/* Max 3 badges visibles: posición izquierda, derecha, arriba-izquierda */
+.tech-badge:nth-child(1) { bottom:6px; left:6px; }
+.tech-badge:nth-child(2) { bottom:6px; left:auto; right:6px; }
+.tech-badge:nth-child(3) { bottom:28px; left:6px; }
 .pg-btn {
   background: var(--white);
   border: 1.5px solid var(--g5);
@@ -8200,13 +8206,46 @@ function render() {
         <span class="pbadge ${cls}">${lbl}</span>
         ${(()=>{
           const n = p.nombre.toLowerCase();
+          const c = p.codigo.toLowerCase();
+          const nc = n + ' ' + c;
           const badges = [];
-          if (/full.?color|wizcolor/.test(n)) badges.push('<span class="tech-badge tech-fc">Full-Color</span>');
-          if (/wizsense/.test(n)) badges.push('<span class="tech-badge tech-ws">WizSense</span>');
-          if (/wizmind/.test(n)) badges.push('<span class="tech-badge tech-wm">WizMind</span>');
-          if (/tioc|active.?deter|disuasion/.test(n)) badges.push('<span class="tech-badge tech-tioc">TiOC</span>');
-          if (/starlight/.test(n)) badges.push('<span class="tech-badge tech-sl">Starlight</span>');
-          return badges.join('');
+
+          // ── Tecnología principal (máx 1) ──
+          if (/wizsense|wiz.?sense/.test(nc))           badges.push('<span class="tech-badge tech-ws">WizSense</span>');
+          else if (/wizmind|wiz.?mind/.test(nc))        badges.push('<span class="tech-badge tech-wm">WizMind</span>');
+
+          // ── Iluminación / color ──
+          if (/tioc|active.?deter|disuasion activa/.test(nc)) badges.push('<span class="tech-badge tech-tioc">TiOC</span>');
+          else if (/wizcolor|wiz.?color/.test(nc))      badges.push('<span class="tech-badge tech-fc">WizColor</span>');
+          else if (/full.?color/.test(nc))              badges.push('<span class="tech-badge tech-fc">Full-Color</span>');
+          else if (/starlight/.test(nc))                badges.push('<span class="tech-badge tech-sl">Starlight</span>');
+
+          // Detectar WizColor/TiOC/Varifocal desde código Dahua
+          // -PV- en el código = TiOC (Perimeter+Voice/light)
+          if (badges.length===0 && /-pv-|-pv$/.test(c)) badges.push('<span class="tech-badge tech-tioc">TiOC</span>');
+          // -LED- en el código = Full-Color
+          if (badges.length<=1 && /-led-|-led\./.test(c) && !/tioc/.test(nc)) badges.push('<span class="tech-badge tech-fc">Full-Color</span>');
+
+          // ── AcuPick (desde nombre o sufijo -pro en WizSense) ──
+          if (/acupick/.test(nc) || (/-pro$|-pro-/.test(c) && /wizsense/.test(nc)))
+            badges.push('<span class="tech-badge tech-acu">AcuPick</span>');
+
+          // ── Varifocal / motorizado ──
+          if (badges.length < 3 && /varifocal|motoriz|motor|zoom|vari.focal/.test(nc))
+            badges.push('<span class="tech-badge tech-varifocal">Varifocal</span>');
+          // Detectar varifocal desde código: -Z en modelos con zoom
+          else if (badges.length < 3 && /-za?s?-|-z\d{4}-/.test(c) && !/fixed|fijo/.test(nc))
+            badges.push('<span class="tech-badge tech-varifocal">Varifocal</span>');
+
+          // ── 4K ──
+          if (badges.length < 3 && (/4k|8mp|8 mp|2160/.test(nc) || /38\d\d|4k/.test(c)))
+            badges.push('<span class="tech-badge tech-4k">4K</span>');
+
+          // ── IK10 ──
+          if (badges.length < 3 && /ik10|ik09|anti.?vandal/.test(nc))
+            badges.push('<span class="tech-badge tech-ik10">IK10</span>');
+
+          return badges.slice(0,3).join('');
         })()}
         <div class="pcard-quickview" onclick="openProdModal(${p.id})">👁 Ver ficha técnica</div>
       </div>
