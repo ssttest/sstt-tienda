@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Editor Lote L — Lago Azul</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; overflow:hidden; font-family:monospace; background:#1a1c1e; color:#d0d8c0; }
+button { font-family:monospace; cursor:pointer; }
+.btn { background:#1e2124; border:1px solid #2e3238; color:#6a7480; padding:3px 9px; border-radius:3px; font-size:12px; }
+.btn:hover { background:#2e3238; color:#d0d8c0; }
+.btn.on { background:#2a3a10; border-color:#7ab860; color:#7ab860; }
+.btn.blue { background:#1a2a3a; border-color:#2a5a78; color:#6ab8d8; }
+.btn.gold { background:#1e2a10; border-color:#4a7020; color:#8ab860; }
+</style>
+</head>
+<body>
+<div style="height:100vh;display:flex;flex-direction:column;">
+
+<!-- TOOLBAR -->
+<div style="background:#0e1012;padding:5px 8px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;border-bottom:1px solid #2e3238;flex-shrink:0;">
+  <span style="color:#b8cca8;font-size:13px;white-space:nowrap;">Lote L — <em style="color:#c8a848;font-style:italic;">Lago Azul</em></span>
+  <button class="btn blue" onclick="fitAll()">⊙ Ver todo</button>
+  <button class="btn" id="btn-terrain" onclick="toggleTerrain()">⬡ Editar terreno</button>
+  <button class="btn gold" onclick="openModal()">★ Nuevo preset</button>
+  <button class="btn" onclick="hardReset()" style="color:#8a7030;">↺ Reset</button>
+  <span style="color:#6a7480;font-size:11px;">Arrastra módulos · 📍 navegar · Scroll=zoom</span>
+  <span id="save-indicator" style="font-size:10px;color:#3a5a30;margin-left:4px;transition:opacity .3s;opacity:0;">✓ guardado</span>
+</div>
+
+<!-- BODY -->
+<div style="display:flex;flex:1;overflow:hidden;">
+
+<!-- LEFT PALETTE -->
+<div style="width:110px;background:#1e2124;border-right:1px solid #2e3238;display:flex;flex-direction:column;flex-shrink:0;">
+  <div style="display:flex;border-bottom:1px solid #2e3238;flex-shrink:0;">
+    <div id="lt0" onclick="swL(0)" style="flex:1;padding:5px 2px;text-align:center;font-size:11px;color:#7ab860;border-bottom:2px solid #7ab860;cursor:pointer;">Módulos</div>
+    <div id="lt1" onclick="swL(1)" style="flex:1;padding:5px 2px;text-align:center;font-size:11px;color:#6a7480;border-bottom:2px solid transparent;cursor:pointer;">Míos</div>
+  </div>
+  <div id="lp0" style="flex:1;overflow-y:auto;padding:5px;"></div>
+  <div id="lp1" style="display:none;flex-direction:column;flex:1;overflow-y:auto;padding:5px;">
+    <div style="font-size:10px;color:#6a7480;margin-bottom:4px;">Tus presets</div>
+    <div id="custom-list"></div>
+    <button class="btn gold" style="width:100%;margin-top:4px;font-size:11px;" onclick="openModal()">＋ Nuevo</button>
+  </div>
+</div>
+
+<!-- CANVAS -->
+<div id="plan-area" style="flex:1;position:relative;overflow:hidden;background:#1a1c1e;">
+  <svg id="svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></svg>
+  <div id="mods" style="position:absolute;top:0;left:0;"></div>
+  <div id="terrain-info" style="display:none;position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(14,16,18,.94);border:1px solid #c8a848;border-radius:4px;padding:6px 14px;font-size:11px;color:#c8a848;white-space:nowrap;pointer-events:none;">
+    Arrastra vértices NW/NE/SE/SW · <span id="dims-text" style="color:#7ab860;"></span>
+  </div>
+</div>
+
+<!-- RIGHT PANEL -->
+<div style="width:160px;background:#1e2124;border-left:1px solid #2e3238;display:flex;flex-direction:column;flex-shrink:0;">
+  <div style="background:#191b1e;padding:5px 7px;font-size:10px;letter-spacing:.1em;color:#6a7480;border-bottom:1px solid #2e3238;flex-shrink:0;">ÁREAS — 📍 para navegar</div>
+  <div id="area-list" style="flex:1;overflow-y:auto;"></div>
+  <div style="padding:6px 8px;border-top:1px solid #2e3238;flex-shrink:0;font-size:12px;">
+    <div style="display:flex;justify-content:space-between;"><span style="color:#6a7480;">Total</span><span id="tot" style="color:#c8a848;font-weight:600;">0 m²</span></div>
+    <div style="display:flex;justify-content:space-between;margin-top:2px;font-size:11px;"><span style="color:#6a7480;">% lote</span><span id="pct" style="color:#7ab860;">0%</span></div>
+  </div>
+</div>
+
+</div>
+
+<!-- STATUS -->
+<div style="background:#0e1012;padding:2px 8px;font-size:10px;color:#6a7480;border-top:1px solid #2e3238;flex-shrink:0;">
+  Sel: <span id="st-sel" style="color:#7ab860;">—</span> &nbsp;|&nbsp;
+  Módulos: <span id="st-n" style="color:#7ab860;">0</span> &nbsp;|&nbsp;
+  Zoom: <span id="st-z" style="color:#7ab860;">1.0×</span>
+</div>
+</div>
+
+<!-- MODAL -->
+<div id="modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:999;align-items:center;justify-content:center;">
+  <div style="background:#1e2124;border:1px solid #3e4248;border-radius:6px;padding:16px;width:260px;max-width:94vw;">
+    <div style="font-size:12px;color:#7ab860;margin-bottom:12px;text-transform:uppercase;letter-spacing:.1em;">Crear preset</div>
+    <div style="display:flex;align-items:center;gap:5px;margin-bottom:7px;">
+      <span style="font-size:11px;color:#6a7480;width:44px;">Nombre</span>
+      <input id="m-name" placeholder="Mi módulo" style="flex:1;background:#111315;border:1px solid #2e3238;color:#d0d8c0;font-family:monospace;font-size:12px;padding:3px 6px;border-radius:2px;outline:none;">
+    </div>
+    <div style="display:flex;align-items:center;gap:5px;margin-bottom:7px;">
+      <span style="font-size:11px;color:#6a7480;width:44px;">Emoji</span>
+      <input id="m-icon" maxlength="2" placeholder="🏠" style="width:44px;background:#111315;border:1px solid #2e3238;color:#d0d8c0;font-family:monospace;font-size:14px;padding:3px 5px;border-radius:2px;outline:none;text-align:center;">
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:7px;">
+      <div style="display:flex;align-items:center;gap:3px;">
+        <span style="font-size:10px;color:#6a7480;">Ancho</span>
+        <input id="m-w" type="number" min="1" max="50" value="6" style="width:40px;background:#111315;border:1px solid #2e3238;color:#d0d8c0;font-family:monospace;font-size:12px;padding:3px 4px;border-radius:2px;outline:none;text-align:right;">
+        <span style="font-size:10px;color:#6a7480;">m</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:3px;">
+        <span style="font-size:10px;color:#6a7480;">Largo</span>
+        <input id="m-h" type="number" min="1" max="50" value="5" style="width:40px;background:#111315;border:1px solid #2e3238;color:#d0d8c0;font-family:monospace;font-size:12px;padding:3px 4px;border-radius:2px;outline:none;text-align:right;">
+        <span style="font-size:10px;color:#6a7480;">m</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:3px;">
+        <span style="font-size:10px;color:#6a7480;">P</span>
+        <input id="m-fl" type="number" min="1" max="3" value="1" style="width:30px;background:#111315;border:1px solid #2e3238;color:#d0d8c0;font-family:monospace;font-size:12px;padding:3px 4px;border-radius:2px;outline:none;text-align:right;">
+      </div>
+    </div>
+    <div style="font-size:10px;color:#6a7480;margin-bottom:4px;">Color:</div>
+    <div id="m-colors" style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:12px;"></div>
+    <div style="display:flex;gap:6px;justify-content:flex-end;">
+      <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button class="btn gold" onclick="savePreset()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var PX = 4;
+var sc = 1;
+var cam = {x:40, y:30};
+var terrainMode = false;
+var selId = null;
+var nextId = 10;
+var dragVtx = null;
+var modalColor = '#1a3a5a';
+var panning = false, panSx=0, panSy=0, panCx=0, panCy=0;
+var touchPan = false, tPanSx=0, tPanSy=0, tPanCx=0, tPanCy=0;
+var pinchDist = 0;
+
+var COLORS = ['#1a3a5a','#2a5a7a','#5a1a00','#8a2a00','#3a5a30','#5a7a40','#7a5a2a','#a07840','#5a5040','#3a3a5a','#4a1a4a','#1a4a4a','#6a3a10','#c04020','#3a6a6a','#404040','#2a2a40','#1a5a3a','#5a3a1a','#303840'];
+
+var BUILTIN = [
+  {name:'Dormitorio',     ic:'🛏', w:4,  h:4,  fl:1, color:'#1a3a5a'},
+  {name:'Dorm. Principal',ic:'🛏', w:5,  h:5,  fl:1, color:'#2a5a7a'},
+  {name:'Baño',           ic:'🚿', w:2,  h:2,  fl:1, color:'#1a4a4a'},
+  {name:'Baño completo',  ic:'🛁', w:3,  h:3,  fl:1, color:'#1a4a4a'},
+  {name:'Living',         ic:'🛋', w:6,  h:5,  fl:1, color:'#1a3a5a'},
+  {name:'Cocina',         ic:'🍳', w:4,  h:3,  fl:1, color:'#3a3a1a'},
+  {name:'Comedor',        ic:'🍽', w:5,  h:4,  fl:1, color:'#2a3a5a'},
+  {name:'Quincho',        ic:'🔥', w:12, h:9,  fl:1, color:'#5a1a00'},
+  {name:'Deck/Terraza',   ic:'🪵', w:8,  h:4,  fl:1, color:'#7a5a2a'},
+  {name:'Galería',        ic:'🏛', w:5,  h:3,  fl:1, color:'#7a5a2a'},
+  {name:'Bodega',         ic:'📦', w:8,  h:6,  fl:1, color:'#3a5a30'},
+  {name:'Cobertizo',      ic:'🚗', w:6,  h:6,  fl:1, color:'#5a5040'},
+  {name:'Leñera',         ic:'🪵', w:4,  h:3,  fl:1, color:'#6a3a10'},
+  {name:'Estacionam.',    ic:'🅿', w:10, h:6,  fl:1, color:'#404040'},
+  {name:'Lavandería',     ic:'👕', w:3,  h:3,  fl:1, color:'#2a3a4a'},
+  {name:'Módulo libre',   ic:'⬜', w:6,  h:6,  fl:1, color:'#303840'},
+];
+
+var terrain = [{x:0,y:0},{x:66,y:0},{x:46,y:99},{x:0,y:133}];
+var modules = [];
+var customPresets = [];
+try { customPresets = JSON.parse(localStorage.getItem('ll_presets')||'[]'); } catch(e){}
+
+function defMods() {
+  return [
+    {id:1, name:'Casa Principal',   ic:'🏠', mx:3,  my:3,  w:12, h:7,  fl:2, color:'#1a3a5a'},
+    {id:2, name:'Galería',          ic:'🏛', mx:22, my:3,  w:5,  h:4,  fl:1, color:'#2a5a7a'},
+    {id:3, name:'Quincho',          ic:'🔥', mx:3,  my:13, w:12, h:9,  fl:1, color:'#5a1a00'},
+    {id:4, name:'Leñera',           ic:'🪵', mx:22, my:13, w:4,  h:5,  fl:1, color:'#6a3a10'},
+    {id:5, name:'Deck techado',     ic:'🪵', mx:3,  my:25, w:18, h:5,  fl:1, color:'#7a5a2a'},
+    {id:6, name:'Bodega',           ic:'📦', mx:3,  my:33, w:12, h:7,  fl:1, color:'#3a5a30'},
+    {id:7, name:'Cobertizo lancha', ic:'🚗', mx:22, my:33, w:12, h:7,  fl:1, color:'#2a5028'},
+    {id:8, name:'Estacionamiento',  ic:'🅿', mx:3,  my:43, w:20, h:6,  fl:1, color:'#404040'},
+  ];
+}
+modules = defMods();
+
+// coordinate helpers
+function mToP(m) { return m * PX * sc; }
+function pToM(p) { return p / (PX * sc); }
+function scrX(mx) { return cam.x + mToP(mx); }
+function scrY(my) { return cam.y + mToP(my); }
+
+// distance in meters between two terrain vertices
+function dstM(i, j) {
+  return Math.hypot(terrain[j].x - terrain[i].x, terrain[j].y - terrain[i].y);
+}
+
+// shoelace area of terrain (meters)
+function terrainArea() {
+  var a = 0;
+  for (var i=0; i<terrain.length; i++) {
+    var j = (i+1) % terrain.length;
+    a += terrain[i].x * terrain[j].y - terrain[j].x * terrain[i].y;
+  }
+  return Math.abs(a/2);
+}
+
+// ═══ SVG RENDER ═══
+function renderSVG() {
+  var svg = document.getElementById('svg');
+  if (!svg) return;
+  var W = svg.clientWidth, H = svg.clientHeight;
+  if (!W || !H) return;
+
+  // screen coords of vertices
+  var tv = terrain.map(function(v){ return {x:scrX(v.x), y:scrY(v.y)}; });
+  var poly = tv.map(function(p){ return p.x+','+p.y; }).join(' ');
+  var lagoY = Math.max(tv[2].y, tv[3].y);
+
+  // measurements
+  var nM = dstM(0,1).toFixed(1);
+  var eM = dstM(1,2).toFixed(1);
+  var sM = dstM(2,3).toFixed(1);
+  var wM = dstM(3,0).toFixed(1);
+  var areaM = terrainArea().toFixed(0);
+
+  // midpoints of sides (screen)
+  function mid(a,b){ return {x:(a.x+b.x)/2, y:(a.y+b.y)/2}; }
+  function ang(a,b){ return Math.atan2(b.y-a.y, b.x-a.x)*180/Math.PI; }
+  var mN=mid(tv[0],tv[1]), mE=mid(tv[1],tv[2]), mS=mid(tv[2],tv[3]), mW=mid(tv[3],tv[0]);
+  var aN=ang(tv[0],tv[1]), aE=ang(tv[1],tv[2]), aS=ang(tv[2],tv[3]), aW=ang(tv[3],tv[0]);
+
+  // 80m DGA line
+  var fW = Math.min(80/dstM(3,0), 1);
+  var fE = Math.min(80/dstM(2,1), 1);
+  var dgaWx = scrX(terrain[3].x + (terrain[0].x-terrain[3].x)*fW);
+  var dgaWy = scrY(terrain[3].y + (terrain[0].y-terrain[3].y)*fW);
+  var dgaEx = scrX(terrain[2].x + (terrain[1].x-terrain[2].x)*fE);
+  var dgaEy = scrY(terrain[2].y + (terrain[1].y-terrain[2].y)*fE);
+
+  // scale bar
+  var barPx = mToP(20);
+
+  // vertex handles
+  var handles = '';
+  if (terrainMode) {
+    var labels = ['NW','NE','SE','SW'];
+    for (var i=0; i<terrain.length; i++) {
+      var vx = scrX(terrain[i].x), vy = scrY(terrain[i].y);
+      handles += '<circle cx="'+vx+'" cy="'+vy+'" r="12" fill="rgba(200,168,48,.92)" stroke="#fff" stroke-width="2.5"/>';
+      handles += '<text x="'+vx+'" y="'+(vy+3.5)+'" text-anchor="middle" font-size="8" font-weight="600" fill="#111" font-family="monospace">'+labels[i]+'</text>';
+    }
+  }
+
+  // center area label
+  var cx4 = (tv[0].x+tv[1].x+tv[2].x+tv[3].x)/4;
+  var cy4 = (tv[0].y+tv[1].y+tv[2].y+tv[3].y)/4;
+  var centerLbl = terrainMode
+    ? '<text x="'+cx4+'" y="'+cy4+'" text-anchor="middle" font-size="14" font-weight="600" fill="rgba(200,168,48,.85)" font-family="monospace">~'+areaM+' m²</text>'
+    : '';
+
+  var html = '';
+  // lago
+  html += '<rect x="0" y="'+Math.max(0,lagoY)+'" width="'+W+'" height="'+Math.max(0,H-lagoY)+'" fill="#0c2030"/>';
+  html += '<text x="'+(W/2)+'" y="'+Math.min(lagoY+26,H-6)+'" text-anchor="middle" font-style="italic" font-size="14" fill="rgba(74,154,192,.6)" font-family="Georgia,serif">Lago Azul</text>';
+  // terrain
+  html += '<polygon points="'+poly+'" fill="#243020" stroke="#c0b060" stroke-width="2" stroke-dasharray="9,5"/>';
+  // dim labels
+  html += '<g font-family="monospace" font-size="10" fill="rgba(190,182,118,.85)">';
+  html += '<text x="'+mN.x+'" y="'+(mN.y-10)+'" text-anchor="middle" transform="rotate('+aN+','+mN.x+','+mN.y+')">Norte '+nM+'m</text>';
+  html += '<text x="'+(mE.x+14)+'" y="'+mE.y+'" text-anchor="middle" transform="rotate('+aE+','+(mE.x+14)+','+mE.y+')">Este '+eM+'m</text>';
+  html += '<text x="'+mS.x+'" y="'+(mS.y+14)+'" text-anchor="middle" transform="rotate('+aS+','+mS.x+','+mS.y+')">Lago '+sM+'m</text>';
+  html += '<text x="'+(mW.x-14)+'" y="'+mW.y+'" text-anchor="middle" transform="rotate('+aW+','+(mW.x-14)+','+mW.y+')">Oeste '+wM+'m</text>';
+  html += '</g>';
+  html += centerLbl;
+  // DGA
+  html += '<line x1="'+dgaWx+'" y1="'+dgaWy+'" x2="'+dgaEx+'" y2="'+dgaEy+'" stroke="#d44020" stroke-width="1.2" stroke-dasharray="7,5" opacity="0.65"/>';
+  html += '<text x="'+(dgaEx+5)+'" y="'+(dgaEy-4)+'" font-size="8" fill="#d44020" opacity="0.8" font-family="monospace">80m DGA</text>';
+  // lancha corridor
+  html += '<polygon points="'+scrX(terrain[0].x)+','+scrY(terrain[0].y)+' '+scrX(terrain[0].x+3)+','+scrY(terrain[0].y)+' '+scrX(terrain[3].x+3)+','+scrY(terrain[3].y)+' '+scrX(terrain[3].x)+','+scrY(terrain[3].y)+'" fill="rgba(200,168,48,.1)" stroke="rgba(200,168,48,.35)" stroke-width="1" stroke-dasharray="4,4"/>';
+  // scale bar
+  html += '<rect x="14" y="'+(H-18)+'" width="'+barPx+'" height="4" fill="#3a3028"/>';
+  html += '<rect x="'+(14+barPx)+'" y="'+(H-18)+'" width="'+barPx+'" height="4" fill="#e0d8c0"/>';
+  html += '<rect x="14" y="'+(H-18)+'" width="'+(barPx*2)+'" height="4" fill="none" stroke="#c0a850" stroke-width="1"/>';
+  html += '<text x="14" y="'+(H-21)+'" font-size="8" fill="rgba(200,180,120,.7)" font-family="monospace">0</text>';
+  html += '<text x="'+(14+barPx*2)+'" y="'+(H-21)+'" font-size="8" fill="rgba(200,180,120,.7)" font-family="monospace" text-anchor="end">20m</text>';
+  // north arrow
+  html += '<circle cx="'+(W-28)+'" cy="34" r="14" fill="rgba(228,224,214,.9)"/>';
+  html += '<polygon points="'+(W-28)+',20 '+(W-33)+',30 '+(W-23)+',30" fill="#1a2018"/>';
+  html += '<polygon points="'+(W-28)+',48 '+(W-33)+',38 '+(W-23)+',38" fill="#b0b8a8"/>';
+  html += '<text x="'+(W-28)+'" y="17" text-anchor="middle" font-size="9" font-weight="600" fill="#1a2018" font-family="monospace">N</text>';
+  html += handles;
+
+  svg.innerHTML = html;
+
+  // update dims overlay
+  var dimsEl = document.getElementById('dims-text');
+  if (dimsEl) dimsEl.textContent = 'N:'+nM+'m  E:'+eM+'m  S:'+sM+'m  O:'+wM+'m  ·  ~'+areaM+' m²';
+
+  // update pct
+  var built = 0;
+  modules.forEach(function(m){ built += m.w*m.h*m.fl; });
+  var pctEl = document.getElementById('pct');
+  if (pctEl) pctEl.textContent = areaM>0 ? (built/parseFloat(areaM)*100).toFixed(1)+'%' : '0%';
+}
+
+// ═══ RENDER MODULES ═══
+function renderMods() {
+  var container = document.getElementById('mods');
+  if (!container) return;
+  container.querySelectorAll('.mod').forEach(function(el){ el.remove(); });
+
+  modules.forEach(function(m) {
+    var div = document.createElement('div');
+    div.className = 'mod';
+    div.id = 'mod-'+m.id;
+    var isSel = m.id === selId;
+    var l=scrX(m.mx), t=scrY(m.my), w=mToP(m.w), h=mToP(m.h);
+
+    var css = 'position:absolute;left:'+l+'px;top:'+t+'px;width:'+w+'px;height:'+h+'px;';
+    css += 'background:'+m.color+';';
+    css += 'border:'+(isSel?'2.5px solid #fff':'1.5px solid rgba(255,255,255,.2)')+';';
+    css += 'border-radius:3px;cursor:grab;overflow:hidden;font-family:monospace;';
+    css += 'display:flex;flex-direction:column;align-items:center;justify-content:center;';
+    css += 'z-index:'+(isSel?10:1)+';';
+    if (m.fl>1) css += 'outline:1.5px dashed rgba(120,180,255,.4);outline-offset:3px;';
+    div.style.cssText = css;
+
+    if (w>22 && h>13) {
+      var nm = document.createElement('div');
+      nm.style.cssText = 'color:#fff;font-size:'+Math.max(8,Math.min(11,w/m.name.length*1.1))+'px;font-weight:600;text-align:center;padding:0 3px;line-height:1.2;word-break:break-word;';
+      nm.textContent = m.name;
+      div.appendChild(nm);
+    }
+    if (h>26 && w>20) {
+      var sz = document.createElement('div');
+      sz.style.cssText = 'color:rgba(255,255,210,.5);font-size:8px;text-align:center;margin-top:1px;';
+      sz.textContent = m.w+'×'+m.h+'m·'+(m.w*m.h*m.fl)+'m²';
+      div.appendChild(sz);
+    }
+
+    makeDraggable(div, m);
+    div.addEventListener('click', function(e){ e.stopPropagation(); selectMod(m.id); });
+    container.appendChild(div);
+  });
+
+  var sel = modules.find(function(m){ return m.id===selId; });
+  var stSel = document.getElementById('st-sel');
+  if (stSel) stSel.textContent = sel ? sel.name : '—';
+  var stN = document.getElementById('st-n');
+  if (stN) stN.textContent = modules.length;
+}
+
+// ═══ AREA LIST ═══
+function renderList() {
+  var list = document.getElementById('area-list');
+  if (!list) return;
+  list.innerHTML = '';
+  var total = 0;
+
+  modules.forEach(function(m) {
+    var area = m.w*m.h*m.fl;
+    total += area;
+    var row = document.createElement('div');
+    row.id = 'arow-'+m.id;
+    row.style.cssText = 'display:flex;align-items:center;gap:4px;padding:5px 7px;border-bottom:1px solid #1a1d20;cursor:pointer;'+(m.id===selId?'background:#1e2a1e;':'');
+
+    var dot = document.createElement('div');
+    dot.style.cssText = 'width:8px;height:8px;border-radius:2px;flex-shrink:0;background:'+m.color+';';
+
+    var name = document.createElement('span');
+    name.style.cssText = 'flex:1;font-size:10px;color:#d0d8c0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+    name.textContent = m.name;
+
+    var m2 = document.createElement('span');
+    m2.style.cssText = 'font-size:10px;font-weight:600;color:#7ab860;white-space:nowrap;';
+    m2.textContent = area+'m²';
+
+    var go = document.createElement('button');
+    go.textContent = '📍';
+    go.title = 'Ir a '+m.name;
+    go.style.cssText = 'background:#1a2a1a;border:1px solid #2a4a2a;color:#7ab860;font-size:10px;padding:1px 4px;border-radius:2px;flex-shrink:0;';
+
+    (function(mid){
+      go.addEventListener('click', function(e){ e.stopPropagation(); goTo(mid); });
+      row.addEventListener('click', function(){ goTo(mid); });
+    })(m.id);
+
+    row.appendChild(dot); row.appendChild(name); row.appendChild(m2); row.appendChild(go);
+    list.appendChild(row);
+  });
+
+  var totEl = document.getElementById('tot');
+  if (totEl) totEl.textContent = total+' m²';
+  renderSVG();
+}
+
+function render() { renderSVG(); renderMods(); renderList(); }
+
+// ═══ NAVIGATE ═══
+function goTo(id) {
+  var m = modules.find(function(x){ return x.id===id; });
+  if (!m) return;
+  selectMod(id);
+  var area = document.getElementById('plan-area');
+  var aW = area.clientWidth||500, aH = area.clientHeight||500;
+  cam.x = aW/2 - mToP(m.mx+m.w/2);
+  cam.y = aH/2 - mToP(m.my+m.h/2);
+  render();
+  var row = document.getElementById('arow-'+id);
+  if (row) {
+    row.scrollIntoView({block:'nearest'});
+    row.style.background='#1e3a1e';
+    setTimeout(function(){ row.style.background=id===selId?'#1e2a1e':''; }, 800);
+  }
+}
+
+function selectMod(id) { selId=id; renderMods(); renderList(); }
+
+// ═══ FIT ALL ═══
+function fitAll() {
+  var area = document.getElementById('plan-area');
+  var aW=area.clientWidth||500, aH=area.clientHeight||500;
+  var allX=[], allY=[];
+  terrain.forEach(function(v){ allX.push(v.x); allY.push(v.y); });
+  modules.forEach(function(m){ allX.push(m.mx,m.mx+m.w); allY.push(m.my,m.my+m.h); });
+  var mnX=Math.min.apply(null,allX), mxX=Math.max.apply(null,allX);
+  var mnY=Math.min.apply(null,allY), mxY=Math.max.apply(null,allY);
+  var mg=50, rx=Math.max(mxX-mnX,10), ry=Math.max(mxY-mnY,10);
+  sc = Math.max(0.2, Math.min((aW-mg*2)/(rx*PX), (aH-mg*2)/(ry*PX), 3));
+  cam.x = mg - mnX*PX*sc;
+  cam.y = mg - mnY*PX*sc;
+  document.getElementById('st-z').textContent = sc.toFixed(2)+'×';
+  render();
+}
+
+// ═══ TERRAIN MODE ═══
+function toggleTerrain() {
+  terrainMode = !terrainMode;
+  var btn = document.getElementById('btn-terrain');
+  var info = document.getElementById('terrain-info');
+  if (terrainMode) { btn.className='btn on'; info.style.display='block'; }
+  else { btn.className='btn'; info.style.display='none'; dragVtx=null; }
+  renderSVG();
+}
+
+function vtxHit(lx, ly) {
+  for (var i=0; i<terrain.length; i++) {
+    var vx=scrX(terrain[i].x), vy=scrY(terrain[i].y);
+    if (Math.hypot(lx-vx, ly-vy) < 16) return i;
+  }
+  return -1;
+}
+
+// ═══ DRAGGABLE MODULES ═══
+function makeDraggable(el, m) {
+  var dragging=false, sx0=0, sy0=0, mx0=0, my0=0;
+  function start(cx,cy){ dragging=true; sx0=cx; sy0=cy; mx0=m.mx; my0=m.my; el.style.cursor='grabbing'; el.style.zIndex='20'; }
+  function move(cx,cy){ if(!dragging)return; m.mx=Math.round((mx0+pToM(cx-sx0))*2)/2; m.my=Math.round((my0+pToM(cy-sy0))*2)/2; el.style.left=scrX(m.mx)+'px'; el.style.top=scrY(m.my)+'px'; }
+  function end(){ if(!dragging)return; dragging=false; el.style.cursor='grab'; el.style.zIndex=m.id===selId?'10':'1'; renderList(); saveState(); }
+  el.addEventListener('mousedown',function(e){ if(terrainMode)return; e.preventDefault(); e.stopPropagation(); start(e.clientX,e.clientY); });
+  el.addEventListener('touchstart',function(e){ if(terrainMode)return; e.preventDefault(); e.stopPropagation(); start(e.touches[0].clientX,e.touches[0].clientY); },{passive:false});
+  document.addEventListener('mousemove',function(e){ move(e.clientX,e.clientY); });
+  document.addEventListener('mouseup',end);
+  document.addEventListener('touchmove',function(e){ if(dragging){e.preventDefault();move(e.touches[0].clientX,e.touches[0].clientY);}},{passive:false});
+  document.addEventListener('touchend',end);
+}
+
+// ═══ PAN + ZOOM + VERTEX DRAG ═══
+var planArea = document.getElementById('plan-area');
+
+planArea.addEventListener('mousedown', function(e) {
+  var rect = planArea.getBoundingClientRect();
+  var lx = e.clientX-rect.left, ly = e.clientY-rect.top;
+  if (terrainMode) {
+    var idx = vtxHit(lx, ly);
+    if (idx >= 0) { e.preventDefault(); e.stopPropagation(); dragVtx={idx:idx,sx:e.clientX,sy:e.clientY,vx:terrain[idx].x,vy:terrain[idx].y}; return; }
+  }
+  var tag = e.target.tagName.toLowerCase();
+  if (tag==='div' && e.target!==planArea) return; // module div — don't pan
+  panning=true; panSx=e.clientX; panSy=e.clientY; panCx=cam.x; panCy=cam.y;
+  planArea.style.cursor='move'; e.preventDefault();
+});
+
+document.addEventListener('mousemove', function(e) {
+  if (dragVtx!==null) {
+    var dx=pToM(e.clientX-dragVtx.sx), dy=pToM(e.clientY-dragVtx.sy);
+    terrain[dragVtx.idx].x = Math.round((dragVtx.vx+dx)*2)/2;
+    terrain[dragVtx.idx].y = Math.round((dragVtx.vy+dy)*2)/2;
+    renderSVG(); return;
+  }
+  if (panning) { cam.x=panCx+(e.clientX-panSx); cam.y=panCy+(e.clientY-panSy); renderSVG(); renderMods(); }
+});
+
+document.addEventListener('mouseup', function() { if(dragVtx!==null) saveState(); dragVtx=null; panning=false; planArea.style.cursor='default'; });
+
+planArea.addEventListener('wheel', function(e) {
+  e.preventDefault();
+  var f=e.deltaY<0?1.12:0.89;
+  var rect=planArea.getBoundingClientRect();
+  var mx=e.clientX-rect.left, my=e.clientY-rect.top;
+  cam.x=mx-(mx-cam.x)*f; cam.y=my-(my-cam.y)*f;
+  sc=Math.max(0.2,Math.min(8,sc*f));
+  document.getElementById('st-z').textContent=sc.toFixed(2)+'×';
+  renderSVG(); renderMods();
+  clearTimeout(window._zoomSave); window._zoomSave=setTimeout(saveState,400);
+},{passive:false});
+
+planArea.addEventListener('touchstart', function(e) {
+  var rect=planArea.getBoundingClientRect();
+  if (e.touches.length===2) { pinchDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY); e.preventDefault(); return; }
+  var lx=e.touches[0].clientX-rect.left, ly=e.touches[0].clientY-rect.top;
+  if (terrainMode) { var idx=vtxHit(lx,ly); if(idx>=0){e.preventDefault();e.stopPropagation();dragVtx={idx:idx,sx:e.touches[0].clientX,sy:e.touches[0].clientY,vx:terrain[idx].x,vy:terrain[idx].y};return;} }
+  var tag=e.target.tagName.toLowerCase();
+  if (tag==='div' && e.target!==planArea) return;
+  touchPan=true; tPanSx=e.touches[0].clientX; tPanSy=e.touches[0].clientY; tPanCx=cam.x; tPanCy=cam.y; e.preventDefault();
+},{passive:false});
+
+planArea.addEventListener('touchmove', function(e) {
+  if (e.touches.length===2 && pinchDist>0) {
+    e.preventDefault();
+    var nd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+    var f=nd/pinchDist; pinchDist=nd;
+    var rect=planArea.getBoundingClientRect();
+    var mx=(e.touches[0].clientX+e.touches[1].clientX)/2-rect.left;
+    var my=(e.touches[0].clientY+e.touches[1].clientY)/2-rect.top;
+    cam.x=mx-(mx-cam.x)*f; cam.y=my-(my-cam.y)*f; sc=Math.max(0.2,Math.min(8,sc*f));
+    renderSVG(); renderMods();
+    clearTimeout(window._zoomSave); window._zoomSave=setTimeout(saveState,400);
+    return;
+  }
+  if (dragVtx!==null) { e.preventDefault(); var dx=pToM(e.touches[0].clientX-dragVtx.sx),dy=pToM(e.touches[0].clientY-dragVtx.sy); terrain[dragVtx.idx].x=Math.round((dragVtx.vx+dx)*2)/2; terrain[dragVtx.idx].y=Math.round((dragVtx.vy+dy)*2)/2; renderSVG(); return; }
+  if (touchPan) { e.preventDefault(); cam.x=tPanCx+(e.touches[0].clientX-tPanSx); cam.y=tPanCy+(e.touches[0].clientY-tPanSy); renderSVG(); renderMods(); }
+},{passive:false});
+
+planArea.addEventListener('touchend', function(){ if(dragVtx!==null) saveState(); dragVtx=null; touchPan=false; pinchDist=0; });
+planArea.addEventListener('click', function(e){ if(e.target===planArea||e.target.tagName.toLowerCase()==='svg'||e.target.closest('svg'))selectMod(null); });
+
+// ═══ ADD MODULE ═══
+function addMod(p) {
+  var cx=terrain.reduce(function(s,v){return s+v.x;},0)/4;
+  var cy=terrain.reduce(function(s,v){return s+v.y;},0)/4;
+  var m={id:nextId++,name:p.name,ic:p.ic||'⬜',mx:Math.round(cx-p.w/2),my:Math.round(cy-p.h/2),w:p.w,h:p.h,fl:p.fl||p.floors||1,color:p.color||p.c||'#303840'};
+  modules.push(m); render(); goTo(m.id); saveState();
+}
+
+// ═══ RESET ═══
+function hardReset() {
+  if (!confirm('¿Resetear al estado inicial?')) return;
+  modules=defMods(); nextId=10; selId=null;
+  terrain=[{x:0,y:0},{x:66,y:0},{x:46,y:99},{x:0,y:133}];
+  cam={x:40,y:30}; sc=1; terrainMode=false;
+  document.getElementById('btn-terrain').className='btn';
+  document.getElementById('terrain-info').style.display='none';
+  localStorage.removeItem('ll_state');
+  render(); fitAll();
+}
+
+// ═══ PALETTE ═══
+function makeTile(p, canDel) {
+  var btn=document.createElement('div');
+  btn.style.cssText='background:#252830;border:1px solid #2e3238;border-radius:3px;margin-bottom:4px;padding:5px;cursor:pointer;position:relative;';
+  btn.innerHTML='<div style="width:100%;height:4px;background:'+(p.color||p.c||'#333')+';border-radius:1px;margin-bottom:3px;"></div><div style="font-size:11px;color:#d0d8c0;">'+p.name+'</div><div style="font-size:9px;color:#6a7480;">'+p.w+'×'+p.h+'m'+((p.fl||p.floors||1)>1?'·'+(p.fl||p.floors)+'p':'')+'</div>';
+  if (canDel) {
+    var del=document.createElement('span'); del.textContent='✕'; del.title='Borrar';
+    del.style.cssText='position:absolute;top:3px;right:4px;color:#804030;font-size:10px;cursor:pointer;';
+    (function(id){ del.onclick=function(e){e.stopPropagation();delPreset(id);}; })(p.id);
+    btn.appendChild(del);
+  }
+  btn.addEventListener('click',function(){addMod(p);});
+  btn.addEventListener('touchend',function(e){e.preventDefault();addMod(p);},{passive:false});
+  return btn;
+}
+
+function buildPalette() {
+  var bi=document.getElementById('lp0');
+  if(bi){bi.innerHTML='';BUILTIN.forEach(function(p){bi.appendChild(makeTile(p,false));});}
+  var cu=document.getElementById('custom-list');
+  if(cu){cu.innerHTML='';if(customPresets.length===0){cu.innerHTML='<div style="font-size:10px;color:#6a7480;">Sin presets aún.</div>';}else{customPresets.forEach(function(p){cu.appendChild(makeTile(p,true));});}}
+}
+
+// ═══ TABS ═══
+function swL(i) {
+  document.getElementById('lp0').style.display=i===0?'block':'none';
+  document.getElementById('lp1').style.display=i===1?'flex':'none';
+  ['lt0','lt1'].forEach(function(id,j){
+    document.getElementById(id).style.color=i===j?'#7ab860':'#6a7480';
+    document.getElementById(id).style.borderBottomColor=i===j?'#7ab860':'transparent';
+  });
+}
+
+// ═══ MODAL ═══
+function openModal() {
+  modalColor=COLORS[0];
+  document.getElementById('m-name').value='';
+  document.getElementById('m-icon').value='🏠';
+  document.getElementById('m-w').value=6;
+  document.getElementById('m-h').value=5;
+  document.getElementById('m-fl').value=1;
+  buildColorPicker();
+  document.getElementById('modal').style.display='flex';
+  setTimeout(function(){document.getElementById('m-name').focus();},80);
+}
+
+function closeModal(){ document.getElementById('modal').style.display='none'; }
+
+function buildColorPicker() {
+  var cp=document.getElementById('m-colors'); if(!cp)return; cp.innerHTML='';
+  COLORS.forEach(function(c){
+    var d=document.createElement('div');
+    d.style.cssText='width:20px;height:20px;border-radius:3px;background:'+c+';cursor:pointer;border:2px solid '+(c===modalColor?'#fff':'transparent')+';';
+    d.onclick=function(){modalColor=c;buildColorPicker();};
+    cp.appendChild(d);
+  });
+}
+
+function savePreset() {
+  var p={id:'cp'+Date.now(),name:document.getElementById('m-name').value.trim()||'Preset',ic:document.getElementById('m-icon').value||'⬜',w:+document.getElementById('m-w').value||6,h:+document.getElementById('m-h').value||5,fl:+document.getElementById('m-fl').value||1,color:modalColor};
+  customPresets.push(p);
+  try{localStorage.setItem('ll_presets',JSON.stringify(customPresets));}catch(e){}
+  buildPalette(); closeModal(); swL(1);
+}
+
+function delPreset(id) {
+  if(!confirm('¿Borrar preset?'))return;
+  customPresets=customPresets.filter(function(p){return p.id!==id;});
+  try{localStorage.setItem('ll_presets',JSON.stringify(customPresets));}catch(e){}
+  buildPalette();
+}
+
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===document.getElementById('modal'))closeModal();});
+
+// ═══ KEYBOARD ═══
+document.addEventListener('keydown',function(e){
+  if(e.target.tagName==='INPUT')return;
+  if(e.key==='Escape'){closeModal();selectMod(null);if(terrainMode)toggleTerrain();}
+  if(e.key==='f')fitAll();
+  if(e.key==='t')toggleTerrain();
+  if((e.key==='Delete'||e.key==='Backspace')&&selId!==null){e.preventDefault();modules=modules.filter(function(m){return m.id!==selId;});selId=null;render();saveState();}
+  if(selId!==null){var m=modules.find(function(x){return x.id===selId;});if(!m)return;var step=e.shiftKey?2:0.5;if(e.key==='ArrowLeft'){m.mx-=step;renderMods();}if(e.key==='ArrowRight'){m.mx+=step;renderMods();}if(e.key==='ArrowUp'){m.my-=step;renderMods();}if(e.key==='ArrowDown'){m.my+=step;renderMods();}clearTimeout(window._arrowSave);window._arrowSave=setTimeout(saveState,300);}
+});
+
+window.addEventListener('resize',function(){renderSVG();});
+
+// ═══ SAVE / LOAD ═══
+function saveState() {
+  try {
+    localStorage.setItem('ll_state', JSON.stringify({
+      terrain: terrain,
+      modules: modules,
+      nextId: nextId,
+      cam: cam,
+      sc: sc
+    }));
+    var ind = document.getElementById('save-indicator');
+    if (ind) { ind.style.opacity='1'; ind.style.color='#7ab860'; clearTimeout(window._indTimer); window._indTimer=setTimeout(function(){ ind.style.opacity='0'; },1500); }
+  } catch(e) {
+    var ind = document.getElementById('save-indicator');
+    if (ind) { ind.textContent='⚠ sin espacio'; ind.style.color='#c04020'; ind.style.opacity='1'; }
+  }
+}
+
+function loadState() {
+  try {
+    var raw = localStorage.getItem('ll_state');
+    if (!raw) return false;
+    var s = JSON.parse(raw);
+    if (s.terrain && s.terrain.length === 4) terrain = s.terrain;
+    if (s.modules && s.modules.length > 0) { modules = s.modules; nextId = s.nextId || 20; }
+    if (s.cam) cam = s.cam;
+    if (s.sc) sc = s.sc;
+    return true;
+  } catch(e) { return false; }
+}
+
+// ═══ INIT ═══
+buildPalette();
+var hadSaved = loadState();
+setTimeout(function(){
+  render();
+  if (!hadSaved) fitAll();
+  else { renderSVG(); renderMods(); renderList(); document.getElementById('st-z').textContent = sc.toFixed(2)+'×'; }
+}, 100);
+</script>
+</body>
+</html>
