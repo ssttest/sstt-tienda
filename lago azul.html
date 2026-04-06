@@ -25,6 +25,7 @@ button { font-family:monospace; cursor:pointer; }
   <button class="btn" id="btn-terrain" onclick="toggleTerrain()">⬡ Editar terreno</button>
   <button class="btn gold" onclick="openModal()">★ Nuevo preset</button>
   <button class="btn" onclick="hardReset()" style="color:#8a7030;">↺ Reset</button>
+  <button class="btn" onclick="exportLamina()" style="background:#1a1a3a;border-color:#4a4a8a;color:#8a8ad8;">⬛ Exportar lámina</button>
   <span style="color:#6a7480;font-size:11px;">Arrastra módulos · 📍 navegar · Scroll=zoom</span>
   <span id="save-indicator" style="font-size:10px;color:#3a5a30;margin-left:4px;transition:opacity .3s;opacity:0;">✓ guardado</span>
 </div>
@@ -622,6 +623,182 @@ document.addEventListener('keydown',function(e){
 });
 
 window.addEventListener('resize',function(){renderSVG();});
+
+// ═══ EXPORT LÁMINA ═══
+function exportLamina() {
+  // Gather data
+  var t = terrain;
+  function dstM(i,j){ return Math.hypot(t[j].x-t[i].x, t[j].y-t[i].y); }
+  var nM = dstM(0,1).toFixed(1), eM = dstM(1,2).toFixed(1);
+  var sM = dstM(2,3).toFixed(1), wM = dstM(3,0).toFixed(1);
+  var area = 0;
+  for(var i=0;i<t.length;i++){var j=(i+1)%t.length;area+=t[i].x*t[j].y-t[j].x*t[i].y;}
+  area = Math.abs(area/2).toFixed(0);
+  var totalBuilt = 0;
+  modules.forEach(function(m){totalBuilt+=m.w*m.h*m.fl;});
+
+  // Build SVG of site plan (mini version)
+  var SW=220, SH=280; // site plan box size
+  // fit terrain in box
+  var allX=t.map(function(v){return v.x;}), allY=t.map(function(v){return v.y;});
+  var mnX=Math.min.apply(null,allX),mxX=Math.max.apply(null,allX);
+  var mnY=Math.min.apply(null,allY),mxY=Math.max.apply(null,allY);
+  var mg2=16;
+  var scP=Math.min((SW-mg2*2)/(mxX-mnX),(SH-mg2*2)/(mxY-mnY));
+  function px(x){return mg2+(x-mnX)*scP;}
+  function py(y){return mg2+(y-mnY)*scP;}
+  var tPts = t.map(function(v){return px(v.x)+','+py(v.y);}).join(' ');
+  var lagoY2 = Math.max(py(t[2].y),py(t[3].y));
+
+  var modsSVG = '';
+  modules.forEach(function(m){
+    var mx2=px(m.mx),my2=py(m.my),mw2=m.w*scP,mh2=m.h*scP;
+    modsSVG += '<rect x="'+mx2+'" y="'+my2+'" width="'+mw2+'" height="'+mh2+'" fill="'+m.color+'" fill-opacity="0.85" stroke="rgba(255,255,255,.3)" stroke-width="0.5" rx="1"/>';
+    if(mw2>20&&mh2>10){
+      modsSVG += '<text x="'+(mx2+mw2/2)+'" y="'+(my2+mh2/2+3)+'" text-anchor="middle" font-size="'+(Math.min(8,mw2/m.name.length*1.2))+'px" fill="#fff" font-family="monospace" font-weight="600">'+m.name+'</text>';
+    }
+    if(mh2>18&&mw2>16){
+      modsSVG += '<text x="'+(mx2+mw2/2)+'" y="'+(my2+mh2-3)+'" text-anchor="middle" font-size="6px" fill="rgba(255,255,210,.6)" font-family="monospace">'+(m.w*m.h*m.fl)+'m²</text>';
+    }
+  });
+
+  // Restriction line (80m)
+  var fW=Math.min(80/dstM(3,0),1);
+  var fE=Math.min(80/dstM(2,1),1);
+  var dgaWx=px(t[3].x+(t[0].x-t[3].x)*fW), dgaWy=py(t[3].y+(t[0].y-t[3].y)*fW);
+  var dgaEx=px(t[2].x+(t[1].x-t[2].x)*fE), dgaEy=py(t[2].y+(t[1].y-t[2].y)*fE);
+
+  // Build rows for surface table
+  var rows = '';
+  modules.forEach(function(m){
+    var a=m.w*m.h*m.fl;
+    rows += '<tr><td style="padding:3px 6px;border-bottom:1px solid #e8e8e8;font-size:11px;">'+m.name+(m.fl>1?' ('+m.fl+' pisos)':'')+'</td>'
+          + '<td style="padding:3px 6px;border-bottom:1px solid #e8e8e8;font-size:11px;color:#555;">'+m.w+'×'+m.h+'m</td>'
+          + '<td style="padding:3px 6px;border-bottom:1px solid #e8e8e8;font-size:11px;font-weight:600;text-align:right;">'+a+' m²</td></tr>';
+  });
+
+  var now = new Date();
+  var fecha = now.getDate()+'/'+(now.getMonth()+1)+'/'+now.getFullYear();
+
+  var lamina = '<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">'
+    + '<title>Lámina — Lote L Lago Azul</title>'
+    + '<style>'
+    + '*{margin:0;padding:0;box-sizing:border-box;}'
+    + 'body{background:#f0ede8;font-family:Georgia,serif;}'
+    + '.page{width:297mm;min-height:210mm;background:#fff;margin:0 auto;padding:0;box-shadow:0 2px 20px rgba(0,0,0,.15);}'
+    + '@media print{body{background:#fff;}.page{box-shadow:none;width:100%;} .no-print{display:none;}}'
+    + '.header{background:#1a2030;color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:flex-end;}'
+    + '.header h1{font-size:22px;letter-spacing:.05em;font-weight:400;}'
+    + '.header h2{font-size:11px;letter-spacing:.15em;color:#8a9ab0;margin-top:3px;text-transform:uppercase;font-weight:400;}'
+    + '.header-right{text-align:right;font-size:10px;color:#8a9ab0;line-height:1.8;}'
+    + '.body{display:flex;gap:0;}'
+    + '.left{flex:1;padding:16px 14px;border-right:1px solid #e0ddd8;}'
+    + '.right{width:260px;padding:14px;}'
+    + '.section-title{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#8a9ab0;border-bottom:1px solid #e0ddd8;padding-bottom:4px;margin-bottom:10px;font-family:monospace;}'
+    + '.terrain-data{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px;}'
+    + '.td-item{background:#f5f3ef;padding:6px 8px;border-radius:3px;}'
+    + '.td-label{font-size:9px;color:#8a9ab0;font-family:monospace;letter-spacing:.1em;}'
+    + '.td-val{font-size:16px;font-weight:700;color:#1a2030;font-family:monospace;margin-top:1px;}'
+    + '.td-unit{font-size:9px;color:#8a9ab0;}'
+    + 'table{width:100%;border-collapse:collapse;}'
+    + 'table th{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#8a9ab0;padding:4px 6px;border-bottom:2px solid #1a2030;text-align:left;font-family:monospace;}'
+    + '.total-row td{padding:6px 6px;font-size:13px;font-weight:700;color:#1a2030;border-top:2px solid #1a2030;}'
+    + '.note{font-size:9px;color:#9a9a9a;font-family:monospace;margin-top:8px;line-height:1.6;border-top:1px solid #e0ddd8;padding-top:8px;}'
+    + '.print-btn{display:block;margin:14px auto;padding:10px 28px;background:#1a2030;color:#fff;border:none;border-radius:4px;font-size:13px;cursor:pointer;font-family:monospace;letter-spacing:.05em;}'
+    + '.print-btn:hover{background:#2a3a50;}'
+    + '</style></head><body>'
+    + '<div class="no-print" style="text-align:center;padding:12px;background:#e8e4de;font-family:monospace;font-size:12px;color:#555;">'
+    + 'Vista previa de lámina — <button class="print-btn" onclick="window.print()" style="display:inline;margin:0 8px;padding:5px 16px;">🖨 Imprimir / Guardar PDF</button>'
+    + '</div>'
+    + '<div class="page">'
+
+    // Header
+    + '<div class="header">'
+    + '<div><h1>LOTE L — LAGO AZUL</h1><h2>Diseño modular · Cochamó · Rol SII 158-974</h2></div>'
+    + '<div class="header-right">Fecha: '+fecha+'<br>Constructora: Iterrasur<br>Uso: Segunda vivienda</div>'
+    + '</div>'
+
+    // Body
+    + '<div class="body">'
+
+    // LEFT: site plan + terrain data
+    + '<div class="left">'
+
+    // Terrain data grid
+    + '<div class="section-title">Datos del terreno</div>'
+    + '<div class="terrain-data">'
+    + '<div class="td-item"><div class="td-label">Norte</div><div class="td-val">'+nM+' <span class="td-unit">m</span></div></div>'
+    + '<div class="td-item"><div class="td-label">Este</div><div class="td-val">'+eM+' <span class="td-unit">m</span></div></div>'
+    + '<div class="td-item"><div class="td-label">Sur (lago)</div><div class="td-val">'+sM+' <span class="td-unit">m</span></div></div>'
+    + '<div class="td-item"><div class="td-label">Oeste</div><div class="td-val">'+wM+' <span class="td-unit">m</span></div></div>'
+    + '<div class="td-item" style="grid-column:1/-1;background:#1a2030;">'
+    + '<div class="td-label" style="color:#8a9ab0;">Área total del lote</div>'
+    + '<div class="td-val" style="color:#fff;font-size:22px;">~'+area+' <span class="td-unit" style="color:#8a9ab0;">m²</span></div></div>'
+    + '</div>'
+
+    // Site plan SVG
+    + '<div class="section-title">Plano de emplazamiento</div>'
+    + '<div style="background:#1a2030;border-radius:4px;padding:10px;position:relative;">'
+    + '<svg width="'+SW+'" height="'+SH+'" xmlns="http://www.w3.org/2000/svg">'
+    + '<rect x="0" y="'+(lagoY2)+'" width="'+SW+'" height="'+(SH-lagoY2)+'" fill="#0c2030"/>'
+    + '<text x="'+(SW/2)+'" y="'+(lagoY2+(SH-lagoY2)/2)+'" text-anchor="middle" font-style="italic" font-size="10" fill="rgba(74,154,192,.7)" font-family="Georgia,serif">Lago Azul</text>'
+    + '<polygon points="'+tPts+'" fill="#243020" stroke="#c0b060" stroke-width="1.5" stroke-dasharray="5,3"/>'
+    + '<line x1="'+dgaWx+'" y1="'+dgaWy+'" x2="'+dgaEx+'" y2="'+dgaEy+'" stroke="#d44020" stroke-width="1" stroke-dasharray="4,3" opacity="0.7"/>'
+    + '<text x="'+(dgaEx+3)+'" y="'+(dgaEy-2)+'" font-size="6" fill="#d44020" opacity="0.85" font-family="monospace">80m DGA</text>'
+    // Lancha corridor
+    + '<polygon points="'+px(t[0].x)+','+py(t[0].y)+' '+px(t[0].x+3)+','+py(t[0].y)+' '+px(t[3].x+3)+','+py(t[3].y)+' '+px(t[3].x)+','+py(t[3].y)+'" fill="rgba(200,168,48,.15)" stroke="rgba(200,168,48,.4)" stroke-width="0.7" stroke-dasharray="3,3"/>'
+    + modsSVG
+    // Dim labels
+    + '<text x="'+(px(t[0].x)+px(t[1].x))/2+'" y="'+(py(t[0].y)-5)+'" text-anchor="middle" font-size="7" fill="rgba(190,182,118,.9)" font-family="monospace">N '+nM+'m</text>'
+    + '<text x="'+(px(t[2].x)+px(t[3].x))/2+'" y="'+(Math.max(py(t[2].y),py(t[3].y))+10)+'" text-anchor="middle" font-size="7" fill="rgba(74,154,192,.9)" font-family="monospace">Lago '+sM+'m</text>'
+    + '<text x="'+(px(t[3].x)-12)+'" y="'+(py(t[3].y)+py(t[0].y))/2+'" text-anchor="middle" font-size="7" fill="rgba(190,182,118,.7)" font-family="monospace" transform="rotate(-90,'+(px(t[3].x)-12)+','+(py(t[3].y)+py(t[0].y))/2+')">O '+wM+'m</text>'
+    + '<text x="'+(px(t[1].x)+10)+'" y="'+(py(t[1].y)+py(t[2].y))/2+'" text-anchor="middle" font-size="7" fill="rgba(190,182,118,.7)" font-family="monospace" transform="rotate(90,'+(px(t[1].x)+10)+','+(py(t[1].y)+py(t[2].y))/2+')">E '+eM+'m</text>'
+    // North arrow
+    + '<circle cx="'+(SW-16)+'" cy="16" r="10" fill="rgba(228,224,214,.9)"/>'
+    + '<polygon points="'+(SW-16)+',6 '+(SW-20)+',14 '+(SW-12)+',14" fill="#1a2018"/>'
+    + '<polygon points="'+(SW-16)+',26 '+(SW-20)+',18 '+(SW-12)+',18" fill="#b0b8a8"/>'
+    + '<text x="'+(SW-16)+'" y="4" text-anchor="middle" font-size="6" font-weight="700" fill="#1a2018" font-family="monospace">N</text>'
+    + '</svg>'
+    + '</div>'
+
+    // Scale note
+    + '<div style="font-size:9px;color:#9a9a9a;font-family:monospace;margin-top:6px;text-align:center;">Escala proporcional · Norte arriba · Lago al sur</div>'
+
+    + '</div>'// /left
+
+    // RIGHT: surface table + notes
+    + '<div class="right">'
+    + '<div class="section-title">Cuadro de superficies</div>'
+    + '<table>'
+    + '<thead><tr><th>Espacio</th><th>Dim.</th><th style="text-align:right;">m²</th></tr></thead>'
+    + '<tbody>'+rows+'</tbody>'
+    + '<tfoot><tr class="total-row"><td colspan="2">TOTAL CONSTRUIDO</td><td style="text-align:right;">'+totalBuilt+' m²</td></tr></tfoot>'
+    + '</table>'
+
+    + '<div style="margin-top:14px;" class="section-title">Orientación</div>'
+    + '<div style="font-size:10px;color:#444;line-height:1.8;font-family:monospace;">'
+    + '→ Lago al SUR<br>→ Acceso desde el NORTE<br>→ Paso lancha: borde OESTE (3m)<br>→ Restricción DGA: 80m del lago'
+    + '</div>'
+
+    + '<div style="margin-top:14px;" class="section-title">Clima · Cochamó</div>'
+    + '<div style="font-size:10px;color:#444;line-height:1.8;font-family:monospace;">'
+    + 'Precip: ~3.400 mm/año<br>Temp máx verano: 19°C<br>Temp mín invierno: 4°C<br>Horas sol/año: ~1.800h'
+    + '</div>'
+
+    + '<div class="note">'
+    + '⚑ Verificar distancia mínima al lago con Municipalidad de Cochamó antes de fijar implantación.<br><br>'
+    + 'Lámina generada desde Editor Lote L · '+fecha
+    + '</div>'
+
+    + '</div>'// /right
+    + '</div>'// /body
+    + '</div>'// /page
+    + '</body></html>';
+
+  var win = window.open('', '_blank');
+  win.document.write(lamina);
+  win.document.close();
+}
 
 // ═══ SAVE / LOAD ═══
 function saveState() {
