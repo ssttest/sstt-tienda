@@ -25,7 +25,11 @@ button { font-family:monospace; cursor:pointer; }
   <button class="btn" id="btn-terrain" onclick="toggleTerrain()">⬡ Editar terreno</button>
   <button class="btn gold" onclick="openModal()">★ Nuevo preset</button>
   <button class="btn" onclick="hardReset()" style="color:#8a7030;">↺ Reset</button>
+  <button class="btn blue" onclick="exportPNG()" style="border-color:#2a6a78;">⬇ Exportar lámina</button>
   <button class="btn" onclick="exportLamina()" style="background:#1a1a3a;border-color:#4a4a8a;color:#8a8ad8;">⬛ Exportar lámina</button>
+  <button class="btn" id="btn-img" onclick="document.getElementById('img-input').click()" style="border-color:#5a4a78;color:#a090c8;">🛰 Imagen fondo</button>
+  <button class="btn" id="btn-img-off" onclick="clearBgImage()" style="display:none;border-color:#804030;color:#c06050;">✕ Quitar imagen</button>
+  <input type="file" id="img-input" accept="image/*" style="display:none;" onchange="loadBgImage(this)">
   <span style="color:#6a7480;font-size:11px;">Arrastra módulos · 📍 navegar · Scroll=zoom</span>
   <span id="save-indicator" style="font-size:10px;color:#3a5a30;margin-left:4px;transition:opacity .3s;opacity:0;">✓ guardado</span>
 </div>
@@ -49,10 +53,22 @@ button { font-family:monospace; cursor:pointer; }
 
 <!-- CANVAS -->
 <div id="plan-area" style="flex:1;position:relative;overflow:hidden;background:#1a1c1e;">
+  <canvas id="bg-canvas" style="position:absolute;top:0;left:0;pointer-events:none;image-rendering:pixelated;"></canvas>
   <svg id="svg" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;"></svg>
   <div id="mods" style="position:absolute;top:0;left:0;"></div>
   <div id="terrain-info" style="display:none;position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(14,16,18,.94);border:1px solid #c8a848;border-radius:4px;padding:6px 14px;font-size:11px;color:#c8a848;white-space:nowrap;pointer-events:none;">
     Arrastra vértices NW/NE/SE/SW · <span id="dims-text" style="color:#7ab860;"></span>
+  </div>
+  <!-- BG Image controls -->
+  <div id="bg-controls" style="display:none;position:absolute;top:8px;left:50%;transform:translateX(-50%);background:rgba(14,16,18,.94);border:1px solid #5a4a78;border-radius:4px;padding:6px 12px;font-size:11px;color:#a090c8;gap:10px;align-items:center;white-space:nowrap;z-index:50;">
+    <span>🛰 Imagen aérea</span>
+    <span style="color:#6a7480;">Escala:</span>
+    <input type="range" id="bg-scale" min="0.1" max="5" step="0.05" value="0.5" style="width:80px;" oninput="bgConfig.metersPerPixel=+this.value;document.getElementById('bg-scale-val').textContent=this.value+'m/px';renderBg();">
+    <span id="bg-scale-val" style="color:#7ab860;min-width:50px;">0.5m/px</span>
+    <span style="color:#6a7480;">Opacidad:</span>
+    <input type="range" id="bg-opacity" min="0.1" max="1" step="0.05" value="0.55" style="width:60px;" oninput="bgConfig.opacity=+this.value;renderBg();">
+    <button class="btn" onclick="setPinMode()" id="btn-pin-mode" title="Haz click en el plano para marcar dónde está el pin amarillo" style="font-size:10px;border-color:#c8a848;color:#c8a848;">📍 Ajustar pin</button>
+    <span id="pin-mode-hint" style="color:#c8a848;display:none;">→ Haz click en el plano donde está el pin amarillo</span>
   </div>
 </div>
 
@@ -280,6 +296,7 @@ function renderSVG() {
   var dimsEl = document.getElementById('dims-text');
   if (dimsEl) dimsEl.textContent = 'N:'+nM+'m  E:'+eM+'m  S:'+sM+'m  O:'+wM+'m  ·  ~'+areaM+' m²';
 
+  renderBg();
   // update pct
   var built = 0;
   modules.forEach(function(m){ built += m.w*m.h*m.fl; });
@@ -615,6 +632,96 @@ function delPreset(id) {
 
 document.getElementById('modal').addEventListener('click',function(e){if(e.target===document.getElementById('modal'))closeModal();});
 
+// ═══ EXPORT PNG ═══
+function exportPNG() {
+  var area = document.getElementById('plan-area');
+  var W = area.clientWidth, H = area.clientHeight;
+  var exportCanvas = document.createElement('canvas');
+  exportCanvas.width = W * 2; exportCanvas.height = H * 2;
+  var ectx = exportCanvas.getContext('2d');
+  ectx.scale(2,2);
+  ectx.fillStyle = '#1a1c1e';
+  ectx.fillRect(0,0,W,H);
+  // Draw bg image if present
+  if (bgImage) {
+    var imgScPx = (PX * sc) / bgConfig.metersPerPixel;
+    var pinScreenX = cam.x + bgConfig.pinWorldX * PX * sc;
+    var pinScreenY = cam.y + bgConfig.pinWorldY * PX * sc;
+    var imgLeft = pinScreenX - bgConfig.pinImgX * imgScPx;
+    var imgTop  = pinScreenY - bgConfig.pinImgY * imgScPx;
+    ectx.globalAlpha = bgConfig.opacity;
+    ectx.drawImage(bgImage, imgLeft, imgTop, bgImage.width*imgScPx, bgImage.height*imgScPx);
+    ectx.globalAlpha = 1;
+  }
+  // Draw SVG
+  var svgEl = document.getElementById('svg');
+  var svgData = new XMLSerializer().serializeToString(svgEl);
+  var svgBlob = new Blob([svgData], {type:'image/svg+xml'});
+  var url = URL.createObjectURL(svgBlob);
+  var svgImg = new Image();
+  svgImg.onload = function() {
+    ectx.drawImage(svgImg, 0, 0, W, H);
+    URL.revokeObjectURL(url);
+    // Draw modules
+    document.querySelectorAll('.mod').forEach(function(div) {
+      var l=parseFloat(div.style.left), t=parseFloat(div.style.top);
+      var w=parseFloat(div.style.width), h=parseFloat(div.style.height);
+      ectx.fillStyle = div.style.background;
+      ectx.globalAlpha = 0.92;
+      ectx.fillRect(l,t,w,h);
+      ectx.globalAlpha = 1;
+      ectx.strokeStyle = 'rgba(255,255,255,.3)';
+      ectx.lineWidth = 1;
+      ectx.strokeRect(l,t,w,h);
+      // text
+      ectx.fillStyle = '#fff';
+      ectx.font = 'bold 10px monospace';
+      ectx.textAlign = 'center';
+      var nameEl = div.querySelector('div');
+      if (nameEl) ectx.fillText(nameEl.textContent, l+w/2, t+h/2+3);
+    });
+    // Title
+    ectx.fillStyle = 'rgba(200,184,120,.9)';
+    ectx.font = 'bold 14px monospace';
+    ectx.textAlign = 'left';
+    ectx.fillText('Lote L — Lago Azul, Cochamó', 10, 20);
+    var a = document.createElement('a');
+    a.download = 'lote_l_lago_azul.png';
+    a.href = exportCanvas.toDataURL('image/png');
+    a.click();
+  };
+  svgImg.src = url;
+}
+
+// ═══ PIN MODE ═══
+var pinMode = false;
+function setPinMode() {
+  pinMode = !pinMode;
+  var btn = document.getElementById('btn-pin-mode');
+  var hint = document.getElementById('pin-mode-hint');
+  if (pinMode) {
+    btn.style.background='#2a2010'; hint.style.display='inline';
+    planArea.style.cursor='crosshair';
+  } else {
+    btn.style.background=''; hint.style.display='none';
+    planArea.style.cursor='default';
+  }
+}
+
+// Intercept click in pin mode to set pin world position
+planArea.addEventListener('click', function(e) {
+  if (!pinMode) return;
+  var rect = planArea.getBoundingClientRect();
+  var lx = e.clientX - rect.left;
+  var ly = e.clientY - rect.top;
+  // Convert screen click to world coords
+  bgConfig.pinWorldX = (lx - cam.x) / (PX * sc);
+  bgConfig.pinWorldY = (ly - cam.y) / (PX * sc);
+  setPinMode(); // exit pin mode
+  renderBg();
+  saveState();
+}, true);
+
 // ═══ KEYBOARD ═══
 document.addEventListener('keydown',function(e){
   if(e.target.tagName==='INPUT')return;
@@ -801,6 +908,94 @@ function exportLamina() {
   var win = window.open('', '_blank');
   win.document.write(lamina);
   win.document.close();
+}
+
+// ═══ BACKGROUND IMAGE ═══
+var bgImage = null;         // Image object
+var bgImageData = null;     // base64 data URL
+// bg alignment: pin world coords (meters) and image pixel coords
+// The yellow pin in the aerial image is the center of the terrain
+// We store: pinWorldX, pinWorldY (meters in terrain space)
+//           pinImgX, pinImgY (pixels in the image)
+//           metersPerPixel (scale of the image)
+var bgConfig = {
+  pinWorldX: 23,   // center of terrain (avg of vertices)
+  pinWorldY: 55,   // center of terrain
+  pinImgX: 0,      // will be set when image loaded
+  pinImgY: 0,
+  metersPerPixel: 0.5, // default, user can adjust
+  opacity: 0.55
+};
+
+function loadBgImage(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    bgImageData = e.target.result;
+    var img = new Image();
+    img.onload = function() {
+      bgImage = img;
+      // Default: pin is at center of image
+      bgConfig.pinImgX = img.width / 2;
+      bgConfig.pinImgY = img.height / 2;
+      // Estimate scale: the image covers roughly the terrain
+      // terrain is ~133m tall, use that as reference
+      bgConfig.metersPerPixel = 133 / img.height;
+      // Update terrain center as pin world position
+      var cx = terrain.reduce(function(s,v){return s+v.x;},0)/4;
+      var cy = terrain.reduce(function(s,v){return s+v.y;},0)/4;
+      bgConfig.pinWorldX = cx;
+      bgConfig.pinWorldY = cy;
+      document.getElementById('btn-img-off').style.display='inline-block';
+      document.getElementById('bg-controls').style.display='flex';
+      renderBg();
+      saveState();
+    };
+    img.src = bgImageData;
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function clearBgImage() {
+  bgImage = null; bgImageData = null;
+  var canvas = document.getElementById('bg-canvas');
+  if (canvas) { var ctx=canvas.getContext('2d'); ctx.clearRect(0,0,canvas.width,canvas.height); }
+  document.getElementById('btn-img-off').style.display='none';
+  document.getElementById('bg-controls').style.display='none';
+  saveState();
+}
+
+function renderBg() {
+  if (!bgImage) return;
+  var canvas = document.getElementById('bg-canvas');
+  if (!canvas) return;
+  var area = document.getElementById('plan-area');
+  var W = area.clientWidth, H = area.clientHeight;
+  canvas.width = W; canvas.height = H;
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+  ctx.globalAlpha = bgConfig.opacity;
+
+  // The pin in the image (pinImgX, pinImgY) corresponds to
+  // world position (pinWorldX, pinWorldY) in meters.
+  // Scale: metersPerPixel converts image pixels to meters.
+  // Screen position of pin = cam + pinWorldX*PX*sc, cam + pinWorldY*PX*sc
+  var pinScreenX = cam.x + bgConfig.pinWorldX * PX * sc;
+  var pinScreenY = cam.y + bgConfig.pinWorldY * PX * sc;
+
+  // Image pixel size in screen pixels
+  var imgScPx = (PX * sc) / bgConfig.metersPerPixel;
+
+  // Top-left of image on screen
+  var imgLeft = pinScreenX - bgConfig.pinImgX * imgScPx;
+  var imgTop  = pinScreenY - bgConfig.pinImgY * imgScPx;
+  var imgW = bgImage.width  * imgScPx;
+  var imgH = bgImage.height * imgScPx;
+
+  ctx.drawImage(bgImage, imgLeft, imgTop, imgW, imgH);
+  ctx.globalAlpha = 1;
 }
 
 // ═══ SAVE / LOAD ═══
