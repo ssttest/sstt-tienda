@@ -17709,7 +17709,7 @@ var TECH_DATA = {
       'Compatible con TiOC PRO y series WizSense 3',
     ],
     usecase: 'Ideal para: accesos vehiculares, cajas, tiendas retail, estacionamientos. Cualquier zona donde necesites identificar colores de ropa o patentes de noche.',
-    catSearch: 'full color led wizcolor',
+    catSearch: 'full color led wizcolor', search: 'full color',
     catTerms: ['full-color','wizcolor','full color','led','color'],
   },
   wizsense: {
@@ -17728,7 +17728,7 @@ var TECH_DATA = {
       'Soporta Face Detection básica (snapshot y track)',
     ],
     usecase: 'Ideal para: perímetros industriales, bodegas, estacionamientos, conjuntos residenciales. Instalaciones que requieren alarmas confiables sin falsas alertas.',
-    catSearch: 'wizsense',
+    catSearch: 'wizsense', search: 'wizsense',
     catTerms: ['wizsense','wiz sense','smd','smd+'],
   },
   tioc: {
@@ -17747,7 +17747,7 @@ var TECH_DATA = {
       'Full-Color 24/7 — imagen en color tanto de día como de noche',
     ],
     usecase: 'Ideal para: patios traseros, bodegas, empresas, locales comerciales cerrados. Prevención activa sin guardia de seguridad humano.',
-    catSearch: 'tioc',
+    catSearch: 'tioc', search: 'tioc',
     catTerms: ['tioc','tio c','disuasion activa','active deterrence','-pv-'],
   },
   acupick: {
@@ -17766,7 +17766,7 @@ var TECH_DATA = {
       'Disponible desde SmartPSS Lite, DSS y app DMSS',
     ],
     usecase: 'Ideal para: investigación de incidentes en retail, bancos, conjuntos residenciales, aeropuertos. Cualquier instalación que requiera encontrar evidencia rápidamente.',
-    catSearch: 'acupick wizsense wizmind',
+    catSearch: 'acupick wizsense wizmind', search: 'acupick',
     catTerms: ['acupick','acu pick','wizsense','wizmind'],
   },
   xinghan: {
@@ -17785,7 +17785,7 @@ var TECH_DATA = {
       'Actualizable vía firmware — capacidades mejoran con el tiempo',
     ],
     usecase: 'Ideal para: proyectos enterprise, ciudades inteligentes, instalaciones críticas donde se requiere el máximo nivel de análisis visual de IA.',
-    catSearch: 'xinghan pro tioc pro wizsense pro',
+    catSearch: 'xinghan pro', search: 'pro',
     catTerms: ['xinghan','-pro','-pro-'],
   },
 };
@@ -17834,7 +17834,7 @@ function openTechModal(key) {
       '<p style="background:#f9f9f9;padding:12px;border-radius:8px;border-left:3px solid '+d.color+'">'+d.usecase+'</p>' +
     '</div>' +
     '<div class="tech-modal-footer">' +
-      '<button class="tech-modal-btn tech-modal-btn-primary" onclick="closeTechModal();doSearch(d.catSearch);showSection(\'catalogo\')">Ver productos →</button>' +
+      '<button class="tech-modal-btn tech-modal-btn-primary" onclick="closeTechModal();doSearch(d.catSearch||d.search||\'\');showSection(\'catalogo\');">Ver ' + (d.count||'') + ' productos →</button>' +
       '<a href="'+d.url+'" target="_blank" rel="noopener" class="tech-modal-btn tech-modal-btn-secondary" style="display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none">Dahua.com ↗</a>' +
     '</div>';
 
@@ -17859,6 +17859,27 @@ function getTechLogo(key, color) {
 }
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeTechModal(); });
+
+
+// Verify tech modal functions are available and wire up clicks
+document.addEventListener('DOMContentLoaded', function() {
+  var cards = document.querySelectorAll('.hero-tech[onclick]');
+  cards.forEach(function(card) {
+    // Re-attach onclick just in case HTML onclick didn't register
+    var onclick = card.getAttribute('onclick');
+    if (onclick && typeof openTechModal === 'function') {
+      var match = onclick.match(/openTechModal\('(\w+)'\)/);
+      if (match) {
+        var key = match[1];
+        card.addEventListener('click', function(e) {
+          e.stopPropagation();
+          openTechModal(key);
+        });
+      }
+    }
+  });
+  console.log('[SSTT] Tech modal cards wired:', cards.length, '| openTechModal:', typeof openTechModal);
+});
 
 </script>
 
