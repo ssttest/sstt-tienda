@@ -5209,6 +5209,223 @@ input[data-validated="1"]::after {
 }
 .aip-btn-send:hover { background:var(--red2); transform:scale(1.1); }
 
+
+[data-theme="dahua-dark"] {
+  --red:      #E8001C;
+  --red2:     #C8001A;
+  --red-p:    rgba(232,0,28,.15);
+  --blue:     #1B5FD4;
+  --blue2:    #1450B8;
+  --blue-p:   rgba(27,95,212,.15);
+  --blue-p2:  rgba(27,95,212,.3);
+  --black:    #E8EDF8;
+  --g1:       #C8D4F0;
+  --g2:       #A0B0D8;
+  --g3:       #7080A8;
+  --g4:       #445078;
+  --g5:       #1E2E50;
+  --g6:       #0F1B35;
+  --g7:       #0A1628;
+  --white:    #0A1628;
+  --navy:     #00B4E6;
+  --navy2:    #1B5FD4;
+  --navy-muted: #7080A8;
+  --text:     #E8EDF8;
+  --muted:    #A0B0D8;
+  --light:    #7080A8;
+  --border:   #1E2E50;
+  --border2:  #162040;
+  --bg:       #0F1B35;
+  --bg2:      #0A1628;
+  --shadow-r: 0 3px 14px rgba(0,180,230,.25);
+}
+
+/* Fondo general oscuro */
+[data-theme="dahua-dark"] body {
+  background: #0A1628 !important;
+  color: #E8EDF8 !important;
+}
+
+/* Header */
+[data-theme="dahua-dark"] header {
+  background: linear-gradient(90deg, #0A1628 0%, #0D1F40 100%) !important;
+  border-bottom: 1px solid #1B5FD4 !important;
+  box-shadow: 0 2px 20px rgba(0,180,230,.15) !important;
+}
+[data-theme="dahua-dark"] header * { color: #E8EDF8 !important; }
+[data-theme="dahua-dark"] .search-wrap .search-form {
+  background: rgba(27,95,212,.15) !important;
+  border: 1px solid rgba(0,180,230,.3) !important;
+}
+[data-theme="dahua-dark"] .search-input { color: #E8EDF8 !important; background: transparent !important; }
+[data-theme="dahua-dark"] .search-input::placeholder { color: rgba(168,192,220,.5) !important; }
+[data-theme="dahua-dark"] .search-btn { background: #1B5FD4 !important; }
+[data-theme="dahua-dark"] .search-btn:hover { background: #00B4E6 !important; }
+
+/* Module nav */
+[data-theme="dahua-dark"] .module-nav {
+  background: #0D1F40 !important;
+  border-bottom: 1px solid #1E2E50 !important;
+}
+[data-theme="dahua-dark"] .mnav-tab { color: rgba(200,212,240,.6) !important; }
+[data-theme="dahua-dark"] .mnav-tab.active { color: #00B4E6 !important; border-bottom-color: #00B4E6 !important; }
+
+/* Category nav */
+[data-theme="dahua-dark"] .nav-wrap { background: #0F1B35 !important; border-color: #1E2E50 !important; }
+[data-theme="dahua-dark"] .nav-link { color: #A0B0D8 !important; }
+[data-theme="dahua-dark"] .nav-link.active { color: #00B4E6 !important; border-bottom-color: #00B4E6 !important; }
+[data-theme="dahua-dark"] .nav-link:hover { color: #E8EDF8 !important; }
+
+/* Catalog area */
+[data-theme="dahua-dark"] .catalog-area { background: #0A1628 !important; }
+
+/* Sidebar */
+[data-theme="dahua-dark"] .sidebar { background: #0D1F40 !important; border-color: #1E2E50 !important; }
+[data-theme="dahua-dark"] .cat-item { color: #A0B0D8 !important; }
+[data-theme="dahua-dark"] .cat-item:hover { background: rgba(27,95,212,.2) !important; color: #E8EDF8 !important; }
+[data-theme="dahua-dark"] .cat-item.active { background: rgba(0,180,230,.15) !important; color: #00B4E6 !important; border-left-color: #00B4E6 !important; }
+[data-theme="dahua-dark"] .scard { background: #0D1F40 !important; border-color: #1E2E50 !important; }
+[data-theme="dahua-dark"] .scard-head { color: #A0B0D8 !important; border-color: #1E2E50 !important; }
+
+/* Cards de producto */
+[data-theme="dahua-dark"] .pcard {
+  background: #0F1B35 !important;
+  border: 1px solid #1E2E50 !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,.4) !important;
+}
+[data-theme="dahua-dark"] .pcard:hover {
+  border-color: #00B4E6 !important;
+  box-shadow: 0 4px 24px rgba(0,180,230,.2) !important;
+}
+[data-theme="dahua-dark"] .pcard-img-wrap { background: #0A1628 !important; }
+[data-theme="dahua-dark"] .pcard-code { color: #00B4E6 !important; }
+[data-theme="dahua-dark"] .pcard-name { color: #C8D4F0 !important; }
+[data-theme="dahua-dark"] .price-total { color: #E8EDF8 !important; }
+[data-theme="dahua-dark"] .price-neto { color: #7080A8 !important; }
+[data-theme="dahua-dark"] .price-sub { color: #445078 !important; }
+[data-theme="dahua-dark"] .pbadge.pb-normal { background: #1B5FD4 !important; color: #fff !important; }
+
+/* Botones acción */
+[data-theme="dahua-dark"] .pca-btn-red { background: #E8001C !important; }
+[data-theme="dahua-dark"] .pca-btn-dark { background: #1B5FD4 !important; }
+[data-theme="dahua-dark"] .pca-btn-dark:hover { background: #00B4E6 !important; }
+[data-theme="dahua-dark"] .pca-btn-light {
+  background: rgba(27,95,212,.15) !important;
+  border-color: #1E2E50 !important;
+  color: #00B4E6 !important;
+}
+
+/* Tags */
+[data-theme="dahua-dark"] .ptag {
+  background: rgba(0,180,230,.1) !important;
+  color: #00B4E6 !important;
+  border-color: rgba(0,180,230,.2) !important;
+}
+
+/* Stock badge */
+[data-theme="dahua-dark"] .pbadge { color: #E8EDF8 !important; }
+
+/* Paginación */
+[data-theme="dahua-dark"] .pag { background: transparent !important; }
+
+/* Hero */
+[data-theme="dahua-dark"] .hero {
+  background: linear-gradient(135deg, #0A1628 0%, #0D1F40 50%, #1B3A6A 100%) !important;
+}
+
+/* Footer */
+[data-theme="dahua-dark"] footer { background: #060F1E !important; }
+
+/* Mobile nav */
+[data-theme="dahua-dark"] #mobileNav {
+  background: rgba(10,22,40,.97) !important;
+  border-top: 1px solid #1B5FD4 !important;
+}
+
+/* Asistente */
+[data-theme="dahua-dark"] #aiFab {
+  background: linear-gradient(135deg, #1B5FD4, #00B4E6) !important;
+  border-color: #00B4E6 !important;
+}
+[data-theme="dahua-dark"] #aiPanel {
+  background: rgba(10,22,40,.97) !important;
+  border-color: #1E2E50 !important;
+}
+
+/* Links y textos */
+[data-theme="dahua-dark"] a:not(.pca-btn):not(.hbtn) { color: #00B4E6 !important; }
+[data-theme="dahua-dark"] h1,
+[data-theme="dahua-dark"] h2,
+[data-theme="dahua-dark"] h3 { color: #E8EDF8 !important; }
+
+/* Buscador sticky móvil */
+[data-theme="dahua-dark"] .mob-search {
+  background: rgba(10,22,40,.95) !important;
+  border-bottom: 1px solid #1B5FD4 !important;
+}
+[data-theme="dahua-dark"] .mob-search .search-form {
+  background: rgba(27,95,212,.2) !important;
+  border-color: rgba(0,180,230,.3) !important;
+}
+[data-theme="dahua-dark"] .mob-search .search-input { color: #E8EDF8 !important; }
+
+/* ── Tech Modal ── */
+#techModal {
+  position:fixed;inset:0;z-index:9000;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+#techModal.open { display:flex; }
+.tech-modal-wrap {
+  background:#fff;border-radius:20px;max-width:560px;width:100%;
+  max-height:85vh;overflow-y:auto;
+  box-shadow:0 24px 80px rgba(0,0,0,.25);
+  animation:fadeUp .22s cubic-bezier(.32,.72,0,1);
+}
+.tech-modal-head {
+  padding:20px 24px 16px;border-bottom:1px solid #eee;
+  display:flex;align-items:center;gap:14px;
+}
+.tech-modal-logo { width:52px;height:52px;flex-shrink:0; }
+.tech-modal-title { font-size:22px;font-weight:800;color:#0A1628; }
+.tech-modal-sub { font-size:12px;color:#888;margin-top:2px; }
+.tech-modal-close {
+  margin-left:auto;background:none;border:none;cursor:pointer;
+  font-size:20px;color:#999;width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;border-radius:50%;
+  transition:background .15s;
+}
+.tech-modal-close:hover { background:#f5f5f5; }
+.tech-modal-body { padding:20px 24px 24px; }
+.tech-modal-body h4 { font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#666;margin:16px 0 8px; }
+.tech-modal-body p { font-size:13.5px;line-height:1.7;color:#333; }
+.tech-modal-body ul { padding-left:18px;font-size:13.5px;line-height:1.9;color:#333; }
+.tech-tag {
+  display:inline-block;padding:3px 10px;border-radius:20px;
+  font-size:11px;font-weight:700;margin:3px;
+}
+.tech-modal-footer {
+  padding:14px 24px;border-top:1px solid #eee;
+  display:flex;gap:10px;
+}
+.tech-modal-btn {
+  flex:1;padding:10px;border-radius:10px;border:none;
+  font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font);
+  transition:all .15s;
+}
+.tech-modal-btn-primary { background:#E8001C;color:#fff; }
+.tech-modal-btn-primary:hover { background:#C8001A; }
+.tech-modal-btn-secondary { background:#f5f5f7;color:#1a1a1a; }
+.tech-modal-btn-secondary:hover { background:#eee; }
+[data-theme="dahua-dark"] .tech-modal-wrap { background:#0F1B35;border:1px solid #1E2E50; }
+[data-theme="dahua-dark"] .tech-modal-head { border-color:#1E2E50; }
+[data-theme="dahua-dark"] .tech-modal-title { color:#E8EDF8; }
+[data-theme="dahua-dark"] .tech-modal-body p,
+[data-theme="dahua-dark"] .tech-modal-body ul { color:#A0B0D8; }
+[data-theme="dahua-dark"] .tech-modal-body h4 { color:#6B7DE0; }
+[data-theme="dahua-dark"] .tech-modal-footer { border-color:#1E2E50; }
+[data-theme="dahua-dark"] .tech-modal-btn-secondary { background:#1E2E50;color:#E8EDF8; }
+
 </style>
 
 <!-- Google Places Autocomplete — configurable via localStorage('sstt_gmaps_key') -->
@@ -5263,29 +5480,10 @@ if (window.pdfjsLib) {
 </head>
 <body>
 
-<div class="demo-banner">
-  🔧 <strong>Maqueta funcional SSTT®</strong> — Buscador, carro, filtros y cotización de despacho funcionan en tiempo real. Las integraciones Bsale / WebPay requieren el backend PHP.
-</div>
+
 
 <!-- TOPBAR -->
-<div class="topbar">
-  <div class="wrap">
-    <div class="topbar-l">
-      <span>📍 Santiago, Chile — Lun a Vie 9:00–18:00 hrs</span>
-      <a href="#">☎ +56 2 2xxx xxxx</a>
-      <a href="#"><span class="__cf_email__" data-cfemail="afd9cac1dbcedcefdcdcdbdb81ccc3">[email&#160;protected]</span></a>
-    </div>
-    <div class="topbar-r">
-      <span style="opacity:.7;font-size:11px">Despachamos con:</span>
-      <span class="c-pill ci-chx" style="border-radius:3px;padding:2px 8px;font-size:10px;font-weight:900;letter-spacing:.2px">Chilexpress</span>
-      <span class="c-pill ci-stk" style="border-radius:3px;padding:2px 8px;font-size:10px;font-weight:900;letter-spacing:.2px">Starken</span>
-      <span class="c-pill ci-blx" style="border-radius:3px;padding:2px 8px;font-size:10px;font-weight:900;letter-spacing:.2px">Bluexpress</span>
-      <span style="opacity:.3">|</span>
-      <a href="#">Cómo comprar</a>
-      <a href="#">Post-venta</a>
-    </div>
-  </div>
-</div>
+
 
 <!-- HEADER -->
 <header>
@@ -5342,6 +5540,13 @@ if (window.pdfjsLib) {
         </div>
       </div>
 
+      <button id="themeToggleBtn" onclick="toggleDahuaTheme()" title="Cambiar tema"
+        style="background:none;border:1px solid var(--border);border-radius:20px;padding:5px 12px;
+        font-size:11px;font-weight:700;cursor:pointer;color:var(--g2);font-family:var(--font);
+        display:flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap">
+        <span id="themeIcon">🔵</span>
+        <span id="themeLbl" style="display:none">Dahua Blue</span>
+      </button>
       <button class="hbtn" id="cartToggle" style="position:relative;background:var(--navy);color:#fff;border-color:var(--navy)">
         <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
         Carro
@@ -5445,26 +5650,103 @@ if (window.pdfjsLib) {
       </div>
     </div>
     <div class="hero-techs">
-      <div class="hero-tech" onclick="doSearch('WizSense')">
-        <div class="hero-tech-icon">🧠</div>
-        <div><div class="hero-tech-name">WizSense</div><div class="hero-tech-desc">IA · Detección humana/vehículos</div></div>
+
+      <!-- WizColor -->
+      <div class="hero-tech" onclick="openTechModal('wizcolor')">
+        <div class="hero-tech-icon" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center">
+          <svg viewBox="0 0 36 36" width="34" height="34">
+            <defs>
+              <linearGradient id="wcG" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#FF6B35"/>
+                <stop offset="50%" stop-color="#FFD700"/>
+                <stop offset="100%" stop-color="#FF1493"/>
+              </linearGradient>
+            </defs>
+            <circle cx="18" cy="18" r="16" fill="url(#wcG)" opacity=".2"/>
+            <circle cx="18" cy="18" r="10" fill="url(#wcG)"/>
+            <text x="18" y="23" text-anchor="middle" font-size="12" fill="#fff" font-weight="bold">WC</text>
+          </svg>
+        </div>
+        <div>
+          <div class="hero-tech-name">WizColor</div>
+          <div class="hero-tech-desc">Color 24/7 · Sin IR · <span style="color:#34A853;font-weight:700">55 productos</span></div>
+        </div>
       </div>
-      <div class="hero-tech" onclick="doSearch('WizMind')">
-        <div class="hero-tech-icon">🤖</div>
-        <div><div class="hero-tech-name">WizMind</div><div class="hero-tech-desc">IA avanzada · Face recognition</div></div>
+
+      <!-- WizSense -->
+      <div class="hero-tech" onclick="openTechModal('wizsense')">
+        <div class="hero-tech-icon" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center">
+          <svg viewBox="0 0 36 36" width="34" height="34">
+            <circle cx="18" cy="18" r="16" fill="rgba(66,133,244,.2)"/>
+            <circle cx="18" cy="12" r="5" fill="#4285F4"/>
+            <path d="M9 26c0-5 4-8 9-8s9 3 9 8" fill="#4285F4" opacity=".7"/>
+            <circle cx="26" cy="22" r="4" fill="#34A853"/>
+            <path d="M24 22l1.5 1.5L28 20" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="hero-tech-name">WizSense</div>
+          <div class="hero-tech-desc">SMD+ · Humano/vehículo · <span style="color:#34A853;font-weight:700">44 productos</span></div>
+        </div>
       </div>
-      <div class="hero-tech" onclick="doSearch('TiOC')">
-        <div class="hero-tech-icon">🔴</div>
-        <div><div class="hero-tech-name">TiOC 2.0</div><div class="hero-tech-desc">Triple cámara · Active deterrence</div></div>
+
+      <!-- TiOC 2.0 -->
+      <div class="hero-tech" onclick="openTechModal('tioc')">
+        <div class="hero-tech-icon" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center">
+          <svg viewBox="0 0 36 36" width="34" height="34">
+            <circle cx="18" cy="18" r="16" fill="rgba(232,0,28,.2)"/>
+            <circle cx="14" cy="18" r="5" fill="#E8001C"/>
+            <circle cx="22" cy="14" r="4" fill="#FF6B35" opacity=".8"/>
+            <circle cx="22" cy="22" r="4" fill="#1B5FD4" opacity=".8"/>
+            <path d="M18 10 L18 8 M26 18 L28 18" stroke="#E8001C" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="hero-tech-name">TiOC 2.0</div>
+          <div class="hero-tech-desc">Triple sensor · Disuasión activa · <span style="color:#34A853;font-weight:700">27 productos</span></div>
+        </div>
       </div>
-      <div class="hero-tech" onclick="doSearch('HDCVI')">
-        <div class="hero-tech-icon">📡</div>
-        <div><div class="hero-tech-name">HDCVI 5.0</div><div class="hero-tech-desc">4K sobre coaxial existente</div></div>
+
+      <!-- AcuPick -->
+      <div class="hero-tech" onclick="openTechModal('acupick')">
+        <div class="hero-tech-icon" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center">
+          <svg viewBox="0 0 36 36" width="34" height="34">
+            <circle cx="18" cy="18" r="16" fill="rgba(0,180,230,.2)"/>
+            <rect x="10" y="10" width="10" height="13" rx="2" fill="none" stroke="#00B4E6" stroke-width="1.5"/>
+            <circle cx="15" cy="14" r="2" fill="#00B4E6"/>
+            <path d="M22 20l4 4" stroke="#34A853" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="22" cy="20" r="4" fill="none" stroke="#34A853" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="hero-tech-name">AcuPick 2.0</div>
+          <div class="hero-tech-desc">Búsqueda IA · Funciona con WizSense/WizMind</div>
+        </div>
       </div>
-      <div class="hero-tech" onclick="doSearch('4K')">
-        <div class="hero-tech-icon">🎯</div>
-        <div><div class="hero-tech-name">4K Ultra HD</div><div class="hero-tech-desc">8MP · Máxima resolución</div></div>
+
+      <!-- Xinghan AI -->
+      <div class="hero-tech" onclick="openTechModal('xinghan')">
+        <div class="hero-tech-icon" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center">
+          <svg viewBox="0 0 36 36" width="34" height="34">
+            <defs>
+              <linearGradient id="xhG" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#1B5FD4"/>
+                <stop offset="100%" stop-color="#00B4E6"/>
+              </linearGradient>
+            </defs>
+            <circle cx="18" cy="18" r="16" fill="url(#xhG)" opacity=".2"/>
+            <path d="M18 6 L22 16 L18 14 L14 16 Z" fill="url(#xhG)"/>
+            <path d="M18 30 L22 20 L18 22 L14 20 Z" fill="url(#xhG)" opacity=".7"/>
+            <circle cx="18" cy="18" r="3" fill="url(#xhG)"/>
+            <text x="18" y="23" text-anchor="middle" font-size="6" fill="#00B4E6" font-weight="bold">AI</text>
+          </svg>
+        </div>
+        <div>
+          <div class="hero-tech-name">Xinghan AI</div>
+          <div class="hero-tech-desc">Large-Scale AI · Edge NPU · <span style="color:#34A853;font-weight:700">12 productos</span></div>
+        </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -16874,7 +17156,7 @@ function aiSend() {
   var catLines = contextProds.slice(0, 80).map(function(p){ return p.codigo+'|'+p.nombre.slice(0,50)+'|$'+p.ptotal+'|'+p.cat; });
   var catCtx = catLines.join('\n');
 
-  var sys = 'Eres el asesor técnico-comercial de SSTT SpA, distribuidor oficial Dahua Chile. Tienes conocimiento completo de la DahuaWiki oficial.\n\n' +
+  var sys = 'Eres annastasIA, asesora técnico-comercial de SSTT SpA, distribuidor oficial Dahua Chile. Tienes conocimiento completo de la DahuaWiki oficial.\n\n' +
     '=== CONOCIMIENTO TÉCNICO (DahuaWiki) ===\n' +
     'TECNOLOGÍAS CÁMARAS:\n' +
     '- IP: Ethernet UTP Cat5e/6. PoE: 802.3af=15.4W, 802.3at=30W, 802.3bt=60-90W, Hi-PoE=60W. Distancia máx 100m (250m con switch PFS en modo extendido vía DIP switch). Resolución hasta 32MP. IA: WizSense (SMD+ humano/vehículo), WizMind (reconocimiento facial), TiOC (triple cámara + disuasión activa), Full-Color (LED visible 24/7).\n' +
@@ -16996,7 +17278,7 @@ function aiAskAPI() {
     if (!contextProds.length) contextProds = PRODUCTS.slice(0,80);
     var catLines = contextProds.slice(0,80).map(function(p){ return p.codigo+'|'+p.nombre.slice(0,50)+'|$'+p.ptotal+'|'+p.cat; });
     var catCtx = catLines.join('\n');
-    var sys = 'Eres el asesor técnico-comercial de SSTT SpA, distribuidor oficial Dahua Chile con conocimiento completo de DahuaWiki.\n' +
+    var sys = 'Eres annastasIA, asesora rusa técnico-comercial de SSTT SpA. Hablas español con personalidad rusa: directa, precisa, usas expresiones como Da (sí), Horosho (perfecto), Nyet (no).\n' +
       'Resoluciones: 720P=1MP, 1080P=2MP, 4K=8MP. Tecnologías: IP(PoE/UTP/100m), HDCVI(coaxial/500m).\n' +
       'Series IA: WizSense(SMD+), WizMind(facial), TiOC(disuasión), Full-Color(LED).\n' +
       'Grabadores: NVR para IP, XVR para HDCVI+IP.\n' +
@@ -17215,7 +17497,7 @@ document.addEventListener('click', function(e) {
     // ── FAB — logo Gemini con colores SSTT ──
     var fab = document.createElement('button');
     fab.id = 'aiFab';
-    fab.title = 'Asesor IA SSTT';
+    fab.title = 'annastasIA';
     fab.onclick = function(){ aiToggle(); };
     fab.style.cssText = [
       'position:fixed',
@@ -17302,8 +17584,8 @@ document.addEventListener('click', function(e) {
           '<path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gHP)"/>' +
         '</svg>' +
         '<div style="flex:1">' +
-          '<div style="font-size:13px;font-weight:800;color:#fff;letter-spacing:.2px">Asesor SSTT®</div>' +
-          '<div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:1px">Dahua Chile · IA + Voz</div>' +
+          '<div style="font-size:13px;font-weight:800;color:#fff;letter-spacing:.2px">annastasIA®</div>' +
+          '<div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:1px">Dahua Chile · annastasIA</div>' +
         '</div>' +
         '<button onclick="aiToggleVoiceMode()" id="aiVoiceMode" title="Modo conversación" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s">🎙️</button>' +
         '<button onclick="aiClose()" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;margin-left:4px">✕</button>' +
@@ -17315,7 +17597,7 @@ document.addEventListener('click', function(e) {
         '<div style="display:flex;gap:7px;align-items:flex-start">' +
           '<div style="width:24px;height:24px;border-radius:50%;background:'+DARK+';border:1.5px solid '+RED+';color:'+RED+';display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;font-weight:800">✦</div>' +
           '<div style="max-width:85%;padding:9px 12px;border-radius:4px 16px 16px 16px;background:#f5f5f7;font-size:13px;line-height:1.5;color:#1a1a1a">' +
-            'Hola 👋 Soy tu asesor Dahua. Puedo ayudarte por <b>texto</b> o <b>voz</b>.' +
+            'Hola 👋 Soy <b>annastasIA</b>, tu asesora Dahua. Puedo ayudarte a elegir equipos por <b>texto</b> o <b>voz</b>.' +
           '</div>' +
         '</div>' +
       '</div>' +
@@ -17358,7 +17640,7 @@ document.addEventListener('click', function(e) {
       panel.style.bottom = pb+'px';
     });
 
-    console.log('[SSTT] Asistente inyectado ✅');
+    console.log('[SSTT] annastasIA inyectada ✅');
     // Mostrar wizard de bienvenida — esperar a que el JS principal esté listo
     function tryShowWelcome(attempts) {
       if (typeof aiShowWelcome === 'function') {
@@ -17377,6 +17659,212 @@ document.addEventListener('click', function(e) {
   }
   setTimeout(injectAssistant, 800);
 })();
+
+// ── Toggle temas Dahua ──────────────────────────────────────────
+var _themes = [
+  { key: '',           icon: '☀️', lbl: 'Light',  bg: '',        color: '',        border: '' },
+  { key: 'dahua-dark', icon: '🌙', lbl: 'Dark',   bg: '#0A1628', color: '#00B4E6', border: '#1B5FD4' },
+];
+var _themeIdx = 0;
+
+function toggleDahuaTheme() {
+  _themeIdx = (_themeIdx + 1) % _themes.length;
+  var t = _themes[_themeIdx];
+  document.body.dataset.theme = t.key;
+  var btn  = document.getElementById('themeToggleBtn');
+  var icon = document.getElementById('themeIcon');
+  var lbl  = document.getElementById('themeLbl');
+  if (icon) icon.textContent = t.icon;
+  if (lbl)  { lbl.textContent = t.lbl; lbl.style.display = t.key ? '' : 'none'; }
+  if (btn)  { btn.style.background = t.bg; btn.style.color = t.color; btn.style.borderColor = t.border; }
+  if (t.key) localStorage.setItem('sstt_theme', t.key);
+  else localStorage.removeItem('sstt_theme');
+}
+
+// Restaurar tema guardado
+(function(){
+  var saved = localStorage.getItem('sstt_theme');
+  if (saved) {
+    var idx = _themes.findIndex(function(t){ return t.key === saved; });
+    if (idx > 0) { _themeIdx = idx - 1; toggleDahuaTheme(); }
+  }
+})();
+
+
+// ── Tech Modal ───────────────────────────────────────────────
+var TECH_DATA = {
+  wizcolor: {
+    title: 'WizColor',
+    sub: 'Color brillante 24/7 sin infrarrojo visible',
+    color: '#FF6B35',
+    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/1113',
+    tags: [['Full-Color','#FF6B35'],['AI-ISP','#E8001C'],['Smart Dual Light','#FFD700'],['4K','#1B5FD4']],
+    desc: 'La tecnología Dahua WizColor se combina a la perfección con el potente AI-ISP, el sensor de gran tamaño de píxel y la gran apertura de las cámaras. Esta integración única permite a las cámaras capturar imágenes de alta calidad con colores vívidos en escenarios nocturnos, preservando los detalles y minimizando el desenfoque de movimiento. A diferencia de cámaras auto-iluminadoras tradicionales, WizColor maximiza fuentes de luz débiles como luz de luna y luces urbanas reflejadas en el cielo.',
+    features: [
+      'Imágenes en color completo con menos de 0.001 lux de iluminación',
+      'Sensor 1/1.8" con apertura F1.2 — máxima captación de luz',
+      'Smart Dual Light: alterna inteligente entre IR y luz cálida',
+      'Alcance hasta 60m en color real sin iluminación artificial',
+      'Sin distorsión de luz blanca — colores 100% naturales',
+      'Compatible con TiOC PRO y series WizSense 3',
+    ],
+    usecase: 'Ideal para: accesos vehiculares, cajas, tiendas retail, estacionamientos. Cualquier zona donde necesites identificar colores de ropa o patentes de noche.',
+    catSearch: 'full color led wizcolor',
+    catTerms: ['full-color','wizcolor','full color','led','color'],
+  },
+  wizsense: {
+    title: 'WizSense',
+    sub: 'IA perimetral · Chip AI dedicado · SMD 4.0',
+    color: '#4285F4',
+    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/722',
+    tags: [['SMD 4.0','#4285F4'],['AcuPick','#00B4E6'],['Deep Learning','#34A853'],['IVS','#1B5FD4']],
+    desc: 'WizSense es una serie amplia de productos y soluciones IA de Dahua que adoptan chip IA independiente y algoritmo de deep learning. Reconoce humanos y vehículos en imágenes con alta precisión, permitiendo configurar alarmas únicamente para humanos o vehículos y reducir drásticamente las falsas alarmas. WizSense incluye perimeter protection, smart motion detection (SMD 4.0), AcuPick y AI SSA.',
+    features: [
+      'SMD 4.0: clasifica humano/vehículo/otros con chip IA dedicado',
+      'AcuPick: búsqueda de personas o vehículos en grabaciones por atributos',
+      'IVS perimetral: Cruce de línea, Intrusión, Merodeo, Estacionamiento',
+      'Falsas alarmas reducidas en un 95% respecto a detección de movimiento estándar',
+      'AI H.265+ — ahorra hasta 70% de espacio de almacenamiento',
+      'Soporta Face Detection básica (snapshot y track)',
+    ],
+    usecase: 'Ideal para: perímetros industriales, bodegas, estacionamientos, conjuntos residenciales. Instalaciones que requieren alarmas confiables sin falsas alertas.',
+    catSearch: 'wizsense',
+    catTerms: ['wizsense','wiz sense','smd','smd+'],
+  },
+  tioc: {
+    title: 'TiOC 2.0',
+    sub: 'Triple sensor · Disuasión activa · Sirena + Luz',
+    color: '#E8001C',
+    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/902',
+    tags: [['3-in-1 Camera','#E8001C'],['Disuasión Activa','#FF6B35'],['Full-Color','#FFD700'],['SMD 4.0','#4285F4']],
+    desc: 'TiOC 2.0 incorpora numerosas tecnologías innovadoras: el sensor de luz ambiental mejorado ofrece mejor rendimiento en condiciones de poca luz; la nueva tecnología de disuasión activa refuerza la capacidad de alerta; el nuevo algoritmo SMD 4.0 mejora la precisión de detección; y la función One-tap arming/disarming simplifica el control del sistema de seguridad.',
+    features: [
+      '3 sensores en 1: IR nocturno + Full-Color + Sensor de disuasión activa',
+      'Luces LED rojas y azules + sirena 110dB activadas por detección IVS+SMD',
+      'SMD 4.0 con algoritmo mejorado para mayor precisión',
+      'One-tap arming/disarming desde app DMSS',
+      'Voces personalizables: importa tu propio mensaje de alerta',
+      'Full-Color 24/7 — imagen en color tanto de día como de noche',
+    ],
+    usecase: 'Ideal para: patios traseros, bodegas, empresas, locales comerciales cerrados. Prevención activa sin guardia de seguridad humano.',
+    catSearch: 'tioc',
+    catTerms: ['tioc','tio c','disuasion activa','active deterrence','-pv-'],
+  },
+  acupick: {
+    title: 'AcuPick 2.0',
+    sub: 'Motor de búsqueda de video · IA · Segundos',
+    color: '#00B4E6',
+    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/1052',
+    tags: [['Deep Learning','#00B4E6'],['NVR Smart','#1B5FD4'],['Video Metadata','#34A853'],['Quick Pick','#4285F4']],
+    desc: 'AcuPick es un verdadero motor de búsqueda de videos que puede localizar rápidamente la información que necesitas. AcuPick 2.0 — introducido en 2024 — ofrece capacidades de IA mejoradas. Con algoritmos de deep learning, trabaja con dispositivos backend para hacer coincidir con precisión objetivos como personas y vehículos, buscando en videos en vivo y grabados para localizar objetivos rápidamente.',
+    features: [
+      'Búsqueda por foto: sube imagen y encuentra coincidencias en grabaciones',
+      'Filtros personas: color de ropa (superior/inferior), género, sombrero, bolso, paraguas',
+      'Filtros vehículos: tipo, color, marca, patente (con cámara LPR)',
+      'Quick Pick: extrae automáticamente clips relevantes desde eventos SMD',
+      'Búsqueda simultánea en múltiples canales y períodos de tiempo',
+      'Disponible desde SmartPSS Lite, DSS y app DMSS',
+    ],
+    usecase: 'Ideal para: investigación de incidentes en retail, bancos, conjuntos residenciales, aeropuertos. Cualquier instalación que requiera encontrar evidencia rápidamente.',
+    catSearch: 'acupick wizsense wizmind',
+    catTerms: ['acupick','acu pick','wizsense','wizmind'],
+  },
+  xinghan: {
+    title: 'Xinghan AI',
+    sub: 'Large-Scale AI Models · NPU Edge Computing',
+    color: '#1B5FD4',
+    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/1120',
+    tags: [['Large Model','#1B5FD4'],['NPU Edge','#00B4E6'],['Transformer','#8B5CF6'],['ViT','#34A853']],
+    desc: 'Xinghan Large-Scale AI Models-Vision expande sin problemas la capacidad de almacenamiento y operación de modelos algorítmicos mediante la poderosa integración de algoritmos de modelos de IA edge y potencia de cómputo NPU. Diseñado con arquitectura transformer liviana y optimizado por destilación y cuantización de modelos, reduce el consumo de los operadores ViT. Permite colaboración en múltiples tareas simultáneamente mediante inferencia conjunta entre modelos pequeños y grandes optimizados para dispositivos edge.',
+    features: [
+      'Modelos transformer de gran escala corriendo en chip edge de la cámara',
+      'Inferencia conjunta: modelos pequeños + grandes en NPU dedicado',
+      'Múltiples tareas simultáneas: detección + reconocimiento + metadata',
+      'Arquitectura liviana — bajo consumo energético, alta precisión',
+      'Compatible con TiOC PRO y cámaras Pro Series 2024/2025',
+      'Actualizable vía firmware — capacidades mejoran con el tiempo',
+    ],
+    usecase: 'Ideal para: proyectos enterprise, ciudades inteligentes, instalaciones críticas donde se requiere el máximo nivel de análisis visual de IA.',
+    catSearch: 'xinghan pro tioc pro wizsense pro',
+    catTerms: ['xinghan','-pro','-pro-'],
+  },
+};
+
+function getTechProducts(terms) {
+  if (!terms || !terms.length) return '';
+  var matches = PRODUCTS.filter(function(p) {
+    var n = (p.nombre + ' ' + p.codigo).toLowerCase();
+    return terms.some(function(t){ return n.includes(t.toLowerCase()); });
+  }).sort(function(a,b){ return a.ptotal - b.ptotal; }).slice(0, 4);
+  if (!matches.length) return '<p style="font-size:12px;color:#999">Busca en el catálogo con el botón de abajo</p>';
+  return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
+    matches.map(function(p) {
+      return '<div onclick="closeTechModal();openProdModal('+p.id+')" style="padding:8px;background:#f9f9f9;border-radius:8px;cursor:pointer;border:1px solid #eee;transition:all .15s" onmouseover="this.style.borderColor=\'#1B5FD4\'" onmouseout="this.style.borderColor=\'#eee\'">' +
+        '<img src="'+imgProxyUrl(p.codigo)+'" onerror="this.style.display=\'none\'" style="width:100%;height:50px;object-fit:contain;margin-bottom:4px">' +
+        '<div style="font-size:10px;color:#1B5FD4;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+p.codigo+'</div>' +
+        '<div style="font-size:11px;font-weight:700;color:#E8001C">'+fmt(p.ptotal)+'</div>' +
+        '</div>';
+    }).join('') +
+  '</div>';
+}
+
+function openTechModal(key) {
+  var d = TECH_DATA[key];
+  if (!d) return;
+  var wrap = document.getElementById('techModalWrap');
+  if (!wrap) return;
+
+  var tagsHtml = d.tags.map(function(t){
+    return '<span class="tech-tag" style="background:'+t[1]+'22;color:'+t[1]+';border:1px solid '+t[1]+'44">'+t[0]+'</span>';
+  }).join('');
+
+  wrap.innerHTML =
+    '<div class="tech-modal-head">' +
+      '<div class="tech-modal-logo">' + getTechLogo(key, d.color) + '</div>' +
+      '<div><div class="tech-modal-title">'+d.title+'</div><div class="tech-modal-sub">'+d.sub+'</div></div>' +
+      '<button class="tech-modal-close" onclick="closeTechModal()">✕</button>' +
+    '</div>' +
+    '<div class="tech-modal-body">' +
+      '<div style="margin-bottom:12px">'+tagsHtml+'</div>' +
+      '<p>'+d.desc+'</p>' +
+      (d.catTerms ? '<div id="techModalProds" style="margin-top:14px"><div style="font-size:11px;color:#999;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Productos disponibles en SSTT</div>' + getTechProducts(d.catTerms) + '</div>' : '') +
+      '<h4>Características clave</h4>' +
+      '<ul>'+d.features.map(function(f){ return '<li>'+f+'</li>'; }).join('')+'</ul>' +
+      '<h4>Casos de uso</h4>' +
+      '<p style="background:#f9f9f9;padding:12px;border-radius:8px;border-left:3px solid '+d.color+'">'+d.usecase+'</p>' +
+    '</div>' +
+    '<div class="tech-modal-footer">' +
+      '<button class="tech-modal-btn tech-modal-btn-primary" onclick="closeTechModal();doSearch(d.catSearch);showSection(\'catalogo\')">Ver productos →</button>' +
+      '<a href="'+d.url+'" target="_blank" rel="noopener" class="tech-modal-btn tech-modal-btn-secondary" style="display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none">Dahua.com ↗</a>' +
+    '</div>';
+
+  document.getElementById('techModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTechModal() {
+  document.getElementById('techModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function getTechLogo(key, color) {
+  var logos = {
+    wizcolor: '<svg viewBox="0 0 52 52" width="52" height="52"><defs><linearGradient id="wc2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF6B35"/><stop offset="50%" stop-color="#FFD700"/><stop offset="100%" stop-color="#FF1493"/></linearGradient></defs><circle cx="26" cy="26" r="24" fill="url(#wc2)" opacity=".15"/><circle cx="26" cy="26" r="14" fill="url(#wc2)"/><text x="26" y="31" text-anchor="middle" font-size="12" fill="#fff" font-weight="900">WC</text></svg>',
+    wizsense: '<svg viewBox="0 0 52 52" width="52" height="52"><circle cx="26" cy="26" r="24" fill="rgba(66,133,244,.15)"/><circle cx="26" cy="18" r="7" fill="#4285F4"/><path d="M12 40c0-8 6-13 14-13s14 5 14 13" fill="#4285F4" opacity=".6"/><circle cx="38" cy="32" r="6" fill="none" stroke="#34A853" stroke-width="2"/><path d="M35 32l2 2 4-4" stroke="#34A853" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
+    tioc: '<svg viewBox="0 0 52 52" width="52" height="52"><circle cx="26" cy="26" r="24" fill="rgba(232,0,28,.1)"/><circle cx="20" cy="26" r="8" fill="#E8001C"/><circle cx="32" cy="18" r="6" fill="#FF6B35" opacity=".8"/><circle cx="32" cy="34" r="6" fill="#1B5FD4" opacity=".8"/><path d="M26 12 L26 8 M40 26 L44 26" stroke="#E8001C" stroke-width="2.5" stroke-linecap="round"/></svg>',
+    acupick: '<svg viewBox="0 0 52 52" width="52" height="52"><circle cx="26" cy="26" r="24" fill="rgba(0,180,230,.1)"/><rect x="14" y="13" width="15" height="20" rx="3" fill="none" stroke="#00B4E6" stroke-width="2"/><circle cx="21" cy="20" r="3" fill="#00B4E6"/><path d="M32 30l6 6" stroke="#34A853" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="30" r="6" fill="none" stroke="#34A853" stroke-width="2"/></svg>',
+    xinghan: '<svg viewBox="0 0 52 52" width="52" height="52"><defs><linearGradient id="xh2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1B5FD4"/><stop offset="100%" stop-color="#00B4E6"/></linearGradient></defs><circle cx="26" cy="26" r="24" fill="url(#xh2)" opacity=".15"/><path d="M26 8 L31 22 L26 20 L21 22 Z" fill="url(#xh2)"/><path d="M26 44 L31 30 L26 32 L21 30 Z" fill="url(#xh2)" opacity=".7"/><circle cx="26" cy="26" r="5" fill="url(#xh2)"/><text x="26" y="29" text-anchor="middle" font-size="5.5" fill="#fff" font-weight="900">AI</text></svg>',
+  };
+  return logos[key] || '';
+}
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeTechModal(); });
+
 </script>
+
+<!-- TECH MODAL -->
+<div id="techModal" onclick="if(event.target===this)closeTechModal()">
+  <div class="tech-modal-wrap" id="techModalWrap"></div>
+</div>
 </body>
 </html>
