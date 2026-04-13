@@ -573,7 +573,14 @@ nav {
   font-weight: 500;
 }
 /* tech pills column */
-.hero-techs { display: flex; flex-direction: column; gap: 8px }
+.hero-techs {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0 16px 8px;
+}
 .hero-tech {
   display: flex;
   align-items: center;
@@ -4688,7 +4695,6 @@ input[data-validated="1"]::after {
   .header-inner { grid-template-columns: auto 1fr auto; gap:12px; }
   .logo-divider, .logo-dist { display:none }
   .hero-inner { grid-template-columns: 1fr; }
-  .hero-techs { display:none }
   .hero-stats { flex-wrap:wrap; gap:16px; }
   .main-wrap { grid-template-columns: 180px 1fr; }
 }
@@ -4716,7 +4722,6 @@ input[data-validated="1"]::after {
   /* Hero */
   .hero { padding: 36px 0 40px }
   .hero-inner { grid-template-columns: 1fr; gap:24px; }
-  .hero-techs { display:none }
   .hero-title { font-size:34px }
   .hero-sub { font-size:13px; margin-bottom:20px }
   .hero-btns { gap:8px }
@@ -4786,7 +4791,6 @@ input[data-validated="1"]::after {
   .logo-divider, .logo-dist { display:none }
   .main-wrap { grid-template-columns: 180px 1fr }
   .hero-inner { grid-template-columns: 1fr; }
-  .hero-techs { display:none }
   .hero-title { font-size:42px }
   .ai-hero-inner { grid-template-columns: 1fr }
   .ai-stats-col { flex-direction:row; gap:8px }
@@ -5649,7 +5653,13 @@ if (window.pdfjsLib) {
         </div>
       </div>
     </div>
-    <div class="hero-techs">
+/div>
+  </div>
+</div>
+
+<div style="background:linear-gradient(180deg,rgba(13,27,64,.95) 0%,rgba(13,27,64,.8) 100%);padding:12px 0 20px">
+  <div class="wrap">
+<div class="hero-techs">
 
       <!-- WizColor -->
       <div class="hero-tech" onclick="openTechModal('wizcolor')">
@@ -5669,7 +5679,7 @@ if (window.pdfjsLib) {
         </div>
         <div>
           <div class="hero-tech-name">WizColor</div>
-          <div class="hero-tech-desc">Color 24/7 · Sin IR · <span style="color:#34A853;font-weight:700">55 productos</span></div>
+          <div class="hero-tech-desc">Color 24/7 · Sin IR · <span style="color:#34A853;font-weight:700">45 productos</span></div>
         </div>
       </div>
 
@@ -5703,7 +5713,7 @@ if (window.pdfjsLib) {
         </div>
         <div>
           <div class="hero-tech-name">TiOC 2.0</div>
-          <div class="hero-tech-desc">Triple sensor · Disuasión activa · <span style="color:#34A853;font-weight:700">27 productos</span></div>
+          <div class="hero-tech-desc">Triple sensor · Disuasión activa · <span style="color:#34A853;font-weight:700">36 productos</span></div>
         </div>
       </div>
 
@@ -5747,7 +5757,7 @@ if (window.pdfjsLib) {
         </div>
       </div>
 
-    </div>
+    <
   </div>
 </div>
 
@@ -8200,6 +8210,7 @@ let S = {
   q:'', cat:'todas', sort:'', chipFilter:'',
   priceMin:0, priceMax:0,
   page:1, perPage:12,
+  techFilter: null,
   cart: JSON.parse(localStorage.getItem('sstt_cart')||'[]'),
   shipCost:0, shipCourier:'',
 };
@@ -8307,6 +8318,20 @@ function matchScore(p, rawQ) {
 
 function getFiltered() {
   let list = [...PRODUCTS];
+
+  // Filtro de tecnología (desde tarjetas hero)
+  if (S.techFilter && S.techFilter.length) {
+    console.log('[getFiltered] usando techFilter, ids:', S.techFilter.length);
+    const ids = new Set(S.techFilter);
+    list = list.filter(p => ids.has(p.id));
+    list.forEach(p => p._score = 0);
+    if (S.priceMin) list = list.filter(p => p.ptotal >= S.priceMin);
+    if (S.priceMax) list = list.filter(p => p.ptotal <= S.priceMax);
+    if (S.sort === 'precio_asc')  list.sort((a,b) => a.ptotal - b.ptotal);
+    if (S.sort === 'precio_desc') list.sort((a,b) => b.ptotal - a.ptotal);
+    return list;
+  }
+
   if (S.cat !== 'todas') list = list.filter(p => p.cat === S.cat);
 
   if (S.q) {
@@ -8601,7 +8626,7 @@ function goPage(n) { S.page=n; render(); window.scrollTo({top:0,behavior:'smooth
 
 // ── Filtros ──────────────────────────────────────────────────
 function setCat(cat) {
-  S.cat=cat; S.page=1;
+  S.cat=cat; S.techFilter=null; S.page=1;
   document.querySelectorAll('.nav-link').forEach(el => el.classList.toggle('active', el.dataset.cat===cat));
   render(); renderCatSidebar();
 }
@@ -8625,7 +8650,7 @@ function applyPrice() {
   S.page=1; render();
 }
 
-function doSearch(q) { S.q=q.trim(); S.page=1; render(); qs('sd').classList.remove('show'); }
+function doSearch(q) { S.q=q.trim(); S.techFilter=null; S.page=1; render(); qs('sd').classList.remove('show'); }
 
 // ── Autocomplete ─────────────────────────────────────────────
 let sdTimer;
@@ -9752,7 +9777,7 @@ function showSection(id, btn, _fromPop) {
   if (!_fromPop) {
     const state = { section: id, cat: S.cat, q: S.q, page: S.page };
     const url   = '#' + id + (id === 'catalogo' && S.cat !== 'todas' ? '/' + S.cat : '');
-    window.history.pushState(state, '', url);
+    try { window.history.pushState(state, '', url); } catch(e) {}
   }
 }
 
@@ -11272,7 +11297,7 @@ renderDoriEx();
 // API key en Cloudflare Worker — no se necesita configurar en el browser
 // Set initial history entry so first "back" goes to #catalogo not exits
 if (!window.location.hash) {
-  window.history.replaceState({ section:'catalogo', cat:'todas', q:'', page:1 }, '', '#catalogo');
+  try { window.history.replaceState({ section:'catalogo', cat:'todas', q:'', page:1 }, '', '#catalogo'); } catch(e) {}
 }
 
 
@@ -12271,6 +12296,7 @@ window.openProdModal = openProdModalWithPDF;
 // HISTORY API — botón atrás/adelante del navegador
 // ════════════════════════════════════════════════════════
 window.addEventListener('popstate', function(e) {
+  try {
   if (e.state && e.state.section) {
     // Restore section
     showSection(e.state.section, null, true);
@@ -12285,6 +12311,7 @@ window.addEventListener('popstate', function(e) {
     // No state = went back to blank hash = go to catalogo
     showSection('catalogo', null, true);
   }
+  } catch(e2) {}
 });
 
 // Parse URL hash on first load (allows sharing links)
@@ -12303,10 +12330,10 @@ window.addEventListener('popstate', function(e) {
       render();
     }
     // Push the initial state so popstate works from first page
-    window.history.replaceState(
+    try { window.history.replaceState(
       { section: sec, cat: S.cat, q: S.q, page: S.page },
       '', window.location.hash
-    );
+    ); } catch(e) {}
   }
 })();
 
@@ -17692,173 +17719,9 @@ function toggleDahuaTheme() {
 
 
 // ── Tech Modal ───────────────────────────────────────────────
-var TECH_DATA = {
-  wizcolor: {
-    title: 'WizColor',
-    sub: 'Color brillante 24/7 sin infrarrojo visible',
-    color: '#FF6B35',
-    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/1113',
-    tags: [['Full-Color','#FF6B35'],['AI-ISP','#E8001C'],['Smart Dual Light','#FFD700'],['4K','#1B5FD4']],
-    desc: 'La tecnología Dahua WizColor se combina a la perfección con el potente AI-ISP, el sensor de gran tamaño de píxel y la gran apertura de las cámaras. Esta integración única permite a las cámaras capturar imágenes de alta calidad con colores vívidos en escenarios nocturnos, preservando los detalles y minimizando el desenfoque de movimiento. A diferencia de cámaras auto-iluminadoras tradicionales, WizColor maximiza fuentes de luz débiles como luz de luna y luces urbanas reflejadas en el cielo.',
-    features: [
-      'Imágenes en color completo con menos de 0.001 lux de iluminación',
-      'Sensor 1/1.8" con apertura F1.2 — máxima captación de luz',
-      'Smart Dual Light: alterna inteligente entre IR y luz cálida',
-      'Alcance hasta 60m en color real sin iluminación artificial',
-      'Sin distorsión de luz blanca — colores 100% naturales',
-      'Compatible con TiOC PRO y series WizSense 3',
-    ],
-    usecase: 'Ideal para: accesos vehiculares, cajas, tiendas retail, estacionamientos. Cualquier zona donde necesites identificar colores de ropa o patentes de noche.',
-    catSearch: 'full color led wizcolor', search: 'full color',
-    catTerms: ['full-color','wizcolor','full color','led','color'],
-  },
-  wizsense: {
-    title: 'WizSense',
-    sub: 'IA perimetral · Chip AI dedicado · SMD 4.0',
-    color: '#4285F4',
-    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/722',
-    tags: [['SMD 4.0','#4285F4'],['AcuPick','#00B4E6'],['Deep Learning','#34A853'],['IVS','#1B5FD4']],
-    desc: 'WizSense es una serie amplia de productos y soluciones IA de Dahua que adoptan chip IA independiente y algoritmo de deep learning. Reconoce humanos y vehículos en imágenes con alta precisión, permitiendo configurar alarmas únicamente para humanos o vehículos y reducir drásticamente las falsas alarmas. WizSense incluye perimeter protection, smart motion detection (SMD 4.0), AcuPick y AI SSA.',
-    features: [
-      'SMD 4.0: clasifica humano/vehículo/otros con chip IA dedicado',
-      'AcuPick: búsqueda de personas o vehículos en grabaciones por atributos',
-      'IVS perimetral: Cruce de línea, Intrusión, Merodeo, Estacionamiento',
-      'Falsas alarmas reducidas en un 95% respecto a detección de movimiento estándar',
-      'AI H.265+ — ahorra hasta 70% de espacio de almacenamiento',
-      'Soporta Face Detection básica (snapshot y track)',
-    ],
-    usecase: 'Ideal para: perímetros industriales, bodegas, estacionamientos, conjuntos residenciales. Instalaciones que requieren alarmas confiables sin falsas alertas.',
-    catSearch: 'wizsense', search: 'wizsense',
-    catTerms: ['wizsense','wiz sense','smd','smd+'],
-  },
-  tioc: {
-    title: 'TiOC 2.0',
-    sub: 'Triple sensor · Disuasión activa · Sirena + Luz',
-    color: '#E8001C',
-    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/902',
-    tags: [['3-in-1 Camera','#E8001C'],['Disuasión Activa','#FF6B35'],['Full-Color','#FFD700'],['SMD 4.0','#4285F4']],
-    desc: 'TiOC 2.0 incorpora numerosas tecnologías innovadoras: el sensor de luz ambiental mejorado ofrece mejor rendimiento en condiciones de poca luz; la nueva tecnología de disuasión activa refuerza la capacidad de alerta; el nuevo algoritmo SMD 4.0 mejora la precisión de detección; y la función One-tap arming/disarming simplifica el control del sistema de seguridad.',
-    features: [
-      '3 sensores en 1: IR nocturno + Full-Color + Sensor de disuasión activa',
-      'Luces LED rojas y azules + sirena 110dB activadas por detección IVS+SMD',
-      'SMD 4.0 con algoritmo mejorado para mayor precisión',
-      'One-tap arming/disarming desde app DMSS',
-      'Voces personalizables: importa tu propio mensaje de alerta',
-      'Full-Color 24/7 — imagen en color tanto de día como de noche',
-    ],
-    usecase: 'Ideal para: patios traseros, bodegas, empresas, locales comerciales cerrados. Prevención activa sin guardia de seguridad humano.',
-    catSearch: 'tioc', search: 'tioc',
-    catTerms: ['tioc','tio c','disuasion activa','active deterrence','-pv-'],
-  },
-  acupick: {
-    title: 'AcuPick 2.0',
-    sub: 'Motor de búsqueda de video · IA · Segundos',
-    color: '#00B4E6',
-    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/1052',
-    tags: [['Deep Learning','#00B4E6'],['NVR Smart','#1B5FD4'],['Video Metadata','#34A853'],['Quick Pick','#4285F4']],
-    desc: 'AcuPick es un verdadero motor de búsqueda de videos que puede localizar rápidamente la información que necesitas. AcuPick 2.0 — introducido en 2024 — ofrece capacidades de IA mejoradas. Con algoritmos de deep learning, trabaja con dispositivos backend para hacer coincidir con precisión objetivos como personas y vehículos, buscando en videos en vivo y grabados para localizar objetivos rápidamente.',
-    features: [
-      'Búsqueda por foto: sube imagen y encuentra coincidencias en grabaciones',
-      'Filtros personas: color de ropa (superior/inferior), género, sombrero, bolso, paraguas',
-      'Filtros vehículos: tipo, color, marca, patente (con cámara LPR)',
-      'Quick Pick: extrae automáticamente clips relevantes desde eventos SMD',
-      'Búsqueda simultánea en múltiples canales y períodos de tiempo',
-      'Disponible desde SmartPSS Lite, DSS y app DMSS',
-    ],
-    usecase: 'Ideal para: investigación de incidentes en retail, bancos, conjuntos residenciales, aeropuertos. Cualquier instalación que requiera encontrar evidencia rápidamente.',
-    catSearch: 'acupick wizsense wizmind', search: 'acupick',
-    catTerms: ['acupick','acu pick','wizsense','wizmind'],
-  },
-  xinghan: {
-    title: 'Xinghan AI',
-    sub: 'Large-Scale AI Models · NPU Edge Computing',
-    color: '#1B5FD4',
-    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/1120',
-    tags: [['Large Model','#1B5FD4'],['NPU Edge','#00B4E6'],['Transformer','#8B5CF6'],['ViT','#34A853']],
-    desc: 'Xinghan Large-Scale AI Models-Vision expande sin problemas la capacidad de almacenamiento y operación de modelos algorítmicos mediante la poderosa integración de algoritmos de modelos de IA edge y potencia de cómputo NPU. Diseñado con arquitectura transformer liviana y optimizado por destilación y cuantización de modelos, reduce el consumo de los operadores ViT. Permite colaboración en múltiples tareas simultáneamente mediante inferencia conjunta entre modelos pequeños y grandes optimizados para dispositivos edge.',
-    features: [
-      'Modelos transformer de gran escala corriendo en chip edge de la cámara',
-      'Inferencia conjunta: modelos pequeños + grandes en NPU dedicado',
-      'Múltiples tareas simultáneas: detección + reconocimiento + metadata',
-      'Arquitectura liviana — bajo consumo energético, alta precisión',
-      'Compatible con TiOC PRO y cámaras Pro Series 2024/2025',
-      'Actualizable vía firmware — capacidades mejoran con el tiempo',
-    ],
-    usecase: 'Ideal para: proyectos enterprise, ciudades inteligentes, instalaciones críticas donde se requiere el máximo nivel de análisis visual de IA.',
-    catSearch: 'xinghan pro', search: 'pro',
-    catTerms: ['xinghan','-pro','-pro-'],
-  },
-};
 
-function getTechProducts(terms) {
-  if (!terms || !terms.length) return '';
-  var matches = PRODUCTS.filter(function(p) {
-    var n = (p.nombre + ' ' + p.codigo).toLowerCase();
-    return terms.some(function(t){ return n.includes(t.toLowerCase()); });
-  }).sort(function(a,b){ return a.ptotal - b.ptotal; }).slice(0, 4);
-  if (!matches.length) return '<p style="font-size:12px;color:#999">Busca en el catálogo con el botón de abajo</p>';
-  return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
-    matches.map(function(p) {
-      return '<div onclick="closeTechModal();openProdModal('+p.id+')" style="padding:8px;background:#f9f9f9;border-radius:8px;cursor:pointer;border:1px solid #eee;transition:all .15s" onmouseover="this.style.borderColor=\'#1B5FD4\'" onmouseout="this.style.borderColor=\'#eee\'">' +
-        '<img src="'+imgProxyUrl(p.codigo)+'" onerror="this.style.display=\'none\'" style="width:100%;height:50px;object-fit:contain;margin-bottom:4px">' +
-        '<div style="font-size:10px;color:#1B5FD4;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+p.codigo+'</div>' +
-        '<div style="font-size:11px;font-weight:700;color:#E8001C">'+fmt(p.ptotal)+'</div>' +
-        '</div>';
-    }).join('') +
-  '</div>';
-}
 
-function openTechModal(key) {
-  var d = TECH_DATA[key];
-  if (!d) return;
-  var wrap = document.getElementById('techModalWrap');
-  if (!wrap) return;
 
-  var tagsHtml = d.tags.map(function(t){
-    return '<span class="tech-tag" style="background:'+t[1]+'22;color:'+t[1]+';border:1px solid '+t[1]+'44">'+t[0]+'</span>';
-  }).join('');
-
-  wrap.innerHTML =
-    '<div class="tech-modal-head">' +
-      '<div class="tech-modal-logo">' + getTechLogo(key, d.color) + '</div>' +
-      '<div><div class="tech-modal-title">'+d.title+'</div><div class="tech-modal-sub">'+d.sub+'</div></div>' +
-      '<button class="tech-modal-close" onclick="closeTechModal()">✕</button>' +
-    '</div>' +
-    '<div class="tech-modal-body">' +
-      '<div style="margin-bottom:12px">'+tagsHtml+'</div>' +
-      '<p>'+d.desc+'</p>' +
-      (d.catTerms ? '<div id="techModalProds" style="margin-top:14px"><div style="font-size:11px;color:#999;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Productos disponibles en SSTT</div>' + getTechProducts(d.catTerms) + '</div>' : '') +
-      '<h4>Características clave</h4>' +
-      '<ul>'+d.features.map(function(f){ return '<li>'+f+'</li>'; }).join('')+'</ul>' +
-      '<h4>Casos de uso</h4>' +
-      '<p style="background:#f9f9f9;padding:12px;border-radius:8px;border-left:3px solid '+d.color+'">'+d.usecase+'</p>' +
-    '</div>' +
-    '<div class="tech-modal-footer">' +
-      '<button class="tech-modal-btn tech-modal-btn-primary" onclick="closeTechModal();doSearch(d.catSearch||d.search||\'\');showSection(\'catalogo\');">Ver ' + (d.count||'') + ' productos →</button>' +
-      '<a href="'+d.url+'" target="_blank" rel="noopener" class="tech-modal-btn tech-modal-btn-secondary" style="display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none">Dahua.com ↗</a>' +
-    '</div>';
-
-  document.getElementById('techModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeTechModal() {
-  document.getElementById('techModal').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function getTechLogo(key, color) {
-  var logos = {
-    wizcolor: '<svg viewBox="0 0 52 52" width="52" height="52"><defs><linearGradient id="wc2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF6B35"/><stop offset="50%" stop-color="#FFD700"/><stop offset="100%" stop-color="#FF1493"/></linearGradient></defs><circle cx="26" cy="26" r="24" fill="url(#wc2)" opacity=".15"/><circle cx="26" cy="26" r="14" fill="url(#wc2)"/><text x="26" y="31" text-anchor="middle" font-size="12" fill="#fff" font-weight="900">WC</text></svg>',
-    wizsense: '<svg viewBox="0 0 52 52" width="52" height="52"><circle cx="26" cy="26" r="24" fill="rgba(66,133,244,.15)"/><circle cx="26" cy="18" r="7" fill="#4285F4"/><path d="M12 40c0-8 6-13 14-13s14 5 14 13" fill="#4285F4" opacity=".6"/><circle cx="38" cy="32" r="6" fill="none" stroke="#34A853" stroke-width="2"/><path d="M35 32l2 2 4-4" stroke="#34A853" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
-    tioc: '<svg viewBox="0 0 52 52" width="52" height="52"><circle cx="26" cy="26" r="24" fill="rgba(232,0,28,.1)"/><circle cx="20" cy="26" r="8" fill="#E8001C"/><circle cx="32" cy="18" r="6" fill="#FF6B35" opacity=".8"/><circle cx="32" cy="34" r="6" fill="#1B5FD4" opacity=".8"/><path d="M26 12 L26 8 M40 26 L44 26" stroke="#E8001C" stroke-width="2.5" stroke-linecap="round"/></svg>',
-    acupick: '<svg viewBox="0 0 52 52" width="52" height="52"><circle cx="26" cy="26" r="24" fill="rgba(0,180,230,.1)"/><rect x="14" y="13" width="15" height="20" rx="3" fill="none" stroke="#00B4E6" stroke-width="2"/><circle cx="21" cy="20" r="3" fill="#00B4E6"/><path d="M32 30l6 6" stroke="#34A853" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="30" r="6" fill="none" stroke="#34A853" stroke-width="2"/></svg>',
-    xinghan: '<svg viewBox="0 0 52 52" width="52" height="52"><defs><linearGradient id="xh2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1B5FD4"/><stop offset="100%" stop-color="#00B4E6"/></linearGradient></defs><circle cx="26" cy="26" r="24" fill="url(#xh2)" opacity=".15"/><path d="M26 8 L31 22 L26 20 L21 22 Z" fill="url(#xh2)"/><path d="M26 44 L31 30 L26 32 L21 30 Z" fill="url(#xh2)" opacity=".7"/><circle cx="26" cy="26" r="5" fill="url(#xh2)"/><text x="26" y="29" text-anchor="middle" font-size="5.5" fill="#fff" font-weight="900">AI</text></svg>',
-  };
-  return logos[key] || '';
-}
-
-document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeTechModal(); });
 
 
 // Verify tech modal functions are available and wire up clicks
@@ -17887,5 +17750,246 @@ document.addEventListener('DOMContentLoaded', function() {
 <div id="techModal" onclick="if(event.target===this)closeTechModal()">
   <div class="tech-modal-wrap" id="techModalWrap"></div>
 </div>
+
+<script id="techModalScript">
+function getTechProducts(terms) {
+  if (!terms || !terms.length) return '';
+  var matches = PRODUCTS.filter(function(p) {
+    var n = (p.nombre + ' ' + p.codigo).toLowerCase();
+    return terms.some(function(t){ return n.includes(t.toLowerCase()); });
+  }).sort(function(a,b){ return a.ptotal - b.ptotal; }).slice(0, 4);
+  if (!matches.length) return '<p style="font-size:12px;color:#999">Busca en el catálogo con el botón de abajo</p>';
+  return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
+    matches.map(function(p) {
+      return '<div onclick="closeTechModal();openProdModal('+p.id+')" style="padding:8px;background:#f9f9f9;border-radius:8px;cursor:pointer;border:1px solid #eee;transition:all .15s" onmouseover="this.style.borderColor=\'#1B5FD4\'" onmouseout="this.style.borderColor=\'#eee\'">' +
+        '<img src="'+imgProxyUrl(p.codigo)+'" onerror="this.style.display=\'none\'" style="width:100%;height:50px;object-fit:contain;margin-bottom:4px">' +
+        '<div style="font-size:10px;color:#1B5FD4;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+p.codigo+'</div>' +
+        '<div style="font-size:11px;font-weight:700;color:#E8001C">'+fmt(p.ptotal)+'</div>' +
+        '</div>';
+    }).join('') +
+  '</div>';
+}
+
+var TECH_DATA = {
+  wizcolor: {
+    title: 'WizColor',
+    sub: 'Color brillante 24/7 sin infrarrojo visible',
+    color: '#FF6B35',
+    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/1113',
+    tags: [['Full-Color','#FF6B35'],['AI-ISP','#E8001C'],['Smart Dual Light','#FFD700'],['4K','#1B5FD4']],
+    desc: 'La tecnología Dahua WizColor se combina a la perfección con el potente AI-ISP, el sensor de gran tamaño de píxel y la gran apertura de las cámaras. Esta integración única permite a las cámaras capturar imágenes de alta calidad con colores vívidos en escenarios nocturnos, preservando los detalles y minimizando el desenfoque de movimiento. A diferencia de cámaras auto-iluminadoras tradicionales, WizColor maximiza fuentes de luz débiles como luz de luna y luces urbanas reflejadas en el cielo.',
+    features: [
+      'Imágenes en color completo con menos de 0.001 lux de iluminación',
+      'Sensor 1/1.8" con apertura F1.2 — máxima captación de luz',
+      'Smart Dual Light: alterna inteligente entre IR y luz cálida',
+      'Alcance hasta 60m en color real sin iluminación artificial',
+      'Sin distorsión de luz blanca — colores 100% naturales',
+      'Compatible con TiOC PRO y series WizSense 3',
+    ],
+    usecase: 'Ideal para: accesos vehiculares, cajas, tiendas retail, estacionamientos. Cualquier zona donde necesites identificar colores de ropa o patentes de noche.',
+    catSearch: 'wizcolor full-color',
+    catTerms: ['wizcolor','full-color'],
+  },
+  wizsense: {
+    title: 'WizSense',
+    sub: 'IA perimetral · Chip AI dedicado · SMD 4.0',
+    color: '#4285F4',
+    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/722',
+    tags: [['SMD 4.0','#4285F4'],['AcuPick','#00B4E6'],['Deep Learning','#34A853'],['IVS','#1B5FD4']],
+    desc: 'WizSense es una serie amplia de productos y soluciones IA de Dahua que adoptan chip IA independiente y algoritmo de deep learning. Reconoce humanos y vehículos en imágenes con alta precisión, permitiendo configurar alarmas únicamente para humanos o vehículos y reducir drásticamente las falsas alarmas. WizSense incluye perimeter protection, smart motion detection (SMD 4.0), AcuPick y AI SSA.',
+    features: [
+      'SMD 4.0: clasifica humano/vehículo/otros con chip IA dedicado',
+      'AcuPick: búsqueda de personas o vehículos en grabaciones por atributos',
+      'IVS perimetral: Cruce de línea, Intrusión, Merodeo, Estacionamiento',
+      'Falsas alarmas reducidas en un 95% respecto a detección de movimiento estándar',
+      'AI H.265+ — ahorra hasta 70% de espacio de almacenamiento',
+      'Soporta Face Detection básica (snapshot y track)',
+    ],
+    usecase: 'Ideal para: perímetros industriales, bodegas, estacionamientos, conjuntos residenciales. Instalaciones que requieren alarmas confiables sin falsas alertas.',
+    catSearch: 'wizsense',
+    catTerms: ['wizsense'],
+  },
+  tioc: {
+    title: 'TiOC 2.0',
+    sub: 'Triple sensor · Disuasión activa · Sirena + Luz',
+    color: '#E8001C',
+    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/902',
+    tags: [['3-in-1 Camera','#E8001C'],['Disuasión Activa','#FF6B35'],['Full-Color','#FFD700'],['SMD 4.0','#4285F4']],
+    desc: 'TiOC 2.0 incorpora numerosas tecnologías innovadoras: el sensor de luz ambiental mejorado ofrece mejor rendimiento en condiciones de poca luz; la nueva tecnología de disuasión activa refuerza la capacidad de alerta; el nuevo algoritmo SMD 4.0 mejora la precisión de detección; y la función One-tap arming/disarming simplifica el control del sistema de seguridad.',
+    features: [
+      '3 sensores en 1: IR nocturno + Full-Color + Sensor de disuasión activa',
+      'Luces LED rojas y azules + sirena 110dB activadas por detección IVS+SMD',
+      'SMD 4.0 con algoritmo mejorado para mayor precisión',
+      'One-tap arming/disarming desde app DMSS',
+      'Voces personalizables: importa tu propio mensaje de alerta',
+      'Full-Color 24/7 — imagen en color tanto de día como de noche',
+    ],
+    usecase: 'Ideal para: patios traseros, bodegas, empresas, locales comerciales cerrados. Prevención activa sin guardia de seguridad humano.',
+    catSearch: 'tioc',
+    catTerms: ['tioc','-pv-'],
+  },
+  acupick: {
+    title: 'AcuPick 2.0',
+    sub: 'Motor de búsqueda de video · IA · Segundos',
+    color: '#00B4E6',
+    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/1052',
+    tags: [['Deep Learning','#00B4E6'],['NVR Smart','#1B5FD4'],['Video Metadata','#34A853'],['Quick Pick','#4285F4']],
+    desc: 'AcuPick es un verdadero motor de búsqueda de videos que puede localizar rápidamente la información que necesitas. AcuPick 2.0 — introducido en 2024 — ofrece capacidades de IA mejoradas. Con algoritmos de deep learning, trabaja con dispositivos backend para hacer coincidir con precisión objetivos como personas y vehículos, buscando en videos en vivo y grabados para localizar objetivos rápidamente.',
+    features: [
+      'Búsqueda por foto: sube imagen y encuentra coincidencias en grabaciones',
+      'Filtros personas: color de ropa (superior/inferior), género, sombrero, bolso, paraguas',
+      'Filtros vehículos: tipo, color, marca, patente (con cámara LPR)',
+      'Quick Pick: extrae automáticamente clips relevantes desde eventos SMD',
+      'Búsqueda simultánea en múltiples canales y períodos de tiempo',
+      'Disponible desde SmartPSS Lite, DSS y app DMSS',
+    ],
+    usecase: 'Ideal para: investigación de incidentes en retail, bancos, conjuntos residenciales, aeropuertos. Cualquier instalación que requiera encontrar evidencia rápidamente.',
+    catSearch: 'acupick wizmind',
+    catTerms: ['acupick','wizmind'],
+  },
+  xinghan: {
+    title: 'Xinghan AI',
+    sub: 'Large-Scale AI Models · NPU Edge Computing',
+    color: '#1B5FD4',
+    url: 'https://www.dahuasecurity.com/la/Products/keyTechnologies/1120',
+    tags: [['Large Model','#1B5FD4'],['NPU Edge','#00B4E6'],['Transformer','#8B5CF6'],['ViT','#34A853']],
+    desc: 'Xinghan Large-Scale AI Models-Vision expande sin problemas la capacidad de almacenamiento y operación de modelos algorítmicos mediante la poderosa integración de algoritmos de modelos de IA edge y potencia de cómputo NPU. Diseñado con arquitectura transformer liviana y optimizado por destilación y cuantización de modelos, reduce el consumo de los operadores ViT. Permite colaboración en múltiples tareas simultáneamente mediante inferencia conjunta entre modelos pequeños y grandes optimizados para dispositivos edge.',
+    features: [
+      'Modelos transformer de gran escala corriendo en chip edge de la cámara',
+      'Inferencia conjunta: modelos pequeños + grandes en NPU dedicado',
+      'Múltiples tareas simultáneas: detección + reconocimiento + metadata',
+      'Arquitectura liviana — bajo consumo energético, alta precisión',
+      'Compatible con TiOC PRO y cámaras Pro Series 2024/2025',
+      'Actualizable vía firmware — capacidades mejoran con el tiempo',
+    ],
+    usecase: 'Ideal para: proyectos enterprise, ciudades inteligentes, instalaciones críticas donde se requiere el máximo nivel de análisis visual de IA.',
+    catSearch: 'xinghan pro',
+    catTerms: ['xinghan ai','-pro wizsense','-pro wizcolor','-pro tioc','tioc pro','wizcolor pro','wizsense pro'],
+  },
+};
+
+// ── Filtro por tecnología (desde tarjetas hero) ──────────────
+function applyTechFilter() {
+  filterByTech(window._activeTechTerms || []);
+}
+
+function filterByTech(terms) {
+  console.log('[filterByTech] terms:', terms);
+  if (!terms || !terms.length) {
+    console.warn('[filterByTech] Sin términos — abortando');
+    return;
+  }
+
+  var matched = PRODUCTS.filter(function(p) {
+    var n = (p.nombre + ' ' + p.codigo).toLowerCase();
+    return terms.some(function(t) {
+      var tl = t.toLowerCase();
+      if (tl.startsWith('-') || tl.endsWith('-')) {
+        return p.codigo.toLowerCase().includes(tl.replace(/-/g,''));
+      }
+      return n.includes(tl);
+    });
+  });
+
+  S.techFilter = matched.map(function(p){ return p.id; });
+  console.log('[filterByTech] matched:', matched.length, '| techFilter IDs:', S.techFilter.slice(0,5));
+  S.q = '';
+  S.page = 1;
+  S.cat = 'todas';
+
+  // Activar nav "Todos"
+  document.querySelectorAll('.nav-link').forEach(function(el){
+    el.classList.toggle('active', el.dataset.cat === 'todas');
+  });
+
+  // Renderizar y actualizar breadcrumb
+  render();
+  var bc = document.getElementById('breadCur');
+  if (bc) bc.textContent = 'Tecnología: ' + (window._activeTechName||'') + ' — ' + matched.length + ' productos';
+}
+
+
+function openTechModal(key) {
+  var d = TECH_DATA[key];
+  if (!d) return;
+  var wrap = document.getElementById('techModalWrap');
+  if (!wrap) return;
+
+  var tagsHtml = (d.tags||[]).map(function(t){
+    return '<span class="tech-tag" style="background:'+t[1]+'22;color:'+t[1]+';border:1px solid '+t[1]+'44">'+t[0]+'</span>';
+  }).join('');
+
+  var prodsHtml = getTechProducts(d.catTerms);
+
+  wrap.innerHTML = [
+    '<div class="tech-modal-head">',
+      '<div class="tech-modal-logo">'+getTechLogo(key, d.color)+'</div>',
+      '<div><div class="tech-modal-title">'+d.title+'</div>',
+      '<div class="tech-modal-sub">'+d.sub+'</div></div>',
+      '<button class="tech-modal-close" onclick="closeTechModal()">&#x2715;</button>',
+    '</div>',
+    '<div class="tech-modal-body">',
+      '<div style="margin-bottom:12px">'+tagsHtml+'</div>',
+      '<p>'+d.desc+'</p>',
+      prodsHtml ? '<div style="margin-top:14px"><div style="font-size:11px;color:#999;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Productos en catálogo</div>'+prodsHtml+'</div>' : '',
+      '<h4>Características clave</h4>',
+      '<ul>'+(d.features||[]).map(function(f){ return '<li>'+f+'</li>'; }).join('')+'</ul>',
+      '<h4>Casos de uso</h4>',
+      '<p style="background:#f9f9f9;padding:12px;border-radius:8px;border-left:3px solid '+d.color+'">'+d.usecase+'</p>',
+    '</div>',
+    '<div class="tech-modal-footer">',
+      '<button class="tech-modal-btn tech-modal-btn-primary" id="techBtnVer">Ver '+(d.count||'')+' productos &#x2192;</button>',
+      '<a href="'+d.url+'" target="_blank" rel="noopener" class="tech-modal-btn tech-modal-btn-secondary" style="display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none">Dahua.com &#x2197;</a>',
+    '</div>'
+  ].join('');
+
+  // Asignar click con timeout para asegurar que DOM esté listo
+  var _terms = d.catTerms || [];
+  setTimeout(function() {
+    var btnVer = document.getElementById('techBtnVer');
+    if (btnVer) {
+      btnVer.onclick = function() {
+        closeTechModal();
+        // Asegurar que sección catálogo esté activa SIN pushState
+        var secCat = document.getElementById('secCatalogo');
+        if (secCat && !secCat.classList.contains('active')) {
+          document.querySelectorAll('.app-section').forEach(function(s){ s.classList.remove('active'); });
+          secCat.classList.add('active');
+          document.querySelectorAll('.mnav-tab').forEach(function(b){
+            b.classList.toggle('active', b.dataset && b.dataset.sec === 'catalogo');
+          });
+        }
+        // Aplicar filtro DESPUÉS de que el DOM esté listo
+        setTimeout(function() {
+          filterByTech(_terms);
+          window.scrollTo({top: 0, behavior: 'smooth'});
+        }, 10);
+      };
+    }
+  }, 0);
+  window._activeTechTerms = d.catTerms || [];
+  window._activeTechName = d.title || '';
+  document.getElementById('techModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeTechModal() {
+  document.getElementById('techModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function getTechLogo(key, color) {
+  var logos = {
+    wizcolor: '<svg viewBox="0 0 52 52" width="52" height="52"><defs><linearGradient id="wc2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FF6B35"/><stop offset="50%" stop-color="#FFD700"/><stop offset="100%" stop-color="#FF1493"/></linearGradient></defs><circle cx="26" cy="26" r="24" fill="url(#wc2)" opacity=".15"/><circle cx="26" cy="26" r="14" fill="url(#wc2)"/><text x="26" y="31" text-anchor="middle" font-size="12" fill="#fff" font-weight="900">WC</text></svg>',
+    wizsense: '<svg viewBox="0 0 52 52" width="52" height="52"><circle cx="26" cy="26" r="24" fill="rgba(66,133,244,.15)"/><circle cx="26" cy="18" r="7" fill="#4285F4"/><path d="M12 40c0-8 6-13 14-13s14 5 14 13" fill="#4285F4" opacity=".6"/><circle cx="38" cy="32" r="6" fill="none" stroke="#34A853" stroke-width="2"/><path d="M35 32l2 2 4-4" stroke="#34A853" stroke-width="2" fill="none" stroke-linecap="round"/></svg>',
+    tioc: '<svg viewBox="0 0 52 52" width="52" height="52"><circle cx="26" cy="26" r="24" fill="rgba(232,0,28,.1)"/><circle cx="20" cy="26" r="8" fill="#E8001C"/><circle cx="32" cy="18" r="6" fill="#FF6B35" opacity=".8"/><circle cx="32" cy="34" r="6" fill="#1B5FD4" opacity=".8"/><path d="M26 12 L26 8 M40 26 L44 26" stroke="#E8001C" stroke-width="2.5" stroke-linecap="round"/></svg>',
+    acupick: '<svg viewBox="0 0 52 52" width="52" height="52"><circle cx="26" cy="26" r="24" fill="rgba(0,180,230,.1)"/><rect x="14" y="13" width="15" height="20" rx="3" fill="none" stroke="#00B4E6" stroke-width="2"/><circle cx="21" cy="20" r="3" fill="#00B4E6"/><path d="M32 30l6 6" stroke="#34A853" stroke-width="3" stroke-linecap="round"/><circle cx="32" cy="30" r="6" fill="none" stroke="#34A853" stroke-width="2"/></svg>',
+    xinghan: '<svg viewBox="0 0 52 52" width="52" height="52"><defs><linearGradient id="xh2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1B5FD4"/><stop offset="100%" stop-color="#00B4E6"/></linearGradient></defs><circle cx="26" cy="26" r="24" fill="url(#xh2)" opacity=".15"/><path d="M26 8 L31 22 L26 20 L21 22 Z" fill="url(#xh2)"/><path d="M26 44 L31 30 L26 32 L21 30 Z" fill="url(#xh2)" opacity=".7"/><circle cx="26" cy="26" r="5" fill="url(#xh2)"/><text x="26" y="29" text-anchor="middle" font-size="5.5" fill="#fff" font-weight="900">AI</text></svg>',
+  };
+  return logos[key] || '';
+}
+
+document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeTechModal(); });
+</script>
 </body>
 </html>
