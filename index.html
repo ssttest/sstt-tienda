@@ -5538,6 +5538,131 @@ input[data-validated="1"]::after {
   }
 }
 
+/* ══ B2B DUAL NAV ══════════════════════════════════════════════ */
+.b2b-dualbar {
+  background: linear-gradient(90deg, #0A1628 0%, #1a1a2e 100%);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.b2b-dualbar-inner {
+  max-width: 1400px; margin: 0 auto;
+  display: flex; align-items: stretch;
+  height: 48px;
+}
+/* Canal SMB */
+.b2b-canal {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 20px; cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all .2s; flex: 1; justify-content: center;
+  font-size: 13px; font-weight: 700; color: rgba(255,255,255,.55);
+  text-decoration: none; white-space: nowrap;
+}
+.b2b-canal:hover { color: rgba(255,255,255,.85); }
+.b2b-canal.active-smb { color: #fff; border-bottom-color: #E8001C; }
+.b2b-canal.active-ent { color: #fff; border-bottom-color: #00B4E6; }
+.b2b-canal-icon { font-size: 16px; flex-shrink: 0; }
+.b2b-canal-label { display: flex; flex-direction: column; gap: 1px; }
+.b2b-canal-title { font-size: 12.5px; font-weight: 800; line-height: 1.2; }
+.b2b-canal-sub { font-size: 10px; font-weight: 500; opacity: .6; line-height: 1.2; }
+.b2b-divider {
+  width: 1px; background: rgba(255,255,255,.1);
+  margin: 8px 0; flex-shrink: 0;
+}
+/* Badge de perfil en el dual nav */
+.b2b-profile-badge {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 16px; font-size: 11px; font-weight: 700;
+  color: rgba(255,255,255,.4); white-space: nowrap;
+  border-left: 1px solid rgba(255,255,255,.08);
+}
+/* Cards enterprise */
+.pcard.is-enterprise {
+  border-color: rgba(0,180,230,.25) !important;
+}
+.pcard.is-enterprise:hover {
+  border-color: #00B4E6 !important;
+  box-shadow: 0 4px 20px rgba(0,180,230,.15) !important;
+}
+/* Badge enterprise en cards */
+.enterprise-badge {
+  position: absolute; top: 8px; left: 8px; z-index: 2;
+  background: linear-gradient(135deg, #0A1628, #1B5FD4);
+  color: #00B4E6; border: 1px solid rgba(0,180,230,.3);
+  border-radius: 4px; padding: 2px 7px;
+  font-size: 9px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .5px;
+}
+/* Botón "Solicitar Cotización" */
+.btn-cotizar-proyecto {
+  width: 100%; border: none; border-radius: 8px;
+  background: linear-gradient(135deg, #0A1628, #1B3A6A);
+  color: #00B4E6; font-weight: 800; font-size: 12px;
+  padding: 9px 12px; cursor: pointer; font-family: var(--font);
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: all .18s; border: 1px solid rgba(0,180,230,.25);
+}
+.btn-cotizar-proyecto:hover {
+  background: linear-gradient(135deg, #0D1F40, #1B5FD4);
+  box-shadow: 0 4px 16px rgba(0,180,230,.25);
+  color: #fff;
+}
+/* Modal "Declarar Proyecto" */
+#proyectoModal {
+  position: fixed; inset: 0; z-index: 9500;
+  background: rgba(0,0,0,.65); backdrop-filter: blur(8px);
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+#proyectoModal.open { display: flex; }
+.proyecto-modal-wrap {
+  background: #fff; border-radius: 20px;
+  max-width: 520px; width: 100%; max-height: 90vh;
+  overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,.3);
+  animation: fadeUp .22s cubic-bezier(.32,.72,0,1);
+}
+.proyecto-modal-head {
+  background: linear-gradient(135deg, #0A1628, #1B3A6A);
+  color: #fff; padding: 20px 24px; border-radius: 20px 20px 0 0;
+}
+.proyecto-modal-body { padding: 20px 24px 24px; }
+.proyecto-modal-body label {
+  font-size: 11px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .4px; color: #666; display: block; margin-bottom: 4px; margin-top: 12px;
+}
+.proyecto-modal-body select,
+.proyecto-modal-body input,
+.proyecto-modal-body textarea {
+  width: 100%; border: 1.5px solid #e0e0e0; border-radius: 10px;
+  padding: 10px 13px; font-size: 13px; font-family: var(--font);
+  outline: none; transition: border-color .15s; background: #fafafa;
+  box-sizing: border-box;
+}
+.proyecto-modal-body select:focus,
+.proyecto-modal-body input:focus,
+.proyecto-modal-body textarea:focus { border-color: #1B5FD4; background: #fff; }
+.proyecto-modal-body textarea { resize: vertical; min-height: 80px; }
+/* Precio oculto enterprise */
+.price-hidden {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: #888; font-style: italic; padding: 4px 0;
+}
+/* Tramo badge */
+.tramo-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: rgba(232,0,28,.1); color: var(--red);
+  border: 1px solid rgba(232,0,28,.2); border-radius: 12px;
+  padding: 2px 8px; font-size: 10px; font-weight: 800;
+}
+/* Mobile hide sub */
+@media (max-width: 480px) {
+  .b2b-canal-sub { display: none; }
+  .b2b-canal { padding: 0 12px; }
+  .b2b-profile-badge { display: none; }
+}
+
 </style>
 
 <!-- Google Places Autocomplete — configurable via localStorage('sstt_gmaps_key') -->
@@ -5717,6 +5842,139 @@ if (window.pdfjsLib) {
 
 
 <!-- HERO BANNER -->
+
+<!-- ══ BARRA B2B DUAL ══════════════════════════════════════════ -->
+<div class="b2b-dualbar" id="b2bDualbar">
+  <div class="b2b-dualbar-inner">
+
+    <!-- Canal SMB -->
+    <div class="b2b-canal b2b-nav-btn active-smb" data-view="smb" onclick="B2B.setView('smb')" title="Catálogo Rápido — Dahua, Uniview, alta rotación">
+      <span class="b2b-canal-icon">⚡</span>
+      <div class="b2b-canal-label">
+        <span class="b2b-canal-title">Catálogo Rápido</span>
+        <span class="b2b-canal-sub">Compra por Volumen · Dahua · Stock inmediato</span>
+      </div>
+    </div>
+
+    <div class="b2b-divider"></div>
+
+    <!-- Canal Enterprise -->
+    <div class="b2b-canal b2b-nav-btn" data-view="enterprise" onclick="B2B.setView('enterprise')" title="Soluciones Especializadas — Avigilon, Bosch, FLIR, NDAA">
+      <span class="b2b-canal-icon">🏢</span>
+      <div class="b2b-canal-label">
+        <span class="b2b-canal-title">Proyectos Corporativos</span>
+        <span class="b2b-canal-sub">NDAA · Minería · Gobierno · Infraestructura</span>
+      </div>
+    </div>
+
+    <div class="b2b-divider"></div>
+
+    <!-- Canal Todo -->
+    <div class="b2b-canal b2b-nav-btn" data-view="all" onclick="B2B.setView('all')" style="flex:0;padding:0 14px">
+      <span style="font-size:11px;color:rgba(255,255,255,.4)">Ver todo</span>
+    </div>
+
+    <!-- Perfil usuario -->
+    <div class="b2b-profile-badge" id="b2bProfileBadge">
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <span id="b2bProfileLabel">Invitado</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ MODAL: DECLARAR PROYECTO ════════════════════════════════ -->
+<div id="proyectoModal" onclick="if(event.target===this)cerrarProyectoModal()">
+  <div class="proyecto-modal-wrap">
+    <div class="proyecto-modal-head">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+        <div style="width:40px;height:40px;background:rgba(0,180,230,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🏢</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#fff">Declarar Proyecto</div>
+          <div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:2px">Tu ingeniero de preventa revisará la solicitud en máx. 24 horas hábiles</div>
+        </div>
+        <button onclick="cerrarProyectoModal()" style="margin-left:auto;background:rgba(255,255,255,.1);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">✕</button>
+      </div>
+      <div id="proyectoProductoInfo" style="background:rgba(0,180,230,.1);border:1px solid rgba(0,180,230,.25);border-radius:10px;padding:10px 12px;font-size:12px;color:#00B4E6"></div>
+    </div>
+    <div class="proyecto-modal-body">
+
+      <label>Nombre del usuario final *</label>
+      <input type="text" id="pyNombreUF" placeholder="Empresa o persona que recibirá el sistema">
+
+      <label>Vertical del proyecto *</label>
+      <select id="pyVertical">
+        <option value="">Selecciona la industria…</option>
+        <option value="mineria">⛏️ Minería y Recursos Naturales</option>
+        <option value="gobierno">🏛️ Gobierno y Seguridad Pública</option>
+        <option value="infraestructura">🏗️ Infraestructura Crítica</option>
+        <option value="banca">🏦 Banca y Servicios Financieros</option>
+        <option value="retail">🛒 Retail y Cadena de Distribución</option>
+        <option value="salud">🏥 Salud y Farmacéutica</option>
+        <option value="educacion">🎓 Educación</option>
+        <option value="industria">🏭 Industria y Manufactura</option>
+        <option value="transporte">🚢 Transporte y Logística</option>
+        <option value="otro">🔧 Otro</option>
+      </select>
+
+      <label>Número de cámaras estimado *</label>
+      <select id="pyNroCamaras">
+        <option value="">Selecciona un rango…</option>
+        <option value="1-10">1 a 10 cámaras</option>
+        <option value="10-50">10 a 50 cámaras</option>
+        <option value="50-200">50 a 200 cámaras</option>
+        <option value="200+">Más de 200 cámaras</option>
+      </select>
+
+      <label>Presupuesto estimado del proyecto *</label>
+      <select id="pyPresupuesto">
+        <option value="">Selecciona un rango…</option>
+        <option value="<5M">Menos de $5.000.000</option>
+        <option value="5M-20M">$5.000.000 – $20.000.000</option>
+        <option value="20M-100M">$20.000.000 – $100.000.000</option>
+        <option value="100M+">Más de $100.000.000</option>
+      </select>
+
+      <label>Normativas o requerimientos especiales</label>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;margin-bottom:4px">
+        <label style="all:unset;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#444;cursor:pointer;padding:5px 10px;border:1.5px solid #e0e0e0;border-radius:8px;transition:all .15s" id="chkNDAA">
+          <input type="checkbox" value="NDAA" onchange="toggleChk(this,'chkNDAA')"> NDAA Compliance
+        </label>
+        <label style="all:unset;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#444;cursor:pointer;padding:5px 10px;border:1.5px solid #e0e0e0;border-radius:8px;transition:all .15s" id="chkISO">
+          <input type="checkbox" value="ISO27001" onchange="toggleChk(this,'chkISO')"> ISO 27001
+        </label>
+        <label style="all:unset;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#444;cursor:pointer;padding:5px 10px;border:1.5px solid #e0e0e0;border-radius:8px;transition:all .15s" id="chkSernac">
+          <input type="checkbox" value="Ley19628" onchange="toggleChk(this,'chkSernac')"> Ley 19.628 (Datos)
+        </label>
+        <label style="all:unset;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#444;cursor:pointer;padding:5px 10px;border:1.5px solid #e0e0e0;border-radius:8px;transition:all .15s" id="chkOnvif">
+          <input type="checkbox" value="ONVIF" onchange="toggleChk(this,'chkOnvif')"> ONVIF Profile T
+        </label>
+      </div>
+
+      <label>Descripción del proyecto / requerimientos adicionales</label>
+      <textarea id="pyDescripcion" placeholder="Describe brevemente el alcance, ubicaciones, integraciones existentes y cualquier requerimiento especial…"></textarea>
+
+      <label>Tu nombre *</label>
+      <input type="text" id="pyContactoNombre" placeholder="Nombre completo">
+
+      <label>Email de contacto *</label>
+      <input type="email" id="pyContactoEmail" placeholder="email@empresa.com">
+
+      <label>Teléfono</label>
+      <input type="tel" id="pyContactoTel" placeholder="+56 9 XXXX XXXX">
+
+      <div id="pyError" style="display:none;background:#fff0f0;border:1px solid #fcc;border-radius:8px;padding:10px;font-size:12px;color:#c00;margin-top:12px"></div>
+
+      <button onclick="enviarProyecto()" style="width:100%;margin-top:16px;background:linear-gradient(135deg,#0A1628,#1B5FD4);color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s"
+        onmouseover="this.style.background='linear-gradient(135deg,#0D1F40,#2A4FD4)'"
+        onmouseout="this.style.background='linear-gradient(135deg,#0A1628,#1B5FD4)'">
+        📤 Enviar solicitud al equipo de preventa
+      </button>
+      <div style="text-align:center;font-size:11px;color:#aaa;margin-top:8px">Respuesta en máx. 24 horas hábiles · Tu información es confidencial</div>
+    </div>
+  </div>
+</div>
+
 <div class="hero">
   <div class="wrap hero-inner">
     <div>
@@ -7016,7 +7274,7 @@ if (window.pdfjsLib) {
           <span>📍 Tienda Física: General José Artigas 3028, Ñuñoa · Santiago</span>
           <span>⏰ Lun a Vie · 9:00–18:00 hrs</span>
           <a href="tel:+56222042119" style="color:#E8001C;text-decoration:none;font-weight:600">📞 +56 2 2204 2119</a>
-          <a href="mailto:ventas@sstt.cl" style="color:#555;text-decoration:none" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#555'">✉️ ventas@sstt.cl</a>
+          <a href="/cdn-cgi/l/email-protection#e6908388928795a695959292c8858a" style="color:#555;text-decoration:none" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#555'">✉️ <span class="__cf_email__" data-cfemail="94e2f1fae0f5e7d4e7e7e0e0baf7f8">[email&#160;protected]</span></a>
         </div>
         <!-- RRSS -->
         <div style="display:flex;gap:10px;margin-top:16px;align-items:center">
@@ -7130,7 +7388,7 @@ if (window.pdfjsLib) {
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js" defer></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── Close helpers (defined early so showSection can call them) ──
 function _closeAllModals() {
   document.getElementById('prodModal')?.classList.remove('open');
@@ -8370,6 +8628,11 @@ function matchScore(p, rawQ) {
 function getFiltered() {
   let list = [...PRODUCTS];
 
+  // ── Filtro B2B por vista (SMB / Enterprise / All) ──
+  if (typeof B2B !== 'undefined' && B2B.activeView !== 'all') {
+    list = list.filter(p => B2B.classify(p) === B2B.activeView);
+  }
+
   // Filtro de tecnología (desde tarjetas hero)
   if (S.techFilter && S.techFilter.length) {
     console.log('[getFiltered] usando techFilter, ids:', S.techFilter.length);
@@ -8606,6 +8869,13 @@ function render() {
           return badges.slice(0,3).join('');
         })()}
         <div class="pcard-quickview" onclick="openProdModal(${p.id})">👁 Ver ficha técnica</div>
+        ${(()=>{
+          var _type = B2B.classify(p);
+          if (_type === 'enterprise') {
+            return '<div class="enterprise-badge">Proyecto</div>';
+          }
+          return '';
+        })()}
       </div>
       <div class="pcard-body">
         <div class="pcard-code">
@@ -8618,15 +8888,45 @@ function render() {
         <div class="pcard-name" onclick="openProdModal(${p.id})" style="cursor:pointer">${p.nombre}</div>
         <div class="pcard-tags">${tags.map(t=>`<span class="ptag">${t}</span>`).join('')}</div>
         <div class="pcard-price">
-          <div class="price-neto">Neto ${fmt(p.pneto)} + IVA ${fmt(p.piva)}</div>
-          <div class="price-total">${fmt(p.ptotal)}</div>
-          <div class="price-sub">Precio final con IVA incluido</div>
+          ${(()=>{
+            var _t = B2B.classify(p);
+            if (_t === 'enterprise') {
+              if (B2B.canSeePriceEnterprise()) {
+                return `<div class="price-neto">Neto ${fmt(p.pneto)} + IVA ${fmt(p.piva)}</div>
+                         <div class="price-total">${fmt(p.ptotal)}</div>
+                         <div class="price-sub" style="color:#1B5FD4">Precio Integrador Certificado</div>`;
+              }
+              return `<div class="price-hidden">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Precio bajo solicitud — Proyecto corporativo
+              </div>`;
+            }
+            // SMB — mostrar precio tramo si aplica
+            var tramoP = B2B.getPrecioTramo(p);
+            if (tramoP) {
+              return `<div class="price-neto">Neto ${fmt(Math.round(tramoP/1.19))}</div>
+                       <div class="price-total">${fmt(tramoP)}</div>
+                       <div class="price-sub"><span class="tramo-badge">Tramo ${B2B.userTramo}</span> · Precio personalizado</div>`;
+            }
+            return `<div class="price-neto">Neto ${fmt(p.pneto)} + IVA ${fmt(p.piva)}</div>
+                     <div class="price-total">${fmt(p.ptotal)}</div>
+                     <div class="price-sub">Precio final con IVA incluido</div>`;
+          })()}
         </div>
         <div class="pcard-actions">
-          <button class="pca-btn pca-btn-red" onclick='addCart(${JSON.stringify(p)})' title="Comprar">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-            <span>Comprar</span>
-          </button>
+          ${(()=>{
+            var _t = B2B.classify(p);
+            if (_t === 'enterprise') {
+              return `<button class="btn-cotizar-proyecto" onclick="abrirProyectoModal(${p.id})" style="grid-column:1/-1">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Declarar Proyecto / Cotizar
+              </button>`;
+            }
+            return `<button class="pca-btn pca-btn-red" onclick='addCart(${JSON.stringify(p)})' title="Comprar">
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              <span>Comprar</span>
+            </button>`;
+          })()}
           <button class="pca-btn pca-btn-dark" onclick="openProdModal(${p.id})" title="Ver ficha técnica">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             <span>Ficha</span>
@@ -17819,6 +18119,273 @@ document.addEventListener('DOMContentLoaded', function() {
   console.log('[SSTT] Tech modal cards wired:', cards.length, '| openTechModal:', typeof openTechModal);
 });
 
+
+// ══════════════════════════════════════════════════════════════════
+// MOTOR B2B HÍBRIDO — Clasificador SMB vs Enterprise
+// ══════════════════════════════════════════════════════════════════
+
+var B2B = {
+  // ── Perfiles de usuario ──
+  PROFILES: { GUEST: 'guest', SMB: 'smb', INTEGRADOR: 'integrador', ADMIN: 'admin' },
+
+  // ── Reglas de clasificación Enterprise ──
+  ENTERPRISE_CATS:    ['licencias','especiales'],
+  ENTERPRISE_PRICE:   800000,   // >$800k → proyecto
+
+  // Prefijos de código → siempre Enterprise
+  ENTERPRISE_CODES:   ['IVSS','DSS','VMS','TPC-','DHI-TPC','DHI-UAV','SDT',
+                       'HF8','HF9','ECA7','ECA2'],
+
+  // Palabras clave en nombre → Enterprise
+  ENTERPRISE_KEYS:    [
+    // Térmicas
+    'térmica','termal','thermal','temperature',
+    // Antiexplosivas
+    'antiexplosiv','anti-explos','exproof','ex-proof','atex','iecex',
+    // NEMA 4X / Anticorrosión
+    'nema4','nema 4','nema-4','anticorrosiv','anticorrosion',
+    // IA avanzada y analítica
+    'lpr','analítica','analytic','wizmind','reconocimiento facial','face recogn',
+    // Servidores y software
+    'servidor','server','ivss','vms',
+    // Otros enterprise
+    'temperatura',
+  ],
+
+  // ── Perfiles de usuario actual ──
+  userProfile: 'guest',
+  userTramo: null,       // tramo BSale: A, B, C, D
+  userEmpresa: null,
+
+  // Clasificar un producto como 'smb' o 'enterprise'
+  classify: function(p) {
+    if (!p) return 'smb';
+    var cod = (p.codigo||'').toUpperCase();
+    var nom = (p.nombre||'').toLowerCase();
+    var cat = (p.cat||'');
+    var precio = p.ptotal || 0;
+
+    // Por categoría explícita
+    if (B2B.ENTERPRISE_CATS.indexOf(cat) >= 0) return 'enterprise';
+
+    // Por código
+    if (B2B.ENTERPRISE_CODES.some(function(k){ return cod.startsWith(k); })) return 'enterprise';
+
+    // Por precio
+    if (precio >= B2B.ENTERPRISE_PRICE) return 'enterprise';
+
+    // Por palabras clave en nombre
+    if (B2B.ENTERPRISE_KEYS.some(function(k){
+      return new RegExp(k,'i').test(nom);
+    })) return 'enterprise';
+
+    // Por categoría PTZ de alto valor
+    if (cat === 'camaras-ptz' && precio >= 500000) return 'enterprise';
+
+    return 'smb';
+  },
+
+  // Verificar si el usuario puede ver precio enterprise
+  canSeePriceEnterprise: function() {
+    return ['integrador','admin'].indexOf(B2B.userProfile) >= 0;
+  },
+
+  // Retornar precio según tramo BSale
+  getPrecioTramo: function(p) {
+    if (!p) return null;
+    if (!B2B.userTramo) return null;
+    // Tramos: A=pneto (distribuidor), B=pneto*1.15, C=pneto*1.25, D=ptotal
+    var tramos = {A: p.pneto, B: Math.round(p.pneto*1.15), C: Math.round(p.pneto*1.25), D: p.ptotal};
+    return tramos[B2B.userTramo] || null;
+  },
+
+  // Login simulado (hasta integrar BSale)
+  login: function(perfil, tramo, empresa) {
+    B2B.userProfile = perfil;
+    B2B.userTramo   = tramo  || null;
+    B2B.userEmpresa = empresa|| null;
+    localStorage.setItem('sstt_b2b_profile', JSON.stringify({p:perfil,t:tramo,e:empresa}));
+    renderCatalog && renderCatalog();
+  },
+
+  // Restore session
+  restore: function() {
+    try {
+      var d = JSON.parse(localStorage.getItem('sstt_b2b_profile')||'null');
+      if (d) { B2B.userProfile=d.p; B2B.userTramo=d.t; B2B.userEmpresa=d.e; }
+    } catch(e){}
+  },
+
+  // Vista activa: 'smb' | 'enterprise' | 'all'
+  activeView: 'all',
+  setView: function(view) {
+    B2B.activeView = view;
+    // Actualizar nav header
+    document.querySelectorAll('.b2b-nav-btn').forEach(function(btn){
+      btn.classList.toggle('active', btn.dataset.view === view);
+    });
+    renderCatalog && renderCatalog();
+    showSection && showSection('catalogo');
+  },
+
+  // Filtrar productos por vista
+  filterByView: function(products) {
+    if (B2B.activeView === 'all') return products;
+    return products.filter(function(p){
+      return B2B.classify(p) === B2B.activeView;
+    });
+  }
+};
+
+// Restaurar sesión al cargar
+B2B.restore();
+
+
+// ══ MODAL DECLARAR PROYECTO ════════════════════════════════════
+var _proyectoProducto = null;
+
+function abrirProyectoModal(prodId) {
+  var p = PRODUCTS.find(function(x){ return x.id === prodId; });
+  _proyectoProducto = p;
+  var info = document.getElementById('proyectoProductoInfo');
+  if (info && p) {
+    info.innerHTML = '<strong style="color:#00B4E6">' + p.codigo + '</strong> — ' +
+      p.nombre.slice(0, 70) + (p.nombre.length > 70 ? '…' : '');
+  }
+  var m = document.getElementById('proyectoModal');
+  if (m) m.classList.add('open');
+  // Pre-rellenar con datos del usuario si están disponibles
+  var nombre = document.getElementById('cNombre');
+  if (nombre && nombre.value) {
+    var pN = document.getElementById('pyContactoNombre');
+    if (pN && !pN.value) pN.value = nombre.value;
+  }
+  var email = document.getElementById('cEmail');
+  if (email && email.value) {
+    var pE = document.getElementById('pyContactoEmail');
+    if (pE && !pE.value) pE.value = email.value;
+  }
+}
+
+function cerrarProyectoModal() {
+  var m = document.getElementById('proyectoModal');
+  if (m) m.classList.remove('open');
+}
+
+function toggleChk(input, lblId) {
+  var lbl = document.getElementById(lblId);
+  if (lbl) {
+    lbl.style.borderColor = input.checked ? '#1B5FD4' : '#e0e0e0';
+    lbl.style.background  = input.checked ? '#f0f4ff' : '';
+    lbl.style.color       = input.checked ? '#1B5FD4' : '#444';
+  }
+}
+
+function enviarProyecto() {
+  var err = document.getElementById('pyError');
+  // Validar campos obligatorios
+  var campos = {
+    'pyNombreUF':       'Nombre del usuario final',
+    'pyVertical':       'Vertical del proyecto',
+    'pyNroCamaras':     'Número de cámaras',
+    'pyPresupuesto':    'Presupuesto estimado',
+    'pyContactoNombre': 'Tu nombre',
+    'pyContactoEmail':  'Email de contacto',
+  };
+  var errores = [];
+  for (var id in campos) {
+    var el = document.getElementById(id);
+    if (!el || !el.value.trim()) errores.push(campos[id]);
+  }
+  if (errores.length) {
+    err.style.display = 'block';
+    err.innerHTML = '⚠️ Completa los campos requeridos: ' + errores.join(', ');
+    return;
+  }
+  err.style.display = 'none';
+
+  // Recopilar normativas seleccionadas
+  var normativas = [];
+  document.querySelectorAll('.proyecto-modal-body input[type=checkbox]:checked').forEach(function(cb){
+    normativas.push(cb.value);
+  });
+
+  // Armar payload
+  var payload = {
+    producto: _proyectoProducto ? _proyectoProducto.codigo : '—',
+    nombreProducto: _proyectoProducto ? _proyectoProducto.nombre : '—',
+    usuarioFinal: document.getElementById('pyNombreUF').value,
+    vertical: document.getElementById('pyVertical').value,
+    nroCamaras: document.getElementById('pyNroCamaras').value,
+    presupuesto: document.getElementById('pyPresupuesto').value,
+    normativas: normativas.join(', ') || 'Ninguna especificada',
+    descripcion: document.getElementById('pyDescripcion').value,
+    contactoNombre: document.getElementById('pyContactoNombre').value,
+    contactoEmail: document.getElementById('pyContactoEmail').value,
+    contactoTel: document.getElementById('pyContactoTel').value,
+    timestamp: new Date().toISOString(),
+    perfilUsuario: B2B.userProfile,
+  };
+
+  console.log('[SSTT] Proyecto declarado:', payload);
+
+  // TODO: enviar a endpoint (Bsale / email / CRM)
+  // fetch('/api/proyectos', {method:'POST', body:JSON.stringify(payload)})
+
+  // Mostrar éxito
+  var wrap = document.querySelector('.proyecto-modal-body');
+  if (wrap) {
+    wrap.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
+      '<div style="font-size:48px;margin-bottom:16px">✅</div>' +
+      '<div style="font-size:18px;font-weight:800;color:#0A1628;margin-bottom:8px">¡Solicitud enviada!</div>' +
+      '<div style="font-size:13px;color:#666;line-height:1.6;margin-bottom:20px">Tu solicitud de proyecto fue recibida.<br>Nuestro ingeniero de preventa revisará los detalles<br>y te contactará en máx. <strong>24 horas hábiles</strong>.</div>' +
+      '<div style="background:#f0f4ff;border:1px solid #c0d0f0;border-radius:12px;padding:12px 16px;font-size:12px;color:#1B5FD4;margin-bottom:20px">' +
+        '📋 Producto: <strong>' + payload.producto + '</strong><br>' +
+        '🏢 Empresa: <strong>' + payload.usuarioFinal + '</strong><br>' +
+        '💰 Presupuesto: <strong>' + payload.presupuesto + '</strong>' +
+      '</div>' +
+      '<button onclick="cerrarProyectoModal()" style="background:linear-gradient(135deg,#0A1628,#1B5FD4);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(var(--font))">Cerrar</button>' +
+    '</div>';
+  }
+  showToast('📤 Solicitud de proyecto enviada — respuesta en 24 hrs');
+}
+
+// Integrar B2B.filterByView en el renderizado
+(function() {
+  var _origRender = typeof render === 'function' ? render : null;
+  if (_origRender) {
+    window._origRenderCatalog = _origRender;
+  }
+})();
+
+// Actualizar perfil badge
+function updateB2BBadge() {
+  var badge = document.getElementById('b2bProfileBadge');
+  var label = document.getElementById('b2bProfileLabel');
+  if (!label) return;
+  var profiles = {
+    guest: 'Invitado',
+    smb: 'Instalador SMB' + (B2B.userTramo ? ' · Tramo ' + B2B.userTramo : ''),
+    integrador: 'Integrador Certificado',
+    admin: 'Administrador SSTT',
+  };
+  label.textContent = profiles[B2B.userProfile] || 'Invitado';
+  if (B2B.userProfile !== 'guest' && badge) {
+    badge.style.color = '#00B4E6';
+  }
+}
+updateB2BBadge();
+
+// Inicializar vista B2B correcta
+document.addEventListener('DOMContentLoaded', function() {
+  B2B.setView('smb'); // Por defecto mostrar SMB
+  updateB2BBadge();
+});
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') cerrarProyectoModal();
+});
+
 </script>
 
 <!-- TECH MODAL -->
@@ -18189,12 +18756,4 @@ function updateCoResumen() {
   safe('coResumenEnvio').textContent = envio;
 }
 
-// Formatear RUT del campo principal
-function formatRutMain() {
-  var el = document.getElementById('cRutPersonalMain');
-  if (el) { el.value = formatRutStr(el.value); onRutInputModal(el,'rutMsgMain','rutStatusMain'); }
-}
-
-</script>
-</body>
-</html>
+// Forma
