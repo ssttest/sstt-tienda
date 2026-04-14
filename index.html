@@ -1291,12 +1291,22 @@ nav {
 
 /* Footer */
 .cart-foot {
-  padding: 12px 16px 20px;
-  background: rgba(255,255,255,.7);
-  border-top: 1px solid rgba(0,0,0,.07);
+  display: contents; /* deja que cart-form y cart-sticky sean hijos directos del flex */
+}
+.cart-form {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 16px 0;
+  scrollbar-width: none;
+}
+.cart-form::-webkit-scrollbar { display: none }
+.cart-sticky {
   flex-shrink: 0;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  padding: 12px 16px 18px;
+  background: rgba(255,255,255,.92);
+  border-top: 1.5px solid rgba(0,0,0,.08);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 /* Section cards inside cart */
@@ -1346,9 +1356,10 @@ nav {
 
 /* Totals card */
 .totals {
-  background: rgba(250,250,252,.9);
-  border: 1px solid rgba(0,0,0,.07);
-  border-radius: 18px; padding: 12px 16px; margin-bottom: 10px;
+  background: transparent;
+  border: none;
+  padding: 0 0 8px;
+  margin: 0;
 }
 .trow {
   display: flex; justify-content: space-between;
@@ -5430,6 +5441,103 @@ input[data-validated="1"]::after {
 [data-theme="dahua-dark"] .tech-modal-footer { border-color:#1E2E50; }
 [data-theme="dahua-dark"] .tech-modal-btn-secondary { background:#1E2E50;color:#E8EDF8; }
 
+[data-theme="dahua-dark"] .cart-sticky {
+  background: rgba(10,22,40,.97) !important;
+  border-color: #1E2E50 !important;
+}
+[data-theme="dahua-dark"] .cart-form {
+  background: transparent;
+}
+
+/* ══ CHECKOUT 4 PASOS ══════════════════════════════════════════ */
+.co-stepper {
+  display: flex; align-items: center; padding: 10px 16px 8px;
+  border-bottom: 1px solid rgba(0,0,0,.07); flex-shrink: 0;
+}
+.co-step {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  cursor: pointer; flex: none; opacity: .4; transition: opacity .2s;
+}
+.co-step.active { opacity: 1; }
+.co-step.done   { opacity: .7; }
+.co-step-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--g5); color: var(--g2);
+  font-size: 12px; font-weight: 800; display: flex;
+  align-items: center; justify-content: center;
+  transition: all .25s; font-family: var(--font-d);
+}
+.co-step.active .co-step-num { background: var(--red); color: #fff; }
+.co-step.done   .co-step-num { background: #1A7F3C; color: #fff; }
+.co-step-lbl { font-size: 10px; font-weight: 700; color: var(--g2); white-space: nowrap; }
+.co-step.active .co-step-lbl { color: var(--red); }
+.co-step.done   .co-step-lbl { color: #1A7F3C; }
+.co-step-line {
+  flex: 1; height: 2px; background: var(--g5);
+  margin: 0 4px; border-radius: 2px; margin-bottom: 13px;
+  transition: background .25s;
+}
+.co-step-line.done { background: #1A7F3C; }
+
+/* ── Viewport / Slider ── */
+.co-viewport {
+  flex: 1; overflow: hidden; position: relative;
+}
+.co-track {
+  display: flex; height: 100%;
+  transition: transform .38s cubic-bezier(.4,0,.2,1);
+  will-change: transform;
+}
+.co-panel {
+  min-width: 100%; height: 100%;
+  overflow-y: auto; padding: 14px 16px;
+  scrollbar-width: none; flex-shrink: 0;
+}
+.co-panel::-webkit-scrollbar { display: none }
+
+/* ── Sticky bottom ajustado ── */
+.cart-sticky {
+  flex-shrink: 0; padding: 10px 16px 18px;
+  background: rgba(255,255,255,.95);
+  border-top: 1.5px solid rgba(0,0,0,.08);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: 0 -4px 20px rgba(0,0,0,.06);
+}
+
+/* ── Totales compactos en sticky ── */
+.totals { background: transparent; border: none; padding: 0 0 8px; margin: 0; }
+
+/* Dark mode */
+[data-theme="dahua-dark"] .co-stepper { border-color: #1E2E50; }
+[data-theme="dahua-dark"] .co-step-num { background: #1E2E50; color: #A0B0D8; }
+[data-theme="dahua-dark"] .co-step-lbl { color: #A0B0D8; }
+[data-theme="dahua-dark"] .co-step-line { background: #1E2E50; }
+[data-theme="dahua-dark"] .cart-sticky { background: rgba(10,22,40,.97) !important; border-color: #1E2E50 !important; }
+
+/* ── Footer responsive ── */
+@media (max-width: 900px) {
+  footer [style*="grid-template-columns:1.4fr"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+  }
+  footer [style*="grid-template-columns:repeat(4,1fr)"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+@media (max-width: 600px) {
+  footer [style*="grid-template-columns:1.4fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  footer [style*="grid-template-columns:repeat(4,1fr)"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  footer [style*="border-right:1px solid #eee"] {
+    border-right: none !important;
+    border-bottom: 1px solid #eee;
+  }
+}
+
 </style>
 
 <!-- Google Places Autocomplete — configurable via localStorage('sstt_gmaps_key') -->
@@ -5854,37 +5962,39 @@ if (window.pdfjsLib) {
 <!-- CART DRAWER -->
 <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 <aside class="cart-drawer" id="cartDrawer">
+
+  <!-- ══ HEADER FIJO ══════════════════════════════════════════ -->
   <div class="cart-head">
-    <div>
-      <div class="cart-head-title">
-        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        Tu Carro de Compras
-      </div>
-      <div class="cart-head-sub" id="cartSub">0 productos · www.sstt.cl</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px">
-      <button onclick="openOrderImport()" title="Cargar pedido desde imagen o texto"
-        style="display:flex;align-items:center;gap:5px;background:rgba(0,87,184,.1);color:var(--blue);
-               border:1.5px solid rgba(0,87,184,.2);border-radius:10px;padding:7px 11px;
-               font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--font);white-space:nowrap"
-        onmouseover="this.style.background='rgba(0,87,184,.18)'"
-        onmouseout="this.style.background='rgba(0,87,184,.1)'">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
-        Cargar pedido
+    <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0">
+      <!-- Flecha atrás (solo en pasos 2-4) -->
+      <button id="checkoutBack" onclick="checkoutPrev()" style="display:none;
+        background:rgba(0,0,0,.07);border:none;border-radius:50%;width:30px;height:30px;
+        cursor:pointer;flex-shrink:0;display:none;align-items:center;justify-content:center;
+        transition:all .15s" onmouseover="this.style.background='rgba(0,0,0,.12)'"
+        onmouseout="this.style.background='rgba(0,0,0,.07)'">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
       </button>
-      <button id="clearCartBtn" onclick="confirmClearCart()" title="Vaciar carro" style="display:none;
+      <div style="min-width:0">
+        <div class="cart-head-title" id="cartHeadTitle">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Tu Carro
+        </div>
+        <div class="cart-head-sub" id="cartSub">0 productos</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+      <button onclick="openOrderImport()" title="Cargar pedido"
+        style="display:flex;align-items:center;gap:5px;background:rgba(0,87,184,.1);color:var(--blue);
+               border:1.5px solid rgba(0,87,184,.2);border-radius:10px;padding:6px 10px;
+               font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);white-space:nowrap">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        Cargar
+      </button>
+      <button id="clearCartBtn" onclick="confirmClearCart()" style="display:none;
         align-items:center;gap:5px;background:rgba(232,0,28,.08);color:var(--red);
-        border:1.5px solid rgba(232,0,28,.2);border-radius:10px;padding:7px 11px;
-        font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;font-family:var(--font);white-space:nowrap"
-        onmouseover="this.style.background='rgba(232,0,28,.16)'"
-        onmouseout="this.style.background='rgba(232,0,28,.08)'">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-          <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-          <path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/>
-        </svg>
+        border:1.5px solid rgba(232,0,28,.2);border-radius:10px;padding:6px 10px;
+        font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)">
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
         Vaciar
       </button>
       <button class="cart-x" onclick="closeCart()">
@@ -5892,452 +6002,342 @@ if (window.pdfjsLib) {
       </button>
     </div>
   </div>
-  <div class="cart-body" id="cartBody">
-    <div class="cart-empty" id="cartEmpty">
-      <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#ccc" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-      <p>Tu carro está vacío</p>
-      <small>Agrega productos desde el catálogo</small>
+
+  <!-- ══ STEPPER ═══════════════════════════════════════════════ -->
+  <div class="co-stepper" id="coStepper" style="display:none">
+    <div class="co-step active" id="cst1" onclick="checkoutGoTo(0)">
+      <div class="co-step-num">1</div>
+      <div class="co-step-lbl">Carro</div>
     </div>
-    <div id="cartItems"></div>
+    <div class="co-step-line"></div>
+    <div class="co-step" id="cst2" onclick="checkoutGoTo(1)">
+      <div class="co-step-num">2</div>
+      <div class="co-step-lbl">Datos</div>
+    </div>
+    <div class="co-step-line"></div>
+    <div class="co-step" id="cst3" onclick="checkoutGoTo(2)">
+      <div class="co-step-num">3</div>
+      <div class="co-step-lbl">Envío</div>
+    </div>
+    <div class="co-step-line"></div>
+    <div class="co-step" id="cst4" onclick="checkoutGoTo(3)">
+      <div class="co-step-num">4</div>
+      <div class="co-step-lbl">Pago</div>
+    </div>
   </div>
-  <div class="cart-foot" id="cartFoot" style="display:none">
 
-    <!-- LOGIN PROMPT (visible si no está logueado) -->
-    <div class="cs" id="loginPrompt" style="background:var(--blue-p);border-color:var(--blue-p2)">
-      <div style="display:flex;align-items:center;gap:10px;justify-content:space-between">
-        <div>
-          <div style="font-size:12px;font-weight:700;color:var(--blue-d)">¿Tienes cuenta?</div>
-          <div style="font-size:11px;color:var(--muted);margin-top:2px">Inicia sesión para facturar y ver tus pedidos</div>
-        </div>
-        <button onclick="openModal('login')" style="background:var(--blue);color:#fff;border:none;border-radius:var(--r-sm);padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:'IBM Plex Sans',sans-serif;white-space:nowrap">Iniciar sesión</button>
-      </div>
-    </div>
+  <!-- ══ SLIDER VIEWPORT ═══════════════════════════════════════ -->
+  <div class="co-viewport" id="coViewport">
+    <div class="co-track" id="coTrack">
 
-    <div class="cs">
-      <div class="cs-title">Datos de contacto</div>
-
-      <!-- Tipo de documento -->
-      <div class="doc-toggle" id="docToggle">
-        <div class="dtog on" id="dtBoleta" onclick="setDoc('boleta')">
-          <span class="dtog-icon">🧾</span>Boleta
+      <!-- ─────────── PASO 1: CARRO ─────────── -->
+      <div class="co-panel" id="coP1">
+        <div class="cart-empty" id="cartEmpty">
+          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#ccc" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <p>Tu carro está vacío</p>
+          <small>Agrega productos desde el catálogo</small>
         </div>
-        <div class="dtog" id="dtFactura" onclick="setDoc('factura')">
-          <span class="dtog-icon">📋</span>Factura
-        </div>
+        <div id="cartItems"></div>
       </div>
 
-      <!-- Nombre + Email (siempre visibles) -->
-      <div class="frow" style="margin-top:8px">
-        <input type="text" id="cNombre" class="finput" placeholder="Nombre completo *" style="margin:0">
-        <div style="position:relative;flex:1">
-          <input type="email" id="cEmail" class="finput" placeholder="Email *" style="margin:0;width:100%"
-            oninput="cEmailDirty=true" onfocus="this.style.borderColor='var(--blue)'"
-            onblur="validateCartEmail()">
-          <span id="cEmailIcon" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none"></span>
-        </div>
-      </div>
-      <div class="field-msg" id="cEmailMsg"></div>
+      <!-- ─────────── PASO 2: DATOS ─────────── -->
+      <div class="co-panel" id="coP2">
 
-      <!-- BOLETA: RUT personal opcional -->
-      <div id="boletaFields" style="margin-top:8px">
-        <div style="background:var(--g6);border:1px solid var(--g5);border-radius:10px;
-          padding:10px 13px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px">
-          <div style="font-size:12px;color:var(--g2);line-height:1.45">
-            🧾 <strong>Boleta electrónica</strong> — se emite a nombre del comprador.<br>
-            <span style="font-size:11px;color:var(--g3)">Opcional: agrega tu RUT para boleta personalizada.</span>
-          </div>
-          <button onclick="toggleBoletaRut()" id="btnBoletaRut"
-            style="background:var(--g5);color:var(--g2);border:none;border-radius:8px;
-            padding:5px 11px;font-size:11px;font-weight:700;cursor:pointer;
-            white-space:nowrap;flex-shrink:0;font-family:var(--font)">
-            + RUT personal
-          </button>
-        </div>
-        <div id="boletaRutWrap" style="display:none">
-          <div style="position:relative">
-            <input type="text" id="cRutPersonal" class="finput" placeholder="RUT personal (opcional — boleta personalizada)"
-              style="margin:0;padding-right:80px" oninput="onRutInputModal(this,'rutMsgBoleta','rutStatusBoleta')">
-            <span class="rut-status" id="rutStatusBoleta"></span>
-            <button style="position:absolute;right:6px;top:50%;transform:translateY(-50%);
-              background:var(--bg2);border:1px solid var(--border);border-radius:3px;
-              padding:2px 7px;font-size:10px;cursor:pointer;color:var(--muted);
-              font-family:var(--font)" onclick="formatRut()">Formatear</button>
-          </div>
-          <div class="field-msg" id="rutMsgBoleta"></div>
-          <div class="rut-verified-badge" id="rutBadgeBoleta">
-            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
-            RUT válido — boleta personalizada
-          </div>
-        </div>
-      </div>
-
-      <!-- FACTURA: requiere e-RUT empresa (RUT empresarial, no personal) -->
-      <div id="rutFacturaWrap" style="display:none;margin-top:8px">
-        <div style="position:relative">
-          <input type="text" id="cRut" class="finput" placeholder="RUT empresa *"
-            style="margin:0;padding-right:80px" oninput="onRutInput(this)">
-          <span class="rut-status" id="rutStatus"></span>
-          <button style="position:absolute;right:6px;top:50%;transform:translateY(-50%);
-            background:var(--bg2);border:1px solid var(--border);border-radius:3px;
-            padding:2px 7px;font-size:10px;cursor:pointer;color:var(--muted);
-            font-family:var(--font)" onclick="formatRut()">Formatear</button>
-        </div>
-        <div class="field-msg" id="rutMsg"></div>
-        <div class="rut-verified-badge" id="rutBadge">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
-          RUT válido — listo para facturar
-        </div>
-      </div>
-
-      <!-- Campos extra para factura -->
-      <div class="factura-fields" id="facturaFields">
-
-        <!-- ── BANNER e-RUT ──────────────────────────────────────── -->
-        <div id="erutBanner" style="margin-bottom:12px">
-          <!-- Estado: no validado -->
-          <div id="erutNoValidado" style="background:var(--orange-p);border:1.5px solid #F0C88A;
-            border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px">
-            <span style="font-size:22px;flex-shrink:0">📋</span>
-            <div style="flex:1">
-              <div style="font-weight:700;font-size:13px;color:var(--orange)">Valida tu e-RUT para facturar</div>
-              <div style="font-size:11.5px;color:#8B5000;margin-top:2px;line-height:1.45">
-                Sube el e-RUT de tu empresa — extraemos los datos automáticamente y verificamos que estás autorizado a facturar.
-                <strong>Válido por 1 año.</strong>
-              </div>
-            </div>
-            <button onclick="abrirErutModal()"
-              style="background:var(--orange);color:#fff;border:none;border-radius:9px;
-              padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;
-              white-space:nowrap;flex-shrink:0;font-family:var(--font)">
-              📤 Subir e-RUT
-            </button>
-          </div>
-          <!-- Estado: validado -->
-          <div id="erutValidado" style="display:none;background:var(--green-p);border:1.5px solid #B8E8CA;
-            border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:10px">
-            <span style="font-size:20px">✅</span>
-            <div style="flex:1">
-              <div style="font-weight:700;font-size:12.5px;color:var(--green)">e-RUT validado correctamente</div>
-              <div style="font-size:11px;color:#166534;margin-top:1px" id="erutValidadoInfo">—</div>
-            </div>
-            <button onclick="abrirErutModal()"
-              style="background:none;color:var(--green);border:1px solid var(--green);border-radius:8px;
-              padding:5px 11px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)">
-              Actualizar
-            </button>
-          </div>
-        </div>
-
-        <!-- Campos del formulario (se autocompletan desde e-RUT) -->
-        <div style="font-size:10.5px;font-weight:700;color:var(--blue);margin-bottom:8px;
-          text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:5px">
-          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Datos para factura electrónica
-        </div>
-        <input type="text" id="cRazon" class="finput" placeholder="Razón social *">
-        <input type="text" id="cGiro" class="finput" placeholder="Giro comercial * (completar manualmente)">
-        <div style="position:relative">
-          <input type="text" id="cDirFact" class="finput" placeholder="Dirección de facturación *"
-            style="margin:0;padding-right:32px" autocomplete="off">
-          <span id="cDirFactPin" style="position:absolute;right:10px;top:50%;
-            transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:.4">📍</span>
-        </div>
-        <input type="text" id="cDeptoFact" class="finput" placeholder="Dpto / Oficina / Local (opcional)">
-        <div class="frow">
-          <input type="text" id="cComunaFact" class="finput" placeholder="Comuna" style="margin:0">
-          <input type="text" id="cRegionFact" class="finput" placeholder="Región" style="margin:0">
-        </div>
-      </div>
-
-      <!-- Teléfono + Email — obligatorios para tracking de courier -->
-      <div style="background:var(--g6);border:1px solid var(--g5);border-radius:10px;
-        padding:10px 12px;margin-top:8px;margin-bottom:2px">
-        <div style="font-size:10.5px;font-weight:700;color:var(--g3);text-transform:uppercase;
-          letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:5px">
-          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2.25h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          Contacto para seguimiento de despacho *
-        </div>
-        <div style="font-size:11.5px;color:var(--g2);margin-bottom:10px;line-height:1.5">
-          📦 La empresa de transporte usará estos datos para enviarte el estado de tu pedido y coordinar la entrega.
-        </div>
-        <div style="position:relative;margin-bottom:8px">
-          <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);
-            font-size:12px;color:var(--g3);font-weight:700;pointer-events:none;z-index:1">+56</span>
-          <input type="tel" id="cTel" class="finput"
-            placeholder="9 XXXX XXXX *"
-            style="margin:0;padding-left:42px"
-            oninput="formatCartTel(this)"
-            onblur="validateCartTel()">
-          <span id="cTelIcon" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);
-            font-size:13px;pointer-events:none"></span>
-        </div>
-        <div class="field-msg" id="cTelMsg" style="margin-bottom:4px"></div>
-        <div style="font-size:11px;color:var(--g3);margin-bottom:6px">
-          📧 El correo se usa para confirmar el pedido y recibir el tracking
-        </div>
-        <div style="position:relative">
-          <input type="email" id="cEmailTracking" class="finput"
-            placeholder="Email para notificaciones *"
-            style="margin:0;padding-right:90px"
-            onblur="validateCartEmailTracking()">
-          <button onclick="usarEmailLogin()" id="btnUsarEmailLogin"
-            style="position:absolute;right:6px;top:50%;transform:translateY(-50%);
-            background:var(--blue-p);color:var(--blue);border:1px solid var(--blue-p2);
-            border-radius:6px;padding:3px 8px;font-size:10px;font-weight:700;cursor:pointer;
-            font-family:var(--font);white-space:nowrap;display:none"
-            title="Usar el email con que iniciaste sesión">
-            Usar el mío
-          </button>
-          <span id="cEmailTrackingIcon" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none"></span>
-        </div>
-        <div class="field-msg" id="cEmailTrackingMsg"></div>
-      </div>
-      <div style="position:relative;margin-top:6px">
-  <input type="text" id="cDir" class="finput" placeholder="Dirección de despacho *" style="margin:0;padding-right:32px" autocomplete="off">
-  <span id="cDirPin" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:.4">📍</span>
-</div>
-      <input type="text" id="cDepto" class="finput" placeholder="Dpto / Casa / Oficina / Local (opcional)" style="margin-top:6px">
-      <div class="frow" style="margin-top:6px">
-        <input type="text" id="cComuna" class="finput" placeholder="Comuna" style="margin:0" readonly>
-        <input type="text" id="cRegionAuto" class="finput" placeholder="Región" style="margin:0" readonly>
-      </div>
-    </div>
-    <div class="cs">
-      <div class="cs-title">
-        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-        Despacho / Retiro
-        <button class="cotizar-btn" id="cotizarBtnShow" onclick="cotizar()" style="display:none">Cotizar envío</button>
-      </div>
-
-      <!-- TOGGLE DESPACHO / RETIRO -->
-      <div class="doc-toggle" style="margin-bottom:10px">
-        <div class="dtog on" id="dtDespacho" onclick="setEntrega('despacho')">
-          <span class="dtog-icon">🚚</span>Despacho a domicilio
-        </div>
-        <div class="dtog" id="dtRetiro" onclick="setEntrega('retiro')">
-          <span class="dtog-icon">🏪</span>Retiro en tienda
-        </div>
-      </div>
-
-      <!-- SECCIÓN DESPACHO -->
-      <div id="secDespacho">
-
-        <!-- Destinatario — por defecto igual a quien factura/boletea -->
-        <div style="background:var(--blue-p);border:1px solid var(--blue-p2);border-radius:10px;
-          padding:10px 13px;font-size:12px;color:var(--blue);margin-bottom:10px;
-          display:flex;align-items:center;justify-content:space-between;gap:10px">
-          <div style="display:flex;align-items:center;gap:7px">
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            <span>Destinatario: <strong id="despDestinatarioLabel">igual a quien factura/boletea</strong></span>
-          </div>
-          <button onclick="togglePersonalizarDespacho()" id="btnPersonalizar"
-            style="background:var(--blue);color:#fff;border:none;border-radius:8px;
-            padding:5px 11px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;
-            font-family:var(--font);flex-shrink:0">
-            ✏️ Personalizar
-          </button>
-        </div>
-
-        <!-- Panel personalizar (oculto por defecto) -->
-        <div id="despPersonalizar" style="display:none;background:rgba(0,87,184,.04);
-          border:1.5px solid var(--blue-p2);border-radius:12px;padding:13px 14px;margin-bottom:10px">
-
-          <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;
-            color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:6px">
-            ✏️ Personalizar destinatario y despacho
-          </div>
-
-          <!-- Nombre destinatario -->
-          <div style="margin-bottom:8px">
-            <label style="font-size:11px;font-weight:700;color:var(--g2);text-transform:uppercase;
-              letter-spacing:.3px;display:block;margin-bottom:4px">Nombre destinatario *</label>
-            <input type="text" id="despNombre" class="finput"
-              placeholder="Nombre de quien recibe el pedido" style="margin:0"
-              oninput="actualizarDestinatario()">
-          </div>
-
-          <!-- Atención a -->
-          <div style="margin-bottom:8px">
-            <label style="font-size:11px;font-weight:700;color:var(--g2);text-transform:uppercase;
-              letter-spacing:.3px;display:block;margin-bottom:4px">
-              Atención a: <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--g3)">(opcional)</span>
-            </label>
-            <input type="text" id="despAtencion" class="finput"
-              placeholder="Ej: Juan Pérez — permite retiro sin e-RUT de la empresa" style="margin:0">
-            <div style="font-size:10.5px;color:var(--g3);margin-top:4px;line-height:1.5">
-              💡 Al agregar "Atención a:" la persona indicada puede retirar en la agencia
-              <strong>solo con su cédula de identidad</strong>, sin necesitar el e-RUT de la empresa ni el carnet del destinatario titular.
-            </div>
-          </div>
-
-          <!-- Tipo de despacho -->
-          <div style="margin-bottom:8px">
-            <label style="font-size:11px;font-weight:700;color:var(--g2);text-transform:uppercase;
-              letter-spacing:.3px;display:block;margin-bottom:6px">Tipo de envío</label>
-            <div style="display:flex;gap:6px">
-              <label id="despTipoDom" onclick="setDespTipo('domicilio')"
-                style="flex:1;display:flex;align-items:center;gap:7px;padding:9px 11px;
-                border-radius:10px;border:2px solid var(--black);background:rgba(26,26,26,.05);
-                cursor:pointer;transition:all .15s;font-size:12.5px;font-weight:600">
-                <span style="font-size:16px">🏠</span>
-                <div><div>A domicilio</div><div style="font-size:10px;font-weight:400;color:var(--g3)">Dirección exacta</div></div>
-              </label>
-              <label id="despTipoAgencia" onclick="setDespTipo('agencia')"
-                style="flex:1;display:flex;align-items:center;gap:7px;padding:9px 11px;
-                border-radius:10px;border:2px solid var(--g5);background:transparent;
-                cursor:pointer;transition:all .15s;font-size:12.5px;font-weight:600">
-                <span style="font-size:16px">🏢</span>
-                <div><div>A agencia</div><div style="font-size:10px;font-weight:400;color:var(--g3)">Retiro en sucursal courier</div></div>
-              </label>
-            </div>
-          </div>
-
-          <!-- Agencia específica (visible solo si tipo=agencia) -->
-          <div id="despAgenciaInfo" style="display:none;margin-bottom:8px">
-            <label style="font-size:11px;font-weight:700;color:var(--g2);text-transform:uppercase;
-              letter-spacing:.3px;display:block;margin-bottom:4px">Ciudad / agencia de retiro *</label>
-            <input type="text" id="despAgenciaCiudad" class="finput"
-              placeholder="Ej: Temuco — Starken Agencia Centro" style="margin:0">
-            <div style="font-size:10.5px;color:var(--orange);margin-top:4px">
-              ⚠️ El envío "a agencia" queda en la sucursal — el destinatario o la persona en "Atención a:" debe ir a buscarlo.
-            </div>
-          </div>
-
-          <!-- Botón limpiar personalización -->
-          <button onclick="resetPersonalizarDespacho()"
-            style="background:none;border:none;color:var(--g3);font-size:11.5px;cursor:pointer;
-            padding:4px 0;font-family:var(--font);text-decoration:underline">
-            ↺ Volver a usar datos de facturación/boleta
-          </button>
-        </div>
-
-        <!-- Cotizar envío (usa la dirección/comuna del formulario superior) -->
-        <div id="despDirWrap">
-          <button class="cotizar-btn" onclick="cotizar()" style="display:inline-flex;align-items:center;gap:5px;margin-bottom:6px">
-            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            Cotizar envío
-          </button>
-        </div>
-        <div class="ship-opts" id="shipOpts"><span class="ship-ph">Ingresa tu comuna arriba y presiona "Cotizar envío"</span></div>
-      </div>
-
-      <!-- SECCIÓN RETIRO EN TIENDA -->
-      <div id="secRetiro" style="display:none">
-        <div style="background:var(--green-p);border:1px solid #b0dfc0;border-radius:var(--r-sm);padding:10px 12px;font-size:12px;color:var(--green);margin-bottom:10px;display:flex;gap:8px">
-          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <div><strong>Retiro gratuito en nuestras instalaciones</strong><br>
-          📍 Santiago — Av. Ejemplo 1234, Of. 501 · Lun a Vie 9:00–18:00 hrs<br>
-          ⏱️ Disponible para retiro en 1-2 horas hábiles tras confirmación de pago</div>
-        </div>
-
-        <!-- Quién retira -->
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px">¿Quién retira?</div>
-        <div class="doc-toggle" id="retiroTipoToggle" style="margin-bottom:10px">
-          <div class="dtog on" id="rtPersona" onclick="setRetiroTipo('persona')"><span class="dtog-icon">👤</span>Titular</div>
-          <div class="dtog" id="rtTransporte" onclick="setRetiroTipo('transporte')"><span class="dtog-icon">🚛</span>Empresa courier</div>
-          <div class="dtog" id="rtTercero" onclick="setRetiroTipo('tercero')"><span class="dtog-icon">👥</span>Tercero autorizado</div>
-        </div>
-
-        <!-- BOLETA: RUT de quien retira -->
-        <div id="retiroBoleta" style="display:none">
-          <div style="background:var(--blue-p);border:1px solid var(--blue-p2);border-radius:var(--r-sm);padding:9px 12px;font-size:12px;color:var(--blue-d);margin-bottom:8px">
-            🧾 <strong>Compra con boleta:</strong> Deberás presentar el RUT de quien figura en la boleta para retirar el pedido.
-          </div>
-          <div style="position:relative">
-            <input type="text" id="cRutRetiro" class="finput" placeholder="RUT de quien retira (ej: 12.345.678-9)" style="margin:0;padding-right:80px" oninput="onRutRetiroInput(this)">
-            <span style="position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none" id="rutRetiroIcon"></span>
-          </div>
-          <div class="field-msg" id="rutRetiroMsg"></div>
-        </div>
-
-        <!-- FACTURA: e-RUT empresa -->
-        <div id="retiroFactura" style="display:none">
-          <div style="background:var(--orange-p);border:1px solid #f0c8a0;border-radius:var(--r-sm);padding:9px 12px;font-size:12px;color:var(--orange);margin-bottom:8px">
-            📋 <strong>Compra con factura:</strong> Quien retire debe presentar el <strong>e-RUT vigente</strong> de la empresa facturada, debidamente asociado. No se aceptarán poderes sin el e-RUT correspondiente.
-          </div>
-          <input type="text" id="cRutEmpresaRetiro" class="finput" placeholder="RUT empresa (ej: 76.543.210-K)" style="margin-bottom:6px" oninput="onRutRetiroInput(this,'retiroEmpresaMsg','retiroEmpresaIcon')">
-          <div class="field-msg" id="retiroEmpresaMsg"></div>
-          <input type="text" id="cNombreRetiro" class="finput" placeholder="Nombre de quien retira físicamente *" style="margin:0">
-          <div style="font-size:11px;color:var(--muted);margin-top:4px;font-style:italic">* Debe presentar cédula de identidad y coincidir con el e-RUT autorizado</div>
-        </div>
-
-        <!-- TRANSPORTE AUTORIZADO -->
-        <div id="retiroTransporte" style="display:none">
-          <div style="background:var(--yellow-p);border:1px solid #e0c080;border-radius:var(--r-sm);padding:9px 12px;font-size:12px;color:var(--yellow);margin-bottom:8px">
-            🚛 <strong>Retiro por empresa de transporte:</strong> Debes identificar claramente la empresa y adjuntar la orden de retiro autorizada. SSTT® verificará la identidad del conductor.
-          </div>
-          <div class="field-row" style="margin-bottom:6px">
-            <div><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">Empresa de transporte *</label>
-            <select id="cEmpresaTransporte" class="finput" style="margin:0">
-              <option value="">Selecciona la empresa…</option>
-              <option>Chilexpress</option><option>Starken</option><option>Bluexpress</option>
-              <option>DHL</option><option>FedEx</option><option>Trans Andes</option>
-              <option value="otra">Otra empresa</option>
-            </select></div>
-            <div><label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px">N° de guía / OT</label>
-            <input type="text" id="cGuiaTransporte" class="finput" placeholder="N° de guía o nota de retiro" style="margin:0"></div>
-          </div>
-          <input type="text" id="cOtraEmpresa" class="finput" placeholder="Nombre de la empresa (si seleccionaste Otra)" style="margin-bottom:6px;display:none" id="cOtraEmpresa">
-          <input type="text" id="cRutChofer" class="finput" placeholder="RUT del conductor que retira (opcional)" style="margin:0">
-        </div>
-
-        <!-- TERCERO AUTORIZADO -->
-        <div id="retiroTercero" style="display:none">
-          <div style="background:var(--blue-p);border:1px solid var(--blue-p2);border-radius:var(--r-sm);padding:9px 12px;font-size:12px;color:var(--blue-d);margin-bottom:8px">
-            👥 <strong>Tercero autorizado:</strong> Quien retire debe presentar <strong>cédula de identidad</strong> y el <strong>RUT del comprador</strong>. SSTT® verificará con la orden de compra.
-          </div>
-          <div class="field-row">
+        <!-- Login suave -->
+        <div class="cs" id="loginPrompt" style="background:var(--blue-p);border-color:var(--blue-p2);display:none">
+          <div style="display:flex;align-items:center;gap:10px;justify-content:space-between">
             <div>
-              <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Nombre del tercero *</div>
-              <input type="text" id="cTerceroNombre" class="finput" placeholder="Nombre completo" style="margin:0">
+              <div style="font-size:12px;font-weight:700;color:var(--blue-d)">¿Tienes cuenta?</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px">Inicia sesión para autocompletar tus datos</div>
             </div>
-            <div>
-              <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">RUT del tercero *</div>
+            <button onclick="openModal('login')" style="background:var(--blue);color:#fff;border:none;border-radius:var(--r-sm);padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font)">Ingresar</button>
+          </div>
+        </div>
+
+        <!-- Tipo documento -->
+        <div class="cs">
+          <div class="cs-title">💳 Facturación</div>
+          <div class="doc-toggle" id="docToggle" style="margin-bottom:14px">
+            <div class="dtog on" id="dtBoleta" onclick="setDoc('boleta')">
+              <span class="dtog-icon">🧾</span>Boleta Electrónica
+            </div>
+            <div class="dtog" id="dtFactura" onclick="setDoc('factura')">
+              <span class="dtog-icon">📋</span>Factura Electrónica
+            </div>
+          </div>
+
+          <!-- Campos comunes boleta -->
+          <div id="boletaFields">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <input type="text" id="cNombre" class="finput" placeholder="Nombre completo *" style="margin:0">
               <div style="position:relative">
-                <input type="text" id="cTerceroRut" class="finput" placeholder="12.345.678-9" style="margin:0;padding-right:34px" oninput="onRutRetiroInput(this,'terceroRutMsg','terceroRutIcon')">
-                <span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:12px" id="terceroRutIcon"></span>
+                <input type="text" id="cRutPersonalMain" class="finput" placeholder="RUT *" style="margin:0;padding-right:80px"
+                  oninput="onRutInputModal(this,'rutMsgMain','rutStatusMain')">
+                <span class="rut-status" id="rutStatusMain" style="position:absolute;right:36px;top:50%;transform:translateY(-50%)"></span>
+                <button onclick="formatRutMain()" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);
+                  background:var(--bg2);border:1px solid var(--border);border-radius:3px;
+                  padding:2px 7px;font-size:10px;cursor:pointer;color:var(--muted);font-family:var(--font)">OK</button>
               </div>
+              <div class="field-msg" id="rutMsgMain"></div>
+              <div style="position:relative">
+                <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--g3);font-weight:700;pointer-events:none;z-index:1">+56</span>
+                <input type="tel" id="cTel" class="finput" placeholder="9 XXXX XXXX *"
+                  style="margin:0;padding-left:42px" oninput="formatCartTel(this)" onblur="validateCartTel()">
+                <span id="cTelIcon" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none"></span>
+              </div>
+              <div class="field-msg" id="cTelMsg"></div>
+              <div style="position:relative">
+                <input type="email" id="cEmail" class="finput" placeholder="Email *" style="margin:0"
+                  oninput="cEmailDirty=true" onblur="validateCartEmail()">
+                <span id="cEmailIcon" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:13px;pointer-events:none"></span>
+              </div>
+              <div class="field-msg" id="cEmailMsg"></div>
             </div>
           </div>
-          <div class="field-msg" id="terceroRutMsg"></div>
+
+          <!-- Campos factura -->
+          <div id="rutFacturaWrap" style="display:none;margin-top:8px">
+            <!-- e-RUT banner -->
+            <div id="erutBanner" style="margin-bottom:12px">
+              <div id="erutNoValidado" style="background:var(--orange-p);border:1.5px solid #F0C88A;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:20px;flex-shrink:0">📋</span>
+                <div style="flex:1">
+                  <div style="font-weight:700;font-size:13px;color:var(--orange)">Valida tu e-RUT para facturar</div>
+                  <div style="font-size:11px;color:#8B5000;margin-top:2px;line-height:1.4">Sube el e-RUT de tu empresa — extraemos los datos automáticamente.</div>
+                </div>
+                <button onclick="abrirErutModal()" style="background:var(--orange);color:#fff;border:none;border-radius:9px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--font)">📤 Subir</button>
+              </div>
+              <div id="erutValidado" style="display:none;background:var(--green-p);border:1.5px solid #B8E8CA;border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:10px">
+                <span style="font-size:20px">✅</span>
+                <div style="flex:1"><div style="font-weight:700;font-size:12px;color:var(--green)">e-RUT validado</div><div style="font-size:11px;color:#166534;margin-top:1px" id="erutValidadoInfo">—</div></div>
+                <button onclick="abrirErutModal()" style="background:none;color:var(--green);border:1px solid var(--green);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)">Actualizar</button>
+              </div>
+            </div>
+            <!-- RUT empresa -->
+            <div style="position:relative;margin-bottom:6px">
+              <input type="text" id="cRut" class="finput" placeholder="RUT empresa *" style="margin:0;padding-right:80px" oninput="onRutInput(this)">
+              <span class="rut-status" id="rutStatus"></span>
+            </div>
+            <div class="field-msg" id="rutMsg"></div>
+            <div class="rut-verified-badge" id="rutBadge">
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>
+              RUT válido — listo para facturar
+            </div>
+            <!-- Campos factura -->
+            <div class="factura-fields" id="facturaFields">
+              <input type="text" id="cRazon" class="finput" placeholder="Razón social *">
+              <input type="text" id="cGiro" class="finput" placeholder="Giro comercial *">
+              <div class="frow">
+                <input type="text" id="cComunaFact" class="finput" placeholder="Comuna" style="margin:0">
+                <input type="text" id="cRegionFact" class="finput" placeholder="Región" style="margin:0">
+              </div>
+            </div>
+            <!-- Campos comunes para factura también -->
+            <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">
+              <div style="position:relative">
+                <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--g3);font-weight:700;pointer-events:none;z-index:1">+56</span>
+                <input type="tel" id="cTelFact" class="finput" placeholder="9 XXXX XXXX *" style="margin:0;padding-left:42px">
+              </div>
+              <input type="email" id="cEmailFact" class="finput" placeholder="Email de contacto *" style="margin:0">
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="totals">
-      <div class="trow"><span>Subtotal neto</span><span id="tNeto">$0</span></div>
-      <div class="trow"><span>IVA (19%)</span><span id="tIva">$0</span></div>
-      <div class="trow"><span id="tShipLbl">Despacho</span><span id="tShip">—</span></div>
-      <div class="trow trow-total"><span>Total</span><span id="tTotal">$0</span></div>
-    </div>
-    <div class="cs">
-      <div class="cs-title">Método de pago</div>
-      <div class="pay-opts" id="payOpts">
-        <label class="pay-opt on" onclick="selPay(this)"><input type="radio" name="p" value="webpay" checked><span class="pay-name">WebPay Plus</span><span class="pay-sub">Débito / Crédito</span></label>
-        <label class="pay-opt" onclick="selPay(this)"><input type="radio" name="p" value="transferencia"><span class="pay-name">Transferencia</span><span class="pay-sub">BCI / Santander</span></label>
-        <label class="pay-opt" onclick="selPay(this)"><input type="radio" name="p" value="khipu"><span class="pay-name">Khipu</span><span class="pay-sub">Pago con tu banco</span></label>
+
+      <!-- ─────────── PASO 3: ENVÍO ─────────── -->
+      <div class="co-panel" id="coP3">
+        <div class="cs">
+          <div class="cs-title">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            Despacho / Retiro
+          </div>
+          <!-- Toggle 3 opciones -->
+          <div class="doc-toggle" style="margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
+            <div class="dtog on" id="dtDespacho" onclick="setEntrega('despacho')" style="flex-direction:column;padding:8px 4px;gap:2px;text-align:center;font-size:11px">
+              <span class="dtog-icon" style="font-size:16px">🏠</span>Domicilio
+            </div>
+            <div class="dtog" id="dtAgencia" onclick="setEntrega('agencia')" style="flex-direction:column;padding:8px 4px;gap:2px;text-align:center;font-size:11px">
+              <span class="dtog-icon" style="font-size:16px">🏢</span>Agencia
+            </div>
+            <div class="dtog" id="dtRetiro" onclick="setEntrega('retiro')" style="flex-direction:column;padding:8px 4px;gap:2px;text-align:center;font-size:11px">
+              <span class="dtog-icon" style="font-size:16px">🏪</span>En tienda
+            </div>
+          </div>
+
+          <!-- DOMICILIO -->
+          <div id="secDespacho">
+            <div style="position:relative;margin-bottom:8px">
+              <input type="text" id="cDir" class="finput" placeholder="Dirección de despacho *" style="margin:0;padding-right:32px" autocomplete="off">
+              <span id="cDirPin" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;opacity:.4">📍</span>
+            </div>
+            <input type="text" id="cDepto" class="finput" placeholder="Dpto / Casa / Oficina (opcional)">
+            <div class="frow" style="margin-bottom:8px">
+              <input type="text" id="cComuna" class="finput" placeholder="Comuna" style="margin:0" readonly>
+              <input type="text" id="cRegionAuto" class="finput" placeholder="Región" style="margin:0" readonly>
+            </div>
+            <!-- Destinatario -->
+            <div style="background:var(--blue-p);border:1px solid var(--blue-p2);border-radius:10px;
+              padding:10px 13px;font-size:12px;color:var(--blue);margin-bottom:8px;
+              display:flex;align-items:center;justify-content:space-between;gap:8px">
+              <span>👤 Destinatario: <strong id="despDestinatarioLabel">igual al comprador</strong></span>
+              <button onclick="togglePersonalizarDespacho()" id="btnPersonalizar"
+                style="background:var(--blue);color:#fff;border:none;border-radius:8px;
+                padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--font)">
+                ✏️ Editar
+              </button>
+            </div>
+            <div id="despPersonalizar" style="display:none;background:rgba(0,87,184,.04);
+              border:1.5px solid var(--blue-p2);border-radius:12px;padding:12px 14px;margin-bottom:8px">
+              <input type="text" id="despNombre" class="finput" placeholder="Nombre de quien recibe *" style="margin:0 0 8px" oninput="actualizarDestinatario()">
+              <input type="text" id="despAtencion" class="finput" placeholder="Atención a (opcional)" style="margin:0">
+            </div>
+            <!-- Cotizar -->
+            <button class="cotizar-btn" onclick="cotizar()" style="width:100%;display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:6px">
+              <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+              Cotizar envío
+            </button>
+            <div class="ship-opts" id="shipOpts"><span class="ship-ph">Ingresa tu comuna y presiona "Cotizar envío"</span></div>
+          </div>
+
+          <!-- AGENCIA -->
+          <div id="secAgencia" style="display:none;background:var(--blue-p);border:1px solid var(--blue-p2);border-radius:12px;padding:12px 14px">
+            <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px">🏢 Despacho a agencia courier</div>
+            <div style="font-size:11.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">El pedido llega a la sucursal más cercana. Debes retirarlo con tu cédula.</div>
+            <select id="cCourierAgencia" class="finput" style="margin-bottom:8px">
+              <option value="">Selecciona courier *</option>
+              <option>Chilexpress</option><option>Starken</option><option>Bluexpress</option>
+            </select>
+            <input type="text" id="cAgenciaCiudad" class="finput" placeholder="Ciudad de la agencia *">
+            <input type="text" id="cAtencionA" class="finput" placeholder="Atención a (opcional — persona que retira)" style="margin:0">
+          </div>
+
+          <!-- RETIRO -->
+          <div id="secRetiro" style="display:none">
+            <div style="background:var(--green-p);border:1px solid #b0dfc0;border-radius:var(--r-sm);padding:10px 12px;font-size:12px;color:var(--green);margin-bottom:10px;display:flex;gap:8px">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <div><strong>Retiro gratuito en tienda</strong><br>📍 Santiago · Lun a Vie 9:00–18:00 hrs<br>⏱️ Listo en 1-2 horas tras confirmación de pago</div>
+            </div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px">¿Quién retira?</div>
+            <div class="doc-toggle" id="retiroTipoToggle" style="margin-bottom:10px">
+              <div class="dtog on" id="rtPersona" onclick="setRetiroTipo('persona')"><span class="dtog-icon">👤</span>Titular</div>
+              <div class="dtog" id="rtTransporte" onclick="setRetiroTipo('transporte')"><span class="dtog-icon">🚛</span>Courier</div>
+              <div class="dtog" id="rtTercero" onclick="setRetiroTipo('tercero')"><span class="dtog-icon">👥</span>Tercero</div>
+            </div>
+            <div id="retiroBoleta" style="display:none">
+              <input type="text" id="cRutRetiro" class="finput" placeholder="RUT de quien retira" style="padding-right:34px" oninput="onRutRetiroInput(this)">
+              <div class="field-msg" id="rutRetiroMsg"></div>
+            </div>
+            <div id="retiroFactura" style="display:none">
+              <input type="text" id="cNombreRetiro" class="finput" placeholder="Nombre de quien retira *">
+            </div>
+            <div id="retiroTransporte" style="display:none">
+              <select id="cEmpresaTransporte" class="finput"><option value="">Empresa de transporte *</option><option>Chilexpress</option><option>Starken</option><option>Bluexpress</option></select>
+              <input type="text" id="cGuiaTransporte" class="finput" placeholder="N° de guía / OT">
+            </div>
+            <div id="retiroTercero" style="display:none">
+              <div class="frow">
+                <input type="text" id="cTerceroNombre" class="finput" placeholder="Nombre del tercero *" style="margin:0">
+                <input type="text" id="cTerceroRut" class="finput" placeholder="RUT del tercero *" style="margin:0" oninput="onRutRetiroInput(this,'terceroRutMsg','terceroRutIcon')">
+              </div>
+              <div class="field-msg" id="terceroRutMsg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─────────── PASO 4: PAGO ─────────── -->
+      <div class="co-panel" id="coP4">
+
+        <!-- Resumen compacto -->
+        <div class="cs" id="coResumen" style="background:rgba(0,87,184,.04);border-color:var(--blue-p2)">
+          <div class="cs-title" style="margin-bottom:10px">📋 Resumen del pedido</div>
+          <div id="coResumenItems" style="font-size:12.5px;display:flex;flex-direction:column;gap:6px"></div>
+          <div style="border-top:1px solid var(--border);margin-top:10px;padding-top:10px">
+            <div class="trow" style="font-size:12px"><span style="color:var(--muted)">Subtotal neto</span><span id="tNeto2">—</span></div>
+            <div class="trow" style="font-size:12px"><span style="color:var(--muted)">IVA (19%)</span><span id="tIva2">—</span></div>
+            <div class="trow" style="font-size:12px"><span id="tShipLbl2" style="color:var(--muted)">Despacho</span><span id="tShip2">—</span></div>
+            <div class="trow trow-total" style="font-size:18px;margin-top:8px;padding-top:8px"><span>Total</span><span id="tTotal2" style="color:var(--red)">—</span></div>
+          </div>
+          <div style="margin-top:8px;font-size:11px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px">
+            <span id="coResumenNombre" style="font-weight:600"></span>
+            <span>·</span>
+            <span id="coResumenDoc"></span>
+            <span>·</span>
+            <span id="coResumenEnvio"></span>
+          </div>
+        </div>
+
+        <!-- Método de pago -->
+        <div class="cs">
+          <div class="cs-title">💳 Método de pago</div>
+          <div class="pay-opts" id="payOpts">
+            <label class="pay-opt on" onclick="selPay(this)">
+              <input type="radio" name="p" value="webpay" checked>
+              <span class="pay-name">WebPay Plus</span>
+              <span class="pay-sub">Débito / Crédito / RedCompra</span>
+            </label>
+            <label class="pay-opt" onclick="selPay(this)">
+              <input type="radio" name="p" value="transferencia">
+              <span class="pay-name">Transferencia bancaria</span>
+              <span class="pay-sub">BCI / Santander — confirmación manual</span>
+            </label>
+            <label class="pay-opt" onclick="selPay(this)">
+              <input type="radio" name="p" value="khipu">
+              <span class="pay-name">Khipu</span>
+              <span class="pay-sub">Pago directo desde tu banco</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- T&C + botón cotización -->
+        <div style="margin-bottom:10px;padding:0 2px">
+          <label style="display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--muted);cursor:pointer;line-height:1.5">
+            <input type="checkbox" id="coTyC" style="margin-top:2px;flex-shrink:0">
+            He leído y acepto los <a href="#" style="color:var(--blue)">términos y condiciones</a> de SSTT SpA.
+          </label>
+        </div>
+
+        <!-- Botón cotización -->
+        <button onclick="abrirModalCotizacion()"
+          style="width:100%;background:var(--g6);color:var(--black);border:1px solid var(--border);border-radius:14px;
+                 padding:12px;font-size:13px;font-weight:700;display:flex;align-items:center;
+                 justify-content:center;gap:8px;cursor:pointer;margin-bottom:8px;font-family:var(--font)">
+          📄 Generar Cotización
+        </button>
+
+        <!-- Finalizar compra -->
+        <button class="pay-now-btn" onclick="checkout()">
+          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Finalizar compra
+        </button>
+        <div class="pay-badges">
+          <span class="pb2 pb2-wp">WebPay Plus</span>
+          <span class="pb2 pb2-tr">Transferencia BCI</span>
+          <span class="pb2 pb2-kh">Khipu</span>
+          <span class="pb2 pb2-bs">Bsale</span>
+        </div>
+      </div>
+
+    </div><!-- /co-track -->
+  </div><!-- /co-viewport -->
+
+  <!-- ══ STICKY BOTTOM ══════════════════════════════════════════ -->
+  <div class="cart-sticky" id="cartSticky" style="display:none">
+    <!-- Totales compactos (pasos 1-3) -->
+    <div id="coStickyTotals">
+      <div class="totals" style="margin-bottom:8px">
+        <div class="trow"><span>Subtotal neto</span><span id="tNeto">$0</span></div>
+        <div class="trow"><span>IVA (19%)</span><span id="tIva">$0</span></div>
+        <div class="trow"><span id="tShipLbl">Despacho</span><span id="tShip">—</span></div>
+        <div class="trow trow-total"><span>Total con IVA</span><span id="tTotal">$0</span></div>
       </div>
     </div>
-    <button onclick="abrirModalCotizacion()"
-      style="width:100%;background:var(--black);color:#fff;border:none;border-radius:16px;
-             padding:14px;font-size:14px;font-weight:700;display:flex;align-items:center;
-             justify-content:center;gap:8px;cursor:pointer;transition:all .18s;
-             font-family:var(--font);margin-bottom:10px;
-             box-shadow:0 4px 16px rgba(0,0,0,.18)"
-      onmouseover="this.style.background='#333';this.style.transform='translateY(-1px)'"
-      onmouseout="this.style.background='var(--black)';this.style.transform=''">
-      📄 Generar Cotización
+    <!-- Botón principal dinámico -->
+    <button id="coNextBtn" class="pay-now-btn" onclick="checkoutNext()" style="margin-bottom:0">
+      Continuar →
     </button>
-    <button class="pay-now-btn" onclick="checkout()">
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      Finalizar compra
-    </button>
-    <div class="pay-badges">
-      <span class="pb2 pb2-wp">WebPay Plus</span>
-      <span class="pb2 pb2-tr">Transferencia BCI</span>
-      <span class="pb2 pb2-kh">Khipu</span>
-      <span class="pb2 pb2-bs">Boleta/Factura Bsale</span>
-    </div>
   </div>
+
 </aside>
 
 <!-- LOGIN / REGISTRO MODAL -->
@@ -6958,116 +6958,167 @@ if (window.pdfjsLib) {
 </div><!-- /acDori -->
 
 </div><!-- /wrap -->
-</div><!-- /secAcademia -->
+</div><!-- /secAcademia<footer style="background:#fff;border-top:2px solid #f0f0f0;color:#333;padding:0;margin-top:0">
 
-<!-- PRODUCT DETAIL MODAL -->
-<div class="prod-modal-overlay" id="prodModalOverlay" onclick="if(event.target===this)closeProdModal()">
-  <div class="prod-modal" onclick="event.stopPropagation()" id="prodModalInner">
-    <!-- filled by JS -->
+  <!-- ── Barra superior: métricas de confianza ── -->
+  <div style="background:#f8f9fa;border-bottom:1px solid #eee;padding:16px 0">
+    <div class="wrap" style="max-width:1200px;display:grid;grid-template-columns:repeat(4,1fr);gap:0">
+      <div style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#E8001C" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
+        <div>
+          <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">Estado de compra</div>
+          <div style="font-size:11px;color:#888;margin-top:1px">Seguimiento online</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#E8001C" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        <div>
+          <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">Contáctanos</div>
+          <div style="font-size:11px;color:#888;margin-top:1px">Escríbenos</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#E8001C" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <div>
+          <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">+56 2 2204 2119</div>
+          <div style="font-size:11px;color:#888;margin-top:1px">Lun a Vie · 9:00–18:00 hrs</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:8px 20px">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#E8001C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        <div>
+          <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">Centro de ayuda</div>
+          <div style="font-size:11px;color:#888;margin-top:1px">Estamos para ayudarte</div>
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
-<!-- VIDEO MODAL -->
-<div class="vmod" id="vmod" onclick="if(event.target===this)closeVideo()">
-  <div class="vmod-inner">
-    <div class="vmod-hd"><span id="vmodTitle">Video</span><button class="vmod-x" onclick="closeVideo()">✕</button></div>
-    <div class="vmod-frame"><iframe id="vmodFrame" frameborder="0" allowfullscreen allow="autoplay;encrypted-media"></iframe></div>
-  </div>
-</div>
-<footer style="
-  background:rgba(18,18,22,.96);
-  backdrop-filter:blur(28px) saturate(160%);
-  -webkit-backdrop-filter:blur(28px) saturate(160%);
-  border-top:1px solid rgba(255,255,255,.07);
-  color:rgba(255,255,255,.65);
-  padding:40px 0 24px;
-  margin-top:0;
-">
-  <div class="wrap" style="max-width:1200px">
-
-    <!-- Grid principal -->
-    <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:40px;margin-bottom:36px">
+  <!-- ── Grid principal links ── -->
+  <div class="wrap" style="max-width:1200px;padding:36px 20px 28px">
+    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:32px">
 
       <!-- Brand -->
       <div>
         <div style="margin-bottom:14px">
-          <div style="font-family:var(--font-d);font-size:22px;font-weight:800;font-style:italic;
-            color:#fff;letter-spacing:-.5px">SSTT®</div>
-          <div style="font-size:11px;color:rgba(255,255,255,.35);margin-top:2px;letter-spacing:.3px;text-transform:uppercase">SpA · Chile</div>
+          <div style="font-family:var(--font-d);font-size:26px;font-weight:900;color:#111;letter-spacing:-.5px">SSTT®</div>
+          <div style="font-size:10px;color:#999;margin-top:2px;text-transform:uppercase;letter-spacing:.4px">SpA · Distribuidor Oficial Dahua · Chile</div>
         </div>
-        <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(232,0,28,.15);
-          border:1px solid rgba(232,0,28,.3);border-radius:6px;padding:4px 10px;margin-bottom:14px">
-          <span style="width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0"></span>
-          <span style="font-size:10px;font-weight:800;color:#FFA0A8;text-transform:uppercase;letter-spacing:.6px">Distribuidor Oficial Dahua</span>
+        <div style="display:inline-flex;align-items:center;gap:7px;background:#fff0f0;border:1px solid #fcc;border-radius:6px;padding:4px 10px;margin-bottom:14px">
+          <span style="width:6px;height:6px;border-radius:50%;background:#E8001C;flex-shrink:0"></span>
+          <span style="font-size:10px;font-weight:800;color:#E8001C;text-transform:uppercase;letter-spacing:.5px">Distribuidor Oficial Dahua Technology</span>
         </div>
-        <p style="font-size:12.5px;line-height:1.65;color:rgba(255,255,255,.45);margin-bottom:16px">
+        <p style="font-size:12.5px;line-height:1.65;color:#666;margin-bottom:16px">
           Distribuidor Regional Oficial Dahua Technology para Chile.<br>
           Atención técnica especializada en CCTV, NVR, control de accesos y sistemas de seguridad profesionales.
         </p>
-        <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;color:rgba(255,255,255,.4)">
-          <span>📍 General José Artigas 3028, Ñuñoa · Santiago</span>
-          <span>📞 +56 2 2204 2119</span>
-          <a href="/cdn-cgi/l/email-protection#2a5c4f445e4b596a59595e5e044946" style="color:rgba(255,255,255,.5);text-decoration:none" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">✉️ <span class="__cf_email__" data-cfemail="e7918289938694a794949393c9848b">[email&#160;protected]</span></a>
+        <div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:#555">
+          <span>📍 Tienda Física: General José Artigas 3028, Ñuñoa · Santiago</span>
+          <span>⏰ Lun a Vie · 9:00–18:00 hrs</span>
+          <a href="tel:+56222042119" style="color:#E8001C;text-decoration:none;font-weight:600">📞 +56 2 2204 2119</a>
+          <a href="mailto:ventas@sstt.cl" style="color:#555;text-decoration:none" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#555'">✉️ ventas@sstt.cl</a>
+        </div>
+        <!-- RRSS -->
+        <div style="display:flex;gap:10px;margin-top:16px;align-items:center">
+          <a href="#" style="display:flex;align-items:center;gap:5px;color:#444;text-decoration:none;font-size:12px;font-weight:600" onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color='#444'">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+            Instagram
+          </a>
+          <a href="#" style="display:flex;align-items:center;gap:5px;color:#444;text-decoration:none;font-size:12px;font-weight:600" onmouseover="this.style.color='#1877F2'" onmouseout="this.style.color='#444'">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+          <a href="#" style="display:flex;align-items:center;gap:5px;color:#444;text-decoration:none;font-size:12px;font-weight:600" onmouseover="this.style.color='#0A66C2'" onmouseout="this.style.color='#444'">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+          </a>
         </div>
       </div>
 
-      <!-- Productos -->
+      <!-- Sobre SSTT -->
       <div>
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;
-          color:rgba(255,255,255,.3);margin-bottom:14px">Productos</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Cámaras IP Domo</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Cámaras HDCVI 4K</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">NVR / Grabadores</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Kits Completos</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Switch PoE</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Control Accesos</a>
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #E8001C;display:inline-block">Sobre SSTT</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Acerca de Nosotros <span style="color:#ccc">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Política de Privacidad <span style="color:#ccc">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Garantía Dahua <span style="color:#ccc">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Trabaja Con Nosotros <span style="color:#ccc">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">¿Cómo llegar? <span style="color:#ccc">›</span></a>
         </div>
       </div>
 
-      <!-- Utilidades -->
+      <!-- Servicios -->
       <div>
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;
-          color:rgba(255,255,255,.3);margin-bottom:14px">Utilidades</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Calculador Disco Duro</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Calculador Cámaras</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Primeros Auxilios CCTV</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Cómo armar cable UTP</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Subir DVR a Internet</a>
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #E8001C;display:inline-block">Servicios</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Estado de tu compra <span style="color:#ccc">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Retiros y Despachos <span style="color:#ccc">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Formas de Pago <span style="color:#ccc">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Facturación Electrónica <span style="color:#ccc">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Soporte Técnico <span style="color:#ccc">›</span></a>
         </div>
       </div>
 
-      <!-- Información -->
+      <!-- Compra Segura -->
       <div>
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;
-          color:rgba(255,255,255,.3);margin-bottom:14px">Información</div>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Cómo comprar</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Política post-venta</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Garantía Dahua</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Ubicación y Contacto</a>
-          <a href="#" style="font-size:13px;color:rgba(255,255,255,.5);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.5)'">Política de privacidad</a>
+        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #E8001C;display:inline-block">Compra Segura</div>
+        <p style="font-size:12px;color:#666;margin-bottom:14px;line-height:1.5">Todas tus compras están protegidas con tecnología SSL y pagos certificados.</p>
+        <!-- SSL badge -->
+        <div style="display:flex;align-items:center;gap:8px;background:#f8fffe;border:1px solid #d0ead0;border-radius:8px;padding:8px 12px;margin-bottom:10px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A7F3C" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#1A7F3C">SSL Secure</div>
+            <div style="font-size:10px;color:#888">Conexión cifrada 256-bit</div>
+          </div>
+        </div>
+        <!-- WebPay badge -->
+        <div style="display:flex;align-items:center;gap:8px;background:#f5f8ff;border:1px solid #d0d8f0;border-radius:8px;padding:8px 12px;margin-bottom:10px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B2CC1" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <div>
+            <div style="font-size:11px;font-weight:800;color:#1B2CC1">WebPay Plus</div>
+            <div style="font-size:10px;color:#888">Débito · Crédito · RedCompra</div>
+          </div>
+        </div>
+        <!-- Couriers -->
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+          <span style="background:#fff3e0;border:1px solid #ffd580;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;color:#B45309">Chilexpress</span>
+          <span style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;color:#2E7D32">Starken</span>
+          <span style="background:#e3f2fd;border:1px solid #90caf9;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;color:#1565C0">Bluexpress</span>
         </div>
       </div>
 
     </div>
 
-    <!-- Separador + bottom bar -->
-    <div style="border-top:1px solid rgba(255,255,255,.07);padding-top:20px;
-      display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+    <!-- ── Bottom bar ── -->
+    <div style="border-top:1px solid #eee;padding-top:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <span style="font-size:12px;color:#aaa">SSTT SpA © 2026 | Distribución autorizada Dahua Technology para Chile. Todos los derechos reservados.</span>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <a href="#" style="font-size:11px;color:#aaa;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#aaa'">Política de privacidad</a>
+        <span style="color:#ddd">·</span>
+        <a href="#" style="font-size:11px;color:#aaa;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#aaa'">Términos de uso</a>
+        <span style="color:#ddd">·</span>
+        <a href="#" style="font-size:11px;color:#aaa;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#aaa'">Garantías</a>
+      </div>
+    </div>
+  </div>
 
-      <span style="font-size:12px;color:rgba(255,255,255,.25)">
-        © 2025 SSTT SpA — Distribución autorizada Dahua Technology para Chile
-      </span>
+  <!-- ── Botón flotante WhatsApp ── -->
+  <a href="https://wa.me/56222042119?text=Hola%20SSTT%2C%20necesito%20ayuda%20con%20una%20compra"
+    target="_blank" rel="noopener"
+    style="position:fixed;bottom:80px;right:20px;z-index:999;
+      background:#25D366;color:#fff;border-radius:50px;
+      padding:10px 18px;font-size:13px;font-weight:700;
+      display:flex;align-items:center;gap:8px;
+      box-shadow:0 4px 20px rgba(37,211,102,.4);
+      text-decoration:none;transition:all .2s;
+      font-family:var(--font)"
+    onmouseover="this.style.background='#1ebe5d';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(37,211,102,.5)'"
+    onmouseout="this.style.background='#25D366';this.style.transform='';this.style.boxShadow='0 4px 20px rgba(37,211,102,.4)'">
+    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+    Contáctanos
+  </a>
 
-      <!-- Badges integraciones -->
-      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
-        <span style="background:rgba(0,87,184,.25);border:1px solid rgba(0,87,184,.5);
-          border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:rgba(255,255,255,.7)">Bsale</span>
-        <span style="background:rgba(0,120,0,.2);border:1px solid rgba(0,180,0,.5);
-          border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:rgba(255,255,255,.7)">WebPay Plus</span>
-        <span style="background:rgba(200,160,0,.2);border:1px solid rgba(255,200,0,.5);
+</footer>an style="background:rgba(200,160,0,.2);border:1px solid rgba(255,200,0,.5);
           border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:rgba(255,255,255,.7)">Chilexpress</span>
         <span style="background:rgba(0,80,0,.2);border:1px solid rgba(0,160,0,.5);
           border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:rgba(255,255,255,.7)">Starken</span>
@@ -8839,12 +8890,20 @@ function updateBadge() {
 }
 
 function renderCart() {
-  const items=qs('cartItems'), empty=qs('cartEmpty'), foot=qs('cartFoot');
-  // Mostrar/ocultar botón vaciar
+  const items=qs('cartItems'), empty=qs('cartEmpty');
+  const cartSticky = qs('cartSticky');
   const clearBtn = document.getElementById('clearCartBtn');
   if (clearBtn) clearBtn.style.display = S.cart.length ? 'flex' : 'none';
-  if (!S.cart.length) { empty.style.display='flex'; items.innerHTML=''; foot.style.display='none'; return; }
-  empty.style.display='none'; foot.style.display='block';
+  if (!S.cart.length) {
+    empty.style.display='flex'; items.innerHTML='';
+    if (cartSticky) cartSticky.style.display = 'none';
+    var stepper = qs('coStepper'); if(stepper) stepper.style.display='none';
+    return;
+  }
+  empty.style.display='none';
+  if (cartSticky) cartSticky.style.display = 'block';
+  // Actualizar stepper
+  var stepper = qs('coStepper'); if(stepper) stepper.style.display='flex';
   items.innerHTML = S.cart.map(p=>`
     <div class="citem">
       <img class="citem-img" src="${imgProxyUrl(p.codigo)}" onerror="this.style.opacity='.3'">
@@ -8863,15 +8922,24 @@ function renderCart() {
   calcTotals();
 }
 
+function scrollToCartItems() {
+  const body = qs('cartBody');
+  if(body) body.scrollTo({top:0, behavior:'smooth'});
+}
+
 function calcTotals() {
   const neto=S.cart.reduce((a,c)=>a+c.pneto*c.qty,0);
   const iva=Math.round(neto*.19);
-  const total=neto+iva+S.shipCost;
-  qs('tNeto').textContent=fmt(neto);
-  qs('tIva').textContent=fmt(iva);
-  qs('tShip').textContent=S.shipCost?fmt(S.shipCost):'—';
-  qs('tShipLbl').textContent=S.shipCost?`Despacho (${S.shipCourier})`:'Despacho';
-  qs('tTotal').textContent=fmt(total);
+  const total=neto+iva+(S.shipCost||0);
+  const safe = id => { const el=document.getElementById(id)||qs(id); return el||{textContent:''}; };
+  safe('tNeto').textContent=fmt(neto);
+  safe('tIva').textContent=fmt(iva);
+  safe('tShip').textContent=S.shipCost?fmt(S.shipCost):'—';
+  safe('tShipLbl').textContent=S.shipCost?`Despacho (${S.shipCourier})`:'Despacho';
+  safe('tTotal').textContent=fmt(total);
+  // Actualizar también el botón con el total
+  const btn = document.getElementById('coNextBtn');
+  if (btn && coStep < 3) btn.textContent = CO_BTNS[coStep] + ' · ' + fmt(total);
 }
 
 function openCart()  { qs('cartOverlay').classList.add('open'); qs('cartDrawer').classList.add('open'); }
@@ -9508,13 +9576,20 @@ let retiroTipo  = 'persona';
 
 function setEntrega(type) {
   entregaType = type;
-  qs('dtDespacho').classList.toggle('on',  type==='despacho');
-  qs('dtRetiro').classList.toggle('on',    type==='retiro');
-  qs('secDespacho').style.display = type==='despacho' ? 'block' : 'none';
-  qs('secRetiro').style.display   = type==='retiro'   ? 'block' : 'none';
+  ['dtDespacho','dtAgencia','dtRetiro'].forEach(id => {
+    const el = qs(id); if(el) el.classList.remove('on');
+  });
+  const activo = type==='despacho' ? 'dtDespacho' : type==='agencia' ? 'dtAgencia' : 'dtRetiro';
+  const el = qs(activo); if(el) el.classList.add('on');
+  const sd = qs('secDespacho'), sa = qs('secAgencia'), sr = qs('secRetiro');
+  if(sd) sd.style.display = type==='despacho' ? 'block' : 'none';
+  if(sa) sa.style.display = type==='agencia'  ? 'block' : 'none';
+  if(sr) sr.style.display = type==='retiro'   ? 'block' : 'none';
   if (type==='retiro') {
     S.shipCost=0; S.shipCourier='Retiro en tienda'; calcTotals();
     updateRetiroUI();
+  } else if (type==='agencia') {
+    S.shipCost=0; S.shipCourier='Agencia courier'; calcTotals();
   } else {
     S.shipCost=0; S.shipCourier=''; calcTotals();
   }
@@ -17756,7 +17831,13 @@ function getTechProducts(terms) {
   if (!terms || !terms.length) return '';
   var matches = PRODUCTS.filter(function(p) {
     var n = (p.nombre + ' ' + p.codigo).toLowerCase();
-    return terms.some(function(t){ return n.includes(t.toLowerCase()); });
+    var c = p.codigo.toLowerCase();
+    return terms.some(function(t) {
+      var tl = t.toLowerCase();
+      if (tl === '-pro-') return c.includes('-pro-') || c.endsWith('-pro');
+      if (tl.startsWith('-') || tl.endsWith('-')) return c.includes(tl);
+      return n.includes(tl);
+    });
   }).sort(function(a,b){ return a.ptotal - b.ptotal; }).slice(0, 4);
   if (!matches.length) return '<p style="font-size:12px;color:#999">Busca en el catálogo con el botón de abajo</p>';
   return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
@@ -17864,7 +17945,7 @@ var TECH_DATA = {
     ],
     usecase: 'Ideal para: proyectos enterprise, ciudades inteligentes, instalaciones críticas donde se requiere el máximo nivel de análisis visual de IA.',
     catSearch: 'xinghan pro',
-    catTerms: ['xinghan ai','-pro wizsense','-pro wizcolor','-pro tioc','tioc pro','wizcolor pro','wizsense pro'],
+    catTerms: ['xinghan','-pro-'],
   },
 };
 
@@ -17873,41 +17954,62 @@ function applyTechFilter() {
   filterByTech(window._activeTechTerms || []);
 }
 
-function filterByTech(terms) {
-  console.log('[filterByTech] terms:', terms);
-  if (!terms || !terms.length) {
-    console.warn('[filterByTech] Sin términos — abortando');
-    return;
-  }
+function filterByTech(terms, techName) {
+  if (!terms || !terms.length) return;
 
   var matched = PRODUCTS.filter(function(p) {
     var n = (p.nombre + ' ' + p.codigo).toLowerCase();
+    var c = p.codigo.toLowerCase();
     return terms.some(function(t) {
       var tl = t.toLowerCase();
-      if (tl.startsWith('-') || tl.endsWith('-')) {
-        return p.codigo.toLowerCase().includes(tl.replace(/-/g,''));
-      }
+      // Término especial: -pro- debe estar en el CÓDIGO rodeado de guiones
+      if (tl === '-pro-') return c.includes('-pro-') || c.endsWith('-pro');
+      // Término con guion inicial/final = buscar en código
+      if (tl.startsWith('-') || tl.endsWith('-')) return c.includes(tl);
+      // Búsqueda normal en nombre + código
       return n.includes(tl);
     });
   });
 
   S.techFilter = matched.map(function(p){ return p.id; });
-  console.log('[filterByTech] matched:', matched.length, '| techFilter IDs:', S.techFilter.slice(0,5));
   S.q = '';
   S.page = 1;
   S.cat = 'todas';
 
-  // Activar nav "Todos"
   document.querySelectorAll('.nav-link').forEach(function(el){
     el.classList.toggle('active', el.dataset.cat === 'todas');
   });
 
-  // Renderizar y actualizar breadcrumb
   render();
   var bc = document.getElementById('breadCur');
-  if (bc) bc.textContent = 'Tecnología: ' + (window._activeTechName||'') + ' — ' + matched.length + ' productos';
+  if (bc) bc.textContent = (techName||'Tecnología') + ' — ' + matched.length + ' productos';
 }
 
+
+function filterByTechTerms(terms) {
+  // Filtrar PRODUCTS directamente con catTerms — sin matchScore
+  if (!terms || !terms.length) return;
+  var filtered = PRODUCTS.filter(function(p) {
+    var n = (p.nombre + ' ' + p.codigo).toLowerCase();
+    // Para '-pro' solo aceptar si además tiene wizsense, wizcolor o tioc
+    if (terms.indexOf('-pro') >= 0 || terms.indexOf('-pro-') >= 0) {
+      var hasPro = n.includes('-pro') || n.endsWith('pro');
+      var hasBase = n.includes('wizsense') || n.includes('wizcolor') || n.includes('tioc') || n.includes('xinghan');
+      if (hasPro && hasBase) return true;
+      // También aceptar si tiene 'xinghan' solo
+      if (n.includes('xinghan')) return true;
+      return false;
+    }
+    return terms.some(function(t){ return n.includes(t.toLowerCase()); });
+  });
+  // Mostrar en catálogo usando el sistema interno
+  S.q = '__tech_filter__';
+  S.page = 1;
+  S._techFiltered = filtered;
+  renderCatalog();
+  showSection('catalogo');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
 
 function openTechModal(key) {
   var d = TECH_DATA[key];
@@ -17920,6 +18022,18 @@ function openTechModal(key) {
   }).join('');
 
   var prodsHtml = getTechProducts(d.catTerms);
+
+  // Calcular conteo real de productos
+  var matched = (d.catTerms||[]).length ? PRODUCTS.filter(function(p) {
+    var n = (p.nombre + ' ' + p.codigo).toLowerCase();
+    var c = p.codigo.toLowerCase();
+    return d.catTerms.some(function(t) {
+      var tl = t.toLowerCase();
+      if (tl === '-pro-') return c.includes('-pro-') || c.endsWith('-pro');
+      if (tl.startsWith('-') || tl.endsWith('-')) return c.includes(tl);
+      return n.includes(tl);
+    });
+  }) : [];
 
   wrap.innerHTML = [
     '<div class="tech-modal-head">',
@@ -17938,7 +18052,7 @@ function openTechModal(key) {
       '<p style="background:#f9f9f9;padding:12px;border-radius:8px;border-left:3px solid '+d.color+'">'+d.usecase+'</p>',
     '</div>',
     '<div class="tech-modal-footer">',
-      '<button class="tech-modal-btn tech-modal-btn-primary" id="techBtnVer">Ver '+(d.count||'')+' productos &#x2192;</button>',
+      '<button class="tech-modal-btn tech-modal-btn-primary" id="techBtnVer">Ver '+matched.length+' productos &#x2192;</button>',
       '<a href="'+d.url+'" target="_blank" rel="noopener" class="tech-modal-btn tech-modal-btn-secondary" style="display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none">Dahua.com &#x2197;</a>',
     '</div>'
   ].join('');
@@ -17950,7 +18064,6 @@ function openTechModal(key) {
     if (btnVer) {
       btnVer.onclick = function() {
         closeTechModal();
-        // Asegurar que sección catálogo esté activa SIN pushState
         var secCat = document.getElementById('secCatalogo');
         if (secCat && !secCat.classList.contains('active')) {
           document.querySelectorAll('.app-section').forEach(function(s){ s.classList.remove('active'); });
@@ -17959,9 +18072,8 @@ function openTechModal(key) {
             b.classList.toggle('active', b.dataset && b.dataset.sec === 'catalogo');
           });
         }
-        // Aplicar filtro DESPUÉS de que el DOM esté listo
         setTimeout(function() {
-          filterByTech(_terms);
+          filterByTech(_terms, d.title);
           window.scrollTo({top: 0, behavior: 'smooth'});
         }, 10);
       };
@@ -17970,12 +18082,11 @@ function openTechModal(key) {
   window._activeTechTerms = d.catTerms || [];
   window._activeTechName = d.title || '';
   document.getElementById('techModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
 }
 
 function closeTechModal() {
-  document.getElementById('techModal').classList.remove('open');
-  document.body.style.overflow = '';
+  var m = document.getElementById('techModal');
+  if (m) m.classList.remove('open');
 }
 
 function getTechLogo(key, color) {
@@ -17990,6 +18101,100 @@ function getTechLogo(key, color) {
 }
 
 document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeTechModal(); });
+
+// ══ CHECKOUT 4 PASOS ══════════════════════════════════════════
+var coStep = 0;
+var CO_STEPS = ['coP1','coP2','coP3','coP4'];
+var CO_TITLES = ['Tu Carro','Datos de Facturación','Despacho / Envío','Pago y Confirmación'];
+var CO_BTNS   = ['Continuar → Datos','Continuar → Envío','Continuar → Pago','Finalizar compra'];
+
+function checkoutGoTo(step, force) {
+  // No ir hacia adelante si el carro está vacío
+  if (step > 0 && !S.cart.length) return;
+  // No saltar pasos hacia adelante sin completar
+  if (!force && step > coStep + 1) return;
+  coStep = step;
+  // Mover el track
+  var track = document.getElementById('coTrack');
+  if (track) track.style.transform = 'translateX(-' + (step * 100) + '%)';
+  // Actualizar stepper
+  ['cst1','cst2','cst3','cst4'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('active','done');
+    if (i === step) el.classList.add('active');
+    else if (i < step) el.classList.add('done');
+  });
+  // Actualizar líneas entre pasos
+  document.querySelectorAll('.co-step-line').forEach(function(line, i) {
+    line.classList.toggle('done', i < step);
+  });
+  // Actualizar título y botón
+  var title = document.getElementById('cartHeadTitle');
+  if (title) title.innerHTML = (step > 0 ? '' : '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>') + CO_TITLES[step];
+  var nextBtn = document.getElementById('coNextBtn');
+  if (nextBtn) {
+    nextBtn.textContent = CO_BTNS[step];
+    nextBtn.onclick = step === 3 ? checkout : checkoutNext;
+    nextBtn.style.background = step === 3 ? 'var(--green,#1A7F3C)' : 'var(--black)';
+  }
+  // Mostrar/ocultar flecha atrás
+  var backBtn = document.getElementById('checkoutBack');
+  if (backBtn) backBtn.style.display = step > 0 ? 'flex' : 'none';
+  // Stepper visible solo si hay items
+  var stepper = document.getElementById('coStepper');
+  if (stepper) stepper.style.display = S.cart.length ? 'flex' : 'none';
+  // Scroll al top del panel activo
+  var panel = document.getElementById(CO_STEPS[step]);
+  if (panel) panel.scrollTop = 0;
+  // Actualizar resumen en paso 4
+  if (step === 3) updateCoResumen();
+}
+
+function checkoutNext() {
+  if (coStep < CO_STEPS.length - 1) checkoutGoTo(coStep + 1);
+}
+function checkoutPrev() {
+  if (coStep > 0) checkoutGoTo(coStep - 1);
+}
+
+function updateCoResumen() {
+  // Resumen de items
+  var itemsEl = document.getElementById('coResumenItems');
+  if (itemsEl) {
+    itemsEl.innerHTML = S.cart.map(function(p) {
+      return '<div style="display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid var(--border)">' +
+        '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + p.nombre.slice(0,45) + (p.nombre.length>45?'…':'') + '</div>' +
+        '<div style="font-size:10px;color:var(--muted)">' + p.codigo + ' · x' + p.qty + '</div></div>' +
+        '<div style="font-weight:700;font-size:13px;white-space:nowrap">' + fmt(p.ptotal*p.qty) + '</div>' +
+      '</div>';
+    }).join('');
+  }
+  // Totales
+  var neto = S.cart.reduce(function(a,c){ return a+c.pneto*c.qty; }, 0);
+  var iva = Math.round(neto*.19);
+  var total = neto + iva + (S.shipCost||0);
+  var safe = function(id) { var el=document.getElementById(id); return el||{textContent:''}; };
+  safe('tNeto2').textContent = fmt(neto);
+  safe('tIva2').textContent = fmt(iva);
+  safe('tShip2').textContent = S.shipCost ? fmt(S.shipCost) : 'Gratis';
+  safe('tShipLbl2').textContent = S.shipCourier ? 'Despacho (' + S.shipCourier + ')' : 'Despacho';
+  safe('tTotal2').textContent = fmt(total);
+  // Datos comprador
+  var nombre = (document.getElementById('cNombre')||{}).value || '';
+  var doc = docType === 'factura' ? 'Factura electrónica' : 'Boleta electrónica';
+  var envio = entregaType === 'retiro' ? 'Retiro en tienda' : entregaType === 'agencia' ? 'Agencia courier' : 'Despacho a domicilio';
+  safe('coResumenNombre').textContent = nombre;
+  safe('coResumenDoc').textContent = doc;
+  safe('coResumenEnvio').textContent = envio;
+}
+
+// Formatear RUT del campo principal
+function formatRutMain() {
+  var el = document.getElementById('cRutPersonalMain');
+  if (el) { el.value = formatRutStr(el.value); onRutInputModal(el,'rutMsgMain','rutStatusMain'); }
+}
+
 </script>
 </body>
 </html>
