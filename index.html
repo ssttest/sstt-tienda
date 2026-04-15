@@ -6003,10 +6003,7 @@ if (window.pdfjsLib) {
 <div class="hero">
   <div class="wrap hero-inner">
     <div>
-      <div class="hero-eyebrow">
-        <span></span>
-        Distribuidor Regional Oficial · Santiago, Chile
-      </div>
+
       <h1 class="hero-title">
         Seguridad Inteligente<br>con <em>Tecnología Dahua</em>
       </h1>
@@ -7295,10 +7292,10 @@ if (window.pdfjsLib) {
           <span>⏰ Lun a Vie · 8:30–17:45 hrs</span>
           <a href="tel:+56222042119" style="color:#E8001C;text-decoration:none;font-weight:600">📞 +56 2 2204 2119 · Ventas</a>
           <a href="tel:+56222257011" style="color:#E8001C;text-decoration:none;font-weight:600">📞 +56 2 2225 7011 · Ventas</a>
-          <a href="/cdn-cgi/l/email-protection#87f1e2e9f3e6f4c7f4f4f3f3a9e4eb" style="color:#555;text-decoration:none" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#555'">✉️ <span class="__cf_email__" data-cfemail="89ffece7fde8fac9fafafdfda7eae5">[email&#160;protected]</span></a>
-          <a href="/cdn-cgi/l/email-protection#7d0e120d120f09183d0e0e0909531e11" style="color:#555;text-decoration:none" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#555'">✉️ <span class="__cf_email__" data-cfemail="f88b9788978a8c9db88b8b8c8cd69b94">[email&#160;protected]</span></a>
+          <a href="mailto:ventas@sstt.cl" style="color:#555;text-decoration:none" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#555'">✉️ ventas@sstt.cl</a>
+          <a href="mailto:soporte@sstt.cl" style="color:#555;text-decoration:none" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#555'">✉️ soporte@sstt.cl</a>
         </div>
-        <!-- RRSS -->
+                <!-- RRSS -->
         <div style="display:flex;gap:10px;margin-top:16px;align-items:center">
           <a href="https://instagram.com/ssttcl" target="_blank" rel="noopener"
             style="display:flex;align-items:center;gap:5px;color:#444;text-decoration:none;font-size:12px;font-weight:600"
@@ -18937,3 +18934,23 @@ function formatRutMain() {
 }
 
 // Inicializar tema guardado en localStora
+
+// Inicializar tema guardado en localStorage al cargar
+(function(){
+  try {
+    var saved = localStorage.getItem('sstt_theme');
+    if (saved === 'dahua-dark') {
+      document.body.dataset.theme = 'dahua-dark';
+      var btn = document.getElementById('themeToggleBtn');
+      var icon = document.getElementById('themeIcon');
+      var lbl  = document.getElementById('themeLbl');
+      if (icon) icon.textContent = '🌙';
+      if (lbl)  { lbl.textContent = 'Dark'; lbl.style.display = ''; }
+      if (btn)  { btn.style.background = '#0A1628'; btn.style.color = '#00B4E6'; btn.style.borderColor = '#1B5FD4'; }
+    }
+  } catch(e) {}
+})();
+
+</script>
+</body>
+</html>
