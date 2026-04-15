@@ -1837,29 +1837,59 @@ nav {
 /* prodModal.open handled below */
 
 /* ── WRAPPER ─────────────────────────────────────────────────── */
+/* ══════════════════════════════════════════════════════════════
+   FICHA DE PRODUCTO — Apple Liquid Glass Tahoe
+   ══════════════════════════════════════════════════════════════ */
+
+/* Keyframes propios de la ficha */
+@keyframes pmGlassIn {
+  from { opacity:0; transform: translateY(20px) scale(0.97); filter: blur(4px); }
+  to   { opacity:1; transform: translateY(0) scale(1);       filter: blur(0); }
+}
+@keyframes pmShimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
 .pm-wrap {
-  background: #ffffff;
+  background: rgba(252,252,255,0.82);
+  backdrop-filter: blur(48px) saturate(200%) brightness(1.04);
+  -webkit-backdrop-filter: blur(48px) saturate(200%) brightness(1.04);
   min-height: 100%;
   max-width: 1060px;
   margin: 24px auto;
-  border-radius: 16px;
+  border-radius: 24px;
   overflow: hidden;
-  box-shadow: 0 8px 40px rgba(0,0,0,.13), 0 1.5px 0 rgba(255,255,255,.9);
-  animation: fadeUp .22s cubic-bezier(.4,0,.2,1);
+  border: 1px solid rgba(255,255,255,0.85);
+  box-shadow:
+    0 32px 80px rgba(0,0,0,0.16),
+    0 8px 24px rgba(0,0,0,0.08),
+    inset 0 1.5px 0 rgba(255,255,255,0.95),
+    inset 0 -1px 0 rgba(0,0,0,0.04);
+  animation: pmGlassIn .38s cubic-bezier(.32,.72,0,1) both;
   position: relative;
 }
+.pm-wrap::before {
+  content:'';
+  position:absolute; inset:0; border-radius:24px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0.15) 100%);
+  pointer-events:none; z-index:0;
+}
 @media(max-width:768px){
-  .pm-wrap { margin: 0; border-radius: 0; min-height: 100vh }
+  .pm-wrap { margin:0; border-radius:0; min-height:100vh; border:none; }
 }
 
-/* ── TOP BAR ─────────────────────────────────────────────────── */
+/* ── TOP BAR — glass dark ─────────────────────────────────────── */
 .pm-topbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
-  height: 42px;
-  background: #1a1a1a;
+  height: 44px;
+  background: rgba(15,15,20,0.88);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
   color: rgba(255,255,255,.45);
   font-size: 11.5px;
   position: sticky; top: 0; z-index: 10;
@@ -1868,240 +1898,298 @@ nav {
   display: flex; align-items: center; gap: 5px;
   font-size: 11.5px; color: rgba(255,255,255,.4);
 }
-.pm-breadcrumb a {
-  color: rgba(255,255,255,.4); cursor: pointer;
-  transition: color .15s;
-}
-.pm-breadcrumb a:hover { color: #fff }
-.pm-breadcrumb span:last-child {
-  color: rgba(255,255,255,.9); font-family: var(--font-m);
-  font-size: 11px; font-weight: 600;
-}
-.pm-breadcrumb-sep { color: rgba(255,255,255,.18); margin: 0 2px }
+.pm-breadcrumb a { color: rgba(255,255,255,.4); cursor:pointer; transition:color .15s; }
+.pm-breadcrumb a:hover { color:#fff }
+.pm-breadcrumb span:last-child { color:rgba(255,255,255,.9); font-family:var(--font-m); font-size:11px; font-weight:700; }
+.pm-breadcrumb-sep { color:rgba(255,255,255,.15); margin:0 2px }
 .pm-x {
-  background: rgba(255,255,255,.08); color: rgba(255,255,255,.7);
-  border: 1px solid rgba(255,255,255,.12); width: 28px; height: 28px; border-radius: 50%;
-  font-size: 14px; cursor: pointer; display: flex;
-  align-items: center; justify-content: center;
-  transition: all .15s; flex-shrink: 0;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: rgba(255,255,255,0.7);
+  width:30px; height:30px; border-radius:50%;
+  font-size:15px; cursor:pointer; display:flex;
+  align-items:center; justify-content:center;
+  transition:all .18s cubic-bezier(.32,.72,0,1); flex-shrink:0;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
 }
-.pm-x:hover { background: rgba(255,255,255,.18); color: #fff }
+.pm-x:hover {
+  background:rgba(255,255,255,0.22);
+  color:#fff;
+  transform: rotate(90deg) scale(1.1);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2);
+}
 
-/* ── HERO ────────────────────────────────────────────────────── */
+/* ── HERO ─────────────────────────────────────────────────────── */
 .pm-hero {
   display: grid;
   grid-template-columns: 380px 1fr;
   min-height: 360px;
-  border-bottom: 1px solid #efefef;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  position: relative; z-index: 1;
 }
-@media(max-width:680px){
-  .pm-hero { grid-template-columns: 1fr }
-}
+@media(max-width:680px){ .pm-hero { grid-template-columns:1fr } }
 
-/* Image panel — blanco limpio */
+/* Panel imagen — glass difuminado */
 .pm-img-panel {
-  background: #f8f9fa;
-  border-right: 1px solid #efefef;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 28px 24px;
-  position: relative;
-  gap: 16px;
+  background: rgba(248,249,252,0.60);
+  backdrop-filter: blur(32px) saturate(160%);
+  -webkit-backdrop-filter: blur(32px) saturate(160%);
+  border-right: 1px solid rgba(255,255,255,0.6);
+  display: flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding: 36px 28px 28px;
+  position: relative; gap:16px;
+  box-shadow: inset -1px 0 0 rgba(0,0,0,0.04);
 }
 .pm-series-ribbon {
-  position: absolute; top: 0; left: 0; right: 0;
-  padding: 7px 16px;
-  display: flex; align-items: center; gap: 6px;
-  font-size: 10.5px; font-weight: 800;
-  letter-spacing: .5px; text-transform: uppercase;
-  color: #fff;
+  position:absolute; top:0; left:0; right:0;
+  padding: 8px 16px;
+  display:flex; align-items:center; gap:6px;
+  font-size:10.5px; font-weight:800;
+  letter-spacing:.6px; text-transform:uppercase;
+  color:#fff;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 .pm-img-main {
-  max-width: 260px; max-height: 260px;
-  object-fit: contain;
-  margin-top: 24px;
-  transition: transform .35s cubic-bezier(.32,.72,0,1);
-  cursor: zoom-in;
-  filter: drop-shadow(0 8px 24px rgba(0,0,0,.12));
+  max-width:270px; max-height:270px;
+  object-fit:contain;
+  margin-top:28px;
+  transition: transform .4s cubic-bezier(.32,.72,0,1), filter .4s;
+  cursor:zoom-in;
+  filter: drop-shadow(0 12px 32px rgba(0,0,0,0.14));
 }
-.pm-img-main:hover { transform: scale(1.07) }
+.pm-img-main:hover {
+  transform: scale(1.08) translateY(-4px);
+  filter: drop-shadow(0 20px 48px rgba(0,0,0,0.20));
+}
 
-/* Info panel */
+/* Panel info */
 .pm-info-panel {
-  padding: 28px 32px;
-  display: flex; flex-direction: column; gap: 18px;
+  padding: 30px 34px;
+  display:flex; flex-direction:column; gap:18px;
+  background: rgba(255,255,255,0.40);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  position:relative; z-index:1;
 }
 .pm-code {
-  font-family: var(--font-m);
-  font-size: 11.5px; font-weight: 700;
-  color: var(--blue); letter-spacing: .8px;
-  text-transform: uppercase;
+  font-family:var(--font-m);
+  font-size:11px; font-weight:800;
+  color:var(--blue); letter-spacing:1px;
+  text-transform:uppercase;
 }
 .pm-name {
-  font-size: 20px; font-weight: 700;
-  color: #111; line-height: 1.38;
-  letter-spacing: -.2px;
+  font-size:21px; font-weight:700;
+  color:#0a0a0f; line-height:1.36;
+  letter-spacing:-.25px;
 }
 
-/* Price card — limpio, sin borde izquierdo rojo */
+/* Price card — glass pill */
 .pm-price-card {
-  background: #f8f9fa;
-  border: 1px solid #efefef;
-  border-radius: 12px;
-  padding: 14px 18px;
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(255,255,255,0.85);
+  border-radius: 18px;
+  padding: 16px 20px;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9);
 }
 .pm-price-main {
-  font-family: var(--font-d);
-  font-size: 36px; font-weight: 800;
-  color: #111; line-height: 1;
-  margin-bottom: 5px;
+  font-family:var(--font-d);
+  font-size:38px; font-weight:800;
+  color:#0a0a0f; line-height:1;
+  margin-bottom:5px; letter-spacing:-.5px;
 }
-.pm-price-sub {
-  font-size: 11.5px; color: #888; line-height: 1.6;
-}
-.pm-price-sub strong { color: #555 }
+.pm-price-sub { font-size:11.5px; color:#888; line-height:1.65; }
+.pm-price-sub strong { color:#444 }
 
 /* Stock pill */
 .pm-stock-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: #f0faf4; color: #1e8f4e;
-  border: 1px solid #b8e8ca; border-radius: 20px;
-  padding: 5px 13px; font-size: 11.5px; font-weight: 700;
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(30,143,78,0.10); color:#1e8f4e;
+  border:1px solid rgba(30,143,78,0.20); border-radius:50px;
+  padding:5px 14px; font-size:11.5px; font-weight:700;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
 }
-.pm-stock-pill.low  { background: #fffbeb; color: #b45309; border-color: #fde68a }
-.pm-stock-pill.out  { background: #f5f5f5; color: #999; border-color: #e5e5e5 }
-.pm-stock-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: currentColor;
-  animation: heroPulse 2s ease-in-out infinite;
-}
-.pm-stock-pill.out .pm-stock-dot { animation: none }
+.pm-stock-pill.low  { background:rgba(180,83,9,.08); color:#b45309; border-color:rgba(180,83,9,.2) }
+.pm-stock-pill.out  { background:rgba(0,0,0,.05); color:#999; border-color:rgba(0,0,0,.1) }
+.pm-stock-dot { width:6px; height:6px; border-radius:50%; background:currentColor; animation:heroPulse 2s ease-in-out infinite; }
+.pm-stock-pill.out .pm-stock-dot { animation:none }
 
-/* CTA buttons */
-.pm-cta-row {
-  display: flex; gap: 8px; flex-wrap: wrap; align-items: center;
-}
+/* CTA buttons — Liquid Glass pills */
+.pm-cta-row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+
 .pm-btn-primary {
-  background: var(--red); color: #fff;
-  border: none; border-radius: 50px;
-  padding: 11px 22px; font-size: 13.5px; font-weight: 700;
-  display: flex; align-items: center; gap: 8px;
-  transition: all .2s cubic-bezier(.32,.72,0,1);
-  box-shadow: 0 4px 14px rgba(232,0,28,.3), inset 0 1px 0 rgba(255,255,255,.2);
-  font-family: var(--font);
+  background: linear-gradient(135deg, #E8001C 0%, #c2001a 100%);
+  color:#fff; border:none; border-radius:50px;
+  padding:12px 24px; font-size:13.5px; font-weight:700;
+  display:flex; align-items:center; gap:8px;
+  transition:all .22s cubic-bezier(.32,.72,0,1);
+  box-shadow: 0 4px 18px rgba(232,0,28,.35), inset 0 1px 0 rgba(255,255,255,.25), inset 0 -1px 0 rgba(0,0,0,.15);
+  font-family:var(--font); position:relative; overflow:hidden;
 }
-.pm-btn-primary:hover { background: var(--red2); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(232,0,28,.4) }
+.pm-btn-primary::before {
+  content:''; position:absolute; inset:0; border-radius:50px;
+  background:linear-gradient(135deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 60%);
+  pointer-events:none;
+}
+.pm-btn-primary:hover {
+  background:linear-gradient(135deg,#ff1a33 0%,#d4001e 100%);
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 8px 28px rgba(232,0,28,.45), inset 0 1px 0 rgba(255,255,255,.3);
+}
+.pm-btn-primary:active { transform:scale(.97); }
+
 .pm-btn-secondary {
-  background: #111; color: #fff;
-  border: none; border-radius: 50px;
-  padding: 11px 18px; font-size: 13px; font-weight: 600;
-  display: flex; align-items: center; gap: 6px;
-  transition: all .2s; font-family: var(--font);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+  background: rgba(255,255,255,0.62);
+  border: 1px solid rgba(255,255,255,0.82);
+  color:#111; border-radius:50px;
+  padding:11px 18px; font-size:13px; font-weight:600;
+  display:flex; align-items:center; gap:6px;
+  transition:all .2s; font-family:var(--font);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  box-shadow:0 2px 10px rgba(0,0,0,.08), inset 0 1px 0 rgba(255,255,255,.9);
 }
-.pm-btn-secondary:hover { background: #333 }
+.pm-btn-secondary:hover {
+  background:rgba(255,255,255,0.88);
+  box-shadow:0 4px 18px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,1);
+  transform:translateY(-1px);
+}
+
 .pm-btn-ghost {
-  background: #fff; color: #666;
-  border: 1.5px solid #e5e5e5; border-radius: 50px;
-  padding: 10px 16px; font-size: 13px;
-  display: flex; align-items: center; gap: 5px;
-  transition: all .15s; font-family: var(--font);
+  background:rgba(255,255,255,0.45);
+  border:1px solid rgba(0,0,0,.10); border-radius:50px;
+  color:#555;
+  padding:10px 16px; font-size:13px;
+  display:flex; align-items:center; gap:5px;
+  transition:all .18s; font-family:var(--font);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
 }
-.pm-btn-ghost:hover { border-color: #111; color: #111 }
+.pm-btn-ghost:hover { background:rgba(255,255,255,.75); border-color:rgba(0,0,0,.2); color:#111; }
 
 /* External links */
-.pm-ext-links {
-  display: flex; flex-wrap: wrap; gap: 6px;
-}
+.pm-ext-links { display:flex; flex-wrap:wrap; gap:6px; }
 .pm-ext-link {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11.5px; font-weight: 600; color: var(--blue);
-  background: rgba(0,87,184,.06); border: 1px solid rgba(0,87,184,.15);
-  border-radius: 20px; padding: 5px 12px;
-  transition: all .15s;
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11.5px; font-weight:600; color:var(--blue);
+  background:rgba(0,87,184,.07); border:1px solid rgba(0,87,184,.18);
+  border-radius:50px; padding:5px 14px;
+  transition:all .18s;
+  backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
+  text-decoration:none; cursor:pointer;
+  /* Reset estilos browser para <button> */
+  -webkit-appearance:none; appearance:none; outline:none;
 }
-.pm-ext-link:hover { background: var(--blue); color: #fff }
+.pm-ext-link:hover { background:var(--blue); color:#fff; transform:translateY(-1px); box-shadow:0 4px 14px rgba(0,87,184,.3); }
 
-/* ── HIGHLIGHTS BAR ──────────────────────────────────────────── */
+/* ── HIGHLIGHTS — glass pills Tahoe ──────────────────────────── */
 .pm-highlights {
-  display: flex; flex-wrap: wrap; gap: 8px;
-  padding: 14px 24px;
-  background: #fff;
-  border-bottom: 1px solid #efefef;
+  display:flex; flex-wrap:wrap; gap:8px;
+  padding:14px 24px;
+  background:rgba(255,255,255,0.50);
+  backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  position:relative; z-index:1;
 }
 .pm-hl {
-  display: flex; align-items: center; gap: 8px;
-  background: #f5f5f7; border: 1px solid #e8e8ed;
-  border-radius: 20px; padding: 7px 16px;
-  font-size: 12px; font-weight: 600;
-  color: #111; white-space: nowrap;
-  transition: all .18s;
-  cursor: default;
+  display:flex; align-items:center; gap:8px;
+  background:rgba(255,255,255,0.72);
+  border:1px solid rgba(255,255,255,0.88);
+  border-radius:50px; padding:7px 16px;
+  font-size:12px; font-weight:600;
+  color:#111; white-space:nowrap;
+  transition:all .2s cubic-bezier(.32,.72,0,1);
+  cursor:default;
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  box-shadow:0 2px 8px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.9);
 }
-.pm-hl:hover { background: #111; color: #fff; border-color: #111 }
-.pm-hl-icon { font-size: 14px }
-.pm-hl-val  { font-weight: 800 }
-.pm-hl-label{ color: #888; font-weight: 400; margin-left: 1px }
-.pm-hl:hover .pm-hl-label { color: rgba(255,255,255,.55) }
+.pm-hl:hover {
+  background:rgba(10,10,15,0.88);
+  color:#fff; border-color:rgba(0,0,0,.5);
+  transform:translateY(-2px) scale(1.03);
+  box-shadow:0 6px 20px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.15);
+}
+.pm-hl-icon { font-size:14px }
+.pm-hl-val  { font-weight:800 }
+.pm-hl-label{ color:#888; font-weight:400; margin-left:1px; transition:color .18s; }
+.pm-hl:hover .pm-hl-label { color:rgba(255,255,255,.55) }
 
-/* ── TABS — estilo Dahua.com ─────────────────────────────────── */
+/* ── TABS — glass sticky ─────────────────────────────────────── */
 .pm-tabbar {
-  display: flex;
-  border-bottom: 1px solid #efefef;
-  background: #fff;
-  overflow-x: auto; scrollbar-width: none;
-  position: sticky; top: 42px; z-index: 9;
-  padding: 0 8px;
+  display:flex;
+  border-bottom:1px solid rgba(0,0,0,0.07);
+  background:rgba(255,255,255,0.70);
+  backdrop-filter:blur(32px) saturate(180%);
+  -webkit-backdrop-filter:blur(32px) saturate(180%);
+  overflow-x:auto; scrollbar-width:none;
+  position:sticky; top:44px; z-index:9;
+  padding:0 12px;
+  box-shadow:0 1px 0 rgba(255,255,255,0.8);
 }
-.pm-tabbar::-webkit-scrollbar { display: none }
+.pm-tabbar::-webkit-scrollbar { display:none }
 .pm-tab {
-  padding: 0 20px; height: 46px;
-  font-size: 13px; font-weight: 600;
-  color: #888; background: none; border: none;
-  border-bottom: 2px solid transparent;
-  cursor: pointer; transition: all .15s;
-  white-space: nowrap; font-family: var(--font);
-  flex-shrink: 0; letter-spacing: .1px;
+  padding:0 20px; height:48px;
+  font-size:13px; font-weight:600;
+  color:#999; background:none; border:none;
+  border-bottom:2px solid transparent;
+  cursor:pointer; transition:all .18s;
+  white-space:nowrap; font-family:var(--font);
+  flex-shrink:0; letter-spacing:.05px;
 }
-.pm-tab:hover { color: #111 }
-.pm-tab.active { color: var(--blue); border-bottom-color: var(--blue) }
+.pm-tab:hover { color:#111 }
+.pm-tab.active { color:var(--blue); border-bottom-color:var(--blue); }
 
 /* ── PANELS ──────────────────────────────────────────────────── */
-.pm-body { padding: 0 }
-.pm-panel { display: none; padding: 24px 28px; min-height: 200px }
-.pm-panel.active { display: block }
+.pm-body { padding:0 }
+.pm-panel { display:none; padding:26px 30px; min-height:200px; position:relative; z-index:1; }
+.pm-panel.active { display:block }
 
-/* Specs — tabla limpia estilo Dahua, sin acordeón colapsado por defecto */
-.pm-spec-accordion { display: flex; flex-direction: column; gap: 0; border: 1px solid #efefef; border-radius: 12px; overflow: hidden }
-.pm-spec-group { border-bottom: 1px solid #efefef }
-.pm-spec-group:last-child { border-bottom: none }
+/* Specs accordion — glass cards */
+.pm-spec-accordion { display:flex; flex-direction:column; gap:8px; }
+.pm-spec-group {
+  border-radius:16px; overflow:hidden;
+  background:rgba(255,255,255,0.65);
+  border:1px solid rgba(255,255,255,0.82);
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  box-shadow:0 2px 12px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.9);
+  transition:box-shadow .2s, transform .2s;
+}
+.pm-spec-group:hover {
+  box-shadow:0 6px 24px rgba(0,0,0,.09), inset 0 1px 0 rgba(255,255,255,.95);
+  transform:translateY(-1px);
+}
 .pm-spec-grp-hdr {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px 18px;
-  font-size: 12.5px; font-weight: 700; color: #111;
-  background: #f8f9fa; cursor: pointer;
-  transition: background .15s;
-  user-select: none; letter-spacing: .1px;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:13px 18px;
+  font-size:12.5px; font-weight:700; color:#111;
+  background:transparent; cursor:pointer;
+  transition:background .15s;
+  user-select:none; letter-spacing:.1px;
+  border-bottom:1px solid rgba(0,0,0,.05);
 }
-.pm-spec-grp-hdr:hover { background: #f0f0f5 }
+.pm-spec-grp-hdr:hover { background:rgba(255,255,255,.4) }
 .pmg-arrow {
-  font-size: 11px; color: #aaa;
-  transition: transform .2s;
+  font-size:11px; color:#ccc;
+  transition:transform .22s cubic-bezier(.32,.72,0,1);
 }
-.pm-spec-grp-body { border-top: 1px solid #efefef }
-.pm-spec-grp-body.collapsed { display: none }
+.pm-spec-grp-body { border-top:1px solid rgba(0,0,0,.05) }
+.pm-spec-grp-body.collapsed { display:none }
 .pm-spec-row {
-  display: grid; grid-template-columns: 210px 1fr;
-  padding: 9px 18px; font-size: 12.5px;
-  border-bottom: 1px solid #f5f5f5;
-  transition: background .1s;
+  display:grid; grid-template-columns:210px 1fr;
+  padding:9px 18px; font-size:12.5px;
+  border-bottom:1px solid rgba(0,0,0,.04);
+  transition:background .12s;
 }
-.pm-spec-row:last-child { border-bottom: none }
-.pm-spec-row:hover { background: #fafafa }
-.pm-spec-key { color: #888; font-weight: 500 }
-.pm-spec-val { color: #111; font-weight: 600 }
+.pm-spec-row:last-child { border-bottom:none }
+.pm-spec-row:hover { background:rgba(255,255,255,.65) }
+.pm-spec-key { color:#999; font-weight:500 }
+.pm-spec-val { color:#111; font-weight:600 }
 
 /* PDF spec badge */
 .pm-pdf-badge {
@@ -2173,69 +2261,79 @@ nav {
   margin-top: 16px;
 }
 
-/* Downloads panel — estilo tabla Dahua */
-.pm-dl-grid { display: flex; flex-direction: column; gap: 0; border: 1px solid #efefef; border-radius: 12px; overflow: hidden }
+/* Downloads — glass cards */
+.pm-dl-grid { display:flex; flex-direction:column; gap:8px; }
 .pm-dl-item {
-  display: flex; align-items: center; gap: 14px;
-  background: #fff; border: none;
-  border-bottom: 1px solid #f0f0f0;
-  padding: 14px 18px;
-  transition: all .18s; color: #111;
-  text-decoration: none;
+  display:flex; align-items:center; gap:14px;
+  background:rgba(255,255,255,0.65);
+  border:1px solid rgba(255,255,255,0.82);
+  border-radius:16px; padding:14px 18px;
+  transition:all .22s cubic-bezier(.32,.72,0,1); color:#111;
+  text-decoration:none;
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  box-shadow:0 2px 10px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.9);
 }
-.pm-dl-item:last-child { border-bottom: none }
 .pm-dl-item:hover {
-  background: #f5f8ff;
-  padding-left: 22px;
+  background:rgba(255,255,255,0.88);
+  box-shadow:0 6px 24px rgba(0,0,0,.10), inset 0 1px 0 rgba(255,255,255,1);
+  transform:translateY(-2px) translateX(3px);
 }
 .pm-dl-ico {
-  width: 36px; height: 36px; border-radius: 10px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; flex-shrink: 0;
+  width:40px; height:40px; border-radius:12px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:20px; flex-shrink:0;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
 }
-.pm-dl-ico.pdf { background: #fff0f0 }
-.pm-dl-ico.web { background: #f0f4ff }
-.pm-dl-name { font-size: 13px; font-weight: 700; color: #111 }
-.pm-dl-desc { font-size: 11.5px; color: #999; margin-top: 1px }
+.pm-dl-ico.pdf { background:rgba(232,0,28,.08); }
+.pm-dl-ico.web { background:rgba(0,87,184,.08); }
+.pm-dl-name { font-size:13px; font-weight:700; color:#111 }
+.pm-dl-desc { font-size:11.5px; color:#999; margin-top:1px }
 .pm-dl-arr {
-  margin-left: auto; font-size: 18px;
-  color: #ccc; flex-shrink: 0;
-  transition: color .15s;
+  margin-left:auto; font-size:18px;
+  color:#ddd; flex-shrink:0;
+  transition:all .18s;
 }
-.pm-dl-item:hover .pm-dl-arr { color: var(--blue) }
+.pm-dl-item:hover .pm-dl-arr { color:var(--blue); transform:translateX(3px); }
 
-/* Related products */
+/* Related — glass cards */
 .pm-related-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-  gap: 10px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:10px;
 }
 .pm-rel-card {
-  border: 1px solid #efefef; border-radius: 14px;
-  overflow: hidden; cursor: pointer; transition: all .2s;
-  background: #fff;
+  background:rgba(255,255,255,0.65);
+  border:1px solid rgba(255,255,255,0.82);
+  border-radius:18px; overflow:hidden;
+  cursor:pointer; transition:all .22s cubic-bezier(.32,.72,0,1);
+  backdrop-filter:blur(16px) saturate(160%);
+  -webkit-backdrop-filter:blur(16px) saturate(160%);
+  box-shadow:0 2px 10px rgba(0,0,0,.06), inset 0 1px 0 rgba(255,255,255,.9);
 }
 .pm-rel-card:hover {
-  border-color: #ddd;
-  box-shadow: 0 6px 20px rgba(0,0,0,.08);
-  transform: translateY(-2px);
+  background:rgba(255,255,255,0.88);
+  box-shadow:0 8px 28px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,1);
+  transform:translateY(-4px) scale(1.02);
 }
 .pm-rel-img {
-  width: 100%; height: 100px;
-  object-fit: contain; background: #f8f9fa; padding: 10px;
-  display: block;
+  width:100%; height:100px;
+  object-fit:contain; background:rgba(248,249,252,0.8); padding:10px;
+  display:block;
 }
-.pm-rel-body { padding: 8px 10px }
-.pm-rel-code { font-family: var(--font-m); font-size: 10px; color: var(--blue); font-weight: 600 }
-.pm-rel-name { font-size: 11.5px; font-weight: 600; color: #111; line-height: 1.3; margin: 3px 0 }
-.pm-rel-price { font-family: var(--font-d); font-size: 15px; font-weight: 800; color: #111 }
+.pm-rel-body { padding:8px 10px }
+.pm-rel-code { font-family:var(--font-m); font-size:10px; color:var(--blue); font-weight:600 }
+.pm-rel-name { font-size:11.5px; font-weight:600; color:#111; line-height:1.3; margin:3px 0 }
+.pm-rel-price { font-family:var(--font-d); font-size:15px; font-weight:800; color:#111 }
 .pm-rel-add {
-  width: 100%; background: var(--red); color: #fff;
-  border: none; padding: 7px; font-size: 11.5px; font-weight: 700;
-  cursor: pointer; transition: background .15s;
-  font-family: var(--font);
+  width:100%; background:linear-gradient(135deg,#E8001C,#c2001a);
+  color:#fff; border:none; padding:8px;
+  font-size:11.5px; font-weight:700;
+  cursor:pointer; transition:all .18s;
+  font-family:var(--font);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2);
 }
-.pm-rel-add:hover { background: var(--red2) }
+.pm-rel-add:hover { background:linear-gradient(135deg,#ff1a33,#d4001e); }
 
 /* PDF loading spinner */
 .pm-pdf-loading {
@@ -3565,6 +3663,110 @@ nav {
   color: var(--green);
 }
 
+
+
+/* ══════════════════════════════════════════════════════════════
+   PDF VIEWER MODAL — Liquid Glass Tahoe
+   ══════════════════════════════════════════════════════════════ */
+#pdfViewer {
+  position: fixed; inset: 0; z-index: 1100;
+  display: none; align-items: center; justify-content: center;
+  padding: 16px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  animation: pdfFadeIn .22s cubic-bezier(.32,.72,0,1);
+}
+#pdfViewer.open { display: flex; }
+@keyframes pdfFadeIn {
+  from { opacity:0; backdrop-filter:blur(0px); }
+  to   { opacity:1; backdrop-filter:blur(20px); }
+}
+.pdf-viewer-wrap {
+  background: rgba(250,250,255,0.88);
+  backdrop-filter: blur(48px) saturate(200%) brightness(1.05);
+  -webkit-backdrop-filter: blur(48px) saturate(200%) brightness(1.05);
+  border: 1px solid rgba(255,255,255,0.85);
+  border-radius: 22px;
+  overflow: hidden;
+  width: 100%; max-width: 900px;
+  height: 90vh;
+  display: flex; flex-direction: column;
+  box-shadow:
+    0 40px 100px rgba(0,0,0,0.22),
+    0 12px 32px rgba(0,0,0,0.12),
+    inset 0 1.5px 0 rgba(255,255,255,0.95),
+    inset 0 -1px 0 rgba(0,0,0,0.04);
+  animation: pdfSlideUp .3s cubic-bezier(.32,.72,0,1);
+}
+@keyframes pdfSlideUp {
+  from { transform: translateY(24px) scale(0.97); opacity:0; }
+  to   { transform: translateY(0) scale(1);       opacity:1; }
+}
+.pdf-viewer-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  flex-shrink: 0; gap: 10px;
+}
+.pdf-viewer-title {
+  font-family: var(--font-m); font-size: 12px; font-weight: 700;
+  color: #333; letter-spacing: .3px; flex: 1; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.pdf-viewer-actions { display: flex; gap: 8px; flex-shrink: 0; }
+.pdf-viewer-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 14px; border-radius: 50px;
+  font-size: 12px; font-weight: 700;
+  cursor: pointer; border: none; font-family: var(--font);
+  transition: all .18s cubic-bezier(.32,.72,0,1);
+}
+.pdf-viewer-btn.download {
+  background: linear-gradient(135deg,#E8001C,#c2001a);
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(232,0,28,.3), inset 0 1px 0 rgba(255,255,255,.2);
+}
+.pdf-viewer-btn.download:hover {
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 6px 20px rgba(232,0,28,.4);
+}
+.pdf-viewer-btn.close-btn {
+  background: rgba(255,255,255,0.65);
+  border: 1px solid rgba(0,0,0,0.10);
+  color: #555;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.pdf-viewer-btn.close-btn:hover {
+  background: rgba(255,255,255,0.9); color: #111;
+  transform: translateY(-1px);
+}
+.pdf-viewer-iframe {
+  flex: 1; border: none; width: 100%;
+  background: #f5f5f5;
+}
+.pdf-viewer-loading {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 14px;
+  color: #888; font-size: 13px;
+}
+.pdf-viewer-spinner {
+  width: 36px; height: 36px;
+  border: 3px solid rgba(0,87,184,.15);
+  border-top-color: var(--blue);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+}
+@media(max-width:600px){
+  .pdf-viewer-wrap { border-radius:14px; height:95vh; }
+  .pdf-viewer-bar { padding:10px 12px; }
+  .pdf-viewer-btn span { display:none; }
+}
 
 /* ── VIDEO MODAL ─────────────────────────────────────────────── */
 #vmod {
@@ -11264,14 +11466,29 @@ function _pmBuildModal(id) {
 
   const dlHTML = `
     <div class="pm-dl-grid">
-      <a class="pm-dl-item" href="${pdfUrl}" target="_blank" rel="noopener">
+      <div class="pm-dl-item" style="cursor:default">
         <div class="pm-dl-ico pdf">📄</div>
-        <div>
+        <div style="flex:1;min-width:0">
           <div class="pm-dl-name">Ficha Técnica PDF — ${p.codigo}</div>
           <div class="pm-dl-desc">Especificaciones completas · cdn1.dori.cl</div>
         </div>
-        <div class="pm-dl-arr">↓</div>
-      </a>
+        <div style="display:flex;gap:7px;flex-shrink:0">
+          <button onclick="openPdfViewer('${pdfUrl}','Ficha Técnica PDF — ${p.codigo}')"
+            style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:50px;border:1px solid rgba(0,87,184,.2);background:rgba(0,87,184,.07);color:var(--blue);font-size:11.5px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all .18s"
+            onmouseover="this.style.background='var(--blue)';this.style.color='#fff'"
+            onmouseout="this.style.background='rgba(0,87,184,.07)';this.style.color='var(--blue)'">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Ver
+          </button>
+          <a href="${pdfUrl}" download
+            style="display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:50px;background:linear-gradient(135deg,#E8001C,#c2001a);color:#fff;font-size:11.5px;font-weight:700;text-decoration:none;transition:all .18s;box-shadow:0 3px 10px rgba(232,0,28,.3);font-family:var(--font)"
+            onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 5px 16px rgba(232,0,28,.4)'"
+            onmouseout="this.style.transform='';this.style.boxShadow='0 3px 10px rgba(232,0,28,.3)'">
+            <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Descargar
+          </a>
+        </div>
+      </div>
       <a class="pm-dl-item" href="${dahuaES}" target="_blank" rel="noopener">
         <div class="pm-dl-ico web">🌍</div>
         <div>
@@ -11407,9 +11624,13 @@ function _pmBuildModal(id) {
           </div>
 
           <div class="pm-ext-links">
-            <a class="pm-ext-link" href="${pdfUrl}" target="_blank" rel="noopener">
+            <button class="pm-ext-link" onclick="openPdfViewer('${pdfUrl}','Ficha Técnica PDF — ${p.codigo}')" style="cursor:pointer;font-family:var(--font)">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Ficha técnica PDF — ${p.codigo}
+              Ver ficha técnica PDF
+            </button>
+            <a class="pm-ext-link" href="${pdfUrl}" download title="Descargar PDF">
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Descargar
             </a>
           </div>
         </div>
@@ -19105,6 +19326,70 @@ function formatRutMain() {
 
 // Inicializar tema guardado en localStora
 
+
+// ── PDF Viewer Modal ──────────────────────────────────────────
+function openPdfViewer(url, titulo) {
+  var modal   = document.getElementById('pdfViewer');
+  var frame   = document.getElementById('pdfViewerFrame');
+  var loading = document.getElementById('pdfViewerLoading');
+  var title   = document.getElementById('pdfViewerTitle');
+  var dlBtn   = document.getElementById('pdfDownloadBtn');
+  if (!modal) return;
+
+  // Reset estado
+  frame.style.display = 'none';
+  loading.style.display = 'flex';
+  title.textContent = titulo || 'Ficha Técnica PDF';
+  // Botón descarga apunta siempre al PDF original
+  dlBtn.href = url;
+  dlBtn.setAttribute('download', '');
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+
+  // Usar Google Docs Viewer para saltar X-Frame-Options/CORS del CDN externo
+  var viewerUrl = 'https://docs.google.com/gview?embedded=true&url=' + encodeURIComponent(url);
+
+  frame.src = '';
+  setTimeout(function() {
+    frame.src = viewerUrl;
+
+    // Google Docs Viewer puede tardar 3-8s en renderizar
+    var ready = false;
+    frame.onload = function() {
+      if (ready) return;
+      ready = true;
+      loading.style.display = 'none';
+      frame.style.display = 'block';
+    };
+
+    // Fallback: mostrar igual a los 5s por si onload no dispara
+    setTimeout(function() {
+      if (!ready) {
+        ready = true;
+        loading.style.display = 'none';
+        frame.style.display = 'block';
+      }
+    }, 5000);
+  }, 100);
+}
+
+function closePdfViewer() {
+  var modal = document.getElementById('pdfViewer');
+  var frame = document.getElementById('pdfViewerFrame');
+  if (!modal) return;
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+  setTimeout(function() { frame.src = ''; }, 300);
+}
+
+// Cerrar con Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('pdfViewer')?.classList.contains('open')) {
+    closePdfViewer();
+  }
+});
+
 // Inicializar tema guardado en localStorage al cargar
 (function(){
   try {
@@ -19122,5 +19407,32 @@ function formatRutMain() {
 })();
 
 </script>
+
+<!-- ── PDF VIEWER MODAL ──────────────────────────────────────── -->
+<div id="pdfViewer" onclick="if(event.target===this)closePdfViewer()">
+  <div class="pdf-viewer-wrap">
+    <div class="pdf-viewer-bar">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:#E8001C"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <span class="pdf-viewer-title" id="pdfViewerTitle">Ficha Técnica PDF</span>
+      <div class="pdf-viewer-actions">
+        <a id="pdfDownloadBtn" href="#" download class="pdf-viewer-btn download" title="Descargar PDF">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Descargar</span>
+        </a>
+        <button class="pdf-viewer-btn close-btn" onclick="closePdfViewer()" title="Cerrar">
+          <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>Cerrar</span>
+        </button>
+      </div>
+    </div>
+    <div class="pdf-viewer-loading" id="pdfViewerLoading">
+      <div class="pdf-viewer-spinner"></div>
+      <span>Cargando ficha técnica…</span>
+    </div>
+    <iframe id="pdfViewerFrame" class="pdf-viewer-iframe" style="display:none"
+      title="Ficha Técnica PDF" allowfullscreen></iframe>
+  </div>
+</div>
+
 </body>
 </html>
