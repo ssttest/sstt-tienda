@@ -5473,6 +5473,10 @@ input[data-validated="1"]::after {
 .co-step-lbl { font-size: 10px; font-weight: 700; color: var(--g2); white-space: nowrap; }
 .co-step.active .co-step-lbl { color: var(--red); }
 .co-step.done   .co-step-lbl { color: #1A7F3C; }
+/* B2B active states */
+.b2b-canal.active-smb  { color:#fff !important; border-bottom-color:#E8001C !important; }
+.b2b-canal.active-ent  { color:#fff !important; border-bottom-color:#00B4E6 !important; }
+.b2b-canal.active-all  { color:#fff !important; border-bottom-color:rgba(255,255,255,.4) !important; }
 .co-step-line {
   flex: 1; height: 2px; background: var(--g5);
   margin: 0 4px; border-radius: 2px; margin-bottom: 13px;
@@ -5522,27 +5526,22 @@ input[data-validated="1"]::after {
 [data-theme="dahua-dark"] .cart-sticky { background: rgba(10,22,40,.97) !important; border-color: #1E2E50 !important; }
 
 /* ── Footer responsive ── */
-@media (max-width: 900px) {
-  footer [style*="grid-template-columns:1.4fr"] {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 24px !important;
-  }
-  footer [style*="grid-template-columns:repeat(4,1fr)"] {
-    grid-template-columns: 1fr 1fr !important;
-  }
+.footer-grid-main  { display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:32px; }
+.footer-grid-trust { display:grid; grid-template-columns:repeat(4,1fr); }
+
+@media (max-width: 1024px) {
+  .footer-grid-main  { grid-template-columns: 1fr 1fr; gap:28px; }
+  .footer-grid-trust { grid-template-columns: 1fr 1fr; }
 }
 @media (max-width: 600px) {
-  footer [style*="grid-template-columns:1.4fr"] {
-    grid-template-columns: 1fr !important;
-  }
-  footer [style*="grid-template-columns:repeat(4,1fr)"] {
-    grid-template-columns: 1fr 1fr !important;
-  }
-  footer [style*="border-right:1px solid #eee"] {
-    border-right: none !important;
-    border-bottom: 1px solid #eee;
-  }
+  .footer-grid-main  { grid-template-columns: 1fr; gap:20px; }
+  .footer-grid-trust { grid-template-columns: 1fr 1fr; }
+  .footer-trust-item { border-right:none !important; border-bottom:1px solid #eee; padding:10px 14px !important; }
+  .footer-trust-item:nth-child(odd)  { border-right:1px solid #eee !important; }
+  .footer-trust-item:nth-child(even) { border-right:none !important; }
 }
+
+/* Aplicar clases al footer vía JS al cargar */
 
 /* ══ B2B DUAL NAV ══════════════════════════════════════════════ */
 .b2b-dualbar {
@@ -5667,6 +5666,18 @@ input[data-validated="1"]::after {
   .b2b-canal-sub { display: none; }
   .b2b-canal { padding: 0 12px; }
   .b2b-profile-badge { display: none; }
+}
+
+@media (max-width: 480px) {
+  .b2b-dualbar { position: sticky; top: 0; z-index: 200; }
+  .b2b-canal-sub { display: none; }
+  .b2b-canal { padding: 0 10px; gap: 6px; }
+  .b2b-canal-title { font-size: 12px; }
+  .b2b-profile-badge { display: none; }
+  /* Footer trust bar */
+  .footer-trust-item .ft-sub { display: none; }
+  /* Footer bottom bar */
+  footer [style*="border-top:1px solid #eee"] { flex-direction: column; gap: 8px; text-align:center; }
 }
 
 </style>
@@ -5854,7 +5865,7 @@ if (window.pdfjsLib) {
   <div class="b2b-dualbar-inner">
 
     <!-- Canal SMB -->
-    <div class="b2b-canal b2b-nav-btn active-smb" data-view="smb" onclick="B2B.setView('smb')" title="Catálogo Rápido — Dahua, Uniview, alta rotación">
+    <div class="b2b-canal b2b-nav-btn" data-view="smb" onclick="B2B.setView('smb')" title="Catálogo Rápido — Dahua, Uniview, alta rotación">
       <span class="b2b-canal-icon">⚡</span>
       <div class="b2b-canal-label">
         <span class="b2b-canal-title">Catálogo Rápido</span>
@@ -5876,8 +5887,8 @@ if (window.pdfjsLib) {
     <div class="b2b-divider"></div>
 
     <!-- Canal Todo -->
-    <div class="b2b-canal b2b-nav-btn" data-view="all" onclick="B2B.setView('all')" style="flex:0;padding:0 14px">
-      <span style="font-size:11px;color:rgba(255,255,255,.4)">Ver todo</span>
+    <div class="b2b-canal b2b-nav-btn active-all" data-view="all" onclick="B2B.setView('all')" style="flex:0;padding:0 16px">
+      <span style="font-size:11px;font-weight:700;color:#fff">Ver todo</span>
     </div>
 
     <!-- Perfil usuario -->
@@ -5900,6 +5911,14 @@ if (window.pdfjsLib) {
           <div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:2px">Tu ingeniero de preventa revisará la solicitud en máx. 24 horas hábiles</div>
         </div>
         <button onclick="cerrarProyectoModal()" style="margin-left:auto;background:rgba(255,255,255,.1);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">✕</button>
+      </div>
+      <div id="proyectoListadoHeader" style="display:none;background:rgba(0,180,230,.08);border-top:1px solid rgba(0,180,230,.2);padding:8px 16px;font-size:11px">
+        <div style="color:#00B4E6;font-weight:700;margin-bottom:4px" id="proyectoListadoCount"></div>
+        <div id="proyectoListadoDetalle" style="display:flex;flex-wrap:wrap;gap:4px"></div>
+        <button onclick="_proyectoListado=[];actualizarBtnListadoProyecto();document.getElementById('proyectoListadoHeader').style.display='none'"
+          style="margin-top:6px;background:none;border:none;color:rgba(255,255,255,.4);font-size:10px;cursor:pointer;font-family:var(--font);text-decoration:underline">
+          Limpiar lista
+        </button>
       </div>
       <div id="proyectoProductoInfo" style="background:rgba(0,180,230,.1);border:1px solid rgba(0,180,230,.25);border-radius:10px;padding:10px 12px;font-size:12px;color:#00B4E6"></div>
     </div>
@@ -7224,29 +7243,29 @@ if (window.pdfjsLib) {
 
   <!-- ── Barra superior: métricas de confianza ── -->
   <div style="background:#f8f9fa;border-bottom:1px solid #eee;padding:16px 0">
-    <div class="wrap" style="max-width:1200px;display:grid;grid-template-columns:repeat(4,1fr);gap:0">
-      <div style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
+    <div class="wrap footer-grid-trust" style="max-width:1200px;gap:0">
+      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#E8001C" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
         <div>
           <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">Estado de compra</div>
           <div style="font-size:11px;color:#888;margin-top:1px">Seguimiento online</div>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
+      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#E8001C" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <div>
           <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">Contáctanos</div>
           <div style="font-size:11px;color:#888;margin-top:1px">Escríbenos</div>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
+      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#E8001C" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         <div>
           <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">+56 2 2204 2119</div>
           <div style="font-size:11px;color:#888;margin-top:1px">Lun a Vie · 9:00–18:00 hrs</div>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:12px;padding:8px 20px">
+      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#E8001C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
         <div>
           <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">Centro de ayuda</div>
@@ -7257,8 +7276,8 @@ if (window.pdfjsLib) {
   </div>
 
   <!-- ── Grid principal links ── -->
-  <div class="wrap" style="max-width:1200px;padding:36px 20px 28px">
-    <div style="display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px;margin-bottom:32px">
+  <div class="wrap" style="max-width:1200px;padding:32px 16px 24px">
+    <div class="footer-grid-main">
 
       <!-- Brand -->
       <div>
@@ -7276,8 +7295,8 @@ if (window.pdfjsLib) {
           <span>⏰ Lun a Vie · 8:30–17:45 hrs</span>
           <a href="tel:+56222042119" style="color:#E8001C;text-decoration:none;font-weight:600">📞 +56 2 2204 2119 · Ventas</a>
           <a href="tel:+56222257011" style="color:#E8001C;text-decoration:none;font-weight:600">📞 +56 2 2225 7011 · Ventas</a>
-          <a href="mailto:ventas@sstt.cl" style="color:#555;text-decoration:none" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#555'">✉️ ventas@sstt.cl</a>
-          <a href="mailto:soporte@sstt.cl" style="color:#555;text-decoration:none" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#555'">✉️ soporte@sstt.cl</a>
+          <a href="/cdn-cgi/l/email-protection#87f1e2e9f3e6f4c7f4f4f3f3a9e4eb" style="color:#555;text-decoration:none" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#555'">✉️ <span class="__cf_email__" data-cfemail="89ffece7fde8fac9fafafdfda7eae5">[email&#160;protected]</span></a>
+          <a href="/cdn-cgi/l/email-protection#7d0e120d120f09183d0e0e0909531e11" style="color:#555;text-decoration:none" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#555'">✉️ <span class="__cf_email__" data-cfemail="f88b9788978a8c9db88b8b8c8cd69b94">[email&#160;protected]</span></a>
         </div>
         <!-- RRSS -->
         <div style="display:flex;gap:10px;margin-top:16px;align-items:center">
@@ -7298,8 +7317,8 @@ if (window.pdfjsLib) {
 
       <!-- Sobre SSTT -->
       <div>
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #E8001C;display:inline-block">Sobre SSTT</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="footer-col-title" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #E8001C;display:inline-block">Sobre SSTT</div>
+        <div class="footer-col-links" style="display:flex;flex-direction:column;gap:10px">
           <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Acerca de Nosotros <span style="color:#ccc">›</span></a>
           <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Política de Privacidad <span style="color:#ccc">›</span></a>
           <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Garantía Dahua <span style="color:#ccc">›</span></a>
@@ -7310,8 +7329,8 @@ if (window.pdfjsLib) {
 
       <!-- Servicios -->
       <div>
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #E8001C;display:inline-block">Servicios</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
+        <div class="footer-col-title" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #E8001C;display:inline-block">Servicios</div>
+        <div class="footer-col-links" style="display:flex;flex-direction:column;gap:10px">
           <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Estado de tu compra <span style="color:#ccc">›</span></a>
           <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Retiros y Despachos <span style="color:#ccc">›</span></a>
           <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#E8001C'" onmouseout="this.style.color='#444'">Formas de Pago <span style="color:#ccc">›</span></a>
@@ -7322,7 +7341,7 @@ if (window.pdfjsLib) {
 
       <!-- Compra Segura -->
       <div>
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #E8001C;display:inline-block">Compra Segura</div>
+        <div class="footer-col-title" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #E8001C;display:inline-block">Compra Segura</div>
         <p style="font-size:12px;color:#666;margin-bottom:14px;line-height:1.5">Todas tus compras están protegidas con tecnología SSL y pagos certificados.</p>
         <!-- SSL badge -->
         <div style="display:flex;align-items:center;gap:8px;background:#f8fffe;border:1px solid #d0ead0;border-radius:8px;padding:8px 12px;margin-bottom:10px">
@@ -7381,7 +7400,7 @@ if (window.pdfjsLib) {
 
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js" defer></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js" defer></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js" defer></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── Close helpers (defined early so showSection can call them) ──
 function _closeAllModals() {
   document.getElementById('prodModal')?.classList.remove('open');
@@ -8910,10 +8929,19 @@ function render() {
           ${(()=>{
             var _t = B2B.classify(p);
             if (_t === 'enterprise') {
-              return `<button class="btn-cotizar-proyecto" onclick="abrirProyectoModal(${p.id})" style="grid-column:1/-1">
-                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                Declarar Proyecto / Cotizar
-              </button>`;
+              return `<div style="display:flex;flex-direction:column;gap:4px;grid-column:1/-1">
+                <button class="btn-cotizar-proyecto" onclick="abrirProyectoModal(${p.id})">
+                  <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  Declarar Proyecto / Cotizar
+                </button>
+                <button style="background:rgba(0,180,230,.12);color:#00B4E6;border:1px solid rgba(0,180,230,.3);border-radius:8px;padding:6px 8px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:5px;transition:all .15s"
+                  onclick="event.stopPropagation();abrirProyectoModal(${p.id},true)"
+                  onmouseover="this.style.background='rgba(0,180,230,.25)'"
+                  onmouseout="this.style.background='rgba(0,180,230,.12)'">
+                  <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  + Agregar a lista cotización
+                </button>
+              </div>`;
             }
             return `<button class="pca-btn pca-btn-red" onclick='addCart(${JSON.stringify(p)})' title="Comprar">
               <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
@@ -9161,6 +9189,18 @@ function saveCart() { localStorage.setItem('sstt_cart', JSON.stringify(S.cart));
 function cartTotal() { return S.cart.reduce((a,c)=>a+c.qty,0); }
 
 function addCart(p) {
+  if (!p) return;
+  const tipo = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
+  if (tipo === 'enterprise') {
+    showToast('⚠️ Producto de proyecto — usa "Declarar Proyecto / Cotizar"');
+    abrirProyectoModal(p.id);
+    return;
+  }
+  // Si ya hay productos enterprise en el carro, bloquear
+  if (S.cart.some(c => typeof B2B !== 'undefined' && B2B.classify(c) === 'enterprise')) {
+    showToast('⚠️ Tu carro tiene productos de proyecto. Vacíalo primero.');
+    openCart(); return;
+  }
   const ex = S.cart.find(c=>c.id===p.id);
   if (ex) ex.qty++; else S.cart.push({...p,qty:1});
   saveCart(); renderCart(); updateBadge();
@@ -11141,27 +11181,59 @@ function _pmBuildModal(id) {
             <div class="pm-name">${p.nombre}</div>
           </div>
 
-          <div class="pm-price-card">
-            <div class="pm-price-main">${fmt(p.ptotal)}</div>
-            <div class="pm-price-sub">
-              Neto ${fmt(p.pneto)} &nbsp;+&nbsp; IVA ${fmt(p.piva)} &nbsp;·&nbsp;
-              <strong>Precio final con IVA incluido</strong>
-            </div>
-          </div>
+          ${(()=>{
+            const _b2bType = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
+            const _canPrice = _b2bType !== 'enterprise' || (typeof B2B !== 'undefined' && B2B.canSeePriceEnterprise());
+            if (_b2bType === 'enterprise') {
+              // Badge proyecto en modal
+              return `<div style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#0A1628,#1B3A6A);
+                border:1px solid rgba(0,180,230,.3);border-radius:10px;padding:10px 16px;margin-bottom:4px">
+                <span style="font-size:18px">🏢</span>
+                <div>
+                  <div style="font-size:12px;font-weight:800;color:#00B4E6;text-transform:uppercase;letter-spacing:.5px">Producto de Proyecto Corporativo</div>
+                  <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Requiere declaración de proyecto — precio bajo solicitud</div>
+                </div>
+              </div>`;
+            }
+            // SMB: precio normal
+            return `<div class="pm-price-card">
+              <div class="pm-price-main">${fmt(p.ptotal)}</div>
+              <div class="pm-price-sub">
+                Neto ${fmt(p.pneto)} &nbsp;+&nbsp; IVA ${fmt(p.piva)} &nbsp;·&nbsp;
+                <strong>Precio final con IVA incluido</strong>
+              </div>
+            </div>`;
+          })()}
 
-          <div>
-            <span class="pm-stock-pill ${p.stock==='bajo'?'low':p.stock==='agotado'?'out':''}">
-              <span class="pm-stock-dot"></span>
-              ${p.stock==='bajo'?'Últimas unidades':p.stock==='agotado'?'Sin stock':'En stock — despacho inmediato'}
-            </span>
-          </div>
+          ${(()=>{
+            const _b2bType = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
+            if (_b2bType !== 'enterprise') {
+              return `<div>
+                <span class="pm-stock-pill ${p.stock==='bajo'?'low':p.stock==='agotado'?'out':''}">
+                  <span class="pm-stock-dot"></span>
+                  ${p.stock==='bajo'?'Últimas unidades':p.stock==='agotado'?'Sin stock':'En stock — despacho inmediato'}
+                </span>
+              </div>`;
+            }
+            return '';
+          })()}
 
           <div class="pm-cta-row">
-            <button class="pm-btn-primary" onclick="pmAddCart(${id})">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-              Agregar al carro
-            </button>
-            <button class="pm-btn-secondary" onclick="pmAddCot(${id})">📋 Cotizar</button>
+            ${(()=>{
+              const _b2bType = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
+              if (_b2bType === 'enterprise') {
+                return `<button class="pm-btn-primary" style="background:linear-gradient(135deg,#0A1628,#1B5FD4);color:#00B4E6;border:1px solid rgba(0,180,230,.3)"
+                  onclick="closeProdModal();abrirProyectoModal(${id})">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  Declarar Proyecto / Cotizar
+                </button>`;
+              }
+              return `<button class="pm-btn-primary" onclick="pmAddCart(${id})">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                Agregar al carro
+              </button>
+              <button class="pm-btn-secondary" onclick="pmAddCot(${id})">📋 Cotizar</button>`;
+            })()}
             <button class="pm-btn-ghost" onclick="copyTxt('${p.codigo}');showToast('✅ Código copiado')" title="Copiar código de modelo">📋</button>
           </div>
 
@@ -11225,7 +11297,15 @@ function pmToggleGroup(hdr) {
 
 function pmAddCart(id) {
   const p = PRODUCTS.find(x=>x.id===id);
-  if (p) { addCart(p); closeProdModal(); }
+  if (!p) return;
+  const tipo = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
+  if (tipo === 'enterprise') {
+    closeProdModal();
+    abrirProyectoModal(id);
+    return;
+  }
+  addCart(p);
+  closeProdModal();
 }
 function pmAddCot(id) {
   const p = PRODUCTS.find(x=>x.id===id);
@@ -11968,6 +12048,10 @@ function closeCmpModal() {
 // ── Barra flotante ───────────────────────────────────────────────
 function cmpUpdateBar() {
   const n = CMP.items.length;
+
+  // Mostrar/ocultar el FAB del comparador
+  const fab = document.getElementById('cmpFab');
+  if (fab) fab.style.display = n > 0 ? 'block' : 'none';
 
   // Update trigger button
   const trigger = document.getElementById('cmpTrigger');
@@ -18207,7 +18291,7 @@ var B2B = {
     B2B.userTramo   = tramo  || null;
     B2B.userEmpresa = empresa|| null;
     localStorage.setItem('sstt_b2b_profile', JSON.stringify({p:perfil,t:tramo,e:empresa}));
-    renderCatalog && renderCatalog();
+    if (typeof render === "function") render();
   },
 
   // Restore session
@@ -18222,12 +18306,16 @@ var B2B = {
   activeView: 'all',
   setView: function(view) {
     B2B.activeView = view;
-    // Actualizar nav header
+    // Actualizar nav header — limpiar todos y poner el correcto
     document.querySelectorAll('.b2b-nav-btn').forEach(function(btn){
-      btn.classList.toggle('active', btn.dataset.view === view);
+      btn.classList.remove('active-smb','active-ent','active-all');
     });
-    renderCatalog && renderCatalog();
-    showSection && showSection('catalogo');
+    var activeClass = view==='smb' ? 'active-smb' : view==='enterprise' ? 'active-ent' : 'active-all';
+    var activeBtn = document.querySelector('.b2b-nav-btn[data-view="'+view+'"]');
+    if (activeBtn) activeBtn.classList.add(activeClass);
+    // Renderizar y navegar al catálogo
+    if (typeof render === 'function') { S.page=1; render(); }
+    if (typeof showSection === 'function') showSection('catalogo');
   },
 
   // Filtrar productos por vista
@@ -18244,18 +18332,60 @@ B2B.restore();
 
 
 // ══ MODAL DECLARAR PROYECTO ════════════════════════════════════
-var _proyectoProducto = null;
+var _proyectoProducto  = null;   // Producto individual (click "Cotizar" desde card/modal)
+var _proyectoListado   = [];     // Lista acumulada de productos de proyecto para cotización
 
-function abrirProyectoModal(prodId) {
+function abrirProyectoModal(prodId, modoListado) {
   var p = PRODUCTS.find(function(x){ return x.id === prodId; });
   _proyectoProducto = p;
+
+  if (modoListado && p) {
+    // Agregar al listado sin abrir el modal
+    var existe = _proyectoListado.some(function(x){ return x.id === p.id; });
+    if (!existe) { _proyectoListado.push(p); }
+    showToast('📋 ' + p.codigo + ' agregado a cotización de proyecto (' + _proyectoListado.length + ' productos)');
+    actualizarBtnListadoProyecto();
+    return;
+  }
+
+  // Modo normal: abrir modal con el producto
   var info = document.getElementById('proyectoProductoInfo');
-  if (info && p) {
-    info.innerHTML = '<strong style="color:#00B4E6">' + p.codigo + '</strong> — ' +
-      p.nombre.slice(0, 70) + (p.nombre.length > 70 ? '…' : '');
+  if (info) {
+    if (p) {
+      // Mostrar producto actual + listado acumulado
+      var listHtml = _proyectoListado.length > 0
+        ? '<div style="margin-top:8px;border-top:1px solid rgba(0,180,230,.2);padding-top:8px">' +
+          '<div style="font-size:10px;color:#00B4E6;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">'+
+          'Productos en esta solicitud ('+(_proyectoListado.length + (p ? 1 : 0))+')</div>' +
+          _proyectoListado.concat(p ? [p] : []).map(function(x){
+            return '<div style="font-size:11px;color:rgba(255,255,255,.7);padding:2px 0">· ' + x.codigo + '</div>';
+          }).join('') + '</div>'
+        : '';
+      info.innerHTML = '<strong style="color:#00B4E6">' + p.codigo + '</strong> — ' +
+        p.nombre.slice(0, 70) + (p.nombre.length > 70 ? '…' : '') + listHtml;
+    } else {
+      // Sin producto específico — solo el listado
+      info.innerHTML = _proyectoListado.length > 0
+        ? '<div style="font-size:11px;color:#00B4E6;font-weight:700;margin-bottom:4px">'+_proyectoListado.length+' producto(s) en tu solicitud:</div>' +
+          _proyectoListado.map(function(x){ return '<div style="font-size:11px;color:rgba(255,255,255,.7)">· '+x.codigo+'</div>'; }).join('')
+        : '<span style="color:rgba(255,255,255,.5)">Sin productos seleccionados aún</span>';
+    }
   }
   var m = document.getElementById('proyectoModal');
   if (m) m.classList.add('open');
+  // Actualizar header de listado
+  var lh = document.getElementById('proyectoListadoHeader');
+  var lc = document.getElementById('proyectoListadoCount');
+  var ld = document.getElementById('proyectoListadoDetalle');
+  if (lh && _proyectoListado.length > 0) {
+    lh.style.display = 'block';
+    if (lc) lc.textContent = '📋 ' + _proyectoListado.length + ' producto(s) en tu lista de cotización:';
+    if (ld) ld.innerHTML = _proyectoListado.map(function(x) {
+      return '<span style="background:rgba(0,180,230,.15);color:#00B4E6;border:1px solid rgba(0,180,230,.2);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:700">' + x.codigo + '</span>';
+    }).join('');
+  } else if (lh) {
+    lh.style.display = 'none';
+  }
   // Pre-rellenar con datos del usuario si están disponibles
   var nombre = document.getElementById('cNombre');
   if (nombre && nombre.value) {
@@ -18313,9 +18443,17 @@ function enviarProyecto() {
   });
 
   // Armar payload
+  // Construir lista de productos (listado acumulado + producto individual)
+  var productosLista = _proyectoListado.slice();
+  if (_proyectoProducto && !productosLista.some(function(x){ return x.id === _proyectoProducto.id; })) {
+    productosLista.push(_proyectoProducto);
+  }
+  var productosTexto = productosLista.map(function(p){ return p.codigo + ' — ' + p.nombre.slice(0,50); }).join(' | ');
+
   var payload = {
-    producto: _proyectoProducto ? _proyectoProducto.codigo : '—',
-    nombreProducto: _proyectoProducto ? _proyectoProducto.nombre : '—',
+    producto: productosTexto || (_proyectoProducto ? _proyectoProducto.codigo : '—'),
+    nombreProducto: productosLista.length + ' producto(s): ' + (productosTexto || _proyectoProducto?.nombre || '—'),
+    productosDetalle: productosLista,
     usuarioFinal: document.getElementById('pyNombreUF').value,
     vertical: document.getElementById('pyVertical').value,
     nroCamaras: document.getElementById('pyNroCamaras').value,
@@ -18337,7 +18475,8 @@ function enviarProyecto() {
   // Mostrar éxito
   var wrap = document.querySelector('.proyecto-modal-body');
   if (wrap) {
-    wrap.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
+    _proyectoListado = []; _proyectoProducto = null; actualizarBtnListadoProyecto();
+  wrap.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
       '<div style="font-size:48px;margin-bottom:16px">✅</div>' +
       '<div style="font-size:18px;font-weight:800;color:#0A1628;margin-bottom:8px">¡Solicitud enviada!</div>' +
       '<div style="font-size:13px;color:#666;line-height:1.6;margin-bottom:20px">Tu solicitud de proyecto fue recibida.<br>Nuestro ingeniero de preventa revisará los detalles<br>y te contactará en máx. <strong>24 horas hábiles</strong>.</div>' +
@@ -18380,13 +18519,45 @@ updateB2BBadge();
 
 // Inicializar vista B2B correcta
 document.addEventListener('DOMContentLoaded', function() {
-  B2B.setView('smb'); // Por defecto mostrar SMB
+  // Inicializar vista B2B — activeView por defecto = 'all' (no filtrar)
+  // El usuario elige SMB o Enterprise desde la barra
+  B2B.activeView = 'all';
   updateB2BBadge();
+  // Activar visualmente el botón "Ver todo" por defecto
+  document.querySelectorAll('.b2b-nav-btn').forEach(function(btn){
+    btn.classList.toggle('active', btn.dataset.view === 'all');
+  });
 });
 
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') cerrarProyectoModal();
 });
+
+
+// ── Botón flotante de listado de proyecto ──────────────────────
+function actualizarBtnListadoProyecto() {
+  var btn = document.getElementById('proyectoBtnFloat');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'proyectoBtnFloat';
+    btn.style.cssText = 'position:fixed;bottom:90px;left:20px;z-index:9000;' +
+      'background:linear-gradient(135deg,#0A1628,#1B5FD4);color:#00B4E6;' +
+      'border:1.5px solid rgba(0,180,230,.4);border-radius:14px;' +
+      'padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;' +
+      'font-family:var(--font);display:none;align-items:center;gap:7px;' +
+      'box-shadow:0 4px 20px rgba(0,180,230,.25);transition:all .2s';
+    btn.onclick = function() { abrirProyectoModal(null); };
+    document.body.appendChild(btn);
+  }
+  var n = _proyectoListado.length;
+  if (n > 0) {
+    btn.style.display = 'flex';
+    btn.innerHTML = '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
+      '📋 Cotización Proyecto (' + n + ')';
+  } else {
+    btn.style.display = 'none';
+  }
+}
 
 </script>
 
@@ -18575,7 +18746,7 @@ function filterByTechTerms(terms) {
   S.q = '__tech_filter__';
   S.page = 1;
   S._techFiltered = filtered;
-  renderCatalog();
+  if (typeof render === "function") render();
   showSection('catalogo');
   window.scrollTo({top: 0, behavior: 'smooth'});
 }
@@ -18765,17 +18936,4 @@ function formatRutMain() {
   if (el) { el.value = formatRutStr ? formatRutStr(el.value) : el.value; onRutInputModal(el,'rutMsgMain','rutStatusMain'); }
 }
 
-// Inicializar tema guardado en localStorage al cargar
-(function(){
-  var saved = localStorage.getItem('sstt_theme');
-  if (saved) {
-    var idx = (typeof _themes !== 'undefined') ? _themes.findIndex(function(t){ return t.key === saved; }) : -1;
-    if (idx > 0 && typeof toggleDahuaTheme === 'function') { 
-      var _themeIdx = idx - 1; 
-      toggleDahuaTheme(); 
-    }
-  }
-})();
-</script>
-</body>
-</html>
+// Inicializar tema guardado en localStora
