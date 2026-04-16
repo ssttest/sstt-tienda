@@ -83,7 +83,7 @@
 
 /* ── RESET ──────────────────────────────────────────────────── */
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box }
-html { scroll-behavior:smooth; -webkit-text-size-adjust:100%; background:#ffffff; }
+html, html body { scroll-behavior:smooth; -webkit-text-size-adjust:100%; background:#ffffff !important; }
 body {
   font-family: var(--font);
   font-size: 14px;
@@ -650,15 +650,15 @@ nav {
 /* ══════════════════════════════════════════════════════════════
    MAIN LAYOUT + SIDEBAR
    ══════════════════════════════════════════════════════════════ */
-.main-wrap { display: grid; grid-template-columns: 220px 1fr; align-items: start }
+.main-wrap { display: grid; grid-template-columns: 220px 1fr; align-items: start; min-height: calc(100vh - 160px); background: #ffffff; }
 
 .sidebar {
   background: var(--white);
   border-right: 1px solid var(--g5);
   padding: 0;
   position: sticky;
-  top: 159px;
-  max-height: calc(100vh - 179px);
+  top: 114px;
+  max-height: calc(100vh - 120px);
   overflow-y: auto;
   scrollbar-width: thin;
 }
@@ -955,14 +955,28 @@ nav {
 
 .pcard-tags { display: flex; flex-wrap: wrap; gap: 4px }
 .ptag {
-  font-size: 10px;
-  font-weight: 600;
-  padding: 2px 7px;
-  border-radius: 2px;
-  background: var(--g6);
-  color: var(--g3);
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 20px;
+  background: var(--g6); color: var(--g3);
   border: 1px solid var(--g5);
+  white-space: nowrap;
 }
+/* Colores semánticos por tipo */
+.ptag-res  { background:#f0f0f5; color:#333; border-color:#d8d8e8; }          /* Resolución */
+.ptag-lens { background:#e8f4f0; color:#1a6b4a; border-color:#b8ddd0; }       /* Óptica */
+.ptag-wc   { background:#fff3e0; color:#b45309; border-color:#f5c97a; }       /* WizColor */
+.ptag-tioc { background:#ffeef0; color:#c2001a; border-color:#f5b8c0; }       /* TiOC */
+.ptag-fc   { background:#fff0e8; color:#c04a00; border-color:#f5c8a8; }       /* Full-Color */
+.ptag-ws   { background:#e8f0ff; color:#1a50c8; border-color:#b8ccf8; }       /* WizSense */
+.ptag-wm   { background:#f0e8ff; color:#6010c0; border-color:#d0b8f5; }       /* WizMind */
+.ptag-xh   { background:linear-gradient(135deg,#0a1628,#1B5FD4); color:#00B4E6; border-color:#1B5FD4; } /* Xinghan */
+.ptag-ir   { background:#f0f8f0; color:#2a7a2a; border-color:#b8d8b8; }       /* IR */
+.ptag-led  { background:#fffde8; color:#927700; border-color:#f0e080; }       /* LED */
+.ptag-hdd  { background:#f5f5f5; color:#444; border-color:#ddd; }             /* HDD/Mbps */
+.ptag-rec  { background:#fff0f0; color:#c2001a; border-color:#f5b8b8; font-weight:800; } /* REC resolución grabador */
+.ptag-prot { background:#e8f4ff; color:#1a5fa8; border-color:#b8d8f5; font-weight:700; } /* IP/IK protección */
+.ptag-nema { background:#e8eeff; color:#3030a8; border-color:#b8c4f5; font-weight:700; } /* NEMA4X */
+.ptag-rec::before { content:'⏺'; color:#e8001c; margin-right:3px; font-size:9px; vertical-align:middle; animation:heroPulse 1.5s ease-in-out infinite; }
 
 /* Price — Dahua: precio grande y prominente */
 .pcard-price {
@@ -1090,17 +1104,14 @@ nav {
   pointer-events: none;
 }
 .tech-badge + .tech-badge { left: auto; right: 6px; }
-.tech-fc      { background: rgba(255,90,10,.82);   color:#fff; }  /* Full-Color / WizColor */
-.tech-ws      { background: rgba(0,55,180,.82);   color:#fff; }  /* WizSense */
-.tech-wm      { background: rgba(75,0,185,.82);   color:#fff; }  /* WizMind */
-.tech-tioc    { background: rgba(200,0,20,.85);   color:#fff; }  /* TiOC */
-.tech-sl      { background: rgba(0,125,75,.82);   color:#fff; }  /* Starlight */
-.tech-acu     { background: rgba(0,130,160,.82);  color:#fff; }  /* AcuPick */
-.tech-smd     { background: rgba(30,30,30,.82);   color:#fff; }  /* SMD 4.0 */
-.tech-xh      { background: rgba(40,90,200,.82);  color:#fff; }  /* Xinghan */
-.tech-4k      { background: rgba(160,10,10,.82);  color:#fff; }  /* 4K/8MP */
-.tech-ik10    { background: rgba(100,60,0,.82);   color:#fff; }  /* IK10 */
-.tech-varifocal { background: rgba(0,100,80,.82); color:#fff; }  /* Varifocal */
+/* ── Tech badges premium — solo tecnologías Dahua superiores ── */
+.tech-fc    { background:linear-gradient(135deg,rgba(220,85,0,.90),rgba(180,55,0,.90));    color:#fff; } /* WizColor / Full-Color */
+.tech-tioc  { background:linear-gradient(135deg,rgba(200,0,20,.90),rgba(140,0,10,.90));    color:#fff; } /* TiOC */
+.tech-ws    { background:linear-gradient(135deg,rgba(0,60,180,.90),rgba(0,40,140,.90));    color:#fff; } /* WizSense */
+.tech-wm    { background:linear-gradient(135deg,rgba(80,0,190,.90),rgba(55,0,140,.90));    color:#fff; } /* WizMind */
+.tech-acu   { background:linear-gradient(135deg,rgba(0,130,155,.90),rgba(0,95,120,.90));   color:#fff; } /* AcuPick */
+.tech-xh    { background:linear-gradient(135deg,rgba(10,22,40,.95),rgba(27,95,212,.90));   color:#00B4E6; letter-spacing:.3px; } /* Xinghan AI */
+.tech-4k    { background:linear-gradient(135deg,rgba(140,10,10,.90),rgba(100,0,0,.90));    color:#fff; } /* 4K */
 /* Max 3 badges visibles: posición izquierda, derecha, arriba-izquierda */
 .tech-badge:nth-child(1) { bottom:6px; left:6px; }
 .tech-badge:nth-child(2) { bottom:6px; left:auto; right:6px; }
@@ -1647,8 +1658,8 @@ nav {
 
 
 /* App sections */
-.app-section { display: none }
-.app-section.active { display: block }
+.app-section { display: none; background: #ffffff; }
+.app-section.active { display: block; background: #ffffff; }
 
 .ac-hero {
   background: linear-gradient(160deg, #0C1A2E 0%, #001E3C 50%, #003870 100%);
@@ -5453,27 +5464,46 @@ input[data-validated="1"]::after {
   right:28px !important;
   z-index:99999 !important;
   width:58px; height:58px; border-radius:50%;
-  background:rgba(255,255,255,0.72);
-  border:1px solid rgba(255,255,255,0.88);
-  backdrop-filter:blur(28px) saturate(200%) brightness(1.08);
-  -webkit-backdrop-filter:blur(28px) saturate(200%) brightness(1.08);
+  /* Orb camuflaje — hereda colores del fondo via backdrop-filter */
+  background:rgba(255,255,255,0.08);
+  border:none;
+  backdrop-filter:blur(32px) saturate(280%) brightness(1.15) contrast(0.95);
+  -webkit-backdrop-filter:blur(32px) saturate(280%) brightness(1.15) contrast(0.95);
   box-shadow:
-    0 8px 32px rgba(0,0,0,0.16),
-    0 2px 8px rgba(0,0,0,0.08),
-    inset 0 1.5px 0 rgba(255,255,255,0.95),
-    inset 0 -1px 0 rgba(0,0,0,0.05);
+    inset 0 0 0 1px rgba(255,255,255,0.45),
+    0 0 0 1.5px rgba(255,255,255,0.15),
+    0 8px 32px rgba(0,0,0,0.12),
+    0 2px 8px rgba(0,0,0,0.08);
   cursor:pointer;
   display:flex !important; align-items:center; justify-content:center;
-  transition:transform .22s cubic-bezier(.32,.72,0,1),box-shadow .22s;
+  transition:transform .3s cubic-bezier(.32,.72,0,1), box-shadow .3s;
   visibility:visible !important; opacity:1 !important;
+  overflow:hidden;
 }
 #aiFab:hover {
-  transform:scale(1.1);
-  box-shadow:0 14px 42px rgba(0,0,0,0.20), inset 0 1.5px 0 rgba(255,255,255,1);
+  transform:scale(1.12);
+  backdrop-filter:blur(48px) saturate(320%) brightness(1.2) contrast(0.92);
+  -webkit-backdrop-filter:blur(48px) saturate(320%) brightness(1.2) contrast(0.92);
+  box-shadow:
+    inset 0 0 0 1.5px rgba(255,255,255,0.6),
+    0 0 0 3px rgba(255,255,255,0.12),
+    0 16px 48px rgba(0,0,0,0.16);
 }
 @media(max-width:768px){ #aiFab { bottom:66px !important; right:14px !important; width:50px; height:50px; } }
 
 @keyframes gemSpin { to { transform:rotate(360deg); } }
+@keyframes orbBreathe {
+  0%,100% {
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.45),0 0 0 1.5px rgba(255,255,255,0.15),0 8px 32px rgba(0,0,0,0.12);
+    backdrop-filter:blur(32px) saturate(280%) brightness(1.15);
+  }
+  50% {
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.60),0 0 0 2px rgba(255,255,255,0.20),0 12px 40px rgba(0,0,0,0.14);
+    backdrop-filter:blur(40px) saturate(300%) brightness(1.18);
+  }
+}
+#aiFab { animation:orbBreathe 3s ease-in-out infinite; }
+#aiFab:hover { animation:none; }
 @keyframes gemPulse {
   0%,100% { filter:drop-shadow(0 0 3px rgba(255,255,255,.5)); }
   50%      { filter:drop-shadow(0 0 9px rgba(255,255,255,1)); }
@@ -5716,8 +5746,11 @@ input[data-validated="1"]::after {
 }
 
 /* Fondo general oscuro */
+[data-theme="dahua-dark"],
 [data-theme="dahua-dark"] body,
-[data-theme="dahua-dark"] html {
+[data-theme="dahua-dark"] html,
+[data-theme="dahua-dark"] .app-section,
+[data-theme="dahua-dark"] .app-section.active {
   background: #111318 !important;
   color: #E8EDF8 !important;
 }
@@ -5791,11 +5824,12 @@ input[data-validated="1"]::after {
 /* Nav categorías y breadcrumb en dark — separados del hero */
 [data-theme="dahua-dark"] nav { background: #0e1015 !important; border-bottom-color: #22262e !important; }
 [data-theme="dahua-dark"] .bcrumb-bar, [data-theme="dahua-dark"] .bcrum-bar { background: #0e1015 !important; border-color: #22262e !important; }
-[data-theme="dahua-dark"] .main-wrap { background: #0e1015 !important; }
+[data-theme="dahua-dark"] .main-wrap { background: #111318 !important; min-height: calc(100vh - 160px) !important; }
 [data-theme="dahua-dark"] .sidebar { background: #111318 !important; border-color: #22262e !important; }
 
 /* Catalog area */
 [data-theme="dahua-dark"] .catalog-area { background: #0e1015 !important; }
+[data-theme="dahua-dark"] #secCatalogo { background: #111318 !important; min-height: 100vh !important; }
 
 /* Sidebar */
 [data-theme="dahua-dark"] .sidebar { background: #111318 !important; border-color: #22262e !important; }
@@ -6344,7 +6378,7 @@ if (window.pdfjsLib) {
 </nav>
 
 <!-- SECCIÓN: CATÁLOGO (default) -->
-<div class="app-section active" id="secCatalogo">
+<div class="app-section active" id="secCatalogo" style="min-height:100vh;background:#ffffff">
 
 
 <!-- MOBILE SEARCH -->
@@ -9091,6 +9125,25 @@ function matchScore(p, rawQ) {
 
   if (!q) return 100;
 
+  // ── Tags tecnológicos inferidos (búsqueda por tecnología) ──
+  const techAliases = {
+    'wizmind':    /wizmind|wiz.?mind/i,
+    'wizsense':   /wizsense|wiz.?sense/i,
+    'wizcolor':   /wizcolor|wiz.?color/i,
+    'tioc':       /tioc|-pv-/i,
+    'fullcolor':  /full.?color/i,
+    'acupick':    /acupick/i,
+    'xinghan':    /xinghan/i,
+    'wizseek':    /wizseek/i,
+    'wizmind':    /wizmind/i,
+  };
+  const qClean = q.replace(/[\s\-_.]/g,'');
+  for (const [key, rx] of Object.entries(techAliases)) {
+    if (qClean === key || q === key.replace('wiz','wiz ') || q.replace(/\s/g,'') === key) {
+      if (rx.test(nombre) || rx.test(codigo)) return 90;
+    }
+  }
+
   // ── Coincidencias exactas / altas ──
   if (codigo === q)                          return 100;
   if (codigoN === qNorm)                     return 99;
@@ -9155,7 +9208,8 @@ function getFiltered() {
     return list;
   }
 
-  if (S.cat !== 'todas') list = list.filter(p => p.cat === S.cat);
+  // Si hay búsqueda activa, ignorar filtro de categoría (búsqueda global siempre)
+  if (S.cat !== 'todas' && !S.q) list = list.filter(p => p.cat === S.cat);
 
   if (S.q) {
     // Calcular score para cada producto y filtrar los que tienen score > 0
@@ -9182,25 +9236,125 @@ function getFiltered() {
 }
 
 // ── Tags técnicos ────────────────────────────────────────────
-function getTags(nombre) {
+function getTags(nombre, codigo) {
+  const n = nombre || '';
+  const _cod = (codigo || '').toUpperCase();
   const t = [];
-  const tests = [
-    [/\b(\d+MP)\b/i, m => m[1].toUpperCase()],
-    [/\b(4K|8K|1080[Pp]|720[Pp])\b/, m => m[1]],
-    [/\b(PoE|POE)\b/i, () => 'PoE'],
-    [/\b(IP67|IP66|IK10)\b/i, m => m[1]],
-    [/\b(WizSense|WizMind)\b/i, m => m[1]],
-    [/\bIR\s*(\d+[Mm]?)\b/, m => 'IR ' + m[1]],
-    [/\b(Starlight)\b/i, () => 'Starlight'],
-    [/mic[ró]fono|audio\s*in/i, () => 'Audio'],
-    [/\b(PTZ)\b/, () => 'PTZ'],
-    [/\b(HDCVI|HDTVI)\b/i, m => m[1]],
-  ];
-  for (const [rx,fn] of tests) {
-    const m = nombre.match(rx);
-    if (m && t.length < 5) t.push(fn(m));
+
+  // Detectar si es grabador (XVR/HCVR/NVR/DVR/EVS/DSS/IVSS)
+  const isRec = /\b(XVR|HCVR|NVR|DVR|EVS|DSS|IVSS|IVSS)\b/i.test(n);
+
+  // ── SLOT 1: RESOLUCIÓN ───────────────────────────────────
+  if (!isRec) {
+    // Cámaras
+    if      (/\b12MP\b/i.test(n))               t.push('12MP');
+    else if (/\b(8MP|4K)\b/i.test(n))           t.push('8MP 4K');
+    else if (/\b5MP\b/i.test(n))                t.push('5MP');
+    else if (/\b4MP\b/i.test(n))                t.push('4MP');
+    else if (/\b2MP\b/i.test(n))                t.push('2MP FHD');
+    else if (/\b(1\.3MP|720[Pp]|1MP)\b/i.test(n)) t.push('720P');
+    else if (/\b1080[Pp]\b/i.test(n))           t.push('2MP FHD');
+  } else {
+    // ── Grabadores: resolución de GRABACIÓN según serie del código ──
+    // La resolución que importa es la de grabación real, no la de visualización
+    const cod = _cod || n.toUpperCase();
+
+    // 4K: serie 7, sufijo -4K-, -4KL o nombre con 4K en XVR5/7
+    const is4K    = /XVR7|-4K[^a-z]|-4KL/i.test(cod)
+                 || (/\b4K\b/i.test(n) && /XVR[57]/i.test(cod));
+
+    // Serie 1 o 4 → 1080P-Lite
+    const isLite  = /^XVR1|^XVR4|DH.?XVR1|DH.?XVR4/i.test(cod)
+                 || /1080.{0,4}Lite|1080N/i.test(n);
+
+    // Serie 5 sin 4K → 1080P real
+    const is1080P = /^XVR5|^HCVR|^DVR/i.test(cod) && !is4K;
+
+    if      (is4K)    t.push('4K');
+    else if (is1080P) t.push('1080P');
+    else if (isLite)  t.push('1080P-Lite');
+    else {
+      if      (/\b4K\b/i.test(n))       t.push('4K');
+      else if (/\b1080[Pp]\b/i.test(n)) t.push('1080P');
+      else if (/\b720[Pp]\b/i.test(n))  t.push('720P');
+      else if (/960H/i.test(n))          t.push('960H');
+    }
   }
-  return [...new Set(t)];
+
+  // ── SLOT 2: ÓPTICA (solo cámaras) ────────────────────────
+  if (!isRec) {
+    const ptz = n.match(/\bPTZ\b/i);
+    const zoom = n.match(/\b(\d+)[Xx]\b/);
+    const motor = /[Mm]otori[zs]|[Mm]otor\s+\d/i.test(n);
+    const varifocal = /[Vv]arifocal/i.test(n);
+    const lente = n.match(/\b(\d+\.?\d*)mm\b/);
+    const fisheye = /[Ff]isheye/i.test(n);
+    const panoramica = /[Pp]anoram/i.test(n);
+
+    if      (ptz && zoom)         t.push('PTZ ' + zoom[1] + 'X');
+    else if (ptz)                 t.push('PTZ');
+    else if (fisheye)             t.push('Fisheye 360°');
+    else if (panoramica)          t.push('Panorámica');
+    else if (motor)               t.push('Varifocal Motor');   // no mostrar lente en varifocal
+    else if (varifocal)           t.push('Varifocal');          // varifocal manual sin lente
+    else if (lente && !/\d+[,\.]\d*-\d/.test(n)) t.push(lente[1] + 'mm'); // solo lente fijo, no varifocal
+  }
+
+  // ── SLOT 3: ILUMINACIÓN (solo cámaras, jerarquía estricta) ──
+  if (!isRec) {
+    const hasWC   = /\bWizColor\b/i.test(n);
+    const hasTiOC = /\bTiOC\b/i.test(n);
+    const hasFC   = /Full.Color|FullColor/i.test(n);
+    const ir      = n.match(/\bIR\s*(\d+)/i);
+    const led     = n.match(/\bLED\s*(\d+)/i);
+    const tiocPro = /TiOC\s*PRO/i.test(n);
+
+    // TiOC PRO siempre lleva WizColor (son tecnologías complementarias)
+    if (hasWC && (hasTiOC || tiocPro)) {
+      t.push('WizColor');
+      t.push('TiOC');
+    } else if (hasWC)   { t.push('WizColor'); }
+    else if (hasTiOC)   { t.push('TiOC'); }
+    else if (hasFC)     { t.push('Full-Color'); }
+
+    // IR y LED: ambos se muestran si ambos existen en el título
+    // Si tiene tecnología color (WizColor/TiOC/Full-Color) igual mostrar alcances
+    if (led) t.push('LED ' + led[1] + 'm');
+    if (ir)  t.push('IR '  + ir[1]  + 'm');
+  }
+
+  // ── SLOT 4: IA / PLATAFORMA ──────────────────────────────
+  if      (/\bXinghan\b/i.test(n))  t.push('Xinghan AI');
+  else if (/\bWizMind\b/i.test(n))  t.push('WizMind');
+  else if (/\bWizSense\b/i.test(n)) t.push('WizSense');
+  else if (/\bWizSeek\b/i.test(n))  t.push('WizSeek');
+  else if (/\bAcuPick\b/i.test(n))  t.push('AcuPick');
+  else if (/\bSMD\+?\b/i.test(n))  t.push('SMD+');
+  else if (/\bIVS\b/i.test(n))      t.push('IVS');
+
+  // ── SLOT 5: PROTECCIÓN IP + IK ───────────────────────────
+  if (!isRec) {
+    const ip = n.match(/\bIP(6[5-9]|[789]\d)\b/i);
+    const ik = n.match(/\bIK(\d+)\b/i);
+    // Combinar IP e IK en un solo tag si ambos existen
+    if (ip && ik)       t.push('IP' + ip[1] + ' IK' + ik[1]);
+    else if (ip)        t.push('IP' + ip[1]);
+    else if (ik)        t.push('IK' + ik[1]);
+    // NEMA4X es más riguroso que IP68 — mostrarlo si existe
+    if (/NEMA4?[Xx]/i.test(n)) t.push('NEMA4X');
+  }
+
+  // ── GRABADORES: HDD + Mbps (slots finales) ───────────────
+  if (isRec) {
+    const hdd  = n.match(/(\d+)\s*HDD/i) || n.match(/(\d+)\s*DD\b/i);
+    const mbps = n.match(/(\d+)\s*[Mm]bps/i);
+    const ch   = n.match(/\b(\d+)\s*[Cc][Hh]\b/);
+    if (hdd)  t.push(hdd[1] + ' HDD');
+    if (mbps) t.push(mbps[1] + ' Mbps');
+    if (ch)   t.push(ch[1] + 'CH');
+  }
+
+  return [...new Set(t)].slice(0, 5);  // máx 5 para dar espacio a IP+IK
 }
 
 // ── Render products ──────────────────────────────────────────
@@ -9322,7 +9476,7 @@ function render() {
 
   qs('grid').innerHTML = slice.map(p => {
     const [lbl, cls] = p.nuevo ? ['Nuevo', 'pb-new'] : (BADGE_MAP[p.stock] || BADGE_MAP.normal);
-    const tags = getTags(p.nombre);
+    const tags = getTags(p.nombre, p.codigo);
     return `
     <div class="pcard">
       <div class="pcard-img-wrap" onclick="openProdModal(${p.id})" style="cursor:pointer">
@@ -9340,42 +9494,37 @@ function render() {
           const nc = n + ' ' + c;
           const badges = [];
 
-          // ── Tecnología principal (máx 1) ──
-          if (/wizsense|wiz.?sense/.test(nc))           badges.push('<span class="tech-badge tech-ws">WizSense</span>');
-          else if (/wizmind|wiz.?mind/.test(nc))        badges.push('<span class="tech-badge tech-wm">WizMind</span>');
+          // ══ TECH-BADGES: solo tecnologías premium Dahua (máx 2) ══
+          // Jerarquía: Xinghan > WizMind > WizColor+TiOC > WizSense > Full-Color > AcuPick > 4K
 
-          // ── Iluminación / color ──
-          if (/tioc|active.?deter|disuasion activa/.test(nc)) badges.push('<span class="tech-badge tech-tioc">TiOC</span>');
-          else if (/wizcolor|wiz.?color/.test(nc))      badges.push('<span class="tech-badge tech-fc">WizColor</span>');
-          else if (/full.?color/.test(nc))              badges.push('<span class="tech-badge tech-fc">Full-Color</span>');
-          else if (/starlight/.test(nc))                badges.push('<span class="tech-badge tech-sl">Starlight</span>');
+          const hasXinghan  = /xinghan/i.test(nc);
+          const hasWizMind  = /wizmind|wiz.?mind/i.test(nc);
+          const hasWizColor = /wizcolor|wiz.?color/i.test(nc);
+          const hasTiOC     = /tioc/i.test(nc) || /-pv-|-pv$/i.test(c);
+          const hasWizSense = /wizsense|wiz.?sense/i.test(nc);
+          const hasFullColor= /full.?color/i.test(nc) || (/-led-|-led\./.test(c) && !hasTiOC);
+          const hasAcuPick  = /acupick/i.test(nc);
+          const has4K       = /4k|8mp|8 mp/.test(nc) || /38\d\d|4k/.test(c);
 
-          // Detectar WizColor/TiOC/Varifocal desde código Dahua
-          // -PV- en el código = TiOC (Perimeter+Voice/light)
-          if (badges.length===0 && /-pv-|-pv$/.test(c)) badges.push('<span class="tech-badge tech-tioc">TiOC</span>');
-          // -LED- en el código = Full-Color
-          if (badges.length<=1 && /-led-|-led\./.test(c) && !/tioc/.test(nc)) badges.push('<span class="tech-badge tech-fc">Full-Color</span>');
+          // Slot 1 — IA/Plataforma superior
+          if      (hasXinghan)  badges.push('<span class="tech-badge tech-xh">Xinghan AI</span>');
+          else if (hasWizMind)  badges.push('<span class="tech-badge tech-wm">WizMind</span>');
+          else if (hasWizSense) badges.push('<span class="tech-badge tech-ws">WizSense</span>');
+          else if (hasAcuPick)  badges.push('<span class="tech-badge tech-acu">AcuPick</span>');
 
-          // ── AcuPick (desde nombre o sufijo -pro en WizSense) ──
-          if (/acupick/.test(nc) || (/-pro$|-pro-/.test(c) && /wizsense/.test(nc)))
-            badges.push('<span class="tech-badge tech-acu">AcuPick</span>');
+          // Slot 2 — Tecnología de imagen/iluminación
+          if      (hasWizColor && hasTiOC) {
+            badges.push('<span class="tech-badge tech-fc">WizColor</span>');
+            if (badges.length < 2) badges.push('<span class="tech-badge tech-tioc">TiOC</span>');
+          }
+          else if (hasWizColor) badges.push('<span class="tech-badge tech-fc">WizColor</span>');
+          else if (hasTiOC)     badges.push('<span class="tech-badge tech-tioc">TiOC</span>');
+          else if (hasFullColor)badges.push('<span class="tech-badge tech-fc">Full-Color</span>');
 
-          // ── Varifocal / motorizado ──
-          if (badges.length < 3 && /varifocal|motoriz|motor|zoom|vari.focal/.test(nc))
-            badges.push('<span class="tech-badge tech-varifocal">Varifocal</span>');
-          // Detectar varifocal desde código: -Z en modelos con zoom
-          else if (badges.length < 3 && /-za?s?-|-z\d{4}-/.test(c) && !/fixed|fijo/.test(nc))
-            badges.push('<span class="tech-badge tech-varifocal">Varifocal</span>');
+          // 4K/8MP: siempre visible como badge si aplica (resolución premium)
+          if (has4K && badges.length < 2) badges.push('<span class="tech-badge tech-4k">4K</span>');
 
-          // ── 4K ──
-          if (badges.length < 3 && (/4k|8mp|8 mp|2160/.test(nc) || /38\d\d|4k/.test(c)))
-            badges.push('<span class="tech-badge tech-4k">4K</span>');
-
-          // ── IK10 ──
-          if (badges.length < 3 && /ik10|ik09|anti.?vandal/.test(nc))
-            badges.push('<span class="tech-badge tech-ik10">IK10</span>');
-
-          return badges.slice(0,3).join('');
+          return badges.slice(0,2).join('');
         })()}
         <div class="pcard-quickview" onclick="openProdModal(${p.id})">👁 Ver ficha técnica</div>
         ${(()=>{
@@ -9395,7 +9544,25 @@ function render() {
           </button>
         </div>
         <div class="pcard-name" onclick="openProdModal(${p.id})" style="cursor:pointer">${p.nombre}</div>
-        <div class="pcard-tags">${tags.map(t=>`<span class="ptag">${t}</span>`).join('')}</div>
+        <div class="pcard-tags">${tags.map(t => {
+          let cls = 'ptag ';
+          if (/^(\d+MP|\d+K|FHD|720P|1080N)/.test(t))            cls += 'ptag-res';
+          else if (/^(4K|1080P|720P|960H|5MP-Lite|4K-Lite|1080P-Lite)/.test(t)) cls += 'ptag-rec';
+          else if (/^(PTZ|Varifocal|Fisheye|Panor)/.test(t)||/mm$/.test(t)) cls += 'ptag-lens';
+          else if (/WizColor/.test(t))                              cls += 'ptag-wc';
+          else if (/TiOC/.test(t))                                  cls += 'ptag-tioc';
+          else if (/Full.Color/.test(t))                            cls += 'ptag-fc';
+          else if (/WizMind/.test(t))                               cls += 'ptag-wm';
+          else if (/Xinghan/.test(t))                               cls += 'ptag-xh';
+          else if (/WizSense|WizSeek|AcuPick|SMD|IVS/.test(t))     cls += 'ptag-ws';
+          else if (/^IR/.test(t))                                   cls += 'ptag-ir';
+          else if (/^LED/.test(t))                                  cls += 'ptag-led';
+          else if (/HDD|Mbps|CH$/.test(t))                         cls += 'ptag-hdd';
+          else if (/^IP\d|^IK\d|IP\d+\s+IK/.test(t))                 cls += 'ptag-prot';
+          else if (/NEMA/.test(t))                                     cls += 'ptag-nema';
+          else                                                       cls += 'ptag-res';
+          return `<span class="${cls}">${t}</span>`;
+        }).join('')}</div>
         <div class="pcard-price">
           ${(()=>{
             var _t = B2B.classify(p);
@@ -9510,7 +9677,21 @@ function applyPrice() {
   S.page=1; render();
 }
 
-function doSearch(q) { S.q=q.trim(); S.techFilter=null; S.page=1; render(); qs('sd').classList.remove('show'); }
+function doSearch(q) {
+  S.q = q.trim();
+  S.techFilter = null;
+  S.page = 1;
+  // Resetear categoría a "todas" para que la búsqueda sea global
+  if (S.q) {
+    S.cat = 'todas';
+    document.querySelectorAll('.nav-link').forEach(function(el) {
+      el.classList.toggle('active', el.dataset.cat === 'todas');
+    });
+    if (typeof renderCatSidebar === 'function') renderCatSidebar();
+  }
+  render();
+  qs('sd').classList.remove('show');
+}
 
 // ── Autocomplete ─────────────────────────────────────────────
 let sdTimer;
@@ -18498,6 +18679,7 @@ document.addEventListener('click', function(e) {
     fab.id = 'aiFab';
     fab.title = 'annastasIA';
     fab.onclick = function(){ aiToggle(); };
+    // ── ORB — Liquid Glass camuflaje ambiental ──
     fab.style.cssText = [
       'position:fixed',
       'bottom:'+fabBot+'px',
@@ -18506,31 +18688,38 @@ document.addEventListener('click', function(e) {
       'width:'+fabSize+'px',
       'height:'+fabSize+'px',
       'border-radius:50%',
-      'background:rgba(255,255,255,0.72)',
-      'border:1px solid rgba(255,255,255,0.88)',
-      'backdrop-filter:blur(28px) saturate(200%) brightness(1.08)',
-      '-webkit-backdrop-filter:blur(28px) saturate(200%) brightness(1.08)',
-      'box-shadow:0 8px 32px rgba(0,0,0,0.18),0 2px 8px rgba(0,0,0,0.10),inset 0 1.5px 0 rgba(255,255,255,0.95),inset 0 -1px 0 rgba(0,0,0,0.06)',
+      'background:rgba(255,255,255,0.08)',
+      'border:none',
+      'backdrop-filter:blur(32px) saturate(280%) brightness(1.15) contrast(0.95)',
+      '-webkit-backdrop-filter:blur(32px) saturate(280%) brightness(1.15) contrast(0.95)',
+      'box-shadow:0 0 0 1px rgba(255,255,255,0.45) inset,0 0 0 1.5px rgba(255,255,255,0.15),0 8px 32px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.08)',
       'cursor:pointer',
       'display:flex',
       'align-items:center',
       'justify-content:center',
-      'transition:transform .22s cubic-bezier(.32,.72,0,1),box-shadow .22s',
+      'transition:transform .3s cubic-bezier(.32,.72,0,1),box-shadow .3s,backdrop-filter .3s',
       'overflow:hidden',
     ].join(';');
 
-    // Interior: estrella Gemini en rojo SSTT + sonograma oculto
+    // Interior del orb: capas de lensing + estrella
     fab.innerHTML =
-      '<div id="aiFabInner" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:relative">' +
-        '<div id="aiFabStar" style="transition:opacity .3s">' +
-          '<svg width="28" height="28" viewBox="0 0 40 40" fill="none" style="animation:ssttSpin 10s linear infinite">' +
-            '<defs><linearGradient id="gSST" x1="0" y1="0" x2="1" y2="1">' +
-              '<stop offset="0%" stop-color="#fff"/>' +
-              '<stop offset="40%" stop-color="#ffcccc"/>' +
-              '<stop offset="100%" stop-color="'+RED+'"/>' +
+      // Capa 1: reflejo especular superior (lente)
+      '<div style="position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,0.55) 0%,rgba(255,255,255,0.08) 40%,transparent 65%);pointer-events:none;z-index:3"></div>' +
+      // Capa 2: brillo inferior difuso
+      '<div style="position:absolute;bottom:0;left:10%;right:10%;height:35%;border-radius:0 0 50% 50%;background:radial-gradient(ellipse at center,rgba(255,255,255,0.25) 0%,transparent 70%);pointer-events:none;z-index:3"></div>' +
+      // Capa 3: anillo iris exterior
+      '<div style="position:absolute;inset:-1px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.35);pointer-events:none;z-index:4"></div>' +
+      // Estrella central
+      '<div id="aiFabInner" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:relative;z-index:2">' +
+        '<div id="aiFabStar" style="transition:opacity .3s,transform .3s">' +
+          '<svg width="22" height="22" viewBox="0 0 40 40" fill="none" style="animation:ssttSpin 12s linear infinite;filter:drop-shadow(0 0 6px rgba(255,255,255,0.8))">' +
+            '<defs><linearGradient id="gORB" x1="0" y1="0" x2="1" y2="1">' +
+              '<stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>' +
+              '<stop offset="50%" stop-color="rgba(255,220,220,0.9)"/>' +
+              '<stop offset="100%" stop-color="rgba(232,0,28,0.85)"/>' +
             '</linearGradient></defs>' +
-            '<path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gSST)"/>' +
-            '<path d="M20 14C20 14 21.5 19 26 19C26 19 21.5 20 20 25C20 25 18.5 20 14 19C14 19 18.5 19 20 14Z" fill="white" opacity=".5"/>' +
+            '<path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gORB)"/>' +
+            '<path d="M20 14C20 14 21.5 19 26 19C26 19 21.5 20 20 25C20 25 18.5 20 14 19C14 19 18.5 19 20 14Z" fill="rgba(255,255,255,0.7)"/>' +
           '</svg>' +
         '</div>' +
         '<div id="aiFabSono" style="display:none;align-items:center;justify-content:center;height:100%">' +
@@ -18539,6 +18728,21 @@ document.addEventListener('click', function(e) {
           '<div class="sstt-bar"></div>' +
         '</div>' +
       '</div>';
+
+    // ── Efecto hover: el orb respira y amplía el lensing ──
+    fab.addEventListener('mouseenter', function() {
+      this.style.backdropFilter = 'blur(48px) saturate(320%) brightness(1.2) contrast(0.92)';
+      this.style.webkitBackdropFilter = 'blur(48px) saturate(320%) brightness(1.2) contrast(0.92)';
+      this.style.boxShadow = '0 0 0 1.5px rgba(255,255,255,0.6) inset,0 0 0 3px rgba(255,255,255,0.12),0 16px 48px rgba(0,0,0,0.16),0 4px 16px rgba(0,0,0,0.10)';
+      this.style.transform = 'scale(1.12)';
+    });
+    fab.addEventListener('mouseleave', function() {
+      this.style.backdropFilter = 'blur(32px) saturate(280%) brightness(1.15) contrast(0.95)';
+      this.style.webkitBackdropFilter = 'blur(32px) saturate(280%) brightness(1.15) contrast(0.95)';
+      this.style.boxShadow = '0 0 0 1px rgba(255,255,255,0.45) inset,0 0 0 1.5px rgba(255,255,255,0.15),0 8px 32px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.08)';
+      this.style.transform = 'scale(1)';
+    });
+
     document.body.appendChild(fab);
 
     // ── Panel de chat ──
