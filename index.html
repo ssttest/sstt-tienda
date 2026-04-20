@@ -272,8 +272,8 @@ header {
   display: flex;
   align-items: center;
   background: rgba(255,255,255,0.62);
-  backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
-  -webkit-backdrop-filter: blur(28px) saturate(180%) brightness(1.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255,255,255,0.75);
   border-radius: 50px;
   padding: 4px 4px 4px 18px;
@@ -817,6 +817,8 @@ nav {
 
 .pcard {
   background: var(--white);
+  will-change: transform;
+  contain: layout style;
   border: 1px solid var(--g5);
   border-radius: var(--r-lg);
   overflow: hidden;
@@ -826,15 +828,10 @@ nav {
   position: relative;
 }
 .pcard:hover {
-  border-color: rgba(255,255,255,0.7);
-  background: rgba(255,255,255,0.82);
-  box-shadow:
-    0 8px 32px rgba(0,0,0,0.10),
-    0 2px 0 rgba(255,255,255,0.95) inset,
-    0 -1px 0 rgba(0,0,0,0.04) inset;
-  backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(100,130,200,0.35);
+  background: rgba(255,255,255,0.96);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+  transform: translateY(-2px);
 }
 
 
@@ -978,6 +975,26 @@ nav {
 .ptag-nema { background:#e8eeff; color:#3030a8; border-color:#b8c4f5; font-weight:700; } /* NEMA4X */
 .ptag-rec::before { content:'⏺'; color:#e8001c; margin-right:3px; font-size:9px; vertical-align:middle; animation:heroPulse 1.5s ease-in-out infinite; }
 
+/* Animaciones carro */
+@keyframes cartShake {
+  0%,100% { transform: rotate(0deg) scale(1); }
+  20%     { transform: rotate(-12deg) scale(1.15); }
+  40%     { transform: rotate(10deg) scale(1.1); }
+  60%     { transform: rotate(-6deg) scale(1.05); }
+  80%     { transform: rotate(4deg) scale(1.02); }
+}
+.cart-shake { animation: cartShake .45s cubic-bezier(.36,.07,.19,.97); }
+
+/* Badge animación al agregar al carro */
+@keyframes badgePop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.55); }
+  70%  { transform: scale(0.88); }
+  100% { transform: scale(1); }
+}
+.badge-pop { animation: badgePop .35s cubic-bezier(.36,.07,.19,.97); }
+.cart-cnt  { transition: background .2s; }
+
 /* Price — Dahua: precio grande y prominente */
 .pcard-price {
   margin-top: auto;
@@ -1098,8 +1115,8 @@ nav {
   border-radius: 20px;
   letter-spacing: .3px;
   text-transform: uppercase;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 2;
   pointer-events: none;
 }
@@ -1139,8 +1156,8 @@ nav {
   position: absolute;
   top: calc(100% + 8px); left: 0; right: 0;
   background: rgba(255,255,255,.88);
-  backdrop-filter: blur(48px) saturate(200%) brightness(1.04);
-  -webkit-backdrop-filter: blur(48px) saturate(200%) brightness(1.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255,255,255,.75);
   border-radius: 18px;
   box-shadow:
@@ -1224,8 +1241,8 @@ nav {
   display: none;
   padding: 8px 14px;
   background: rgba(255,255,255,0.70);
-  backdrop-filter: blur(32px) saturate(200%) brightness(1.06);
-  -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border-bottom: 1px solid rgba(255,255,255,0.6);
   box-shadow: 0 2px 16px rgba(0,0,0,0.08), 0 1px 0 rgba(255,255,255,0.9) inset;
   position: sticky;
@@ -1283,10 +1300,8 @@ nav {
 /* ══ CARRO — iPhone Sheet Glass ══════════════════════════════ */
 .cart-overlay {
   position: fixed; inset: 0;
-  background: rgba(0,0,0,0.18);
-  backdrop-filter: blur(18px) saturate(160%);
-  -webkit-backdrop-filter: blur(18px) saturate(160%);
-  z-index: 800; display: none;
+  background: rgba(0,0,0,0.35);
+  z-index: 9994; display: none;
 }
 .cart-overlay.open { display: block }
 
@@ -1295,11 +1310,11 @@ nav {
   top: 10px; right: 10px; bottom: 10px;
   width: min(400px, calc(100vw - 20px));
   background: rgba(248,249,252,0.78);
-  backdrop-filter: blur(56px) saturate(220%) brightness(1.06) contrast(1.02);
-  -webkit-backdrop-filter: blur(56px) saturate(220%) brightness(1.06) contrast(1.02);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255,255,255,0.82);
   border-radius: 28px;
-  z-index: 801;
+  z-index: 9996;
   display: flex; flex-direction: column;
   transform: translateX(calc(100% + 20px));
   transition: transform .44s cubic-bezier(.32,.72,0,1);
@@ -3608,7 +3623,7 @@ nav {
 
 .cart-drawer{position:fixed;top:0;right:0;bottom:0;width:420px;background:var(--white);z-index:801;box-shadow:-6px 0 28px rgba(0,0,0,.12);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
 .cart-drawer.open{transform:translateX(0)}
-.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:800;display:none}
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:9994;display:none}
 .cart-overlay.open{display:block}
 
 #secAcademia.active { background: var(--white); min-height:100vh; }
@@ -3797,6 +3812,117 @@ nav {
   #pdfViewer { padding:8px; }
 }
 
+
+/* ══ CART SUGGESTIONS MODAL — Liquid Glass ══ */
+#cartSuggestModal {
+  position:fixed; inset:0; z-index:9998;
+  display:none; align-items:flex-end; justify-content:center;
+  background:rgba(0,0,0,0.25);
+  padding:0;
+}
+#cartSuggestModal.open { display:flex; }
+.csm-wrap {
+  width:100%; max-width:440px;
+  background:rgba(250,251,255,0.92);
+  backdrop-filter:blur(48px) saturate(220%) brightness(1.05);
+  -webkit-backdrop-filter:blur(48px) saturate(220%) brightness(1.05);
+  border:1px solid rgba(255,255,255,0.88);
+  border-radius:28px 28px 0 0;
+  box-shadow:0 -20px 60px rgba(0,0,0,0.14),
+             0 -4px 16px rgba(0,0,0,0.08),
+             inset 0 1px 0 rgba(255,255,255,0.95);
+  animation:csmSlideUp .32s cubic-bezier(.32,.72,0,1) both;
+  overflow:hidden; display:flex; flex-direction:column;
+  max-height:80vh;
+}
+@keyframes csmSlideUp {
+  from { transform:translateY(100%); opacity:0; }
+  to   { transform:translateY(0);    opacity:1; }
+}
+.csm-handle {
+  width:36px; height:4px; border-radius:2px;
+  background:rgba(0,0,0,0.15);
+  margin:10px auto 0;
+}
+.csm-head {
+  padding:14px 20px 10px;
+  display:flex; align-items:center; justify-content:space-between;
+  flex-shrink:0;
+}
+.csm-title {
+  font-size:15px; font-weight:800; color:#111; letter-spacing:-.2px;
+}
+.csm-subtitle {
+  font-size:11.5px; color:#888; margin-top:2px;
+}
+.csm-skip {
+  background:rgba(255,255,255,0.65);
+  border:1px solid rgba(0,0,0,0.10);
+  border-radius:50px; color:#555;
+  padding:6px 14px; font-size:12px; font-weight:600;
+  cursor:pointer; font-family:var(--font);
+  transition:all .18s;
+  box-shadow:0 2px 8px rgba(0,0,0,0.06);
+  white-space:nowrap; flex-shrink:0;
+}
+.csm-skip:hover { background:rgba(255,255,255,.9); color:#111; }
+.csm-list {
+  overflow-y:auto; padding:0 14px 14px;
+  display:flex; flex-direction:column; gap:8px;
+  scrollbar-width:thin;
+}
+.csm-item {
+  display:flex; align-items:center; gap:12px;
+  background:rgba(255,255,255,0.72);
+  border:1px solid rgba(255,255,255,0.85);
+  border-radius:16px; padding:10px 12px;
+  cursor:pointer;
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  box-shadow:0 2px 10px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,.9);
+  transition:all .2s cubic-bezier(.32,.72,0,1);
+}
+.csm-item:hover {
+  background:rgba(255,255,255,0.92);
+  box-shadow:0 4px 18px rgba(0,0,0,0.10);
+  transform:translateX(3px);
+}
+.csm-img {
+  width:52px; height:52px; object-fit:contain;
+  background:rgba(248,249,252,0.8);
+  border-radius:12px; flex-shrink:0; padding:4px;
+  border:1px solid rgba(0,0,0,0.05);
+}
+.csm-info { flex:1; min-width:0; }
+.csm-sku  { font-family:var(--font-m); font-size:10px; color:var(--blue); font-weight:700; }
+.csm-name { font-size:12px; font-weight:600; color:#111; line-height:1.35;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.csm-price { font-family:var(--font-d); font-size:16px; font-weight:800; color:#111; white-space:nowrap; flex-shrink:0; }
+.csm-add {
+  width:32px; height:32px; border-radius:50%; border:none;
+  background:linear-gradient(135deg,#E8001C,#c2001a);
+  color:#fff; cursor:pointer; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 3px 10px rgba(232,0,28,.3);
+  transition:all .18s;
+}
+.csm-add:hover { transform:scale(1.1); box-shadow:0 5px 16px rgba(232,0,28,.45); }
+.csm-added { background:linear-gradient(135deg,#1A7F3C,#0f5a2a) !important; }
+.csm-footer {
+  padding:12px 14px 20px; flex-shrink:0;
+  background:rgba(255,255,255,0.72);
+  backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  border-top:1px solid rgba(0,0,0,0.06);
+}
+.csm-continue {
+  width:100%; padding:14px;
+  background:linear-gradient(135deg,#111,#333);
+  color:#fff; border:none; border-radius:50px;
+  font-size:14px; font-weight:800; cursor:pointer;
+  font-family:var(--font);
+  box-shadow:0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,.1);
+  transition:all .2s;
+}
+.csm-continue:hover { transform:translateY(-1px); box-shadow:0 6px 22px rgba(0,0,0,.3); }
 /* ── VIDEO MODAL ─────────────────────────────────────────────── */
 #vmod {
   position: fixed;
@@ -5091,7 +5217,8 @@ input[data-validated="1"]::after {
   .search-wrap { display:none }
   .mob-search { display:block }
   .hbtn span { display:none }
-  .hbtn { padding:8px 10px; gap:0 }
+  .hbtn { padding:8px 10px; gap:0; display:flex !important; }
+  #cartToggle { display:flex !important; }
 
   /* Module nav */
   .module-nav { top: 56px }
@@ -5140,6 +5267,9 @@ input[data-validated="1"]::after {
   .bcrum-bar .wrap { flex-direction:column; gap:4px; }
 }
 
+/* ── CART TOGGLE: siempre visible en todos los dispositivos ── */
+#cartToggle { display:flex !important; }
+
 /* ── Botón filtros mobile ── */
 @media(max-width:768px){
   .mob-filter-btn { display:flex !important }
@@ -5180,14 +5310,17 @@ input[data-validated="1"]::after {
 @media(max-width:768px) {
   /* Topbar completamente oculto */
   .topbar { display:none !important; }
-  /* Header compacto — solo logo */
-  .header-inner { grid-template-columns: auto 1fr; height:42px; padding:0 14px }
+  /* Header compacto mobile */
+  .header-inner { grid-template-columns: auto 1fr auto; height:52px; padding:0 12px; gap:8px; }
   .search-wrap { display:none }
   .mob-search { display:block }
-  /* Ocultar botones Ingresar/Carro del header — los reemplaza el mobile nav */
-  #loginBtn, #userPill, #cartToggle { display:none !important; }
-  .hbtn { display:none !important; }
-  /* Ocultar barra de módulos — el mobile nav la reemplaza */
+  /* Mantener botones Carro e Ingresar siempre visibles */
+  #loginBtn { display:none !important; }
+  #cartToggle { display:flex !important; }
+  #userPill { display:flex !important; }
+  .hbtn span { display:none; }
+  .hbtn { padding:8px 10px; gap:0; display:flex !important; }
+  /* Ocultar barra de módulos en móvil */
   .module-nav { display:none !important; }
   /* Sidebar oculto, layout 1col */
   .main-wrap { grid-template-columns: 1fr }
@@ -5510,7 +5643,7 @@ input[data-validated="1"]::after {
   position:fixed !important;
   bottom:28px !important;
   right:28px !important;
-  z-index:99999 !important;
+  z-index:9990 !important; /* Bajo z-index del cart drawer */
   width:58px; height:58px; border-radius:50%;
   /* Orb camuflaje — hereda colores del fondo via backdrop-filter */
   background:rgba(255,255,255,0.08);
@@ -5538,12 +5671,21 @@ input[data-validated="1"]::after {
     0 16px 48px rgba(0,0,0,0.16);
 }
 @media(max-width:768px){ #aiFab { bottom:66px !important; right:14px !important; width:50px; height:50px; } }
+/* Ocultar flotantes cuando el cart está abierto */
+body.cart-open #aiFab,
+body.cart-open #waBtn,
+body.cart-open #proyectoListadoBtn {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(12px) scale(0.88) !important;
+  transition: opacity .2s, transform .2s !important;
+}
 
 @keyframes gemSpin { to { transform:rotate(360deg); } }
 @keyframes orbBreathe {
   0%,100% {
     box-shadow:inset 0 0 0 1px rgba(255,255,255,0.45),0 0 0 1.5px rgba(255,255,255,0.15),0 8px 32px rgba(0,0,0,0.12);
-    backdrop-filter:blur(32px) saturate(280%) brightness(1.15);
+    backdrop-filter:blur(10px) saturate(160%);
   }
   50% {
     box-shadow:inset 0 0 0 1px rgba(255,255,255,0.60),0 0 0 2px rgba(255,255,255,0.20),0 12px 40px rgba(0,0,0,0.14);
@@ -5897,15 +6039,10 @@ input[data-validated="1"]::after {
   box-shadow: 0 2px 12px rgba(0,0,0,.4) !important;
 }
 [data-theme="dahua-dark"] .pcard:hover {
-  border-color: rgba(0,180,230,0.35) !important;
-  background: rgba(30,40,55,0.75) !important;
-  box-shadow:
-    0 8px 32px rgba(0,0,0,0.4),
-    0 1px 0 rgba(0,180,230,0.2) inset,
-    0 -1px 0 rgba(0,0,0,0.3) inset !important;
-  backdrop-filter: blur(20px) saturate(160%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
-  transform: translateY(-3px) scale(1.01) !important;
+  border-color: rgba(0,180,230,0.4) !important;
+  background: rgba(25,35,50,0.95) !important;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
 }
 [data-theme="dahua-dark"] .pcard-img-wrap { background: #1c1f26 !important; }
 [data-theme="dahua-dark"] .pcard-code { color: #00B4E6 !important; }
@@ -6822,8 +6959,8 @@ if (window.pdfjsLib) {
 </div>
 
 <!-- CART DRAWER -->
-<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
-<aside class="cart-drawer" id="cartDrawer">
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-drawer" id="cartDrawer" onclick="event.stopPropagation()">
 
   <!-- ══ HEADER FIJO ══════════════════════════════════════════ -->
   <div class="cart-head">
@@ -6872,17 +7009,17 @@ if (window.pdfjsLib) {
       <div class="co-step-lbl">Carro</div>
     </div>
     <div class="co-step-line"></div>
-    <div class="co-step" id="cst2" onclick="checkoutGoTo(1)">
+    <div class="co-step" id="cst2" onclick="event.stopPropagation();checkoutGoTo(1, true)">
       <div class="co-step-num">2</div>
       <div class="co-step-lbl">Datos</div>
     </div>
     <div class="co-step-line"></div>
-    <div class="co-step" id="cst3" onclick="checkoutGoTo(2)">
+    <div class="co-step" id="cst3" onclick="event.stopPropagation();checkoutGoTo(2, true)">
       <div class="co-step-num">3</div>
       <div class="co-step-lbl">Envío</div>
     </div>
     <div class="co-step-line"></div>
-    <div class="co-step" id="cst4" onclick="checkoutGoTo(3)">
+    <div class="co-step" id="cst4" onclick="event.stopPropagation();checkoutGoTo(3, true)">
       <div class="co-step-num">4</div>
       <div class="co-step-lbl">Pago</div>
     </div>
@@ -7195,7 +7332,7 @@ if (window.pdfjsLib) {
       </div>
     </div>
     <!-- Botón principal dinámico -->
-    <button id="coNextBtn" class="pay-now-btn" onclick="checkoutNext()" style="margin-bottom:0">
+    <button id="coNextBtn" class="pay-now-btn" style="margin-bottom:0" onclick="event.stopPropagation();checkoutNext()">
       Continuar → Datos
     </button>
   </div>
@@ -8060,6 +8197,7 @@ if (window.pdfjsLib) {
   <!-- ── Botón flotante WhatsApp ── -->
   <a href="https://wa.me/56222042119?text=Hola%20SSTT%2C%20necesito%20ayuda%20con%20una%20compra"
     target="_blank" rel="noopener"
+    id="waBtn"
     style="position:fixed;bottom:28px;left:20px;z-index:999;
       background:#25D366;color:#fff;border-radius:50px;
       padding:10px 18px;font-size:13px;font-weight:700;
@@ -9210,7 +9348,17 @@ let S = {
   priceMin:0, priceMax:0,
   page:1, perPage:12,
   techFilter: null,
-  cart: JSON.parse(localStorage.getItem('sstt_cart')||'[]'),
+  cart: (function(){
+    try {
+      var c = JSON.parse(localStorage.getItem('sstt_cart')||'[]');
+      // Sanitizar: máx 50 items distintos, cantidad máx 99 por item
+      if (!Array.isArray(c)) return [];
+      c = c.filter(function(p){ return p && p.id && p.ptotal; });
+      c = c.slice(0, 50);
+      c.forEach(function(p){ if(p.qty > 99) p.qty = 99; });
+      return c;
+    } catch(e){ return []; }
+  })(),
   shipCost:0, shipCourier:'',
 };
 
@@ -9745,7 +9893,7 @@ function render() {
                 <span>Cotizar</span>
               </button>`;
             }
-            return `<button class="pca-btn pca-btn-red" onclick='addCart(${JSON.stringify(p)})' title="Comprar">
+            return `<button class="pca-btn pca-btn-red" onclick="addCart(PRODUCTS.find(x=>x.id===${p.id}))" title="Comprar">
               <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
               <span>Comprar</span>
             </button>`;
@@ -10001,27 +10149,40 @@ document.querySelectorAll('.nav-link[data-cat]').forEach(el => {
 });
 
 // ── CARRO ────────────────────────────────────────────────────
-function saveCart() { localStorage.setItem('sstt_cart', JSON.stringify(S.cart)); }
+function saveCart() {
+  try { localStorage.setItem('sstt_cart', JSON.stringify(S.cart)); } catch(e) {}
+}
 function cartTotal() { return S.cart.reduce((a,c)=>a+c.qty,0); }
 
 function addCart(p) {
-  if (!p) return;
-  const tipo = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
-  if (tipo === 'enterprise') {
-    showToast('⚠️ Producto de proyecto — usa "Declarar Proyecto / Cotizar"');
-    abrirProyectoModal(p.id);
-    return;
+  if (!p) { showToast('❌ Producto no encontrado'); return; }
+  try {
+    const tipo = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
+    if (tipo === 'enterprise') {
+      showToast('⚠️ Producto de proyecto — usa "Declarar Proyecto / Cotizar"');
+      abrirProyectoModal(p.id);
+      return;
+    }
+    if (S.cart.some(c => typeof B2B !== 'undefined' && B2B.classify(c) === 'enterprise')) {
+      showToast('⚠️ Tu carro tiene productos de proyecto. Vacíalo primero.');
+      openCart(); return;
+    }
+    const ex = S.cart.find(c => c.id === p.id);
+    if (ex) { ex.qty++; } else { S.cart.push(Object.assign({}, p, {qty:1})); }
+    saveCart(); renderCart(); updateBadge();
+    showToast(p.codigo + ' agregado al carro');
+    // Animación micro en el ícono del carro
+    var cartIcon = document.getElementById('cartToggle');
+    if (cartIcon) {
+      cartIcon.classList.remove('cart-shake');
+      void cartIcon.offsetWidth;
+      cartIcon.classList.add('cart-shake');
+    }
+    openCart();
+  } catch(e) {
+    showToast('❌ Error al agregar: ' + e.message);
+    console.error('addCart error:', e, p);
   }
-  // Si ya hay productos enterprise en el carro, bloquear
-  if (S.cart.some(c => typeof B2B !== 'undefined' && B2B.classify(c) === 'enterprise')) {
-    showToast('⚠️ Tu carro tiene productos de proyecto. Vacíalo primero.');
-    openCart(); return;
-  }
-  const ex = S.cart.find(c=>c.id===p.id);
-  if (ex) ex.qty++; else S.cart.push({...p,qty:1});
-  saveCart(); renderCart(); updateBadge();
-  showToast(`${p.codigo} agregado al carro`);
-  openCart();
 }
 
 function removeCart(id) { S.cart=S.cart.filter(c=>c.id!==id); saveCart(); renderCart(); updateBadge(); }
@@ -10033,10 +10194,21 @@ function changeQty(id,d) {
 }
 
 function updateBadge() {
-  const n=cartTotal();
-  qs('cartCount').textContent=n;
-  qs('cartSub').textContent=`${n} producto${n!==1?'s':''} · www.sstt.cl`;
+  const n = cartTotal();
+  const cnt = qs('cartCount');
+  if (cnt) {
+    cnt.textContent = n;
+    cnt.style.display = n > 0 ? 'flex' : 'none';
+    if (n > 0) {
+      cnt.classList.remove('badge-pop');
+      void cnt.offsetWidth;
+      cnt.classList.add('badge-pop');
+    }
+  }
+  const sub = qs('cartSub');
+  if (sub) sub.textContent = n + ' producto' + (n!==1?'s':'') + ' · www.sstt.cl';
 }
+window.updateBadge = updateBadge;
 
 function renderCart() {
   const items=qs('cartItems'), empty=qs('cartEmpty');
@@ -10051,15 +10223,12 @@ function renderCart() {
   }
   empty.style.display='none';
   if (cartSticky) cartSticky.style.display = 'block';
-  // Conectar botón continuar y asegurar step 0
-  var _nextBtn = document.getElementById('coNextBtn');
-  if (_nextBtn) _nextBtn.onclick = checkoutNext;
-  if (typeof coStep !== 'undefined' && coStep > 0) coStep = 0;
-  var _track = document.getElementById('coTrack');
-  if (_track) _track.style.transform = 'translateX(0%)';
-  // Actualizar stepper
+  // Mostrar stepper
   var stepper = qs('coStepper'); if(stepper) stepper.style.display='flex';
-  if (typeof checkoutGoTo === 'function') checkoutGoTo(0, true);
+  // Solo resetear si estamos en paso > 0 (ej: usuario vacía el carro y vuelve)
+  if (typeof coStep !== 'undefined' && coStep > 0) {
+    if (typeof checkoutGoTo === 'function') checkoutGoTo(0, true);
+  }
   items.innerHTML = S.cart.map(p=>`
     <div class="citem">
       <img class="citem-img" src="${imgProxyUrl(p.codigo)}" onerror="this.style.opacity='.3'">
@@ -10076,6 +10245,7 @@ function renderCart() {
       <div class="citem-price">${fmt(p.ptotal*p.qty)}</div>
     </div>`).join('');
   calcTotals();
+  updateBadge();
 }
 
 function scrollToCartItems() {
@@ -10100,7 +10270,19 @@ function calcTotals() {
   }
 }
 
-function openCart()  { qs('cartOverlay').classList.add('open'); qs('cartDrawer').classList.add('open'); }
+function openCart() {
+  var overlay = qs('cartOverlay'), drawer = qs('cartDrawer');
+  if (overlay) overlay.classList.add('open');
+  if (drawer)  drawer.classList.add('open');
+  document.body.classList.add('cart-open');
+  // Disparar hooks registrados
+  if (window._openCartHooks) {
+    window._openCartHooks.forEach(function(fn){ try{ fn(); }catch(e){} });
+  }
+}
+window.openCart = openCart;
+window._openCartHooks = [];
+window._addOpenCartHook = function(fn) { window._openCartHooks.push(fn); };
 function confirmClearCart() {
   if (!S.cart.length) return;
   if (!confirm('¿Vaciar el carro? Se eliminarán todos los productos.')) return;
@@ -10108,9 +10290,21 @@ function confirmClearCart() {
   showToast('🗑 Carro vaciado');
 }
 
-function closeCart() { qs('cartOverlay').classList.remove('open'); qs('cartDrawer').classList.remove('open'); }
+function closeCart() {
+  // No cerrar si el modal de sugerencias está abierto
+  var csm = document.getElementById('cartSuggestModal');
+  if (csm && csm.classList.contains('open')) return;
+  var overlay = qs('cartOverlay'), drawer = qs('cartDrawer');
+  if (overlay) overlay.classList.remove('open');
+  if (drawer)  drawer.classList.remove('open');
+  document.body.classList.remove('cart-open');
+}
+window.closeCart = closeCart;
 qs('cartToggle').addEventListener('click', () => qs('cartDrawer').classList.contains('open')?closeCart():openCart());
-qs('cartOverlay').addEventListener('click', closeCart);
+// Cerrar solo si click es DIRECTAMENTE en el overlay (no en el drawer ni sus hijos)
+qs('cartOverlay').addEventListener('click', function(e) {
+  if (e.target === qs('cartOverlay')) closeCart();
+});
 
 // ── Cotizar despacho (simulado en modo demo) ─────────────────
 function cotizar() {
@@ -15188,17 +15382,13 @@ window.addEventListener('DOMContentLoaded', () => {
   `;
   document.head.appendChild(cartStyle);
 
-  // 9. Scroll cart to top when opened
-  const origOpenCart = window.openCart;
-  if (origOpenCart) {
-    window.openCart = function() {
-      origOpenCart();
-      setTimeout(() => {
-        const cb = document.getElementById('cartBody');
-        if (cb) cb.scrollTop = 0;
-      }, 50);
-    };
-  }
+  // Scroll cart to top when opened — usando hook
+  window._addOpenCartHook(function() {
+    setTimeout(function() {
+      var cb = document.getElementById('cartBody');
+      if (cb) cb.scrollTop = 0;
+    }, 50);
+  });
 
   // 9. Fix cart items visibility — ensure .citem elements are not hidden
   const origRenderCart = window.renderCart;
@@ -15213,19 +15403,17 @@ window.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  // 8. Patch openCart to also init Google Maps autocomplete
-  const _origOC = window.openCart;
-  window.openCart = function() {
-    if (_origOC) _origOC();
-    setTimeout(() => {
-      const apiKey = localStorage.getItem('sstt_gmaps_key');
+  // GMaps autocomplete — usando hook
+  window._addOpenCartHook(function() {
+    setTimeout(function() {
+      var apiKey = localStorage.getItem('sstt_gmaps_key');
       if (apiKey && typeof initPlacesAutocomplete === 'function') {
         initPlacesAutocomplete();
       } else if (!apiKey) {
-        // Show hint in despacho area
-        const cDirParent = document.getElementById('cDir')?.parentElement;
+        var cDir = document.getElementById('cDir');
+        var cDirParent = cDir && cDir.parentElement;
         if (cDirParent && !document.getElementById('gmapsHintDespacho')) {
-          const hint = document.createElement('div');
+          var hint = document.createElement('div');
           hint.id = 'gmapsHintDespacho';
           hint.style.cssText = 'font-size:11px;color:var(--blue);margin:4px 0 2px;cursor:pointer;display:flex;align-items:center;gap:5px;padding:6px 10px;background:var(--blue-p);border-radius:6px';
           hint.innerHTML = '📍 <span onclick="configGMapsKey()" style="text-decoration:underline;cursor:pointer">Activar autocompletado de direcciones con Google Maps</span>';
@@ -15233,7 +15421,7 @@ window.addEventListener('DOMContentLoaded', () => {
         }
       }
     }, 400);
-  };
+  });
 
   console.log('[REPAIR] DOM repair complete');
 })();
@@ -15362,14 +15550,12 @@ function initAddressAutocomplete() {
 }
 
 // Call when cart opens to ensure autocomplete is bound to visible inputs
-const _origOpenCart = window.openCart;
-window.openCart = function() {
-  if (_origOpenCart) _origOpenCart();
-  setTimeout(() => {
-    if (window.google?.maps?.places) initAddressAutocomplete();
-    updateGMapsHint();
+window._addOpenCartHook(function() {
+  setTimeout(function() {
+    if (window.google && window.google.maps && window.google.maps.places) initAddressAutocomplete();
+    if (typeof updateGMapsHint === 'function') updateGMapsHint();
   }, 300);
-};
+});
 
 // Also init on DOMContentLoaded in case Google already loaded
 if (document.readyState === 'loading') {
@@ -16625,11 +16811,9 @@ function updateTrackingEmailUI() {
 }
 
 // También auto-rellenar al abrir el carro
-const _origOpenCart2 = window.openCart;
-window.openCart = function() {
-  if (_origOpenCart2) _origOpenCart2();
-  setTimeout(updateTrackingEmailUI, 350);
-};
+window._addOpenCartHook(function() {
+  setTimeout(function() { if (typeof updateTrackingEmailUI === 'function') updateTrackingEmailUI(); }, 350);
+});
 
 // Y al hacer login
 const _origUpdateAuthUI2 = window.updateAuthUI;
@@ -17037,11 +17221,9 @@ function erutGuardarValidado(rutUsuario, estado) {
 }
 
 // Inicializar banner al abrir el carro
-const _origOpenCartERUT = window.openCart;
-window.openCart = function() {
-  if (_origOpenCartERUT) _origOpenCartERUT();
-  setTimeout(erutActualizarBanner, 400);
-};
+window._addOpenCartHook(function() {
+  setTimeout(function() { if (typeof erutActualizarBanner === 'function') erutActualizarBanner(); }, 400);
+});
 
 // También al cargar la página
 document.addEventListener('DOMContentLoaded', () => setTimeout(erutActualizarBanner, 800));
@@ -17149,24 +17331,20 @@ function usarFactRapido(i) {
 }
 
 // Limpiar y reinjectar selectores cuando cambia el estado
-const _origOpenCartQS = window.openCart;
-window.openCart = function() {
-  if (_origOpenCartQS) _origOpenCartQS();
-  setTimeout(() => {
-    // Limpiar selectores anteriores
-    ['quickDirSelector','quickFactSelector'].forEach(id => {
-      document.getElementById(id)?.remove();
+window._addOpenCartHook(function() {
+  setTimeout(function() {
+    ['quickDirSelector','quickFactSelector'].forEach(function(id) {
+      var el = document.getElementById(id); if (el) el.remove();
     });
-    inyectarSelectorRapido();
-    // Auto-aplicar predeterminados si el carro está vacío de datos
-    const dirs  = cargarDirecciones();
-    const facts = cargarFacturacion();
-    const predDir  = dirs.find(d=>d.predeterminada);
-    const predFact = facts.find(f=>f.predeterminada);
-    if (predDir && !qs('cDir')?.value) usarDirRapido(dirs.indexOf(predDir));
-    if (predFact && !qs('cRazon')?.value && docType==='factura') usarFactRapido(facts.indexOf(predFact));
+    if (typeof inyectarSelectorRapido === 'function') inyectarSelectorRapido();
+    var dirs  = typeof cargarDirecciones === 'function' ? cargarDirecciones() : [];
+    var facts = typeof cargarFacturacion === 'function' ? cargarFacturacion() : [];
+    var predDir  = dirs.find(function(d){ return d.predeterminada; });
+    var predFact = facts.find(function(f){ return f.predeterminada; });
+    if (predDir  && qs('cDir')   && !qs('cDir').value)   usarDirRapido(dirs.indexOf(predDir));
+    if (predFact && qs('cRazon') && !qs('cRazon').value && docType==='factura') usarFactRapido(facts.indexOf(predFact));
   }, 450);
-};
+});
 
 
 // ── Mobile nav active state + badge ──────────────────────────
@@ -19404,6 +19582,9 @@ updateB2BBadge();
 
 // Inicializar vista B2B correcta
 document.addEventListener('DOMContentLoaded', function() {
+  // Re-inicializar badge y carro al cargar
+  updateBadge();
+  renderCart();
   // Iniciar en Catálogo Rápido (SMB) por defecto
   B2B.setView('smb');
 });
@@ -19728,9 +19909,8 @@ var CO_TITLES = ['Tu Carro','Datos de Facturación','Despacho / Envío','Pago y 
 var CO_BTNS   = ['Continuar → Datos','Continuar → Envío','Continuar → Pago','Finalizar compra'];
 
 function checkoutGoTo(step, force) {
-  // No ir hacia adelante si el carro está vacío
+  document.body.style.overflow = '';
   if (step > 0 && !S.cart.length) return;
-  // No saltar pasos hacia adelante sin completar
   if (!force && step > coStep + 1) return;
   coStep = step;
   // Mover el track
@@ -19754,7 +19934,8 @@ function checkoutGoTo(step, force) {
   var nextBtn = document.getElementById('coNextBtn');
   if (nextBtn) {
     nextBtn.textContent = CO_BTNS[step];
-    nextBtn.onclick = step === 3 ? checkout : checkoutNext;
+    // Guardar el paso actual en el botón para que el listener lo lea
+    nextBtn.dataset.step = step;
     nextBtn.style.background = step === 3 ? 'var(--green,#1A7F3C)' : 'var(--black)';
   }
   // Mostrar/ocultar flecha atrás
@@ -19771,7 +19952,14 @@ function checkoutGoTo(step, force) {
 }
 
 function checkoutNext() {
-  if (coStep < CO_STEPS.length - 1) checkoutGoTo(coStep + 1);
+  var step = coStep;
+  if (step === 3) {
+    if (typeof checkout === 'function') checkout();
+    return;
+  }
+  if (step < CO_STEPS.length - 1) {
+    checkoutGoTo(step + 1);
+  }
 }
 function checkoutPrev() {
   if (coStep > 0) checkoutGoTo(coStep - 1);
@@ -19813,6 +20001,101 @@ function updateCoResumen() {
 function formatRutMain() {
   var el = document.getElementById('cRutPersonalMain');
   if (el) { el.value = formatRutStr ? formatRutStr(el.value) : el.value; onRutInputModal(el,'rutMsgMain','rutStatusMain'); }
+}
+
+
+// ══ CART SUGGESTIONS — Modal "¿Olvidaste algo?" ══════════════
+var _csmCallback = null;  // función a ejecutar tras confirmar
+
+var _csmCallback = null;
+function csmShow(onConfirm) {
+  // Guardar callback
+  _csmCallback = typeof onConfirm === 'function' ? onConfirm : function(){};
+
+  if (!S.cart.length) { _csmCallback(); _csmCallback=null; return; }
+
+  // Construir skuMap
+  var skuMap = {};
+  PRODUCTS.forEach(function(p) { skuMap[p.codigo] = p; });
+
+  // Acumular scores de cross-sell
+  var scores = {};
+  S.cart.forEach(function(item) {
+    var recs = (typeof CROSS_SELL !== 'undefined') ? (CROSS_SELL[item.codigo] || []) : [];
+    recs.forEach(function(r) {
+      scores[r.sku] = (scores[r.sku] || 0) + r.score;
+    });
+  });
+
+  // Filtrar sugerencias válidas
+  var cartSkus = {};
+  S.cart.forEach(function(i){ cartSkus[i.codigo] = true; });
+  var sugs = Object.keys(scores)
+    .filter(function(sku) { return skuMap[sku] && !cartSkus[sku]; })
+    .sort(function(a,b) { return scores[b] - scores[a]; })
+    .slice(0, 6)
+    .map(function(sku) { return skuMap[sku]; });
+
+  // Sin sugerencias → ir directo
+  if (!sugs.length) {
+    var cb = _csmCallback; _csmCallback = null; cb(); return;
+  }
+
+  // Render
+  var modal = document.getElementById('cartSuggestModal');
+  var list  = document.getElementById('csmList');
+  if (!modal || !list) {
+    var cb = _csmCallback; _csmCallback = null; cb(); return;
+  }
+
+  list.innerHTML = sugs.map(function(p) {
+    var ent = typeof B2B !== 'undefined' && B2B.classify(p) === 'enterprise';
+    var priceHtml = ent
+      ? '<span style="font-size:11px;color:#888;font-style:italic">Bajo solicitud</span>'
+      : '<span class="csm-price">' + fmt(p.ptotal) + '</span>';
+    var addBtn = ent ? '' :
+      '<button class="csm-add" onclick="csmAddItem(' + p.id + ',this)" title="Agregar">' +
+        '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">' +
+        '<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>' +
+      '</button>';
+    var imgUrl = typeof imgProxyUrl === 'function' ? imgProxyUrl(p.codigo) : '';
+    return '<div class="csm-item" id="csmI-' + p.id + '">' +
+      '<img class="csm-img" src="' + imgUrl + '" onerror="this.style.opacity=.3">' +
+      '<div class="csm-info">' +
+        '<div class="csm-sku">' + p.codigo + '</div>' +
+        '<div class="csm-name">' + p.nombre.slice(0,55) + '</div>' +
+      '</div>' +
+      priceHtml + addBtn +
+    '</div>';
+  }).join('');
+
+  modal.classList.add('open');
+}
+
+function csmAddItem(id, btn) {
+  var p = PRODUCTS.find(function(x){ return x.id === id; });
+  if (!p) return;
+  addCart(p);
+  btn.classList.add('csm-added');
+  btn.innerHTML = '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>';
+  btn.onclick = null;
+  // Animar el item
+  var item = document.getElementById('csmI-' + id);
+  if (item) { item.style.opacity = '0.55'; item.style.transform = 'translateX(0)'; }
+}
+
+function csmDismiss() {
+  var m = document.getElementById('cartSuggestModal');
+  if (m) m.classList.remove('open');
+  var cb = _csmCallback; _csmCallback = null;
+  if (cb) cb();
+}
+
+function csmConfirm() {
+  var m = document.getElementById('cartSuggestModal');
+  if (m) m.classList.remove('open');
+  var cb = _csmCallback; _csmCallback = null;
+  if (cb) cb();
 }
 
 // Inicializar tema guardado en localStora
@@ -19924,6 +20207,27 @@ document.addEventListener('keydown', function(e) {
       title="Ficha Técnica PDF" allowfullscreen></iframe>
   </div>
 </div>
+
+<!-- ── CART SUGGESTIONS MODAL ─────────────────────────────── -->
+<div id="cartSuggestModal" onclick="if(event.target===this)csmDismiss()">
+  <div class="csm-wrap">
+    <div class="csm-handle"></div>
+    <div class="csm-head">
+      <div>
+        <div class="csm-title">¿Olvidaste algo? 🛒</div>
+        <div class="csm-subtitle">Clientes que compraron lo mismo también llevaron:</div>
+      </div>
+      <button class="csm-skip" onclick="csmDismiss()">Saltar</button>
+    </div>
+    <div class="csm-list" id="csmList"></div>
+    <div class="csm-footer">
+      <button class="csm-continue" onclick="csmConfirm()">
+        Continuar → Datos
+      </button>
+    </div>
+  </div>
+</div>
+
 
 </body>
 </html>
