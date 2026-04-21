@@ -6326,6 +6326,152 @@ body.cart-open #proyectoListadoBtn {
 .hero-arr.p{left:14px} .hero-arr.n{right:14px}
 @media(max-width:480px){.hero-arr{display:none}}
 
+
+/* ══ WHATSAPP CHAT PANEL ══════════════════════════════════ */
+#waChatPanel {
+  position: fixed;
+  bottom: 90px;
+  left: 20px;
+  width: 340px;
+  max-height: 520px;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 40px rgba(0,0,0,.18), 0 2px 12px rgba(0,0,0,.1);
+  display: none;
+  flex-direction: column;
+  z-index: 9998;
+  overflow: hidden;
+  font-family: var(--font);
+  animation: waPanelIn .3s cubic-bezier(.32,.72,0,1);
+}
+#waChatPanel.open { display: flex; }
+@keyframes waPanelIn {
+  from { opacity:0; transform:translateY(16px) scale(.96); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+@media(max-width:480px) {
+  #waChatPanel { left:10px; right:10px; width:auto; bottom:80px; }
+}
+
+/* Header */
+.wap-head {
+  background: linear-gradient(135deg, #25D366, #1ebe5d);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.wap-avatar {
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(255,255,255,.25);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.wap-head-info { flex: 1; min-width: 0; }
+.wap-head-name { font-size: 14px; font-weight: 700; color: #fff; }
+.wap-head-status { font-size: 11px; color: rgba(255,255,255,.85); display:flex;align-items:center;gap:4px; }
+.wap-head-dot { width:6px;height:6px;border-radius:50%;background:#fff;animation:waPulse 2s infinite; }
+@keyframes waPulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+.wap-close {
+  background: rgba(255,255,255,.2); border: none; border-radius: 50%;
+  width: 28px; height: 28px; cursor: pointer; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Mensajes */
+.wap-msgs {
+  flex: 1; overflow-y: auto; padding: 14px 12px;
+  background: #f0f0f0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4d4d4' fill-opacity='0.3'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  display: flex; flex-direction: column; gap: 8px;
+  scrollbar-width: thin;
+}
+.wap-msg {
+  max-width: 82%;
+  padding: 8px 11px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.45;
+  position: relative;
+  word-break: break-word;
+}
+.wap-msg.bot {
+  background: #fff;
+  border-radius: 4px 10px 10px 10px;
+  align-self: flex-start;
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+.wap-msg.user {
+  background: #dcf8c6;
+  border-radius: 10px 4px 10px 10px;
+  align-self: flex-end;
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+}
+.wap-msg-time {
+  font-size: 10px; color: #aaa;
+  text-align: right; margin-top: 3px;
+}
+.wap-typing {
+  background: #fff; border-radius: 4px 10px 10px 10px;
+  padding: 10px 14px; align-self: flex-start;
+  box-shadow: 0 1px 2px rgba(0,0,0,.1);
+  display: none;
+}
+.wap-typing.show { display: flex; gap: 4px; align-items: center; }
+.wap-dot { width:7px;height:7px;border-radius:50%;background:#aaa;animation:waBounce 1.2s infinite; }
+.wap-dot:nth-child(2){animation-delay:.2s}
+.wap-dot:nth-child(3){animation-delay:.4s}
+@keyframes waBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+/* Quick replies */
+.wap-quick {
+  padding: 8px 10px 4px;
+  background: #f0f0f0;
+  display: flex; flex-wrap: wrap; gap: 6px;
+  flex-shrink: 0;
+}
+.wap-qbtn {
+  background: #fff; border: 1.5px solid #25D366; color: #075E54;
+  border-radius: 16px; padding: 5px 12px; font-size: 12px;
+  font-weight: 600; cursor: pointer; transition: all .15s;
+  font-family: var(--font);
+}
+.wap-qbtn:hover { background: #25D366; color: #fff; }
+
+/* Input */
+.wap-input-row {
+  display: flex; gap: 8px; padding: 10px 12px;
+  background: #f0f0f0; border-top: 1px solid rgba(0,0,0,.07);
+  flex-shrink: 0; align-items: flex-end;
+}
+.wap-input {
+  flex: 1; border: none; border-radius: 20px;
+  padding: 9px 14px; font-size: 13px; outline: none;
+  font-family: var(--font); resize: none;
+  max-height: 80px; min-height: 36px;
+  background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  line-height: 1.4;
+}
+.wap-send {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: #25D366; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; color: #fff; transition: all .2s;
+}
+.wap-send:hover { background: #1ebe5d; transform: scale(1.05); }
+
+/* Footer redirect */
+.wap-footer {
+  padding: 8px 12px;
+  background: #fff;
+  border-top: 1px solid rgba(0,0,0,.06);
+  display: flex; align-items: center; justify-content: center; gap:6px;
+  font-size: 11px; color: #888; flex-shrink: 0;
+}
+.wap-footer a { color: #25D366; font-weight: 700; text-decoration: none; }
+
 /* ── Viewport / Slider ── */
 .co-viewport {
   flex: 1; overflow: hidden; position: relative;
@@ -8398,6 +8544,54 @@ if (window.pdfjsLib) {
   </a>
 
 </footer>
+
+
+<!-- ══ WHATSAPP CHAT PANEL ══════════════════════════════════ -->
+<div id="waChatPanel">
+  <div class="wap-head">
+    <div class="wap-avatar">
+      <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" style="color:#fff">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+      </svg>
+    </div>
+    <div class="wap-head-info">
+      <div class="wap-head-name">annastasIA · SSTT</div>
+      <div class="wap-head-status"><span class="wap-head-dot"></span> En línea · Asistente IA</div>
+    </div>
+    <button class="wap-close" onclick="waPanelClose()">
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="wap-msgs" id="wapMsgs">
+    <!-- Los mensajes se insertan dinámicamente -->
+    <div class="wap-typing" id="wapTyping">
+      <div class="wap-dot"></div>
+      <div class="wap-dot"></div>
+      <div class="wap-dot"></div>
+    </div>
+  </div>
+
+  <div class="wap-quick" id="wapQuick"></div>
+
+  <div class="wap-input-row">
+    <textarea class="wap-input" id="wapInput" placeholder="Escribe tu consulta..." rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();waSend()}"
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,80)+'px'"></textarea>
+    <button class="wap-send" onclick="waSend()">
+      <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="wap-footer">
+    <svg width="10" height="10" fill="#25D366" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+    Continuar en <a id="wapWaLink" href="https://wa.me/56222042119" target="_blank">WhatsApp real →</a>
+  </div>
+</div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js" defer></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js" defer></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── Close helpers (defined early so showSection can call them) ──
@@ -19833,6 +20027,235 @@ if(_hs){
   _hs.addEventListener('mouseenter',function(){clearInterval(hT);});
   _hs.addEventListener('mouseleave',function(){hT=setInterval(function(){hGo(hI+1);},5500);});
 }
+
+
+// ══ WHATSAPP CHAT PANEL ══════════════════════════════════
+var wapHistory = [];   // historial de la conversación para la API
+var wapOpen = false;
+
+function waPanelOpen() {
+  var panel = document.getElementById('waChatPanel');
+  if (!panel) return;
+  panel.classList.add('open');
+  wapOpen = true;
+  if (wapHistory.length === 0) waWelcome();
+}
+
+function waPanelClose() {
+  var panel = document.getElementById('waChatPanel');
+  if (panel) panel.classList.remove('open');
+  wapOpen = false;
+}
+
+function waWelcome() {
+  // Mensaje de bienvenida con contexto del carro
+  var cartInfo = '';
+  if (typeof S !== 'undefined' && S.cart && S.cart.length > 0) {
+    cartInfo = ' Veo que tienes ' + S.cart.length + ' producto' + (S.cart.length > 1 ? 's' : '') + ' en tu carro.';
+  }
+  waAddMsg('bot', '👋 Hola! Soy annastasIA, el asistente inteligente de SSTT.' + cartInfo + '\n\n¿En qué puedo ayudarte?');
+  
+  // Quick replies iniciales
+  waSetQuick([
+    '📷 Necesito cámaras',
+    '🖥️ Busco un grabador',
+    '💰 Ver precios',
+    '📦 Mi pedido',
+    '🔧 Soporte técnico'
+  ]);
+}
+
+function waAddMsg(role, text) {
+  var msgs = document.getElementById('wapMsgs');
+  var typing = document.getElementById('wapTyping');
+  if (!msgs) return;
+  
+  var now = new Date();
+  var time = now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+  
+  var div = document.createElement('div');
+  div.className = 'wap-msg ' + role;
+  div.innerHTML = text.replace(/\n/g,'<br>') + '<div class="wap-msg-time">' + time + '</div>';
+  msgs.insertBefore(div, typing);
+  msgs.scrollTop = msgs.scrollHeight;
+  
+  // Guardar en historial
+  wapHistory.push({role: role === 'bot' ? 'assistant' : 'user', content: text});
+}
+
+function waSetQuick(options) {
+  var quick = document.getElementById('wapQuick');
+  if (!quick) return;
+  quick.innerHTML = options.map(function(o) {
+    return '<button class="wap-qbtn" onclick="waQuickSend(this)">' + o + '</button>';
+  }).join('');
+}
+
+function waQuickSend(btn) {
+  var text = btn.textContent;
+  document.getElementById('wapQuick').innerHTML = '';
+  waAddMsg('user', text);
+  waThink(text);
+}
+
+function waSend() {
+  var input = document.getElementById('wapInput');
+  if (!input) return;
+  var text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  input.style.height = 'auto';
+  document.getElementById('wapQuick').innerHTML = '';
+  waAddMsg('user', text);
+  waThink(text);
+}
+
+function waShowTyping() {
+  var t = document.getElementById('wapTyping');
+  if (t) { t.classList.add('show'); document.getElementById('wapMsgs').scrollTop = 9999; }
+}
+function waHideTyping() {
+  var t = document.getElementById('wapTyping');
+  if (t) t.classList.remove('show');
+}
+
+function waThink(userMsg) {
+  waShowTyping();
+  
+  // Construir contexto del carro para el sistema
+  var cartContext = '';
+  if (typeof S !== 'undefined' && S.cart && S.cart.length > 0) {
+    cartContext = '\nCarro actual del cliente: ' + S.cart.map(function(p) {
+      return p.codigo + ' x' + p.qty + ' ($' + (p.pneto*p.qty).toLocaleString('es-CL') + ' neto)';
+    }).join(', ');
+  }
+  
+  // Construir prompt con contexto del negocio
+  var systemPrompt = [
+    'Eres annastasIA, el asistente de ventas inteligente de SSTT SpA, distribuidor oficial Dahua Technology en Chile.',
+    'Eres experta en cámaras de seguridad IP y HDCVI, grabadores NVR/XVR, switches PoE, alarmas y accesorios Dahua.',
+    'Hablas en español chileno de forma amigable y profesional. Eres concisa — máximo 3-4 líneas por respuesta.',
+    'Cuando el cliente necesita una cámara, preguntas: ¿exterior o interior?, ¿necesita visión nocturna?, ¿qué área cubre?',
+    'Cuando mencionas productos, usas el catálogo real. Tecnologías: WizColor (color 24/7), WizSense (IA personas/vehículos), TiOC (disuasión activa), AcuPick (búsqueda IA), Xinghan (IA gran escala).',
+    'Si el cliente quiere continuar por WhatsApp real, le dices que puede hacer clic en "Continuar en WhatsApp real" abajo.',
+    'Precios en pesos chilenos, siempre mencionas que son neto + IVA.',
+    cartContext
+  ].join(' ');
+  
+  // Llamar a la API de Claude
+  fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 300,
+      system: systemPrompt,
+      messages: wapHistory.filter(function(m) { return m.role === 'user' || m.role === 'assistant'; })
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    waHideTyping();
+    var reply = (data.content && data.content[0]) ? data.content[0].text : 'Disculpa, tuve un problema. ¿Puedes repetir tu consulta?';
+    waAddMsg('bot', reply);
+    
+    // Actualizar link de WhatsApp con el resumen de la conversación
+    waUpdateWaLink(userMsg, reply);
+    
+    // Quick replies contextuales según la respuesta
+    waContextualQuick(userMsg, reply);
+  })
+  .catch(function(e) {
+    waHideTyping();
+    // Fallback sin API — respuesta básica inteligente
+    waFallback(userMsg);
+  });
+}
+
+function waFallback(msg) {
+  // Respuestas offline sin API
+  var m = msg.toLowerCase();
+  var reply = '';
+  var quick = [];
+  
+  if (m.includes('cámara') || m.includes('camara') || m.includes('📷')) {
+    reply = '¡Tenemos más de 400 cámaras Dahua! 📷\n\n¿Para qué entorno la necesitas?';
+    quick = ['🌧️ Exterior', '🏠 Interior', '🌙 Visión nocturna', '🤖 Con IA'];
+  } else if (m.includes('grabador') || m.includes('nvr') || m.includes('xvr') || m.includes('🖥️')) {
+    reply = 'Tenemos grabadores NVR (IP) y XVR (HDCVI) de 4 a 128 canales.\n\n¿Cuántas cámaras necesitas conectar?';
+    quick = ['4 cámaras', '8 cámaras', '16 cámaras', '32+ cámaras'];
+  } else if (m.includes('precio') || m.includes('💰') || m.includes('costo') || m.includes('valor')) {
+    reply = 'Todos nuestros precios en el sitio son neto + 19% IVA.\nPara proyectos de +$1M neto contáctanos directamente para precio especial. 💼';
+    quick = ['Ver catálogo', '📋 Pedir cotización', '💬 Hablar con ejecutivo'];
+  } else if (m.includes('pedido') || m.includes('📦') || m.includes('despacho') || m.includes('envío')) {
+    reply = 'Para consultar el estado de tu pedido necesito tu número de orden o RUT. \n¿Tienes esos datos a mano?';
+    quick = ['Tengo el número', '📞 Llamar directamente'];
+  } else if (m.includes('soporte') || m.includes('🔧') || m.includes('problema') || m.includes('ayuda técnica')) {
+    reply = 'Te conecto con nuestro equipo técnico. \n¿Cuál es el problema con el equipo?';
+    quick = ['No enciende', 'Sin imagen', 'No graba', 'App no conecta'];
+  } else if (m.includes('exterior') || m.includes('🌧️')) {
+    reply = 'Para exterior recomiendo cámaras con IP66/IP67 y visión nocturna. \n¿Necesitas detección de personas o solo grabación?';
+    quick = ['Solo grabación', '🤖 Con detección IA', '💡 Color nocturno'];
+  } else if (m.includes('interior') || m.includes('🏠')) {
+    reply = 'Para interior tenemos domo y bullet desde 2MP hasta 8MP. \n¿El ambiente tiene buena iluminación o es oscuro?';
+    quick = ['Bien iluminado', '🌙 Oscuro/nocturno', '📐 ¿Qué tamaño necesito?'];
+  } else if (m.includes('ia') || m.includes('inteligencia') || m.includes('🤖')) {
+    reply = 'Dahua tiene 4 líneas de IA: WizSense (personas/vehículos), AcuPick (búsqueda), TiOC (disuasión activa) y Xinghan (IA gran escala). \n¿Cuál te interesa?';
+    quick = ['WizSense', 'TiOC', 'AcuPick', 'Xinghan AI'];
+  } else {
+    reply = 'Entendido! Para darte la mejor recomendación necesito saber un poco más. \n¿Qué quieres monitorear?';
+    quick = ['📷 Cámaras', '🖥️ Grabadores', '🔌 Accesorios', '📞 Hablar con ejecutivo'];
+  }
+  
+  waAddMsg('bot', reply);
+  waUpdateWaLink(msg, reply);
+  if (quick.length) waSetQuick(quick);
+}
+
+function waContextualQuick(userMsg, reply) {
+  var m = (userMsg + ' ' + reply).toLowerCase();
+  var quick = [];
+  
+  if (m.includes('exterior') || m.includes('interior')) {
+    quick = ['¿Qué resolución necesito?', '¿Cuánto cuesta?', 'Ver opciones en catálogo'];
+  } else if (m.includes('wizsense') || m.includes('tioc') || m.includes('wizcolor')) {
+    quick = ['Ver productos con esta tecnología', '¿Cuánto cuesta?', '¿Qué grabador necesito?'];
+  } else if (m.includes('precio') || m.includes('costo')) {
+    quick = ['📋 Pedir cotización formal', '🛒 Ver catálogo', '💬 Hablar con ejecutivo'];
+  }
+  
+  if (quick.length) waSetQuick(quick);
+}
+
+function waUpdateWaLink(userMsg, reply) {
+  var link = document.getElementById('wapWaLink');
+  if (!link) return;
+  
+  // Construir resumen de la conversación para WhatsApp
+  var summary = 'Hola SSTT! Vengo del asistente IA del sitio.';
+  if (wapHistory.length > 2) {
+    var lastUser = wapHistory.filter(function(m){return m.role==='user';}).slice(-1)[0];
+    if (lastUser) summary += ' Mi consulta: ' + lastUser.content.slice(0,100);
+  }
+  if (typeof S !== 'undefined' && S.cart && S.cart.length > 0) {
+    summary += ' Tengo ' + S.cart.length + ' item' + (S.cart.length>1?'s':'') + ' en el carro.';
+  }
+  
+  link.href = 'https://wa.me/56222042119?text=' + encodeURIComponent(summary);
+}
+
+// Inicializar — reemplazar el onclick del botón waBtn
+document.addEventListener('DOMContentLoaded', function() {
+  var waBtn = document.getElementById('waBtn');
+  if (waBtn) {
+    waBtn.removeAttribute('href');
+    waBtn.style.cursor = 'pointer';
+    waBtn.onclick = function(e) {
+      e.preventDefault();
+      wapOpen ? waPanelClose() : waPanelOpen();
+    };
+  }
+});
 
 document.addEventListener('DOMContentLoaded', function() {
   // Re-inicializar badge y carro al cargar
