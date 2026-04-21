@@ -821,9 +821,12 @@ nav {
 }
 /* Also for wide screens — more columns */
 @media(min-width:1200px) { .cp-row { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
-@media(max-width:900px)  { .cp-row { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap:10px; } }
-@media(max-width:600px)  { .cp-row { grid-template-columns: repeat(2, 1fr); gap:2px; } }
+@media(max-width:900px)  { .cp-row { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:8px; } }
+@media(max-width:600px)  { .cp-row { grid-template-columns: repeat(2, 1fr); gap:4px; } }
 .products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:12px; }
+@media(max-width:900px) { .products-grid { grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; } }
+@media(max-width:600px) { .products-grid { grid-template-columns:repeat(2,1fr); gap:4px; } }
+@media(max-width:400px) { .products-grid { grid-template-columns:repeat(2,1fr); gap:2px; } }
 
 .pcard {
   background: var(--white);
@@ -1272,8 +1275,12 @@ nav {
 /* ── USER / MENU ─────────────────────────────────────────────── */
 .user-pill {
   display: flex; align-items: center; gap: 7px;
-  background: var(--g6); border: 1.5px solid var(--g5);
-  border-radius: var(--r); padding: 5px 12px 5px 5px;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.75);
+  border-radius: 50px; padding: 5px 12px 5px 5px;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.9);
   cursor: pointer; transition: all .15s; position: relative;
 }
 .user-pill:hover { border-color: var(--black) }
@@ -5238,7 +5245,7 @@ input[data-validated="1"]::after {
   .search-wrap { display:none }
   .mob-search { display:block }
   .hbtn span { display:none }
-  .hbtn { padding:8px 10px; gap:0; display:flex !important; }
+  .hbtn { padding:8px 10px; gap:0; display:flex !important; border-radius:50px !important; }
   #cartToggle { display:flex !important; }
 
   /* Module nav */
@@ -5340,7 +5347,7 @@ input[data-validated="1"]::after {
   #cartToggle { display:flex !important; }
   #userPill { display:flex !important; }
   .hbtn span { display:none; }
-  .hbtn { padding:8px 10px; gap:0; display:flex !important; }
+  .hbtn { padding:8px 10px; gap:0; display:flex !important; border-radius:50px !important; }
   /* Ocultar barra de módulos en móvil */
   .module-nav { display:none !important; }
   /* Sidebar oculto, layout 1col */
@@ -5356,8 +5363,8 @@ input[data-validated="1"]::after {
   .hero-title { font-size:30px }
   .hero-stats { flex-wrap:wrap; gap:16px }
   /* Catálogo */
-  .cp-row { grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap:8px }
-  .catalog-area { padding:8px 8px }
+  .cp-row { grid-template-columns: repeat(2, 1fr); gap:6px }
+  .catalog-area { padding:4px 6px }
   /* Módulo nav */
   .module-nav-inner { gap:0 }
   .mnav-tab { padding:0 14px; font-size:12.5px }
@@ -5400,7 +5407,7 @@ input[data-validated="1"]::after {
   .hero-btns { flex-direction:column; gap:8px }
   .btn-hero-primary, .btn-hero-outline { width:100%; justify-content:center }
   .hero-tech { flex:1 1 100%; }
-  .cp-row { grid-template-columns: repeat(2,1fr); gap:2px }
+  .cp-row { grid-template-columns: repeat(2,1fr); gap:4px }
   .catalog-area { padding:2px 2px }
   .pcard-body { padding:8px 10px }
   .pcard-name { font-size:12.5px; -webkit-line-clamp:3; line-clamp:3 }
@@ -5409,7 +5416,7 @@ input[data-validated="1"]::after {
   .price-total { font-size:18px }
   .pcard-actions { gap:3px; grid-template-columns:1fr 1fr !important; }
   .pca-btn { font-size:9px; padding:6px 2px; border-radius:8px; }
-  .pcard-img-wrap { height:110px }
+  .pcard-img-wrap { height:100px }
   /* Nav categorías horizontal scroll */
   nav { display:block }
   .nav-inner { gap:0 }
@@ -5436,7 +5443,7 @@ input[data-validated="1"]::after {
   .hero-tech { flex:1 1 100%; }
   .hero-sub { font-size:12px !important; }
   .hero-stat-n { font-size:24px; }
-  .cp-row { grid-template-columns: repeat(2,1fr); gap:2px }
+  .cp-row { grid-template-columns: repeat(2,1fr); gap:4px }
   .catalog-area { padding:2px 2px }
   .pcard-name { font-size:12px }
   .price-total { font-size:16px }
