@@ -1326,11 +1326,14 @@ nav {
 }
 .cart-overlay.open {
   display: block;
-  /* No cubrir el área del drawer (400px desde la derecha) */
-  right: min(400px, calc(100vw - 20px));
+  /* Solo cubrir el área izquierda, dejando libre el drawer */
+  right: min(calc(100vw - 20px), 420px);
 }
-@media(max-width:440px) {
-  .cart-overlay.open { right: 0; }
+@media(max-width:600px) {
+  /* En mobile el drawer es full-width — ocultar overlay completamente */
+  .cart-overlay.open { display: none !important; }
+  /* Padding para no quedar bajo el mobileNav */
+  .cart-sticky { padding-bottom: 60px !important; }
 }
 
 .cart-drawer {
@@ -1342,7 +1345,7 @@ nav {
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255,255,255,0.82);
   border-radius: 28px;
-  z-index: 9996;
+  z-index: 10000;
   display: flex; flex-direction: column;
   transform: translateX(calc(100% + 20px));
   transition: transform .44s cubic-bezier(.32,.72,0,1);
@@ -1573,13 +1576,12 @@ nav {
 .pay-opts { display: flex; flex-direction: column; gap: 6px }
 .pay-opt {
   display: flex; align-items: center; gap: 10px;
-  background: rgba(255,255,255,0.60);
-  border: 1px solid rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(0,0,0,0.10);
   border-radius: 16px; padding: 12px 14px;
   cursor: pointer; transition: all .22s; font-size: 13px;
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9);
+  color: #111;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
 }
 .pay-opt:hover {
   background: rgba(255,255,255,0.82);
@@ -1592,8 +1594,8 @@ nav {
   background: rgba(232,0,28,0.07);
   box-shadow: 0 4px 18px rgba(232,0,28,0.12), inset 0 1px 0 rgba(255,255,255,0.9);
 }
-.pay-name { font-weight: 600 }
-.pay-sub { font-size: 11px; color: var(--g3); margin-left: auto }
+.pay-name { font-weight: 600; color: #111; }
+.pay-sub { font-size: 11px; color: #666; margin-left: auto; }
 
 /* Login prompt */
 #loginPrompt {
@@ -5146,12 +5148,22 @@ nav {
   color: var(--black);
 }
 .qbtn:hover { background: rgba(0,0,0,.14) }
-.qval {
-  font-size: 15px;
+.qval-input {
+  font-size: 14px;
   font-weight: 700;
-  min-width: 22px;
+  width: 48px;
   text-align: center;
+  border: 1.5px solid var(--g5);
+  border-radius: 8px;
+  padding: 3px 4px;
+  font-family: var(--font);
+  background: var(--white);
+  color: var(--black);
+  -moz-appearance: textfield;
 }
+.qval-input::-webkit-inner-spin-button,
+.qval-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.qval-input:focus { outline: none; border-color: var(--blue); }
 .citem-price {
   font-family: var(--font-d);
   font-size: 18px;
@@ -10231,6 +10243,13 @@ function changeQty(id,d) {
   it.qty=Math.max(1,it.qty+d);
   saveCart(); renderCart(); updateBadge();
 }
+function setQty(id,input) {
+  const it=S.cart.find(c=>c.id===id);
+  if(!it)return;
+  const v=parseInt(input.value)||1;
+  it.qty=Math.max(1,Math.min(999,v));
+  saveCart(); renderCart(); updateBadge();
+}
 
 function updateBadge() {
   const n = cartTotal();
@@ -10272,16 +10291,23 @@ function renderCart() {
     <div class="citem">
       <img class="citem-img" src="${imgProxyUrl(p.codigo)}" onerror="this.style.opacity='.3'">
       <div>
-        <div class="citem-name">${p.nombre.length>50?p.nombre.slice(0,50)+'…':p.nombre}</div>
+        <div class="citem-name">
+          ${p.qty > 1 ? '<span style="display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:#fff;font-size:9px;font-weight:800;border-radius:50%;width:16px;height:16px;margin-right:4px;flex-shrink:0">'+p.qty+'</span>' : ''}${p.nombre.length>50?p.nombre.slice(0,50)+'…':p.nombre}
+        </div>
         <div class="citem-code">${p.codigo}</div>
         <div class="citem-qty">
           <button class="qbtn" onclick="changeQty(${p.id},-1)">−</button>
-          <span class="qval">${p.qty}</span>
+          <input class="qval-input" type="number" min="1" max="999" value="${p.qty}"
+            onchange="setQty(${p.id},this)"
+            onclick="this.select()"
+            style="width:48px;text-align:center;border:1px solid var(--g5);border-radius:8px;
+                   padding:3px 4px;font-size:14px;font-weight:700;font-family:var(--font);
+                   background:var(--white);color:var(--black);">
           <button class="qbtn" onclick="changeQty(${p.id},1)">+</button>
           <button class="citem-del" onclick="removeCart(${p.id})">✕</button>
         </div>
       </div>
-      <div class="citem-price">${fmt(p.ptotal*p.qty)}</div>
+      <div class="citem-price">${fmt(p.pneto*p.qty)}</div>
     </div>`).join('');
   calcTotals();
   updateBadge();
@@ -10314,6 +10340,9 @@ function openCart() {
   if (overlay) overlay.classList.add('open');
   if (drawer)  drawer.classList.add('open');
   document.body.classList.add('cart-open');
+  // Ocultar mobileNav para que no tape el botón Continuar
+  var mn = document.getElementById('mobileNav');
+  if (mn) mn.style.display = 'none';
   // Disparar hooks registrados
   if (window._openCartHooks) {
     window._openCartHooks.forEach(function(fn){ try{ fn(); }catch(e){} });
@@ -10337,6 +10366,8 @@ function closeCart() {
   if (overlay) overlay.classList.remove('open');
   if (drawer)  drawer.classList.remove('open');
   document.body.classList.remove('cart-open');
+  // Restaurar mobileNav
+  if (typeof mnavInit === 'function') mnavInit();
 }
 window.closeCart = closeCart;
 qs('cartToggle').addEventListener('click', () => qs('cartDrawer').classList.contains('open')?closeCart():openCart());
@@ -19986,17 +20017,15 @@ function checkoutGoTo(step, force) {
   // Scroll al top del panel activo
   var panel = document.getElementById(CO_STEPS[step]);
   if (panel) panel.scrollTop = 0;
+  // Ocultar totales sticky en paso 4 (ya están en el resumen)
+  var stickyTotals = document.getElementById('coStickyTotals');
+  if (stickyTotals) stickyTotals.style.display = step === 3 ? 'none' : '';
   // Actualizar resumen en paso 4
   if (step === 3) updateCoResumen();
 }
 
 function checkoutNext() {
   if (coStep === 3) { if (typeof checkout==='function') checkout(); return; }
-  if (coStep === 0) {
-    // Mostrar modal "¿Olvidaste algo?" antes de avanzar
-    csmShow(function() { checkoutGoTo(1); });
-    return;
-  }
   if (coStep < CO_STEPS.length - 1) checkoutGoTo(coStep + 1);
 }
 function checkoutPrev() {
@@ -20008,10 +20037,12 @@ function updateCoResumen() {
   var itemsEl = document.getElementById('coResumenItems');
   if (itemsEl) {
     itemsEl.innerHTML = S.cart.map(function(p) {
-      return '<div style="display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid var(--border)">' +
-        '<div style="flex:1;min-width:0"><div style="font-weight:700;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + p.nombre.slice(0,45) + (p.nombre.length>45?'…':'') + '</div>' +
-        '<div style="font-size:10px;color:var(--muted)">' + p.codigo + ' · x' + p.qty + '</div></div>' +
-        '<div style="font-weight:700;font-size:13px;white-space:nowrap">' + fmt(p.ptotal*p.qty) + '</div>' +
+      return '<div style="display:flex;justify-content:space-between;gap:8px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.08)">' +
+        '<div style="flex:1;min-width:0">' +
+          '<div style="font-weight:600;font-size:12px;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + p.nombre.slice(0,45) + (p.nombre.length>45?'…':'') + '</div>' +
+          '<div style="font-size:10px;color:#666;margin-top:1px">' + p.codigo + ' · x' + p.qty + '</div>' +
+        '</div>' +
+        '<div style="font-weight:700;font-size:12px;color:#111;white-space:nowrap;text-align:right">' + fmt(p.pneto*p.qty) + '<br><span style="font-size:9px;color:#888;font-weight:400">neto</span></div>' +
       '</div>';
     }).join('');
   }
