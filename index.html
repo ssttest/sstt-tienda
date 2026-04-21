@@ -7381,6 +7381,11 @@ if (window.pdfjsLib) {
         <div class="trow trow-total"><span>Total con IVA</span><span id="tTotal">$0</span></div>
       </div>
     </div>
+    <!-- Cross-sell sugerencias -->
+    <div id="csCrossSell" style="margin-bottom:8px;display:none">
+      <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">💡 Clientes también llevaron</div>
+      <div id="csItems" style="display:flex;flex-direction:column;gap:4px"></div>
+    </div>
     <!-- Botón principal dinámico -->
     <button id="coNextBtn" class="pay-now-btn" style="margin-bottom:0" onclick="event.stopPropagation();checkoutNext()">
       Continuar → Datos
@@ -10343,6 +10348,7 @@ function renderCart() {
     </div>`).join('');
   calcTotals();
   updateBadge();
+  if (typeof renderCrossSell === 'function') renderCrossSell();
 }
 
 function scrollToCartItems() {
@@ -20056,13 +20062,69 @@ function checkoutGoTo(step, force) {
   if (step === 3) updateCoResumen();
 }
 
+function renderCrossSell() {
+  var wrap = document.getElementById('csCrossSell');
+  var list = document.getElementById('csItems');
+  if (!wrap || !list || !S.cart.length) { if(wrap) wrap.style.display='none'; return; }
+  
+  var skuMap = {};
+  PRODUCTS.forEach(function(p){ skuMap[p.codigo]=p; });
+  var cartSkus = {};
+  S.cart.forEach(function(i){ cartSkus[i.codigo]=true; });
+  
+  // Obtener sugerencias
+  var scores = {};
+  S.cart.forEach(function(item) {
+    var recs = (typeof CROSS_SELL!=='undefined') ? (CROSS_SELL[item.codigo]||[]) : [];
+    recs.forEach(function(r){ scores[r.sku]=(scores[r.sku]||0)+r.score; });
+  });
+  
+  // Grabador sin disco — prioridad
+  var sugs = [];
+  if (typeof carroNecesitaDisco==='function') {
+    var grab = carroNecesitaDisco();
+    if (grab && typeof getHDDsParaGrabador==='function') {
+      getHDDsParaGrabador(grab.codigo).forEach(function(h){
+        if (!cartSkus[h.codigo]) sugs.push({p:h, badge:'💾 Disco requerido'});
+      });
+    }
+  }
+  
+  // Cross-sell
+  var sugSkus = {};
+  sugs.forEach(function(s){ sugSkus[s.p.codigo]=true; });
+  Object.keys(scores)
+    .filter(function(sku){ return skuMap[sku] && !cartSkus[sku] && !sugSkus[sku]; })
+    .sort(function(a,b){ return scores[b]-scores[a]; })
+    .slice(0, 4-sugs.length)
+    .forEach(function(sku){ sugs.push({p:skuMap[sku],badge:null}); });
+  
+  if (!sugs.length) { wrap.style.display='none'; return; }
+  
+  list.innerHTML = sugs.map(function(item) {
+    var p=item.p, badge=item.badge;
+    if (!p||!p.id) return '';
+    var inCart = S.cart.some(function(c){ return c.id===p.id; });
+    if (inCart) return '';
+    var badgeHtml = badge ? '<span style="font-size:9px;color:#c2001a;font-weight:800">'+badge+'</span> ' : '';
+    return '<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;background:rgba(0,87,184,.04);border-radius:10px;border:1px solid rgba(0,87,184,.1)">'+
+      '<img src="'+(typeof imgProxyUrl==='function'?imgProxyUrl(p.codigo):'')+'" style="width:36px;height:36px;object-fit:contain;border-radius:6px;background:#f5f5f7" onerror="this.style.opacity=.3">'+
+      '<div style="flex:1;min-width:0">'+
+        badgeHtml+
+        '<div style="font-size:11px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(p.nombre||'').slice(0,45)+'</div>'+
+        '<div style="font-size:10px;color:#666">'+p.codigo+' · '+fmt(p.pneto)+' neto</div>'+
+      '</div>'+
+      '<button onclick="event.stopPropagation();addCart(PRODUCTS.find(function(x){return x.id==='+p.id+'}));renderCrossSell()" '+
+        'style="background:var(--red);color:#fff;border:none;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;flex-shrink:0">'+
+        '+ Agregar</button>'+
+    '</div>';
+  }).join('');
+  
+  wrap.style.display = list.innerHTML.trim() ? '' : 'none';
+}
+
 function checkoutNext() {
   if (coStep === 3) { if (typeof checkout==='function') checkout(); return; }
-  if (coStep === 0) {
-    var cb = function(){ checkoutGoTo(1); };
-    try { csmTryShow(cb); } catch(e) { cb(); }
-    return;
-  }
   if (coStep < CO_STEPS.length - 1) checkoutGoTo(coStep + 1);
 }
 
