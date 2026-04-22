@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 11:33 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 11:56 hrs (UTC-4 Chile) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -7506,7 +7506,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 11:33 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 11:56 hrs</span>
   </div>
 </div>
 
@@ -20615,7 +20615,7 @@ function compatExtractSpecs(p) {
 
 // Analizar carro completo y generar alertas
 function compatAnalizarCarro() {
-  if (!window.S || !S.cart || S.cart.length === 0) return [];
+  if (typeof S === 'undefined' || !S.cart || S.cart.length === 0) return [];
   
   var alertas = [];
   var items = S.cart.map(function(it) {
@@ -20651,13 +20651,24 @@ function compatAnalizarCarro() {
           icon: '⚠️'
         });
       } else if (totalCamaras > 0 && totalCamaras <= totalCH && totalCH - totalCamaras >= Math.ceil(totalCH * 0.5)) {
-        // Grabador sobredimensionado (más del doble de canales)
-        alertas.push({
-          tipo: 'info',
-          titulo: 'Grabador con capacidad extra',
-          mensaje: 'Tu ' + g.codigo + ' soporta ' + totalCH + ' canales y tienes ' + totalCamaras + '. Tienes espacio para crecer.',
-          icon: 'ℹ️'
-        });
+        // Solo mostrar "espacio para crecer" si NO hay incompatibilidades de resolución o tecnología
+        var hayIncompat = false;
+        // ¿Hay cámaras IP con resolución mayor a la que soporta el grabador?
+        if (g.tipoGrabador === 'IP') {
+          hayIncompat = camarasIP.some(function(c){return c.resolucionMP > g.maxResMP;});
+        }
+        // ¿Hay cámaras IP con grabador HDCVI (ya se alertará por regla 2)?
+        if (g.tipoGrabador === 'HDCVI' && camarasIP.length > 0) {
+          hayIncompat = true;
+        }
+        if (!hayIncompat) {
+          alertas.push({
+            tipo: 'info',
+            titulo: 'Grabador con capacidad extra',
+            mensaje: 'Tu ' + g.codigo + ' soporta ' + totalCH + ' canales y tienes ' + totalCamaras + '. Tienes espacio para crecer.',
+            icon: 'ℹ️'
+          });
+        }
       }
     });
   }
@@ -21333,7 +21344,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 11:33 hrs';
+  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 11:56 hrs';
 })();
 
 
@@ -21880,7 +21891,7 @@ function cartCrossSellRender() {
 
   // Solo en paso 1
   var enPaso1 = (typeof coStep === 'undefined' || coStep === 0);
-  if (!enPaso1 || !S.cart || !S.cart.length) {
+  if (!enPaso1 || typeof S === 'undefined' || !S.cart || !S.cart.length) {
     wrap.style.display = 'none';
     return;
   }
@@ -21951,7 +21962,7 @@ function cartCrossSellRender() {
       var tag = item.tipo === 'disco' ? '💾 Disco requerido' : '🛒 Sugerido';
       var tagColor = item.tipo === 'disco' ? '#e8001c' : '#0057B8';
       return '<div class="ccs-item">' +
-        '<img class="ccs-item-img" src="' + (p.img || '') + '" onerror="this.style.display=&quot;none&quot;">' +
+        '<img class="ccs-item-img" src="' + (p.img || '') + '">' +
         '<div class="ccs-item-info">' +
           '<div class="ccs-item-tag" style="color:' + tagColor + '">' + tag + '</div>' +
           '<div class="ccs-item-name">' + (p.nombre || p.codigo).substring(0, 45) + (p.nombre && p.nombre.length > 45 ? '…' : '') + '</div>' +
