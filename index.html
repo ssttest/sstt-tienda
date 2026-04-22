@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 11:56 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 12:53 hrs (UTC-4 Chile) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1334,7 +1334,7 @@ nav {
   /* En mobile el drawer es full-width — ocultar overlay completamente */
   .cart-overlay.open { display: none !important; }
   /* Padding para no quedar bajo el mobileNav */
-  .cart-sticky { padding-bottom: 60px !important; }
+  .cart-sticky { padding-bottom: 60px !important; overflow-y: auto; max-height: calc(100% - 200px); }
 }
 
 .cart-drawer {
@@ -6477,81 +6477,51 @@ body.cart-open #proyectoListadoBtn {
 
 /* ══ VALIDADOR DE COMPATIBILIDAD ═══════════════════════════════ */
 #compatPanel {
-  margin: 10px 0;
-  border-radius: 12px;
+  margin: 6px 10px 4px;
+  border-radius: 16px;
   overflow: hidden;
-  border: 1.5px solid transparent;
-  background: #fff;
   font-size: 13px;
   display: none;
 }
 .compat-header {
-  padding: 10px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 12.5px;
-  user-select: none;
-  transition: background .15s;
+  padding: 10px 14px; display: flex; align-items: center;
+  justify-content: space-between; cursor: pointer; font-weight: 800;
+  font-size: 12px; user-select: none; border-radius: 14px; transition: all .2s;
 }
-.compat-header.error { background: rgba(232,0,28,.08); color: #a10015; border-bottom: 1px solid rgba(232,0,28,.15); }
-.compat-header.warning { background: rgba(234,179,8,.1); color: #854d0e; border-bottom: 1px solid rgba(234,179,8,.2); }
-.compat-header.ok { background: rgba(26,127,60,.08); color: #14532d; border-bottom: 1px solid rgba(26,127,60,.15); }
-.compat-chevron {
-  transition: transform .2s;
-  flex-shrink: 0;
-  opacity: .6;
+.compat-header.error {
+  background: linear-gradient(135deg,rgba(232,0,28,.12),rgba(180,0,20,.08));
+  color: #a10015; border: 1px solid rgba(232,0,28,.2);
+  box-shadow: 0 2px 10px rgba(232,0,28,.1),inset 0 1px 0 rgba(255,255,255,.5);
 }
-.compat-body {
-  padding: 8px;
-  transition: max-height .3s;
+.compat-header.warning {
+  background: linear-gradient(135deg,rgba(234,179,8,.13),rgba(180,120,0,.08));
+  color: #78430a; border: 1px solid rgba(234,179,8,.25);
+  box-shadow: 0 2px 10px rgba(234,179,8,.1),inset 0 1px 0 rgba(255,255,255,.5);
 }
-.compat-body.collapsed {
-  max-height: 0;
-  padding: 0;
-  overflow: hidden;
+.compat-header.ok {
+  background: linear-gradient(135deg,rgba(26,127,60,.1),rgba(0,100,40,.06));
+  color: #14532d; border: 1px solid rgba(26,127,60,.2);
+  box-shadow: 0 2px 10px rgba(26,127,60,.08),inset 0 1px 0 rgba(255,255,255,.5);
 }
+.compat-chevron { transition: transform .25s; flex-shrink: 0; opacity: .5; }
+.compat-body { padding: 6px 0 0; transition: all .3s; }
+.compat-body.collapsed { max-height: 0; padding: 0; overflow: hidden; }
 .compat-alert {
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 6px;
-  border: 1px solid transparent;
+  display: flex; gap: 10px; padding: 10px 12px;
+  border-radius: 12px; margin-bottom: 5px; border: 1px solid transparent;
 }
 .compat-alert:last-child { margin-bottom: 0; }
-.compat-alert.error { background: rgba(232,0,28,.04); border-color: rgba(232,0,28,.15); }
-.compat-alert.warning { background: rgba(234,179,8,.06); border-color: rgba(234,179,8,.18); }
-.compat-alert.info { background: rgba(0,87,184,.04); border-color: rgba(0,87,184,.12); }
-.compat-alert-icon {
-  flex-shrink: 0;
-  font-size: 18px;
-  line-height: 1;
-}
+.compat-alert.error { background:rgba(255,255,255,.95); border-color:rgba(0,0,0,.08); box-shadow:0 1px 5px rgba(0,0,0,.05); }
+.compat-alert.warning { background:rgba(255,255,255,.95); border-color:rgba(0,0,0,.08); box-shadow:0 1px 5px rgba(0,0,0,.05); }
+.compat-alert.info { background:rgba(255,255,255,.95); border-color:rgba(0,0,0,.08); box-shadow:0 1px 5px rgba(0,0,0,.05); }
+.compat-alert-icon { flex-shrink: 0; font-size: 18px; line-height: 1.2; }
 .compat-alert-text { flex: 1; min-width: 0; }
-.compat-alert-title {
-  font-weight: 700;
-  font-size: 12.5px;
-  color: #111;
-  margin-bottom: 3px;
-}
-.compat-alert-msg {
-  font-size: 12px;
-  color: #444;
-  line-height: 1.45;
-  margin-bottom: 4px;
-}
+.compat-alert-title { font-weight: 700; font-size: 12px; color: #111; margin-bottom: 2px; line-height: 1.3; }
+.compat-alert-msg { font-size: 11.5px; color: #444; line-height: 1.45; margin-bottom: 4px; }
 .compat-alert-sol {
-  font-size: 11.5px;
-  color: #0057B8;
-  font-weight: 600;
-  line-height: 1.45;
-  background: rgba(0,87,184,.05);
-  padding: 5px 8px;
-  border-radius: 6px;
-  margin-top: 4px;
+  font-size: 11px; color: #0057B8; font-weight: 600; line-height: 1.45;
+  background: rgba(0,87,184,.07); padding: 5px 8px; border-radius: 8px; margin-top: 4px;
+  border-left: 2px solid rgba(0,87,184,.3);
 }
 
 /* ══ SEGUIMIENTO DE PEDIDO ════════════════════════════════ */
@@ -6950,6 +6920,146 @@ body.cart-open #proyectoListadoBtn {
   /* Footer bottom bar */
   footer [style*="border-top:1px solid #eee"] { flex-direction: column; gap: 8px; text-align:center; }
 }
+
+
+/* ── Cross-sell Monochrome Glass ───────────────────────────── */
+#cartCrossSell {
+  margin: 5px 10px 4px;
+  padding: 12px 12px 10px;
+  display: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg,rgba(255,255,255,.8),rgba(245,247,250,.9));
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 2px 10px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,.95);
+}
+.ccs-title {
+  font-size: 10px; font-weight: 800; color: #0057B8;
+  text-transform: uppercase; letter-spacing: .7px;
+  margin-bottom: 9px; display: flex; align-items: center; gap: 5px;
+}
+.ccs-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: 12px;
+  background: rgba(255,255,255,.9);
+  border: 1px solid rgba(0,0,0,.06);
+  box-shadow: 0 1px 6px rgba(0,0,0,.04), inset 0 1px 0 rgba(255,255,255,.9);
+  margin-bottom: 5px; transition: all .18s;
+}
+.ccs-item:last-child { margin-bottom: 0; }
+.ccs-item:hover { transform: translateY(-1px); box-shadow: 0 3px 12px rgba(0,0,0,.08); }
+.ccs-item-thumb {
+  width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+  background: linear-gradient(135deg,#f2f4f7,#e8ecf2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; border: 1px solid rgba(0,0,0,.05); overflow: hidden;
+}
+.ccs-item-thumb img { width:100%;height:100%;object-fit:contain; }
+.ccs-item-info { flex: 1; min-width: 0; }
+.ccs-item-tag {
+  font-size: 9px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: .4px; margin-bottom: 1px; color: #0057B8;
+}
+.ccs-item-name {
+  font-size: 11.5px; font-weight: 600; color: #111;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
+}
+.ccs-item-price { font-size: 10.5px; color: #777; margin-top: 1px; }
+.ccs-add-btn {
+  flex-shrink: 0;
+  background: #0057B8; color: #fff;
+  border: none; border-radius: 10px;
+  padding: 6px 12px; font-size: 11px; font-weight: 700;
+  cursor: pointer; font-family: var(--font);
+  transition: all .18s; white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(0,87,184,.3);
+}
+.ccs-add-btn:hover { background: #004aa3; transform: scale(1.04); }
+.ccs-add-btn.added { background: #2d7a4a; box-shadow: 0 2px 6px rgba(45,122,74,.25); }
+
+
+/* ══ VALIDADOR COMPATIBILIDAD — Monochrome Glass ════════════ */
+#compatPanel {
+  margin: 6px 10px 4px;
+  font-size: 13px;
+  display: none;
+}
+.compat-pill {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 14px 8px 10px; border-radius: 50px;
+  cursor: pointer; user-select: none;
+  transition: all .22s cubic-bezier(.32,.72,0,1);
+  background: linear-gradient(135deg,rgba(255,255,255,.88),rgba(245,247,250,.95));
+  border: 1px solid rgba(0,0,0,.11);
+  box-shadow: 0 2px 10px rgba(0,0,0,.07), inset 0 1px 0 rgba(255,255,255,.95);
+}
+.compat-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,.1), inset 0 1px 0 rgba(255,255,255,.95);
+}
+.compat-pill:active { transform: translateY(0); }
+.compat-badge {
+  min-width: 20px; height: 20px; border-radius: 10px; padding: 0 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800; flex-shrink: 0;
+  background: #1a1a1a; color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+}
+.compat-pill-label {
+  font-size: 12px; font-weight: 700; flex: 1; color: #1a1a1a;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.compat-pill-chevron {
+  flex-shrink: 0; transition: transform .22s cubic-bezier(.32,.72,0,1);
+  opacity: .35; color: #1a1a1a;
+}
+.compat-pill-chevron.open { transform: rotate(180deg); }
+.compat-drawer {
+  overflow: hidden; max-height: 0;
+  transition: max-height .35s cubic-bezier(.32,.72,0,1), opacity .28s ease;
+  opacity: 0;
+}
+.compat-drawer.open { max-height: 340px; opacity: 1; overflow-y: auto; }
+.compat-drawer-inner {
+  padding: 7px 2px 2px;
+  display: flex; flex-direction: column; gap: 5px;
+}
+.compat-alert {
+  display: flex; gap: 10px; padding: 10px 12px;
+  border-radius: 14px;
+  background: linear-gradient(135deg,rgba(255,255,255,.92),rgba(248,249,251,.97));
+  border: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 1px 6px rgba(0,0,0,.05), inset 0 1px 0 rgba(255,255,255,.9);
+}
+.compat-alert-icon { flex-shrink: 0; font-size: 17px; line-height: 1.3; filter: grayscale(40%); }
+.compat-alert-text { flex: 1; min-width: 0; }
+.compat-alert-title {
+  font-weight: 700; font-size: 12px; color: #111;
+  margin-bottom: 2px; line-height: 1.3;
+}
+.compat-alert-msg { font-size: 11.5px; color: #555; line-height: 1.45; margin-bottom: 4px; }
+.compat-alert-sol {
+  font-size: 11px; color: #0057B8; font-weight: 600; line-height: 1.5;
+  background: rgba(0,87,184,.05); padding: 6px 10px;
+  border-radius: 9px; margin-top: 3px;
+  border-left: 2px solid rgba(0,87,184,.25);
+}
+.compat-alert-close {
+  flex-shrink: 0; align-self: flex-start;
+  background: rgba(0,0,0,.05); border: none; border-radius: 50%;
+  width: 20px; height: 20px; cursor: pointer; color: #888; font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all .15s; margin-left: 2px; padding: 0;
+}
+.compat-alert-close:hover { background: rgba(0,0,0,.1); color: #333; }
+.compat-dismiss-all {
+  display: block; width: 100%; margin-top: 4px;
+  background: transparent; border: 1px solid rgba(0,0,0,.08);
+  border-radius: 12px; padding: 7px;
+  font-size: 11px; font-weight: 600; color: #888;
+  cursor: pointer; font-family: var(--font); text-align: center;
+  transition: all .15s;
+}
+.compat-dismiss-all:hover { background: rgba(0,0,0,.04); color: #444; }
 
 </style>
 
@@ -7506,7 +7616,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 11:56 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 12:53 hrs</span>
   </div>
 </div>
 
@@ -20988,7 +21098,6 @@ function compatRenderAlerts() {
   var panel = document.getElementById('compatPanel');
   if (!panel) return;
 
-  // Solo mostrar en paso 1
   var enPaso1 = (typeof coStep === 'undefined' || coStep === 0);
   if (!enPaso1) {
     panel.style.display = 'none';
@@ -20997,7 +21106,6 @@ function compatRenderAlerts() {
   }
 
   var alertas = compatAnalizarCarro();
-  // Filtrar las que el usuario ya cerró manualmente
   var cerradas = window._compatCerradas || {};
   var visibles = alertas.filter(function(a, i) {
     return !cerradas[i + '_' + a.titulo];
@@ -21005,7 +21113,6 @@ function compatRenderAlerts() {
 
   if (visibles.length === 0) {
     panel.style.display = 'none';
-    // Mostrar cross-sell cuando no hay alertas pendientes
     cartCrossSellRender();
     return;
   }
@@ -21016,53 +21123,77 @@ function compatRenderAlerts() {
 
   panel.style.display = 'block';
 
-  var errores = visibles.filter(function(a){return a.tipo === 'error';}).length;
-  var warnings = visibles.filter(function(a){return a.tipo === 'warning';}).length;
-  var headerText, headerClass;
+  var errores = visibles.filter(function(a){return a.tipo==='error';}).length;
+  var warnings = visibles.filter(function(a){return a.tipo==='warning';}).length;
+  var pillClass, pillLabel, pillIcon;
   if (errores > 0) {
-    headerText = '⚠️ ' + errores + ' problema' + (errores>1?'s':'') + ' crítico' + (errores>1?'s':'') + ' detectado' + (errores>1?'s':'');
-    headerClass = 'error';
+    pillClass = 'error';
+    pillLabel = errores + ' incompatibilidad' + (errores>1?'es':'') + ' detectada' + (errores>1?'s':'');
+    pillIcon = '⚠️';
   } else if (warnings > 0) {
-    headerText = '⚡ ' + warnings + ' advertencia' + (warnings>1?'s técnicas':'') ;
-    headerClass = 'warning';
+    pillClass = 'warning';
+    pillLabel = warnings + ' advertencia' + (warnings>1?'s':'') + ' técnica' + (warnings>1?'s':'');
+    pillIcon = '⚡';
   } else {
-    headerText = 'ℹ️ ' + visibles.length + ' recomendación' + (visibles.length>1?'es':'');
-    headerClass = 'ok';
+    pillClass = 'ok';
+    pillLabel = visibles.length + ' recomendación' + (visibles.length>1?'es':'');
+    pillIcon = 'ℹ️';
   }
 
-  // Encontrar el índice real de cada alerta visible
+  var isOpen = panel._drawerOpen || false;
+
   var alertasConIdx = visibles.map(function(a) {
-    var idx = alertas.indexOf(a);
-    return { alerta: a, idx: idx };
+    return { alerta: a, idx: alertas.indexOf(a) };
   });
 
   panel.innerHTML =
-    '<div class="compat-header ' + headerClass + '">' +
-      '<span>' + headerText + '</span>' +
+    '<div class="compat-pill ' + pillClass + '" onclick="compatToggleDrawer()">' +
+      '<span style="font-size:15px">' + pillIcon + '</span>' +
+      '<span class="compat-badge">' + visibles.length + '</span>' +
+      '<span class="compat-pill-label">' + pillLabel + '</span>' +
+      '<svg class="compat-pill-chevron' + (isOpen?' open':'') + '" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>' +
     '</div>' +
-    '<div class="compat-body" id="compatBody">' +
-      alertasConIdx.map(function(item) {
-        var a = item.alerta;
-        var key = item.idx + '_' + a.titulo;
-        return '<div class="compat-alert ' + a.tipo + '" id="ca_' + key.replace(/[^a-z0-9]/gi,'_') + '">' +
-          '<div class="compat-alert-icon">' + a.icon + '</div>' +
-          '<div class="compat-alert-text">' +
-            '<div class="compat-alert-title">' + a.titulo + '</div>' +
-            '<div class="compat-alert-msg">' + a.mensaje + '</div>' +
-            (a.solucion ? '<div class="compat-alert-sol">💡 ' + a.solucion + '</div>' : '') +
-          '</div>' +
-          '<button class="compat-alert-close" data-key="' + key + '" onclick="compatDismiss(this.dataset.key)" title="Cerrar">✕</button>' +
-        '</div>';
-      }).join('') +
-      (visibles.length > 1 ?
-        '<button class="compat-dismiss-all" onclick="compatDismissAll()">Cerrar todas las alertas ✕</button>' : '') +
+    '<div class="compat-drawer' + (isOpen?' open':'') + '" id="compatDrawer">' +
+      '<div class="compat-drawer-inner">' +
+        alertasConIdx.map(function(item) {
+          var a = item.alerta;
+          var key = item.idx + '_' + a.titulo;
+          var safeKey = key.replace(/[^a-z0-9]/gi,'_');
+          return '<div class="compat-alert ' + a.tipo + '" id="ca_' + safeKey + '">' +
+            '<div class="compat-alert-icon">' + a.icon + '</div>' +
+            '<div class="compat-alert-text">' +
+              '<div class="compat-alert-title">' + a.titulo + '</div>' +
+              '<div class="compat-alert-msg">' + a.mensaje + '</div>' +
+              (a.solucion ? '<div class="compat-alert-sol">💡 ' + a.solucion + '</div>' : '') +
+            '</div>' +
+            '<button class="compat-alert-close" data-key="' + key + '" onclick="compatDismiss(this.dataset.key)" title="Cerrar">✕</button>' +
+          '</div>';
+        }).join('') +
+        (visibles.length > 1 ?
+          '<button class="compat-dismiss-all" onclick="compatDismissAll()">Cerrar todas ✕</button>' : '') +
+      '</div>' +
     '</div>';
+
+  // Restaurar estado del drawer
+  panel._drawerOpen = isOpen;
 }
+
+function compatToggleDrawer() {
+  var panel = document.getElementById('compatPanel');
+  if (!panel) return;
+  panel._drawerOpen = !panel._drawerOpen;
+  var drawer = document.getElementById('compatDrawer');
+  var chevron = panel.querySelector('.compat-pill-chevron');
+  if (drawer) drawer.classList.toggle('open', panel._drawerOpen);
+  if (chevron) chevron.classList.toggle('open', panel._drawerOpen);
+}
+
 
 function compatDismiss(key) {
   if (!window._compatCerradas) window._compatCerradas = {};
   window._compatCerradas[key] = true;
   compatRenderAlerts();
+  setTimeout(cartCrossSellRender, 80);
 }
 
 function compatDismissAll() {
@@ -21072,6 +21203,7 @@ function compatDismissAll() {
     window._compatCerradas[i + '_' + a.titulo] = true;
   });
   compatRenderAlerts();
+  setTimeout(cartCrossSellRender, 80);
 }
 
 // Resetear alertas cerradas al cambiar el carro
@@ -21085,13 +21217,6 @@ if (typeof saveCart === 'function' && !window._compatHooked) {
 }
 
 
-function compatToggle() {
-  var body = document.getElementById('compatBody');
-  var chev = document.getElementById('compatChevron');
-  if (!body) return;
-  var collapsed = body.classList.toggle('collapsed');
-  if (chev) chev.style.transform = collapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
-}
 
 // Hook: ejecutar cada vez que cambie el carro
 var _compatOriginalRenderCart = null;
@@ -21344,7 +21469,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 11:56 hrs';
+  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 12:53 hrs';
 })();
 
 
@@ -21889,11 +22014,9 @@ function cartCrossSellRender() {
   var wrap = document.getElementById('cartCrossSell');
   if (!wrap) return;
 
-  // Solo en paso 1
   var enPaso1 = (typeof coStep === 'undefined' || coStep === 0);
   if (!enPaso1 || typeof S === 'undefined' || !S.cart || !S.cart.length) {
-    wrap.style.display = 'none';
-    return;
+    wrap.style.display = 'none'; return;
   }
 
   var skuMap = {};
@@ -21901,7 +22024,6 @@ function cartCrossSellRender() {
   var cartSkus = {};
   S.cart.forEach(function(i){ cartSkus[i.codigo] = true; });
 
-  // Calcular scores cross-sell
   var scores = {};
   S.cart.forEach(function(item) {
     var recs = (typeof CROSS_SELL !== 'undefined') ? (CROSS_SELL[item.codigo] || []) : [];
@@ -21912,68 +22034,71 @@ function cartCrossSellRender() {
     });
   });
 
-  // Top 4 sugerencias
   var top = Object.keys(scores)
-    .filter(function(sku) { return !!skuMap[sku]; })
-    .sort(function(a, b) { return scores[b] - scores[a]; })
-    .slice(0, 4);
+    .filter(function(sku){ return !!skuMap[sku]; })
+    .sort(function(a,b){ return scores[b]-scores[a]; })
+    .slice(0,4);
 
-  if (!top.length) { wrap.style.display = 'none'; return; }
-
-  // Verificar si hay HDD requerido para mostrar primero
+  // HDDs requeridos van primero
   var hddsReq = [];
   if (typeof HDD_RULES !== 'undefined') {
     S.cart.forEach(function(item) {
       var regla = HDD_RULES[item.codigo];
       if (regla && regla.hdds) {
         regla.hdds.forEach(function(hdd) {
-          if (!cartSkus[hdd] && skuMap[hdd]) {
-            hddsReq.push({ sku: hdd, tipo: 'disco' });
+          if (!cartSkus[hdd] && skuMap[hdd] && !hddsReq.some(function(h){return h.sku===hdd;})) {
+            hddsReq.push({sku: hdd, tipo: 'disco'});
           }
         });
       }
     });
   }
 
-  // Fusionar: HDDs primero, luego cross-sell sin repetir
   var final = [];
   hddsReq.slice(0,2).forEach(function(h) {
-    if (!final.some(function(f){return f.sku===h.sku;})) {
-      final.push({ sku: h.sku, tipo: 'disco' });
-    }
+    if (!final.some(function(f){return f.sku===h.sku;})) final.push(h);
   });
   top.forEach(function(sku) {
-    if (!final.some(function(f){return f.sku===sku;}) && final.length < 4) {
-      final.push({ sku: sku, tipo: 'sugerencia' });
-    }
+    if (!final.some(function(f){return f.sku===sku;}) && final.length < 4)
+      final.push({sku: sku, tipo: 'sugerido'});
   });
 
   if (!final.length) { wrap.style.display = 'none'; return; }
 
+  // Emoji por categoría
+  function catEmoji(cat) {
+    var map = {'camaras-ip':'📷','camaras-hdcvi':'📹','camaras-ptz':'🔭',
+               'nvr':'🖥️','switches':'🔌','accesorios':'🔧',
+               'alarmas':'🚨','acceso':'🔑','videoporteros':'🔔',
+               'especiales':'💾','licencias':'📋','redes':'🌐'};
+    return map[cat] || '📦';
+  }
+
   wrap.style.display = 'block';
   wrap.innerHTML =
     '<div class="ccs-title">' +
-      '<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' +
+      '<svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' +
       'Clientes también llevaron' +
     '</div>' +
     final.map(function(item) {
       var p = skuMap[item.sku];
       if (!p) return '';
-      var tag = item.tipo === 'disco' ? '💾 Disco requerido' : '🛒 Sugerido';
-      var tagColor = item.tipo === 'disco' ? '#e8001c' : '#0057B8';
+      var isDisco = item.tipo === 'disco';
+      var tagColor = isDisco ? '#e8001c' : '#0057B8';
+      var tagLabel = isDisco ? '💾 Disco requerido' : '✨ Sugerido';
+      var emoji = catEmoji(p.cat);
+      var imgHtml = p.img ? '<img src="' + p.img + '" alt="" style="width:100%;height:100%;object-fit:contain">' : emoji;
       return '<div class="ccs-item">' +
-        '<img class="ccs-item-img" src="' + (p.img || '') + '">' +
+        '<div class="ccs-item-thumb">' + imgHtml + '</div>' +
         '<div class="ccs-item-info">' +
-          '<div class="ccs-item-tag" style="color:' + tagColor + '">' + tag + '</div>' +
-          '<div class="ccs-item-name">' + (p.nombre || p.codigo).substring(0, 45) + (p.nombre && p.nombre.length > 45 ? '…' : '') + '</div>' +
-          '<div class="ccs-item-price">$' + (p.pneto || 0).toLocaleString('es-CL') + ' neto</div>' +
+          '<div class="ccs-item-tag" style="color:' + tagColor + '">' + tagLabel + '</div>' +
+          '<div class="ccs-item-name">' + (p.nombre||p.codigo).substring(0,42) + (p.nombre&&p.nombre.length>42?'…':'') + '</div>' +
+          '<div class="ccs-item-price">$' + (p.pneto||0).toLocaleString('es-CL') + ' neto</div>' +
         '</div>' +
         '<button class="ccs-add-btn" id="ccs_btn_' + p.codigo + '" ' +
-          'data-cod="' + p.codigo + '" onclick="ccsAddToCart(this.dataset.cod)">' +
-          '+ Agregar' +
-        '</button>' +
+          'data-cod="' + p.codigo + '" onclick="ccsAddToCart(this.dataset.cod)">+ Agregar</button>' +
       '</div>';
-    }).join('') ;
+    }).join('');
 }
 
 function ccsAddToCart(codigo) {
