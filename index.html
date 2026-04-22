@@ -6505,8 +6505,6 @@ body.cart-open #proyectoListadoBtn {
 }
 .compat-body {
   padding: 8px;
-  max-height: 400px;
-  overflow-y: auto;
   transition: max-height .3s;
 }
 .compat-body.collapsed {
@@ -7935,11 +7933,11 @@ if (window.pdfjsLib) {
   </div><!-- /co-viewport -->
 
   <!-- ══ STICKY BOTTOM ══════════════════════════════════════════ -->
-  <!-- Validador de Compatibilidad -->
-  <div id="compatPanel"></div>
-
   <div class="cart-sticky" id="cartSticky" style="display:none">
     <!-- Totales compactos (pasos 1-3) -->
+    <!-- Validador de Compatibilidad -->
+    <div id="compatPanel" style="margin-bottom:4px;border-radius:10px"></div>
+    <div id="cartCrossSell"></div>
     <div id="coStickyTotals">
       <div class="totals" style="margin-bottom:8px">
         <div class="trow"><span>Subtotal neto</span><span id="tNeto">$0</span></div>
@@ -7948,11 +7946,7 @@ if (window.pdfjsLib) {
         <div class="trow trow-total"><span>Total con IVA</span><span id="tTotal">$0</span></div>
       </div>
     </div>
-    <!-- Cross-sell sugerencias -->
-    <div id="csCrossSell" style="margin-bottom:8px;display:none">
-      <div style="font-size:11px;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">💡 Clientes también llevaron</div>
-      <div id="csItems" style="display:flex;flex-direction:column;gap:4px"></div>
-    </div>
+    <!-- csCrossSell movido a cartCrossSell -->
     <!-- Botón principal dinámico -->
     <button id="coNextBtn" class="pay-now-btn" style="margin-bottom:0" onclick="event.stopPropagation();checkoutNext()">
       Continuar → Datos
@@ -20980,52 +20974,104 @@ function compatAnalizarCarro() {
 // Render de alertas en el carro
 function compatRenderAlerts() {
   var panel = document.getElementById('compatPanel');
-  var alertas = compatAnalizarCarro();
-  
   if (!panel) return;
-  
-  if (alertas.length === 0) {
+
+  // Solo mostrar en paso 1
+  var enPaso1 = (typeof coStep === 'undefined' || coStep === 0);
+  if (!enPaso1) {
     panel.style.display = 'none';
+    cartCrossSellRender();
     return;
   }
-  
+
+  var alertas = compatAnalizarCarro();
+  // Filtrar las que el usuario ya cerró manualmente
+  var cerradas = window._compatCerradas || {};
+  var visibles = alertas.filter(function(a, i) {
+    return !cerradas[i + '_' + a.titulo];
+  });
+
+  if (visibles.length === 0) {
+    panel.style.display = 'none';
+    // Mostrar cross-sell cuando no hay alertas pendientes
+    cartCrossSellRender();
+    return;
+  }
+
+  // Ocultar cross-sell mientras hay alertas
+  var ccs = document.getElementById('cartCrossSell');
+  if (ccs) ccs.style.display = 'none';
+
   panel.style.display = 'block';
-  
-  var errores = alertas.filter(function(a){return a.tipo === 'error';}).length;
-  var warnings = alertas.filter(function(a){return a.tipo === 'warning';}).length;
-  var infos = alertas.filter(function(a){return a.tipo === 'info';}).length;
-  
-  var headerText = '';
-  var headerClass = '';
+
+  var errores = visibles.filter(function(a){return a.tipo === 'error';}).length;
+  var warnings = visibles.filter(function(a){return a.tipo === 'warning';}).length;
+  var headerText, headerClass;
   if (errores > 0) {
-    headerText = '⚠️ ' + errores + (errores === 1 ? ' problema crítico' : ' problemas críticos') + ' detectados';
+    headerText = '⚠️ ' + errores + ' problema' + (errores>1?'s':'') + ' crítico' + (errores>1?'s':'') + ' detectado' + (errores>1?'s':'');
     headerClass = 'error';
   } else if (warnings > 0) {
-    headerText = '⚡ ' + warnings + (warnings === 1 ? ' advertencia técnica' : ' advertencias técnicas');
+    headerText = '⚡ ' + warnings + ' advertencia' + (warnings>1?'s técnicas':'') ;
     headerClass = 'warning';
   } else {
-    headerText = '✅ Sistema compatible' + (infos > 0 ? ' · ' + infos + ' recomendación' + (infos>1?'es':'') : '');
+    headerText = 'ℹ️ ' + visibles.length + ' recomendación' + (visibles.length>1?'es':'');
     headerClass = 'ok';
   }
-  
-  panel.innerHTML = 
-    '<div class="compat-header ' + headerClass + '" onclick="compatToggle()">' +
-      '<span class="compat-title">' + headerText + '</span>' +
-      '<svg class="compat-chevron" id="compatChevron" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>' +
+
+  // Encontrar el índice real de cada alerta visible
+  var alertasConIdx = visibles.map(function(a) {
+    var idx = alertas.indexOf(a);
+    return { alerta: a, idx: idx };
+  });
+
+  panel.innerHTML =
+    '<div class="compat-header ' + headerClass + '">' +
+      '<span>' + headerText + '</span>' +
     '</div>' +
     '<div class="compat-body" id="compatBody">' +
-      alertas.map(function(a) {
-        return '<div class="compat-alert ' + a.tipo + '">' +
+      alertasConIdx.map(function(item) {
+        var a = item.alerta;
+        var key = item.idx + '_' + a.titulo;
+        return '<div class="compat-alert ' + a.tipo + '" id="ca_' + key.replace(/[^a-z0-9]/gi,'_') + '">' +
           '<div class="compat-alert-icon">' + a.icon + '</div>' +
           '<div class="compat-alert-text">' +
             '<div class="compat-alert-title">' + a.titulo + '</div>' +
             '<div class="compat-alert-msg">' + a.mensaje + '</div>' +
             (a.solucion ? '<div class="compat-alert-sol">💡 ' + a.solucion + '</div>' : '') +
           '</div>' +
+          '<button class="compat-alert-close" data-key="' + key + '" onclick="compatDismiss(this.dataset.key)" title="Cerrar">✕</button>' +
         '</div>';
       }).join('') +
+      (visibles.length > 1 ?
+        '<button class="compat-dismiss-all" onclick="compatDismissAll()">Cerrar todas las alertas ✕</button>' : '') +
     '</div>';
 }
+
+function compatDismiss(key) {
+  if (!window._compatCerradas) window._compatCerradas = {};
+  window._compatCerradas[key] = true;
+  compatRenderAlerts();
+}
+
+function compatDismissAll() {
+  var alertas = compatAnalizarCarro();
+  window._compatCerradas = {};
+  alertas.forEach(function(a, i) {
+    window._compatCerradas[i + '_' + a.titulo] = true;
+  });
+  compatRenderAlerts();
+}
+
+// Resetear alertas cerradas al cambiar el carro
+var _origSaveCart = window.saveCart;
+if (typeof saveCart === 'function' && !window._compatHooked) {
+  window._compatHooked = true;
+  window.saveCart = function() {
+    window._compatCerradas = {};  // resetear al cambiar carro
+    if (_origSaveCart) _origSaveCart.apply(this, arguments);
+  };
+}
+
 
 function compatToggle() {
   var body = document.getElementById('compatBody');
@@ -21853,8 +21899,120 @@ var CO_STEPS = ['coP1','coP2','coP3','coP4'];
 var CO_TITLES = ['Tu Carro','Datos de Facturación','Despacho / Envío','Pago y Confirmación'];
 var CO_BTNS   = ['Continuar → Datos','Continuar → Envío','Continuar → Pago','Finalizar compra'];
 
+
+function cartCrossSellRender() {
+  var wrap = document.getElementById('cartCrossSell');
+  if (!wrap) return;
+
+  // Solo en paso 1
+  var enPaso1 = (typeof coStep === 'undefined' || coStep === 0);
+  if (!enPaso1 || !S.cart || !S.cart.length) {
+    wrap.style.display = 'none';
+    return;
+  }
+
+  var skuMap = {};
+  PRODUCTS.forEach(function(p){ skuMap[p.codigo] = p; });
+  var cartSkus = {};
+  S.cart.forEach(function(i){ cartSkus[i.codigo] = true; });
+
+  // Calcular scores cross-sell
+  var scores = {};
+  S.cart.forEach(function(item) {
+    var recs = (typeof CROSS_SELL !== 'undefined') ? (CROSS_SELL[item.codigo] || []) : [];
+    recs.forEach(function(r) {
+      if (!cartSkus[r.sku] && skuMap[r.sku]) {
+        scores[r.sku] = (scores[r.sku] || 0) + (r.score || 1);
+      }
+    });
+  });
+
+  // Top 4 sugerencias
+  var top = Object.keys(scores)
+    .filter(function(sku) { return !!skuMap[sku]; })
+    .sort(function(a, b) { return scores[b] - scores[a]; })
+    .slice(0, 4);
+
+  if (!top.length) { wrap.style.display = 'none'; return; }
+
+  // Verificar si hay HDD requerido para mostrar primero
+  var hddsReq = [];
+  if (typeof HDD_RULES !== 'undefined') {
+    S.cart.forEach(function(item) {
+      var regla = HDD_RULES[item.codigo];
+      if (regla && regla.hdds) {
+        regla.hdds.forEach(function(hdd) {
+          if (!cartSkus[hdd] && skuMap[hdd]) {
+            hddsReq.push({ sku: hdd, tipo: 'disco' });
+          }
+        });
+      }
+    });
+  }
+
+  // Fusionar: HDDs primero, luego cross-sell sin repetir
+  var final = [];
+  hddsReq.slice(0,2).forEach(function(h) {
+    if (!final.some(function(f){return f.sku===h.sku;})) {
+      final.push({ sku: h.sku, tipo: 'disco' });
+    }
+  });
+  top.forEach(function(sku) {
+    if (!final.some(function(f){return f.sku===sku;}) && final.length < 4) {
+      final.push({ sku: sku, tipo: 'sugerencia' });
+    }
+  });
+
+  if (!final.length) { wrap.style.display = 'none'; return; }
+
+  wrap.style.display = 'block';
+  wrap.innerHTML =
+    '<div class="ccs-title">' +
+      '<svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>' +
+      'Clientes también llevaron' +
+    '</div>' +
+    final.map(function(item) {
+      var p = skuMap[item.sku];
+      if (!p) return '';
+      var tag = item.tipo === 'disco' ? '💾 Disco requerido' : '🛒 Sugerido';
+      var tagColor = item.tipo === 'disco' ? '#e8001c' : '#0057B8';
+      return '<div class="ccs-item">' +
+        '<img class="ccs-item-img" src="' + (p.img || '') + '" onerror="this.style.display=&quot;none&quot;">' +
+        '<div class="ccs-item-info">' +
+          '<div class="ccs-item-tag" style="color:' + tagColor + '">' + tag + '</div>' +
+          '<div class="ccs-item-name">' + (p.nombre || p.codigo).substring(0, 45) + (p.nombre && p.nombre.length > 45 ? '…' : '') + '</div>' +
+          '<div class="ccs-item-price">$' + (p.pneto || 0).toLocaleString('es-CL') + ' neto</div>' +
+        '</div>' +
+        '<button class="ccs-add-btn" id="ccs_btn_' + p.codigo + '" ' +
+          'data-cod="' + p.codigo + '" onclick="ccsAddToCart(this.dataset.cod)">' +
+          '+ Agregar' +
+        '</button>' +
+      '</div>';
+    }).join('') ;
+}
+
+function ccsAddToCart(codigo) {
+  var p = PRODUCTS.find(function(x){ return x.codigo === codigo; });
+  if (!p) return;
+  addToCart(p);
+  var btn = document.getElementById('ccs_btn_' + codigo);
+  if (btn) { btn.textContent = '✓ Agregado'; btn.classList.add('added'); btn.disabled = true; }
+}
+
 function checkoutGoTo(step, force) {
   document.body.style.overflow = '';
+  // Ocultar cross-sell y alertas en pasos 2,3,4
+  setTimeout(function(){
+    var ccs = document.getElementById('cartCrossSell');
+    var cp = document.getElementById('compatPanel');
+    if (step > 0) {
+      if (ccs) ccs.style.display = 'none';
+      if (cp) cp.style.display = 'none';
+    } else {
+      window._compatCerradas = {};
+      compatRenderAlerts();
+    }
+  }, 50);
   if (step > 0 && !S.cart.length) { return; }
   if (!force && step > coStep + 1) return;
   coStep = step;
