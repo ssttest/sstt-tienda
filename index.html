@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 15:15 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 17:52 hrs (UTC-4 Chile) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -7197,6 +7197,211 @@ body.cart-open #proyectoListadoBtn {
   .pcard-img-wrap { height: 85px !important; }
 }
 
+
+/* ══ SIMULADOR FOV v2 ═══════════════════════════════════════ */
+#secFov { background:#f5f6fa; min-height:100%; }
+.fov-wrap { max-width:1100px; margin:0 auto; padding:24px 16px 40px; }
+.fov-hero { text-align:center; margin-bottom:22px; }
+.fov-hero-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:linear-gradient(135deg,rgba(0,87,184,.1),rgba(99,102,241,.08));
+  border:1px solid rgba(0,87,184,.2); border-radius:50px;
+  padding:5px 14px; font-size:11px; font-weight:800;
+  color:#0057B8; text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px;
+}
+.fov-title { font-size:clamp(20px,4vw,30px); font-weight:900; color:#111; margin-bottom:5px; }
+.fov-sub { font-size:13px; color:#666; max-width:640px; margin:0 auto; }
+
+/* Row de cámaras A/B */
+.fov-cam-row {
+  display:grid; grid-template-columns:1fr auto 1fr; gap:14px; align-items:stretch;
+  margin-bottom:18px;
+}
+@media(max-width:768px){ .fov-cam-row{ grid-template-columns:1fr; } }
+.fov-cam-box {
+  background:#fff; border-radius:18px; padding:16px;
+  border:1px solid rgba(0,0,0,.07);
+  box-shadow:0 4px 18px rgba(0,0,0,.05);
+  transition:all .2s;
+}
+.fov-cam-box.fov-cam-a { border-top:3px solid #00aaff; }
+.fov-cam-box.fov-cam-b { border-top:3px solid #ff6b35; }
+.fov-cam-hdr { display:flex; align-items:center; gap:7px; margin-bottom:11px; }
+.fov-cam-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.fov-cam-title { font-size:12px; font-weight:800; color:#333; flex:1;
+  text-transform:uppercase; letter-spacing:.5px; }
+.fov-clear-btn {
+  background:rgba(0,0,0,.05); border:none; border-radius:50%;
+  width:22px; height:22px; cursor:pointer; color:#888; font-size:11px;
+  display:flex; align-items:center; justify-content:center;
+  transition:all .15s; padding:0;
+}
+.fov-clear-btn:hover { background:rgba(232,0,28,.12); color:#e8001c; }
+
+/* Mini buscador con autofill */
+.fov-searchbox { position:relative; margin-bottom:11px; }
+.fov-sr-input {
+  width:100%; padding:9px 13px; border:1.5px solid rgba(0,0,0,.1);
+  border-radius:11px; font-size:12.5px; font-family:var(--font);
+  background:#fafafa; color:#111; outline:none; transition:all .15s;
+  box-sizing:border-box;
+}
+.fov-sr-input:focus { border-color:#0057B8; background:#fff; box-shadow:0 0 0 3px rgba(0,87,184,.08); }
+.fov-sr-dd {
+  display:none; position:absolute; top:calc(100% + 4px); left:0; right:0;
+  background:#fff; border:1px solid rgba(0,0,0,.1); border-radius:12px;
+  box-shadow:0 8px 32px rgba(0,0,0,.12); z-index:100;
+  max-height:320px; overflow-y:auto;
+}
+.fov-sr-item {
+  display:flex; align-items:center; gap:9px; padding:9px 12px;
+  cursor:pointer; border-bottom:1px solid rgba(0,0,0,.04);
+  transition:background .12s;
+}
+.fov-sr-item:hover { background:rgba(0,87,184,.06); }
+.fov-sr-item:last-child { border-bottom:none; }
+.fov-sr-icon { font-size:16px; flex-shrink:0; }
+.fov-sr-info { flex:1; min-width:0; }
+.fov-sr-name { font-size:12px; font-weight:600; color:#111;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.fov-sr-meta { font-size:10px; color:#888; margin-top:1px; }
+.fov-sr-empty { padding:14px; text-align:center; color:#888; font-size:11px; }
+
+/* Botón comparar */
+.fov-compare-toggle {
+  display:flex; align-items:center; justify-content:center;
+}
+.fov-compare-btn {
+  padding:11px 15px; font-size:12px; font-weight:700;
+  background:linear-gradient(135deg,#f0f4fa,#e5ebf5); color:#555;
+  border:1.5px solid rgba(0,0,0,.08); border-radius:12px;
+  cursor:pointer; font-family:var(--font); transition:all .18s;
+  white-space:nowrap;
+}
+.fov-compare-btn:hover { transform:translateY(-1px); box-shadow:0 3px 10px rgba(0,0,0,.08); }
+.fov-compare-btn.on {
+  background:linear-gradient(135deg,#ff6b35,#e55a24); color:#fff;
+  border-color:#ff6b35;
+}
+@media(max-width:768px){ .fov-compare-toggle{ margin:4px 0; } }
+
+/* Slider y label */
+.fov-slider-row { margin-bottom:11px; }
+.fov-slider-lbl { display:flex; justify-content:space-between; font-size:12px;
+  font-weight:600; color:#444; margin-bottom:5px; }
+.fov-slider-lbl b { font-weight:800; }
+.fov-slider-a + .fov-slider-lbl b { color:#00aaff; }
+.fov-slider {
+  width:100%; height:4px; border-radius:4px; outline:none; cursor:pointer;
+  -webkit-appearance:none; appearance:none;
+  background:linear-gradient(to right,#0057B8 0%,#0057B8 50%,#e0e0e0 50%,#e0e0e0 100%);
+}
+.fov-slider::-webkit-slider-thumb {
+  -webkit-appearance:none; width:17px; height:17px; border-radius:50%;
+  background:#fff; border:2.5px solid #0057B8;
+  box-shadow:0 2px 8px rgba(0,87,184,.3); cursor:pointer;
+}
+.fov-slider-b::-webkit-slider-thumb { border-color:#ff6b35; box-shadow:0 2px 8px rgba(255,107,53,.3); }
+.fov-slider-global::-webkit-slider-thumb { border-color:#555; }
+
+/* Specs grid */
+.fov-specs { margin:11px 0 8px; }
+.fov-specs-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+.fov-spec {
+  background:linear-gradient(135deg,#f8f9ff,#f0f3ff);
+  border:1px solid rgba(0,87,184,.1); border-radius:10px;
+  padding:7px 9px; text-align:center;
+}
+.fov-spec-val { font-size:15px; font-weight:900; color:#0057B8; line-height:1; }
+.fov-spec-lbl { font-size:9px; color:#888; font-weight:700; text-transform:uppercase;
+  letter-spacing:.4px; margin-top:2px; }
+.fov-spec-meta {
+  margin-top:6px; padding:5px 9px; background:#fafafa;
+  border-radius:8px; font-size:10px; color:#777; text-align:center;
+}
+.fov-empty {
+  padding:20px; text-align:center; color:#aaa; font-size:11px;
+  background:#fafafa; border-radius:11px; border:1px dashed rgba(0,0,0,.08);
+}
+
+/* DORI list */
+.fov-dori-list { margin-top:10px; }
+.fov-dori-row {
+  display:flex; align-items:center; gap:8px;
+  padding:6px 9px; border-radius:9px;
+  background:#fafafa; border:1px solid rgba(0,0,0,.04);
+  margin-bottom:4px;
+}
+.fov-dori-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+.fov-dori-name { font-size:10.5px; font-weight:700; color:#333; flex:1; }
+.fov-dori-dist { font-size:12px; font-weight:800; color:#0057B8; }
+.fov-dori-ppm { font-size:9px; color:#aaa; }
+.fov-infra-row {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 11px; margin-top:8px;
+  border-radius:10px;
+  background:linear-gradient(135deg,#f8f9ff,#fff);
+  border:1px solid rgba(0,0,0,.06);
+}
+.fov-infra-icon { font-size:20px; line-height:1; flex-shrink:0; }
+.fov-infra-info { flex:1; min-width:0; }
+.fov-infra-title { font-size:11px; font-weight:800; color:#222; line-height:1.25; }
+.fov-infra-sub { font-size:10px; color:#666; margin-top:2px; }
+
+/* Botón agregar al carro */
+.fov-add-btn {
+  width:100%; margin-top:11px; padding:9px;
+  background:linear-gradient(135deg,#E8001C,#c40018); color:#fff;
+  border:none; border-radius:11px; font-size:12px; font-weight:700;
+  cursor:pointer; font-family:var(--font);
+  box-shadow:0 3px 12px rgba(232,0,28,.3); transition:all .18s;
+}
+.fov-add-btn:hover { transform:translateY(-1px); filter:brightness(1.07); }
+
+/* Parámetros globales */
+.fov-global-params {
+  background:#fff; border-radius:18px; padding:14px 18px;
+  border:1px solid rgba(0,0,0,.07); box-shadow:0 3px 14px rgba(0,0,0,.04);
+  margin-bottom:14px;
+  display:grid; grid-template-columns:1fr 1fr; gap:18px;
+}
+@media(max-width:768px){ .fov-global-params{ grid-template-columns:1fr; gap:8px; } }
+
+/* Canvas wrap */
+.fov-canvas-wrap { background:#fff; border-radius:18px; padding:18px;
+  border:1px solid rgba(0,0,0,.07); box-shadow:0 4px 20px rgba(0,0,0,.06); }
+.fov-view-tabs { display:flex; gap:5px; margin-bottom:13px; }
+.fov-vtab {
+  flex:1; padding:7px; border:1.5px solid rgba(0,0,0,.1); border-radius:9px;
+  font-size:11px; font-weight:700; cursor:pointer; text-align:center;
+  background:#fafafa; color:#666; font-family:var(--font); transition:all .15s;
+}
+.fov-vtab.on { background:#111; color:#fff; border-color:#111; }
+#fovCanvas { width:100%; border-radius:11px; background:#0f1923; display:block;
+  box-shadow:inset 0 2px 8px rgba(0,0,0,.3); }
+.dori-legend { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
+.dori-leg-item { display:flex; align-items:center; gap:5px; font-size:10px; color:#666; }
+.dori-leg-dot { width:9px; height:9px; border-radius:50%; }
+
+/* Conclusión */
+.fov-conclusion {
+  margin-top:14px; background:#fff; border-radius:18px; padding:18px;
+  border:1px solid rgba(0,87,184,.15);
+  box-shadow:0 4px 20px rgba(0,87,184,.08);
+}
+.fov-conc-title { font-size:14px; font-weight:800; color:#0057B8; margin-bottom:10px; }
+.fov-conclusion p { margin:6px 0; font-size:12.5px; color:#333; line-height:1.55; }
+.fov-conclusion p.fov-conc-hint {
+  margin-top:10px; padding:8px 11px; background:rgba(0,87,184,.05);
+  border-radius:9px; border-left:3px solid rgba(0,87,184,.3);
+  font-size:11.5px; color:#445;
+}
+
+.fov-footer-info {
+  margin-top:14px; padding:11px 14px; background:#f8f9ff;
+  border-radius:12px; font-size:11px; color:#555; line-height:1.55;
+}
+
 </style>
 
 <!-- Google Places Autocomplete — configurable via localStorage('sstt_gmaps_key') -->
@@ -7332,6 +7537,10 @@ if (window.pdfjsLib) {
     <button data-sec="catalogo" class="mnav-tab active" onclick="showSection('catalogo',this)">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/><rect x="15" y="14" width="7" height="7"/><rect x="2" y="14" width="7" height="7"/></svg>
       Catálogo
+    </button>
+    <button data-sec="fov" class="mnav-tab" onclick="showSection('fov',this)">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934c.326.427.326 1.705 0 2.132C18.768 14.99 15.636 18 12 18c-3.636 0-6.768-3.01-8.188-4.934-.326-.427-.326-1.705 0-2.132C5.232 9.01 8.364 6 12 6c3.636 0 6.768 3.01 8.188 4.934z"/></svg>
+      FOV
     </button>
     <button data-sec="seguimiento" class="mnav-tab" onclick="showSection('seguimiento',this)">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -7752,7 +7961,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 15:15 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 17:52 hrs</span>
   </div>
 </div>
 
@@ -9074,7 +9283,111 @@ if (window.pdfjsLib) {
   </div>
 </div>
 
-</div><!-- /secAcademia<footer style="background:#fff;border-top:2px solid #f0f0f0;color:#333;padding:0;margin-top:0">
+</div><!-- /secAcademia<!-- ══ SECCIÓN: SIMULADOR FOV v2 ══════════════════════════════ -->
+<div class="app-section" id="secFov">
+<div class="fov-wrap">
+  <div class="fov-hero">
+    <div class="fov-hero-badge">
+      <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934c.326.427.326 1.705 0 2.132C18.768 14.99 15.636 18 12 18c-3.636 0-6.768-3.01-8.188-4.934-.326-.427-.326-1.705 0-2.132C5.232 9.01 8.364 6 12 6c3.636 0 6.768 3.01 8.188 4.934z"/></svg>
+      Simulador de Campo Visual · DORI
+    </div>
+    <div class="fov-title">Simulador FOV Dahua</div>
+    <div class="fov-sub">Busca cualquier cámara del catálogo, visualiza su campo visual real y compara dos modelos lado a lado. Fórmulas según EN 62676-4.</div>
+  </div>
+
+  <!-- Buscador A -->
+  <div class="fov-cam-row">
+    <div class="fov-cam-box fov-cam-a">
+      <div class="fov-cam-hdr">
+        <span class="fov-cam-dot" style="background:#00aaff"></span>
+        <span class="fov-cam-title">Cámara A</span>
+        <button class="fov-clear-btn" onclick="fovClear('A')" title="Limpiar">✕</button>
+      </div>
+      <div class="fov-searchbox">
+        <input type="text" class="fov-sr-input" id="fovSearchAInput" placeholder="Buscar por modelo, código o característica…" oninput="fovSearch(this.value,'A')" onfocus="fovSearch(this.value,'A')" autocomplete="off">
+        <div class="fov-sr-dd" id="fovSearchAResults"></div>
+      </div>
+      <div class="fov-slider-row">
+        <div class="fov-slider-lbl">Focal <b id="fovFocalALbl">2.8mm</b></div>
+        <input type="range" class="fov-slider fov-slider-a" id="fovFocalA" min="1.5" max="60" step="0.1" value="2.8" oninput="fovSlide('A','focalA',this.value)">
+      </div>
+      <div id="fovASpecs" class="fov-specs"></div>
+      <div id="fovADori" class="fov-dori-list"></div>
+      <button class="fov-add-btn" onclick="fovAddCartA()">+ Agregar cámara A al carro</button>
+    </div>
+
+    <!-- Botón compare -->
+    <div class="fov-compare-toggle">
+      <button class="fov-compare-btn" id="fovCompareBtn" onclick="fovToggleCompare()">⇆ Comparar con otra</button>
+    </div>
+
+    <!-- Buscador B -->
+    <div class="fov-cam-box fov-cam-b" id="fovCompareWrap" style="display:none">
+      <div class="fov-cam-hdr">
+        <span class="fov-cam-dot" style="background:#ff6b35"></span>
+        <span class="fov-cam-title">Cámara B</span>
+        <button class="fov-clear-btn" onclick="fovClear('B')" title="Limpiar">✕</button>
+      </div>
+      <div class="fov-searchbox">
+        <input type="text" class="fov-sr-input" id="fovSearchBInput" placeholder="Buscar otra cámara para comparar…" oninput="fovSearch(this.value,'B')" onfocus="fovSearch(this.value,'B')" autocomplete="off">
+        <div class="fov-sr-dd" id="fovSearchBResults"></div>
+      </div>
+      <div class="fov-slider-row">
+        <div class="fov-slider-lbl">Focal <b id="fovFocalBLbl">2.8mm</b></div>
+        <input type="range" class="fov-slider fov-slider-b" id="fovFocalB" min="1.5" max="60" step="0.1" value="2.8" oninput="fovSlide('B','focalB',this.value)">
+      </div>
+      <div id="fovBSpecs" class="fov-specs"></div>
+      <div id="fovBDori" class="fov-dori-list"></div>
+      <button class="fov-add-btn" onclick="fovAddCartB()">+ Agregar cámara B al carro</button>
+    </div>
+  </div>
+
+  <!-- Parámetros globales -->
+  <div class="fov-global-params">
+    <div class="fov-slider-row">
+      <div class="fov-slider-lbl">Distancia de análisis <b id="fovDistLbl">10m</b></div>
+      <input type="range" class="fov-slider fov-slider-global" id="fovDist" min="2" max="120" step="1" value="10" oninput="fovSlide(null,'dist',this.value)">
+    </div>
+    <div class="fov-slider-row">
+      <div class="fov-slider-lbl">Altura de montaje <b id="fovHtLbl">3.0m</b></div>
+      <input type="range" class="fov-slider fov-slider-global" id="fovHt" min="1.5" max="15" step="0.1" value="3" oninput="fovSlide(null,'height',this.value)">
+    </div>
+  </div>
+
+  <!-- Canvas -->
+  <div class="fov-canvas-wrap">
+    <div class="fov-view-tabs">
+      <button class="fov-vtab on" onclick="fovSetView('top',this)">👁 Vista superior</button>
+      <button class="fov-vtab" onclick="fovSetView('side',this)">↕ Vista lateral</button>
+      <button class="fov-vtab" onclick="fovSetView('both',this)">⊞ Ambas</button>
+    </div>
+    <canvas id="fovCanvas" width="900" height="480"></canvas>
+    <div class="dori-legend">
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:#e74c3c"></div>Detectar (25px/m)</div>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:#f39c12"></div>Observar (62px/m)</div>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:#27ae60"></div>Reconocer (125px/m)</div>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:#2980b9"></div>Identificar (250px/m)</div>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:#c5a200"></div>🚗 Patente (500px/m)</div>
+    </div>
+    <div class="dori-legend" style="margin-top:6px;padding-top:8px;border-top:1px solid rgba(0,0,0,.06)">
+      <span style="font-size:10px;color:#888;font-weight:700;margin-right:4px">ILUMINACIÓN:</span>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:rgba(180,140,255,.7)"></div>🌙 IR</div>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:rgba(255,230,150,.9)"></div>💡 LED blanco</div>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:rgba(255,220,120,1);box-shadow:0 0 6px rgba(255,220,120,.5)"></div>⭐ PRO / Full-Color</div>
+    </div>
+  </div>
+
+  <!-- Conclusión -->
+  <div id="fovConclusion" class="fov-conclusion" style="display:none"></div>
+
+  <div class="fov-footer-info">
+    <b style="color:#0057B8">Estándar DORI (EN 62676-4)</b> — define la densidad de píxeles mínima necesaria para cada nivel de análisis de video. Las distancias se calculan usando el tamaño real del sensor de cada cámara Dahua, su focal actual y su resolución. Ajusta la distancia y la altura de montaje para modelar tu instalación exacta.
+  </div>
+</div>
+</div></div>
+</div>
+
+<footer style="background:#fff;border-top:2px solid #f0f0f0;color:#333;padding:0;margin-top:0">
 
   <!-- ── Barra superior: métricas de confianza ── -->
   <div style="background:#f8f9fa;border-bottom:1px solid #eee;padding:16px 0">
@@ -13397,11 +13710,18 @@ function _pmBuildModal(id) {
                   Declarar Proyecto / Cotizar
                 </button>`;
               }
+              const _isCam = ['camaras-ip','camaras-hdcvi','camaras-ptz'].includes(p.cat);
+              const _hasMM = /\d+\.?\d*\s*mm/i.test(p.nombre||'');
+              const _fovBtn = (_isCam && _hasMM) ? `<button class="pm-btn-ghost" onclick="pmSimularFOV(${id})" title="Simular campo visual" style="background:linear-gradient(135deg,rgba(0,87,184,.08),rgba(99,102,241,.06));border:1px solid rgba(0,87,184,.2);color:#0057B8;display:inline-flex;align-items:center;gap:5px;font-weight:700">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934c.326.427.326 1.705 0 2.132C18.768 14.99 15.636 18 12 18c-3.636 0-6.768-3.01-8.188-4.934-.326-.427-.326-1.705 0-2.132C5.232 9.01 8.364 6 12 6c3.636 0 6.768 3.01 8.188 4.934z"/></svg>
+                Simular FOV
+              </button>` : '';
               return `<button class="pm-btn-primary" onclick="pmAddCart(${id})">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                 Agregar al carro
               </button>
-              <button class="pm-btn-secondary" onclick="pmAddCot(${id})">📋 Cotizar</button>`;
+              <button class="pm-btn-secondary" onclick="pmAddCot(${id})">📋 Cotizar</button>
+              ${_fovBtn}`;
             })()}
             <button class="pm-btn-ghost" onclick="copyTxt('${p.codigo}');showToast('✅ Código copiado')" title="Copiar código de modelo">📋</button>
           </div>
@@ -13467,6 +13787,38 @@ function pmToggleGroup(hdr) {
   body.classList.toggle('collapsed');
   if (arrow) arrow.textContent = body.classList.contains('collapsed') ? '▸' : '▾';
 }
+
+
+// ── Simulador FOV desde ficha de producto ───────────────────
+function pmSimularFOV(id) {
+  var p = PRODUCTS.find(function(x){ return x.id === id; });
+  if (!p) return;
+  closeProdModal();
+  // Cambiar a la sección FOV
+  showSection('fov', document.querySelector('[data-sec="fov"]'));
+  // Pre-seleccionar la cámara después de que la sección cargue
+  setTimeout(function() {
+    var sel = document.getElementById('fovCamSel');
+    if (!sel) return;
+    // Buscar el option correspondiente
+    for (var i = 0; i < sel.options.length; i++) {
+      var opt = sel.options[i];
+      if (opt.value && opt.value.indexOf('"'+p.codigo+'"') >= 0) {
+        sel.selectedIndex = i;
+        if (typeof fovLoadCam === 'function') fovLoadCam();
+        showToast('🎥 Simulando: ' + p.codigo);
+        // Scroll al canvas
+        setTimeout(function(){
+          var canvas = document.getElementById('fovCanvas');
+          if (canvas) canvas.scrollIntoView({behavior:'smooth', block:'center'});
+        }, 300);
+        return;
+      }
+    }
+    showToast('⚠️ Esta cámara aún no está en el simulador');
+  }, 250);
+}
+window.pmSimularFOV = pmSimularFOV;
 
 function pmAddCart(id) {
   const p = PRODUCTS.find(x=>x.id===id);
@@ -21614,7 +21966,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 15:15 hrs';
+  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 17:52 hrs';
 })();
 
 
@@ -22625,5 +22977,978 @@ document.addEventListener('keydown', function(e) {
 </div>
 
 
+
+</div>
+
+
+<script id="fovScript">
+// ══════════════════════════════════════════════════════════════
+// SIMULADOR FOV v2 — Field of View con comparación dual
+// ══════════════════════════════════════════════════════════════
+(function() {
+
+// ── Detección de sensor size por resolución y tipo ──
+// Dahua usa distintos formatos según cámara
+// Fórmula FOV: angle = 2 * arctan(sensor_dim / (2 * focal))
+// Fórmula DORI: d_max = (pxH * focal) / (ppm_target * sensor_w)
+function inferSensor(nombre, mp, cat) {
+  var n = (nombre || '').toLowerCase();
+  // PTZ con zoom grande usan sensores más grandes
+  if (cat === 'camaras-ptz' && /ptz/i.test(n)) {
+    if (mp >= 8) return {w: 6.4, h: 3.6, name: '1/1.8"'};
+    if (mp >= 4) return {w: 6.0, h: 4.5, name: '1/2.5"'};
+    return {w: 5.3, h: 4.0, name: '1/2.8"'};
+  }
+  // Fisheye generalmente 1/1.8"
+  if (/fisheye|panoramic|180|360/i.test(n)) return {w: 7.2, h: 5.4, name: '1/1.8"'};
+  // Sensor por MP (estándar Dahua)
+  if (mp >= 12) return {w: 6.4, h: 3.6, name: '1/1.8"'};
+  if (mp >= 8)  return {w: 5.6, h: 3.1, name: '1/2.0"'};
+  if (mp >= 5)  return {w: 5.0, h: 2.8, name: '1/2.5"'};
+  if (mp >= 4)  return {w: 4.8, h: 2.7, name: '1/2.7"'};
+  if (mp >= 2)  return {w: 5.3, h: 3.0, name: '1/2.8"'};
+  return {w: 4.8, h: 2.7, name: '1/3"'};  // 1MP y menores
+}
+
+// Píxeles horizontales por MP — varían según aspect ratio
+function inferPxH(mp) {
+  var map = {1:1280,2:1920,3:2048,4:2560,5:2592,6:3072,8:3840,12:4000};
+  if (map[mp]) return map[mp];
+  // Fallback: asumir 16:9
+  return Math.round(Math.sqrt(mp * 1000000 * 16/9));
+}
+
+// Extraer datos de iluminación (IR / LED / Full-Color / PRO)
+// Dahua incluye en nombres: IR30, IR60, IR80, IR100, IR120
+// Sufijos/marcas: WizColor, Full-Color, TiOC, ActiveDeterrence, -PRO
+function parseInfra(nombre, codigo) {
+  var n = (nombre || '');
+  var c = (codigo || '').toUpperCase();
+  var out = { irDist: 0, type: 'IR', label: '', unlimited: false, hasLED: false };
+  // Alcance IR del nombre
+  var ir = n.match(/IR\s*(\d+)/i);
+  if (ir) out.irDist = parseInt(ir[1]);
+  // WizColor / Full-Color / TiOC — tienen LED blanco + sensor starlight
+  var isColor = /wizcolor|full[\s-]?color|fullcolor/i.test(n);
+  var isTiOC = /tioc|active\s*deterrence/i.test(n);
+  var isPro = /-PRO\b|\sPRO\b/i.test(c) || /\bPRO\b/i.test(n);
+  // Smart IR (IR inteligente)
+  var isSmartIR = /smart\s*ir|ir\s*smart/i.test(n);
+  if (isTiOC) {
+    out.type = 'TiOC';
+    out.hasLED = true;
+    out.label = 'TiOC 2.0 — Luz blanca + IR + Sirena (disuasión activa)';
+    out.ledDist = out.irDist || 30;
+    // TiOC tiene buena iluminación pero no "ilimitada"
+  } else if (isColor && isPro) {
+    out.type = 'FullColorPro';
+    out.hasLED = true;
+    out.unlimited = true;
+    out.label = 'Full-Color PRO — LED potente + Starlight 4K';
+  } else if (isPro) {
+    out.type = 'PRO';
+    out.unlimited = true;
+    out.label = 'PRO — Sensor Starlight + IR reforzado';
+  } else if (isColor) {
+    out.type = 'WizColor';
+    out.hasLED = true;
+    out.label = 'WizColor — LED luz blanca + Starlight';
+    out.ledDist = out.irDist || 30;
+  } else if (isSmartIR) {
+    out.type = 'SmartIR';
+    out.label = 'Smart IR · '+out.irDist+'m (evita sobreexposición)';
+  } else if (out.irDist > 0) {
+    out.type = 'IR';
+    out.label = 'IR estándar · '+out.irDist+'m';
+  } else {
+    out.type = 'none';
+    out.label = 'Sin iluminación nocturna declarada';
+  }
+  return out;
+}
+
+// Extraer datos de focal — PRIORIZA código del producto sobre el nombre
+// Los códigos Dahua terminan con el focal en formato DDDD (= DD.DD mm)
+// Ej: -0280B-S2 → 2.80mm, -0360B → 3.60mm, -0800B → 8.00mm, -1200 → 12.00mm
+// Variantes motorizadas: -ZS (remoto), -ZE (telefoto), -ZW (wide), -VF (manual)
+function parseFocal(nombre, codigo) {
+  var n = nombre || '';
+  var c = (codigo || '').toUpperCase();
+  var segments = c.split('-');
+
+  // 1) Detectar VARIANTE por segmento exacto del código
+  var variant = null, variantDesc = null;
+  if (segments.indexOf('ZE') >= 0) { variant='ZE'; variantDesc='motorizado telefoto'; }
+  else if (segments.indexOf('ZW') >= 0) { variant='ZW'; variantDesc='motorizado gran angular'; }
+  else if (segments.indexOf('ZS') >= 0) { variant='ZS'; variantDesc='motorizado remoto'; }
+  else if (segments.some(function(s){ return s === 'VF' || s.endsWith('VF'); })) {
+    variant='VF'; variantDesc='varifocal manual';
+  }
+  // También detectar por sufijo dentro de un segmento (ej: "HDBW2841RP-ZS" tiene ZS como segmento)
+  // o "HAC-HFW1100R-VF-IRE6" tiene VF como segmento
+  // Detectar "Motor" en el nombre → motorizado
+  if (!variant && /motor/i.test(n)) { variant='ZS'; variantDesc='motorizado (por descripción)'; }
+
+  // 2) Si es VARIFOCAL/MOTORIZADO, el rango viene del nombre
+  if (variant) {
+    var range = n.match(/(\d+\.?\d*)\s*[-–]\s*(\d+\.?\d*)\s*mm/i);
+    if (range) {
+      return {
+        min: parseFloat(range[1]), max: parseFloat(range[2]),
+        type: 'varifocal', variant: variant, variantDesc: variantDesc,
+        source: 'nombre (rango)'
+      };
+    }
+    // Fallback: rango típico para cada variante
+    var defaults = {
+      'ZE': {min: 7, max: 35},
+      'ZW': {min: 2.7, max: 13.5},
+      'ZS': {min: 2.7, max: 13.5},
+      'VF': {min: 2.7, max: 13.5}
+    };
+    var d = defaults[variant] || {min: 2.8, max: 12};
+    return {
+      min: d.min, max: d.max, type: 'varifocal',
+      variant: variant, variantDesc: variantDesc+' (rango aproximado)',
+      source: 'aprox'
+    };
+  }
+
+  // 3) FOCAL FIJO — buscar en el código primero (fuente de verdad)
+  // Recorrer segmentos de atrás hacia adelante — el focal va al final
+  for (var i = segments.length - 1; i >= 0; i--) {
+    var s = segments[i];
+    // Patrón: 4 dígitos opcionalmente seguidos de 1-2 letras (B, BS, R, N, etc.)
+    var m = s.match(/^(\d{4})[A-Z]{0,2}$/);
+    if (m) {
+      var val = parseInt(m[1]) / 100;
+      // Rango razonable de focal: 1–60mm
+      if (val >= 1 && val <= 60) {
+        return {
+          min: val, max: val, type: 'fixed',
+          variant: 'FIJA', variantDesc: 'lente fijo '+val+'mm',
+          source: 'codigo'
+        };
+      }
+    }
+  }
+
+  // 4) Zoom PTZ "12X" o "25X"
+  var zoom = n.match(/(\d+)\s*X/i);
+  if (zoom && /ptz/i.test(n)) {
+    var z = parseInt(zoom[1]);
+    return {
+      min: 4.8, max: 4.8 * z, type: 'ptz', zoom: z,
+      variant: 'PTZ', variantDesc: 'PTZ con zoom óptico '+z+'X',
+      source: 'nombre'
+    };
+  }
+
+  // 5) Fallback: focal único del nombre
+  var fixed = n.match(/(\d+\.?\d*)\s*mm/i);
+  if (fixed) {
+    var f = parseFloat(fixed[1]);
+    return {
+      min: f, max: f, type: 'fixed',
+      variant: 'FIJA', variantDesc: 'lente fijo '+f+'mm',
+      source: 'nombre'
+    };
+  }
+  return null;
+}
+
+// ── Colores y constantes ──
+var DORI_COLORS = ['#e74c3c','#f39c12','#27ae60','#2980b9'];
+var DORI_ZONES = [
+  {name:'Detectar',   ppm:25,  desc:'Presencia'},
+  {name:'Observar',   ppm:62,  desc:'Apariencia'},
+  {name:'Reconocer',  ppm:125, desc:'Conocido'},
+  {name:'Identificar',ppm:250, desc:'Identidad'}
+];
+// Patente chilena: ~360x100mm, caracteres 74mm alto. Para leer claramente
+// necesitamos ~80px por carácter (7cm) → ~1140px/m. Estándar forense: 500px/m
+var PLATE_ZONE = { name:'Leer patente', ppm:500, desc:'Patente chilena',
+                   color:'#c5a200', icon:'🚗' };
+
+// Estado global del simulador
+var FOV = {
+  view: 'top',
+  compare: false,
+  camA: null,  // {cod, nombre, mp, sensor, focal, cat, pneto, img}
+  camB: null,
+  focalA: 2.8, focalB: 2.8,
+  dist: 10, height: 3,
+  allCams: []
+};
+
+// ── Init: poblar lista de cámaras ──
+function fovInit() {
+  if (typeof PRODUCTS === 'undefined') { setTimeout(fovInit, 300); return; }
+  FOV.allCams = [];
+  var cats = ['camaras-ip','camaras-hdcvi','camaras-ptz'];
+  PRODUCTS.forEach(function(p){
+    if (!cats.includes(p.cat)) return;
+    var focal = parseFocal(p.nombre, p.codigo);
+    if (!focal) return;
+    var mp = 2;
+    var mpm = (p.nombre||'').match(/(\d+)\s*MP/i);
+    if (mpm) mp = parseInt(mpm[1]);
+    else if (/4K|8MP/i.test(p.nombre||'')) mp = 8;
+    else if (/1080P/i.test(p.nombre||'')) mp = 2;
+    else if (/720P/i.test(p.nombre||'')) mp = 1;
+    var sensor = inferSensor(p.nombre, mp, p.cat);
+    FOV.allCams.push({
+      cod: p.codigo, id: p.id,
+      nombre: p.nombre,
+      mp: mp, sensor: sensor, focal: focal,
+      infra: parseInfra(p.nombre, p.codigo),
+      cat: p.cat, pneto: p.pneto, img: p.img
+    });
+  });
+  console.log('[FOV] '+FOV.allCams.length+' cámaras indexadas');
+  fovRender();
+}
+
+// ── Autocompletado ──
+function fovSearch(query, which) {
+  query = (query||'').trim().toLowerCase();
+  var dropdown = document.getElementById('fovSearch'+which+'Results');
+  if (!dropdown) return;
+  if (query.length < 1) { dropdown.style.display='none'; return; }
+  var tokens = query.split(/\s+/);
+  var matches = FOV.allCams.filter(function(c){
+    var hay = (c.cod + ' ' + c.nombre).toLowerCase();
+    return tokens.every(function(t){ return hay.indexOf(t) >= 0; });
+  }).slice(0, 8);
+  if (!matches.length) {
+    dropdown.innerHTML = '<div class="fov-sr-empty">Sin resultados</div>';
+    dropdown.style.display='block';
+    return;
+  }
+  dropdown.innerHTML = matches.map(function(c){
+    var fStr = c.focal.type === 'fixed' ? c.focal.min+'mm fija' :
+               c.focal.type === 'ptz' ? c.focal.zoom+'X zoom' :
+               c.focal.min+'–'+c.focal.max+'mm '+(c.focal.variant||'VF');
+    var catIcon = c.cat === 'camaras-ip' ? '📷' : c.cat === 'camaras-hdcvi' ? '📹' : '🔭';
+    return '<div class="fov-sr-item" onclick="fovPick(\''+c.cod+'\',\''+which+'\')">' +
+      '<span class="fov-sr-icon">'+catIcon+'</span>' +
+      '<div class="fov-sr-info">' +
+        '<div class="fov-sr-name">'+c.nombre.substring(0,50)+'</div>' +
+        '<div class="fov-sr-meta">'+c.cod+' · '+c.mp+'MP · <b>'+fStr+'</b> · '+c.sensor.name+'</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  dropdown.style.display='block';
+}
+window.fovSearch = fovSearch;
+
+// Seleccionar cámara (A o B)
+window.fovPick = function(cod, which) {
+  var cam = FOV.allCams.find(function(c){ return c.cod === cod; });
+  if (!cam) return;
+  if (which === 'A') {
+    FOV.camA = cam;
+    FOV.focalA = cam.focal.min;
+    document.getElementById('fovSearchAInput').value = cam.cod;
+    document.getElementById('fovSearchAResults').style.display='none';
+  } else {
+    FOV.camB = cam;
+    FOV.focalB = cam.focal.min;
+    document.getElementById('fovSearchBInput').value = cam.cod;
+    document.getElementById('fovSearchBResults').style.display='none';
+  }
+  fovRender();
+};
+
+// Limpiar selección
+window.fovClear = function(which) {
+  if (which === 'A') { FOV.camA = null; document.getElementById('fovSearchAInput').value=''; }
+  else { FOV.camB = null; document.getElementById('fovSearchBInput').value=''; }
+  fovRender();
+};
+
+// Toggle modo comparación
+window.fovToggleCompare = function() {
+  FOV.compare = !FOV.compare;
+  var wrap = document.getElementById('fovCompareWrap');
+  var btn = document.getElementById('fovCompareBtn');
+  if (FOV.compare) {
+    wrap.style.display = 'block';
+    btn.textContent = '✕ Quitar comparación';
+    btn.classList.add('on');
+  } else {
+    wrap.style.display = 'none';
+    FOV.camB = null;
+    document.getElementById('fovSearchBInput').value='';
+    btn.textContent = '⇆ Comparar con otra';
+    btn.classList.remove('on');
+  }
+  fovRender();
+};
+
+// Sliders genéricos
+window.fovSlide = function(which, type, val) {
+  val = parseFloat(val);
+  if (type === 'focalA') { FOV.focalA = val; document.getElementById('fovFocalALbl').textContent = val.toFixed(1)+'mm'; }
+  else if (type === 'focalB') { FOV.focalB = val; document.getElementById('fovFocalBLbl').textContent = val.toFixed(1)+'mm'; }
+  else if (type === 'dist') { FOV.dist = val; document.getElementById('fovDistLbl').textContent = val+'m'; }
+  else if (type === 'height') { FOV.height = val; document.getElementById('fovHtLbl').textContent = val.toFixed(1)+'m'; }
+  fovRender();
+};
+
+// Cambiar vista
+window.fovSetView = function(v, btn) {
+  FOV.view = v;
+  document.querySelectorAll('.fov-vtab').forEach(function(t){t.classList.remove('on');});
+  btn.classList.add('on');
+  fovRender();
+};
+
+// ── CÁLCULOS ──
+function calcFOV(cam, focal) {
+  if (!cam) return null;
+  var sw = cam.sensor.w, sh = cam.sensor.h;
+  var pxH = inferPxH(cam.mp);
+  // Ángulos en grados
+  var angH = 2 * Math.atan(sw / (2*focal)) * 180 / Math.PI;
+  var angV = 2 * Math.atan(sh / (2*focal)) * 180 / Math.PI;
+  // Cobertura a distancia de análisis
+  var wid = 2 * FOV.dist * Math.tan(angH * Math.PI/180 / 2);
+  var hei = 2 * FOV.dist * Math.tan(angV * Math.PI/180 / 2);
+  // PPM a la distancia actual
+  var ppmNow = pxH / wid;
+  // Distancias DORI (fórmula CORRECTA: d = pxH*focal / (ppm*sensor_w))
+  var doriDists = DORI_ZONES.map(function(z){
+    return (pxH * focal) / (z.ppm * sw);
+  });
+  // Distancia máxima para leer patente chilena (500px/m)
+  var plateDist = (pxH * focal) / (PLATE_ZONE.ppm * sw);
+  return {
+    cam: cam, focal: focal, pxH: pxH,
+    angH: angH, angV: angV,
+    wid: wid, hei: hei, ppmNow: ppmNow,
+    doriDists: doriDists, plateDist: plateDist
+  };
+}
+
+// ── RENDER principal ──
+function fovRender() {
+  var rA = FOV.camA ? calcFOV(FOV.camA, FOV.focalA) : null;
+  var rB = FOV.camB ? calcFOV(FOV.camB, FOV.focalB) : null;
+
+  renderPanel('A', rA);
+  if (FOV.compare) renderPanel('B', rB);
+  renderCanvas(rA, rB);
+  renderConclusion(rA, rB);
+  renderSliders();
+}
+
+function renderSliders() {
+  // Sync sliders con rangos reales de la cámara seleccionada
+  if (FOV.camA) {
+    var sA = document.getElementById('fovFocalA');
+    if (sA) {
+      sA.min = FOV.camA.focal.min;
+      sA.max = FOV.camA.focal.max;
+      sA.value = FOV.focalA;
+      var pct = sA.max > sA.min ? ((FOV.focalA-sA.min)/(sA.max-sA.min)*100) : 50;
+      sA.style.background = 'linear-gradient(to right,#0057B8 '+pct+'%,#e0e0e0 '+pct+'%)';
+    }
+  }
+  if (FOV.camB && FOV.compare) {
+    var sB = document.getElementById('fovFocalB');
+    if (sB) {
+      sB.min = FOV.camB.focal.min;
+      sB.max = FOV.camB.focal.max;
+      sB.value = FOV.focalB;
+      var pctB = sB.max > sB.min ? ((FOV.focalB-sB.min)/(sB.max-sB.min)*100) : 50;
+      sB.style.background = 'linear-gradient(to right,#ff6b35 '+pctB+'%,#e0e0e0 '+pctB+'%)';
+    }
+  }
+  // Sliders globales
+  ['fovDist','fovHt'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) {
+      var pct = ((el.value-el.min)/(el.max-el.min)*100);
+      el.style.background = 'linear-gradient(to right,#555 '+pct+'%,#e0e0e0 '+pct+'%)';
+    }
+  });
+}
+
+function renderPanel(which, r) {
+  var prefix = 'fov'+which;
+  var specs = document.getElementById(prefix+'Specs');
+  var dori = document.getElementById(prefix+'Dori');
+  if (!specs || !dori) return;
+  if (!r) {
+    specs.innerHTML = '<div class="fov-empty">Selecciona una cámara para ver sus datos</div>';
+    dori.innerHTML = '';
+    return;
+  }
+  var focalStr = r.cam.focal.type === 'fixed' ? r.cam.focal.min+'mm (fija)' :
+                 r.cam.focal.type === 'ptz' ? r.cam.focal.zoom+'X zoom' :
+                 r.cam.focal.min+'–'+r.cam.focal.max+'mm (varifocal)';
+  specs.innerHTML =
+    '<div class="fov-specs-grid">' +
+      '<div class="fov-spec"><div class="fov-spec-val">'+r.angH.toFixed(0)+'°</div><div class="fov-spec-lbl">Ángulo H</div></div>' +
+      '<div class="fov-spec"><div class="fov-spec-val">'+r.angV.toFixed(0)+'°</div><div class="fov-spec-lbl">Ángulo V</div></div>' +
+      '<div class="fov-spec"><div class="fov-spec-val">'+r.wid.toFixed(1)+'m</div><div class="fov-spec-lbl">Ancho @'+FOV.dist+'m</div></div>' +
+      '<div class="fov-spec"><div class="fov-spec-val">'+r.ppmNow.toFixed(0)+'</div><div class="fov-spec-lbl">px/m</div></div>' +
+    '</div>' +
+    '<div class="fov-spec-meta">'+r.cam.sensor.name+' · '+r.pxH+'px · '+r.cam.mp+'MP · <b style="color:#0057B8">'+(r.cam.focal.variantDesc||'lente fijo')+'</b>'+
+      (r.cam.focal.source ? ' <span style="color:#aaa;font-size:9px">('+r.cam.focal.source+')</span>' : '')+
+    '</div>';
+  var doriHTML = DORI_ZONES.map(function(z,i){
+    return '<div class="fov-dori-row">'+
+      '<div class="fov-dori-dot" style="background:'+DORI_COLORS[i]+'"></div>'+
+      '<div class="fov-dori-name">'+z.name+'</div>'+
+      '<div class="fov-dori-dist">'+r.doriDists[i].toFixed(1)+'m</div>'+
+      '<div class="fov-dori-ppm">('+z.ppm+'px/m)</div>'+
+    '</div>';
+  }).join('');
+  // Fila patente
+  var plateHTML = '<div class="fov-dori-row" style="background:linear-gradient(90deg,rgba(197,162,0,.08),transparent);border-color:rgba(197,162,0,.15)">'+
+    '<div class="fov-dori-dot" style="background:'+PLATE_ZONE.color+'"></div>'+
+    '<div class="fov-dori-name">🚗 Leer patente</div>'+
+    '<div class="fov-dori-dist">'+r.plateDist.toFixed(1)+'m</div>'+
+    '<div class="fov-dori-ppm">(500px/m)</div>'+
+  '</div>';
+  // Info de iluminación
+  var infra = r.cam.infra;
+  var infraIcon = infra.type === 'FullColorPro' || infra.type === 'PRO' ? '⭐' :
+                  infra.type === 'WizColor' ? '💡' :
+                  infra.type === 'TiOC' ? '🚨' :
+                  infra.type === 'SmartIR' ? '🧠' :
+                  infra.type === 'IR' ? '🌙' : '⚠️';
+  var infraColor = infra.unlimited ? '#27ae60' :
+                   infra.hasLED ? '#f39c12' :
+                   infra.irDist > 0 ? '#8e44ad' : '#999';
+  var infraHTML = '<div class="fov-infra-row" style="border-left:3px solid '+infraColor+'">'+
+    '<div class="fov-infra-icon">'+infraIcon+'</div>'+
+    '<div class="fov-infra-info">'+
+      '<div class="fov-infra-title">'+infra.label+'</div>'+
+      (infra.unlimited ?
+        '<div class="fov-infra-sub">✓ Iluminación efectiva en toda la escena</div>' :
+        infra.irDist > 0 ?
+          '<div class="fov-infra-sub">Alcance útil ~'+infra.irDist+'m</div>' :
+          '<div class="fov-infra-sub" style="color:#c00">⚠ Sólo útil con luz ambiente</div>'
+      )+
+    '</div>'+
+  '</div>';
+  dori.innerHTML = doriHTML + plateHTML + infraHTML;
+}
+
+// ── CANVAS ──
+function renderCanvas(rA, rB) {
+  var canvas = document.getElementById('fovCanvas');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var W = canvas.width, H = canvas.height;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = '#0f1923';
+  ctx.fillRect(0,0,W,H);
+  if (FOV.view === 'top') {
+    if (FOV.compare && rA && rB) {
+      drawTop(ctx, rA, rB, 0, 0, W, H);
+    } else {
+      drawTopSingle(ctx, rA, 0, 0, W, H);
+    }
+  } else if (FOV.view === 'side') {
+    drawSide(ctx, rA, rB, 0, 0, W, H);
+  } else {
+    if (FOV.compare && rA && rB) {
+      drawTop(ctx, rA, rB, 0, 0, W, H/2);
+    } else {
+      drawTopSingle(ctx, rA, 0, 0, W, H/2);
+    }
+    ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(0,H/2); ctx.lineTo(W,H/2); ctx.stroke();
+    drawSide(ctx, rA, rB, 0, H/2, W, H/2);
+  }
+}
+
+function drawTopSingle(ctx, r, ox, oy, W, H) {
+  if (!r) {
+    ctx.fillStyle = 'rgba(255,255,255,.4)';
+    ctx.font = '13px system-ui'; ctx.textAlign='center';
+    ctx.fillText('Selecciona una cámara para simular su campo visual', W/2+ox, H/2+oy);
+    return;
+  }
+  ctx.save(); ctx.translate(ox, oy);
+  var margin = 30, camY = margin+10, camX = W/2;
+  // Escala: ver hasta la máxima distancia DORI + buffer
+  var maxD = Math.max(r.doriDists[0], FOV.dist) * 1.15;
+  var scale = (H - camY - margin) / maxD;
+  drawGrid(ctx, 0, camY, W, H-margin, scale, maxD);
+  drawConeTop(ctx, camX, camY, scale, r, '#00aaff', null);
+  // Capa de iluminación
+  drawIlluminationTop(ctx, camX, camY, scale, r, null);
+  drawAnalysisLine(ctx, 0, W, camY, FOV.dist, scale, r.wid);
+  // Silueta vehículo para patente (si plateDist razonable)
+  if (r.plateDist > 0 && r.plateDist * scale < (H - camY - margin)) {
+    drawVehicleTop(ctx, camX + 1.2*scale, camY + r.plateDist*scale, scale, 'Patente', PLATE_ZONE.color);
+  }
+  // Siluetas de personas en cada zona DORI
+  for (var k = 0; k < 4; k++) {
+    var pd = r.doriDists[k];
+    if (pd > 0 && pd * scale < (H - camY - margin)) {
+      drawPersonTop(ctx, camX - 0.6*scale, camY + pd*scale, scale, null, DORI_COLORS[k]);
+    }
+  }
+  // Persona en la distancia de análisis
+  drawPersonTop(ctx, camX, camY + FOV.dist*scale, scale, '1.7m', '#fff');
+  drawCam(ctx, camX, camY, '📷', r.angH);
+  ctx.restore();
+}
+
+function drawTop(ctx, rA, rB, ox, oy, W, H) {
+  ctx.save(); ctx.translate(ox, oy);
+  var margin = 30, camY = margin+10, camX = W/2;
+  var maxD = Math.max(rA.doriDists[0], rB.doriDists[0], FOV.dist) * 1.15;
+  var scale = (H - camY - margin) / maxD;
+  drawGrid(ctx, 0, camY, W, H-margin, scale, maxD);
+  drawConeTop(ctx, camX, camY, scale, rA, '#00aaff', 'left');
+  drawConeTop(ctx, camX, camY, scale, rB, '#ff6b35', 'right');
+  drawIlluminationTop(ctx, camX, camY, scale, rA, 'left');
+  drawIlluminationTop(ctx, camX, camY, scale, rB, 'right');
+  drawAnalysisLine(ctx, 0, W, camY, FOV.dist, scale, null);
+  // Personas en zonas DORI de cada cámara
+  for (var ki = 0; ki < 4; ki++) {
+    var pdA = rA.doriDists[ki];
+    var pdB = rB.doriDists[ki];
+    if (pdA > 0 && pdA * scale < (H - camY - 30)) {
+      drawPersonTop(ctx, camX - 0.8*scale, camY + pdA*scale, scale, null, DORI_COLORS[ki]);
+    }
+    if (pdB > 0 && pdB * scale < (H - camY - 30)) {
+      drawPersonTop(ctx, camX + 0.8*scale, camY + pdB*scale, scale, null, DORI_COLORS[ki]);
+    }
+  }
+  drawPersonTop(ctx, camX, camY + FOV.dist*scale, scale, '1.7m', '#fff');
+  drawCam(ctx, camX, camY, '📷', 0);
+  // Labels A/B
+  ctx.font = 'bold 11px system-ui'; ctx.textAlign='center';
+  ctx.fillStyle = '#00aaff'; ctx.fillText('◀ Cámara A', W*.2, camY-8);
+  ctx.fillStyle = '#ff6b35'; ctx.fillText('Cámara B ▶', W*.8, camY-8);
+  ctx.restore();
+}
+
+function drawConeTop(ctx, cx, cy, scale, r, color, side) {
+  if (!r) return;
+  var halfAng = r.angH * Math.PI/180 / 2;
+  // Zonas DORI (de atrás hacia adelante)
+  for (var i = 3; i >= 0; i--) {
+    var d = r.doriDists[i];
+    var dx = d * Math.tan(halfAng) * scale;
+    var dy = d * scale;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    if (side === 'left') {
+      ctx.lineTo(cx - dx, cy + dy);
+      ctx.lineTo(cx, cy + dy);
+    } else if (side === 'right') {
+      ctx.lineTo(cx, cy + dy);
+      ctx.lineTo(cx + dx, cy + dy);
+    } else {
+      ctx.lineTo(cx - dx, cy + dy);
+      ctx.lineTo(cx + dx, cy + dy);
+    }
+    ctx.closePath();
+    ctx.fillStyle = hexRgba(DORI_COLORS[i], 0.18);
+    ctx.fill();
+    ctx.strokeStyle = hexRgba(DORI_COLORS[i], 0.7);
+    ctx.lineWidth = 1.3;
+    ctx.stroke();
+  }
+  // Etiquetas DORI en el borde del cono
+  ctx.font = 'bold 9px system-ui';
+  for (var j = 0; j < 4; j++) {
+    var ld = r.doriDists[j];
+    if (ld > 0 && ld * scale < (cy + 400)) {
+      var lx = side === 'left'  ? cx - ld * Math.tan(halfAng) * scale * 0.5
+             : side === 'right' ? cx + ld * Math.tan(halfAng) * scale * 0.5
+             : cx + (j%2===0 ? -1 : 1) * ld * Math.tan(halfAng) * scale * 0.3;
+      var ly = cy + ld * scale - 2;
+      if (ly > cy+10 && ly < cy + (ld * scale) + 20) {
+        ctx.fillStyle = DORI_COLORS[j];
+        ctx.textAlign='center';
+        ctx.fillText(DORI_ZONES[j].name+' '+ld.toFixed(0)+'m', lx, ly);
+      }
+    }
+  }
+}
+
+function drawGrid(ctx, x0, y0, W, H, scale, maxD) {
+  ctx.strokeStyle = 'rgba(255,255,255,.06)'; ctx.lineWidth = 1;
+  var step = maxD > 40 ? 10 : maxD > 20 ? 5 : maxD > 10 ? 2 : 1;
+  for (var g = step; g <= maxD; g += step) {
+    var gy = y0 + g * scale;
+    if (gy > H) break;
+    ctx.beginPath(); ctx.moveTo(x0, gy); ctx.lineTo(x0+W, gy); ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.3)'; ctx.font='9px system-ui'; ctx.textAlign='left';
+    ctx.fillText(g+'m', x0+4, gy-2);
+  }
+}
+
+function drawAnalysisLine(ctx, x0, W, camY, dist, scale, wid) {
+  var ay = camY + dist * scale;
+  ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = 1.5;
+  ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(x0, ay); ctx.lineTo(x0+W, ay); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='#fff'; ctx.font='bold 10px system-ui'; ctx.textAlign='left';
+  ctx.fillText('Análisis: '+dist+'m'+(wid?' · '+wid.toFixed(1)+'m ancho':''), x0+6, ay-4);
+}
+
+function drawCam(ctx, x, y, icon, angH) {
+  ctx.font = '18px system-ui'; ctx.textAlign='center';
+  ctx.fillStyle='#fff';
+  ctx.fillText(icon, x, y+2);
+  if (angH) {
+    ctx.font='9px system-ui'; ctx.fillStyle='rgba(255,255,255,.55)';
+    ctx.fillText(angH.toFixed(0)+'° H', x, y+18);
+  }
+}
+
+// Dibuja silueta de persona (top view) — círculo + hombros
+function drawPersonTop(ctx, x, y, scale, label, color) {
+  color = color || '#fff';
+  // Persona ~0.5m de ancho
+  var r = Math.max(3, 0.25 * scale);
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.85;
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI*2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  if (label) {
+    ctx.font='8px system-ui'; ctx.textAlign='center';
+    ctx.fillStyle='rgba(255,255,255,.75)';
+    ctx.fillText(label, x, y - r - 3);
+  }
+}
+
+// Dibuja silueta lateral — rectángulo alto (1.7m)
+function drawPersonSide(ctx, x, floorY, scale, label, color) {
+  color = color || '#fff';
+  var h = 1.7 * scale;
+  var w = Math.max(4, 0.35 * scale);
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.75;
+  ctx.fillRect(x - w/2, floorY - h, w, h);
+  // Cabeza
+  ctx.beginPath();
+  ctx.arc(x, floorY - h - w*0.4, w*0.35, 0, Math.PI*2);
+  ctx.fill();
+  ctx.globalAlpha = 1;
+  if (label) {
+    ctx.font='8px system-ui'; ctx.textAlign='center';
+    ctx.fillStyle='rgba(255,255,255,.7)';
+    ctx.fillText(label, x, floorY - h - w*0.8 - 3);
+  }
+}
+
+// Cono de iluminación (IR o LED) sobre la vista superior
+function drawIlluminationTop(ctx, cx, cy, scale, r, side) {
+  if (!r || !r.cam.infra) return;
+  var infra = r.cam.infra;
+  var halfAng = r.angH * Math.PI/180 / 2;
+  // Alcance efectivo
+  var range, fillColor, strokeColor, label;
+  if (infra.unlimited) {
+    // PRO / FullColorPro — iluminación efectiva a toda la zona de Identificar
+    range = Math.max(r.doriDists[3], 20);
+    fillColor = 'rgba(255,255,200,.16)';
+    strokeColor = 'rgba(255,220,120,.6)';
+    label = infra.type === 'FullColorPro' ? '⭐ Full-Color PRO' : '⭐ PRO Starlight';
+  } else if (infra.hasLED) {
+    // WizColor / TiOC — LED blanco
+    range = infra.ledDist || infra.irDist || 30;
+    fillColor = 'rgba(255,250,220,.22)';
+    strokeColor = 'rgba(255,230,150,.7)';
+    label = infra.type === 'TiOC' ? '🚨 Luz blanca + Sirena' : '💡 LED '+range+'m';
+  } else if (infra.irDist > 0) {
+    // IR estándar o Smart IR
+    range = infra.irDist;
+    fillColor = 'rgba(160,120,255,.13)';
+    strokeColor = 'rgba(180,140,255,.55)';
+    label = (infra.type === 'SmartIR' ? '🧠 Smart IR ' : '🌙 IR ') + range+'m';
+  } else {
+    return; // sin iluminación declarada
+  }
+  var dx = range * Math.tan(halfAng) * scale;
+  var dy = range * scale;
+  // Dibujar cono de luz con gradiente (fuerte cerca, se desvanece lejos)
+  var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, dy);
+  grad.addColorStop(0, fillColor.replace(/[\d.]+\)$/, '0.35)'));
+  grad.addColorStop(0.7, fillColor);
+  grad.addColorStop(1, fillColor.replace(/[\d.]+\)$/, '0.02)'));
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  if (side === 'left') {
+    ctx.lineTo(cx - dx, cy + dy);
+    ctx.lineTo(cx, cy + dy);
+  } else if (side === 'right') {
+    ctx.lineTo(cx, cy + dy);
+    ctx.lineTo(cx + dx, cy + dy);
+  } else {
+    ctx.lineTo(cx - dx, cy + dy);
+    ctx.lineTo(cx + dx, cy + dy);
+  }
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.strokeStyle = strokeColor;
+  ctx.lineWidth = 1.2;
+  ctx.setLineDash([3,3]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  // Etiqueta al borde del alcance
+  if (dy > 30) {
+    ctx.font = 'bold 9px system-ui'; ctx.textAlign = 'center';
+    ctx.fillStyle = strokeColor;
+    var lx = side === 'left' ? cx - dx*0.45 :
+             side === 'right' ? cx + dx*0.45 : cx;
+    ctx.fillText(label, lx, cy + dy - 4);
+  }
+}
+
+// Silueta de auto (top view) — rectángulo
+function drawVehicleTop(ctx, x, y, scale, label, color) {
+  var w = 1.8 * scale, h = 4.5 * scale;
+  ctx.save();
+  ctx.globalAlpha = 0.75;
+  ctx.fillStyle = color || '#fff';
+  ctx.fillRect(x - w/2, y - h/2, w, h);
+  // Parabrisas
+  ctx.fillStyle = 'rgba(0,0,0,.3)';
+  ctx.fillRect(x - w/2 + 2, y - h/2 + 3, w - 4, h*0.3);
+  ctx.globalAlpha = 1;
+  ctx.restore();
+  if (label) {
+    ctx.font='8px system-ui'; ctx.textAlign='center';
+    ctx.fillStyle = color || 'rgba(255,255,255,.8)';
+    ctx.fillText(label, x, y - h/2 - 3);
+  }
+}
+
+function drawSide(ctx, rA, rB, ox, oy, W, H) {
+  ctx.save(); ctx.translate(ox,oy);
+  ctx.fillStyle = '#111d2b'; ctx.fillRect(0,0,W,H);
+  if (!rA) { ctx.restore(); return; }
+  var margin=30, camX=margin+20, camY=H*0.35;
+  var maxD = Math.max(rA.doriDists[0], rB?rB.doriDists[0]:0, FOV.dist)*1.15;
+  var scale = (W-camX-margin) / maxD;
+  // Grid vertical
+  ctx.strokeStyle='rgba(255,255,255,.06)'; ctx.lineWidth=1;
+  var step = maxD > 40 ? 10 : maxD > 20 ? 5 : 2;
+  for (var g = step; g <= maxD; g += step) {
+    var gx = camX + g*scale;
+    ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,H); ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,.3)'; ctx.font='9px system-ui';
+    ctx.fillText(g+'m', gx+2, H-5);
+  }
+  // Suelo
+  var floorY = camY + FOV.height*scale*0.7;
+  ctx.strokeStyle='rgba(255,255,255,.2)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(camX, floorY); ctx.lineTo(W-margin, floorY); ctx.stroke();
+  // Cono A
+  drawConeSide(ctx, camX, camY, scale, rA, '#00aaff');
+  if (rB && FOV.compare) drawConeSide(ctx, camX, camY, scale, rB, '#ff6b35');
+  // Análisis
+  var ax = camX + FOV.dist*scale;
+  ctx.strokeStyle='rgba(255,255,255,.5)'; ctx.lineWidth=1.5;
+  ctx.setLineDash([5,4]);
+  ctx.beginPath(); ctx.moveTo(ax,0); ctx.lineTo(ax,H); ctx.stroke();
+  ctx.setLineDash([]);
+  // Silueta humana a distancia de análisis (1.7m de alto)
+  drawPersonSide(ctx, camX + FOV.dist*scale, floorY, scale, '1.7m', 'rgba(255,255,255,.9)');
+  // Siluetas en cada zona DORI
+  for (var sk = 0; sk < 4; sk++) {
+    var psd = rA.doriDists[sk];
+    if (psd > 0 && camX + psd*scale < W-margin) {
+      drawPersonSide(ctx, camX + psd*scale, floorY, scale*0.6, null, DORI_COLORS[sk]);
+    }
+  }
+  // Cámara
+  ctx.font='16px system-ui'; ctx.textAlign='center'; ctx.fillStyle='#fff';
+  ctx.fillText('📷', camX, camY+4);
+  // Altura
+  ctx.strokeStyle='rgba(255,255,255,.3)'; ctx.lineWidth=1;
+  ctx.setLineDash([3,3]);
+  ctx.beginPath(); ctx.moveTo(camX-15,camY); ctx.lineTo(camX-15,floorY); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle='rgba(255,255,255,.5)'; ctx.font='10px system-ui'; ctx.textAlign='right';
+  ctx.fillText(FOV.height+'m', camX-18, (camY+floorY)/2+4);
+  ctx.fillStyle='rgba(255,255,255,.3)'; ctx.textAlign='left';
+  ctx.fillText('Suelo', camX+8, floorY-3);
+  ctx.restore();
+}
+
+function drawConeSide(ctx, cx, cy, scale, r, color) {
+  var halfAng = r.angV * Math.PI/180 / 2;
+  for (var i = 3; i >= 0; i--) {
+    var d = r.doriDists[i];
+    var dx = d*scale;
+    var dy = d * Math.tan(halfAng) * scale;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx+dx, cy-dy);
+    ctx.lineTo(cx+dx, cy+dy);
+    ctx.closePath();
+    ctx.fillStyle = hexRgba(DORI_COLORS[i], 0.14);
+    ctx.fill();
+    ctx.strokeStyle = hexRgba(DORI_COLORS[i], 0.65);
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+  }
+}
+
+function hexRgba(hex, alpha) {
+  var r = parseInt(hex.slice(1,3),16);
+  var g = parseInt(hex.slice(3,5),16);
+  var b = parseInt(hex.slice(5,7),16);
+  return 'rgba('+r+','+g+','+b+','+alpha+')';
+}
+
+// ── CONCLUSIÓN AUTOMÁTICA ──
+function renderConclusion(rA, rB) {
+  var el = document.getElementById('fovConclusion');
+  if (!el) return;
+  if (!rA) {
+    el.style.display='none';
+    return;
+  }
+  el.style.display='block';
+  if (!rB || !FOV.compare) {
+    // Conclusión de una sola cámara
+    var bestZone = '';
+    for (var i = 3; i >= 0; i--) {
+      if (rA.doriDists[i] >= FOV.dist) {
+        bestZone = DORI_ZONES[i].name;
+        break;
+      }
+    }
+    var focalTxt = rA.cam.focal.type === 'varifocal' ?
+      (rA.cam.focal.variantDesc || 'varifocal')+' ('+rA.cam.focal.min+'–'+rA.cam.focal.max+'mm)' :
+      rA.cam.focal.type === 'ptz' ? 'PTZ con zoom '+rA.cam.focal.zoom+'X' :
+      'fija '+rA.cam.focal.min+'mm';
+    el.innerHTML =
+      '<div class="fov-conc-title">📊 Análisis técnico</div>' +
+      '<p>La <b>'+rA.cam.cod+'</b> ('+rA.cam.mp+'MP, sensor '+rA.cam.sensor.name+', óptica '+focalTxt+') ' +
+      'a <b>'+rA.focal.toFixed(1)+'mm</b> cubre un ángulo de <b>'+rA.angH.toFixed(0)+'°</b> ' +
+      'y permite <b>'+rA.wid.toFixed(1)+'m de ancho</b> a '+FOV.dist+'m.</p>' +
+      (bestZone ? '<p>A '+FOV.dist+'m logra nivel <b style="color:'+DORI_COLORS[DORI_ZONES.findIndex(function(z){return z.name===bestZone;})]+'">'+bestZone+'</b>.</p>' : '<p>⚠️ A '+FOV.dist+'m no alcanza ni para detectar — acerca la cámara o usa un lente más largo.</p>') +
+      '<p class="fov-conc-hint">💡 Para <b>identificar rostros</b> necesitas estar a máx. '+rA.doriDists[3].toFixed(1)+'m. Para <b>reconocer personas conocidas</b>, '+rA.doriDists[2].toFixed(1)+'m.</p>' +
+      '<p class="fov-conc-hint">🚗 Para <b>leer patentes chilenas</b> con claridad, el auto debe estar a máx. <b>'+rA.plateDist.toFixed(1)+'m</b> y la cámara orientada hacia ella.</p>' +
+      // Advertencia de iluminación
+      (function(){
+        var inf = rA.cam.infra;
+        if (inf.unlimited) return '<p class="fov-conc-hint" style="border-left-color:#27ae60">⭐ <b>'+inf.label+'</b>: funciona de noche a cualquier distancia útil del lente. Ideal sin luz ambiente.</p>';
+        if (inf.hasLED) return '<p class="fov-conc-hint" style="border-left-color:#f39c12">💡 <b>'+inf.label+'</b>: aclara la escena con LED blanco hasta ~'+(inf.ledDist||inf.irDist)+'m. Intrusos la ven encendida — buena disuasión.</p>';
+        if (inf.irDist > 0) {
+          var idDist = rA.doriDists[3];
+          if (idDist > inf.irDist) return '<p class="fov-conc-hint" style="border-left-color:#c00;background:rgba(200,0,0,.04)">⚠️ <b>IR alcanza solo '+inf.irDist+'m</b> pero identificas hasta '+idDist.toFixed(1)+'m. De noche más allá de '+inf.irDist+'m no verás nada. Considera una cámara PRO/WizColor o agregar iluminador externo.</p>';
+          return '<p class="fov-conc-hint" style="border-left-color:#8e44ad">🌙 IR de '+inf.irDist+'m — cubre toda tu zona de identificación ('+idDist.toFixed(1)+'m). OK para visión nocturna.</p>';
+        }
+        return '<p class="fov-conc-hint" style="border-left-color:#c00;background:rgba(200,0,0,.04)">⚠️ Sin iluminación propia. Sólo sirve con luz ambiente suficiente.</p>';
+      })();
+    return;
+  }
+  // Conclusión comparativa
+  var diffAng = rA.angH - rB.angH;
+  var diffWid = rA.wid - rB.wid;
+  var diffId = rA.doriDists[3] - rB.doriDists[3];
+  var bestWider = diffAng > 0 ? 'A' : 'B';
+  var bestDetail = diffId > 0 ? 'A' : 'B';
+  var camW = bestWider === 'A' ? rA.cam : rB.cam;
+  var camD = bestDetail === 'A' ? rA.cam : rB.cam;
+  var rW = bestWider === 'A' ? rA : rB;
+  var rD = bestDetail === 'A' ? rA : rB;
+  var advice = '';
+  // Comparar variantes específicas
+  var vA = rA.cam.focal.variant, vB = rB.cam.focal.variant;
+  var motorized = (v) => (v === 'ZS' || v === 'ZE' || v === 'ZW');
+  var hasZS = vA === 'ZS' || vB === 'ZS';
+  var hasZE = vA === 'ZE' || vB === 'ZE';
+  var hasVF = vA === 'VF' || vB === 'VF';
+  var hasPTZ = rA.cam.focal.type === 'ptz' || rB.cam.focal.type === 'ptz';
+  if (hasPTZ) {
+    var ptzCam = rA.cam.focal.type === 'ptz' ? rA.cam : rB.cam;
+    advice += '<p>🔭 La <b>'+ptzCam.cod+'</b> es <b>PTZ</b>: gira, inclina y hace zoom en vivo desde el NVR — ideal para monitoreo activo, perímetros grandes o cuando un operador está atento.</p>';
+  }
+  if (hasZS || hasZE) {
+    var mCam = motorized(vA) ? rA.cam : rB.cam;
+    var vm = mCam.focal.variant;
+    if (vm === 'ZE') {
+      advice += '<p>🎯 La <b>'+mCam.cod+'</b> es <b>ZE — motorizada telefoto</b>: su rango de focal es más cerrado, ideal para cubrir <b>larga distancia</b> con alto detalle (entradas, corredores, perímetros lejanos).</p>';
+    } else {
+      advice += '<p>⚙️ La <b>'+mCam.cod+'</b> es <b>ZS — motorizada remota</b>: ajustas el zoom y enfoque desde el NVR/software, sin subir a la cámara. Ideal para instalaciones altas o de difícil acceso.</p>';
+    }
+  }
+  if (hasVF && !hasZS && !hasZE) {
+    var vfCam = vA === 'VF' ? rA.cam : rB.cam;
+    advice += '<p>🔧 La <b>'+vfCam.cod+'</b> es <b>VF — varifocal manual</b>: ajustas el zoom con un destornillador al instalar. Buena relación precio/flexibilidad para instalaciones accesibles.</p>';
+  }
+  if (!advice) {
+    advice = '<p>💡 Ambas son de lente fija. Elige <b>'+camW.cod+'</b> si priorizas cobertura o <b>'+camD.cod+'</b> si priorizas detalle a distancia.</p>';
+  }
+  // Comparar iluminación
+  var infraCmp = '';
+  var aNight = rA.cam.infra.unlimited ? 'sin límite' :
+               rA.cam.infra.hasLED ? 'LED hasta '+(rA.cam.infra.ledDist||rA.cam.infra.irDist)+'m' :
+               rA.cam.infra.irDist > 0 ? 'IR '+rA.cam.infra.irDist+'m' : 'sin visión nocturna';
+  var bNight = rB.cam.infra.unlimited ? 'sin límite' :
+               rB.cam.infra.hasLED ? 'LED hasta '+(rB.cam.infra.ledDist||rB.cam.infra.irDist)+'m' :
+               rB.cam.infra.irDist > 0 ? 'IR '+rB.cam.infra.irDist+'m' : 'sin visión nocturna';
+  infraCmp = '<p>🌙 <b>Visión nocturna:</b> A → '+aNight+' · B → '+bNight+'.</p>';
+  el.innerHTML =
+    '<div class="fov-conc-title">⚖️ Comparativa técnica</div>' +
+    '<p>La <b style="color:#00aaff">'+rA.cam.cod+'</b> ('+rA.cam.mp+'MP · '+rA.cam.sensor.name+') abre <b>'+rA.angH.toFixed(0)+'°</b> y cubre '+rA.wid.toFixed(1)+'m a '+FOV.dist+'m. Identifica hasta <b>'+rA.doriDists[3].toFixed(1)+'m</b>. Lee patente hasta <b>'+rA.plateDist.toFixed(1)+'m</b>.</p>' +
+    '<p>La <b style="color:#ff6b35">'+rB.cam.cod+'</b> ('+rB.cam.mp+'MP · '+rB.cam.sensor.name+') abre <b>'+rB.angH.toFixed(0)+'°</b> y cubre '+rB.wid.toFixed(1)+'m a '+FOV.dist+'m. Identifica hasta <b>'+rB.doriDists[3].toFixed(1)+'m</b>. Lee patente hasta <b>'+rB.plateDist.toFixed(1)+'m</b>.</p>' +
+    '<p><b>'+camW.cod+'</b> ofrece '+Math.abs(diffAng).toFixed(0)+'° más de cobertura, pero <b>'+camD.cod+'</b> logra '+Math.abs(diffId).toFixed(1)+'m más de alcance para identificación.</p>' +
+    infraCmp +
+    advice;
+}
+
+// ── Agregar al carro ──
+window.fovAddCartA = function() {
+  if (!FOV.camA) return;
+  var p = PRODUCTS.find(function(x){ return x.codigo === FOV.camA.cod; });
+  if (p) { addCart(p); showToast('✅ '+p.codigo+' agregada al carro'); }
+};
+window.fovAddCartB = function() {
+  if (!FOV.camB) return;
+  var p = PRODUCTS.find(function(x){ return x.codigo === FOV.camB.cod; });
+  if (p) { addCart(p); showToast('✅ '+p.codigo+' agregada al carro'); }
+};
+
+// Cerrar dropdowns al click fuera
+document.addEventListener('click', function(e){
+  if (!e.target.closest('.fov-searchbox')) {
+    document.querySelectorAll('.fov-sr-dd').forEach(function(d){ d.style.display='none'; });
+  }
+});
+
+// ── Hook de pmSimularFOV (desde modal de producto) ──
+window.pmSimularFOV = function(id) {
+  var p = PRODUCTS.find(function(x){ return x.id === id; });
+  if (!p) return;
+  if (typeof closeProdModal === 'function') closeProdModal();
+  showSection('fov', document.querySelector('[data-sec="fov"]'));
+  setTimeout(function(){
+    fovPick(p.codigo, 'A');
+    showToast('🎥 Simulando: '+p.codigo);
+    var canvas = document.getElementById('fovCanvas');
+    if (canvas) canvas.scrollIntoView({behavior:'smooth', block:'center'});
+  }, 300);
+};
+
+// Init
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', fovInit);
+} else { setTimeout(fovInit, 500); }
+
+})();
+</script>
 </body>
 </html>
