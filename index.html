@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 12:53 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 13:00 hrs (UTC-4 Chile) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -6516,7 +6516,7 @@ body.cart-open #proyectoListadoBtn {
 .compat-alert.info { background:rgba(255,255,255,.95); border-color:rgba(0,0,0,.08); box-shadow:0 1px 5px rgba(0,0,0,.05); }
 .compat-alert-icon { flex-shrink: 0; font-size: 18px; line-height: 1.2; }
 .compat-alert-text { flex: 1; min-width: 0; }
-.compat-alert-title { font-weight: 700; font-size: 12px; color: #111; margin-bottom: 2px; line-height: 1.3; }
+.compat-alert-title { font-weight: 700; font-size: 12px; color: #333; margin-bottom: 2px; line-height: 1.3; }
 .compat-alert-msg { font-size: 11.5px; color: #444; line-height: 1.45; margin-bottom: 4px; }
 .compat-alert-sol {
   font-size: 11px; color: #0057B8; font-weight: 600; line-height: 1.45;
@@ -7001,16 +7001,16 @@ body.cart-open #proyectoListadoBtn {
   min-width: 20px; height: 20px; border-radius: 10px; padding: 0 6px;
   display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 800; flex-shrink: 0;
-  background: #1a1a1a; color: #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+  background: #555; color: #fff;
+  box-shadow: 0 1px 4px rgba(0,0,0,.15);
 }
 .compat-pill-label {
-  font-size: 12px; font-weight: 700; flex: 1; color: #1a1a1a;
+  font-size: 12px; font-weight: 600; flex: 1; color: #444;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .compat-pill-chevron {
   flex-shrink: 0; transition: transform .22s cubic-bezier(.32,.72,0,1);
-  opacity: .35; color: #1a1a1a;
+  opacity: .4; color: #555;
 }
 .compat-pill-chevron.open { transform: rotate(180deg); }
 .compat-drawer {
@@ -7616,7 +7616,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 12:53 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 13:00 hrs</span>
   </div>
 </div>
 
@@ -21117,9 +21117,8 @@ function compatRenderAlerts() {
     return;
   }
 
-  // Ocultar cross-sell mientras hay alertas
-  var ccs = document.getElementById('cartCrossSell');
-  if (ccs) ccs.style.display = 'none';
+  // Cross-sell siempre visible en paso 1 — no se oculta por alertas
+  // (se renderiza al final)
 
   panel.style.display = 'block';
 
@@ -21176,6 +21175,9 @@ function compatRenderAlerts() {
 
   // Restaurar estado del drawer
   panel._drawerOpen = isOpen;
+
+  // Cross-sell siempre visible junto a las alertas
+  setTimeout(cartCrossSellRender, 50);
 }
 
 function compatToggleDrawer() {
@@ -21469,7 +21471,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 12:53 hrs';
+  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 13:00 hrs';
 })();
 
 
