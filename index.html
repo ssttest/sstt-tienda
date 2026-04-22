@@ -6472,6 +6472,290 @@ body.cart-open #proyectoListadoBtn {
 }
 .wap-footer a { color: #25D366; font-weight: 700; text-decoration: none; }
 
+
+
+/* ══ VALIDADOR DE COMPATIBILIDAD ═══════════════════════════════ */
+#compatPanel {
+  margin: 10px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  background: #fff;
+  font-size: 13px;
+  display: none;
+}
+.compat-header {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12.5px;
+  user-select: none;
+  transition: background .15s;
+}
+.compat-header.error { background: rgba(232,0,28,.08); color: #a10015; border-bottom: 1px solid rgba(232,0,28,.15); }
+.compat-header.warning { background: rgba(234,179,8,.1); color: #854d0e; border-bottom: 1px solid rgba(234,179,8,.2); }
+.compat-header.ok { background: rgba(26,127,60,.08); color: #14532d; border-bottom: 1px solid rgba(26,127,60,.15); }
+.compat-chevron {
+  transition: transform .2s;
+  flex-shrink: 0;
+  opacity: .6;
+}
+.compat-body {
+  padding: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+  transition: max-height .3s;
+}
+.compat-body.collapsed {
+  max-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.compat-alert {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  border: 1px solid transparent;
+}
+.compat-alert:last-child { margin-bottom: 0; }
+.compat-alert.error { background: rgba(232,0,28,.04); border-color: rgba(232,0,28,.15); }
+.compat-alert.warning { background: rgba(234,179,8,.06); border-color: rgba(234,179,8,.18); }
+.compat-alert.info { background: rgba(0,87,184,.04); border-color: rgba(0,87,184,.12); }
+.compat-alert-icon {
+  flex-shrink: 0;
+  font-size: 18px;
+  line-height: 1;
+}
+.compat-alert-text { flex: 1; min-width: 0; }
+.compat-alert-title {
+  font-weight: 700;
+  font-size: 12.5px;
+  color: #111;
+  margin-bottom: 3px;
+}
+.compat-alert-msg {
+  font-size: 12px;
+  color: #444;
+  line-height: 1.45;
+  margin-bottom: 4px;
+}
+.compat-alert-sol {
+  font-size: 11.5px;
+  color: #0057B8;
+  font-weight: 600;
+  line-height: 1.45;
+  background: rgba(0,87,184,.05);
+  padding: 5px 8px;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+/* ══ SEGUIMIENTO DE PEDIDO ════════════════════════════════ */
+.track-wrap {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+.track-hero {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.track-icon {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, #0057B8, #003d82);
+  border-radius: 20px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 8px 24px rgba(0,87,184,.25);
+}
+.track-title {
+  font-size: 24px; font-weight: 800; color: var(--black);
+  margin-bottom: 6px;
+}
+.track-sub {
+  font-size: 14px; color: var(--g3); line-height: 1.5;
+}
+
+/* Formulario */
+.track-form {
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.07);
+  border: 1px solid rgba(0,0,0,.06);
+}
+.track-field {
+  margin-bottom: 16px;
+}
+.track-field label {
+  display: block;
+  font-size: 12px; font-weight: 700;
+  color: var(--g2); text-transform: uppercase;
+  letter-spacing: .4px; margin-bottom: 7px;
+}
+.track-input {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--g5);
+  border-radius: 12px; font-size: 14px;
+  font-family: var(--font); color: var(--black);
+  outline: none; transition: border-color .2s;
+  box-sizing: border-box;
+  background: #fafafa;
+}
+.track-input:focus { border-color: var(--blue); background: #fff; }
+.track-input.error { border-color: var(--red); }
+.track-hint {
+  font-size: 11px; color: var(--g3); margin-top: 4px;
+}
+.track-btn {
+  width: 100%; padding: 13px;
+  background: var(--blue); color: #fff;
+  border: none; border-radius: 12px;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; font-family: var(--font);
+  transition: all .2s; margin-top: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.track-btn:hover { background: #004aa3; transform: translateY(-1px); }
+.track-btn:disabled { background: var(--g4); cursor: not-allowed; transform: none; }
+
+/* Intentos fallidos */
+.track-error {
+  background: rgba(232,0,28,.06);
+  border: 1.5px solid rgba(232,0,28,.2);
+  border-radius: 10px; padding: 11px 14px;
+  font-size: 13px; color: var(--red);
+  margin-top: 12px; display: none;
+  align-items: center; gap: 8px;
+}
+.track-error.show { display: flex; }
+
+/* Rate limiting */
+.track-blocked {
+  background: rgba(234,179,8,.08);
+  border: 1.5px solid rgba(234,179,8,.3);
+  border-radius: 10px; padding: 11px 14px;
+  font-size: 13px; color: #92400e;
+  margin-top: 12px; display: none;
+  align-items: center; gap: 8px;
+}
+.track-blocked.show { display: flex; }
+
+/* Seguridad badge */
+.track-security {
+  display: flex; align-items: center; gap: 6px;
+  justify-content: center; margin-top: 16px;
+  font-size: 11px; color: var(--g3);
+}
+
+/* Resultado */
+.track-result {
+  display: none;
+  animation: fadeUp .3s cubic-bezier(.32,.72,0,1);
+}
+.track-result.show { display: block; }
+
+.track-order-header {
+  background: linear-gradient(135deg, #0057B8, #003d82);
+  color: #fff; border-radius: 16px 16px 0 0;
+  padding: 20px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.track-order-num { font-size: 20px; font-weight: 800; }
+.track-order-date { font-size: 12px; opacity: .75; margin-top: 2px; }
+.track-order-total { font-size: 22px; font-weight: 900; }
+
+.track-status-bar {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  padding: 20px 24px;
+}
+.track-steps {
+  display: flex; align-items: center;
+  gap: 0; margin: 16px 0 8px;
+}
+.track-step {
+  flex: 1; text-align: center; position: relative;
+}
+.track-step-circle {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--g5); color: var(--g3);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 6px; font-size: 12px; font-weight: 700;
+  position: relative; z-index: 1; transition: all .3s;
+}
+.track-step.done .track-step-circle { background: #1A7F3C; color: #fff; }
+.track-step.active .track-step-circle { background: var(--blue); color: #fff; box-shadow: 0 0 0 4px rgba(0,87,184,.15); }
+.track-step-lbl { font-size: 10px; color: var(--g3); font-weight: 600; text-transform: uppercase; letter-spacing: .3px; }
+.track-step.done .track-step-lbl, .track-step.active .track-step-lbl { color: var(--black); }
+.track-step-line {
+  flex: 1; height: 2px; background: var(--g5);
+  margin-top: -22px; position: relative; z-index: 0;
+  transition: background .3s;
+}
+.track-step-line.done { background: #1A7F3C; }
+
+.track-status-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: 20px;
+  font-size: 12px; font-weight: 700;
+}
+.track-status-badge.preparando { background: rgba(234,179,8,.12); color: #92400e; }
+.track-status-badge.despachado { background: rgba(0,87,184,.1); color: var(--blue); }
+.track-status-badge.entregado { background: rgba(26,127,60,.1); color: #1A7F3C; }
+.track-status-badge.confirmado { background: rgba(99,102,241,.1); color: #6366f1; }
+
+.track-items {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.08);
+  border-top: none;
+  padding: 16px 24px;
+}
+.track-item {
+  display: flex; justify-content: space-between;
+  align-items: center; padding: 8px 0;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+  font-size: 13px;
+}
+.track-item:last-child { border-bottom: none; }
+.track-item-name { color: var(--black); font-weight: 500; flex: 1; }
+.track-item-qty { color: var(--g3); margin: 0 12px; font-size: 12px; }
+.track-item-price { font-weight: 700; color: var(--black); }
+
+.track-footer {
+  background: #fafafa;
+  border: 1px solid rgba(0,0,0,.08);
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  padding: 16px 24px;
+  display: flex; justify-content: space-between; gap: 12px;
+}
+.track-back-btn {
+  background: none; border: 1.5px solid var(--border);
+  border-radius: 10px; padding: 9px 16px;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; font-family: var(--font);
+  color: var(--g2); transition: all .2s;
+}
+.track-back-btn:hover { border-color: var(--black); color: var(--black); }
+.track-wa-btn {
+  background: #25D366; color: #fff;
+  border: none; border-radius: 10px; padding: 9px 16px;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: var(--font);
+  display: flex; align-items: center; gap: 6px;
+  transition: all .2s;
+}
+.track-wa-btn:hover { background: #1ebe5d; }
+
+/* Datos enmascarados */
+.track-masked { color: var(--g3); font-style: italic; font-size: 12px; }
+
 /* ── Viewport / Slider ── */
 .co-viewport {
   flex: 1; overflow: hidden; position: relative;
@@ -6803,6 +7087,10 @@ if (window.pdfjsLib) {
     <button data-sec="catalogo" class="mnav-tab active" onclick="showSection('catalogo',this)">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/><rect x="15" y="14" width="7" height="7"/><rect x="2" y="14" width="7" height="7"/></svg>
       Catálogo
+    </button>
+    <button data-sec="seguimiento" class="mnav-tab" onclick="showSection('seguimiento',this)">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      Seguimiento
     </button>
     <button data-sec="asistente" class="mnav-tab" onclick="showSection('asistente',this)">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -7219,7 +7507,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt">Última actualización: Martes 03 de Marzo del 2026 · 13:34 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 12:56 hrs</span>
   </div>
 </div>
 
@@ -7647,6 +7935,9 @@ if (window.pdfjsLib) {
   </div><!-- /co-viewport -->
 
   <!-- ══ STICKY BOTTOM ══════════════════════════════════════════ -->
+  <!-- Validador de Compatibilidad -->
+  <div id="compatPanel"></div>
+
   <div class="cart-sticky" id="cartSticky" style="display:none">
     <!-- Totales compactos (pasos 1-3) -->
     <div id="coStickyTotals">
@@ -7872,6 +8163,165 @@ if (window.pdfjsLib) {
 <!-- FOOTER -->
 
 </div><!-- /secCatalogo -->
+
+
+<!-- ══ SECCIÓN: SEGUIMIENTO DE PEDIDO ══════════════════════ -->
+<div class="app-section" id="secSeguimiento" style="min-height:100vh;background:#f5f6fa;display:none">
+<div class="track-wrap">
+
+  <!-- Formulario de búsqueda -->
+  <div id="trackSearchPanel">
+    <div class="track-hero">
+      <div class="track-icon">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
+        </svg>
+      </div>
+      <div class="track-title">Seguimiento de Pedido</div>
+      <div class="track-sub">Ingresa los datos de tu compra para ver<br>el estado actual en tiempo real.</div>
+    </div>
+
+    <div class="track-form">
+      <div class="track-field">
+        <label>📋 Número de Orden</label>
+        <input type="text" id="trackOrderNum" class="track-input"
+          placeholder="Ej: 000123456"
+          oninput="this.classList.remove('error')">
+        <div class="track-hint">Lo encontrarás en el email de confirmación de compra.</div>
+      </div>
+      <div class="track-field">
+        <label>📧 Email de compra</label>
+        <input type="email" id="trackEmail" class="track-input"
+          placeholder="tu@correo.cl"
+          oninput="this.classList.remove('error')">
+        <div class="track-hint">El email con el que realizaste la compra.</div>
+      </div>
+
+      <!-- Opcional: RUT para mayor seguridad -->
+      <div class="track-field" id="trackRutField" style="display:none">
+        <label>🪪 RUT (verificación adicional)</label>
+        <input type="text" id="trackRut" class="track-input"
+          placeholder="12.345.678-9"
+          oninput="formatRutTrack()">
+      </div>
+
+      <button id="trackSecurityToggle"
+        style="background:none;border:none;color:var(--blue);font-size:12px;font-weight:600;cursor:pointer;padding:0;margin-bottom:12px;font-family:var(--font)"
+        onclick="toggleTrackRut()">
+        + Agregar verificación adicional con RUT
+      </button>
+
+      <button class="track-btn" id="trackSubmitBtn" onclick="trackSearch()">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        Buscar mi pedido
+      </button>
+
+      <div class="track-error" id="trackError">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
+        </svg>
+        <span id="trackErrorMsg">Datos incorrectos. Verifica el número de orden y email.</span>
+      </div>
+
+      <div class="track-blocked" id="trackBlocked">
+        <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+        <span id="trackBlockedMsg">Demasiados intentos. Espera <b id="trackCountdown">10:00</b> min.</span>
+      </div>
+    </div>
+
+    <div class="track-security">
+      <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+      </svg>
+      Tus datos están protegidos · Máx. 5 intentos por sesión
+    </div>
+  </div>
+
+  <!-- Resultado del seguimiento -->
+  <div class="track-result" id="trackResult">
+    <div class="track-order-header">
+      <div>
+        <div class="track-order-num" id="trackResNum">Orden #000123</div>
+        <div class="track-order-date" id="trackResDate">—</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-size:11px;opacity:.7;margin-bottom:2px">Total con IVA</div>
+        <div class="track-order-total" id="trackResTotal">—</div>
+      </div>
+    </div>
+
+    <div class="track-status-bar">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <div style="font-size:13px;font-weight:700;color:var(--black)">Estado actual</div>
+        <div class="track-status-badge" id="trackResBadge">—</div>
+      </div>
+
+      <!-- Barra de progreso por pasos -->
+      <div class="track-steps" id="trackResSteps">
+        <div class="track-step" id="tst1">
+          <div class="track-step-circle">✓</div>
+          <div class="track-step-lbl">Confirmado</div>
+        </div>
+        <div class="track-step-line" id="tsl1"></div>
+        <div class="track-step" id="tst2">
+          <div class="track-step-circle">📦</div>
+          <div class="track-step-lbl">Preparando</div>
+        </div>
+        <div class="track-step-line" id="tsl2"></div>
+        <div class="track-step" id="tst3">
+          <div class="track-step-circle">🚚</div>
+          <div class="track-step-lbl">Despachado</div>
+        </div>
+        <div class="track-step-line" id="tsl3"></div>
+        <div class="track-step" id="tst4">
+          <div class="track-step-circle">✅</div>
+          <div class="track-step-lbl">Entregado</div>
+        </div>
+      </div>
+
+      <!-- Tracking courier -->
+      <div id="trackCourierInfo" style="display:none;margin-top:12px;padding:10px 12px;background:rgba(0,87,184,.05);border-radius:10px;font-size:13px">
+        <div style="font-weight:700;color:var(--blue);margin-bottom:4px">🚚 <span id="trackCourierName">Starken</span></div>
+        <div>N° de seguimiento: <b id="trackCourierNum">—</b></div>
+        <a id="trackCourierLink" href="#" target="_blank"
+          style="color:var(--blue);font-size:12px;font-weight:600;text-decoration:none;display:inline-block;margin-top:4px">
+          Rastrear en sitio del courier →
+        </a>
+      </div>
+
+      <!-- Datos enmascarados del cliente -->
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(0,0,0,.06);font-size:12px;color:var(--g3)">
+        Pedido de <b id="trackResCliente">—</b> · <span id="trackResEmail" class="track-masked">—</span>
+      </div>
+    </div>
+
+    <!-- Items del pedido -->
+    <div class="track-items" id="trackResItems">
+      <!-- Items se insertan dinámicamente -->
+    </div>
+
+    <!-- Footer con acciones -->
+    <div class="track-footer">
+      <button class="track-back-btn" onclick="trackReset()">
+        ← Nueva búsqueda
+      </button>
+      <button class="track-wa-btn" id="trackWaBtn">
+        <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+        </svg>
+        Consultar por WhatsApp
+      </button>
+    </div>
+  </div>
+
+</div>
+</div>
 
 <!-- SECCIÓN: ASISTENTE IA -->
 <div class="app-section" id="secAsistente">
@@ -20029,6 +20479,581 @@ if(_hs){
 }
 
 
+
+// ══════════════════════════════════════════════════════════════
+// 🔍 COMPATIBILITY CHECKER — Validación inteligente del carro
+// ══════════════════════════════════════════════════════════════
+
+// Extraer especificaciones técnicas desde nombre y código del producto
+function compatExtractSpecs(p) {
+  if (!p || !p.nombre) return {};
+  var n = p.nombre;
+  var c = (p.codigo || '').toUpperCase();
+  var specs = { codigo: p.codigo, nombre: n, cat: p.cat };
+
+  // ── CANALES (grabadores) ──
+  if (p.cat === 'nvr') {
+    // Buscar en nombre: "4CH", "8 canales", etc.
+    var mch = n.match(/(\d+)\s*(?:CH|canales?)/i);
+    // Buscar en código: NVR4104 (4CH), NVR5216 (16CH), XVR5208 (8CH)
+    if (!mch) {
+      var mcod = c.match(/(?:NVR|XVR|DVR|IVSS|HCVR|MCVR)\w*?(04|08|16|32|64|128|160)(?!\d)/);
+      if (mcod) mch = [null, String(parseInt(mcod[1]))];
+    }
+    specs.canales = mch ? parseInt(mch[1]) : null;
+
+    // Resolución máxima soportada
+    var mres = n.match(/(4K|8MP|12MP|16MP)/i);
+    if (mres) {
+      var r = mres[1].toUpperCase();
+      specs.maxResMP = r === '4K' ? 8 : parseInt(r);
+    } else if (/(?:NVR|XVR|DVR)\w*(5\d{3}|4\d{3})/.test(c)) {
+      specs.maxResMP = 8; // Serie 5000/4000 soporta 4K
+    } else if (/(?:NVR|XVR|DVR)\w*(2\d{3}|1\d{3})/.test(c)) {
+      specs.maxResMP = 4; // Serie 2000 solo hasta 4MP
+    } else {
+      specs.maxResMP = 4; // Default conservador
+    }
+
+    // Puertos PoE integrados (NVR4104-P tiene 4 PoE)
+    var mpoe = c.match(/-P(\d+)?/);
+    if (mpoe) specs.puertosPoE = mpoe[1] ? parseInt(mpoe[1]) : specs.canales;
+    else specs.puertosPoE = 0;
+
+    // Canales IP adicionales en grabadores híbridos (ej: '+1IP', '+4IP')
+    var mipx = n.match(/\+(\d+)\s*IP/i) || n.match(/(\d+)\s*IP(?:\b)/i);
+    specs.canalesIPExtra = mipx ? parseInt(mipx[1]) : 0;
+
+    // Tipo: NVR (IP), XVR/HCVR/DVR (HDCVI), IVSS (IP gran escala)
+    if (/NVR|IVSS/.test(c)) specs.tipoGrabador = 'IP';
+    else if (/XVR|HCVR|DVR|MCVR/.test(c)) specs.tipoGrabador = 'HDCVI';
+    else specs.tipoGrabador = 'IP';
+  }
+
+  // ── CÁMARAS ──
+  if (p.cat === 'camaras-ip' || p.cat === 'camaras-hdcvi' || p.cat === 'camaras-ptz') {
+    // Resolución en MP
+    var mcres = n.match(/(\d+)\s*MP|(\d+)\s*K/i);
+    if (mcres) {
+      var val = parseInt(mcres[1] || mcres[2]);
+      specs.resolucionMP = (mcres[0].toUpperCase().includes('K')) ? (val === 4 ? 8 : val * 2) : val;
+    } else {
+      specs.resolucionMP = 2; // Default conservador
+    }
+
+    // Conectividad: IP o HDCVI
+    specs.tipoCamara = p.cat === 'camaras-hdcvi' ? 'HDCVI' : 'IP';
+
+    // PoE
+    specs.usaPoE = /PoE/i.test(n);
+
+    // Consumo PoE estimado (W) — aproximaciones Dahua
+    if (specs.tipoCamara === 'IP') {
+      if (/PTZ/i.test(n) || p.cat === 'camaras-ptz') specs.consumoPoE = 25;  // PTZ PoE+
+      else if (specs.resolucionMP >= 8) specs.consumoPoE = 10;  // 4K+
+      else if (specs.resolucionMP >= 4) specs.consumoPoE = 8;   // 4MP-6MP
+      else specs.consumoPoE = 6;  // 2MP
+    }
+
+    // Protección IP (resistencia a agua/polvo)
+    var mip = n.match(/IP(6[5-9])/);
+    specs.ipRating = mip ? parseInt(mip[1]) : 0;
+
+    // Protección IK (antivandálica)
+    var mik = n.match(/IK(\d{2})/);
+    specs.ikRating = mik ? parseInt(mik[1]) : 0;
+
+    // ¿Exterior apta?
+    specs.apta_exterior = specs.ipRating >= 66;
+
+    // IR (visión nocturna)
+    var mir = n.match(/IR\s*(\d+)/i);
+    specs.alcanceIR = mir ? parseInt(mir[1]) : 0;
+
+    // Tecnologías IA
+    specs.wizsense = /WizSense|SMD|IVS/i.test(n);
+    specs.wizcolor = /WizColor|Full Color|Color 24|ColorVu/i.test(n);
+    specs.tioc = /TiOC|Disuasión|Deterrent/i.test(n);
+    specs.acupick = /AcuPick/i.test(n);
+
+    // Fuente externa (si no usa PoE)
+    specs.voltaje = /12V/i.test(n) ? 12 : (/24V/i.test(n) ? 24 : null);
+  }
+
+  // ── SWITCHES ──
+  if (p.cat === 'switches') {
+    // Puertos
+    var mpsw = n.match(/(\d+)\s*(?:puertos?|ports?)/i);
+    if (!mpsw) {
+      // Extraer de código: CS4226-24ET → 24 puertos, CHS4110-8ET → 8
+      var mcsw = c.match(/-(\d+)E?T/);
+      if (mcsw) mpsw = [null, mcsw[1]];
+    }
+    specs.puertos = mpsw ? parseInt(mpsw[1]) : null;
+
+    // Potencia PoE total
+    var mpw = n.match(/(\d+)\s*W/i);
+    if (!mpw) {
+      // Extraer del código: -90 → 90W, -135 → 135W
+      var mcpw = c.match(/-(60|90|120|135|150|190|240|360|400)(?:-|$)/);
+      if (mcpw) mpw = [null, mcpw[1]];
+    }
+    specs.potenciaPoE = mpw ? parseInt(mpw[1]) : 0;
+
+    specs.esPoE = specs.potenciaPoE > 0 || /PoE/i.test(n);
+  }
+
+  // ── FUENTES DE PODER ──
+  if (p.cat === 'accesorios') {
+    var mfv = n.match(/(\d+)V/i);
+    var mfa = n.match(/(\d+)A\b/i);
+    if (mfv && mfa && /fuente|alimentaci[oó]n/i.test(n)) {
+      specs.esFuente = true;
+      specs.voltajeFuente = parseInt(mfv[1]);
+      specs.amperajeFuente = parseFloat(mfa[1]);
+      specs.watts = specs.voltajeFuente * specs.amperajeFuente;
+    }
+  }
+
+  return specs;
+}
+
+// Analizar carro completo y generar alertas
+function compatAnalizarCarro() {
+  if (!window.S || !S.cart || S.cart.length === 0) return [];
+  
+  var alertas = [];
+  var items = S.cart.map(function(it) {
+    var p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(function(x){return x.codigo === it.codigo;}) : null;
+    if (!p) return null;
+    var specs = compatExtractSpecs(p);
+    specs.qty = it.qty || 1;
+    return specs;
+  }).filter(Boolean);
+
+  var grabadores = items.filter(function(i){return i.cat === 'nvr';});
+  var camarasIP = items.filter(function(i){return i.tipoCamara === 'IP';});
+  var camarasHDCVI = items.filter(function(i){return i.tipoCamara === 'HDCVI';});
+  var todasCamaras = camarasIP.concat(camarasHDCVI);
+  var switches = items.filter(function(i){return i.cat === 'switches';});
+  var fuentes = items.filter(function(i){return i.esFuente;});
+  
+  var totalCamarasIP = camarasIP.reduce(function(s,c){return s+c.qty;},0);
+  var totalCamarasHDCVI = camarasHDCVI.reduce(function(s,c){return s+c.qty;},0);
+  var totalCamaras = totalCamarasIP + totalCamarasHDCVI;
+  
+  // ═══ REGLA 1: Canales del grabador vs cámaras ═══
+  if (grabadores.length > 0 && totalCamaras > 0) {
+    grabadores.forEach(function(g) {
+      if (!g.canales) return;
+      var totalCH = g.canales * g.qty;
+      if (totalCamaras > totalCH) {
+        alertas.push({
+          tipo: 'error',
+          titulo: 'Excedes la cantidad de canales del grabador',
+          mensaje: 'Tu ' + g.codigo + ' tiene ' + totalCH + ' canales pero tienes ' + totalCamaras + ' cámara' + (totalCamaras>1?'s':'') + ' en el carro.',
+          solucion: 'Opciones: agregar otro grabador, o cambiar a un modelo de mayor capacidad (16CH, 32CH).',
+          icon: '⚠️'
+        });
+      } else if (totalCamaras > 0 && totalCamaras <= totalCH && totalCH - totalCamaras >= Math.ceil(totalCH * 0.5)) {
+        // Grabador sobredimensionado (más del doble de canales)
+        alertas.push({
+          tipo: 'info',
+          titulo: 'Grabador con capacidad extra',
+          mensaje: 'Tu ' + g.codigo + ' soporta ' + totalCH + ' canales y tienes ' + totalCamaras + '. Tienes espacio para crecer.',
+          icon: 'ℹ️'
+        });
+      }
+    });
+  }
+
+  // ═══ REGLA 2: Compatibilidad HDCVI híbrido vs IP — con límites reales ═══
+  // Los XVR/HCVR son híbridos penta-brid pero con límites técnicos reales:
+  // 1) Resolución IP máxima varía por serie (serie 1/4: 2MP, serie 5: 6MP, serie 7: 4K)
+  // 2) Ancho de banda total limita cuántas cámaras IP de alta res se pueden conectar
+  // 3) IA de cámaras IP (WizSense/WizMind) NO funciona a través de XVR — CRÍTICO
+  grabadores.forEach(function(g) {
+    if (g.tipoGrabador === 'HDCVI' && camarasIP.length > 0) {
+      var canalesIPDisp = g.canalesIPExtra || 0;
+      var totalCamIP = totalCamarasIP;
+
+      // ── Sub-regla 2a: Excede canales IP disponibles ──
+      if (canalesIPDisp > 0 && totalCamIP > canalesIPDisp * g.qty) {
+        var exceso = totalCamIP - canalesIPDisp * g.qty;
+        alertas.push({
+          tipo: 'error',
+          titulo: 'Excedes los canales IP del grabador híbrido',
+          mensaje: 'El ' + g.codigo + ' acepta máx ' + (canalesIPDisp * g.qty) + ' cámara' + (canalesIPDisp>1?'s':'') + ' IP pero tienes ' + totalCamIP + '.',
+          solucion: 'Reduce a ' + (canalesIPDisp * g.qty) + ' cámara' + (canalesIPDisp>1?'s':'') + ' IP o agrega un NVR para las restantes.',
+          icon: '⚠️'
+        });
+      } else if (canalesIPDisp === 0 && camarasIP.length > 0) {
+        alertas.push({
+          tipo: 'error',
+          titulo: 'Grabador HDCVI puro — no acepta cámaras IP',
+          mensaje: 'El ' + g.codigo + ' es HDCVI puro y no tiene canales IP adicionales.',
+          solucion: 'Usa cámaras HDCVI o cambia a un NVR/XVR con canales IP.',
+          icon: '❌'
+        });
+      }
+
+      // ── Sub-regla 2b: Resolución IP excede límite del XVR/HCVR ──
+      var maxResIP = g.maxResIPMP || 2;
+      var camsAltaRes = camarasIP.filter(function(c){return c.resolucionMP > maxResIP;});
+      if (camsAltaRes.length > 0) {
+        var ejemplos = camsAltaRes.slice(0,2).map(function(c){return c.codigo + ' (' + c.resolucionMP + 'MP)';}).join(', ');
+        alertas.push({
+          tipo: 'error',
+          titulo: 'Resolución IP excede la capacidad del grabador híbrido',
+          mensaje: 'El ' + g.codigo + ' (serie ' + g.serie + '000) acepta cámaras IP hasta ' + maxResIP + 'MP. Tienes: ' + ejemplos + '.',
+          solucion: maxResIP <= 2
+            ? 'Los canales IP de este grabador solo soportan cámaras de máx 2MP. Para cámaras de mayor resolución necesitas un NVR.'
+            : 'Cambia a un XVR serie 7000 para soportar cámaras IP hasta 4K, o usa un NVR.',
+          icon: '📐'
+        });
+      }
+
+      // ── Sub-regla 2c: IA de cámaras IP no funciona en XVR — ADVERTENCIA CRÍTICA ──
+      var camsConIA = camarasIP.filter(function(c){return c.wizsense || c.tioc || c.acupick;});
+      if (camsConIA.length > 0) {
+        var techs = [];
+        if (camsConIA.some(function(c){return c.wizsense;})) techs.push('WizSense/SMD');
+        if (camsConIA.some(function(c){return c.tioc;})) techs.push('TiOC');
+        if (camsConIA.some(function(c){return c.acupick;})) techs.push('AcuPick');
+        alertas.push({
+          tipo: 'warning',
+          titulo: 'Las funciones IA de las cámaras IP no operan en este grabador',
+          mensaje: 'Las cámaras IP con ' + techs.join(', ') + ' conectadas a un XVR/HCVR no envían alertas IA al grabador. El video graba normal pero sin detección inteligente de personas/vehículos.',
+          solucion: 'Para aprovechar WizSense/TiOC en cámaras IP necesitas un NVR compatible. En el XVR solo funciona IA en canales HDCVI.',
+          icon: '🤖'
+        });
+      }
+
+      // ── Sub-regla 2d: Validación de ancho de banda IP en XVR ──
+      if (canalesIPDisp > 0 && totalCamIP > 0) {
+        var mbpsDisponible = g.mbps || 40;
+        var mbpsUsadoIP = camarasIP.reduce(function(s, cam) {
+          var mpsPorCam = cam.resolucionMP >= 8 ? 16 : (cam.resolucionMP >= 4 ? 8 : 4);
+          return s + mpsPorCam * cam.qty;
+        }, 0);
+        if (mbpsUsadoIP > mbpsDisponible * 0.7) {
+          alertas.push({
+            tipo: mbpsUsadoIP > mbpsDisponible ? 'error' : 'warning',
+            titulo: mbpsUsadoIP > mbpsDisponible ? 'Ancho de banda IP excedido' : 'Ancho de banda IP al límite',
+            mensaje: 'Las cámaras IP consumen ~' + mbpsUsadoIP + 'Mbps. El ' + g.codigo + ' tiene ' + mbpsDisponible + 'Mbps disponibles para IP.',
+            solucion: 'Reduce la cantidad de cámaras IP, usa resoluciones menores en ellas, o agrega un NVR dedicado para las cámaras IP.',
+            icon: '📡'
+          });
+        }
+      }
+    }
+
+    // ── Sub-regla 2e: NVR IP con cámaras HDCVI ──
+    if (g.tipoGrabador === 'IP' && camarasHDCVI.length > 0) {
+      alertas.push({
+        tipo: 'error',
+        titulo: 'Cámaras HDCVI con grabador NVR (IP)',
+        mensaje: 'El NVR ' + g.codigo + ' solo acepta cámaras IP. Tienes ' + totalCamarasHDCVI + ' cámara' + (totalCamarasHDCVI>1?'s':'') + ' HDCVI (coaxial).',
+        solucion: 'Las cámaras HDCVI necesitan un XVR o HCVR. Alternativa: cambiar las cámaras HDCVI por IP.',
+        icon: '❌'
+      });
+    }
+  });
+
+  // ═══ REGLA 3: IA en NVRs de series bajas — advertencia de canales limitados ═══
+  // NVR serie 2000-I: hasta 4 canales SMD, 2 canales perimetral, 1 canal facial
+  // NVR serie 4000+: sin límite de canales IA
+  grabadores.forEach(function(g) {
+    if (g.tipoGrabador !== 'IP') return;
+    var camsConIA = camarasIP.filter(function(c){return c.wizsense || c.tioc || c.acupick;});
+    var totalCamsConIA = camsConIA.reduce(function(s,c){return s+c.qty;},0);
+
+    // Cámaras IP con IA en NVR sin chip IA: solo graba, no coordina alertas
+    if (totalCamsConIA > 0 && !g.esWizsense && g.serie < 4) {
+      alertas.push({
+        tipo: 'warning',
+        titulo: 'NVR básico no aprovecha la IA de las cámaras',
+        mensaje: 'Tienes ' + totalCamsConIA + ' cámara' + (totalCamsConIA>1?'s':'') + ' WizSense/TiOC pero el NVR ' + g.codigo + ' es de serie básica (serie ' + g.serie + '000) sin capacidad de coordinar IA.',
+        solucion: 'Las cámaras grabarán y detectarán localmente, pero sin grabación por SMD ni notificaciones push coordinadas. Para eso necesitas un NVR WizSense (serie 4000-I o superior).',
+        icon: '🤖'
+      });
+    }
+
+    // NVR serie 2000 con chip IA: límite de 4 canales SMD
+    if (g.tieneChipIA && g.serie <= 2 && totalCamsConIA > g.canalesIAporNVR) {
+      alertas.push({
+        tipo: 'warning',
+        titulo: 'Límite de canales IA en NVR serie 2000',
+        mensaje: 'El ' + g.codigo + ' soporta IA en máx ' + g.canalesIAporNVR + ' canales simultáneos pero tienes ' + totalCamsConIA + ' cámaras con IA.',
+        solucion: 'Solo ' + g.canalesIAporNVR + ' cámaras tendrán SMD/detección IA activa. Para más canales IA usa NVR serie 4000-I o superior.',
+        icon: '⚡'
+      });
+    }
+
+    // NVR con "AI by NVR" activado: consume ancho de banda adicional
+    if (g.tieneChipIA && !camsConIA.length && totalCamarasIP > 0) {
+      alertas.push({
+        tipo: 'info',
+        titulo: 'Consejo: activa IA en el NVR para cámaras sin chip IA',
+        mensaje: 'Tu ' + g.codigo + ' tiene chip IA propio. Puede procesar SMD para cámaras sin IA, pero consume ~50% más ancho de banda por canal.',
+        solucion: 'Considera si las cámaras actuales necesitan IA, o si conviene cambiar a cámaras WizSense donde la IA corre en el chip de la cámara (más eficiente).',
+        icon: '💡'
+      });
+    }
+  });
+
+    // ═══ REGLA 2b: Pérdida de IA en XVR al agregar canales IP adicionales ═══
+  // Dahua oficial: si se SUMAN canales IP (más allá de los analógicos),
+  // la función SMD/IA se desactiva en TODOS los canales del XVR.
+  // Si los IP REEMPLAZAN canales analógicos (1×1), la IA se mantiene.
+  grabadores.forEach(function(g) {
+    if (g.tipoGrabador !== 'HDCVI') return;
+    var esWizSense = /WizSense|WizMind|SMD|IVS|I3|\-I\b/i.test(g.nombre);
+    if (!esWizSense) return;
+    if (totalCamarasIP === 0) return;
+
+    // canalesIPExtra = canales IP que se SUMAN ("+4IP" en el nombre)
+    // Si el cliente pone cámaras IP como adicionales → pierde IA
+    // Si reemplaza canales analógicos (totalCams <= canales del XVR) → mantiene IA
+    var totalAnalogicos = (g.canales || 0) * g.qty;
+    var totalConIP = totalCamarasHDCVI + totalCamarasIP;
+
+    // Modo ADICIONAL: hay más cámaras que canales analógicos
+    // → los canales IP se suman y matan la IA
+    if (totalCamarasIP > 0 && totalConIP > totalAnalogicos) {
+      // Algunos canales IP son adicionales (no reemplazan)
+      var ipAdicionales = totalConIP - totalAnalogicos;
+      var ipQueReemplazan = totalCamarasIP - ipAdicionales;
+      alertas.push({
+        tipo: 'warning',
+        titulo: '⚡ Se perderá la IA (SMD/WizSense) al agregar canales IP adicionales',
+        mensaje: 'El ' + g.codigo + ' tiene IA solo en sus canales analógicos. Al sumar ' + ipAdicionales + ' cámara' + (ipAdicionales>1?'s':'') + ' IP adicional' + (ipAdicionales>1?'es':'') + ', Dahua desactiva el SMD/WizSense en TODOS los canales.',
+        solucion: 'Para mantener la IA: reemplaza canales analógicos por cámaras IP (máx ' + totalAnalogicos + ' IP en total). O usa un NVR con WizSense que sí mantiene IA en canales IP.',
+        icon: '🤖'
+      });
+    } else if (totalCamarasIP > 0 && totalConIP <= totalAnalogicos) {
+      // Modo REEMPLAZO: las cámaras IP ocupan slots analógicos → IA se mantiene
+      alertas.push({
+        tipo: 'info',
+        titulo: 'Cámaras IP en modo reemplazo — IA se mantiene',
+        mensaje: 'Las ' + totalCamarasIP + ' cámara' + (totalCamarasIP>1?'s':'') + ' IP reemplazan canales analógicos del ' + g.codigo + '. En este modo la IA (SMD/WizSense) se mantiene activa.',
+        solucion: 'Correcto. Si agregas más cámaras IP que canales analógicos disponibles, la IA se desactivará.',
+        icon: '✅'
+      });
+    }
+  });
+
+  // ═══ REGLA 3: Resolución máxima del NVR vs cámaras ═══
+  grabadores.forEach(function(g) {
+    if (g.tipoGrabador !== 'IP' || !g.maxResMP) return;
+    var camarasExceden = camarasIP.filter(function(c){
+      return c.resolucionMP > g.maxResMP;
+    });
+    if (camarasExceden.length > 0) {
+      var nombres = camarasExceden.map(function(c){return c.codigo + ' (' + c.resolucionMP + 'MP)';}).join(', ');
+      alertas.push({
+        tipo: 'warning',
+        titulo: 'Resolución de cámaras excede capacidad del NVR',
+        mensaje: 'Tu ' + g.codigo + ' graba máx ' + g.maxResMP + 'MP por canal pero tienes: ' + nombres + '.',
+        solucion: 'El NVR grabará a menor resolución. Para aprovecharlas cambia a un NVR serie 4000/5000 (soporta hasta 12MP).',
+        icon: '📐'
+      });
+    }
+  });
+
+  // ═══ REGLA 4: Consumo PoE vs capacidad del switch ═══
+  var camsPoE = camarasIP.filter(function(c){return c.usaPoE || c.consumoPoE;});
+  if (camsPoE.length > 0 && switches.length > 0) {
+    switches.forEach(function(sw) {
+      if (!sw.esPoE) return;
+      var capacidadSwitch = (sw.potenciaPoE || 0) * sw.qty;
+      var consumoTotal = camsPoE.reduce(function(s,c){return s + (c.consumoPoE||6) * c.qty;},0);
+      var puertosSwitch = (sw.puertos || 0) * sw.qty;
+      var totalCamsPoE = camsPoE.reduce(function(s,c){return s+c.qty;},0);
+      
+      if (consumoTotal > capacidadSwitch * 0.8) {  // 80% del budget como margen seguridad
+        alertas.push({
+          tipo: consumoTotal > capacidadSwitch ? 'error' : 'warning',
+          titulo: consumoTotal > capacidadSwitch ? 'Switch PoE insuficiente' : 'Switch PoE al límite',
+          mensaje: 'Consumo estimado: ~' + consumoTotal + 'W · Capacidad switch ' + sw.codigo + ': ' + capacidadSwitch + 'W',
+          solucion: consumoTotal > capacidadSwitch 
+            ? 'Necesitas un switch de mayor potencia o sumar otro switch PoE.' 
+            : 'Margen bajo. Considera un switch con 20-30% más capacidad para estabilidad.',
+          icon: '⚡'
+        });
+      }
+      if (totalCamsPoE > puertosSwitch) {
+        alertas.push({
+          tipo: 'error',
+          titulo: 'Puertos del switch insuficientes',
+          mensaje: 'Tienes ' + totalCamsPoE + ' cámaras PoE pero el switch solo tiene ' + puertosSwitch + ' puertos.',
+          solucion: 'Necesitas un switch con más puertos o sumar uno adicional.',
+          icon: '🔌'
+        });
+      }
+    });
+  } else if (camsPoE.length > 0 && switches.length === 0) {
+    // Cámaras PoE sin switch PoE ni NVR con PoE integrado
+    var nvrConPoE = grabadores.some(function(g){return g.puertosPoE > 0;});
+    if (!nvrConPoE) {
+      var totalCams = camsPoE.reduce(function(s,c){return s+c.qty;},0);
+      var consumoEstimado = camsPoE.reduce(function(s,c){return s + (c.consumoPoE||6) * c.qty;},0);
+      alertas.push({
+        tipo: 'warning',
+        titulo: 'Falta alimentación PoE para tus cámaras',
+        mensaje: 'Tienes ' + totalCams + ' cámara' + (totalCams>1?'s':'') + ' PoE pero ningún switch PoE ni NVR con PoE integrado.',
+        solucion: 'Agrega un switch PoE de al menos ' + Math.ceil(consumoEstimado * 1.3) + 'W y ' + totalCams + ' puertos.',
+        icon: '🔋'
+      });
+    }
+  }
+
+  // ═══ REGLA 5: NVR con PoE integrado vs cámaras ═══
+  grabadores.forEach(function(g) {
+    if (g.puertosPoE > 0 && totalCamarasIP > g.puertosPoE * g.qty) {
+      var exceso = totalCamarasIP - g.puertosPoE * g.qty;
+      alertas.push({
+        tipo: 'warning',
+        titulo: 'Cámaras exceden puertos PoE del NVR',
+        mensaje: 'Tu ' + g.codigo + ' tiene ' + (g.puertosPoE * g.qty) + ' puertos PoE pero tienes ' + totalCamarasIP + ' cámaras IP.',
+        solucion: 'Para ' + exceso + ' cámara' + (exceso>1?'s':'') + ' adicional' + (exceso>1?'es':'') + ' agrega un switch PoE o alimentación externa.',
+        icon: '🔌'
+      });
+    }
+  });
+
+  // ═══ REGLA 6: Almacenamiento (HDD vs días de grabación) ═══
+  var hdds = items.filter(function(i){
+    return (i.cat === 'accesorios' || i.cat === 'especiales') && /HDD|disco|almacen/i.test(i.nombre || '');
+  });
+  // Esta regla ya existe parcialmente en HDD_RULES — complementamos
+  if (totalCamaras > 0 && grabadores.length > 0 && hdds.length === 0) {
+    var diasEstimados = 'variable';
+    alertas.push({
+      tipo: 'info',
+      titulo: 'Falta disco duro para almacenamiento',
+      mensaje: 'Tus ' + totalCamaras + ' cámara' + (totalCamaras>1?'s':'') + ' no podrán grabar sin un HDD instalado.',
+      solucion: 'Recomendamos HDD de vigilancia (Purple/Skyhawk) acorde al NVR. Guía: 4CH→1-2TB · 8CH→2-4TB · 16CH→4-8TB',
+      icon: '💾'
+    });
+  }
+
+  // ═══ REGLA 7: Cámaras exterior sin IP adecuado ═══
+  // Detectar si en los nombres hay "exterior" o similar sin IP66+
+  var camsInterior = camarasIP.concat(camarasHDCVI).filter(function(c){return c.ipRating < 66 && c.ipRating > 0;});
+  // Esta regla se activa si el cliente declara exterior en un futuro — por ahora info
+
+  // ═══ REGLA 8: Voltaje fuentes vs cámaras HDCVI ═══
+  var camsHDCVI12V = camarasHDCVI.filter(function(c){return c.voltaje === 12;});
+  if (camsHDCVI12V.length > 0 && fuentes.length > 0) {
+    fuentes.forEach(function(f) {
+      var consumoEstimado = camsHDCVI12V.reduce(function(s,c){return s + 4 * c.qty;},0); // ~4W por cámara HDCVI
+      var capacidad = f.watts * f.qty;
+      if (consumoEstimado > capacidad * 0.8) {
+        alertas.push({
+          tipo: consumoEstimado > capacidad ? 'error' : 'warning',
+          titulo: 'Fuente insuficiente para las cámaras',
+          mensaje: 'Consumo estimado: ~' + consumoEstimado + 'W · Fuente ' + f.codigo + ': ' + capacidad + 'W',
+          solucion: 'Considera una fuente de mayor capacidad o dividir en varias fuentes.',
+          icon: '🔌'
+        });
+      }
+    });
+  }
+
+  // ═══ REGLA 9: Sugerencia positiva — mix de tecnologías ═══
+  var tieneWizsense = camarasIP.some(function(c){return c.wizsense;});
+  var tieneNoWizsense = camarasIP.some(function(c){return !c.wizsense;});
+  if (tieneWizsense && tieneNoWizsense && totalCamaras >= 4) {
+    alertas.push({
+      tipo: 'info',
+      titulo: 'Mezcla de cámaras con y sin IA',
+      mensaje: 'Algunas de tus cámaras tienen WizSense (detección IA) y otras no.',
+      solucion: 'Para aprovechar al máximo la IA, considera uniformar la línea. WizSense reduce falsas alarmas 90%.',
+      icon: '🤖'
+    });
+  }
+
+  return alertas;
+}
+
+// Render de alertas en el carro
+function compatRenderAlerts() {
+  var panel = document.getElementById('compatPanel');
+  var alertas = compatAnalizarCarro();
+  
+  if (!panel) return;
+  
+  if (alertas.length === 0) {
+    panel.style.display = 'none';
+    return;
+  }
+  
+  panel.style.display = 'block';
+  
+  var errores = alertas.filter(function(a){return a.tipo === 'error';}).length;
+  var warnings = alertas.filter(function(a){return a.tipo === 'warning';}).length;
+  var infos = alertas.filter(function(a){return a.tipo === 'info';}).length;
+  
+  var headerText = '';
+  var headerClass = '';
+  if (errores > 0) {
+    headerText = '⚠️ ' + errores + (errores === 1 ? ' problema crítico' : ' problemas críticos') + ' detectados';
+    headerClass = 'error';
+  } else if (warnings > 0) {
+    headerText = '⚡ ' + warnings + (warnings === 1 ? ' advertencia técnica' : ' advertencias técnicas');
+    headerClass = 'warning';
+  } else {
+    headerText = '✅ Sistema compatible' + (infos > 0 ? ' · ' + infos + ' recomendación' + (infos>1?'es':'') : '');
+    headerClass = 'ok';
+  }
+  
+  panel.innerHTML = 
+    '<div class="compat-header ' + headerClass + '" onclick="compatToggle()">' +
+      '<span class="compat-title">' + headerText + '</span>' +
+      '<svg class="compat-chevron" id="compatChevron" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>' +
+    '</div>' +
+    '<div class="compat-body" id="compatBody">' +
+      alertas.map(function(a) {
+        return '<div class="compat-alert ' + a.tipo + '">' +
+          '<div class="compat-alert-icon">' + a.icon + '</div>' +
+          '<div class="compat-alert-text">' +
+            '<div class="compat-alert-title">' + a.titulo + '</div>' +
+            '<div class="compat-alert-msg">' + a.mensaje + '</div>' +
+            (a.solucion ? '<div class="compat-alert-sol">💡 ' + a.solucion + '</div>' : '') +
+          '</div>' +
+        '</div>';
+      }).join('') +
+    '</div>';
+}
+
+function compatToggle() {
+  var body = document.getElementById('compatBody');
+  var chev = document.getElementById('compatChevron');
+  if (!body) return;
+  var collapsed = body.classList.toggle('collapsed');
+  if (chev) chev.style.transform = collapsed ? 'rotate(-90deg)' : 'rotate(0deg)';
+}
+
+// Hook: ejecutar cada vez que cambie el carro
+var _compatOriginalRenderCart = null;
+(function hookCompat() {
+  var tries = 0;
+  var waitRender = setInterval(function() {
+    if (typeof renderCart === 'function' || tries > 50) {
+      clearInterval(waitRender);
+      if (typeof renderCart === 'function') {
+        var orig = renderCart;
+        window.renderCart = function() {
+          orig.apply(this, arguments);
+          setTimeout(compatRenderAlerts, 50);
+        };
+      }
+    }
+    tries++;
+  }, 100);
+})();
+
 // ══ WHATSAPP CHAT PANEL ══════════════════════════════════
 var wapHistory = [];   // historial de la conversación para la API
 var wapOpen = false;
@@ -20256,6 +21281,250 @@ document.addEventListener('DOMContentLoaded', function() {
     };
   }
 });
+
+
+// ── Fecha de actualización dinámica ──
+(function() {
+  var dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  var meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+               'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  function formatFecha(d) {
+    return dias[d.getDay()] + ' ' +
+           String(d.getDate()).padStart(2,'0') + ' de ' +
+           meses[d.getMonth()] + ' del ' +
+           d.getFullYear() + ' · ' +
+           String(d.getHours()).padStart(2,'0') + ':' +
+           String(d.getMinutes()).padStart(2,'0') + ' hrs';
+  }
+  // Guardar la fecha de carga en localStorage para persistencia
+  var key = 'sstt_last_update';
+  var stored = localStorage.getItem(key);
+  var now = new Date();
+  // Actualizar solo si no hay fecha guardada o si cambió el día
+  var todayStr = now.toDateString();
+  if (!stored || JSON.parse(stored).day !== todayStr) {
+    localStorage.setItem(key, JSON.stringify({
+      day: todayStr,
+      fecha: formatFecha(now)
+    }));
+  }
+  var txt = document.getElementById('updateTxt');
+  if (txt) {
+    var saved = localStorage.getItem(key);
+    var label = saved ? JSON.parse(saved).fecha : formatFecha(now);
+    txt.textContent = 'Última actualización: ' + label;
+  }
+})();
+
+
+// ══ SEGUIMIENTO DE PEDIDO ════════════════════════════════════
+var trackAttempts = 0;
+var trackMaxAttempts = 5;
+var trackBlockedUntil = null;
+var trackCountdownTimer = null;
+var trackRutVisible = false;
+
+function toggleTrackRut() {
+  trackRutVisible = !trackRutVisible;
+  var field = document.getElementById('trackRutField');
+  var btn = document.getElementById('trackSecurityToggle');
+  if (field) field.style.display = trackRutVisible ? 'block' : 'none';
+  if (btn) btn.textContent = trackRutVisible
+    ? '− Quitar verificación adicional con RUT'
+    : '+ Agregar verificación adicional con RUT';
+}
+
+function formatRutTrack() {
+  var el = document.getElementById('trackRut');
+  if (el && typeof formatRutStr === 'function') el.value = formatRutStr(el.value);
+}
+
+function maskEmail(email) {
+  var parts = email.split('@');
+  if (parts.length !== 2) return email;
+  var user = parts[0];
+  var domain = parts[1];
+  var masked = user[0] + '***' + (user.length > 1 ? user[user.length-1] : '') + '@' + domain;
+  return masked;
+}
+
+function trackSearch() {
+  // Verificar bloqueo
+  if (trackBlockedUntil && new Date() < trackBlockedUntil) return;
+
+  var orderNum = (document.getElementById('trackOrderNum').value || '').trim();
+  var email = (document.getElementById('trackEmail').value || '').trim().toLowerCase();
+  var rut = trackRutVisible ? (document.getElementById('trackRut').value || '').trim() : null;
+
+  // Validar campos
+  var valid = true;
+  if (!orderNum) { document.getElementById('trackOrderNum').classList.add('error'); valid = false; }
+  if (!email || !email.includes('@')) { document.getElementById('trackEmail').classList.add('error'); valid = false; }
+  if (!valid) return;
+
+  // Incrementar intentos
+  trackAttempts++;
+
+  // Mostrar loading
+  var btn = document.getElementById('trackSubmitBtn');
+  if (btn) { btn.disabled = true; btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Buscando...'; }
+
+  // Simular búsqueda (aquí irá la llamada a Bsale)
+  setTimeout(function() {
+    if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Buscar mi pedido'; }
+
+    // DEMO: validar contra pedidos guardados en localStorage
+    var pedidos = [];
+    try { pedidos = JSON.parse(localStorage.getItem('sstt_pedidos') || '[]'); } catch(e) {}
+
+    var pedido = pedidos.find(function(p) {
+      var emailMatch = p.email && p.email.toLowerCase() === email;
+      var numMatch = p.num && String(p.num) === orderNum;
+      var rutMatch = !rut || (p.rut && p.rut.replace(/\./g,'').toLowerCase() === rut.replace(/\./g,'').toLowerCase());
+      return emailMatch && numMatch && rutMatch;
+    });
+
+    if (pedido) {
+      trackAttempts = 0;
+      trackShowResult(pedido, email);
+    } else {
+      trackShowError();
+    }
+  }, 1200);
+}
+
+function trackShowError() {
+  var errEl = document.getElementById('trackError');
+  var errMsg = document.getElementById('trackErrorMsg');
+  var remaining = trackMaxAttempts - trackAttempts;
+
+  if (trackAttempts >= trackMaxAttempts) {
+    // Bloquear por 10 minutos
+    trackBlockedUntil = new Date(Date.now() + 10 * 60 * 1000);
+    if (errEl) errEl.classList.remove('show');
+    var blocked = document.getElementById('trackBlocked');
+    if (blocked) blocked.classList.add('show');
+    trackStartCountdown();
+    return;
+  }
+
+  if (errEl) errEl.classList.add('show');
+  if (errMsg) errMsg.textContent = 'Datos no encontrados. ' + (remaining > 0 ? remaining + ' intento' + (remaining !== 1 ? 's' : '') + ' restante' + (remaining !== 1 ? 's.' : '.') : '');
+}
+
+function trackStartCountdown() {
+  var cd = document.getElementById('trackCountdown');
+  var btn = document.getElementById('trackSubmitBtn');
+  if (btn) btn.disabled = true;
+
+  trackCountdownTimer = setInterval(function() {
+    var remaining = Math.max(0, trackBlockedUntil - new Date());
+    var mins = Math.floor(remaining / 60000);
+    var secs = Math.floor((remaining % 60000) / 1000);
+    if (cd) cd.textContent = mins + ':' + String(secs).padStart(2,'0');
+
+    if (remaining <= 0) {
+      clearInterval(trackCountdownTimer);
+      trackAttempts = 0;
+      trackBlockedUntil = null;
+      if (btn) btn.disabled = false;
+      var blocked = document.getElementById('trackBlocked');
+      if (blocked) blocked.classList.remove('show');
+    }
+  }, 1000);
+}
+
+function trackShowResult(pedido, email) {
+  // Ocultar formulario, mostrar resultado
+  document.getElementById('trackSearchPanel').style.display = 'none';
+  var result = document.getElementById('trackResult');
+  result.classList.add('show');
+
+  // Estados: confirmado, preparando, despachado, entregado
+  var estados = ['confirmado','preparando','despachado','entregado'];
+  var estadoIdx = estados.indexOf(pedido.estado || 'confirmado');
+
+  // Llenar datos
+  var safe = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val || '—'; };
+  safe('trackResNum', 'Orden #' + pedido.num);
+  safe('trackResDate', pedido.fecha || '—');
+  safe('trackResTotal', pedido.total ? '$' + Number(pedido.total).toLocaleString('es-CL') : '—');
+  safe('trackResCliente', pedido.nombre || 'Cliente');
+  safe('trackResEmail', maskEmail(email));
+
+  // Badge de estado
+  var badge = document.getElementById('trackResBadge');
+  if (badge) {
+    var labels = {confirmado:'✅ Confirmado', preparando:'📦 Preparando', despachado:'🚚 Despachado', entregado:'✅ Entregado'};
+    badge.textContent = labels[pedido.estado] || pedido.estado;
+    badge.className = 'track-status-badge ' + (pedido.estado || 'confirmado');
+  }
+
+  // Activar pasos
+  ['tst1','tst2','tst3','tst4'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.classList.remove('done','active');
+    if (i < estadoIdx) el.classList.add('done');
+    else if (i === estadoIdx) el.classList.add('active');
+  });
+  ['tsl1','tsl2','tsl3'].forEach(function(id, i) {
+    var el = document.getElementById(id);
+    if (el) el.classList.toggle('done', i < estadoIdx);
+  });
+
+  // Info courier si está despachado
+  var courierDiv = document.getElementById('trackCourierInfo');
+  if (courierDiv && pedido.courier && estadoIdx >= 2) {
+    courierDiv.style.display = 'block';
+    var cn = document.getElementById('trackCourierName');
+    var cnum = document.getElementById('trackCourierNum');
+    if (cn) cn.textContent = pedido.courier;
+    if (cnum) cnum.textContent = pedido.trackNum || 'Pendiente';
+    var link = document.getElementById('trackCourierLink');
+    if (link && pedido.courier === 'Starken') link.href = 'https://www.starken.cl/seguimiento';
+    else if (link && pedido.courier === 'Chilexpress') link.href = 'https://www.chilexpress.cl/';
+  } else if (courierDiv) {
+    courierDiv.style.display = 'none';
+  }
+
+  // Items del pedido
+  var itemsDiv = document.getElementById('trackResItems');
+  if (itemsDiv && pedido.items) {
+    itemsDiv.innerHTML = pedido.items.map(function(item) {
+      return '<div class="track-item">' +
+        '<span class="track-item-name">' + item.nombre + '</span>' +
+        '<span class="track-item-qty">x' + item.qty + '</span>' +
+        '<span class="track-item-price">$' + Number(item.total).toLocaleString('es-CL') + '</span>' +
+      '</div>';
+    }).join('');
+  }
+
+  // Botón WhatsApp con contexto
+  var waBtn = document.getElementById('trackWaBtn');
+  if (waBtn) {
+    var msg = 'Hola SSTT, consulto por mi pedido #' + pedido.num + '. Estado actual: ' + (pedido.estado || 'confirmado');
+    waBtn.onclick = function() { window.open('https://wa.me/56222042119?text=' + encodeURIComponent(msg), '_blank'); };
+  }
+}
+
+function trackReset() {
+  document.getElementById('trackSearchPanel').style.display = 'block';
+  document.getElementById('trackResult').classList.remove('show');
+  document.getElementById('trackOrderNum').value = '';
+  document.getElementById('trackEmail').value = '';
+  var err = document.getElementById('trackError');
+  if (err) err.classList.remove('show');
+}
+
+// Al completar un pedido, guardar en localStorage para demo
+function saveOrderToTracking(pedidoData) {
+  try {
+    var pedidos = JSON.parse(localStorage.getItem('sstt_pedidos') || '[]');
+    pedidos.push(pedidoData);
+    localStorage.setItem('sstt_pedidos', JSON.stringify(pedidos));
+  } catch(e) {}
+}
 
 document.addEventListener('DOMContentLoaded', function() {
   // Re-inicializar badge y carro al cargar
