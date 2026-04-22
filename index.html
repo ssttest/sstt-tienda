@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 17:52 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 18:24 hrs (UTC-4 Chile) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -7348,6 +7348,47 @@ body.cart-open #proyectoListadoBtn {
 .fov-infra-title { font-size:11px; font-weight:800; color:#222; line-height:1.25; }
 .fov-infra-sub { font-size:10px; color:#666; margin-top:2px; }
 
+/* Selector de sensor/lente en multi-sensor */
+.fov-lens-toggle {
+  margin: 0 0 11px;
+  padding: 10px 11px;
+  background: linear-gradient(135deg, rgba(99,102,241,.06), rgba(0,87,184,.04));
+  border: 1px solid rgba(99,102,241,.15);
+  border-radius: 11px;
+}
+.fov-lens-toggle-label {
+  font-size: 10px; font-weight: 800; color: #5e3dcc;
+  text-transform: uppercase; letter-spacing: .4px;
+  margin-bottom: 6px;
+}
+.fov-lens-chips {
+  display: flex; flex-wrap: wrap; gap: 5px;
+}
+.fov-lens-chip {
+  padding: 6px 10px; font-size: 11px; font-weight: 700;
+  border: 1.5px solid rgba(0,0,0,.08); border-radius: 8px;
+  background: #fff; color: #555; cursor: pointer;
+  font-family: var(--font); transition: all .14s;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.fov-lens-chip:hover { border-color: #7c6fee; color: #333; }
+.fov-lens-chip.on {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  color: #fff; border-color: transparent;
+  box-shadow: 0 2px 8px rgba(99,102,241,.3);
+}
+.fov-multi-banner {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px; margin-bottom:12px;
+  border-radius:11px;
+  background:linear-gradient(135deg,rgba(0,87,184,.06),rgba(0,180,230,.04));
+  border:1px solid rgba(0,87,184,.12);
+}
+.fov-multi-icon { font-size:22px; flex-shrink:0; line-height:1; }
+.fov-multi-info { flex:1; min-width:0; }
+.fov-multi-title { font-size:12px; font-weight:800; color:#0057B8; line-height:1.25; }
+.fov-multi-sub { font-size:10.5px; color:#555; margin-top:2px; line-height:1.3; }
+
 /* Botón agregar al carro */
 .fov-add-btn {
   width:100%; margin-top:11px; padding:9px;
@@ -7961,7 +8002,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 17:52 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 18:24 hrs</span>
   </div>
 </div>
 
@@ -9307,6 +9348,7 @@ if (window.pdfjsLib) {
         <input type="text" class="fov-sr-input" id="fovSearchAInput" placeholder="Buscar por modelo, código o característica…" oninput="fovSearch(this.value,'A')" onfocus="fovSearch(this.value,'A')" autocomplete="off">
         <div class="fov-sr-dd" id="fovSearchAResults"></div>
       </div>
+      <div class="fov-lens-toggle" id="fovLensToggleA" style="display:none"></div>
       <div class="fov-slider-row">
         <div class="fov-slider-lbl">Focal <b id="fovFocalALbl">2.8mm</b></div>
         <input type="range" class="fov-slider fov-slider-a" id="fovFocalA" min="1.5" max="60" step="0.1" value="2.8" oninput="fovSlide('A','focalA',this.value)">
@@ -9332,6 +9374,7 @@ if (window.pdfjsLib) {
         <input type="text" class="fov-sr-input" id="fovSearchBInput" placeholder="Buscar otra cámara para comparar…" oninput="fovSearch(this.value,'B')" onfocus="fovSearch(this.value,'B')" autocomplete="off">
         <div class="fov-sr-dd" id="fovSearchBResults"></div>
       </div>
+      <div class="fov-lens-toggle" id="fovLensToggleB" style="display:none"></div>
       <div class="fov-slider-row">
         <div class="fov-slider-lbl">Focal <b id="fovFocalBLbl">2.8mm</b></div>
         <input type="range" class="fov-slider fov-slider-b" id="fovFocalB" min="1.5" max="60" step="0.1" value="2.8" oninput="fovSlide('B','focalB',this.value)">
@@ -21966,7 +22009,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 17:52 hrs';
+  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 18:24 hrs';
 })();
 
 
@@ -23067,6 +23110,147 @@ function parseInfra(nombre, codigo) {
   return out;
 }
 
+// Detectar tipo de cámara MULTISENSOR a partir de código y nombre
+// Retorna objeto con la info o null si es cámara normal
+function parseMultiSensor(nombre, codigo) {
+  var n = (nombre || '').toLowerCase();
+  var c = (codigo || '').toUpperCase();
+  var segments = c.split('-');
+
+  // ── FISHEYE (1 sensor con lente ojo-de-pez) ──
+  // Códigos: IPC-EBW*, IPC-EB\d*, HAC-EW*, HAC-EBW*
+  if (/^(IPC-)?EBW\d/i.test(c) || /^(IPC-)?EB\d/i.test(c) ||
+      /^(DH-)?HAC-EBW/i.test(c) || /^(DH-)?HAC-EW/i.test(c) ||
+      /fisheye/i.test(n)) {
+    // Fisheye típicamente tiene cobertura 360° horizontal, 180° vertical
+    return {
+      kind: 'fisheye',
+      fovH: 360, fovV: 180,
+      sensors: 1, mpPerSensor: null, focals: null,
+      ptzZoom: null,
+      label: 'Fisheye 360° ojo-de-pez'
+    };
+  }
+
+  // ── EXTRAER "NxYMP" del nombre (sensores × MP por sensor) ──
+  // Ej: "4x2MP", "2x4MP", "8x2MP", "3x2MP"
+  var nx = n.match(/(\d+)\s*x\s*(\d+)\s*mp/i);
+  var sensors = nx ? parseInt(nx[1]) : null;
+  var mpPerSensor = nx ? parseInt(nx[2]) : null;
+
+  // ── PANORÁMICA 360° (sufijos -A360 / -B360 del código) ──
+  if (/\bA360\b|\bB360\b/i.test(c) || /\b360\s*°?\b.*panoram/i.test(n)) {
+    // Ver si además tiene PTZ
+    var hasPTZ360 = /\bptz\b/i.test(n) || /^(DH-)?(PSDW|IPC-SDT)/i.test(c);
+    var ptzZoom = null;
+    // Exigir "X" para distinguir zoom de MP
+    var pz = n.match(/ptz\s*(\d+)\s*x\b/i);
+    if (!pz) pz = n.match(/(\d+)\s*x\s*(?:ptz|zoom)/i);
+    if (pz) ptzZoom = parseInt(pz[1]);
+    var zStr360 = ptzZoom ? ptzZoom+'X' : 'zoom';
+    return {
+      kind: hasPTZ360 ? 'ptzCombo' : 'pano360',
+      fovH: 360, fovV: 90,
+      sensors: sensors || (hasPTZ360 ? 8 : 4),
+      mpPerSensor: mpPerSensor || 2,
+      focals: null, ptzZoom: ptzZoom,
+      label: hasPTZ360 ?
+        'Panorámica 360° + PTZ '+zStr360 :
+        'Panorámica 360° multi-sensor'
+    };
+  }
+
+  // ── PANORÁMICA 270° ──
+  if (/\bA270\b/i.test(c) || /\b270\s*°?\b/i.test(n)) {
+    return {
+      kind: 'pano270', fovH: 270, fovV: 90,
+      sensors: sensors || 3, mpPerSensor: mpPerSensor || 2,
+      focals: null, ptzZoom: null,
+      label: 'Panorámica 270° multi-sensor'
+    };
+  }
+
+  // ── PANORÁMICA 180° (sufijo -A180 o "180°" en nombre) ──
+  if (/\bA180\b/i.test(c) || /\b180\s*°?\b.*panoram|panoram.*\b180/i.test(n)) {
+    // Caso especial: si es un solo sensor (4MP, no 4x4MP), es una cámara con lente panorámica
+    // Detectar por patrón "NxYMP" explícito
+    var singleSensor = !nx; // no hay "4x4MP" pattern
+    return {
+      kind: 'pano180',
+      fovH: 180, fovV: 90,
+      sensors: singleSensor ? 1 : (sensors || 2),
+      mpPerSensor: mpPerSensor || (singleSensor ? 4 : 4),
+      focals: null, ptzZoom: null,
+      singleLens: singleSensor,
+      label: singleSensor ?
+        'Panorámica 180° (lente panorámica)' :
+        'Panorámica 180° multi-sensor'
+    };
+  }
+
+  // ── PTZ + PANORÁMICA COMBO (detectar ANTES que multi-lens) ──
+  // Códigos: IPC-SDT*, SDT*, PSDW*, DH-IPC-SDT*, DH-PSDW*
+  if (/^(DH-)?(IPC-)?(SDT|PSDW)/i.test(c)) {
+    // Extraer zoom: EXIGIR "X" al final para no confundir con MP
+    var pzX = n.match(/ptz\s*(\d+)\s*x\b/i);
+    if (!pzX) pzX = n.match(/(\d+)\s*x\s*(?:ptz|zoom)/i);
+    // Buscar también "5X" después de "PTZ" con separador
+    if (!pzX) pzX = n.match(/ptz\s+\d+mp\s*(\d+)\s*x/i);
+    var ptzZoomC = pzX ? parseInt(pzX[1]) : null;
+    // Detectar FOV panorámico del código (-A360/-B360, -A270/-B270, -A180/-B180, -A120/-B120)
+    var fovH = 180; // default
+    if (/\b[AB]360\b/i.test(c) || /\b360\s*°?\b/i.test(n)) fovH = 360;
+    else if (/\b[AB]270\b/i.test(c) || /\b270\s*°?\b/i.test(n)) fovH = 270;
+    else if (/\b[AB]120\b/i.test(c) || /\b120\s*°?\b/i.test(n)) fovH = 120;
+    else if (/\b[AB]180\b/i.test(c) || /\b180\s*°?\b/i.test(n)) fovH = 180;
+    var zoomStr = ptzZoomC ? ptzZoomC+'X' : 'zoom';
+    return {
+      kind: 'ptzCombo',
+      fovH: fovH,
+      fovV: 90,
+      sensors: sensors || (fovH === 360 ? 4 : fovH === 270 ? 3 : fovH === 120 ? 1 : 2),
+      mpPerSensor: mpPerSensor || 2,
+      focals: null,
+      ptzZoom: ptzZoomC,
+      label: 'PTZ '+zoomStr+' + Panorámica '+fovH+'°'
+    };
+  }
+
+  // ── MULTI-LENS (varios focales en misma dirección) ──
+  if (/^(IPC-)?MFW/i.test(c) || /triple\s*vision(?!.*ptz)|x-spans(?!.*ptz)/i.test(n)) {
+    // Extraer los focales del nombre
+    // Ej: "3.6mm 12mm 25mm" o "3.6mm + 8-32mm"
+    var focals = [];
+    var fm;
+    var re1 = /(\d+\.?\d*)\s*(?:-\s*(\d+\.?\d*))?\s*mm/gi;
+    while ((fm = re1.exec(n)) !== null) {
+      var f1 = parseFloat(fm[1]);
+      if (f1 >= 1 && f1 <= 60) {
+        if (fm[2]) {
+          // Es un rango (varifocal)
+          var f2 = parseFloat(fm[2]);
+          focals.push({min: f1, max: f2, type: 'varifocal'});
+        } else {
+          focals.push({min: f1, max: f1, type: 'fixed'});
+        }
+      }
+    }
+    // Extraer N de "NxYMP"
+    var nxm = focals.length;
+    return {
+      kind: 'multiLens',
+      fovH: null, fovV: null, // depende de cada lente
+      sensors: sensors || nxm || 2,
+      mpPerSensor: mpPerSensor || 2,
+      focals: focals.length ? focals : null,
+      ptzZoom: null,
+      label: 'Multi-lens ('+focals.length+' lentes)'
+    };
+  }
+
+  return null; // cámara normal
+}
+
 // Extraer datos de focal — PRIORIZA código del producto sobre el nombre
 // Los códigos Dahua terminan con el focal en formato DDDD (= DD.DD mm)
 // Ej: -0280B-S2 → 2.80mm, -0360B → 3.60mm, -0800B → 8.00mm, -1200 → 12.00mm
@@ -23076,58 +23260,95 @@ function parseFocal(nombre, codigo) {
   var c = (codigo || '').toUpperCase();
   var segments = c.split('-');
 
+  // 0) DETECTAR MULTISENSOR primero (prioridad máxima)
+  var multi = parseMultiSensor(nombre, codigo);
+
   // 1) Detectar VARIANTE por segmento exacto del código
+  //    ZS  = motorizada estándar (ajuste remoto desde NVR)
+  //    ZAS = motorizada con Audio
+  //    ZE  = motorizada Extended (lente telefoto, rango más cerrado)
+  //    ZEA = motorizada Extended con Audio
+  //    ZW  = motorizada Wide (gran angular)
+  //    ZWA = motorizada Wide con Audio
+  //    VF  = varifocal manual (ajuste físico con destornillador)
   var variant = null, variantDesc = null;
-  if (segments.indexOf('ZE') >= 0) { variant='ZE'; variantDesc='motorizado telefoto'; }
-  else if (segments.indexOf('ZW') >= 0) { variant='ZW'; variantDesc='motorizado gran angular'; }
-  else if (segments.indexOf('ZS') >= 0) { variant='ZS'; variantDesc='motorizado remoto'; }
-  else if (segments.some(function(s){ return s === 'VF' || s.endsWith('VF'); })) {
+  if (segments.indexOf('ZEA') >= 0)      { variant='ZEA'; variantDesc='motorizada telefoto con audio'; }
+  else if (segments.indexOf('ZE') >= 0)  { variant='ZE';  variantDesc='motorizada telefoto (extended)'; }
+  else if (segments.indexOf('ZWA') >= 0) { variant='ZWA'; variantDesc='motorizada gran angular con audio'; }
+  else if (segments.indexOf('ZW') >= 0)  { variant='ZW';  variantDesc='motorizada gran angular'; }
+  else if (segments.indexOf('ZAS') >= 0) { variant='ZAS'; variantDesc='motorizada con audio'; }
+  else if (segments.indexOf('ZSA') >= 0) { variant='ZSA'; variantDesc='motorizada con audio'; }
+  else if (segments.indexOf('ZS') >= 0)  { variant='ZS';  variantDesc='motorizada remota'; }
+  else if (segments.indexOf('VF') >= 0 ||
+           segments.some(function(s){ return s.endsWith('VF') || s.endsWith('-VF'); })) {
     variant='VF'; variantDesc='varifocal manual';
   }
-  // También detectar por sufijo dentro de un segmento (ej: "HDBW2841RP-ZS" tiene ZS como segmento)
-  // o "HAC-HFW1100R-VF-IRE6" tiene VF como segmento
-  // Detectar "Motor" en el nombre → motorizado
-  if (!variant && /motor/i.test(n)) { variant='ZS'; variantDesc='motorizado (por descripción)'; }
+  if (!variant && /motor/i.test(n)) { variant='ZS'; variantDesc='motorizada (por descripción)'; }
 
-  // 2) Si es VARIFOCAL/MOTORIZADO, el rango viene del nombre
+  // 2) Si es VARIFOCAL/MOTORIZADA, el rango viene de:
+  //    (a) nombre con "2.7-13.5mm" explícito, o
+  //    (b) código con "-2712-" (2.7→12mm), "-0832-" (8→32mm), "-2713-" (2.7→13mm)
+  //    (c) rango default según variante
   if (variant) {
+    // (a) Rango explícito en el nombre
     var range = n.match(/(\d+\.?\d*)\s*[-–]\s*(\d+\.?\d*)\s*mm/i);
     if (range) {
       return {
         min: parseFloat(range[1]), max: parseFloat(range[2]),
         type: 'varifocal', variant: variant, variantDesc: variantDesc,
-        source: 'nombre (rango)'
+        source: 'nombre (rango)', multi: multi
       };
     }
-    // Fallback: rango típico para cada variante
+    // (b) Código 4-dígitos tipo varifocal — decodificar AB=X.Y (si no empieza en 0) o AB (si empieza en 0), CD=ZZ
+    for (var j = segments.length - 1; j >= 0; j--) {
+      var sg = segments[j];
+      var mg = sg.match(/^(\d{4})[A-Z]{0,2}$/);
+      if (mg) {
+        var raw = mg[1];
+        var ab = raw.substring(0,2), cd = raw.substring(2,4);
+        // Heurística: AB que empieza con 0 → unidad entera (08 = 8); si no → X.Y (27 = 2.7)
+        var mn = ab.charAt(0) === '0' ? parseInt(ab,10) : parseInt(ab,10)/10;
+        var mx = parseInt(cd,10);
+        // Validaciones: rango razonable
+        if (mx > mn && mn >= 1 && mx <= 80 && mx - mn >= 3) {
+          return {
+            min: mn, max: mx, type: 'varifocal',
+            variant: variant, variantDesc: variantDesc,
+            source: 'código '+raw+' → '+mn+'-'+mx+'mm', multi: multi
+          };
+        }
+      }
+    }
+    // (c) Rango default según variante
     var defaults = {
-      'ZE': {min: 7, max: 35},
-      'ZW': {min: 2.7, max: 13.5},
-      'ZS': {min: 2.7, max: 13.5},
-      'VF': {min: 2.7, max: 13.5}
+      'ZE':  {min: 7,   max: 35},    // Extended / telefoto
+      'ZEA': {min: 7,   max: 35},
+      'ZW':  {min: 2.7, max: 13.5},  // Wide
+      'ZWA': {min: 2.7, max: 13.5},
+      'ZS':  {min: 2.7, max: 13.5},
+      'ZAS': {min: 2.7, max: 13.5},
+      'ZSA': {min: 2.7, max: 13.5},
+      'VF':  {min: 2.7, max: 13.5}
     };
     var d = defaults[variant] || {min: 2.8, max: 12};
     return {
       min: d.min, max: d.max, type: 'varifocal',
       variant: variant, variantDesc: variantDesc+' (rango aproximado)',
-      source: 'aprox'
+      source: 'aprox', multi: multi
     };
   }
 
   // 3) FOCAL FIJO — buscar en el código primero (fuente de verdad)
-  // Recorrer segmentos de atrás hacia adelante — el focal va al final
   for (var i = segments.length - 1; i >= 0; i--) {
     var s = segments[i];
-    // Patrón: 4 dígitos opcionalmente seguidos de 1-2 letras (B, BS, R, N, etc.)
     var m = s.match(/^(\d{4})[A-Z]{0,2}$/);
     if (m) {
       var val = parseInt(m[1]) / 100;
-      // Rango razonable de focal: 1–60mm
       if (val >= 1 && val <= 60) {
         return {
           min: val, max: val, type: 'fixed',
           variant: 'FIJA', variantDesc: 'lente fijo '+val+'mm',
-          source: 'codigo'
+          source: 'codigo', multi: multi
         };
       }
     }
@@ -23140,7 +23361,7 @@ function parseFocal(nombre, codigo) {
     return {
       min: 4.8, max: 4.8 * z, type: 'ptz', zoom: z,
       variant: 'PTZ', variantDesc: 'PTZ con zoom óptico '+z+'X',
-      source: 'nombre'
+      source: 'nombre', multi: multi
     };
   }
 
@@ -23151,9 +23372,22 @@ function parseFocal(nombre, codigo) {
     return {
       min: f, max: f, type: 'fixed',
       variant: 'FIJA', variantDesc: 'lente fijo '+f+'mm',
-      source: 'nombre'
+      source: 'nombre', multi: multi
     };
   }
+
+  // 6) Multisensor sin focal detectable — usar focal típica
+  if (multi) {
+    var defFocal = multi.kind === 'fisheye' ? 1.85 : 2.8;
+    return {
+      min: defFocal, max: defFocal, type: 'fixed',
+      variant: multi.kind.toUpperCase(),
+      variantDesc: multi.label,
+      source: 'multisensor',
+      multi: multi
+    };
+  }
+
   return null;
 }
 
@@ -23174,9 +23408,9 @@ var PLATE_ZONE = { name:'Leer patente', ppm:500, desc:'Patente chilena',
 var FOV = {
   view: 'top',
   compare: false,
-  camA: null,  // {cod, nombre, mp, sensor, focal, cat, pneto, img}
-  camB: null,
+  camA: null, camB: null,
   focalA: 2.8, focalB: 2.8,
+  lensA: 'main', lensB: 'main',  // 'main' | 'ptz' | 0|1|2 (índice de lente en multi-lens)
   dist: 10, height: 3,
   allCams: []
 };
@@ -23229,7 +23463,22 @@ function fovSearch(query, which) {
     var fStr = c.focal.type === 'fixed' ? c.focal.min+'mm fija' :
                c.focal.type === 'ptz' ? c.focal.zoom+'X zoom' :
                c.focal.min+'–'+c.focal.max+'mm '+(c.focal.variant||'VF');
-    var catIcon = c.cat === 'camaras-ip' ? '📷' : c.cat === 'camaras-hdcvi' ? '📹' : '🔭';
+    var multi = c.focal.multi;
+    var catIcon = multi ?
+      (multi.kind === 'fisheye' ? '🔮' :
+       multi.kind === 'pano180' || multi.kind === 'pano270' || multi.kind === 'pano360' ? '🌐' :
+       multi.kind === 'multiLens' ? '🎯' :
+       multi.kind === 'ptzCombo' ? '🎛️' : '📡') :
+      (c.cat === 'camaras-ip' ? '📷' : c.cat === 'camaras-hdcvi' ? '📹' : '🔭');
+    if (multi) {
+      var multiTxt = multi.kind === 'fisheye' ? '360° fisheye' :
+                     multi.kind === 'pano180' ? '180° pano' :
+                     multi.kind === 'pano270' ? '270° pano' :
+                     multi.kind === 'pano360' ? '360° pano' :
+                     multi.kind === 'multiLens' ? 'Multi-lente ('+multi.focals.join('+')+'mm)' :
+                     multi.kind === 'ptzCombo' ? 'PTZ+Pano' : '';
+      fStr = multiTxt + ' · ' + (multi.sensors||'?') + ' sensores';
+    }
     return '<div class="fov-sr-item" onclick="fovPick(\''+c.cod+'\',\''+which+'\')">' +
       '<span class="fov-sr-icon">'+catIcon+'</span>' +
       '<div class="fov-sr-info">' +
@@ -23246,24 +23495,33 @@ window.fovSearch = fovSearch;
 window.fovPick = function(cod, which) {
   var cam = FOV.allCams.find(function(c){ return c.cod === cod; });
   if (!cam) return;
+  // Inicializar lens default según multi-sensor
+  var opts = getLensOptions(cam);
+  var defaultLens = opts ? opts[0].key : 'main';
+  var initFocal = opts ? opts[0].focal.min : cam.focal.min;
   if (which === 'A') {
     FOV.camA = cam;
-    FOV.focalA = cam.focal.min;
+    FOV.lensA = defaultLens;
+    FOV.focalA = initFocal;
     document.getElementById('fovSearchAInput').value = cam.cod;
     document.getElementById('fovSearchAResults').style.display='none';
   } else {
     FOV.camB = cam;
-    FOV.focalB = cam.focal.min;
+    FOV.lensB = defaultLens;
+    FOV.focalB = initFocal;
     document.getElementById('fovSearchBInput').value = cam.cod;
     document.getElementById('fovSearchBResults').style.display='none';
   }
+  renderLensToggle(which);
   fovRender();
 };
 
 // Limpiar selección
 window.fovClear = function(which) {
-  if (which === 'A') { FOV.camA = null; document.getElementById('fovSearchAInput').value=''; }
-  else { FOV.camB = null; document.getElementById('fovSearchBInput').value=''; }
+  if (which === 'A') { FOV.camA = null; FOV.lensA='main'; document.getElementById('fovSearchAInput').value=''; }
+  else { FOV.camB = null; FOV.lensB='main'; document.getElementById('fovSearchBInput').value=''; }
+  var toggle = document.getElementById('fovLensToggle'+which);
+  if (toggle) toggle.style.display = 'none';
   fovRender();
 };
 
@@ -23305,67 +23563,217 @@ window.fovSetView = function(v, btn) {
 };
 
 // ── CÁLCULOS ──
-function calcFOV(cam, focal) {
+// Acepta opcionalmente un lensKey para usar el sensor/lente específico de multi-sensor
+function calcFOV(cam, focal, lensKey) {
   if (!cam) return null;
+  // Si la cámara tiene multi-sensor con opciones de lens, usar el lens activo
+  var activeLens = lensKey !== undefined ? getActiveLens(cam, lensKey) : null;
+  var effectiveMp = activeLens ? activeLens.mp : cam.mp;
   var sw = cam.sensor.w, sh = cam.sensor.h;
-  var pxH = inferPxH(cam.mp);
-  // Ángulos en grados
+  var multi = cam.focal.multi;
+  // Para MULTI-SENSOR: cada sensor tiene su focal común, MP individual
+  // El PPM efectivo sigue siendo del sensor individual (cada sensor ve su parte)
+  var pxPerSensor = multi && multi.mpPerSensor ? inferPxH(multi.mpPerSensor) : inferPxH(cam.mp);
+  var pxH = multi && multi.mpPerSensor ? pxPerSensor : inferPxH(cam.mp);
+  // Ángulos individuales por sensor
   var angH = 2 * Math.atan(sw / (2*focal)) * 180 / Math.PI;
   var angV = 2 * Math.atan(sh / (2*focal)) * 180 / Math.PI;
-  // Cobertura a distancia de análisis
+  // FOV TOTAL (distinto del individual si es multi)
+  var angTotalH = angH, angTotalV = angV;
+  if (multi) {
+    if (multi.kind === 'fisheye') { angTotalH = 360; angTotalV = 180; }
+    else if (multi.kind === 'pano180') { angTotalH = 180; }
+    else if (multi.kind === 'pano270') { angTotalH = 270; }
+    else if (multi.kind === 'pano360') { angTotalH = 360; }
+    else if (multi.kind === 'ptzCombo') { angTotalH = 180; }
+    // multiLens: el total va por cada focal, se calcula aparte
+  }
+  // Cobertura a distancia de análisis (usa ángulo individual, no total)
   var wid = 2 * FOV.dist * Math.tan(angH * Math.PI/180 / 2);
   var hei = 2 * FOV.dist * Math.tan(angV * Math.PI/180 / 2);
+  // Para fisheye el ancho se calcula distinto: es proporcional al radio del círculo a esa distancia
+  if (multi && multi.kind === 'fisheye') {
+    // La distancia máxima útil del fisheye es la altura de montaje
+    // Pero en "vista superior proyectada" el ancho útil es aprox 2h (2 veces la altura)
+    wid = 2 * FOV.height; // el círculo visible en el suelo tiene radio ~ altura
+  }
   // PPM a la distancia actual
   var ppmNow = pxH / wid;
-  // Distancias DORI (fórmula CORRECTA: d = pxH*focal / (ppm*sensor_w))
-  var doriDists = DORI_ZONES.map(function(z){
-    return (pxH * focal) / (z.ppm * sw);
-  });
+  // Distancias DORI (fórmula: d = pxH*focal / (ppm*sensor_w))
+  // Para fisheye es distinto: el PPM en el suelo depende del radio del círculo
+  var doriDists;
+  if (multi && multi.kind === 'fisheye') {
+    // En fisheye: el perímetro a distancia d (proyectado en suelo) es 2πd
+    // PPM uniforme en el borde = pxH / (2πd) → despejando d = pxH/(2π*ppm)
+    doriDists = DORI_ZONES.map(function(z){
+      return pxH / (2 * Math.PI * z.ppm);
+    });
+  } else {
+    doriDists = DORI_ZONES.map(function(z){
+      return (pxH * focal) / (z.ppm * sw);
+    });
+  }
+  // Para multi-lens: calcular DORI por cada focal
+  var multiLensDori = null;
+  if (multi && multi.kind === 'multiLens' && multi.focals && multi.focals.length) {
+    multiLensDori = multi.focals.map(function(f){
+      return {
+        focal: f,
+        angH: 2 * Math.atan(sw / (2*f)) * 180 / Math.PI,
+        doriDists: DORI_ZONES.map(function(z){ return (pxPerSensor * f) / (z.ppm * sw); })
+      };
+    });
+  }
   // Distancia máxima para leer patente chilena (500px/m)
   var plateDist = (pxH * focal) / (PLATE_ZONE.ppm * sw);
   return {
     cam: cam, focal: focal, pxH: pxH,
     angH: angH, angV: angV,
+    angTotalH: angTotalH, angTotalV: angTotalV,
     wid: wid, hei: hei, ppmNow: ppmNow,
-    doriDists: doriDists, plateDist: plateDist
+    doriDists: doriDists, plateDist: plateDist,
+    multi: multi, multiLensDori: multiLensDori
   };
+}
+
+// Devuelve las opciones de sensor/lente para una cámara multi-sensor
+// Cada opción tiene: { key, label, focal:{min,max,type}, mp, sensor, fovH }
+function getLensOptions(cam) {
+  if (!cam || !cam.focal || !cam.focal.multi) return null;
+  var m = cam.focal.multi;
+  var opts = [];
+  if (m.kind === 'multiLens' && m.focals && m.focals.length) {
+    // Multi-lens: una opción por lente
+    m.focals.forEach(function(f, i){
+      var label = f.type === 'varifocal' ? f.min+'–'+f.max+'mm' : f.min+'mm';
+      opts.push({
+        key: i, label: '🔭 Lente '+(i+1)+' · '+label,
+        focal: f,
+        mp: m.mpPerSensor || cam.mp,
+        sensor: cam.sensor,
+        fovH: null
+      });
+    });
+  } else if (m.kind === 'ptzCombo') {
+    // PTZ Combo: pano + ptz separados
+    opts.push({
+      key: 'pano', label: '🌐 Panorámica '+m.fovH+'° · '+(m.sensors||2)+'×'+(m.mpPerSensor||'?')+'MP',
+      focal: {min: cam.focal.min, max: cam.focal.max, type: cam.focal.type, variant:'PANO'},
+      mp: m.mpPerSensor || cam.mp,
+      sensor: cam.sensor,
+      fovH: m.fovH,
+      isPano: true
+    });
+    if (m.ptzZoom) {
+      // PTZ con zoom — focal min ~4.8mm, max = 4.8 * zoom
+      opts.push({
+        key: 'ptz', label: '🎯 PTZ zoom '+m.ptzZoom+'X',
+        focal: {min: 4.8, max: 4.8*m.ptzZoom, type:'ptz', zoom: m.ptzZoom, variant:'PTZ'},
+        mp: cam.mp,  // PTZ usa el MP total generalmente
+        sensor: cam.sensor,
+        fovH: null,
+        isPtz: true
+      });
+    }
+  }
+  return opts.length > 0 ? opts : null;
+}
+
+// Renderizar el toggle de lens para A o B
+function renderLensToggle(which) {
+  var el = document.getElementById('fovLensToggle'+which);
+  if (!el) return;
+  var cam = which === 'A' ? FOV.camA : FOV.camB;
+  var opts = getLensOptions(cam);
+  if (!opts) { el.style.display = 'none'; return; }
+  var current = which === 'A' ? FOV.lensA : FOV.lensB;
+  var hint = cam.focal.multi.kind === 'multiLens' ?
+    'Esta cámara tiene varios lentes independientes · elige cuál simular' :
+    'Esta cámara tiene panorámica + PTZ · elige cuál simular';
+  el.style.display = 'block';
+  el.innerHTML =
+    '<div class="fov-lens-toggle-label">🔀 Elegir sensor/lente</div>' +
+    '<div style="font-size:10px;color:#666;margin-bottom:7px;line-height:1.4">'+hint+'</div>' +
+    '<div class="fov-lens-chips">' +
+      opts.map(function(o){
+        var isOn = String(o.key) === String(current);
+        return '<button class="fov-lens-chip'+(isOn?' on':'')+'" onclick="fovSetLens(\''+which+'\',\''+o.key+'\')">'+
+          o.label +
+        '</button>';
+      }).join('') +
+    '</div>';
+}
+
+// Cambiar el lens seleccionado
+window.fovSetLens = function(which, key) {
+  if (which === 'A') FOV.lensA = key;
+  else FOV.lensB = key;
+  // Resetear focal al min del nuevo lens
+  var cam = which === 'A' ? FOV.camA : FOV.camB;
+  var opts = getLensOptions(cam);
+  if (opts) {
+    var opt = opts.find(function(o){ return String(o.key) === String(key); });
+    if (opt) {
+      if (which === 'A') FOV.focalA = opt.focal.min;
+      else FOV.focalB = opt.focal.min;
+    }
+  }
+  fovRender();
+};
+
+// Obtener la lente efectiva para cálculos
+function getActiveLens(cam, lensKey) {
+  var opts = getLensOptions(cam);
+  if (!opts) return null;
+  return opts.find(function(o){ return String(o.key) === String(lensKey); }) || opts[0];
 }
 
 // ── RENDER principal ──
 function fovRender() {
-  var rA = FOV.camA ? calcFOV(FOV.camA, FOV.focalA) : null;
-  var rB = FOV.camB ? calcFOV(FOV.camB, FOV.focalB) : null;
+  var rA = FOV.camA ? calcFOV(FOV.camA, FOV.focalA, FOV.lensA) : null;
+  var rB = FOV.camB ? calcFOV(FOV.camB, FOV.focalB, FOV.lensB) : null;
 
   renderPanel('A', rA);
   if (FOV.compare) renderPanel('B', rB);
+  renderLensToggle('A');
+  if (FOV.compare) renderLensToggle('B');
   renderCanvas(rA, rB);
   renderConclusion(rA, rB);
   renderSliders();
 }
 
 function renderSliders() {
-  // Sync sliders con rangos reales de la cámara seleccionada
-  if (FOV.camA) {
-    var sA = document.getElementById('fovFocalA');
-    if (sA) {
-      sA.min = FOV.camA.focal.min;
-      sA.max = FOV.camA.focal.max;
-      sA.value = FOV.focalA;
-      var pct = sA.max > sA.min ? ((FOV.focalA-sA.min)/(sA.max-sA.min)*100) : 50;
-      sA.style.background = 'linear-gradient(to right,#0057B8 '+pct+'%,#e0e0e0 '+pct+'%)';
+  // Sync sliders con rangos del lens activo o de la cámara
+  function syncSlider(which) {
+    var cam = which === 'A' ? FOV.camA : FOV.camB;
+    if (!cam) return;
+    if (which === 'B' && !FOV.compare) return;
+    var slider = document.getElementById('fovFocal'+which);
+    if (!slider) return;
+    var lensKey = which === 'A' ? FOV.lensA : FOV.lensB;
+    var activeLens = getActiveLens(cam, lensKey);
+    // Rango del focal: si hay activeLens, usar su rango; si no, el de la cámara
+    var minF = activeLens ? activeLens.focal.min : cam.focal.min;
+    var maxF = activeLens ? activeLens.focal.max : cam.focal.max;
+    var curF = which === 'A' ? FOV.focalA : FOV.focalB;
+    slider.min = minF;
+    slider.max = maxF;
+    // Si el focal actual está fuera del rango, reajustar
+    if (curF < minF || curF > maxF) {
+      curF = minF;
+      if (which === 'A') FOV.focalA = curF; else FOV.focalB = curF;
+      document.getElementById('fovFocal'+which+'Lbl').textContent = curF.toFixed(1)+'mm';
     }
+    slider.value = curF;
+    var pct = maxF > minF ? ((curF - minF) / (maxF - minF) * 100) : 50;
+    var color = which === 'A' ? '#0057B8' : '#ff6b35';
+    slider.style.background = 'linear-gradient(to right,'+color+' '+pct+'%,#e0e0e0 '+pct+'%)';
+    // Si es focal fijo (min === max), deshabilitar slider
+    slider.disabled = (minF === maxF);
+    slider.style.opacity = (minF === maxF) ? '0.55' : '1';
   }
-  if (FOV.camB && FOV.compare) {
-    var sB = document.getElementById('fovFocalB');
-    if (sB) {
-      sB.min = FOV.camB.focal.min;
-      sB.max = FOV.camB.focal.max;
-      sB.value = FOV.focalB;
-      var pctB = sB.max > sB.min ? ((FOV.focalB-sB.min)/(sB.max-sB.min)*100) : 50;
-      sB.style.background = 'linear-gradient(to right,#ff6b35 '+pctB+'%,#e0e0e0 '+pctB+'%)';
-    }
-  }
-  // Sliders globales
+  syncSlider('A');
+  syncSlider('B');
   ['fovDist','fovHt'].forEach(function(id){
     var el = document.getElementById(id);
     if (el) {
@@ -23388,16 +23796,61 @@ function renderPanel(which, r) {
   var focalStr = r.cam.focal.type === 'fixed' ? r.cam.focal.min+'mm (fija)' :
                  r.cam.focal.type === 'ptz' ? r.cam.focal.zoom+'X zoom' :
                  r.cam.focal.min+'–'+r.cam.focal.max+'mm (varifocal)';
-  specs.innerHTML =
+  // Si es multisensor, cambiar el texto del foco
+  var m = r.cam.focal.multi;
+  if (m) {
+    if (m.kind === 'fisheye') focalStr = 'Lente fisheye 360°';
+    else if (m.kind === 'multiLens' && m.focals) {
+      focalStr = m.focals.length+' lentes: ' + m.focals.map(function(f){
+        return f.type === 'varifocal' ? f.min+'–'+f.max+'mm' : f.min+'mm';
+      }).join(' · ');
+    }
+    else if (m.kind === 'pano180' || m.kind === 'pano270' || m.kind === 'pano360') {
+      focalStr = (m.sensors||1)+' sensor'+((m.sensors||1)>1?'es':'')+' × ' + (m.mpPerSensor||'?') + 'MP · ' + m.fovH+'°';
+    }
+    else if (m.kind === 'ptzCombo') {
+      focalStr = 'Panorámica '+(m.sensors||2)+'×'+(m.mpPerSensor||'?')+'MP + PTZ '+(m.ptzZoom||'?')+'X';
+    }
+  }
+  // Banner multisensor al inicio
+  var multiBanner = '';
+  if (m) {
+    var badgeClr = m.kind === 'fisheye' ? '#e74c3c' :
+                   m.kind === 'multiLens' ? '#27ae60' :
+                   m.kind === 'ptzCombo' ? '#f39c12' : '#2980b9';
+    var badgeIcon = m.kind === 'fisheye' ? '🔴' :
+                    m.kind === 'multiLens' ? '🔭' :
+                    m.kind === 'ptzCombo' ? '🎯' : '🌐';
+    multiBanner = '<div class="fov-multi-banner" style="border-left:3px solid '+badgeClr+'">'+
+      '<div class="fov-multi-icon">'+badgeIcon+'</div>'+
+      '<div class="fov-multi-info">'+
+        '<div class="fov-multi-title">'+m.label+'</div>'+
+        '<div class="fov-multi-sub">'+focalStr+'</div>'+
+      '</div>'+
+    '</div>';
+  }
+  // Para multisensor, los ángulos clásicos no aplican — mostrar cobertura total
+  var angHDisplay = m ? (m.fovH || 180)+'°' : r.angH.toFixed(0)+'°';
+  var angVDisplay = m ? (m.fovV || 90)+'°' : r.angV.toFixed(0)+'°';
+  var widthDisplay = m ? (m.kind === 'fisheye' || m.kind === 'pano360' ? '360°' : (m.fovH||180)+'°') : r.wid.toFixed(1)+'m';
+  specs.innerHTML = multiBanner +
     '<div class="fov-specs-grid">' +
-      '<div class="fov-spec"><div class="fov-spec-val">'+r.angH.toFixed(0)+'°</div><div class="fov-spec-lbl">Ángulo H</div></div>' +
-      '<div class="fov-spec"><div class="fov-spec-val">'+r.angV.toFixed(0)+'°</div><div class="fov-spec-lbl">Ángulo V</div></div>' +
-      '<div class="fov-spec"><div class="fov-spec-val">'+r.wid.toFixed(1)+'m</div><div class="fov-spec-lbl">Ancho @'+FOV.dist+'m</div></div>' +
+      '<div class="fov-spec"><div class="fov-spec-val">'+angHDisplay+'</div><div class="fov-spec-lbl">'+(m?'Cobertura H':'Ángulo H')+'</div></div>' +
+      '<div class="fov-spec"><div class="fov-spec-val">'+angVDisplay+'</div><div class="fov-spec-lbl">'+(m?'Cobertura V':'Ángulo V')+'</div></div>' +
+      '<div class="fov-spec"><div class="fov-spec-val">'+widthDisplay+'</div><div class="fov-spec-lbl">'+(m?'Área':'Ancho @'+FOV.dist+'m')+'</div></div>' +
       '<div class="fov-spec"><div class="fov-spec-val">'+r.ppmNow.toFixed(0)+'</div><div class="fov-spec-lbl">px/m</div></div>' +
     '</div>' +
     '<div class="fov-spec-meta">'+r.cam.sensor.name+' · '+r.pxH+'px · '+r.cam.mp+'MP · <b style="color:#0057B8">'+(r.cam.focal.variantDesc||'lente fijo')+'</b>'+
       (r.cam.focal.source ? ' <span style="color:#aaa;font-size:9px">('+r.cam.focal.source+')</span>' : '')+
-    '</div>';
+    '</div>' +
+    (r.multi ? '<div class="fov-spec-meta" style="margin-top:4px;background:rgba(99,102,241,.08);color:#4f46e5;font-weight:700">' +
+      (r.multi.kind === 'fisheye' ? '🔮 Fisheye 360° · 1 sensor' :
+       r.multi.kind === 'pano180' ? '🌐 Panorámica 180° · '+r.multi.sensors+' sensores × '+(r.multi.mpPerSensor||'?')+'MP' :
+       r.multi.kind === 'pano270' ? '🌐 Panorámica 270° · '+r.multi.sensors+' sensores' :
+       r.multi.kind === 'pano360' ? '🌐 Panorámica 360° · '+r.multi.sensors+' sensores' :
+       r.multi.kind === 'multiLens' ? '🎯 Multi-lente: '+r.multi.focals.join('mm + ')+'mm · '+r.multi.sensors+' sensores' :
+       r.multi.kind === 'ptzCombo' ? '🎛️ Combo Pano+PTZ '+(r.multi.ptzZoom||'')+'X · 2 sensores' : '') +
+    '</div>' : '');
   var doriHTML = DORI_ZONES.map(function(z,i){
     return '<div class="fov-dori-row">'+
       '<div class="fov-dori-dot" style="background:'+DORI_COLORS[i]+'"></div>'+
@@ -23480,8 +23933,21 @@ function drawTopSingle(ctx, r, ox, oy, W, H) {
   var maxD = Math.max(r.doriDists[0], FOV.dist) * 1.15;
   var scale = (H - camY - margin) / maxD;
   drawGrid(ctx, 0, camY, W, H-margin, scale, maxD);
+  // Si es multi-sensor, dibujar con la función especial (centrado en el canvas)
+  var isMulti = r.cam.focal.multi;
+  if (isMulti) {
+    var mcx = W/2;
+    var kind = isMulti.kind;
+    // Para fisheye/pano360/ptzCombo360, centrar en medio
+    var mcy = (kind === 'fisheye' || kind === 'pano360' ||
+               (kind === 'ptzCombo' && isMulti.fovH >= 360)) ? H/2 : camY;
+    drawMultiSensor(ctx, mcx, mcy, scale, r);
+    drawIlluminationMulti(ctx, mcx, mcy, scale, r);
+    drawCam(ctx, mcx, mcy, '📷', 0);
+    ctx.restore();
+    return;
+  }
   drawConeTop(ctx, camX, camY, scale, r, '#00aaff', null);
-  // Capa de iluminación
   drawIlluminationTop(ctx, camX, camY, scale, r, null);
   drawAnalysisLine(ctx, 0, W, camY, FOV.dist, scale, r.wid);
   // Silueta vehículo para patente (si plateDist razonable)
@@ -23507,29 +23973,224 @@ function drawTop(ctx, rA, rB, ox, oy, W, H) {
   var maxD = Math.max(rA.doriDists[0], rB.doriDists[0], FOV.dist) * 1.15;
   var scale = (H - camY - margin) / maxD;
   drawGrid(ctx, 0, camY, W, H-margin, scale, maxD);
-  drawConeTop(ctx, camX, camY, scale, rA, '#00aaff', 'left');
-  drawConeTop(ctx, camX, camY, scale, rB, '#ff6b35', 'right');
-  drawIlluminationTop(ctx, camX, camY, scale, rA, 'left');
-  drawIlluminationTop(ctx, camX, camY, scale, rB, 'right');
-  drawAnalysisLine(ctx, 0, W, camY, FOV.dist, scale, null);
-  // Personas en zonas DORI de cada cámara
-  for (var ki = 0; ki < 4; ki++) {
-    var pdA = rA.doriDists[ki];
-    var pdB = rB.doriDists[ki];
-    if (pdA > 0 && pdA * scale < (H - camY - 30)) {
-      drawPersonTop(ctx, camX - 0.8*scale, camY + pdA*scale, scale, null, DORI_COLORS[ki]);
-    }
-    if (pdB > 0 && pdB * scale < (H - camY - 30)) {
-      drawPersonTop(ctx, camX + 0.8*scale, camY + pdB*scale, scale, null, DORI_COLORS[ki]);
-    }
+
+  var hasMultiA = rA.cam.focal.multi;
+  var hasMultiB = rB.cam.focal.multi;
+
+  // Dibujar cámara A (lado izquierdo)
+  if (hasMultiA) {
+    // Multi-sensor: dibujar en lado izquierdo centrado
+    ctx.save();
+    ctx.beginPath(); ctx.rect(0, 0, W/2, H); ctx.clip();
+    var mcxA = W/4;
+    var mcyA = H/2;
+    drawMultiSensor(ctx, mcxA, mcyA, scale * 0.85, rA);
+    drawIlluminationMulti(ctx, mcxA, mcyA, scale * 0.85, rA);
+    ctx.restore();
+    drawCam(ctx, W/4, H/2, '📷', 0);
+  } else {
+    drawConeTop(ctx, camX, camY, scale, rA, '#00aaff', 'left');
+    drawIlluminationTop(ctx, camX, camY, scale, rA, 'left');
   }
-  drawPersonTop(ctx, camX, camY + FOV.dist*scale, scale, '1.7m', '#fff');
-  drawCam(ctx, camX, camY, '📷', 0);
+
+  // Dibujar cámara B (lado derecho)
+  if (hasMultiB) {
+    ctx.save();
+    ctx.beginPath(); ctx.rect(W/2, 0, W/2, H); ctx.clip();
+    var mcxB = 3*W/4;
+    var mcyB = H/2;
+    drawMultiSensor(ctx, mcxB, mcyB, scale * 0.85, rB);
+    drawIlluminationMulti(ctx, mcxB, mcyB, scale * 0.85, rB);
+    ctx.restore();
+    drawCam(ctx, 3*W/4, H/2, '📷', 0);
+  } else {
+    drawConeTop(ctx, camX, camY, scale, rB, '#ff6b35', 'right');
+    drawIlluminationTop(ctx, camX, camY, scale, rB, 'right');
+  }
+
+  // Personas en zonas DORI (solo si ambas son normales)
+  if (!hasMultiA && !hasMultiB) {
+    drawAnalysisLine(ctx, 0, W, camY, FOV.dist, scale, null);
+    for (var ki = 0; ki < 4; ki++) {
+      var pdA = rA.doriDists[ki];
+      var pdB = rB.doriDists[ki];
+      if (pdA > 0 && pdA * scale < (H - camY - 30)) {
+        drawPersonTop(ctx, camX - 0.8*scale, camY + pdA*scale, scale, null, DORI_COLORS[ki]);
+      }
+      if (pdB > 0 && pdB * scale < (H - camY - 30)) {
+        drawPersonTop(ctx, camX + 0.8*scale, camY + pdB*scale, scale, null, DORI_COLORS[ki]);
+      }
+    }
+    drawPersonTop(ctx, camX, camY + FOV.dist*scale, scale, '1.7m', '#fff');
+    drawCam(ctx, camX, camY, '📷', 0);
+  }
+
   // Labels A/B
   ctx.font = 'bold 11px system-ui'; ctx.textAlign='center';
-  ctx.fillStyle = '#00aaff'; ctx.fillText('◀ Cámara A', W*.2, camY-8);
-  ctx.fillStyle = '#ff6b35'; ctx.fillText('Cámara B ▶', W*.8, camY-8);
+  ctx.fillStyle = '#00aaff'; ctx.fillText('◀ Cámara A', W*.2, hasMultiA ? 18 : camY-8);
+  ctx.fillStyle = '#ff6b35'; ctx.fillText('Cámara B ▶', W*.8, hasMultiB ? 18 : camY-8);
+
+  // Divisoria entre mitades si una es multi
+  if (hasMultiA || hasMultiB) {
+    ctx.strokeStyle = 'rgba(255,255,255,.15)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([5,5]);
+    ctx.beginPath();
+    ctx.moveTo(W/2, 0); ctx.lineTo(W/2, H);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
   ctx.restore();
+}
+
+// Dibuja cámara MULTI-SENSOR (fisheye / pano180/270/360 / multiLens / ptzCombo)
+function drawMultiSensorTop(ctx, cx, cy, scale, r, color, side) {
+  var m = r.multi;
+  if (!m) return false;
+  var radiusMax = r.doriDists[0]; // alcance máx = zona Detectar
+  var radiusPx = Math.min(radiusMax * scale, 300);
+
+  if (m.kind === 'fisheye') {
+    // Círculos concéntricos — zonas DORI como ANILLOS (desde afuera hacia adentro)
+    for (var i = 3; i >= 0; i--) {
+      var rad = r.doriDists[i] * scale;
+      if (rad < 3) continue;
+      ctx.beginPath();
+      ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+      ctx.closePath();
+      ctx.fillStyle = hexRgba(DORI_COLORS[i], 0.17);
+      ctx.fill();
+      ctx.strokeStyle = DORI_COLORS[i];
+      ctx.lineWidth = 1.3;
+      ctx.stroke();
+      // Label
+      ctx.font = 'bold 9px system-ui'; ctx.textAlign = 'center';
+      ctx.fillStyle = DORI_COLORS[i];
+      ctx.fillText(DORI_ZONES[i].name + ' ' + r.doriDists[i].toFixed(1) + 'm', cx, cy - rad + 11);
+    }
+    // Radios para indicar 360°
+    ctx.strokeStyle = 'rgba(255,255,255,.2)'; ctx.lineWidth = 1; ctx.setLineDash([3,3]);
+    for (var a = 0; a < 4; a++) {
+      var ang = a * Math.PI / 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(ang) * radiusPx * 1.1, cy + Math.sin(ang) * radiusPx * 1.1);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    return true;
+  }
+
+  if (m.kind === 'pano180' || m.kind === 'pano270' || m.kind === 'pano360') {
+    var totalAng = m.fovH * Math.PI / 180;
+    var halfAng = totalAng / 2;
+    // Orientación: para 180° el arco mira "hacia adelante" (hacia abajo en canvas)
+    // PI/2 = 90° = abajo en canvas. Entonces el centro del arco es PI/2
+    var startAng = Math.PI/2 - halfAng;
+    var endAng = Math.PI/2 + halfAng;
+    for (var i2 = 3; i2 >= 0; i2--) {
+      var rad2 = r.doriDists[i2] * scale;
+      if (rad2 < 3) continue;
+      ctx.beginPath();
+      if (m.fovH >= 360) {
+        ctx.arc(cx, cy, rad2, 0, Math.PI * 2);
+      } else {
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, rad2, startAng, endAng);
+        ctx.lineTo(cx, cy);
+      }
+      ctx.closePath();
+      ctx.fillStyle = hexRgba(DORI_COLORS[i2], 0.18);
+      ctx.fill();
+      ctx.strokeStyle = DORI_COLORS[i2];
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+    }
+    // Indicar las divisiones entre sensores
+    ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 1; ctx.setLineDash([4,3]);
+    for (var s = 0; s <= m.sensors; s++) {
+      var sAng = startAng + (totalAng * s / m.sensors);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(sAng) * radiusPx * 0.8, cy + Math.sin(sAng) * radiusPx * 0.8);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    return true;
+  }
+
+  if (m.kind === 'multiLens' && r.multiLensDori) {
+    // Dibujar un cono por cada focal, con colores distintos por intensidad
+    var fColors = ['#00d4ff', '#a78bfa', '#fbbf24']; // corto, medio, largo
+    var sortedFocals = r.multiLensDori.slice().sort(function(a,b){ return a.focal - b.focal; });
+    sortedFocals.forEach(function(mf, idx){
+      var focalColor = fColors[idx] || '#fff';
+      var halfF = mf.angH * Math.PI / 180 / 2;
+      // Cada lente tiene su focal — dibujar su zona de Identificar (mayor detalle)
+      var dIdent = mf.doriDists[3];
+      var dxF = dIdent * Math.tan(halfF) * scale;
+      var dyF = dIdent * scale;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx - dxF, cy + dyF);
+      ctx.lineTo(cx + dxF, cy + dyF);
+      ctx.closePath();
+      ctx.fillStyle = hexRgba(focalColor, 0.15);
+      ctx.fill();
+      ctx.strokeStyle = focalColor;
+      ctx.lineWidth = 1.4;
+      ctx.stroke();
+      ctx.fillStyle = focalColor;
+      ctx.font = 'bold 10px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText(mf.focal+'mm → ' + dIdent.toFixed(0) + 'm', cx, cy + dyF + 12);
+    });
+    return true;
+  }
+
+  if (m.kind === 'ptzCombo') {
+    // Dos capas: pano semicircular (amplio) + cono PTZ estrecho
+    // Pano
+    var panoHalfAng = Math.PI/2; // 180°
+    for (var ic = 3; ic >= 0; ic--) {
+      var radc = r.doriDists[ic] * scale * 0.6; // pano más corto
+      if (radc < 3) continue;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, radc, 0, Math.PI);
+      ctx.lineTo(cx, cy);
+      ctx.closePath();
+      ctx.fillStyle = hexRgba(DORI_COLORS[ic], 0.12);
+      ctx.fill();
+      ctx.strokeStyle = hexRgba(DORI_COLORS[ic], 0.5);
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+    }
+    // Cono PTZ estrecho (apuntando recto hacia abajo, angulo estrecho)
+    var ptzZoom = m.ptzZoom || 10;
+    var ptzHalf = Math.atan(6.4 / (2 * (4.8 * Math.min(ptzZoom, 8)))); // limitar para visualización
+    var ptzRange = r.doriDists[0] * 1.5;
+    var pdx = ptzRange * Math.tan(ptzHalf) * scale;
+    var pdy = ptzRange * scale * 0.9;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx - pdx, cy + pdy);
+    ctx.lineTo(cx + pdx, cy + pdy);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(251,191,36,.16)';
+    ctx.fill();
+    ctx.strokeStyle = '#fbbf24';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4,3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.fillStyle = '#fbbf24';
+    ctx.font = 'bold 9px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText('PTZ ' + (ptzZoom||'')+'X', cx, cy + pdy + 12);
+    return true;
+  }
+
+  return false;
 }
 
 function drawConeTop(ctx, cx, cy, scale, r, color, side) {
@@ -23648,6 +24309,63 @@ function drawPersonSide(ctx, x, floorY, scale, label, color) {
 }
 
 // Cono de iluminación (IR o LED) sobre la vista superior
+// Iluminación para multisensor (círculo o semicírculo)
+function drawIlluminationMulti(ctx, cx, cy, scale, r) {
+  if (!r || !r.cam.infra) return;
+  var infra = r.cam.infra;
+  var m = r.cam.focal.multi;
+  if (!m) return;
+  var range, fillColor, strokeColor, label;
+  if (infra.unlimited) {
+    range = Math.max(r.doriDists[3], 20);
+    fillColor = 'rgba(255,255,200,.12)';
+    strokeColor = 'rgba(255,220,120,.6)';
+    label = '⭐ '+infra.type;
+  } else if (infra.hasLED) {
+    range = infra.ledDist || infra.irDist || 30;
+    fillColor = 'rgba(255,250,220,.18)';
+    strokeColor = 'rgba(255,230,150,.7)';
+    label = '💡 LED '+range+'m';
+  } else if (infra.irDist > 0) {
+    range = infra.irDist;
+    fillColor = 'rgba(160,120,255,.12)';
+    strokeColor = 'rgba(180,140,255,.55)';
+    label = '🌙 IR '+range+'m';
+  } else { return; }
+  var radius = range * scale;
+  // Si es fisheye o pano360, dibujar círculo completo
+  if (m.kind === 'fisheye' || m.kind === 'pano360' ||
+      (m.kind === 'ptzCombo' && m.fovH >= 360)) {
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = 1.2;
+    ctx.setLineDash([3,3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  } else {
+    // Semicírculo o sector
+    var fov = (m.fovH || 180) * Math.PI / 180;
+    var start = Math.PI/2 - fov/2;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, start, start + fov);
+    ctx.closePath();
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+    ctx.strokeStyle = strokeColor;
+    ctx.lineWidth = 1.2;
+    ctx.setLineDash([3,3]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  ctx.fillStyle = strokeColor;
+  ctx.font = 'bold 9px system-ui'; ctx.textAlign = 'center';
+  ctx.fillText(label, cx, cy - radius - 4);
+}
+
 function drawIlluminationTop(ctx, cx, cy, scale, r, side) {
   if (!r || !r.cam.infra) return;
   var infra = r.cam.infra;
@@ -23712,6 +24430,47 @@ function drawIlluminationTop(ctx, cx, cy, scale, r, side) {
   }
 }
 
+// Iluminación circular para fisheye/pano 360
+function drawIlluminationCircular(ctx, cx, cy, scale, r) {
+  var infra = r.cam.infra;
+  if (!infra) return;
+  var range, fillColor, strokeColor, label;
+  if (infra.unlimited) {
+    range = Math.max(r.doriDists[3], 20);
+    fillColor = 'rgba(255,255,200,.14)';
+    strokeColor = 'rgba(255,220,120,.5)';
+    label = '⭐ ' + (infra.type === 'FullColorPro' ? 'Full-Color PRO' : 'PRO Starlight');
+  } else if (infra.hasLED) {
+    range = infra.ledDist || infra.irDist || 15;
+    fillColor = 'rgba(255,250,220,.16)';
+    strokeColor = 'rgba(255,230,150,.6)';
+    label = '💡 LED ' + range + 'm';
+  } else if (infra.irDist > 0) {
+    range = infra.irDist;
+    fillColor = 'rgba(160,120,255,.13)';
+    strokeColor = 'rgba(180,140,255,.55)';
+    label = '🌙 IR ' + range + 'm';
+  } else { return; }
+  var radPx = range * scale;
+  var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, radPx);
+  grad.addColorStop(0, fillColor.replace(/[\d.]+\)$/, '0.28)'));
+  grad.addColorStop(1, fillColor.replace(/[\d.]+\)$/, '0.02)'));
+  ctx.beginPath();
+  ctx.arc(cx, cy, radPx, 0, Math.PI * 2);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+  ctx.strokeStyle = strokeColor;
+  ctx.lineWidth = 1.2;
+  ctx.setLineDash([3,3]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  // Label en el borde
+  ctx.font = 'bold 9px system-ui'; ctx.textAlign = 'center';
+  ctx.fillStyle = strokeColor;
+  ctx.fillText(label, cx, cy - radPx + 11);
+}
+
 // Silueta de auto (top view) — rectángulo
 function drawVehicleTop(ctx, x, y, scale, label, color) {
   var w = 1.8 * scale, h = 4.5 * scale;
@@ -23729,6 +24488,281 @@ function drawVehicleTop(ctx, x, y, scale, label, color) {
     ctx.fillStyle = color || 'rgba(255,255,255,.8)';
     ctx.fillText(label, x, y - h/2 - 3);
   }
+}
+
+// ── MULTISENSOR: Fisheye (círculo 360°) ──
+function drawFisheyeTop(ctx, cx, cy, scale, r, color) {
+  if (!r) return;
+  // Fisheye tiene radio máximo = zona Detectar
+  var maxR = Math.min(r.doriDists[0], 30); // limitar visualmente
+  // Dibujar anillos DORI concéntricos (más lejos = más grande = menor PPM)
+  for (var i = 3; i >= 0; i--) {
+    var radius = r.doriDists[i] * scale;
+    if (radius < 4) continue;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fillStyle = hexRgba(DORI_COLORS[i], 0.12);
+    ctx.fill();
+    ctx.strokeStyle = hexRgba(DORI_COLORS[i], 0.7);
+    ctx.lineWidth = 1.3;
+    ctx.stroke();
+    // Etiqueta en el borde
+    ctx.fillStyle = DORI_COLORS[i];
+    ctx.font = 'bold 9px system-ui';
+    ctx.textAlign = 'center';
+    ctx.fillText(DORI_ZONES[i].name+' '+r.doriDists[i].toFixed(0)+'m', cx, cy + radius - 5);
+  }
+  // Hint fisheye
+  ctx.fillStyle = 'rgba(255,255,255,.7)';
+  ctx.font = 'bold 10px system-ui';
+  ctx.textAlign = 'center';
+  ctx.fillText('🔴 Cobertura 360° · PPM cae con el radio', cx, cy + 8);
+}
+
+// ── MULTISENSOR: Panorámica 180° multi-sensor ──
+// Dibuja medio círculo dividido en N sectores (uno por sensor)
+function drawPano180Top(ctx, cx, cy, scale, r, color) {
+  if (!r) return;
+  var m = r.cam.focal.multi;
+  var nSensors = m.sensors || (m.singleLens ? 1 : 4);
+  var totalFov = 180 * Math.PI / 180; // 180° en radianes
+  var sectorAng = totalFov / nSensors; // ángulo por sensor
+  // Orientación: medio círculo hacia abajo (cámara arriba mirando al piso)
+  var startAng = -totalFov / 2; // comienza en -90°
+  // Dibujar zonas DORI
+  for (var i = 3; i >= 0; i--) {
+    var d = r.doriDists[i];
+    var radius = d * scale;
+    if (radius < 3) continue;
+    // Dibujar arco completo 180°
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, Math.PI/2 + startAng, Math.PI/2 + startAng + totalFov);
+    ctx.closePath();
+    ctx.fillStyle = hexRgba(DORI_COLORS[i], 0.15);
+    ctx.fill();
+    ctx.strokeStyle = hexRgba(DORI_COLORS[i], 0.7);
+    ctx.lineWidth = 1.3;
+    ctx.stroke();
+  }
+  // Líneas divisorias entre sensores
+  if (nSensors > 1) {
+    ctx.strokeStyle = 'rgba(255,255,255,.35)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4,3]);
+    for (var s = 1; s < nSensors; s++) {
+      var ang = Math.PI/2 + startAng + s * sectorAng;
+      var ex = cx + Math.cos(ang) * r.doriDists[0] * scale;
+      var ey = cy + Math.sin(ang) * r.doriDists[0] * scale;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(ex, ey);
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+  }
+  // Etiqueta
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 10px system-ui';
+  ctx.textAlign = 'center';
+  var labelY = cy + r.doriDists[0] * scale * 0.5;
+  ctx.fillText(nSensors+' sensor'+(nSensors>1?'es':'')+' · 180°', cx, cy - 15);
+  // DORI labels
+  for (var j = 0; j < 4; j++) {
+    if (r.doriDists[j] > 0 && r.doriDists[j] * scale < 400) {
+      ctx.fillStyle = DORI_COLORS[j];
+      ctx.font = 'bold 8px system-ui';
+      ctx.fillText(DORI_ZONES[j].name+' '+r.doriDists[j].toFixed(0)+'m',
+                   cx, cy + r.doriDists[j] * scale - 3);
+    }
+  }
+}
+
+// ── MULTISENSOR: Panorámica 270° ──
+function drawPano270Top(ctx, cx, cy, scale, r, color) {
+  if (!r) return;
+  var m = r.cam.focal.multi;
+  var nSensors = m.sensors || 3;
+  var totalFov = 270 * Math.PI / 180;
+  var startAng = -totalFov / 2;
+  for (var i = 3; i >= 0; i--) {
+    var radius = r.doriDists[i] * scale;
+    if (radius < 3) continue;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, Math.PI/2 + startAng, Math.PI/2 + startAng + totalFov);
+    ctx.closePath();
+    ctx.fillStyle = hexRgba(DORI_COLORS[i], 0.15);
+    ctx.fill();
+    ctx.strokeStyle = hexRgba(DORI_COLORS[i], 0.7);
+    ctx.lineWidth = 1.3;
+    ctx.stroke();
+  }
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 10px system-ui';
+  ctx.textAlign = 'center';
+  ctx.fillText(nSensors+' sensores · 270°', cx, cy - 15);
+}
+
+// ── MULTISENSOR: Panorámica 360° (8 sensores) ──
+function drawPano360Top(ctx, cx, cy, scale, r, color) {
+  if (!r) return;
+  var m = r.cam.focal.multi;
+  var nSensors = m.sensors || 8;
+  // Dibujar anillos DORI completos
+  for (var i = 3; i >= 0; i--) {
+    var radius = r.doriDists[i] * scale;
+    if (radius < 3) continue;
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.fillStyle = hexRgba(DORI_COLORS[i], 0.12);
+    ctx.fill();
+    ctx.strokeStyle = hexRgba(DORI_COLORS[i], 0.7);
+    ctx.lineWidth = 1.3;
+    ctx.stroke();
+  }
+  // Líneas divisorias entre sensores
+  ctx.strokeStyle = 'rgba(255,255,255,.3)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4,3]);
+  for (var s = 0; s < nSensors; s++) {
+    var ang = (s / nSensors) * Math.PI * 2;
+    var ex = cx + Math.cos(ang) * r.doriDists[0] * scale;
+    var ey = cy + Math.sin(ang) * r.doriDists[0] * scale;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(ex, ey);
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 10px system-ui';
+  ctx.textAlign = 'center';
+  ctx.fillText(nSensors+' sensores · 360°', cx, cy - 8);
+  ctx.fillText('cobertura total', cx, cy + 10);
+}
+
+// ── MULTISENSOR: Multi-lens (varios focales superpuestos) ──
+// Dibuja un cono por cada focal, con colores distintos
+function drawMultiLensTop(ctx, cx, cy, scale, r, color) {
+  if (!r) return;
+  var focals = r.cam.focal.multi.focals || [];
+  if (!focals.length) return;
+  var lensColors = ['#00aaff', '#ff9b00', '#b3ff00', '#ff6b35'];
+  // Calcular FOV y DORI para cada lens
+  focals.forEach(function(lens, idx) {
+    var fMm = lens.type === 'varifocal' ? (lens.min + lens.max) / 2 : lens.min;
+    var sw = r.cam.sensor.w;
+    var angH = 2 * Math.atan(sw / (2 * fMm)) * 180 / Math.PI;
+    var halfAng = angH * Math.PI / 180 / 2;
+    // DORI para ese lens (usar ppx=250 = Identificar)
+    var dIdentify = (r.pxH * fMm) / (250 * sw);
+    var d = Math.min(dIdentify, 40);
+    var dx = d * Math.tan(halfAng) * scale;
+    var dy = d * scale;
+    var col = lensColors[idx % lensColors.length];
+    // Cono
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(cx - dx, cy + dy);
+    ctx.lineTo(cx + dx, cy + dy);
+    ctx.closePath();
+    ctx.fillStyle = hexRgba(col, 0.18);
+    ctx.fill();
+    ctx.strokeStyle = hexRgba(col, 0.8);
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+    // Etiqueta del focal
+    ctx.fillStyle = col;
+    ctx.font = 'bold 10px system-ui';
+    ctx.textAlign = 'center';
+    var lblY = cy + dy - 6;
+    var lblTxt = lens.type === 'varifocal' ?
+      lens.min+'–'+lens.max+'mm (ID '+dIdentify.toFixed(0)+'m)' :
+      lens.min+'mm (ID '+dIdentify.toFixed(0)+'m)';
+    ctx.fillText(lblTxt, cx, lblY);
+  });
+  // Título
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 10px system-ui';
+  ctx.textAlign = 'center';
+  ctx.fillText('Multi-lens · '+focals.length+' focales simultáneos', cx, cy - 12);
+}
+
+// ── MULTISENSOR: PTZ + Panorámica combo ──
+// Dibuja cono del pano (ancho) + cono del PTZ (angosto, con rotación)
+function drawPtzComboTop(ctx, cx, cy, scale, r, color) {
+  if (!r) return;
+  var m = r.cam.focal.multi;
+  var fov = m.fovH || 180;
+  var totalFov = fov * Math.PI / 180;
+  var startAng = -totalFov / 2;
+  // Dibujar panorámica primero (arco ancho)
+  for (var i = 3; i >= 0; i--) {
+    var radius = r.doriDists[i] * scale;
+    if (radius < 3) continue;
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    if (fov >= 360) {
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    } else {
+      ctx.arc(cx, cy, radius, Math.PI/2 + startAng, Math.PI/2 + startAng + totalFov);
+      ctx.closePath();
+    }
+    ctx.fillStyle = hexRgba(DORI_COLORS[i], 0.12);
+    ctx.fill();
+    ctx.strokeStyle = hexRgba(DORI_COLORS[i], 0.5);
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+  // Cono del PTZ (amarillo intenso) apuntando hacia abajo
+  var ptzZoom = m.ptzZoom || 10;
+  // El PTZ con zoom alto tiene cono angosto pero llega muy lejos
+  var ptzFocal = 4.8 * ptzZoom; // focal equivalente
+  var ptzSw = 5.3; // sensor PTZ típico
+  var ptzAngH = 2 * Math.atan(ptzSw / (2 * ptzFocal)) * 180 / Math.PI;
+  var ptzHalfAng = ptzAngH * Math.PI / 180 / 2;
+  // PTZ alcanza ID muy lejos
+  var ptzDIdent = (r.pxH * ptzFocal) / (250 * ptzSw);
+  var ptzReach = Math.min(ptzDIdent, 100);
+  var ptzDx = ptzReach * Math.tan(ptzHalfAng) * scale;
+  var ptzDy = ptzReach * scale;
+  // Dibujar el cono PTZ
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.lineTo(cx - ptzDx, cy + ptzDy);
+  ctx.lineTo(cx + ptzDx, cy + ptzDy);
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(255,220,0,.22)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,200,0,.9)';
+  ctx.lineWidth = 1.8;
+  ctx.setLineDash([6,4]);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  // Etiqueta PTZ
+  ctx.fillStyle = '#ffd700';
+  ctx.font = 'bold 10px system-ui';
+  ctx.textAlign = 'center';
+  ctx.fillText('🔭 PTZ '+ptzZoom+'X → '+ptzReach.toFixed(0)+'m', cx, cy + ptzDy - 4);
+  // Etiqueta pano
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 10px system-ui';
+  var sensorTxt = (m.sensors||2)+' sensor'+(m.sensors>1?'es':'')+' · '+fov+'°';
+  ctx.fillText(sensorTxt, cx, cy - 12);
+}
+
+// Dispatcher: decide qué función de multisensor usar
+function drawMultiSensor(ctx, cx, cy, scale, r) {
+  if (!r || !r.cam.focal.multi) return false;
+  var kind = r.cam.focal.multi.kind;
+  if (kind === 'fisheye') { drawFisheyeTop(ctx, cx, cy, scale, r); return true; }
+  if (kind === 'pano180') { drawPano180Top(ctx, cx, cy, scale, r); return true; }
+  if (kind === 'pano270') { drawPano270Top(ctx, cx, cy, scale, r); return true; }
+  if (kind === 'pano360') { drawPano360Top(ctx, cx, cy, scale, r); return true; }
+  if (kind === 'multiLens') { drawMultiLensTop(ctx, cx, cy, scale, r); return true; }
+  if (kind === 'ptzCombo') { drawPtzComboTop(ctx, cx, cy, scale, r); return true; }
+  return false;
 }
 
 function drawSide(ctx, rA, rB, ox, oy, W, H) {
@@ -23832,14 +24866,53 @@ function renderConclusion(rA, rB) {
       (rA.cam.focal.variantDesc || 'varifocal')+' ('+rA.cam.focal.min+'–'+rA.cam.focal.max+'mm)' :
       rA.cam.focal.type === 'ptz' ? 'PTZ con zoom '+rA.cam.focal.zoom+'X' :
       'fija '+rA.cam.focal.min+'mm';
+    // Nota especial si es multi-sensor
+    var multiNote = '';
+    if (rA.multi) {
+      var m = rA.multi;
+      if (m.kind === 'fisheye') {
+        multiNote = '<p style="padding:8px 11px;background:rgba(99,102,241,.08);border-left:3px solid #6366f1;border-radius:8px;font-size:12px">🔮 <b>Cámara fisheye 360°</b> — Cubre todo el techo en una sola vista. El detalle es uniforme en círculo pero disminuye hacia los bordes. Ideal para comercios, recepciones y espacios abiertos con 1 sola cámara.</p>';
+      } else if (m.kind === 'pano180' || m.kind === 'pano270' || m.kind === 'pano360') {
+        var deg = m.fovH;
+        multiNote = '<p style="padding:8px 11px;background:rgba(99,102,241,.08);border-left:3px solid #6366f1;border-radius:8px;font-size:12px">🌐 <b>Panorámica '+deg+'° multi-sensor</b> ('+m.sensors+'× '+(m.mpPerSensor||'?')+'MP) — Combina '+m.sensors+' sensores en una imagen continua. Cubre '+deg+'° horizontales sin ángulo ciego entre cámaras. Cada sensor mantiene el detalle propio de su focal.</p>';
+      } else if (m.kind === 'multiLens') {
+        multiNote = '<p style="padding:8px 11px;background:rgba(99,102,241,.08);border-left:3px solid #6366f1;border-radius:8px;font-size:12px">🎯 <b>Multi-lente con focales distintas</b> ('+m.sensors+' sensores '+m.focals.join('+')+'mm) — Cada lente cubre una distancia: gran angular para cercanía, telefoto para lejos. Una sola cámara hace el trabajo de tres. Ideal para perímetros largos.</p>';
+      } else if (m.kind === 'ptzCombo') {
+        multiNote = '<p style="padding:8px 11px;background:rgba(99,102,241,.08);border-left:3px solid #6366f1;border-radius:8px;font-size:12px">🎛️ <b>Combo Panorámica + PTZ</b> — Dos cámaras en una: panorámica fija ve todo el panorama, mientras el PTZ hace zoom y sigue objetivos. La pano detecta, el PTZ identifica. Máximo rendimiento.</p>';
+      }
+    }
     el.innerHTML =
       '<div class="fov-conc-title">📊 Análisis técnico</div>' +
+      multiNote +
       '<p>La <b>'+rA.cam.cod+'</b> ('+rA.cam.mp+'MP, sensor '+rA.cam.sensor.name+', óptica '+focalTxt+') ' +
-      'a <b>'+rA.focal.toFixed(1)+'mm</b> cubre un ángulo de <b>'+rA.angH.toFixed(0)+'°</b> ' +
+      'a <b>'+rA.focal.toFixed(1)+'mm</b> cubre un ángulo de <b>'+(rA.angTotalH||rA.angH).toFixed(0)+'°</b>' +
+      (rA.multi && rA.angTotalH !== rA.angH ? ' (cada sensor ~'+rA.angH.toFixed(0)+'°)' : '') + ' ' +
       'y permite <b>'+rA.wid.toFixed(1)+'m de ancho</b> a '+FOV.dist+'m.</p>' +
       (bestZone ? '<p>A '+FOV.dist+'m logra nivel <b style="color:'+DORI_COLORS[DORI_ZONES.findIndex(function(z){return z.name===bestZone;})]+'">'+bestZone+'</b>.</p>' : '<p>⚠️ A '+FOV.dist+'m no alcanza ni para detectar — acerca la cámara o usa un lente más largo.</p>') +
       '<p class="fov-conc-hint">💡 Para <b>identificar rostros</b> necesitas estar a máx. '+rA.doriDists[3].toFixed(1)+'m. Para <b>reconocer personas conocidas</b>, '+rA.doriDists[2].toFixed(1)+'m.</p>' +
       '<p class="fov-conc-hint">🚗 Para <b>leer patentes chilenas</b> con claridad, el auto debe estar a máx. <b>'+rA.plateDist.toFixed(1)+'m</b> y la cámara orientada hacia ella.</p>' +
+      // Nota especial según tipo multisensor
+      (function(){
+        var m = rA.cam.focal.multi;
+        if (!m) return '';
+        if (m.kind === 'fisheye') {
+          return '<p class="fov-conc-hint" style="border-left-color:#e74c3c"><b>🔴 Fisheye (ojo de pez):</b> una sola cámara cubre 360° de un ambiente. Ideal para oficinas, bodegas, salas pequeñas. El PPM cae hacia los bordes — úsala para vigilancia general, no identificación precisa. Reemplaza 3–4 cámaras tradicionales.</p>';
+        }
+        if (m.kind === 'pano180') {
+          return '<p class="fov-conc-hint" style="border-left-color:#2980b9"><b>🌐 Panorámica 180°'+(m.singleLens?'':' multi-sensor')+':</b> '+(m.singleLens?'lente panorámico único':m.sensors+' sensores fusionan imagen de 180°')+'. Reemplaza 2–3 cámaras tradicionales con 1 solo cable Ethernet y 1 solo canal NVR. Ideal para frentes amplios: fachadas, accesos vehiculares, perímetros lineales.</p>';
+        }
+        if (m.kind === 'pano360') {
+          return '<p class="fov-conc-hint" style="border-left-color:#2980b9"><b>🌐 Panorámica 360°:</b> '+m.sensors+' sensores fusionan vista total del ambiente. Reemplaza hasta 8 cámaras tradicionales con 1 solo dispositivo. Ideal para instalación en postes centrales de estacionamientos, plazas o patios amplios.</p>';
+        }
+        if (m.kind === 'multiLens') {
+          var fStr = (m.focals||[]).map(function(f){ return f.type==='varifocal'?f.min+'–'+f.max+'mm':f.min+'mm'; }).join(' · ');
+          return '<p class="fov-conc-hint" style="border-left-color:#27ae60"><b>🔭 Multi-lens:</b> '+m.focals.length+' lentes apuntando a la misma dirección pero con distinto focal ('+fStr+'). Útil para cubrir <b>corredores largos</b>: el lente corto ve la zona cercana y el lente largo la lejana, todo desde el mismo punto.</p>';
+        }
+        if (m.kind === 'ptzCombo') {
+          return '<p class="fov-conc-hint" style="border-left-color:#f39c12"><b>🎯 PTZ + Panorámica combo:</b> la panorámica ve todo el escenario '+m.fovH+'° mientras la PTZ '+(m.ptzZoom||'')+'X hace seguimiento activo de objetos. La cámara auto-dispatch: la pano detecta un intruso y dirige la PTZ a su posición para hacer zoom. Ideal para perímetros grandes, estacionamientos, fábricas.</p>';
+        }
+        return '';
+      })() +
       // Advertencia de iluminación
       (function(){
         var inf = rA.cam.infra;
@@ -23868,24 +24941,32 @@ function renderConclusion(rA, rB) {
   // Comparar variantes específicas
   var vA = rA.cam.focal.variant, vB = rB.cam.focal.variant;
   var motorized = (v) => (v === 'ZS' || v === 'ZE' || v === 'ZW');
-  var hasZS = vA === 'ZS' || vB === 'ZS';
-  var hasZE = vA === 'ZE' || vB === 'ZE';
-  var hasVF = vA === 'VF' || vB === 'VF';
+  // Redefinir motorized para cubrir todas las variantes
+  var allMotor = ['ZS','ZSA','ZAS','ZE','ZEA','ZW','ZWA'];
+  var allExt   = ['ZE','ZEA'];
+  var hasMotorA = allMotor.indexOf(vA) >= 0;
+  var hasMotorB = allMotor.indexOf(vB) >= 0;
+  var hasExt = allExt.indexOf(vA) >= 0 || allExt.indexOf(vB) >= 0;
+  var hasVF  = vA === 'VF' || vB === 'VF';
   var hasPTZ = rA.cam.focal.type === 'ptz' || rB.cam.focal.type === 'ptz';
   if (hasPTZ) {
     var ptzCam = rA.cam.focal.type === 'ptz' ? rA.cam : rB.cam;
     advice += '<p>🔭 La <b>'+ptzCam.cod+'</b> es <b>PTZ</b>: gira, inclina y hace zoom en vivo desde el NVR — ideal para monitoreo activo, perímetros grandes o cuando un operador está atento.</p>';
   }
-  if (hasZS || hasZE) {
-    var mCam = motorized(vA) ? rA.cam : rB.cam;
+  if (hasMotorA || hasMotorB) {
+    var mCam = hasMotorA ? rA.cam : rB.cam;
     var vm = mCam.focal.variant;
-    if (vm === 'ZE') {
-      advice += '<p>🎯 La <b>'+mCam.cod+'</b> es <b>ZE — motorizada telefoto</b>: su rango de focal es más cerrado, ideal para cubrir <b>larga distancia</b> con alto detalle (entradas, corredores, perímetros lejanos).</p>';
+    var hasAudio = vm === 'ZAS' || vm === 'ZSA' || vm === 'ZEA' || vm === 'ZWA';
+    var audioTxt = hasAudio ? ' <b>con audio integrado</b>' : '';
+    if (vm === 'ZE' || vm === 'ZEA') {
+      advice += '<p>🎯 La <b>'+mCam.cod+'</b> es <b>'+vm+' — motorizada EXTENDED'+audioTxt+'</b>: su lente telefoto cubre más lejos con detalle, ideal para <b>larga distancia</b> (entradas, corredores, perímetros lejanos).</p>';
+    } else if (vm === 'ZW' || vm === 'ZWA') {
+      advice += '<p>📐 La <b>'+mCam.cod+'</b> es <b>'+vm+' — motorizada gran angular'+audioTxt+'</b>: abre más ángulo que una ZS, buena para cubrir espacios amplios cerca.</p>';
     } else {
-      advice += '<p>⚙️ La <b>'+mCam.cod+'</b> es <b>ZS — motorizada remota</b>: ajustas el zoom y enfoque desde el NVR/software, sin subir a la cámara. Ideal para instalaciones altas o de difícil acceso.</p>';
+      advice += '<p>⚙️ La <b>'+mCam.cod+'</b> es <b>'+vm+' — motorizada remota'+audioTxt+'</b>: ajustas el zoom y enfoque desde el NVR/software, sin subir físicamente a la cámara. Ideal para instalaciones altas o de difícil acceso.</p>';
     }
   }
-  if (hasVF && !hasZS && !hasZE) {
+  if (hasVF && !hasMotorA && !hasMotorB) {
     var vfCam = vA === 'VF' ? rA.cam : rB.cam;
     advice += '<p>🔧 La <b>'+vfCam.cod+'</b> es <b>VF — varifocal manual</b>: ajustas el zoom con un destornillador al instalar. Buena relación precio/flexibilidad para instalaciones accesibles.</p>';
   }
