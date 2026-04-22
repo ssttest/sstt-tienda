@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 13:00 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 13:07 hrs (UTC-4 Chile) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -7616,7 +7616,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 13:00 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 13:07 hrs</span>
   </div>
 </div>
 
@@ -21471,7 +21471,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 13:00 hrs';
+  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 13:07 hrs';
 })();
 
 
@@ -22106,7 +22106,7 @@ function cartCrossSellRender() {
 function ccsAddToCart(codigo) {
   var p = PRODUCTS.find(function(x){ return x.codigo === codigo; });
   if (!p) return;
-  addToCart(p);
+  addCart(p);
   var btn = document.getElementById('ccs_btn_' + codigo);
   if (btn) { btn.textContent = '✓ Agregado'; btn.classList.add('added'); btn.disabled = true; }
 }
