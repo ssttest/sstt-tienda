@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 18:24 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Miércoles 22 de Abril del 2026 · 19:23 hrs (UTC-4 Chile) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -7377,6 +7377,20 @@ body.cart-open #proyectoListadoBtn {
   color: #fff; border-color: transparent;
   box-shadow: 0 2px 8px rgba(99,102,241,.3);
 }
+.fov-compare-channels-btn {
+  display: block; width: 100%; margin-top: 8px;
+  padding: 8px 12px; font-size: 11px; font-weight: 700;
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  color: #fff; border: none; border-radius: 9px;
+  cursor: pointer; font-family: var(--font);
+  transition: all .15s;
+  box-shadow: 0 2px 8px rgba(124,58,237,.25);
+}
+.fov-compare-channels-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(124,58,237,.35);
+  filter: brightness(1.05);
+}
 .fov-multi-banner {
   display:flex; align-items:center; gap:10px;
   padding:10px 12px; margin-bottom:12px;
@@ -8002,7 +8016,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 18:24 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 19:23 hrs</span>
   </div>
 </div>
 
@@ -9417,6 +9431,14 @@ if (window.pdfjsLib) {
       <div class="dori-leg-item"><div class="dori-leg-dot" style="background:rgba(180,140,255,.7)"></div>🌙 IR</div>
       <div class="dori-leg-item"><div class="dori-leg-dot" style="background:rgba(255,230,150,.9)"></div>💡 LED blanco</div>
       <div class="dori-leg-item"><div class="dori-leg-dot" style="background:rgba(255,220,120,1);box-shadow:0 0 6px rgba(255,220,120,.5)"></div>⭐ PRO / Full-Color</div>
+    </div>
+    <div class="dori-legend" style="margin-top:6px;padding-top:8px;border-top:1px solid rgba(0,0,0,.06)">
+      <span style="font-size:10px;color:#888;font-weight:700;margin-right:4px">🔥 TÉRMICA (DRI Johnson):</span>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:#ff6b6b"></div>Detect</div>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:#ffd93d"></div>Recog</div>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:#6bcb77"></div>Ident</div>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:#9b59b6"></div>Vehículo</div>
+      <div class="dori-leg-item"><div class="dori-leg-dot" style="background:#e67e22"></div>🔥 Fuego</div>
     </div>
   </div>
 
@@ -22009,7 +22031,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 18:24 hrs';
+  if (txt) txt.textContent = 'Última actualización: Miércoles 22 de Abril del 2026 · 19:23 hrs';
 })();
 
 
@@ -23112,6 +23134,206 @@ function parseInfra(nombre, codigo) {
 
 // Detectar tipo de cámara MULTISENSOR a partir de código y nombre
 // Retorna objeto con la info o null si es cámara normal
+// ══════════════════════════════════════════════════════════════
+// PARSE THERMAL — detecta cámaras térmicas Dahua (serie TPC)
+// Las térmicas usan criterio Johnson (DRI) no DORI, con sensor VOx
+// uncooled y pixel size en µm. Retorna null si no es térmica.
+// ══════════════════════════════════════════════════════════════
+function parseThermal(nombre, codigo) {
+  var c = (codigo || '').toUpperCase();
+  var n = nombre || '';
+
+  // ¿Es térmica?
+  var isThermal = /^(DH-)?TPC-/.test(c) || /termal|thermal|térmic/i.test(n);
+  if (!isThermal) return null;
+
+  // ── Resolución del sensor térmico ──
+  // Buscar "400x300", "256x192", "640x512" en nombre
+  var thermalRes = null;
+  var mres = n.match(/(\d{3,4})\s*[xX×]\s*(\d{3,4})/);
+  if (mres) {
+    var w = parseInt(mres[1]), h = parseInt(mres[2]);
+    var valid = [[256,192],[384,288],[400,300],[640,480],[640,512],[1280,1024]];
+    for (var vi = 0; vi < valid.length; vi++) {
+      if (Math.abs(w - valid[vi][0]) <= 20 && Math.abs(h - valid[vi][1]) <= 20) {
+        thermalRes = { w: valid[vi][0], h: valid[vi][1] }; break;
+      }
+    }
+  }
+  if (!thermalRes) {
+    // Inferir por serie del código
+    var series = c.match(/TPC-(?:B|D|S|P)?(?:F|T|A|E)?(\d)/);
+    var firstDigit = series ? parseInt(series[1]) : 5;
+    if (firstDigit >= 8) thermalRes = { w:640, h:512 };
+    else if (firstDigit >= 2) thermalRes = { w:400, h:300 };
+    else thermalRes = { w:256, h:192 };
+  }
+
+  // ── Pixel size (µm): 17µm serie 5401/3xxx, 12µm serie 5441/8641/86xx ──
+  var pixelSize = 17;
+  if (/544|5641|8641|8421/.test(c)) pixelSize = 12;
+
+  // ── Focal térmico + óptico híbrido ──
+  // Patrones en segmentos: B3F4, B13F6, B25F12, B50Z56, TB13Z45, B7 sólo
+  var segments = c.split('-');
+  var thermalFocal = null;
+  var opticalFocal = null;
+  var opticalZoom = null;
+  for (var si = 0; si < segments.length; si++) {
+    var seg = segments[si];
+    // Patrón: B{tnum}{F|Z}{onum}
+    var m = seg.match(/^T?B(\d+)([FZ])(\d+)[A-Z]*$/);
+    if (m) {
+      var tnum = parseInt(m[1]);
+      var letter = m[2];
+      var onum = parseInt(m[3]);
+      if (tnum === 7) thermalFocal = 7.5;
+      else if (tnum === 3) thermalFocal = 3.5;
+      else if (tnum >= 4 && tnum <= 80) thermalFocal = tnum;
+      if (letter === 'F') opticalFocal = onum;
+      else if (letter === 'Z') opticalZoom = onum;
+      break;
+    }
+    // Sólo térmico
+    var m2 = seg.match(/^T?B(\d+)[A-Z]*$/);
+    if (m2 && thermalFocal === null) {
+      var tnum2 = parseInt(m2[1]);
+      if (tnum2 === 7) thermalFocal = 7.5;
+      else if (tnum2 === 3) thermalFocal = 3.5;
+      else if (tnum2 >= 4 && tnum2 <= 80) thermalFocal = tnum2;
+    }
+  }
+
+  var isHybrid = (opticalFocal !== null) || (opticalZoom !== null);
+  var isPtz = /^(DH-)?TPC-(S[DA]|PT)/.test(c);
+  // NETD típico
+  var netd = 40;
+  if (/<30|30\s*mK/i.test(n)) netd = 30;
+
+  return {
+    isThermal: true,
+    thermalRes: thermalRes,
+    thermalFocal: thermalFocal,
+    pixelSize: pixelSize,
+    netd: netd,
+    isHybrid: isHybrid,
+    opticalFocal: opticalFocal,
+    opticalZoom: opticalZoom,
+    isPtz: isPtz,
+    // Etiqueta para UI
+    label: (thermalFocal ? thermalFocal+'mm térmico' : 'Térmica') +
+           ' · ' + thermalRes.w+'×'+thermalRes.h +
+           (isHybrid ? ' (Híbrida' +
+             (opticalFocal ? ' + óptico '+opticalFocal+'mm' : '') +
+             (opticalZoom ? ' + zoom '+opticalZoom+'X' : '') + ')' : '')
+  };
+}
+
+// ══ CÁMARAS TÉRMICAS ═══════════════════════════════════════════
+// Detecta si es térmica, extrae sensor, focal térmico, focal óptico, PTZ zoom
+// Basado en codificación Dahua: segundo dígito del modelo = sensor
+//   BF2241 → 2 → 256×192 · BF5401 → 4 → 400×300 · BF5641 → 6 → 640×512
+//
+// Códigos de lente térmica:
+//   -B3F4-   = térmico 3.5mm + óptico 4mm
+//   -B7F8-   = térmico 7mm + óptico 8mm
+//   -TB13-   = térmico puro 13mm
+//   -B13F6-  = térmico 13mm + óptico 6mm
+//   -B13Z45- = térmico 13mm + PTZ óptico zoom 45X
+//   -B50Z56- = térmico 50mm + PTZ óptico zoom 56X
+function parseThermal(nombre, codigo) {
+  var c = (codigo || '').toUpperCase();
+  var n = (nombre || '');
+  // Detectar si es térmica
+  var isThermal = /^(DH-)?TPC-/i.test(c) ||
+                  /t[eé]rmic|thermal|bi.?spec/i.test(n);
+  if (!isThermal) return null;
+
+  // ── Sensor por segundo dígito del número del modelo ──
+  var smatch = c.match(/(?:BF|DF|KF|SD|SDA|PT|AEBF|HT|ACPT|ACSD)(\d)(\d)\d\d/);
+  var sensor = {w:256, h:192, pixelPitch:12, netd:50, label:'256×192', tier:'Value'};  // default
+  if (smatch) {
+    var tier = {'1':'Lite','2':'Value','5':'Pro','8':'Ultra'}[smatch[1]] || '';
+    var sensorMap = {
+      '2': {w:256, h:192, pixelPitch:12, netd:50, label:'256×192', tier:tier},
+      '4': {w:400, h:300, pixelPitch:17, netd:40, label:'400×300', tier:tier},
+      '6': {w:640, h:512, pixelPitch:12, netd:40, label:'640×512', tier:tier}
+    };
+    if (sensorMap[smatch[2]]) sensor = sensorMap[smatch[2]];
+  }
+
+  // ── Focal térmico, óptico, PTZ zoom ──
+  var segments = c.split('-');
+  var thermalFocal = null, opticalFocal = null, ptzZoom = null;
+
+  for (var i = 0; i < segments.length; i++) {
+    var seg = segments[i];
+    var m;
+    // -BxxZyy- o -TBxxZyy-  (térmico + PTZ con zoom)
+    m = seg.match(/^T?B(\d+)Z(\d+)(?:V\d+)?$/);
+    if (m) {
+      thermalFocal = parseInt(m[1]);
+      ptzZoom = parseInt(m[2]);
+      continue;
+    }
+    // -BxxFyy- o -TBxxFyy- (térmico + óptico)
+    m = seg.match(/^T?B(\d+)F(\d+)$/);
+    if (m) {
+      thermalFocal = parseInt(m[1]);
+      opticalFocal = parseInt(m[2]);
+      if (thermalFocal === 3) thermalFocal = 3.5; // B3F4 = 3.5mm
+      continue;
+    }
+    // -Bxx- o -TBxx- (térmico puro)
+    m = seg.match(/^T?B(\d+)$/);
+    if (m) {
+      var val = parseInt(m[1]);
+      if (val >= 3 && val <= 60 && !thermalFocal) {
+        thermalFocal = val;
+      }
+    }
+  }
+  if (!thermalFocal) thermalFocal = 7; // default razonable
+
+  // Extraer "4MP óptico N.N-Mmm" del nombre (cuando óptico es varifocal)
+  var opticalRange = null;
+  var opR = n.match(/[oó]ptico\s+varifocal\s+(\d+\.?\d*)\s*[-–]\s*(\d+\.?\d*)\s*mm/i);
+  if (opR) opticalRange = {min:parseFloat(opR[1]), max:parseFloat(opR[2])};
+
+  // ── Tipo de cámara térmica ──
+  var tipo;
+  if (/^(DH-)?TPC-(PT|SD|ACPT|ACSD)/i.test(c) && ptzZoom) tipo = 'thermal-ptz-combo';
+  else if (/^(DH-)?TPC-(PT|SD)/i.test(c)) tipo = 'thermal-pt';
+  else if (opticalFocal) tipo = 'thermal-hybrid';
+  else if (ptzZoom) tipo = 'thermal-ptz-combo';
+  else if (/HT\d|M20|handheld/i.test(c+' '+n)) tipo = 'thermal-handheld';
+  else tipo = 'thermal-pure';
+
+  // ── Detectar medición de temperatura (HTM, T° en nombre) ──
+  var hasTempMeasurement = /HTM|htm|medici[oó]n|measurement|temperatura|temperature/i.test(c+' '+n);
+  var hasFireDetection = /fire|incendio|incendios/i.test(n);
+
+  return {
+    isThermal: true,
+    type: tipo,
+    sensor: sensor,
+    thermalFocal: thermalFocal,
+    opticalFocal: opticalFocal,
+    opticalRange: opticalRange,
+    ptzZoom: ptzZoom,
+    hasTempMeasurement: hasTempMeasurement,
+    hasFireDetection: hasFireDetection,
+    label: buildThermalLabel(sensor, tipo, thermalFocal, opticalFocal, ptzZoom)
+  };
+}
+
+function buildThermalLabel(s, tipo, tf, of, pz) {
+  var lbl = 'Térmica '+s.label+' · '+tf+'mm';
+  if (of) lbl += ' + Óptica '+of+'mm';
+  if (pz) lbl += ' + PTZ '+pz+'X';
+  return lbl;
+}
+
 function parseMultiSensor(nombre, codigo) {
   var n = (nombre || '').toLowerCase();
   var c = (codigo || '').toUpperCase();
@@ -23260,7 +23482,23 @@ function parseFocal(nombre, codigo) {
   var c = (codigo || '').toUpperCase();
   var segments = c.split('-');
 
-  // 0) DETECTAR MULTISENSOR primero (prioridad máxima)
+  // 0A) DETECTAR TÉRMICA primero
+  var thermal = parseThermal(nombre, codigo);
+  if (thermal) {
+    // Si es híbrida, guardar ambos focales; si no, usar el térmico
+    var tf = thermal.thermalFocal;
+    // Rango típico de focal fijo para el render del slider
+    return {
+      min: tf, max: tf, type: 'thermal-fixed',
+      variant: 'THERMAL',
+      variantDesc: thermal.label,
+      source: 'TPC código',
+      thermal: thermal,
+      multi: null
+    };
+  }
+
+  // 0B) DETECTAR MULTISENSOR (prioridad después de térmica)
   var multi = parseMultiSensor(nombre, codigo);
 
   // 1) Detectar VARIANTE por segmento exacto del código
@@ -23418,6 +23656,10 @@ var FOV = {
 // ── Init: poblar lista de cámaras ──
 function fovInit() {
   if (typeof PRODUCTS === 'undefined') { setTimeout(fovInit, 300); return; }
+  // Exponer para debugging
+  window.FOV = FOV;
+  window._fovCalcFOV = calcFOV;
+  window._fovGetLensOpts = getLensOptions;
   FOV.allCams = [];
   var cats = ['camaras-ip','camaras-hdcvi','camaras-ptz'];
   PRODUCTS.forEach(function(p){
@@ -23430,7 +23672,21 @@ function fovInit() {
     else if (/4K|8MP/i.test(p.nombre||'')) mp = 8;
     else if (/1080P/i.test(p.nombre||'')) mp = 2;
     else if (/720P/i.test(p.nombre||'')) mp = 1;
-    var sensor = inferSensor(p.nombre, mp, p.cat);
+    var sensor;
+    if (focal.thermal) {
+      // Térmica — usar sensor térmico físico
+      var ts = focal.thermal.sensor;
+      sensor = {
+        w: ts.w * ts.pixelPitch / 1000,  // ancho físico en mm
+        h: ts.h * ts.pixelPitch / 1000,  // alto físico en mm
+        name: ts.label + ' (Térmico)',
+        pixelPitch: ts.pixelPitch,
+        netd: ts.netd,
+        wPx: ts.w, hPx: ts.h
+      };
+    } else {
+      sensor = inferSensor(p.nombre, mp, p.cat);
+    }
     FOV.allCams.push({
       cod: p.codigo, id: p.id,
       nombre: p.nombre,
@@ -23568,8 +23824,17 @@ function calcFOV(cam, focal, lensKey) {
   if (!cam) return null;
   // Si la cámara tiene multi-sensor con opciones de lens, usar el lens activo
   var activeLens = lensKey !== undefined ? getActiveLens(cam, lensKey) : null;
-  var effectiveMp = activeLens ? activeLens.mp : cam.mp;
-  var sw = cam.sensor.w, sh = cam.sensor.h;
+  var effectiveMp = activeLens && activeLens.mp ? activeLens.mp : cam.mp;
+  // Si la cámara es térmica pero el activeLens es óptico/PTZ, usar sensor óptico
+  var sw, sh;
+  if (cam.focal.thermal && activeLens && activeLens.useThermal === false) {
+    // Sensor óptico inferido según MP y tipo (como si fuera cámara normal)
+    var opticalMp = activeLens.mp || 4;
+    var opticalSensor = inferSensor(cam.nombre, opticalMp, 'camaras-ip');
+    sw = opticalSensor.w; sh = opticalSensor.h;
+  } else {
+    sw = cam.sensor.w; sh = cam.sensor.h;
+  }
   var multi = cam.focal.multi;
   // Para MULTI-SENSOR: cada sensor tiene su focal común, MP individual
   // El PPM efectivo sigue siendo del sensor individual (cada sensor ve su parte)
@@ -23599,12 +23864,53 @@ function calcFOV(cam, focal, lensKey) {
   }
   // PPM a la distancia actual
   var ppmNow = pxH / wid;
+  // ── CÁMARAS TÉRMICAS: usar fórmula NVESD/Johnson ──
+  // D_max = (critical_target × focal_mm) / (N × pixel_pitch_um × 0.001)
+  // Humano target = 0.75m; Vehículo = 1.9m
+  // Lines: Detection=1.5, Recognition=6, Identification=12
+  var thermalDRI = null;
+  // Si el activeLens indica explícitamente NO usar térmica (óptico/PTZ), saltar DRI
+  var forceOptical = activeLens && activeLens.useThermal === false;
+  if (cam.focal.thermal && !forceOptical) {
+    var pp = cam.focal.thermal.sensor.pixelPitch;  // µm
+    var driFocal = focal;  // mm
+    thermalDRI = {
+      human: {
+        D: (0.75 * driFocal) / (1.5 * pp * 0.001),
+        R: (0.75 * driFocal) / (6   * pp * 0.001),
+        I: (0.75 * driFocal) / (12  * pp * 0.001)
+      },
+      vehicle: {
+        D: (1.9 * driFocal) / (1.5 * pp * 0.001),
+        R: (1.9 * driFocal) / (6   * pp * 0.001),
+        I: (1.9 * driFocal) / (12  * pp * 0.001)
+      },
+      // Detección de fuego: típicamente 4-6x la distancia de detección humana
+      // (el fuego emite ~100x más calor que cuerpo)
+      fireDetection: (0.75 * driFocal) / (1.5 * pp * 0.001) * 5,
+      // FOV: 2 × atan(sensor_w / (2 × focal))
+      angH: 2 * Math.atan((cam.focal.thermal.sensor.w * pp * 0.001) / (2 * driFocal)) * 180/Math.PI,
+      angV: 2 * Math.atan((cam.focal.thermal.sensor.h * pp * 0.001) / (2 * driFocal)) * 180/Math.PI
+    };
+    // Sobrescribir angH/angV con los térmicos para que el canvas dibuje el cono correcto
+    angH = thermalDRI.angH;
+    angV = thermalDRI.angV;
+    // Cobertura
+    wid = 2 * FOV.dist * Math.tan(angH * Math.PI/180 / 2);
+    hei = 2 * FOV.dist * Math.tan(angV * Math.PI/180 / 2);
+  }
   // Distancias DORI (fórmula: d = pxH*focal / (ppm*sensor_w))
   // Para fisheye es distinto: el PPM en el suelo depende del radio del círculo
   var doriDists;
-  if (multi && multi.kind === 'fisheye') {
-    // En fisheye: el perímetro a distancia d (proyectado en suelo) es 2πd
-    // PPM uniforme en el borde = pxH / (2πd) → despejando d = pxH/(2π*ppm)
+  if (cam.focal.thermal && thermalDRI) {
+    // Para térmicas, reemplazar DORI por DRI humano (Detect, Recognize, Identify)
+    doriDists = [
+      thermalDRI.human.D,
+      (thermalDRI.human.D + thermalDRI.human.R) / 2,
+      thermalDRI.human.R,
+      thermalDRI.human.I
+    ];
+  } else if (multi && multi.kind === 'fisheye') {
     doriDists = DORI_ZONES.map(function(z){
       return pxH / (2 * Math.PI * z.ppm);
     });
@@ -23628,20 +23934,67 @@ function calcFOV(cam, focal, lensKey) {
   var plateDist = (pxH * focal) / (PLATE_ZONE.ppm * sw);
   return {
     cam: cam, focal: focal, pxH: pxH,
+    activeLens: activeLens, effectiveMp: effectiveMp,
     angH: angH, angV: angV,
     angTotalH: angTotalH, angTotalV: angTotalV,
     wid: wid, hei: hei, ppmNow: ppmNow,
     doriDists: doriDists, plateDist: plateDist,
-    multi: multi, multiLensDori: multiLensDori
+    multi: multi, multiLensDori: multiLensDori,
+    thermalDRI: thermalDRI
   };
 }
 
 // Devuelve las opciones de sensor/lente para una cámara multi-sensor
 // Cada opción tiene: { key, label, focal:{min,max,type}, mp, sensor, fovH }
 function getLensOptions(cam) {
-  if (!cam || !cam.focal || !cam.focal.multi) return null;
-  var m = cam.focal.multi;
+  if (!cam || !cam.focal) return null;
   var opts = [];
+
+  // ── CÁMARAS TÉRMICAS HÍBRIDAS o TÉRMICA+PTZ ────────────────
+  // Si tiene ambos canales (térmico + óptico), permitir elegir cuál analizar
+  var t = cam.focal.thermal;
+  if (t && (t.opticalFocal || t.ptzZoom)) {
+    // Opción térmica (siempre primero — es la razón principal de la cámara)
+    opts.push({
+      key: 'thermal',
+      label: '🔥 Térmica ' + t.thermalFocal + 'mm · ' + t.sensor.w + '×' + t.sensor.h,
+      focal: {min: t.thermalFocal, max: t.thermalFocal, type: 'thermal-fixed', variant: 'THERMAL'},
+      mp: null, // no aplica MP en térmica, se usa sensor físico
+      sensor: null, // se genera automático en calcFOV
+      useThermal: true,
+      fovH: null
+    });
+    if (t.opticalFocal && !t.ptzZoom) {
+      // Hibrida simple con óptica fija
+      opts.push({
+        key: 'optical',
+        label: '📷 Óptica ' + t.opticalFocal + 'mm fija · '+ (cam.mp||4) + 'MP',
+        focal: {min: t.opticalFocal, max: t.opticalFocal, type: 'fixed', variant: 'FIJA'},
+        mp: cam.mp || 4,
+        sensor: null, // se usa el óptico default
+        useThermal: false,
+        fovH: null
+      });
+    }
+    if (t.ptzZoom) {
+      // Térmica + PTZ óptico
+      opts.push({
+        key: 'ptz',
+        label: '🎯 PTZ óptico ' + t.ptzZoom + 'X · ' + (cam.mp||4) + 'MP',
+        focal: {min: 4.8, max: 4.8 * t.ptzZoom, type: 'ptz', zoom: t.ptzZoom, variant: 'PTZ'},
+        mp: cam.mp || 4,
+        sensor: null,
+        useThermal: false,
+        isPtz: true,
+        fovH: null
+      });
+    }
+    return opts;
+  }
+
+  // ── MULTI-SENSOR (existente) ───────────────────────────────
+  if (!cam.focal.multi) return null;
+  var m = cam.focal.multi;
   if (m.kind === 'multiLens' && m.focals && m.focals.length) {
     // Multi-lens: una opción por lente
     m.focals.forEach(function(f, i){
@@ -23687,10 +24040,29 @@ function renderLensToggle(which) {
   var opts = getLensOptions(cam);
   if (!opts) { el.style.display = 'none'; return; }
   var current = which === 'A' ? FOV.lensA : FOV.lensB;
-  var hint = cam.focal.multi.kind === 'multiLens' ?
-    'Esta cámara tiene varios lentes independientes · elige cuál simular' :
-    'Esta cámara tiene panorámica + PTZ · elige cuál simular';
+  var hint, showCompareChannels = false;
+  if (cam.focal.thermal && (cam.focal.thermal.opticalFocal || cam.focal.thermal.ptzZoom)) {
+    hint = cam.focal.thermal.ptzZoom
+      ? 'Esta cámara tiene sensor térmico + PTZ óptico · elige qué canal simular'
+      : 'Esta cámara tiene sensor térmico + cámara óptica · elige qué canal simular';
+    showCompareChannels = opts.length >= 2;
+  } else if (cam.focal.multi) {
+    hint = cam.focal.multi.kind === 'multiLens'
+      ? 'Esta cámara tiene varios lentes independientes · elige cuál simular'
+      : 'Esta cámara tiene panorámica + PTZ · elige cuál simular';
+    showCompareChannels = opts.length >= 2;
+  } else {
+    hint = 'Elige el sensor/lente a simular';
+  }
   el.style.display = 'block';
+  // Botón "Comparar canales" solo en el panel A (no duplicar en B)
+  var compareBtnHTML = '';
+  if (showCompareChannels && which === 'A') {
+    compareBtnHTML =
+      '<button class="fov-compare-channels-btn" onclick="fovCompareChannels(\''+which+'\')">' +
+      '⚡ Ver los canales lado a lado' +
+      '</button>';
+  }
   el.innerHTML =
     '<div class="fov-lens-toggle-label">🔀 Elegir sensor/lente</div>' +
     '<div style="font-size:10px;color:#666;margin-bottom:7px;line-height:1.4">'+hint+'</div>' +
@@ -23701,8 +24073,42 @@ function renderLensToggle(which) {
           o.label +
         '</button>';
       }).join('') +
-    '</div>';
+    '</div>' +
+    compareBtnHTML;
 }
+
+// ── Comparar canales de la MISMA cámara lado a lado ──
+// Carga la cámara A en B con un lens diferente, activa modo compare
+window.fovCompareChannels = function(srcWhich) {
+  var cam = srcWhich === 'A' ? FOV.camA : FOV.camB;
+  if (!cam) return;
+  var opts = getLensOptions(cam);
+  if (!opts || opts.length < 2) return;
+  var currentLens = srcWhich === 'A' ? FOV.lensA : FOV.lensB;
+  // Encontrar un lens distinto al actual
+  var otherLens = opts.find(function(o){ return String(o.key) !== String(currentLens); });
+  if (!otherLens) return;
+  // Activar modo compare si no lo está
+  if (!FOV.compare) {
+    FOV.compare = true;
+    var wrap = document.getElementById('fovCompareWrap');
+    var btn = document.getElementById('fovCompareBtn');
+    if (wrap) wrap.style.display = 'block';
+    if (btn) {
+      btn.textContent = '✕ Quitar comparación';
+      btn.classList.add('on');
+    }
+  }
+  // Cargar la misma cámara en B con el lens alternativo
+  FOV.camB = cam;
+  FOV.lensB = otherLens.key;
+  FOV.focalB = otherLens.focal.min;
+  // Actualizar input B
+  var inputB = document.getElementById('fovSearchBInput');
+  if (inputB) inputB.value = cam.cod;
+  fovRender();
+  showToast('⚡ Comparando canales: '+currentLens+' vs '+otherLens.key);
+};
 
 // Cambiar el lens seleccionado
 window.fovSetLens = function(which, key) {
@@ -23840,9 +24246,20 @@ function renderPanel(which, r) {
       '<div class="fov-spec"><div class="fov-spec-val">'+widthDisplay+'</div><div class="fov-spec-lbl">'+(m?'Área':'Ancho @'+FOV.dist+'m')+'</div></div>' +
       '<div class="fov-spec"><div class="fov-spec-val">'+r.ppmNow.toFixed(0)+'</div><div class="fov-spec-lbl">px/m</div></div>' +
     '</div>' +
+    (r.thermalDRI ?
+      '<div class="fov-spec-meta" style="background:linear-gradient(135deg,rgba(255,107,107,.1),rgba(255,159,67,.06));color:#c0392b;font-weight:700">' +
+        '🔥 Térmica Dahua · Sensor ' + r.cam.sensor.wPx + '×' + r.cam.sensor.hPx + ' · ' +
+        r.cam.sensor.pixelPitch + 'µm pixel · NETD ≤' + r.cam.sensor.netd + 'mK' +
+      '</div>' +
+      '<div class="fov-spec-meta" style="margin-top:4px">'+
+        '<b style="color:#c0392b">Lente térmico ' + r.cam.focal.thermal.thermalFocal + 'mm</b>' +
+        (r.cam.focal.thermal.opticalFocal ? ' + Óptico ' + r.cam.focal.thermal.opticalFocal + 'mm' : '') +
+        (r.cam.focal.thermal.ptzZoom ? ' + PTZ ' + r.cam.focal.thermal.ptzZoom + 'X' : '') +
+      '</div>'
+    :
     '<div class="fov-spec-meta">'+r.cam.sensor.name+' · '+r.pxH+'px · '+r.cam.mp+'MP · <b style="color:#0057B8">'+(r.cam.focal.variantDesc||'lente fijo')+'</b>'+
       (r.cam.focal.source ? ' <span style="color:#aaa;font-size:9px">('+r.cam.focal.source+')</span>' : '')+
-    '</div>' +
+    '</div>') +
     (r.multi ? '<div class="fov-spec-meta" style="margin-top:4px;background:rgba(99,102,241,.08);color:#4f46e5;font-weight:700">' +
       (r.multi.kind === 'fisheye' ? '🔮 Fisheye 360° · 1 sensor' :
        r.multi.kind === 'pano180' ? '🌐 Panorámica 180° · '+r.multi.sensors+' sensores × '+(r.multi.mpPerSensor||'?')+'MP' :
@@ -23866,28 +24283,46 @@ function renderPanel(which, r) {
     '<div class="fov-dori-dist">'+r.plateDist.toFixed(1)+'m</div>'+
     '<div class="fov-dori-ppm">(500px/m)</div>'+
   '</div>';
-  // Info de iluminación
-  var infra = r.cam.infra;
-  var infraIcon = infra.type === 'FullColorPro' || infra.type === 'PRO' ? '⭐' :
-                  infra.type === 'WizColor' ? '💡' :
-                  infra.type === 'TiOC' ? '🚨' :
-                  infra.type === 'SmartIR' ? '🧠' :
-                  infra.type === 'IR' ? '🌙' : '⚠️';
-  var infraColor = infra.unlimited ? '#27ae60' :
-                   infra.hasLED ? '#f39c12' :
-                   infra.irDist > 0 ? '#8e44ad' : '#999';
-  var infraHTML = '<div class="fov-infra-row" style="border-left:3px solid '+infraColor+'">'+
-    '<div class="fov-infra-icon">'+infraIcon+'</div>'+
-    '<div class="fov-infra-info">'+
-      '<div class="fov-infra-title">'+infra.label+'</div>'+
-      (infra.unlimited ?
-        '<div class="fov-infra-sub">✓ Iluminación efectiva en toda la escena</div>' :
-        infra.irDist > 0 ?
-          '<div class="fov-infra-sub">Alcance útil ~'+infra.irDist+'m</div>' :
-          '<div class="fov-infra-sub" style="color:#c00">⚠ Sólo útil con luz ambiente</div>'
-      )+
-    '</div>'+
-  '</div>';
+  // Info de iluminación (adaptada según tipo de cámara)
+  var infraHTML = '';
+  if (r.thermalDRI) {
+    // Cámara térmica — no necesita iluminación, ve por calor
+    // Si es híbrida, mostrar la iluminación del canal óptico
+    var isHybrid = r.cam.focal.thermal && r.cam.focal.thermal.opticalFocal;
+    var ptzZoom = r.cam.focal.thermal && r.cam.focal.thermal.ptzZoom;
+    infraHTML = '<div class="fov-infra-row" style="border-left:3px solid #27ae60;background:linear-gradient(135deg,rgba(39,174,96,.08),rgba(39,174,96,.02))">'+
+      '<div class="fov-infra-icon">🌡️</div>'+
+      '<div class="fov-infra-info">'+
+        '<div class="fov-infra-title" style="color:#1e7b42">Visión térmica pasiva · 24/7</div>'+
+        '<div class="fov-infra-sub">✓ Funciona igual de día y de noche · atraviesa humo y camuflaje'+
+          (isHybrid ? ' · canal óptico necesita luz ambiente o IR' : '') +
+          (ptzZoom ? ' · PTZ óptico requiere IR para operar de noche' : '') +
+        '</div>'+
+      '</div>'+
+    '</div>';
+  } else {
+    var infra = r.cam.infra;
+    var infraIcon = infra.type === 'FullColorPro' || infra.type === 'PRO' ? '⭐' :
+                    infra.type === 'WizColor' ? '💡' :
+                    infra.type === 'TiOC' ? '🚨' :
+                    infra.type === 'SmartIR' ? '🧠' :
+                    infra.type === 'IR' ? '🌙' : '⚠️';
+    var infraColor = infra.unlimited ? '#27ae60' :
+                     infra.hasLED ? '#f39c12' :
+                     infra.irDist > 0 ? '#8e44ad' : '#999';
+    infraHTML = '<div class="fov-infra-row" style="border-left:3px solid '+infraColor+'">'+
+      '<div class="fov-infra-icon">'+infraIcon+'</div>'+
+      '<div class="fov-infra-info">'+
+        '<div class="fov-infra-title">'+infra.label+'</div>'+
+        (infra.unlimited ?
+          '<div class="fov-infra-sub">✓ Iluminación efectiva en toda la escena</div>' :
+          infra.irDist > 0 ?
+            '<div class="fov-infra-sub">Alcance útil ~'+infra.irDist+'m</div>' :
+            '<div class="fov-infra-sub" style="color:#c00">⚠ Sólo útil con luz ambiente</div>'
+        )+
+      '</div>'+
+    '</div>';
+  }
   dori.innerHTML = doriHTML + plateHTML + infraHTML;
 }
 
@@ -23929,8 +24364,9 @@ function drawTopSingle(ctx, r, ox, oy, W, H) {
   }
   ctx.save(); ctx.translate(ox, oy);
   var margin = 30, camY = margin+10, camX = W/2;
-  // Escala: ver hasta la máxima distancia DORI + buffer
-  var maxD = Math.max(r.doriDists[0], FOV.dist) * 1.15;
+  var isThermal = !!r.thermalDRI;
+  // Escala: ver hasta la máxima distancia DORI/DRI + buffer
+  var maxD = isThermal ? Math.max(r.thermalDRI.human.D, FOV.dist) * 1.15 : Math.max(r.doriDists[0], FOV.dist) * 1.15;
   var scale = (H - camY - margin) / maxD;
   drawGrid(ctx, 0, camY, W, H-margin, scale, maxD);
   // Si es multi-sensor, dibujar con la función especial (centrado en el canvas)
@@ -23947,23 +24383,51 @@ function drawTopSingle(ctx, r, ox, oy, W, H) {
     ctx.restore();
     return;
   }
-  drawConeTop(ctx, camX, camY, scale, r, '#00aaff', null);
-  drawIlluminationTop(ctx, camX, camY, scale, r, null);
-  drawAnalysisLine(ctx, 0, W, camY, FOV.dist, scale, r.wid);
-  // Silueta vehículo para patente (si plateDist razonable)
-  if (r.plateDist > 0 && r.plateDist * scale < (H - camY - margin)) {
-    drawVehicleTop(ctx, camX + 1.2*scale, camY + r.plateDist*scale, scale, 'Patente', PLATE_ZONE.color);
+  var mainColor = isThermal ? '#ff5e3a' : '#00aaff';
+  drawConeTop(ctx, camX, camY, scale, r, mainColor, null);
+  if (!isThermal) {
+    drawIlluminationTop(ctx, camX, camY, scale, r, null);
   }
-  // Siluetas de personas en cada zona DORI
-  for (var k = 0; k < 4; k++) {
-    var pd = r.doriDists[k];
-    if (pd > 0 && pd * scale < (H - camY - margin)) {
-      drawPersonTop(ctx, camX - 0.6*scale, camY + pd*scale, scale, null, DORI_COLORS[k]);
+  drawAnalysisLine(ctx, 0, W, camY, FOV.dist, scale, r.wid);
+  // Preparar marks para etiquetas en columna izquierda
+  var leftMarks = [];
+  if (isThermal) {
+    var vd = r.thermalDRI.vehicle.D;
+    if (vd > 0 && vd * scale < (H - camY - margin)) {
+      drawVehicleTop(ctx, camX + 2*scale, camY + vd*scale, scale, null, '#9b59b6');
+      leftMarks.push({d: vd, name: '🚗 Vehículo D', color: '#9b59b6'});
+    }
+    // Personas: Detect / Recognize / Identify con colores térmicos (SIN label sobre persona)
+    var dh = r.thermalDRI.human;
+    var thermalMarks = [
+      {d: dh.D, name: 'Detectar',    color: '#ff6b6b'},
+      {d: dh.R, name: 'Reconocer',   color: '#ffd93d'},
+      {d: dh.I, name: 'Identificar', color: '#6bcb77'}
+    ];
+    thermalMarks.forEach(function(pm){
+      if (pm.d > 0 && pm.d * scale < (H - camY - margin)) {
+        drawPersonTop(ctx, camX - 0.8*scale, camY + pm.d*scale, scale, null, pm.color);
+        leftMarks.push(pm);
+      }
+    });
+  } else {
+    if (r.plateDist > 0 && r.plateDist * scale < (H - camY - margin)) {
+      drawVehicleTop(ctx, camX + 1.2*scale, camY + r.plateDist*scale, scale, null, PLATE_ZONE.color);
+      leftMarks.push({d: r.plateDist, name: '🚗 Patente', color: PLATE_ZONE.color});
+    }
+    for (var k = 0; k < 4; k++) {
+      var pd = r.doriDists[k];
+      if (pd > 0 && pd * scale < (H - camY - margin)) {
+        drawPersonTop(ctx, camX - 0.6*scale, camY + pd*scale, scale, null, DORI_COLORS[k]);
+        leftMarks.push({d: pd, name: DORI_ZONES[k].name, color: DORI_COLORS[k]});
+      }
     }
   }
-  // Persona en la distancia de análisis
+  // Ordenar por distancia descendente (más lejanas arriba)
+  leftMarks.sort(function(a,b){ return b.d - a.d; });
+  drawDistanceLabelsLeft(ctx, camX, camY, scale, leftMarks, H - margin, false);
   drawPersonTop(ctx, camX, camY + FOV.dist*scale, scale, '1.7m', '#fff');
-  drawCam(ctx, camX, camY, '📷', r.angH);
+  drawCam(ctx, camX, camY, isThermal ? '🔥' : '📷', r.angH);
   ctx.restore();
 }
 
@@ -24008,19 +24472,56 @@ function drawTop(ctx, rA, rB, ox, oy, W, H) {
     drawIlluminationTop(ctx, camX, camY, scale, rB, 'right');
   }
 
-  // Personas en zonas DORI (solo si ambas son normales)
+  // Personas en zonas DORI/DRI (solo si ambas son normales)
   if (!hasMultiA && !hasMultiB) {
     drawAnalysisLine(ctx, 0, W, camY, FOV.dist, scale, null);
-    for (var ki = 0; ki < 4; ki++) {
-      var pdA = rA.doriDists[ki];
-      var pdB = rB.doriDists[ki];
-      if (pdA > 0 && pdA * scale < (H - camY - 30)) {
-        drawPersonTop(ctx, camX - 0.8*scale, camY + pdA*scale, scale, null, DORI_COLORS[ki]);
-      }
-      if (pdB > 0 && pdB * scale < (H - camY - 30)) {
-        drawPersonTop(ctx, camX + 0.8*scale, camY + pdB*scale, scale, null, DORI_COLORS[ki]);
+    var isThA = !!rA.thermalDRI;
+    var isThB = !!rB.thermalDRI;
+    var leftA = [], rightB = [];
+    // A: siluetas + marks en columna izquierda
+    if (isThA) {
+      var dhA = rA.thermalDRI.human;
+      [{d:dhA.D,name:'Detectar',color:'#ff6b6b'},
+       {d:dhA.R,name:'Reconocer',color:'#ffd93d'},
+       {d:dhA.I,name:'Identificar',color:'#6bcb77'}].forEach(function(pm){
+        if (pm.d > 0 && pm.d*scale < (H - camY - 30)) {
+          drawPersonTop(ctx, camX - 0.8*scale, camY + pm.d*scale, scale, null, pm.color);
+          leftA.push(pm);
+        }
+      });
+    } else {
+      for (var ki = 0; ki < 4; ki++) {
+        var pdA = rA.doriDists[ki];
+        if (pdA > 0 && pdA * scale < (H - camY - 30)) {
+          drawPersonTop(ctx, camX - 0.8*scale, camY + pdA*scale, scale, null, DORI_COLORS[ki]);
+          leftA.push({d: pdA, name: DORI_ZONES[ki].name, color: DORI_COLORS[ki]});
+        }
       }
     }
+    // B: siluetas + marks en columna derecha
+    if (isThB) {
+      var dhB = rB.thermalDRI.human;
+      [{d:dhB.D,name:'Detectar',color:'#ff6b6b'},
+       {d:dhB.R,name:'Reconocer',color:'#ffd93d'},
+       {d:dhB.I,name:'Identificar',color:'#6bcb77'}].forEach(function(pm){
+        if (pm.d > 0 && pm.d*scale < (H - camY - 30)) {
+          drawPersonTop(ctx, camX + 0.8*scale, camY + pm.d*scale, scale, null, pm.color);
+          rightB.push(pm);
+        }
+      });
+    } else {
+      for (var ki2 = 0; ki2 < 4; ki2++) {
+        var pdB = rB.doriDists[ki2];
+        if (pdB > 0 && pdB * scale < (H - camY - 30)) {
+          drawPersonTop(ctx, camX + 0.8*scale, camY + pdB*scale, scale, null, DORI_COLORS[ki2]);
+          rightB.push({d: pdB, name: DORI_ZONES[ki2].name, color: DORI_COLORS[ki2]});
+        }
+      }
+    }
+    leftA.sort(function(a,b){ return b.d - a.d; });
+    rightB.sort(function(a,b){ return b.d - a.d; });
+    drawDistanceLabelsLeft(ctx, camX, camY, scale, leftA, H - 20, false);
+    drawDistanceLabelsLeft(ctx, camX, camY, scale, rightB, H - 20, true);
     drawPersonTop(ctx, camX, camY + FOV.dist*scale, scale, '1.7m', '#fff');
     drawCam(ctx, camX, camY, '📷', 0);
   }
@@ -24220,22 +24721,71 @@ function drawConeTop(ctx, cx, cy, scale, r, color, side) {
     ctx.lineWidth = 1.3;
     ctx.stroke();
   }
-  // Etiquetas DORI en el borde del cono
-  ctx.font = 'bold 9px system-ui';
-  for (var j = 0; j < 4; j++) {
-    var ld = r.doriDists[j];
-    if (ld > 0 && ld * scale < (cy + 400)) {
-      var lx = side === 'left'  ? cx - ld * Math.tan(halfAng) * scale * 0.5
-             : side === 'right' ? cx + ld * Math.tan(halfAng) * scale * 0.5
-             : cx + (j%2===0 ? -1 : 1) * ld * Math.tan(halfAng) * scale * 0.3;
-      var ly = cy + ld * scale - 2;
-      if (ly > cy+10 && ly < cy + (ld * scale) + 20) {
-        ctx.fillStyle = DORI_COLORS[j];
-        ctx.textAlign='center';
-        ctx.fillText(DORI_ZONES[j].name+' '+ld.toFixed(0)+'m', lx, ly);
-      }
+  // Las etiquetas DORI se dibujan aparte con drawDistanceLabelsLeft
+}
+
+// Dibuja las etiquetas de distancia DORI/DRI en COLUMNA IZQUIERDA
+// para no superponerse con el cono ni con la línea de análisis.
+// marks = [{d, name, color}, ...]  ordenadas por distancia (mayor a menor)
+function drawDistanceLabelsLeft(ctx, cx, cy, scale, marks, totalH, rightAlign) {
+  if (!marks || !marks.length) return;
+  // Filtrar las que caen dentro del canvas
+  var visible = marks.filter(function(m){
+    return m.d > 0 && cy + m.d*scale < totalH - 15 && cy + m.d*scale > cy + 15;
+  });
+  if (!visible.length) return;
+
+  // Columna de etiquetas — donde va el texto
+  var labelX = rightAlign ? (ctx.canvas.width - 115) : 8;
+  var textAlign = rightAlign ? 'left' : 'left';
+
+  // Dibujar cada etiqueta + línea guía punteada
+  visible.forEach(function(mk){
+    var ly = cy + mk.d * scale;
+    // Línea guía punteada desde la etiqueta al cono
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,255,255,.15)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([2,3]);
+    ctx.beginPath();
+    if (rightAlign) {
+      ctx.moveTo(cx + 20, ly);
+      ctx.lineTo(labelX - 5, ly);
+    } else {
+      ctx.moveTo(labelX + 105, ly);
+      ctx.lineTo(cx - 20, ly);
     }
-  }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    // Badge con color + nombre + distancia
+    var badgeW = 105, badgeH = 17;
+    ctx.save();
+    // Fondo del badge
+    ctx.fillStyle = 'rgba(0,0,0,.55)';
+    ctx.beginPath();
+    if (ctx.roundRect) {
+      ctx.roundRect(labelX, ly - badgeH/2, badgeW, badgeH, 4);
+    } else {
+      ctx.rect(labelX, ly - badgeH/2, badgeW, badgeH);
+    }
+    ctx.fill();
+    // Barra lateral de color
+    ctx.fillStyle = mk.color;
+    ctx.fillRect(labelX, ly - badgeH/2, 3, badgeH);
+    // Texto
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 10px system-ui';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(mk.name, labelX + 7, ly - 0.5);
+    // Distancia alineada a la derecha del badge
+    ctx.fillStyle = mk.color;
+    ctx.textAlign = 'right';
+    ctx.fillText(mk.d.toFixed(0)+'m', labelX + badgeW - 6, ly - 0.5);
+    ctx.restore();
+  });
 }
 
 function drawGrid(ctx, x0, y0, W, H, scale, maxD) {
@@ -24853,6 +25403,52 @@ function renderConclusion(rA, rB) {
     return;
   }
   el.style.display='block';
+  // ══ CONCLUSIÓN TÉRMICA ═══════════════════════════════════════
+  if (rA.thermalDRI) {
+    var dri = rA.thermalDRI;
+    var ts = rA.cam.focal.thermal;
+    var extra = '';
+    // Si hay cámara B para comparar (otra térmica o una óptica)
+    if (FOV.compare && rB) {
+      if (rB.thermalDRI) {
+        // Comparación térmica vs térmica
+        var driB = rB.thermalDRI, tsB = rB.cam.focal.thermal;
+        var winD = dri.human.D > driB.human.D ? rA.cam : rB.cam;
+        var winI = dri.human.I > driB.human.I ? rA.cam : rB.cam;
+        extra = '<p>⚖️ Comparativa: <b style="color:#00aaff">'+rA.cam.cod+'</b> detecta personas a '+dri.human.D.toFixed(0)+'m vs <b style="color:#ff6b35">'+rB.cam.cod+'</b> a '+driB.human.D.toFixed(0)+'m. '+
+          'Para identificación: '+dri.human.I.toFixed(0)+'m vs '+driB.human.I.toFixed(0)+'m.</p>'+
+          '<p>La <b>'+winD.cod+'</b> tiene mejor alcance de detección; la <b>'+winI.cod+'</b> mejor identificación.</p>';
+      } else {
+        // Comparación térmica vs óptica
+        extra = '<p>⚖️ <b style="color:#00aaff">'+rA.cam.cod+'</b> (térmica) vs <b style="color:#ff6b35">'+rB.cam.cod+'</b> (óptica): la térmica detecta <b>siluetas de calor a '+dri.human.D.toFixed(0)+'m</b> incluso en oscuridad total, pero no muestra detalle facial. La óptica a '+FOV.dist+'m te da '+rB.angH.toFixed(0)+'° de cobertura con detalle visual — complementarias, no sustitutas.</p>';
+      }
+    }
+    var adviceT = '';
+    if (ts.type === 'thermal-hybrid') {
+      adviceT = '<p>💡 <b>Cámara híbrida</b>: el sensor térmico detecta movimiento/calor a larga distancia incluso de noche, mientras que el sensor óptico '+(ts.opticalFocal||'?')+'mm te permite confirmar qué es cuando hay suficiente luz. Ideal para <b>perímetros industriales</b>.</p>';
+    } else if (ts.type === 'thermal-ptz-combo') {
+      adviceT = '<p>🎯 <b>Térmica + PTZ</b>: la térmica '+ts.thermalFocal+'mm escanea amplia zona en busca de calor; cuando detecta algo sospechoso, el PTZ '+ts.ptzZoom+'X hace zoom para confirmar visualmente. Excelente para <b>vigilancia perimetral activa</b>.</p>';
+    } else if (ts.type === 'thermal-pure') {
+      adviceT = '<p>🔥 <b>Térmica pura</b>: no muestra imagen en color — produce una imagen de calor. La usas para detectar intrusos por su firma térmica, no para identificar rostros. Funciona '+
+        '<b>igual de día que de noche</b>, atraviesa humo, y ve a través de camuflaje visual.</p>';
+    }
+    if (dri.fireDetection > 100) {
+      adviceT += '<p class="fov-conc-hint" style="border-left-color:#e67e22;background:rgba(230,126,34,.06)">🔥 <b>Detección de incendios</b>: puede detectar fuentes de calor anómalas (fuego, sobrecalentamiento eléctrico) hasta ~'+dri.fireDetection.toFixed(0)+'m — ideal para bodegas, subestaciones eléctricas, prevención forestal.</p>';
+    }
+    if (ts.hasTempMeasurement) {
+      adviceT += '<p class="fov-conc-hint" style="border-left-color:#9b59b6">🌡️ Esta cámara incluye <b>medición de temperatura</b> — mide la temperatura exacta de puntos específicos en la escena con precisión ±0.3°C (útil con Blackbody calibrador).</p>';
+    }
+    el.innerHTML =
+      '<div class="fov-conc-title">🔥 Análisis técnico térmico</div>' +
+      '<p>La <b>'+rA.cam.cod+'</b> es una cámara térmica <b>'+rA.cam.sensor.wPx+'×'+rA.cam.sensor.hPx+'</b> con lente de <b>'+ts.thermalFocal+'mm</b>. Su sensibilidad NETD ≤'+rA.cam.sensor.netd+'mK le permite distinguir diferencias muy sutiles de temperatura.</p>' +
+      '<p>Según el criterio de Johnson (NVESD), puede:<br>' +
+      '• <b>Detectar</b> una persona hasta <b>'+dri.human.D.toFixed(0)+'m</b> (aparece como "blob" de calor)<br>' +
+      '• <b>Reconocer</b> si es humano vs animal/objeto hasta <b>'+dri.human.R.toFixed(0)+'m</b><br>' +
+      '• <b>Identificar</b> actividad (caminar vs trepar) hasta <b>'+dri.human.I.toFixed(0)+'m</b></p>' +
+      '<p>Para vehículos: detectar '+dri.vehicle.D.toFixed(0)+'m · reconocer '+dri.vehicle.R.toFixed(0)+'m · identificar '+dri.vehicle.I.toFixed(0)+'m.</p>' +
+      adviceT + extra;
+    return;
+  }
   if (!rB || !FOV.compare) {
     // Conclusión de una sola cámara
     var bestZone = '';
