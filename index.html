@@ -7505,7 +7505,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 12:56 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 11:09 hrs</span>
   </div>
 </div>
 
@@ -21335,12 +21335,14 @@ document.addEventListener('DOMContentLoaded', function() {
   var meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
                'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
   function formatFecha(d) {
-    return dias[d.getDay()] + ' ' +
-           String(d.getDate()).padStart(2,'0') + ' de ' +
-           meses[d.getMonth()] + ' del ' +
-           d.getFullYear() + ' · ' +
-           String(d.getHours()).padStart(2,'0') + ':' +
-           String(d.getMinutes()).padStart(2,'0') + ' hrs';
+    // Chile horario invierno UTC-4
+    var chile = new Date(d.getTime() - (d.getTimezoneOffset() + 240) * 60000);
+    return dias[chile.getDay()] + ' ' +
+           String(chile.getDate()).padStart(2,'0') + ' de ' +
+           meses[chile.getMonth()] + ' del ' +
+           chile.getFullYear() + ' · ' +
+           String(chile.getHours()).padStart(2,'0') + ':' +
+           String(chile.getMinutes()).padStart(2,'0') + ' hrs';
   }
   // Guardar la fecha de carga en localStorage para persistencia
   var key = 'sstt_last_update';
