@@ -7505,7 +7505,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 11:18 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 22 de Abril del 2026 · 11:26 hrs</span>
   </div>
 </div>
 
@@ -21331,37 +21331,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // ── Fecha de actualización dinámica ──
 (function() {
-  var dias = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
-  var meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
-               'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
-  function formatFecha(d) {
-    // Chile horario invierno UTC-4
-    var chile = new Date(d.getTime() - (d.getTimezoneOffset() + 240) * 60000);
-    return dias[chile.getDay()] + ' ' +
-           String(chile.getDate()).padStart(2,'0') + ' de ' +
-           meses[chile.getMonth()] + ' del ' +
-           chile.getFullYear() + ' · ' +
-           String(chile.getHours()).padStart(2,'0') + ':' +
-           String(chile.getMinutes()).padStart(2,'0') + ' hrs';
-  }
-  // Guardar la fecha de carga en localStorage para persistencia
-  var key = 'sstt_last_update';
-  var stored = localStorage.getItem(key);
-  var now = new Date();
-  // Actualizar solo si no hay fecha guardada o si cambió el día
-  var todayStr = now.toDateString();
-  if (!stored || JSON.parse(stored).day !== todayStr) {
-    localStorage.setItem(key, JSON.stringify({
-      day: todayStr,
-      fecha: formatFecha(now)
-    }));
-  }
+  // Fecha fijada al momento de generar el archivo (UTC-4 Chile)
+  var fechaActualizacion = 'Última actualización: Miércoles 22 de Abril del 2026 · 11:26 hrs';
   var txt = document.getElementById('updateTxt');
-  if (txt) {
-    var saved = localStorage.getItem(key);
-    var label = saved ? JSON.parse(saved).fecha : formatFecha(now);
-    txt.textContent = 'Última actualización: ' + label;
-  }
+  if (txt) txt.textContent = fechaActualizacion;
 })();
 
 
