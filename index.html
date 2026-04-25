@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 09:29 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 09:44 hrs (UTC-4 Chile) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -12184,6 +12184,433 @@ body.cart-open #proyectoListadoBtn {
   letter-spacing: .5px;
 }
 
+
+/* ════════════════════════════════════════════════════════════
+   COMPARADOR INTELIGENTE DE CÁMARAS
+   ════════════════════════════════════════════════════════════ */
+.cmp-header { margin-bottom: 18px; }
+
+.cmp-select-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  align-items: stretch;
+  margin-bottom: 16px;
+}
+.cmp-select-card {
+  background: #fff;
+  border: 1.5px solid rgba(0,0,0,.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  position: relative;
+  min-height: 100px;
+}
+.cmp-select-a { border-left: 4px solid #00aaff; }
+.cmp-select-b { border-left: 4px solid #ff6b35; }
+
+.cmp-select-hdr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #555;
+  margin-bottom: 10px;
+}
+.cmp-dot { width: 10px; height: 10px; border-radius: 50%; }
+.cmp-dot-a { background: #00aaff; }
+.cmp-dot-b { background: #ff6b35; }
+.cmp-clear {
+  margin-left: auto;
+  background: rgba(231,76,60,.1);
+  border: none;
+  color: #e74c3c;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 800;
+  transition: all .15s;
+  padding: 0;
+  line-height: 1;
+}
+.cmp-clear:hover {
+  background: #e74c3c;
+  color: #fff;
+}
+
+.cmp-vs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 900;
+  color: #888;
+  letter-spacing: 1px;
+  padding: 0 8px;
+}
+
+.cmp-cam-info { padding-top: 4px; }
+.cmp-cam-cod {
+  font-size: 14px;
+  font-weight: 900;
+  color: #111;
+  font-family: ui-monospace, monospace;
+  margin-bottom: 4px;
+}
+.cmp-cam-name {
+  font-size: 12px;
+  color: #555;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+.cmp-cam-price {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1e6e3e;
+  font-variant-numeric: tabular-nums;
+}
+
+.cmp-search-wrap { position: relative; }
+.cmp-search {
+  width: 100%;
+  font-family: var(--font);
+  font-size: 12.5px;
+  padding: 9px 11px;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 8px;
+  background: #fafbfc;
+  color: #111;
+  transition: all .15s;
+  box-sizing: border-box;
+}
+.cmp-search:focus {
+  outline: none;
+  border-color: #0057B8;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0,87,184,.1);
+}
+.cmp-search-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  display: none;
+  z-index: 100;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.cmp-search-item {
+  padding: 9px 11px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,.04);
+  transition: background .1s;
+}
+.cmp-search-item:hover { background: rgba(0,87,184,.05); }
+.cmp-search-item:last-child { border-bottom: none; }
+.cmp-sr-cod {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #0057B8;
+  font-family: ui-monospace, monospace;
+}
+.cmp-sr-name {
+  font-size: 11px;
+  color: #555;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+.cmp-sr-price {
+  font-size: 11px;
+  font-weight: 700;
+  color: #1e6e3e;
+  margin-top: 3px;
+}
+.cmp-search-empty {
+  padding: 14px;
+  text-align: center;
+  font-size: 11.5px;
+  color: #888;
+  font-style: italic;
+}
+
+/* Selector contexto */
+.cmp-context {
+  background: #fafbfc;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+.cmp-context-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #555;
+  margin-bottom: 10px;
+}
+.cmp-context-title span {
+  font-size: 11px;
+  font-weight: 600;
+  color: #888;
+  margin-left: 6px;
+}
+.cmp-context-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.cmp-context-tab {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.1);
+  border-radius: 8px;
+  padding: 7px 11px;
+  font-family: var(--font);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #555;
+  cursor: pointer;
+  transition: all .15s;
+}
+.cmp-context-tab:hover {
+  border-color: #0057B8;
+  color: #0057B8;
+}
+.cmp-context-tab.active {
+  background: #0057B8;
+  color: #fff;
+  border-color: #0057B8;
+}
+
+/* Empty state */
+.cmp-empty {
+  padding: 30px;
+  text-align: center;
+  background: rgba(0,87,184,.03);
+  border: 2px dashed rgba(0,87,184,.15);
+  border-radius: 14px;
+  color: #555;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Secciones del análisis */
+.cmp-section {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+.cmp-section-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid rgba(0,87,184,.1);
+  letter-spacing: -.2px;
+}
+
+/* Análisis NL */
+.cmp-narrative-empty {
+  font-size: 12.5px;
+  color: #555;
+  line-height: 1.6;
+  padding: 12px;
+  background: rgba(149,165,166,.05);
+  border-radius: 8px;
+  font-style: italic;
+}
+.cmp-narrative-item {
+  padding: 11px 14px;
+  border-radius: 9px;
+  margin-bottom: 8px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #444;
+  border-left: 3px solid;
+}
+.cmp-narrative-item:last-child { margin-bottom: 0; }
+.cmp-narrative-item b { color: #111; }
+.cmp-nar-info {
+  background: rgba(149,165,166,.05);
+  border-left-color: #95a5a6;
+}
+.cmp-nar-win-a {
+  background: rgba(0,170,255,.06);
+  border-left-color: #00aaff;
+}
+.cmp-nar-win-a b { color: #006fb3; }
+.cmp-nar-win-b {
+  background: rgba(255,107,53,.06);
+  border-left-color: #ff6b35;
+}
+.cmp-nar-win-b b { color: #b8430d; }
+.cmp-nar-critical {
+  background: rgba(231,76,60,.06);
+  border-left-color: #e74c3c;
+}
+.cmp-nar-critical b { color: #c0392b; }
+
+/* Veredicto */
+.cmp-verdict { 
+  background: linear-gradient(135deg, rgba(155,89,182,.04), rgba(155,89,182,.01));
+  border-color: rgba(155,89,182,.15);
+}
+.cmp-ctx-label {
+  background: rgba(155,89,182,.1);
+  color: #6c3483;
+  padding: 2px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.cmp-verdict-card {
+  border-radius: 12px;
+  padding: 16px 18px;
+  border: 1.5px solid;
+}
+.cmp-verdict-a {
+  background: linear-gradient(135deg, rgba(0,170,255,.08), rgba(0,170,255,.02));
+  border-color: rgba(0,170,255,.3);
+}
+.cmp-verdict-b {
+  background: linear-gradient(135deg, rgba(255,107,53,.08), rgba(255,107,53,.02));
+  border-color: rgba(255,107,53,.3);
+}
+.cmp-verdict-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: #111;
+}
+.cmp-verdict-trophy { font-size: 22px; }
+.cmp-verdict-conf {
+  font-size: 11.5px;
+  color: #666;
+  margin-bottom: 8px;
+  font-variant-numeric: tabular-nums;
+}
+.cmp-verdict-conf b { color: #111; }
+.cmp-verdict-pros {
+  font-size: 12.5px;
+  color: #444;
+  line-height: 1.5;
+  background: #fff;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border-left: 3px solid #27ae60;
+}
+.cmp-verdict-tie {
+  font-size: 12.5px;
+  color: #444;
+  padding: 12px;
+  background: rgba(149,165,166,.06);
+  border-radius: 8px;
+  text-align: center;
+}
+.cmp-verdict-prompt {
+  background: linear-gradient(135deg, rgba(243,156,18,.05), rgba(243,156,18,.01));
+  border: 1px dashed rgba(243,156,18,.3);
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+.cmp-verdict-prompt-icon {
+  font-size: 30px;
+  flex-shrink: 0;
+}
+.cmp-verdict-prompt > div {
+  font-size: 12.5px;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* Tabla técnica */
+.cmp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.cmp-table th {
+  background: #f5f7fa;
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 800;
+  color: #555;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border-bottom: 2px solid rgba(0,0,0,.05);
+}
+.cmp-th-a { color: #006fb3; border-bottom-color: #00aaff !important; }
+.cmp-th-b { color: #b8430d; border-bottom-color: #ff6b35 !important; }
+.cmp-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid rgba(0,0,0,.04);
+  color: #444;
+  font-variant-numeric: tabular-nums;
+}
+.cmp-row-lbl {
+  font-weight: 700;
+  color: #888;
+  width: 30%;
+}
+.cmp-cell-win {
+  background: rgba(46,204,113,.08);
+  font-weight: 700;
+  color: #1e6e3e;
+}
+.cmp-cell-cheaper {
+  background: rgba(243,156,18,.06);
+  font-weight: 700;
+  color: #b8650b;
+}
+
+/* Acciones */
+.cmp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+.cmp-action-btn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 9px;
+  font-family: var(--font);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  cursor: pointer;
+  transition: all .15s;
+}
+.cmp-action-btn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+.cmp-action-fov { background: linear-gradient(135deg, #8e44ad, #6c3483); }
+.cmp-action-cart-a { background: linear-gradient(135deg, #00aaff, #0077cc); }
+.cmp-action-cart-b { background: linear-gradient(135deg, #ff6b35, #d65020); }
+
+@media (max-width: 700px) {
+  .cmp-select-row {
+    grid-template-columns: 1fr;
+  }
+  .cmp-vs {
+    padding: 5px;
+    font-size: 14px;
+  }
+  .cmp-context-tabs { gap: 4px; }
+  .cmp-context-tab { font-size: 11px; padding: 6px 9px; }
+}
+
 @media (max-width: 700px) {
   .bom-grid-form { grid-template-columns: 1fr 1fr; }
   .ups-form { grid-template-columns: 1fr; }
@@ -14970,7 +15397,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Sábado 25 de Abril del 2026 · 09:29 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Sábado 25 de Abril del 2026 · 09:44 hrs</span>
   </div>
 </div>
 
@@ -16851,7 +17278,14 @@ if (window.pdfjsLib) {
           <div class="tools-menu-ico">📷</div>
           <div class="tools-menu-info">
             <div class="tools-menu-name">Simulador FOV</div>
-            <div class="tools-menu-desc">Campo visual 3D + comparador A vs B (arriba ↑)</div>
+            <div class="tools-menu-desc">Campo visual 3D + comparador visual (arriba ↑)</div>
+          </div>
+        </button>
+        <button class="tools-menu-btn" onclick="toolsOpen('compareCams',this)">
+          <div class="tools-menu-ico">⇆</div>
+          <div class="tools-menu-info">
+            <div class="tools-menu-name">Comparador Inteligente</div>
+            <div class="tools-menu-desc">Análisis técnico + recomendación contextual</div>
           </div>
         </button>
       </div>
@@ -29578,7 +30012,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 09:29 hrs';
+  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 09:44 hrs';
 })();
 
 
@@ -41968,6 +42402,513 @@ if (document.readyState === 'loading') {
 
   // ── ROUTER ──
   // ════════════════════════════════════════════════════════════
+  // HERRAMIENTA: COMPARADOR INTELIGENTE DE CÁMARAS
+  // Análisis técnico + lenguaje natural + recomendación contextual
+  // ════════════════════════════════════════════════════════════
+  var COMPARE_STATE = { camA: null, camB: null, context: '' };
+
+  function renderCompareCams() {
+    var saved = JSON.parse(localStorage.getItem('sstt_compare_v1') || '{}');
+    if (saved.camAcod) {
+      var pa = PRODUCTS.find(function(p){ return p.codigo === saved.camAcod; });
+      if (pa) COMPARE_STATE.camA = pa;
+    }
+    if (saved.camBcod) {
+      var pb = PRODUCTS.find(function(p){ return p.codigo === saved.camBcod; });
+      if (pb) COMPARE_STATE.camB = pb;
+    }
+    if (saved.context) COMPARE_STATE.context = saved.context;
+
+    var html = '';
+    html += '<div class="cmp-header">';
+    html += '<h2 class="tools-h2">⇆ Comparador Inteligente</h2>';
+    html += '<p class="tools-sub">Selecciona dos cámaras del catálogo y obtén una <b>comparación técnica con análisis en lenguaje natural</b>: qué se gana, qué se pierde, y cuál conviene <b>para tu caso de uso específico</b>. Más allá de una tabla side-by-side: te recomendamos cuál elegir según el proyecto.</p>';
+    html += '</div>';
+
+    // Selección de cámaras
+    html += '<div class="cmp-select-row">';
+    // Cámara A
+    html += '<div class="cmp-select-card cmp-select-a">';
+    html += '<div class="cmp-select-hdr"><span class="cmp-dot cmp-dot-a"></span><span>Cámara A</span>';
+    if (COMPARE_STATE.camA) html += '<button class="cmp-clear" onclick="cmpClear(\'A\')" title="Quitar">✕</button>';
+    html += '</div>';
+    if (COMPARE_STATE.camA) {
+      html += '<div class="cmp-cam-info">';
+      html += '<div class="cmp-cam-cod">'+COMPARE_STATE.camA.codigo+'</div>';
+      html += '<div class="cmp-cam-name">'+COMPARE_STATE.camA.nombre+'</div>';
+      html += '<div class="cmp-cam-price">$'+COMPARE_STATE.camA.ptotal.toLocaleString('es-CL')+'</div>';
+      html += '</div>';
+    } else {
+      html += '<div class="cmp-search-wrap">';
+      html += '<input type="text" class="cmp-search" id="cmpSearchA" placeholder="Buscar cámara A (modelo, código...)" oninput="cmpSearch(this.value, \'A\')" onfocus="cmpSearch(this.value, \'A\')" autocomplete="off">';
+      html += '<div class="cmp-search-results" id="cmpResultsA"></div>';
+      html += '</div>';
+    }
+    html += '</div>';
+
+    // VS divider
+    html += '<div class="cmp-vs">VS</div>';
+
+    // Cámara B
+    html += '<div class="cmp-select-card cmp-select-b">';
+    html += '<div class="cmp-select-hdr"><span class="cmp-dot cmp-dot-b"></span><span>Cámara B</span>';
+    if (COMPARE_STATE.camB) html += '<button class="cmp-clear" onclick="cmpClear(\'B\')" title="Quitar">✕</button>';
+    html += '</div>';
+    if (COMPARE_STATE.camB) {
+      html += '<div class="cmp-cam-info">';
+      html += '<div class="cmp-cam-cod">'+COMPARE_STATE.camB.codigo+'</div>';
+      html += '<div class="cmp-cam-name">'+COMPARE_STATE.camB.nombre+'</div>';
+      html += '<div class="cmp-cam-price">$'+COMPARE_STATE.camB.ptotal.toLocaleString('es-CL')+'</div>';
+      html += '</div>';
+    } else {
+      html += '<div class="cmp-search-wrap">';
+      html += '<input type="text" class="cmp-search" id="cmpSearchB" placeholder="Buscar cámara B (modelo, código...)" oninput="cmpSearch(this.value, \'B\')" onfocus="cmpSearch(this.value, \'B\')" autocomplete="off">';
+      html += '<div class="cmp-search-results" id="cmpResultsB"></div>';
+      html += '</div>';
+    }
+    html += '</div>';
+    html += '</div>';
+
+    // Selector de contexto
+    html += '<div class="cmp-context">';
+    html += '<div class="cmp-context-title">🎯 ¿Para qué proyecto las estás comparando? <span>(opcional · permite recomendación contextual)</span></div>';
+    html += '<div class="cmp-context-tabs">';
+    var ctxOpts = [
+      ['', '⚪ General'],
+      ['parking', '🅿️ Estacionamiento / acceso vehicular'],
+      ['condominio', '🏘️ Condominio / residencial'],
+      ['fachada', '🏪 Fachada / comercio'],
+      ['interior', '🏠 Interior'],
+      ['perimetro', '🚧 Perímetro'],
+      ['lpr', '🚗 LPR / patentes'],
+      ['oficina', '💼 Oficina'],
+      ['industrial', '🏭 Industrial / bodega']
+    ];
+    ctxOpts.forEach(function(o){
+      var sel = COMPARE_STATE.context === o[0] ? ' active' : '';
+      html += '<button class="cmp-context-tab'+sel+'" onclick="cmpSetContext(\''+o[0]+'\')">'+o[1]+'</button>';
+    });
+    html += '</div>';
+    html += '</div>';
+
+    // Resultado
+    html += '<div id="cmpResult"></div>';
+
+    document.getElementById('toolsContent').innerHTML = html;
+    cmpRender();
+  }
+
+  window.cmpSearch = function(query, which) {
+    query = (query||'').trim().toLowerCase();
+    var dropdown = document.getElementById('cmpResults'+which);
+    if (!dropdown) return;
+    if (query.length < 1) { dropdown.style.display='none'; return; }
+    var tokens = query.split(/\s+/);
+    var matches = PRODUCTS.filter(function(p){
+      if (!['camaras-ip','camaras-hdcvi','camaras-ptz'].includes(p.cat)) return false;
+      var hay = (p.codigo + ' ' + p.nombre).toLowerCase();
+      return tokens.every(function(t){ return hay.indexOf(t) >= 0; });
+    }).slice(0, 8);
+    if (!matches.length) {
+      dropdown.innerHTML = '<div class="cmp-search-empty">Sin resultados</div>';
+      dropdown.style.display='block';
+      return;
+    }
+    dropdown.innerHTML = matches.map(function(p){
+      return '<div class="cmp-search-item" onclick="cmpSelect(\''+p.codigo+'\',\''+which+'\')">' +
+        '<div class="cmp-sr-cod">'+p.codigo+'</div>' +
+        '<div class="cmp-sr-name">'+p.nombre+'</div>' +
+        '<div class="cmp-sr-price">$'+p.ptotal.toLocaleString('es-CL')+'</div>' +
+        '</div>';
+    }).join('');
+    dropdown.style.display='block';
+  };
+
+  window.cmpSelect = function(codigo, which) {
+    var p = PRODUCTS.find(function(x){ return x.codigo === codigo; });
+    if (!p) return;
+    if (which === 'A') COMPARE_STATE.camA = p;
+    else COMPARE_STATE.camB = p;
+    cmpSave();
+    renderCompareCams();
+  };
+
+  window.cmpClear = function(which) {
+    if (which === 'A') COMPARE_STATE.camA = null;
+    else COMPARE_STATE.camB = null;
+    cmpSave();
+    renderCompareCams();
+  };
+
+  window.cmpSetContext = function(ctx) {
+    COMPARE_STATE.context = ctx;
+    cmpSave();
+    renderCompareCams();
+  };
+
+  function cmpSave() {
+    try {
+      localStorage.setItem('sstt_compare_v1', JSON.stringify({
+        camAcod: COMPARE_STATE.camA ? COMPARE_STATE.camA.codigo : null,
+        camBcod: COMPARE_STATE.camB ? COMPARE_STATE.camB.codigo : null,
+        context: COMPARE_STATE.context
+      }));
+    } catch(e){}
+  }
+
+  // ── Extraer specs combinados (compatExtract + FOV data) ──
+  function cmpExtract(p) {
+    var s = (typeof compatExtractSpecs === 'function') ? compatExtractSpecs(p) : { codigo:p.codigo, nombre:p.nombre, cat:p.cat };
+    s.precio = p.ptotal;
+    // Datos del FOV si la cámara está allí (focal, sensor)
+    if (typeof FOV !== 'undefined' && FOV.allCams) {
+      var fovCam = FOV.allCams.find(function(c){ return c.cod === p.codigo; });
+      if (fovCam) {
+        s.focalMin = fovCam.focal.min;
+        s.focalMax = fovCam.focal.max;
+        s.focalType = fovCam.focal.type;
+        s.focalVariant = fovCam.focal.variant;
+        s.focalZoom = fovCam.focal.zoom;
+        s.sensor = fovCam.sensor;
+        s.mp = fovCam.mp;
+      }
+    }
+    // Familia / serie por código
+    var c = (p.codigo||'').toUpperCase();
+    if (/HDBW8/i.test(c) || /HDBW7/i.test(c)) s.familia = 'WizMind 8/7 Pro';
+    else if (/HDBW5|HFW5|HDW5/i.test(c) || /HDBW6|HFW6/i.test(c)) s.familia = 'WizMind 5/6';
+    else if (/HDBW3|HFW3|HDW3/i.test(c)) s.familia = 'WizSense 3 Series';
+    else if (/HDBW2|HFW2|HDW2/i.test(c)) s.familia = 'Lite 2 Series';
+    else if (/HAC-/i.test(c)) s.familia = 'HDCVI Lite';
+    else if (/SD\d/i.test(c) || /PTZ/i.test(c)) s.familia = 'PTZ';
+    else if (/ITC/i.test(c)) s.familia = 'ITC (LPR/ANPR)';
+    else s.familia = 'Otra';
+    // Forma física
+    if (/HFW/i.test(c)) s.forma = 'Bullet';
+    else if (/HDBW/i.test(c)) s.forma = 'Eyeball/Dome antivandálica';
+    else if (/HDW/i.test(c)) s.forma = 'Dome';
+    else if (/SD/i.test(c)) s.forma = 'PTZ';
+    else if (/IPC-EB/i.test(c)) s.forma = 'Fisheye/360°';
+    else s.forma = 'Otra';
+    return s;
+  }
+
+  // ── Detectar diferencias categorizadas ──
+  function cmpDiffs(a, b) {
+    var diffs = { resolution:null, sensor:null, ir:null, focal:null, ai:null, protection:null, codec:null, audio:null, ptz:null, type:null, family:null, price:null };
+    if (a.resolucionMP !== b.resolucionMP) diffs.resolution = { aVal:a.resolucionMP, bVal:b.resolucionMP, winner: a.resolucionMP > b.resolucionMP ? 'A' : 'B' };
+    if (a.alcanceIR !== b.alcanceIR && (a.alcanceIR > 0 || b.alcanceIR > 0)) diffs.ir = { aVal:a.alcanceIR, bVal:b.alcanceIR, winner: a.alcanceIR > b.alcanceIR ? 'A' : 'B' };
+    if ((a.focalMin || a.focalMax) && (b.focalMin || b.focalMax)) {
+      var aFix = (a.focalMin === a.focalMax);
+      var bFix = (b.focalMin === b.focalMax);
+      if (aFix !== bFix) diffs.focal = { aVal: aFix?'fija':'varifocal', bVal: bFix?'fija':'varifocal', note:'flexibility' };
+      else if (a.focalMin !== b.focalMin || a.focalMax !== b.focalMax) {
+        diffs.focal = { aVal: a.focalMin+(aFix?'':'-'+a.focalMax), bVal: b.focalMin+(bFix?'':'-'+b.focalMax), note:'range' };
+      }
+    }
+    if (a.tipoCamara !== b.tipoCamara) diffs.type = { aVal:a.tipoCamara, bVal:b.tipoCamara };
+    if (a.familia !== b.familia) diffs.family = { aVal:a.familia, bVal:b.familia };
+    var aiA = []; var aiB = [];
+    if (a.wizsense) aiA.push('WizSense'); if (b.wizsense) aiB.push('WizSense');
+    if (a.wizcolor) aiA.push('Full Color'); if (b.wizcolor) aiB.push('Full Color');
+    if (a.tioc) aiA.push('TiOC'); if (b.tioc) aiB.push('TiOC');
+    if (a.acupick) aiA.push('AcuPick'); if (b.acupick) aiB.push('AcuPick');
+    if (aiA.join(',') !== aiB.join(',')) diffs.ai = { aVal:aiA, bVal:aiB };
+    if (a.ipRating !== b.ipRating || a.ikRating !== b.ikRating) {
+      diffs.protection = { aIp:a.ipRating||0, bIp:b.ipRating||0, aIk:a.ikRating||0, bIk:b.ikRating||0 };
+    }
+    if (Math.abs((a.precio||0) - (b.precio||0)) > 5000) {
+      diffs.price = { aVal:a.precio, bVal:b.precio, diff:Math.abs(a.precio-b.precio), cheaper: a.precio < b.precio ? 'A' : 'B' };
+    }
+    return diffs;
+  }
+
+  // ── Generador de análisis en lenguaje natural ──
+  function cmpNarrative(a, b, diffs, context) {
+    var lines = [];
+
+    // Diagnóstico cuando son la misma serie con leve variación
+    if (a.familia === b.familia && a.tipoCamara === b.tipoCamara && !diffs.resolution && !diffs.ai) {
+      lines.push({ type:'info', text:'<b>Ambas son de la misma familia '+a.familia+'</b>. Las diferencias son menores y suelen reducirse a forma física, focal o configuración específica.' });
+    }
+
+    // Tipo (IP vs HDCVI)
+    if (diffs.type) {
+      lines.push({ type:'critical', text:'<b>Tipos distintos de transmisión</b>: la '+a.codigo+' es <b>'+a.tipoCamara+'</b> mientras la '+b.codigo+' es <b>'+b.tipoCamara+'</b>. Esto NO es comparable directamente — usan grabadores distintos (NVR vs XVR/HDCVI), cableado distinto (UTP vs coaxial/UTP+balun) y son ecosistemas separados. Decide primero qué tecnología usarás.' });
+    }
+
+    // Resolución
+    if (diffs.resolution) {
+      var winnerCam = diffs.resolution.winner === 'A' ? a : b;
+      var loserCam = diffs.resolution.winner === 'A' ? b : a;
+      lines.push({ type:'win-'+diffs.resolution.winner.toLowerCase(), text:'<b>Mayor resolución en '+winnerCam.codigo+'</b>: '+winnerCam.resolucionMP+'MP vs '+loserCam.resolucionMP+'MP. Más resolución = más detalle a la misma distancia, mejor para LPR, identificación facial, o cuando necesitas hacer zoom digital al video después.' });
+    }
+
+    // IR
+    if (diffs.ir) {
+      var winnerIr = diffs.ir.winner === 'A' ? a : b;
+      var loserIr = diffs.ir.winner === 'A' ? b : a;
+      var diffIr = Math.abs(diffs.ir.aVal - diffs.ir.bVal);
+      lines.push({ type:'win-'+diffs.ir.winner.toLowerCase(), text:'<b>Más alcance IR en '+winnerIr.codigo+'</b>: llega a '+winnerIr.alcanceIR+'m vs '+loserIr.alcanceIR+'m de la otra ('+diffIr+'m de diferencia). Crítico si vas a vigilar áreas grandes de noche; irrelevante en interiores con luz constante.' });
+    }
+
+    // Focal
+    if (diffs.focal && diffs.focal.note === 'flexibility') {
+      var fixedCam = a.focalMin === a.focalMax ? a : b;
+      var varCam = a.focalMin === a.focalMax ? b : a;
+      lines.push({ type:'info', text:'<b>Una es fija, otra varifocal</b>: la '+fixedCam.codigo+' tiene focal fija de '+fixedCam.focalMin+'mm. La '+varCam.codigo+' es varifocal '+varCam.focalMin+'-'+varCam.focalMax+'mm, ajustable después de instalada. Si NO sabes exactamente el ángulo que necesitas, varifocal evita errores. Si el ángulo ya lo conoces y la cámara se mantendrá ahí, fija es más barata y más confiable.' });
+    } else if (diffs.focal && diffs.focal.note === 'range') {
+      lines.push({ type:'info', text:'<b>Rangos focales distintos</b>: la '+a.codigo+' '+diffs.focal.aVal+'mm vs la '+b.codigo+' '+diffs.focal.bVal+'mm. Más mm = más zoom, ángulo más cerrado, mejor para distancia. Menos mm = más amplio, mejor para áreas cercanas.' });
+    }
+
+    // IA / Tecnologías
+    if (diffs.ai) {
+      var aiA = diffs.ai.aVal, aiB = diffs.ai.bVal;
+      var unique = function(arr1, arr2){ return arr1.filter(function(x){ return arr2.indexOf(x) < 0; }); };
+      var onlyA = unique(aiA, aiB), onlyB = unique(aiB, aiA);
+      if (onlyA.length > 0) {
+        lines.push({ type:'win-a', text:'<b>'+a.codigo+' agrega '+onlyA.join(' + ')+'</b>. ' + cmpExplainAi(onlyA) });
+      }
+      if (onlyB.length > 0) {
+        lines.push({ type:'win-b', text:'<b>'+b.codigo+' agrega '+onlyB.join(' + ')+'</b>. ' + cmpExplainAi(onlyB) });
+      }
+    }
+
+    // Protección
+    if (diffs.protection) {
+      var pA = a.ipRating||0, pB = b.ipRating||0;
+      if (pA > 0 && pB === 0) {
+        lines.push({ type:'win-a', text:'<b>Solo '+a.codigo+' es exterior</b> (IP'+pA+'). La '+b.codigo+' no menciona protección IP, asumir interior.' });
+      } else if (pB > 0 && pA === 0) {
+        lines.push({ type:'win-b', text:'<b>Solo '+b.codigo+' es exterior</b> (IP'+pB+'). La '+a.codigo+' no menciona protección IP, asumir interior.' });
+      }
+      var ikA = a.ikRating||0, ikB = b.ikRating||0;
+      if (ikA >= 10 && ikB < 10) {
+        lines.push({ type:'win-a', text:'<b>'+a.codigo+' es antivandálica IK'+ikA+'</b>. Resiste impactos físicos — clave en lugares con público (estacionamientos, escuelas, accesos públicos).' });
+      } else if (ikB >= 10 && ikA < 10) {
+        lines.push({ type:'win-b', text:'<b>'+b.codigo+' es antivandálica IK'+ikB+'</b>. Resiste impactos físicos — clave en lugares con público.' });
+      }
+    }
+
+    // Precio
+    if (diffs.price) {
+      var cheaperCam = diffs.price.cheaper === 'A' ? a : b;
+      var pricerCam = diffs.price.cheaper === 'A' ? b : a;
+      var pct = ((diffs.price.diff / cheaperCam.precio) * 100).toFixed(0);
+      lines.push({ type:'info', text:'<b>Diferencia de precio</b>: la '+pricerCam.codigo+' cuesta $'+pricerCam.precio.toLocaleString('es-CL')+' vs $'+cheaperCam.precio.toLocaleString('es-CL')+' de la '+cheaperCam.codigo+' (+'+pct+'% más). El sobreprecio se justifica solo si las características adicionales aplican a tu caso de uso real.' });
+    }
+
+    return lines;
+  }
+
+  function cmpExplainAi(items) {
+    var explain = {
+      'WizSense': 'Filtra falsas alarmas detectando solo humanos/vehículos (descarta ramas, mascotas, sombras). Reduce 90% de notificaciones inútiles.',
+      'Full Color': 'Mantiene color de noche con luz tenue. Útil para fachadas comerciales, accesos. Ojo: si la luz es 0 absoluto necesita iluminador adicional.',
+      'TiOC': 'Disuasión activa: luz blanca y sirena cuando detecta intrusos. Ahuyenta antes de que pase algo.',
+      'AcuPick': 'Búsqueda inteligente posterior: "muéstrame todo lo que pasó vestido de rojo entre 14:00-15:00". Útil para investigaciones post-evento.'
+    };
+    return items.map(function(i){ return explain[i] || i; }).join(' ');
+  }
+
+  // ── Veredicto contextual ──
+  function cmpVerdict(a, b, diffs, context) {
+    if (!context) return null;
+    var pros = { A:[], B:[] };
+    var weight = { A:0, B:0 };
+
+    var contextWeights = {
+      parking:    { ir: 4, focal: 3, ai: 2, ip: 2, ik: 4, resolution: 2, fullcolor: 1 },
+      condominio: { ir: 4, fullcolor: 3, ai: 3, ip: 3, ik: 2, resolution: 2 },
+      fachada:    { fullcolor: 4, wdr: 4, audio: 2, resolution: 3, ai: 2, ip: 3 },
+      interior:   { resolution: 3, audio: 2, ai: 2, ip: 0, ik: 0, fullcolor: 1 },
+      perimetro:  { ir: 5, ai: 4, ip: 3, fullcolor: 1, focal: 3, resolution: 2 },
+      lpr:        { resolution: 4, focal: 5, ir: 3, ip: 3 },
+      oficina:    { resolution: 3, ai: 2, audio: 2, ip: 0 },
+      industrial: { ir: 4, ip: 4, ik: 4, ai: 2, focal: 2 }
+    };
+    var w = contextWeights[context] || {};
+
+    // Resolución
+    if (diffs.resolution && w.resolution) {
+      weight[diffs.resolution.winner] += w.resolution;
+      pros[diffs.resolution.winner].push('mayor resolución (+'+w.resolution+'pts)');
+    }
+    // IR
+    if (diffs.ir && w.ir) {
+      weight[diffs.ir.winner] += w.ir;
+      pros[diffs.ir.winner].push('mayor alcance IR (+'+w.ir+'pts)');
+    }
+    // IA features
+    if (diffs.ai && w.ai) {
+      var aCount = (diffs.ai.aVal||[]).length;
+      var bCount = (diffs.ai.bVal||[]).length;
+      if (aCount > bCount) { weight.A += w.ai; pros.A.push('más tecnologías IA (+'+w.ai+'pts)'); }
+      else if (bCount > aCount) { weight.B += w.ai; pros.B.push('más tecnologías IA (+'+w.ai+'pts)'); }
+    }
+    // Full Color
+    if (w.fullcolor) {
+      if (a.wizcolor && !b.wizcolor) { weight.A += w.fullcolor; pros.A.push('Full Color (+'+w.fullcolor+'pts)'); }
+      else if (b.wizcolor && !a.wizcolor) { weight.B += w.fullcolor; pros.B.push('Full Color (+'+w.fullcolor+'pts)'); }
+    }
+    // IP/IK
+    if (diffs.protection && w.ip) {
+      if ((a.ipRating||0) > (b.ipRating||0)) { weight.A += w.ip; pros.A.push('mejor IP (+'+w.ip+'pts)'); }
+      else if ((b.ipRating||0) > (a.ipRating||0)) { weight.B += w.ip; pros.B.push('mejor IP (+'+w.ip+'pts)'); }
+    }
+    if (diffs.protection && w.ik) {
+      if ((a.ikRating||0) >= 10 && (b.ikRating||0) < 10) { weight.A += w.ik; pros.A.push('antivandálica (+'+w.ik+'pts)'); }
+      else if ((b.ikRating||0) >= 10 && (a.ikRating||0) < 10) { weight.B += w.ik; pros.B.push('antivandálica (+'+w.ik+'pts)'); }
+    }
+    // Focal flexibility
+    if (diffs.focal && w.focal) {
+      var aVar = a.focalMin !== a.focalMax;
+      var bVar = b.focalMin !== b.focalMax;
+      if (aVar && !bVar) { weight.A += w.focal; pros.A.push('focal varifocal (+'+w.focal+'pts)'); }
+      else if (bVar && !aVar) { weight.B += w.focal; pros.B.push('focal varifocal (+'+w.focal+'pts)'); }
+    }
+
+    // Precio: penalización suave para el más caro (si ambas son técnicamente similares)
+    if (diffs.price) {
+      var pricerKey = diffs.price.cheaper === 'A' ? 'B' : 'A';
+      var diffPct = (diffs.price.diff / (diffs.price.cheaper === 'A' ? a.precio : b.precio));
+      if (diffPct > 0.5) { weight[pricerKey] -= 3; }  // más de 50% más caro: -3
+      else if (diffPct > 0.25) { weight[pricerKey] -= 1; }
+    }
+
+    var winner = weight.A > weight.B ? 'A' : weight.B > weight.A ? 'B' : null;
+    var diff = Math.abs(weight.A - weight.B);
+    var confidence = diff >= 5 ? 'alta' : diff >= 2 ? 'moderada' : 'baja (técnicamente similares)';
+
+    var ctxLabels = {
+      parking:'estacionamiento o acceso vehicular', condominio:'condominio o área residencial',
+      fachada:'fachada o comercio', interior:'interior', perimetro:'perímetro',
+      lpr:'identificación de patentes (LPR)', oficina:'oficina', industrial:'industrial o bodega'
+    };
+
+    return {
+      winner: winner,
+      winnerCam: winner === 'A' ? a : winner === 'B' ? b : null,
+      loserCam: winner === 'A' ? b : winner === 'B' ? a : null,
+      proWinner: winner ? pros[winner] : [],
+      confidence: confidence,
+      ctxLabel: ctxLabels[context] || context,
+      scoreA: weight.A,
+      scoreB: weight.B
+    };
+  }
+
+  function cmpRender() {
+    var resultDiv = document.getElementById('cmpResult');
+    if (!resultDiv) return;
+
+    var a = COMPARE_STATE.camA;
+    var b = COMPARE_STATE.camB;
+    if (!a || !b) {
+      resultDiv.innerHTML = '<div class="cmp-empty">👈 Selecciona <b>dos cámaras</b> arriba para empezar a comparar.<br><br>Te diremos qué se gana, qué se pierde, y cuál te conviene según tu proyecto.</div>';
+      return;
+    }
+    if (a.codigo === b.codigo) {
+      resultDiv.innerHTML = '<div class="cmp-empty">⚠️ Estás comparando la misma cámara contigo misma. Selecciona una distinta.</div>';
+      return;
+    }
+
+    var sA = cmpExtract(a);
+    var sB = cmpExtract(b);
+    var diffs = cmpDiffs(sA, sB);
+    var narrative = cmpNarrative(sA, sB, diffs, COMPARE_STATE.context);
+    var verdict = cmpVerdict(sA, sB, diffs, COMPARE_STATE.context);
+
+    var html = '';
+
+    // Análisis en lenguaje natural (lo más importante arriba)
+    html += '<div class="cmp-section">';
+    html += '<div class="cmp-section-title">🧠 Análisis técnico</div>';
+    if (narrative.length === 0) {
+      html += '<div class="cmp-narrative-empty">Estas dos cámaras son técnicamente muy similares. Las diferencias son menores y probablemente cualquier elección funciona. Mira la tabla técnica abajo para ver detalles puntuales.</div>';
+    } else {
+      narrative.forEach(function(n){
+        html += '<div class="cmp-narrative-item cmp-nar-'+n.type+'">'+n.text+'</div>';
+      });
+    }
+    html += '</div>';
+
+    // Veredicto contextual
+    if (verdict) {
+      html += '<div class="cmp-section cmp-verdict">';
+      html += '<div class="cmp-section-title">🎯 Recomendación para <span class="cmp-ctx-label">'+verdict.ctxLabel+'</span></div>';
+      if (verdict.winner) {
+        html += '<div class="cmp-verdict-card cmp-verdict-'+verdict.winner.toLowerCase()+'">';
+        html += '<div class="cmp-verdict-head"><span class="cmp-verdict-trophy">🏆</span><span>'+verdict.winnerCam.codigo+' es la mejor opción</span></div>';
+        html += '<div class="cmp-verdict-conf">Confianza: <b>'+verdict.confidence+'</b> · Score A:'+verdict.scoreA+' · B:'+verdict.scoreB+'</div>';
+        if (verdict.proWinner.length > 0) {
+          html += '<div class="cmp-verdict-pros"><b>Por qué para '+verdict.ctxLabel+'</b>: '+verdict.proWinner.join(', ')+'.</div>';
+        }
+        html += '</div>';
+      } else {
+        html += '<div class="cmp-verdict-tie">Para tu caso de uso, ambas cámaras son <b>técnicamente equivalentes</b>. Decide por precio o disponibilidad.</div>';
+      }
+      html += '</div>';
+    } else {
+      html += '<div class="cmp-section cmp-verdict-prompt">';
+      html += '<div class="cmp-verdict-prompt-icon">💡</div>';
+      html += '<div><b>¿Quieres recomendación contextual?</b> Selecciona arriba el tipo de proyecto y te diremos cuál de las dos conviene para tu caso específico.</div>';
+      html += '</div>';
+    }
+
+    // Tabla side-by-side
+    html += '<div class="cmp-section">';
+    html += '<div class="cmp-section-title">📊 Tabla técnica side-by-side</div>';
+    html += '<table class="cmp-table">';
+    html += '<thead><tr><th></th><th class="cmp-th-a">A: '+a.codigo+'</th><th class="cmp-th-b">B: '+b.codigo+'</th></tr></thead>';
+    html += '<tbody>';
+    var rows = [
+      ['Resolución', sA.resolucionMP ? sA.resolucionMP+' MP' : '—', sB.resolucionMP ? sB.resolucionMP+' MP' : '—', diffs.resolution],
+      ['Tipo', sA.tipoCamara || '—', sB.tipoCamara || '—', diffs.type],
+      ['Familia', sA.familia || '—', sB.familia || '—', diffs.family],
+      ['Forma física', sA.forma || '—', sB.forma || '—', null],
+      ['Focal', sA.focalMin ? (sA.focalMin === sA.focalMax ? sA.focalMin+'mm fija' : sA.focalMin+'-'+sA.focalMax+'mm') : '—', sB.focalMin ? (sB.focalMin === sB.focalMax ? sB.focalMin+'mm fija' : sB.focalMin+'-'+sB.focalMax+'mm') : '—', diffs.focal],
+      ['Sensor', sA.sensor ? sA.sensor.name : '—', sB.sensor ? sB.sensor.name : '—', null],
+      ['Alcance IR', sA.alcanceIR ? sA.alcanceIR+' m' : '—', sB.alcanceIR ? sB.alcanceIR+' m' : '—', diffs.ir],
+      ['IP / IK', (sA.ipRating?'IP'+sA.ipRating:'—')+(sA.ikRating?' / IK'+sA.ikRating:''), (sB.ipRating?'IP'+sB.ipRating:'—')+(sB.ikRating?' / IK'+sB.ikRating:''), diffs.protection],
+      ['PoE', sA.usaPoE ? '✓ '+(sA.consumoPoE||'')+'W' : (sA.tipoCamara==='HDCVI'?'no aplica':'—'), sB.usaPoE ? '✓ '+(sB.consumoPoE||'')+'W' : (sB.tipoCamara==='HDCVI'?'no aplica':'—'), null],
+      ['WizSense (IA)', sA.wizsense?'✓':'—', sB.wizsense?'✓':'—', null],
+      ['Full Color', sA.wizcolor?'✓':'—', sB.wizcolor?'✓':'—', null],
+      ['TiOC (disuasión)', sA.tioc?'✓':'—', sB.tioc?'✓':'—', null],
+      ['AcuPick (búsqueda)', sA.acupick?'✓':'—', sB.acupick?'✓':'—', null],
+      ['Precio', '$'+sA.precio.toLocaleString('es-CL'), '$'+sB.precio.toLocaleString('es-CL'), diffs.price]
+    ];
+    rows.forEach(function(r){
+      var aClass = '', bClass = '';
+      if (r[3] && r[3].winner === 'A') aClass = ' class="cmp-cell-win"';
+      if (r[3] && r[3].winner === 'B') bClass = ' class="cmp-cell-win"';
+      if (r[0] === 'Precio' && r[3]) {
+        if (r[3].cheaper === 'A') aClass = ' class="cmp-cell-cheaper"';
+        else bClass = ' class="cmp-cell-cheaper"';
+      }
+      html += '<tr><td class="cmp-row-lbl">'+r[0]+'</td><td'+aClass+'>'+r[1]+'</td><td'+bClass+'>'+r[2]+'</td></tr>';
+    });
+    html += '</tbody></table>';
+    html += '</div>';
+
+    // Acciones
+    html += '<div class="cmp-actions">';
+    html += '<button class="cmp-action-btn cmp-action-fov" onclick="alert(\'Próxima feature: ver ambas cámaras lado a lado en el Simulador FOV\')">📐 Ver en simulador FOV</button>';
+    html += '<button class="cmp-action-btn cmp-action-cart-a" onclick="cmpAddToCart(\'A\')">🛒 Agregar A al carro</button>';
+    html += '<button class="cmp-action-btn cmp-action-cart-b" onclick="cmpAddToCart(\'B\')">🛒 Agregar B al carro</button>';
+    html += '</div>';
+
+    resultDiv.innerHTML = html;
+  }
+
+  window.cmpAddToCart = function(which) {
+    var p = which === 'A' ? COMPARE_STATE.camA : COMPARE_STATE.camB;
+    if (!p) return;
+    if (typeof addCart === 'function') addCart(p);
+    if (typeof showToast === 'function') showToast('🛒 '+p.codigo+' agregada al carro');
+  };
+
+  // ════════════════════════════════════════════════════════════
   // HERRAMIENTA: DORI (Standard EN 62676-4)
   // Detección · Observación · Reconocimiento · Identificación
   // ════════════════════════════════════════════════════════════
@@ -42243,6 +43184,7 @@ if (document.readyState === 'loading') {
     else if (toolId === 'hddGuide') renderHddGuide();
     else if (toolId === 'bwCalc') renderBwCalc();
     else if (toolId === 'lprGuide') renderLprGuide();
+    else if (toolId === 'compareCams') renderCompareCams();
     else if (toolId === 'doriCalc') renderDoriCalc();
     else if (toolId === 'poeBudget') renderPoeBudget();
     else if (toolId === 'readyCheck') renderReadyCheck();
