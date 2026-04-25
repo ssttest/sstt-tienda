@@ -664,14 +664,16 @@ nav {
 .main-wrap { display: grid; grid-template-columns: 220px 1fr; align-items: start; min-height: calc(100vh - 160px); background: #ffffff; }
 
 .sidebar {
-  background: var(--white);
-  border-right: 1px solid var(--g5);
+  background: rgba(255,255,255,0.92);
+  border-right: 1px solid rgba(200,210,230,0.5);
   padding: 0;
   position: sticky;
   top: 114px;
   max-height: calc(100vh - 120px);
   overflow-y: auto;
   scrollbar-width: thin;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
 }
 .scard { border-bottom: 1px solid var(--g5) }
 .scard:last-child { border-bottom: none }
@@ -5125,107 +5127,27 @@ input[data-validated="1"]::after {
 }
 
 
-/* ═══════════════════════════════════════════════════
-   RESPONSIVE PRINCIPAL — mobile first
-   ═══════════════════════════════════════════════════ */
-
-/* ── Tablet / small desktop ── */
-@media(max-width:1024px){
-  .header-inner { grid-template-columns: auto 1fr auto; gap:12px; }
-  .logo-divider, .logo-dist { display:none }
-  .hero-inner { grid-template-columns: 1fr 240px; gap:28px; }
-  .hero-stats { flex-wrap:wrap; gap:16px; }
-  .main-wrap { grid-template-columns: 180px 1fr; }
-}
-@media(max-width:900px){
-  .hero-inner { grid-template-columns: 1fr; gap:28px; }
-  .hero-techs { flex-direction:row; flex-wrap:wrap; }
-  .hero-techs-wrap { width:100%; }
-  .hero-tech { flex:1 1 calc(50% - 6px); min-width:180px; }
-}
-
-/* ── Mobile (≤768px) ── */
-@media(max-width:768px){
-  /* Header */
-  .topbar { display:none }
-  .header-inner {
-    grid-template-columns: 1fr auto;
-    gap: 10px;
-    height: 56px;
-    padding: 0 14px;
-  }
-  .logo-divider, .logo-dist { display:none }
-  .search-wrap { display:none }
-  .mob-search { display:block }
-  .hbtn span { display:none }
-  .hbtn { padding:8px 10px; gap:0; display:flex !important; border-radius:50px !important; }
-  #cartToggle { display:flex !important; }
-
-  /* Module nav */
-  .module-nav { top: 56px }
-  nav { top: 102px }
-
-  /* Hero */
-  .hero { padding: 36px 0 40px }
-  .hero-inner { grid-template-columns: 1fr; gap:24px; }
-  .hero-title { font-size:34px }
-  .hero-sub { font-size:13px; margin-bottom:20px }
-  .hero-btns { gap:8px }
-  .hero-stats { flex-wrap:wrap; gap:0; padding-top:20px; }
-  .hero-stat { margin-right:16px; padding-right:16px; margin-bottom:8px; }
-  .hero-stat-n { font-size:28px }
-
-  /* Main layout — sidebar colapsa */
-  .main-wrap { grid-template-columns: 1fr }
-  .sidebar {
-    position: static;
-    max-height: none;
-    border-right: none;
-    border-bottom: 1px solid var(--g5);
-    display: none;
-  }
-  .sidebar.open { display: block }
-
-  /* Catalog */
-  .catalog-area { padding: 12px }
-  .rbar { flex-direction:column; gap:8px; }
-  .rbar-r { width:100%; justify-content:space-between; }
-
-  /* Cards */
-  .pcard-actions {
-    grid-template-columns: 1fr auto auto;
-    gap:4px;
-  }
-
-  /* Cart drawer — full screen on mobile */
-  .cart-drawer {
-    top: 0; right: 0; bottom: 0;
-    width: 100% !important;
-    border-radius: 0 !important;
-    padding-bottom: env(safe-area-inset-bottom, 0) !important;
-  }
-
-  /* bcrum bar */
-  .bcrum-bar .wrap { flex-direction:column; gap:4px; }
-}
-
+/* ── Reglas únicas rescatadas del bloque legacy (no cubiertas por CONSOLIDADO) ── */
 /* ── CART TOGGLE: siempre visible en todos los dispositivos ── */
 #cartToggle { display:flex !important; }
 
-/* ── Botón filtros mobile ── */
-@media(max-width:768px){
-  .mob-filter-btn { display:flex !important }
+@media(max-width:900px){
+  /* Hero 2 columnas → 1 columna antes del breakpoint 768 */
+  .hero-inner { grid-template-columns: 1fr; gap:28px; }
+  .hero-techs { flex-direction:row; flex-wrap:wrap; }
+  .hero-tech { flex:1 1 calc(50% - 6px); min-width:180px; }
 }
-/* ── Small mobile (≤480px) ── */
-@media(max-width:480px){
-  .hero-title { font-size:28px }
-  .hero-stat { border-right:none; margin-right:12px; padding-right:0 }
-  .logo-a, .logo-rest { font-size:26px }
-  .btn-hero-primary, .btn-hero-outline { padding:11px 18px; font-size:13px }
-  .pcard-name { font-size:12px }
-  .price-total { font-size:19px }
-  .cart-drawer { border-radius:0 !important; padding-bottom: env(safe-area-inset-bottom, 0) !important; }
-  .cs { border-radius:12px }
+
+@media(max-width:768px){
+  /* Sidebar: colapso abierto/cerrado */
+  .sidebar.open { display: block }
+  /* Rbar catálogo */
+  .rbar { flex-direction:column; gap:8px; }
+  .rbar-r { width:100%; justify-content:space-between; }
+  /* Filtros mobile */
+  .mob-filter-btn { display:flex !important }
+  /* Breadcrumb bar */
+  .bcrum-bar .wrap { flex-direction:column; gap:4px; }
 }
 
 
@@ -8466,13 +8388,15 @@ body.cart-open #proyectoListadoBtn {
   margin-bottom: 16px;
 }
 .sd-card {
-  background: linear-gradient(180deg, #fff, #fafbfc);
-  border: 1px solid rgba(0,0,0,.06);
+  background: rgba(255,255,255,0.84);
+  border: 1px solid rgba(200,210,230,0.45);
   border-radius: 12px;
   padding: 14px;
   text-align: center;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
 }
 .sd-card::before {
   content:'';
@@ -8565,13 +8489,15 @@ body.cart-open #proyectoListadoBtn {
   margin-bottom: 16px;
 }
 .ups-card {
-  background: linear-gradient(180deg, #fff, #fafbfc);
-  border: 1px solid rgba(0,0,0,.06);
+  background: rgba(255,255,255,0.84);
+  border: 1px solid rgba(200,210,230,0.45);
   border-radius: 12px;
   padding: 14px;
   text-align: center;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
 }
 .ups-card::before {
   content:'';
@@ -9785,13 +9711,15 @@ body.cart-open #proyectoListadoBtn {
   margin-bottom: 18px;
 }
 .bw-card {
-  background: linear-gradient(180deg, #fff, #fafbfc);
-  border: 1.5px solid rgba(0,0,0,.06);
+  background: rgba(255,255,255,0.84);
+  border: 1.5px solid rgba(200,210,230,0.45);
   border-radius: 12px;
   padding: 16px 14px;
   text-align: center;
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
 }
 .bw-card::before {
   content: '';
@@ -10544,12 +10472,14 @@ body.cart-open #proyectoListadoBtn {
   margin-bottom: 14px;
 }
 .lpr-card {
-  background: #fff;
-  border: 1px solid rgba(0,0,0,.06);
+  background: rgba(255,255,255,0.84);
+  border: 1px solid rgba(200,210,230,0.45);
   border-radius: 10px;
   padding: 12px;
   text-align: center;
   position: relative;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
 }
 .lpr-card-key {
   background: linear-gradient(135deg, rgba(231,76,60,.06), rgba(231,76,60,.02));
@@ -11884,8 +11814,8 @@ body.cart-open #proyectoListadoBtn {
   margin-bottom: 16px;
 }
 .dori-card {
-  background: #fff;
-  border: 1px solid rgba(0,0,0,.06);
+  background: rgba(255,255,255,0.84);
+  border: 1px solid rgba(200,210,230,0.45);
   border-left: 4px solid;
   border-radius: 12px;
   padding: 14px;
@@ -11893,6 +11823,8 @@ body.cart-open #proyectoListadoBtn {
   gap: 12px;
   align-items: center;
   transition: all .15s ease;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
 }
 .dori-card:hover {
   box-shadow: 0 4px 16px rgba(0,0,0,.06);
@@ -12002,11 +11934,13 @@ body.cart-open #proyectoListadoBtn {
   margin-bottom: 14px;
 }
 .poe-card {
-  background: #fff;
-  border: 1.5px solid rgba(0,0,0,.06);
+  background: rgba(255,255,255,0.84);
+  border: 1.5px solid rgba(200,210,230,0.45);
   border-radius: 10px;
   padding: 12px 14px;
   text-align: center;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
 }
 .poe-card-lbl {
   font-size: 10px;
@@ -13238,10 +13172,12 @@ body.cart-open #proyectoListadoBtn {
   gap: 10px; margin-bottom: 14px;
 }
 .hdd-card {
-  background: linear-gradient(180deg, #fff, #fafbfc);
-  border: 1px solid rgba(0,0,0,.06);
+  background: rgba(255,255,255,0.84);
+  border: 1px solid rgba(200,210,230,0.45);
   border-radius: 12px; padding: 12px 14px;
   text-align: center; position: relative; overflow: hidden;
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
 }
 .hdd-card::before {
   content:''; position:absolute; top:0; left:0; right:0; height:2px;
@@ -15184,6 +15120,316 @@ body.cart-open #proyectoListadoBtn {
   border-radius:12px; font-size:11px; color:#555; line-height:1.55;
 }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   WIZARD DE DESCUBRIMIENTO — Estilos del modal/wizard
+   Sesión 8: asistente conversacional para clientes nuevos
+   ═══════════════════════════════════════════════════════════════ */
+.wiz-overlay {
+  position: fixed; inset: 0;
+  background: rgba(20,22,28,0.55);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  z-index: 9998;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  animation: wiz-fade-in .2s ease-out;
+  overflow-y: auto;
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+@keyframes wiz-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes wiz-slide-up { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.wiz-panel {
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 18px;
+  border: 1px solid rgba(200,210,230,0.6);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.7);
+  padding: 18px 20px 16px;
+  max-width: 460px;
+  width: 100%;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  position: relative;
+  animation: wiz-slide-up .25s ease-out;
+  font-family: var(--font, 'IBM Plex Sans', system-ui, sans-serif);
+}
+
+.wiz-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 16px; padding-bottom: 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.wiz-step {
+  font-size: 11px; font-weight: 600;
+  color: #888; text-transform: uppercase; letter-spacing: 0.6px;
+}
+.wiz-bar {
+  height: 3px; background: #f0f0f0; border-radius: 3px;
+  overflow: hidden; margin-top: 6px;
+}
+.wiz-bar-fill {
+  height: 100%; background: #E8001C;
+  transition: width .35s ease-out;
+}
+.wiz-close {
+  background: none; border: none; cursor: pointer;
+  color: #888; padding: 0; margin-left: 12px;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px; flex-shrink: 0;
+  transition: all .15s;
+}
+.wiz-close:hover { background: rgba(0,0,0,0.05); color: #1A1A1A; }
+
+.wiz-content { min-height: 280px; }
+.wiz-q {
+  font-size: 17px; font-weight: 600; color: #1A1A1A;
+  margin: 0 0 4px; line-height: 1.35;
+}
+.wiz-sub {
+  font-size: 13px; color: #666;
+  margin: 0 0 16px; line-height: 1.5;
+}
+.wiz-time {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(232,0,28,0.08); padding: 6px 12px;
+  border-radius: 14px; font-size: 12px; color: #791F1F;
+  font-weight: 500;
+}
+.wiz-intro-icon {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: rgba(232,0,28,0.08);
+  display: flex; align-items: center; justify-content: center;
+  margin: 12px auto 18px;
+}
+
+.wiz-opts {
+  display: grid; gap: 8px; margin-bottom: 12px;
+}
+.wiz-cols-1 { grid-template-columns: 1fr; }
+.wiz-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.wiz-opt {
+  background: #fff; border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 10px; padding: 13px 12px;
+  cursor: pointer; text-align: left;
+  transition: all .15s ease;
+  min-height: 56px;
+  display: flex; flex-direction: column; justify-content: center;
+  font-family: inherit;
+}
+.wiz-opt:hover { border-color: #0057B8; background: #fafbfd; transform: translateY(-1px); }
+.wiz-opt:active { transform: translateY(0); }
+.wiz-opt.on {
+  border: 2px solid #E8001C; padding: 12px 11px;
+  background: #FFF0F2;
+  box-shadow: 0 0 0 4px rgba(232,0,28,0.08);
+}
+.wiz-opt-t {
+  font-size: 13.5px; font-weight: 600; color: #1A1A1A;
+  margin: 0 0 2px; line-height: 1.3;
+}
+.wiz-opt-s {
+  font-size: 11.5px; color: #888;
+  margin: 0; line-height: 1.4;
+}
+.wiz-opt.on .wiz-opt-t { color: #791F1F; }
+.wiz-opt.on .wiz-opt-s { color: #A32D2D; }
+
+.wiz-help {
+  display: block; width: 100%; padding: 9px 12px;
+  border: 1px dashed rgba(0,0,0,0.18);
+  background: transparent; border-radius: 10px;
+  font-size: 12px; color: #666; cursor: pointer;
+  margin-bottom: 12px; text-align: center;
+  font-family: inherit; font-weight: 500;
+  transition: all .15s;
+}
+.wiz-help:hover { background: rgba(0,87,184,0.05); color: #0057B8; border-color: #0057B8; }
+
+.wiz-tooltip {
+  position: absolute;
+  top: 70px; left: 20px; right: 20px;
+  background: #1A1A1A; color: #fff;
+  padding: 14px 16px; border-radius: 10px;
+  font-size: 12.5px; line-height: 1.55;
+  z-index: 10; display: none;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  animation: wiz-slide-up .2s ease-out;
+}
+.wiz-tooltip.show { display: block; }
+.wiz-tooltip strong { font-weight: 600; color: #fff; }
+.wiz-tooltip-close {
+  float: right; background: none; border: none;
+  color: #fff; cursor: pointer; font-size: 20px;
+  line-height: 1; padding: 0 0 0 12px; margin-top: -2px;
+  font-family: inherit;
+}
+
+.wiz-nav {
+  display: flex; justify-content: space-between; gap: 8px;
+  margin-top: 14px; padding-top: 14px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+.wiz-btn {
+  flex: 1; padding: 11px 14px;
+  border-radius: 10px; border: 1px solid rgba(0,0,0,0.12);
+  background: #fff; font-size: 13.5px; font-weight: 600;
+  color: #1A1A1A; cursor: pointer;
+  transition: all .15s; font-family: inherit;
+}
+.wiz-btn:hover:not(:disabled) { background: #fafafa; border-color: #888; }
+.wiz-btn:active:not(:disabled) { transform: scale(0.98); }
+.wiz-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.wiz-btn-primary {
+  background: #E8001C; border-color: #E8001C; color: #fff;
+}
+.wiz-btn-primary:hover:not(:disabled) { background: #C8001A; border-color: #C8001A; }
+.wiz-btn-tertiary {
+  background: transparent; border-color: rgba(0,0,0,0.1);
+  font-size: 12px; padding: 8px;
+  color: #888;
+}
+.wiz-btn-tertiary:hover:not(:disabled) { background: rgba(0,0,0,0.04); color: #1A1A1A; }
+
+/* ── Resultado / propuesta ────────────────────────────────────── */
+.wiz-result-card {
+  background: rgba(245,247,250,0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex; gap: 12px;
+  border: 1px solid rgba(200,210,230,0.4);
+  animation: wiz-slide-up .3s ease-out backwards;
+}
+.wiz-result-card:nth-child(1) { animation-delay: 0.05s; }
+.wiz-result-card:nth-child(2) { animation-delay: 0.1s; }
+.wiz-result-card:nth-child(3) { animation-delay: 0.15s; }
+.wiz-result-card:nth-child(4) { animation-delay: 0.2s; }
+.wiz-result-card:nth-child(5) { animation-delay: 0.25s; }
+.wiz-rc-thumb {
+  width: 56px; height: 56px;
+  background: #fff; border-radius: 8px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(0,0,0,0.06);
+  padding: 4px;
+}
+.wiz-rc-body { flex: 1; min-width: 0; }
+.wiz-rc-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 8px; margin-bottom: 4px;
+}
+.wiz-rc-name {
+  font-size: 13px; font-weight: 600; color: #1A1A1A;
+  margin: 0; line-height: 1.3;
+  word-break: break-word;
+}
+.wiz-rc-qty {
+  font-size: 12px; font-weight: 600; color: #E8001C;
+  white-space: nowrap; flex-shrink: 0;
+}
+.wiz-rc-why {
+  font-size: 11.5px; color: #666;
+  line-height: 1.45; margin: 4px 0 6px;
+}
+.wiz-rc-foot {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: 8px;
+}
+.wiz-rc-code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10.5px; color: #888;
+  letter-spacing: 0.3px;
+}
+.wiz-rc-price {
+  font-size: 12.5px; font-weight: 600; color: #1A1A1A;
+}
+
+.wiz-total {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 16px; background: #FFF0F2;
+  border: 1px solid #F7C1C1; border-radius: 12px;
+  margin: 16px 0 12px;
+}
+.wiz-total-l { font-size: 13px; color: #791F1F; font-weight: 500; }
+.wiz-total-v { font-size: 24px; font-weight: 700; color: #791F1F; }
+
+.wiz-actions {
+  display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px;
+}
+.wiz-actions-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+
+/* ── Mobile (≤ 480px) ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .wiz-overlay { padding: 8px; }
+  .wiz-panel { padding: 14px 16px 12px; border-radius: 14px; max-height: calc(100vh - 16px); }
+  .wiz-q { font-size: 16px; }
+  .wiz-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .wiz-opt { padding: 11px 9px; min-height: 50px; }
+  .wiz-opt-t { font-size: 12.5px; }
+  .wiz-opt-s { font-size: 10.5px; }
+  .wiz-rc-thumb { width: 48px; height: 48px; }
+  .wiz-rc-name { font-size: 12.5px; }
+  .wiz-total-v { font-size: 21px; }
+}
+
+/* ── Botón FAB flotante para abrir el wizard desde toda la tienda ── */
+.wiz-fab {
+  position: fixed;
+  right: 16px;
+  bottom: 86px; /* sobre el mobile-nav (48px) + safe area */
+  z-index: 850;
+  background: linear-gradient(135deg, #E8001C 0%, #C8001A 100%);
+  color: #fff;
+  border: none;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(232,0,28,0.35), 0 2px 6px rgba(0,0,0,0.1);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .25s ease;
+  font-family: inherit;
+}
+.wiz-fab:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 8px 24px rgba(232,0,28,0.45); }
+.wiz-fab:active { transform: scale(0.95); }
+.wiz-fab svg { width: 26px; height: 26px; }
+.wiz-fab-label {
+  position: absolute; right: calc(100% + 10px);
+  background: #1A1A1A; color: #fff;
+  padding: 6px 10px; border-radius: 8px;
+  font-size: 12px; font-weight: 500;
+  white-space: nowrap; opacity: 0;
+  transform: translateX(8px); pointer-events: none;
+  transition: all .2s;
+}
+.wiz-fab:hover .wiz-fab-label { opacity: 1; transform: translateX(0); }
+
+@media (min-width: 769px) {
+  .wiz-fab { bottom: 24px; }
+}
+
+/* ── Botón hero CTA ──────────────────────────────────────────── */
+.wiz-hero-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, #E8001C 0%, #C8001A 100%);
+  color: #fff; border: none;
+  padding: 12px 20px; border-radius: 50px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; font-family: inherit;
+  box-shadow: 0 4px 14px rgba(232,0,28,0.3);
+  transition: all .2s;
+}
+.wiz-hero-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,0,28,0.4); }
+.wiz-hero-cta:active { transform: translateY(0); }
+
 </style>
 
 <!-- Google Places Autocomplete — configurable via localStorage('sstt_gmaps_key') -->
@@ -15327,6 +15573,10 @@ if (window.pdfjsLib) {
     <button data-sec="seguimiento" class="mnav-tab" onclick="showSection('seguimiento',this)">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       Seguimiento
+    </button>
+    <button class="mnav-tab" onclick="wizOpen()" style="background:linear-gradient(90deg,rgba(232,0,28,0.18),rgba(232,0,28,0.08));color:#ffd0d6;">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 4"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/></svg>
+      Asistente
     </button>
     
     
@@ -17240,6 +17490,23 @@ if (window.pdfjsLib) {
 
     <!-- Menú de herramientas -->
     <div class="tools-menu" id="toolsMenu">
+      <div class="tools-menu-group tools-group-wizard">
+        <div class="tools-menu-group-hdr">
+          <span class="tools-menu-group-icon">✨</span>
+          <div>
+            <div class="tools-menu-group-title">¿No sabes por dónde empezar?</div>
+            <div class="tools-menu-group-sub">Te guiamos en 6 preguntas (1 minuto)</div>
+          </div>
+        </div>
+        <button class="tools-menu-btn tools-menu-btn-special" onclick="wizOpen()" style="border-color:#E8001C;background:linear-gradient(135deg,#FFF5F6 0%,#FFE8EC 100%);">
+          <div class="tools-menu-ico" style="background:#E8001C;color:#fff;">🎯</div>
+          <div class="tools-menu-info">
+            <div class="tools-menu-name" style="color:#791F1F;">Asistente de Descubrimiento</div>
+            <div class="tools-menu-desc">Encuentra tu sistema ideal con preguntas simples — propuesta lista para agregar al carro</div>
+          </div>
+        </button>
+      </div>
+
       <div class="tools-menu-group tools-group-simulators">
         <div class="tools-menu-group-hdr">
           <span class="tools-menu-group-icon">📐</span>
@@ -44913,6 +45180,631 @@ if (document.readyState === 'loading') {
     } catch(e){}
   };
 
+  // ═══════════════════════════════════════════════════════════════════
+  // WIZARD DE DESCUBRIMIENTO — Asistente conversacional para clientes
+  // que no saben qué necesitan. Genera propuesta técnica completa con
+  // productos del catálogo SSTT en 6 preguntas + 1 minuto.
+  // ═══════════════════════════════════════════════════════════════════
+
+  // Estado global del wizard
+  window.wizState = {
+    step: -1,  // -1 = intro, 0..5 = preguntas, 6 = resultado
+    answers: [null, null, [], null, null, null]
+  };
+
+  // Definición de los 6 pasos
+  window.wizSteps = [
+    {
+      q: '¿Dónde lo va a instalar?',
+      s: 'Esto define el tipo de cámaras y la cantidad',
+      cols: 2,
+      opts: [
+        {t:'Casa',          s:'Vivienda particular'},
+        {t:'Local comercial', s:'Tienda, restaurante'},
+        {t:'Bodega o galpón', s:'Espacios amplios'},
+        {t:'Oficina',       s:'Empresa, coworking'},
+        {t:'Condominio',    s:'Copropiedad, edificio'},
+        {t:'Industria',     s:'Planta, fábrica'}
+      ]
+    },
+    {
+      q: '¿Qué tamaño tiene el lugar?',
+      s: 'Para calcular cantidad de cámaras',
+      cols: 1,
+      opts: [
+        {t:'Hasta 100 m²',    s:'Casa pequeña, local pequeño'},
+        {t:'100 a 300 m²',    s:'Vivienda mediana'},
+        {t:'300 a 800 m²',    s:'Local grande, oficina'},
+        {t:'Más de 800 m²',   s:'Bodega, industria'}
+      ],
+      help: {
+        title: '¿No sé los m²?',
+        body: 'Una casa típica de 3 dormitorios tiene unos 80–120 m². Un local de barrio 40–80 m². Una bodega industrial parte desde 300 m². Elige el rango más cercano.'
+      }
+    },
+    {
+      q: '¿Qué necesita ver con detalle?',
+      s: 'Puede elegir varios',
+      multi: true,
+      cols: 2,
+      opts: [
+        {t:'Rostros',         s:'Reconocer personas'},
+        {t:'Matrículas',      s:'Placas de autos'},
+        {t:'Perímetro',       s:'Cercos, accesos'},
+        {t:'Interior general', s:'Vista panorámica'}
+      ],
+      help: {
+        title: '¿Para qué importa esto?',
+        body: 'Reconocer rostros requiere lentes de 2.8mm a corta distancia. Leer matrículas necesita lentes de 6mm o más, o cámaras LPR específicas. Elegir bien aquí evita comprar cámaras con resolución insuficiente.'
+      }
+    },
+    {
+      q: '¿Cómo es la luz de noche?',
+      s: 'Define la tecnología de visión nocturna',
+      cols: 1,
+      opts: [
+        {t:'Siempre hay luz', s:'Poste, ampolleta, alumbrado público'},
+        {t:'Luz parcial',     s:'Sombras, áreas oscuras'},
+        {t:'Oscuro total',    s:'Sin luz, requiere infrarrojo'}
+      ],
+      help: {
+        title: '¿Qué cámara para qué luz?',
+        body: 'Luz suficiente: cámara estándar. Luz parcial: cámara Starlight (color de noche). Oscuro total: cámara con IR potente o Color con foco LED. Elegir mal aquí da imágenes negras o ruidosas.'
+      }
+    },
+    {
+      q: '¿Cuántos días guardar grabaciones?',
+      s: 'Define el tamaño del disco duro',
+      cols: 2,
+      opts: [
+        {t:'7 días',     s:'Básico'},
+        {t:'15 días',    s:'Recomendado'},
+        {t:'30 días',    s:'Empresarial'},
+        {t:'60+ días',   s:'Compliance, legal'}
+      ]
+    },
+    {
+      q: '¿Qué presupuesto maneja?',
+      s: 'Orienta la línea de productos',
+      cols: 2,
+      opts: [
+        {t:'Ahorro',     s:'Lo esencial'},
+        {t:'Equilibrado', s:'Calidad-precio'},
+        {t:'Premium',    s:'Lo mejor disponible'},
+        {t:'Sin tope',   s:'Top de gama'}
+      ]
+    }
+  ];
+
+  // ── Lógica de mapeo a productos del catálogo ──────────────────
+  window.wizBuildProposal = function() {
+    var ans = window.wizState.answers;
+    var cantCam = [4, 6, 10, 16][ans[1]] || 6;
+    var dias = [7, 15, 30, 60][ans[4]];
+    var presup = ans[5]; // 0=ahorro, 1=eq, 2=premium, 3=sin tope
+    var luz = ans[3]; // 0=siempre, 1=parcial, 2=oscuro
+    var verRostros = ans[2].indexOf(0) >= 0;
+    var verMatriculas = ans[2].indexOf(1) >= 0;
+
+    // Calcular TB necesarios: aprox 0.04 TB/día por cámara 4MP
+    var tbNeeded = Math.ceil(cantCam * dias * 0.04);
+    if (tbNeeded < 1) tbNeeded = 1;
+
+    var products = [];
+    var P = (typeof PRODUCTS !== 'undefined') ? PRODUCTS : [];
+
+    function findById(id) {
+      for (var i = 0; i < P.length; i++) if (P[i].id === id) return P[i];
+      return null;
+    }
+
+    // ── 1. CÁMARAS (IDs según presupuesto) ────────────────────────
+    var camIds = [
+      155,  // ahorro: HAC-T1A11N-0280B HDCVI 1MP $8.500
+      281,  // equilibrado: IPC-HFW2449TP-ZAS-IL 4MP $166.900
+      272,  // premium: IPC-HFW5541TP-SE 5MP $169.900
+      394   // sin tope: TPC-PT8441MA termal 4MP (cara, pero hay opciones)
+    ];
+    // Si oscuro total y ahorro, mejor IP económica que HDCVI
+    if (luz === 2 && presup === 0) {
+      // Buscar una cámara IP más económica con IR
+      var ipCheap = null;
+      for (var k = 0; k < P.length; k++) {
+        if (P[k].cat === 'camaras-ip' && P[k].ptotal > 30000 && P[k].ptotal < 80000 &&
+            (P[k].nombre || '').toLowerCase().indexOf('ir') >= 0) {
+          if (!ipCheap || P[k].ptotal < ipCheap.ptotal) ipCheap = P[k];
+        }
+      }
+      if (ipCheap) camIds[0] = ipCheap.id;
+    }
+    // Si premium y ver matrículas, intentar cámara con lente largo
+    if (presup >= 2 && verMatriculas) {
+      var lpr = null;
+      for (var j = 0; j < P.length; j++) {
+        var n = (P[j].nombre || '').toLowerCase();
+        if (P[j].cat === 'camaras-ip' && (n.indexOf('lpr') >= 0 || n.indexOf('itc') >= 0) && P[j].ptotal < 800000) {
+          if (!lpr || P[j].ptotal < lpr.ptotal) lpr = P[j];
+        }
+      }
+      if (lpr) camIds[presup] = lpr.id;
+    }
+
+    var cam = findById(camIds[presup]) || findById(281);
+    if (cam) {
+      products.push({
+        prod: cam,
+        qty: cantCam,
+        why: 'Cobertura para ' + window.wizSteps[1].opts[ans[1]].t.toLowerCase() +
+             ', optimizada para ' + window.wizSteps[3].opts[luz].t.toLowerCase()
+      });
+    }
+
+    // ── 2. NVR/XVR según tipo de cámara ──────────────────────────
+    var camIsHdcvi = cam && cam.cat === 'camaras-hdcvi';
+    if (camIsHdcvi) {
+      // XVR — buscar uno acorde a canales
+      var xvrFind = null;
+      var xvrLines = [];
+      for (var x = 0; x < P.length; x++) {
+        if ((P[x].cat === 'nvr' || P[x].cat === 'xvr') &&
+            (P[x].nombre || '').toLowerCase().indexOf('xvr') >= 0) {
+          xvrLines.push(P[x]);
+        }
+      }
+      // Filtrar por canales que soporte (heurística: codigo + nombre)
+      for (var xl = 0; xl < xvrLines.length; xl++) {
+        var nm = xvrLines[xl].nombre.toLowerCase();
+        var match = nm.match(/(\d+)\s*ch|(\d+)\s*can/);
+        var ch = match ? parseInt(match[1] || match[2]) : 0;
+        if (ch >= cantCam && (!xvrFind || xvrLines[xl].ptotal < xvrFind.ptotal)) {
+          xvrFind = xvrLines[xl];
+        }
+      }
+      if (xvrFind) {
+        products.push({
+          prod: xvrFind,
+          qty: 1,
+          why: 'Grabador HDCVI compatible con ' + cantCam + ' cámaras coaxiales'
+        });
+      }
+    } else {
+      // NVR — buscar
+      var nvrFind = null;
+      for (var n2 = 0; n2 < P.length; n2++) {
+        if (P[n2].cat === 'nvr' && (P[n2].nombre || '').toLowerCase().indexOf('nvr') >= 0) {
+          var nm2 = P[n2].nombre.toLowerCase();
+          var m2 = nm2.match(/(\d+)\s*ch|(\d+)\s*can/);
+          var ch2 = m2 ? parseInt(m2[1] || m2[2]) : 0;
+          if (ch2 >= cantCam && ch2 <= cantCam * 2 && P[n2].ptotal > 80000 && P[n2].ptotal < 800000) {
+            if (!nvrFind || P[n2].ptotal < nvrFind.ptotal) nvrFind = P[n2];
+          }
+        }
+      }
+      if (nvrFind) {
+        products.push({
+          prod: nvrFind,
+          qty: 1,
+          why: 'Grabador IP para ' + cantCam + ' cámaras simultáneas con app DMSS'
+        });
+      }
+    }
+
+    // ── 3. HDD SkyHawk según TB ──────────────────────────────────
+    var skyhawkMap = [
+      {tb: 1, id: 578},
+      {tb: 2, id: 579},
+      {tb: 3, id: 580},
+      {tb: 4, id: 581},
+      {tb: 6, id: 582},
+      {tb: 8, id: 583},
+      {tb: 10, id: 584}
+    ];
+    var hddPick = skyhawkMap[skyhawkMap.length - 1];
+    for (var h = 0; h < skyhawkMap.length; h++) {
+      if (skyhawkMap[h].tb >= tbNeeded) { hddPick = skyhawkMap[h]; break; }
+    }
+    var hdd = findById(hddPick.id);
+    if (hdd) {
+      products.push({
+        prod: hdd,
+        qty: 1,
+        why: 'Capacidad para ' + dias + ' días con ' + cantCam + ' cámaras (' + hddPick.tb + ' TB)'
+      });
+    }
+
+    // ── 4. SWITCH PoE (solo si IP) ────────────────────────────────
+    if (!camIsHdcvi) {
+      var swFind = null;
+      for (var s = 0; s < P.length; s++) {
+        if (P[s].cat === 'switches' && (P[s].nombre || '').toLowerCase().indexOf('poe') >= 0) {
+          var snm = P[s].nombre.toLowerCase();
+          var sm = snm.match(/(\d+)\s*p/);
+          var sp = sm ? parseInt(sm[1]) : 0;
+          if (sp >= cantCam && sp <= cantCam * 2 + 4) {
+            if (!swFind || P[s].ptotal < swFind.ptotal) swFind = P[s];
+          }
+        }
+      }
+      if (swFind) {
+        products.push({
+          prod: swFind,
+          qty: 1,
+          why: 'Switch PoE de ' + (cantCam <= 8 ? 8 : 16) + ' puertos — alimenta cámaras por el cable de red'
+        });
+      }
+    }
+
+    // ── 5. CABLE UTP (siempre IP) o coaxial (HDCVI) ──────────────
+    if (!camIsHdcvi) {
+      // UTP cat6 305m
+      var cable = findById(78); // PFM920I-6UN-C
+      if (cable) {
+        products.push({
+          prod: cable,
+          qty: 1,
+          why: 'Bobina cable UTP cat6 cobre 305m — alcanza para todo el cableado'
+        });
+      }
+    } else {
+      // Cable video poder
+      var cab = findById(82); // CVP30
+      if (cab) {
+        products.push({
+          prod: cab,
+          qty: cantCam,
+          why: 'Cable coaxial + alimentación de 30m por cada cámara HDCVI'
+        });
+      }
+    }
+
+    // Calcular total
+    var total = 0;
+    products.forEach(function(it) {
+      total += (it.prod.ptotal || 0) * it.qty;
+    });
+
+    return {
+      products: products,
+      total: total,
+      meta: {
+        cantCam: cantCam,
+        dias: dias,
+        tb: hddPick.tb,
+        lugar: window.wizSteps[0].opts[ans[0]].t,
+        tamSize: window.wizSteps[1].opts[ans[1]].t,
+        presup: window.wizSteps[5].opts[presup].t.toLowerCase()
+      }
+    };
+  };
+
+  // ── Render del wizard (modal completo) ────────────────────────
+  window.wizOpen = function() {
+    window.wizState.step = -1;
+    window.wizState.answers = [null, null, [], null, null, null];
+
+    var existing = document.getElementById('wizModal');
+    if (existing) existing.remove();
+
+    var modal = document.createElement('div');
+    modal.id = 'wizModal';
+    modal.className = 'wiz-overlay';
+    modal.innerHTML =
+      '<div class="wiz-panel" role="dialog" aria-modal="true" aria-labelledby="wizTitle">' +
+        '<div class="wiz-head">' +
+          '<div style="flex:1">' +
+            '<div class="wiz-step" id="wizStepLabel">Bienvenida</div>' +
+            '<div class="wiz-bar"><div class="wiz-bar-fill" id="wizBar" style="width:0%"></div></div>' +
+          '</div>' +
+          '<button class="wiz-close" id="wizCloseBtn" aria-label="Cerrar asistente">' +
+            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+          '</button>' +
+        '</div>' +
+        '<div class="wiz-tooltip" id="wizTooltip">' +
+          '<button class="wiz-tooltip-close" id="wizTooltipClose" aria-label="Cerrar ayuda">×</button>' +
+          '<div id="wizTooltipContent"></div>' +
+        '</div>' +
+        '<div id="wizContent" class="wiz-content"></div>' +
+        '<div class="wiz-nav" id="wizNav">' +
+          '<button class="wiz-btn" id="wizBack" style="display:none">← Atrás</button>' +
+          '<button class="wiz-btn wiz-btn-primary" id="wizNext">Comenzar →</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(modal);
+
+    // Bind events
+    document.getElementById('wizCloseBtn').addEventListener('click', wizCloseConfirm);
+    document.getElementById('wizBack').addEventListener('click', wizPrev);
+    document.getElementById('wizNext').addEventListener('click', wizNextStep);
+    document.getElementById('wizTooltipClose').addEventListener('click', function() {
+      document.getElementById('wizTooltip').classList.remove('show');
+    });
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) wizCloseConfirm();
+    });
+
+    document.body.style.overflow = 'hidden';
+    wizRender();
+
+    // Focus inicial
+    setTimeout(function() { document.getElementById('wizNext').focus(); }, 50);
+  };
+
+  window.wizClose = function() {
+    var modal = document.getElementById('wizModal');
+    if (modal) modal.remove();
+    document.body.style.overflow = '';
+  };
+
+  window.wizCloseConfirm = function() {
+    var st = window.wizState.step;
+    if (st === -1 || st === 6) { wizClose(); return; }
+    if (confirm('¿Cerrar el asistente? Perderás las respuestas.')) wizClose();
+  };
+
+  window.wizNextStep = function() {
+    var s = window.wizState.step;
+    if (s === -1) { window.wizState.step = 0; wizRender(); return; }
+    if (s < window.wizSteps.length) { window.wizState.step++; wizRender(); }
+  };
+
+  window.wizPrev = function() {
+    if (window.wizState.step > -1) {
+      window.wizState.step--;
+      wizRender();
+    }
+  };
+
+  window.wizSelect = function(idx) {
+    var s = window.wizState.step;
+    var st = window.wizSteps[s];
+    if (st.multi) {
+      var arr = window.wizState.answers[s];
+      var p = arr.indexOf(idx);
+      if (p >= 0) arr.splice(p, 1); else arr.push(idx);
+      wizRender();
+    } else {
+      window.wizState.answers[s] = idx;
+      wizRender();
+      // Auto-advance
+      setTimeout(function() {
+        if (window.wizState.step === s) {
+          window.wizState.step++;
+          wizRender();
+        }
+      }, 230);
+    }
+  };
+
+  window.wizShowHelp = function() {
+    var s = window.wizState.step;
+    var st = window.wizSteps[s];
+    if (!st || !st.help) return;
+    var tip = document.getElementById('wizTooltip');
+    document.getElementById('wizTooltipContent').innerHTML =
+      '<strong>' + st.help.title + '</strong><br><br>' + st.help.body;
+    tip.classList.add('show');
+  };
+
+  window.wizRender = function() {
+    var s = window.wizState.step;
+    var c = document.getElementById('wizContent');
+    var back = document.getElementById('wizBack');
+    var next = document.getElementById('wizNext');
+    var bar = document.getElementById('wizBar');
+    var lbl = document.getElementById('wizStepLabel');
+    var nav = document.getElementById('wizNav');
+
+    // Cerrar tooltip al cambiar de paso
+    var tip = document.getElementById('wizTooltip');
+    if (tip) tip.classList.remove('show');
+
+    if (s === -1) {
+      // INTRO
+      lbl.textContent = 'Bienvenida';
+      bar.style.width = '0%';
+      back.style.display = 'none';
+      next.textContent = 'Comenzar →';
+      next.disabled = false;
+      nav.style.display = '';
+      c.innerHTML =
+        '<div class="wiz-intro-icon">' +
+          '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#E8001C" stroke-width="2">' +
+            '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>' +
+          '</svg>' +
+        '</div>' +
+        '<p class="wiz-q" style="text-align:center">Encontremos tu sistema ideal</p>' +
+        '<p class="wiz-sub" style="text-align:center;margin-bottom:16px">Te haremos 6 preguntas simples y armamos una propuesta a tu medida con productos del catálogo SSTT.</p>' +
+        '<div style="text-align:center"><span class="wiz-time">⏱ Tiempo estimado: 1 minuto</span></div>';
+      return;
+    }
+
+    if (s === window.wizSteps.length) {
+      wizRenderResult();
+      return;
+    }
+
+    // Pregunta normal
+    var st = window.wizSteps[s];
+    lbl.textContent = 'Paso ' + (s + 1) + ' de ' + window.wizSteps.length;
+    bar.style.width = Math.round((s + 1) / window.wizSteps.length * 100) + '%';
+    back.style.display = '';
+    nav.style.display = '';
+
+    var html = '<p class="wiz-q">' + st.q + '</p>';
+    html += '<p class="wiz-sub">' + st.s + '</p>';
+    html += '<div class="wiz-opts wiz-cols-' + (st.cols || 2) + '">';
+    st.opts.forEach(function(o, idx) {
+      var sel = st.multi ? window.wizState.answers[s].indexOf(idx) >= 0 : window.wizState.answers[s] === idx;
+      html += '<button class="wiz-opt' + (sel ? ' on' : '') + '" type="button" onclick="wizSelect(' + idx + ')">' +
+                '<p class="wiz-opt-t">' + o.t + '</p>' +
+                '<p class="wiz-opt-s">' + o.s + '</p>' +
+              '</button>';
+    });
+    html += '</div>';
+    if (st.help) {
+      html += '<button class="wiz-help" type="button" onclick="wizShowHelp()">💡 ' + st.help.title + '</button>';
+    }
+    c.innerHTML = html;
+
+    // Estado del botón siguiente
+    var hasAns = st.multi ? window.wizState.answers[s].length > 0 : window.wizState.answers[s] !== null;
+    next.disabled = !hasAns;
+    next.textContent = (s === window.wizSteps.length - 1) ? 'Ver propuesta →' : 'Siguiente →';
+  };
+
+  window.wizRenderResult = function() {
+    var c = document.getElementById('wizContent');
+    var bar = document.getElementById('wizBar');
+    var lbl = document.getElementById('wizStepLabel');
+    var nav = document.getElementById('wizNav');
+
+    bar.style.width = '100%';
+    lbl.textContent = '✓ Propuesta lista';
+    nav.style.display = 'none';
+
+    var prop = window.wizBuildProposal();
+    var meta = prop.meta;
+
+    var html = '<p class="wiz-q" style="margin-bottom:6px">Propuesta para ' + meta.lugar.toLowerCase() + '</p>';
+    html += '<p class="wiz-sub" style="margin-bottom:16px">' +
+            meta.tamSize.toLowerCase() + ' · ' + meta.dias + ' días grabación · línea ' + meta.presup + '</p>';
+
+    prop.products.forEach(function(it) {
+      var p = it.prod;
+      var imgUrl = p.img || '';
+      var thumbHtml = imgUrl
+        ? '<img src="' + imgUrl + '" alt="" loading="lazy" style="width:100%;height:100%;object-fit:contain">'
+        : '<div style="font-size:18px;color:#999">📦</div>';
+      html += '<div class="wiz-result-card">' +
+                '<div class="wiz-rc-thumb">' + thumbHtml + '</div>' +
+                '<div class="wiz-rc-body">' +
+                  '<div class="wiz-rc-head">' +
+                    '<p class="wiz-rc-name">' + p.nombre + '</p>' +
+                    '<span class="wiz-rc-qty">×' + it.qty + '</span>' +
+                  '</div>' +
+                  '<p class="wiz-rc-why">' + it.why + '</p>' +
+                  '<div class="wiz-rc-foot">' +
+                    '<span class="wiz-rc-code">' + p.codigo + '</span>' +
+                    '<span class="wiz-rc-price">$' + (p.ptotal || 0).toLocaleString('es-CL') + ' c/u</span>' +
+                  '</div>' +
+                '</div>' +
+              '</div>';
+    });
+
+    html += '<div class="wiz-total">' +
+              '<span class="wiz-total-l">Total estimado con IVA</span>' +
+              '<span class="wiz-total-v">$' + prop.total.toLocaleString('es-CL') + '</span>' +
+            '</div>';
+
+    html += '<div class="wiz-actions">' +
+              '<button class="wiz-btn wiz-btn-primary" type="button" onclick="wizAddAllToCart()">' +
+                '🛒 Agregar todo al carro' +
+              '</button>' +
+              '<div class="wiz-actions-row">' +
+                '<button class="wiz-btn" type="button" onclick="wizExportPDF()">📄 PDF</button>' +
+                '<button class="wiz-btn" type="button" onclick="wizContactWA()">💬 Asesor</button>' +
+              '</div>' +
+              '<button class="wiz-btn wiz-btn-tertiary" type="button" onclick="wizRestart()">' +
+                '↻ Comenzar de nuevo' +
+              '</button>' +
+            '</div>';
+
+    c.innerHTML = html;
+  };
+
+  window.wizAddAllToCart = function() {
+    var prop = window.wizBuildProposal();
+    var added = 0;
+    prop.products.forEach(function(it) {
+      try {
+        for (var q = 0; q < it.qty; q++) {
+          if (typeof addCart === 'function') {
+            addCart(it.prod);
+            added++;
+          }
+        }
+      } catch (e) {
+        console.error('wizAddAllToCart error:', e);
+      }
+    });
+    wizClose();
+    if (typeof showToast === 'function') {
+      showToast('✓ ' + added + ' productos agregados al carro');
+    }
+  };
+
+  window.wizExportPDF = function() {
+    var prop = window.wizBuildProposal();
+    var meta = prop.meta;
+    try {
+      var jsPDF = window.jspdf && window.jspdf.jsPDF ? window.jspdf.jsPDF : window.jsPDF;
+      if (!jsPDF) {
+        if (typeof showToast === 'function') showToast('⚠️ jsPDF no disponible');
+        return;
+      }
+      var doc = new jsPDF();
+      var y = 18;
+      doc.setFontSize(16);
+      doc.setFont(undefined, 'bold');
+      doc.text('Propuesta SSTT — Asistente de Descubrimiento', 14, y);
+      y += 8;
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      doc.text('Lugar: ' + meta.lugar + '  ·  ' + meta.tamSize + '  ·  ' + meta.dias + ' días grabación', 14, y);
+      y += 6;
+      doc.text('Línea: ' + meta.presup + '  ·  ' + meta.cantCam + ' cámaras  ·  ' + meta.tb + ' TB', 14, y);
+      y += 12;
+
+      if (doc.autoTable) {
+        var rows = prop.products.map(function(it) {
+          return [
+            it.prod.codigo,
+            it.prod.nombre,
+            it.qty,
+            '$' + (it.prod.ptotal || 0).toLocaleString('es-CL'),
+            '$' + ((it.prod.ptotal || 0) * it.qty).toLocaleString('es-CL')
+          ];
+        });
+        doc.autoTable({
+          startY: y,
+          head: [['Código', 'Producto', 'Cant', 'Unit', 'Subtotal']],
+          body: rows,
+          theme: 'striped',
+          headStyles: { fillColor: [232, 0, 28] },
+          styles: { fontSize: 9 }
+        });
+        var endY = doc.lastAutoTable.finalY || y + 60;
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
+        doc.text('Total con IVA: $' + prop.total.toLocaleString('es-CL'), 14, endY + 10);
+      }
+
+      doc.save('propuesta-sstt-' + Date.now() + '.pdf');
+      if (typeof showToast === 'function') showToast('✓ PDF generado');
+    } catch (e) {
+      console.error('wizExportPDF error:', e);
+      if (typeof showToast === 'function') showToast('❌ Error al generar PDF');
+    }
+  };
+
+  window.wizContactWA = function() {
+    var prop = window.wizBuildProposal();
+    var meta = prop.meta;
+    var msg = 'Hola, vengo del asistente de SSTT. Necesito un sistema para ' + meta.lugar.toLowerCase() +
+              ' (' + meta.tamSize.toLowerCase() + '), ' + meta.cantCam + ' cámaras, ' +
+              meta.dias + ' días de grabación, presupuesto ' + meta.presup + '. ¿Pueden asesorarme?';
+    var url = 'https://wa.me/56930502234?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank');
+  };
+
+  window.wizRestart = function() {
+    window.wizState.step = -1;
+    window.wizState.answers = [null, null, [], null, null, null];
+    document.getElementById('wizNav').style.display = '';
+    wizRender();
+  };
+
+
     window.toolsOpen = function(toolId, btn) {
     document.querySelectorAll('.tools-menu-btn').forEach(function(b){ b.classList.remove('active'); });
     if (btn) btn.classList.add('active');
@@ -44999,5 +45891,16 @@ if (document.readyState === 'loading') {
     }
   };
 </script>
+
+<!-- WIZARD FAB — Asistente de Descubrimiento (Sesión 8) -->
+<button class="wiz-fab" onclick="wizOpen()" aria-label="Abrir asistente de descubrimiento">
+  <span class="wiz-fab-label">Asistente: ¿qué cámara comprar?</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+    <circle cx="12" cy="12" r="9"/>
+    <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 4"/>
+    <circle cx="12" cy="17" r="0.5" fill="currentColor"/>
+  </svg>
+</button>
+
 </body>
 </html>
