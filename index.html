@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 09:44 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 10:03 hrs (UTC-4 Chile) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -12599,6 +12599,54 @@ body.cart-open #proyectoListadoBtn {
 .cmp-action-cart-a { background: linear-gradient(135deg, #00aaff, #0077cc); }
 .cmp-action-cart-b { background: linear-gradient(135deg, #ff6b35, #d65020); }
 
+
+.cmp-prose-section {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.06);
+  border-left: 4px solid;
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  transition: all .15s ease;
+}
+.cmp-prose-section:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,.05);
+}
+.cmp-ps-info {
+  border-left-color: #95a5a6;
+  background: linear-gradient(135deg, rgba(149,165,166,.04), #fff);
+}
+.cmp-ps-win-a {
+  border-left-color: #00aaff;
+  background: linear-gradient(135deg, rgba(0,170,255,.05), #fff);
+}
+.cmp-ps-win-b {
+  border-left-color: #ff6b35;
+  background: linear-gradient(135deg, rgba(255,107,53,.05), #fff);
+}
+.cmp-ps-critical {
+  border-left-color: #e74c3c;
+  background: linear-gradient(135deg, rgba(231,76,60,.06), #fff);
+}
+.cmp-prose-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 6px;
+  letter-spacing: -.2px;
+}
+.cmp-ps-info .cmp-prose-title { color: #444; }
+.cmp-ps-win-a .cmp-prose-title { color: #006fb3; }
+.cmp-ps-win-b .cmp-prose-title { color: #b8430d; }
+.cmp-ps-critical .cmp-prose-title { color: #c0392b; }
+.cmp-prose-body {
+  font-size: 12.5px;
+  color: #444;
+  line-height: 1.65;
+}
+.cmp-prose-body b { color: #111; font-weight: 700; }
+.cmp-prose-body i { color: #666; font-style: italic; }
+
 @media (max-width: 700px) {
   .cmp-select-row {
     grid-template-columns: 1fr;
@@ -12609,6 +12657,399 @@ body.cart-open #proyectoListadoBtn {
   }
   .cmp-context-tabs { gap: 4px; }
   .cmp-context-tab { font-size: 11px; padding: 6px 9px; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   COMPARADOR - VEREDICTO HERO + PROSA NARRATIVA
+   ════════════════════════════════════════════════════════════ */
+
+/* Veredicto HERO (arriba) — el más visible */
+.cmp-verdict-hero {
+  background: linear-gradient(135deg, rgba(155,89,182,.08), rgba(0,87,184,.04));
+  border: 2px solid rgba(155,89,182,.2);
+  border-radius: 16px;
+  padding: 22px 24px;
+  margin-bottom: 18px;
+  box-shadow: 0 4px 18px rgba(155,89,182,.08);
+}
+.cmp-verdict-conf-high  { border-color: rgba(46,204,113,.4); background: linear-gradient(135deg, rgba(46,204,113,.08), rgba(46,204,113,.02)); }
+.cmp-verdict-conf-medium { border-color: rgba(243,156,18,.35); background: linear-gradient(135deg, rgba(243,156,18,.06), rgba(243,156,18,.01)); }
+.cmp-verdict-conf-low { border-color: rgba(149,165,166,.4); background: linear-gradient(135deg, rgba(149,165,166,.06), rgba(149,165,166,.01)); }
+
+.cmp-vh-top {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.cmp-vh-trophy {
+  font-size: 38px;
+  line-height: 1;
+}
+.cmp-vh-content { min-width: 0; }
+.cmp-vh-tag {
+  font-size: 10px;
+  font-weight: 800;
+  color: #888;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.cmp-vh-tag span {
+  color: #6c3483;
+  background: rgba(155,89,182,.1);
+  padding: 2px 8px;
+  border-radius: 5px;
+  margin-left: 4px;
+}
+.cmp-verdict-conf-high .cmp-vh-tag span { color: #1e6e3e; background: rgba(46,204,113,.1); }
+.cmp-vh-winner {
+  font-size: 22px;
+  font-weight: 900;
+  color: #111;
+  letter-spacing: -.5px;
+  font-family: ui-monospace, monospace;
+  margin-bottom: 4px;
+  word-break: break-all;
+}
+.cmp-vh-conf {
+  font-size: 12px;
+  color: #555;
+}
+.cmp-vh-conf b { color: #111; }
+
+.cmp-vh-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cmp-vh-sa, .cmp-vh-sb {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  color: #888;
+  background: #fff;
+  border: 1.5px solid rgba(0,0,0,.08);
+  text-align: center;
+  line-height: 1;
+}
+.cmp-vh-sa span, .cmp-vh-sb span {
+  font-size: 18px;
+  font-weight: 900;
+  color: #111;
+  margin-top: 3px;
+  font-variant-numeric: tabular-nums;
+}
+.cmp-vh-sa.cmp-vh-win {
+  border-color: #00aaff;
+  background: linear-gradient(135deg, rgba(0,170,255,.1), #fff);
+}
+.cmp-vh-sa.cmp-vh-win span { color: #006fb3; }
+.cmp-vh-sb.cmp-vh-win {
+  border-color: #ff6b35;
+  background: linear-gradient(135deg, rgba(255,107,53,.1), #fff);
+}
+.cmp-vh-sb.cmp-vh-win span { color: #b8430d; }
+.cmp-vh-vs {
+  font-size: 10px;
+  font-weight: 700;
+  color: #888;
+}
+
+.cmp-vh-prose {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.65;
+  border-left: 3px solid;
+}
+.cmp-verdict-conf-high .cmp-vh-prose { border-left-color: #27ae60; }
+.cmp-verdict-conf-medium .cmp-vh-prose { border-left-color: #f39c12; }
+.cmp-verdict-conf-low .cmp-vh-prose { border-left-color: #95a5a6; }
+.cmp-vh-prose b { color: #111; }
+
+.cmp-vh-alt {
+  margin-top: 10px;
+  background: rgba(0,0,0,.02);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #555;
+  line-height: 1.55;
+  font-style: italic;
+}
+.cmp-vh-alt b { color: #111; font-style: normal; }
+
+.cmp-verdict-tie-hero {
+  background: rgba(149,165,166,.06);
+  border: 1.5px dashed rgba(149,165,166,.3);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: center;
+}
+.cmp-vth-icon { font-size: 32px; }
+.cmp-verdict-tie-hero > div:last-child {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
+}
+
+.cmp-prompt-hero {
+  background: linear-gradient(135deg, rgba(243,156,18,.06), rgba(243,156,18,.01));
+  border: 1.5px dashed rgba(243,156,18,.3);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: center;
+}
+.cmp-prompt-hero > div:last-child {
+  font-size: 13px;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Prosa narrativa - secciones */
+.cmp-prose-section {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 12px;
+  border-left: 4px solid;
+}
+.cmp-ps-exec    { border-left-color: #8e44ad; background: linear-gradient(180deg, rgba(155,89,182,.03), #fff); }
+.cmp-ps-tech    { border-left-color: #0057B8; }
+.cmp-ps-install { border-left-color: #f39c12; }
+.cmp-ps-cost    { border-left-color: #27ae60; }
+
+.cmp-prose-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #111;
+  margin-bottom: 12px;
+  letter-spacing: -.2px;
+}
+.cmp-prose-body {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.75;
+}
+.cmp-prose-body b { color: #111; font-weight: 800; }
+
+@media (max-width: 700px) {
+  .cmp-vh-top {
+    grid-template-columns: auto 1fr;
+  }
+  .cmp-vh-score {
+    grid-column: 1 / -1;
+    justify-content: center;
+  }
+  .cmp-prose-section { padding: 14px 16px; }
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   CONCEPTOS RÁPIDOS
+   ════════════════════════════════════════════════════════════ */
+.cqr-header { margin-bottom: 16px; }
+
+.cqr-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.cqr-sidebar {
+  background: #fafbfc;
+  border: 1px solid rgba(0,0,0,.05);
+  border-radius: 12px;
+  padding: 8px;
+  position: sticky;
+  top: 14px;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+.cqr-sidebar-item {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 9px;
+  background: transparent;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: all .15s;
+  margin-bottom: 4px;
+  text-align: left;
+  font-family: var(--font);
+}
+.cqr-sidebar-item:hover {
+  background: rgba(0,87,184,.04);
+}
+.cqr-sidebar-item.active {
+  background: linear-gradient(135deg, rgba(0,87,184,.08), rgba(0,87,184,.02));
+  border-color: rgba(0,87,184,.2);
+}
+.cqr-sb-icon {
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.cqr-sb-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.cqr-sb-text b {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #111;
+  line-height: 1.3;
+}
+.cqr-sb-text span {
+  font-size: 10.5px;
+  color: #666;
+  line-height: 1.3;
+}
+.cqr-sidebar-item.active .cqr-sb-text b { color: #0057B8; }
+
+.cqr-content {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,.06);
+  border-radius: 14px;
+  padding: 22px 26px;
+  min-height: 400px;
+}
+
+.cqr-content-head {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid rgba(0,87,184,.1);
+}
+.cqr-ch-icon {
+  font-size: 36px;
+  line-height: 1;
+}
+.cqr-ch-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #111;
+  letter-spacing: -.3px;
+}
+.cqr-ch-sub {
+  font-size: 12.5px;
+  color: #666;
+  margin-top: 3px;
+}
+
+.cqr-content-body {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.75;
+}
+.cqr-content-body p { margin: 0 0 14px 0; }
+.cqr-content-body p:last-child { margin-bottom: 0; }
+.cqr-content-body b { color: #111; font-weight: 800; }
+.cqr-content-body i { color: #555; }
+.cqr-content-body ul, .cqr-content-body ol {
+  margin: 8px 0 14px 0;
+  padding-left: 24px;
+}
+.cqr-content-body li {
+  margin-bottom: 5px;
+}
+.cqr-content-body li b { color: #0057B8; }
+
+.cqr-tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 8px;
+  margin: 12px 0;
+}
+.cqr-tech-card {
+  background: #fafbfc;
+  border-left: 3px solid #0057B8;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.cqr-tech-card b { display: block; font-size: 13px; margin-bottom: 4px; color: #111; }
+
+.cqr-codec-tbl {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0;
+  font-size: 12px;
+}
+.cqr-codec-tbl th {
+  background: #f5f7fa;
+  padding: 9px 11px;
+  text-align: left;
+  font-weight: 800;
+  color: #555;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  border-bottom: 2px solid rgba(0,0,0,.05);
+}
+.cqr-codec-tbl td {
+  padding: 8px 11px;
+  border-bottom: 1px solid rgba(0,0,0,.04);
+  color: #444;
+  vertical-align: top;
+  line-height: 1.5;
+}
+.cqr-codec-tbl td b { color: #111; }
+
+.cqr-tags {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(0,0,0,.08);
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.cqr-tag {
+  background: rgba(0,87,184,.08);
+  color: #0057B8;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 5px;
+}
+
+@media (max-width: 700px) {
+  .cqr-layout { grid-template-columns: 1fr; }
+  .cqr-sidebar {
+    position: static;
+    max-height: 280px;
+  }
+  .cqr-content { padding: 16px 18px; }
+  .cqr-tech-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 700px) {
@@ -14963,10 +15404,7 @@ if (window.pdfjsLib) {
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       Asistente IA CCTV
     </button>
-    <button data-sec="academia" class="mnav-tab" style="display:none" onclick="showSection('academia',this)">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-      Academia CCTV
-    </button>
+    
     <div style="margin-left:auto;display:flex;align-items:center;gap:10px;padding-right:4px">
       <span style="font-size:11px;color:rgba(255,255,255,.4)">Distribuidor Oficial</span>
       
@@ -15397,7 +15835,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Sábado 25 de Abril del 2026 · 09:44 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Sábado 25 de Abril del 2026 · 10:03 hrs</span>
   </div>
 </div>
 
@@ -16323,403 +16761,7 @@ if (window.pdfjsLib) {
 </div>
 </div><!-- /secAsistente -->
 
-<!-- SECCIÓN: ACADEMIA CCTV -->
-<div class="app-section" id="secAcademia">
-<div class="ac-hero">
-  <div class="wrap ac-hero-inner">
-    <div>
-      <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:4px 12px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px">🎓 Academia CCTV SSTT®</div>
-      <h2 class="ac-title">Todo lo que necesita saber<br>un instalador profesional</h2>
-      <p class="ac-sub">Calculadoras técnicas, guías de instalación, videos de capacitación y herramientas para diseñar sistemas de videovigilancia de nivel profesional.</p>
-    </div>
-    <div class="ac-stats">
-      <div class="ac-stat"><div class="ac-stat-n">6</div><div class="ac-stat-l">Calculadoras</div></div>
-      <div class="ac-stat"><div class="ac-stat-n">10+</div><div class="ac-stat-l">Guías técnicas</div></div>
-      <div class="ac-stat"><div class="ac-stat-n">12</div><div class="ac-stat-l">Videos</div></div>
-    </div>
-  </div>
-</div>
-<div class="ac-tabs-bar">
-  <button class="ac-tab active" onclick="showAcPanel('calc',this)">🔢 Calculadoras</button>
-  <button class="ac-tab" onclick="showAcPanel('guias',this)">📖 Guías técnicas</button>
-  <button class="ac-tab" onclick="showAcPanel('videos',this)">▶️ Videos</button>
-  <button class="ac-tab" onclick="showAcPanel('dori',this)">🎯 Tabla DORI</button>
-</div>
-<div class="wrap">
 
-<!-- CALCULADORAS -->
-<div class="ac-panel active" id="acCalc">
-<div class="calc-grid" style="margin-top:4px">
-
-  <div class="calc-card">
-    <div class="cc-hd" style="background:var(--blue-p)"><span class="cc-ico">🔭</span><div><div class="cc-ttl">Lente Focal</div><div class="cc-sub2">Focal óptima según escena</div></div></div>
-    <div class="cc-body">
-      <div class="frow2"><div class="cfield"><label>Distancia (m)</label><input type="number" id="lDist" value="10" min="0.5" step="0.5"></div><div class="cfield"><label>Ancho objeto (m)</label><input type="number" id="lObj" value="3" min="0.1" step="0.1"></div></div>
-      <div class="cfield"><label>Tamaño sensor</label><select id="lSensor"><option value="6.4">1/2" (6.4mm)</option><option value="5.37" selected>1/2.7" (5.37mm)</option><option value="5.12">1/2.8" (5.12mm)</option><option value="4.8">1/3" (4.8mm)</option></select></div>
-      <div class="cfield"><label>Uso principal</label><select id="lUso"><option value="1">General / vigilancia</option><option value="2">Lectura de patentes</option><option value="1.5">Reconocimiento facial</option><option value="0.5">Gran angular</option></select></div>
-      <button class="calc-btn2" onclick="calcLente()">Calcular focal</button>
-      <div class="calc-res" id="lRes"><div class="cr-main" id="lMain"></div><div class="cr-det" id="lDet"></div></div>
-    </div>
-  </div>
-
-  <div class="calc-card">
-    <div class="cc-hd" style="background:#fef0e6"><span class="cc-ico">💾</span><div><div class="cc-ttl">Disco Duro</div><div class="cc-sub2">Almacenamiento necesario</div></div></div>
-    <div class="cc-body">
-      <div class="frow2"><div class="cfield"><label>N° cámaras</label><input type="number" id="dCams" value="8" min="1"></div><div class="cfield"><label>Días retención</label><input type="number" id="dDias" value="30" min="1" max="365"></div></div>
-      <div class="cfield"><label>Resolución / bitrate</label><select id="dRes"><option value="0.5">1080P H.265+ (~0.5 Mbps)</option><option value="1" selected>4MP H.265+ (~1 Mbps)</option><option value="2">8MP/4K H.265+ (~2 Mbps)</option><option value="4">8MP H.264 (~4 Mbps)</option></select></div>
-      <div class="frow2"><div class="cfield"><label>Horas/día</label><input type="number" id="dHoras" value="24" min="1" max="24"></div><div class="cfield"><label>% grabación</label><input type="number" id="dMovim" value="100" min="10" max="100"></div></div>
-      <button class="calc-btn2" onclick="calcDisco()" style="background:var(--orange)">Calcular almacenamiento</button>
-      <div class="calc-res" id="dRes2"><div class="cr-main" id="dMain"></div><div class="cr-det" id="dDet"></div></div>
-    </div>
-  </div>
-
-  <div class="calc-card">
-    <div class="cc-hd" style="background:var(--green-p)"><span class="cc-ico">🎯</span><div><div class="cc-ttl">DORI (EN 62676-4)</div><div class="cc-sub2">Distancias detección→identificación</div></div></div>
-    <div class="cc-body">
-      <div class="cfield"><label>Resolución horizontal</label><select id="doRes"><option value="1920">1920px — 1080P</option><option value="2560" selected>2560px — 4MP</option><option value="2688">2688px — 4MP Dahua</option><option value="3840">3840px — 8MP/4K</option></select></div>
-      <div class="frow2"><div class="cfield"><label>Focal (mm)</label><select id="doFocal"><option value="2.8">2.8mm</option><option value="3.6" selected>3.6mm</option><option value="4">4mm</option><option value="6">6mm</option><option value="8">8mm</option><option value="12">12mm</option></select></div><div class="cfield"><label>Sensor</label><select id="doSensor"><option value="5.37" selected>1/2.7" (5.37)</option><option value="5.12">1/2.8" (5.12)</option><option value="4.8">1/3" (4.8)</option><option value="6.4">1/2" (6.4)</option></select></div></div>
-      <button class="calc-btn2" onclick="calcDori()" style="background:var(--green)">Calcular DORI</button>
-      <div class="calc-res" id="doRes2"><table class="dori-tbl" id="doriTbl"></table></div>
-    </div>
-  </div>
-
-  <div class="calc-card">
-    <div class="cc-hd" style="background:var(--yellow-p)"><span class="cc-ico">⚡</span><div><div class="cc-ttl">Caída de Tensión</div><div class="cc-sub2">Cámaras con fuente 12VDC/24VAC</div></div></div>
-    <div class="cc-body">
-      <div class="cfield"><label>Sección del cable</label><select id="tCable"><option value="36">2×0.5mm² (36 Ω/km)</option><option value="22.8" selected>2×0.75mm² (22.8 Ω/km)</option><option value="14.4">2×1.0mm² (14.4 Ω/km)</option><option value="9.2">2×1.5mm² (9.2 Ω/km)</option></select></div>
-      <div class="frow2"><div class="cfield"><label>Longitud (m)</label><input type="number" id="tDist" value="50" min="1"></div><div class="cfield"><label>Corriente (mA)</label><input type="number" id="tCorr" value="400" min="50" step="50"></div></div>
-      <div class="cfield"><label>Tensión fuente</label><select id="tVolt"><option value="12" selected>12 VDC</option><option value="24">24 VAC</option></select></div>
-      <button class="calc-btn2" onclick="calcTension()" style="background:var(--yellow)">Calcular caída</button>
-      <div class="calc-res" id="tRes"><div class="cr-main" id="tMain"></div><div class="cr-det" id="tDet"></div><div class="cr-warn2" id="tWarn"></div><div class="cr-ok2" id="tOk"></div></div>
-    </div>
-  </div>
-
-  <div class="calc-card">
-    <div class="cc-hd" style="background:#f0eaff"><span class="cc-ico">📐</span><div><div class="cc-ttl">Ángulo de Visión</div><div class="cc-sub2">Campo visual y cobertura</div></div></div>
-    <div class="cc-body">
-      <div class="cfield"><label>Focal del lente (mm)</label><input type="number" id="aFocal" value="3.6" min="1" step="0.1"></div>
-      <div class="cfield"><label>Tamaño sensor</label><select id="aSensor"><option value="6.4,4.8">1/2" — 6.4×4.8mm</option><option value="5.37,4.04" selected>1/2.7" — 5.37×4.04mm</option><option value="5.12,3.84">1/2.8" — 5.12×3.84mm</option><option value="4.8,3.6">1/3" — 4.8×3.6mm</option></select></div>
-      <div class="cfield"><label>Distancia escena (m)</label><input type="number" id="aDist" value="10" min="1" step="0.5"></div>
-      <button class="calc-btn2" onclick="calcAngulo()" style="background:#6a20c0">Calcular ángulo</button>
-      <div class="calc-res" id="aRes"><div class="cr-main" id="aMain"></div><div class="cr-det" id="aDet"></div></div>
-    </div>
-  </div>
-
-  <div class="calc-card">
-    <div class="cc-hd" style="background:var(--green-p)"><span class="cc-ico">🔌</span><div><div class="cc-ttl">Presupuesto PoE</div><div class="cc-sub2">¿Alcanza el switch para tus cámaras?</div></div></div>
-    <div class="cc-body">
-      <div id="poeCams">
-        <div class="poe-row" style="display:grid;grid-template-columns:1fr 45px 26px;gap:5px;margin-bottom:5px;align-items:center">
-          <select class="poe-tipo" style="padding:5px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:11px;font-family:'IBM Plex Sans',sans-serif;background:var(--bg)"><option value="8">Cámara estándar PoE 802.3af (8W)</option><option value="15">Cámara PoE+ 802.3at (15W)</option><option value="25">PTZ PoE++ (25W)</option><option value="60">Hi-PoE Dahua (60W)</option><option value="5">Económica (5W)</option></select>
-          <input type="number" value="4" min="1" max="64" style="width:100%;padding:5px;border:1px solid var(--border);border-radius:var(--r-sm);font-size:11px;text-align:center">
-          <button onclick="this.closest('.poe-row').remove()" style="background:var(--red-p);border:1px solid var(--red);border-radius:3px;padding:3px 5px;cursor:pointer;color:var(--red);font-size:11px">✕</button>
-        </div>
-      </div>
-      <button onclick="addPoeRow()" style="background:none;border:1px dashed var(--border);border-radius:var(--r-sm);padding:5px;width:100%;font-size:11px;color:var(--muted);cursor:pointer;font-family:'IBM Plex Sans',sans-serif;margin-bottom:7px">+ Agregar tipo</button>
-      <div class="frow2"><div class="cfield"><label>Potencia switch (W)</label><input type="number" id="poeSwitch" value="190" min="30"></div><div class="cfield"><label>Margen %</label><input type="number" id="poeMarg" value="20" min="0" max="50"></div></div>
-      <button class="calc-btn2" onclick="calcPoe()" style="background:var(--green)">Calcular PoE</button>
-      <div class="calc-res" id="poeRes"><div class="cr-main" id="poeMain"></div><div class="cr-det" id="poeDet"></div><div class="cr-warn2" id="poeWarn"></div><div class="cr-ok2" id="poeOk"></div></div>
-    </div>
-  </div>
-
-</div><!-- /calc-grid -->
-</div><!-- /acCalc -->
-
-<!-- GUÍAS -->
-<div class="ac-panel" id="acGuias">
-<div class="guides-layout" style="padding-top:4px">
-  <div class="g-nav">
-    <div class="g-nav-hd">📖 Guías</div>
-    <div class="g-item active" onclick="showGuide('tipos',this)">📷 Tipos de cámaras</div>
-    <div class="g-item" onclick="showGuide('resolucion',this)">📺 Resoluciones</div>
-    <div class="g-item" onclick="showGuide('infrarrojo',this)">🌙 Visión nocturna IR</div>
-    <div class="g-item" onclick="showGuide('wdr',this)">☀️ WDR y backlight</div>
-    <div class="g-item" onclick="showGuide('poe',this)">🔌 PoE completo</div>
-    <div class="g-item" onclick="showGuide('ivs',this)">🧠 Reglas IVS Dahua</div>
-    <div class="g-item" onclick="showGuide('grabadores',this)">📼 NVR y XVR</div>
-    <div class="g-item" onclick="showGuide('storage',this)">💾 Almacenamiento</div>
-    <div class="g-item" onclick="showGuide('cableado',this)">🔧 Cableado</div>
-    <div class="g-item" onclick="showGuide('fuentes',this)">⚡ Fuentes de poder</div>
-    <div class="g-item" onclick="showGuide('configuracion',this)">⚙️ Configuración inicial</div>
-    <div class="g-item" onclick="showGuide('acceso-remoto',this)">📱 Acceso remoto DMSS</div>
-    <div class="g-item" onclick="showGuide('grabacion',this)">📹 Modos de grabación</div>
-    <div class="g-item" onclick="showGuide('acupick',this)">🔍 AcuPick búsqueda IA</div>
-    <div class="g-item" onclick="showGuide('ivs2',this)">🎯 IVS configuración avanzada</div>
-    <div class="g-item" onclick="showGuide('troubleshoot',this)">🔧 Resolución de problemas</div>
-    <div class="g-item" onclick="showGuide('configuracion',this)">⚙️ Configuración inicial</div>
-    <div class="g-item" onclick="showGuide('acceso-remoto',this)">📱 Acceso remoto DMSS</div>
-    <div class="g-item" onclick="showGuide('grabacion',this)">📹 Modos de grabación</div>
-    <div class="g-item" onclick="showGuide('acupick',this)">🔍 AcuPick — Búsqueda IA</div>
-    <div class="g-item" onclick="showGuide('ivs2',this)">🎯 IVS avanzado</div>
-    <div class="g-item" onclick="showGuide('troubleshoot',this)">🛠️ Problemas frecuentes</div>
-  </div>
-  <div class="g-content" id="gContent">
-    <div class="g-panel active" id="g-tipos"><div class="g-ttl">📷 Tipos de cámaras CCTV</div><p class="g-intro">La elección depende de la aplicación, entorno y presupuesto. Aquí explicamos las principales tecnologías disponibles en Chile.</p><div class="g-sec"><h3>Cámaras IP (Red)</h3><p>Transmiten señal digital a través de Ethernet. Son la tecnología más moderna y versátil.</p><ul><li><strong>Resolución:</strong> desde 1MP hasta 32MP</li><li><strong>Alimentación:</strong> PoE — un solo cable para datos y energía</li><li><strong>Distancia:</strong> máximo 100m por segmento UTP sin switch</li><li><strong>IA embebida:</strong> WizSense, WizMind, IVS, LPR</li><li><strong>Ideal para:</strong> instalaciones nuevas, máxima resolución o IA</li></ul><div class="ibox">💡 Para instalaciones nuevas en Chile, usa IP siempre que el presupuesto lo permita. La diferencia de calidad es notable en 4MP o superior.</div></div><div class="g-sec"><h3>Cámaras HDCVI (Dahua)</h3><p>Señal HD sobre cable coaxial RG59 o RG6. Tecnología analógica de alta definición de Dahua.</p><ul><li><strong>Resolución:</strong> 1MP a 8MP (4K)</li><li><strong>Distancia:</strong> hasta 500m con RG59 en 1080P, 300m en 4K</li><li><strong>Multiformato:</strong> compatible con AHD, TVI y analógico estándar</li><li><strong>Ideal para:</strong> renovación de instalaciones coaxiales existentes</li></ul></div><div class="g-sec"><h3>Comparativa rápida</h3><table class="dtbl"><thead><tr><th>Característica</th><th>IP</th><th>HDCVI</th></tr></thead><tbody><tr><td>Resolución máx.</td><td>32MP</td><td>8MP (4K)</td></tr><tr><td>Distancia sin equipo extra</td><td>100m (UTP)</td><td>500m (RG59)</td></tr><tr><td>Un cable para todo</td><td>✅ PoE</td><td>❌ coaxial + alimentación</td></tr><tr><td>IA / IVS avanzado</td><td>✅ WizSense/WizMind</td><td>⚠️ Limitado en XVR</td></tr><tr><td>Renovar coaxial existente</td><td>❌</td><td>✅ Ideal</td></tr></tbody></table></div></div>
-    <div class="g-panel" id="g-resolucion"><div class="g-ttl">📺 Resoluciones en CCTV</div><p class="g-intro">La resolución determina el nivel de detalle que puede capturar una cámara. Más megapíxeles no siempre es mejor — depende del caso de uso y la óptica.</p><div class="g-sec"><h3>Tabla de resoluciones estándar</h3><table class="dtbl"><thead><tr><th>Nombre</th><th>Resolución</th><th>Megapíxeles</th><th>Uso</th></tr></thead><tbody><tr><td>720P / HD</td><td>1280×720</td><td>~1MP</td><td>Áreas pequeñas, interior</td></tr><tr><td>1080P / Full HD</td><td>1920×1080</td><td>2MP</td><td>Uso general, oficinas</td></tr><tr><td>4MP</td><td>2560×1440</td><td>4MP</td><td>Pasillos, fachadas</td></tr><tr><td>8MP / 4K</td><td>3840×2160</td><td>8MP</td><td>Accesos, patentes, áreas críticas</td></tr></tbody></table></div><div class="g-sec"><h3>¿Cuándo usar 4K?</h3><ul><li>Identificar rostros a más de 10 metros</li><li>Lectura de patentes vehiculares</li><li>Grandes espacios donde una cámara cubre mucha área</li><li>Cuando se requiere zoom digital de calidad</li></ul><div class="wbox">⚠️ Más resolución = más almacenamiento. Una cámara 4K usa aprox. 4× más espacio que 1080P con la misma compresión.</div></div></div>
-    <div class="g-panel" id="g-infrarrojo"><div class="g-ttl">🌙 Infrarrojo y visión nocturna</div><p class="g-intro">La iluminación IR es fundamental para la visión nocturna. Entender su funcionamiento permite diseñar sistemas que funcionen bien en todo tipo de condiciones de luz.</p><div class="g-sec"><h3>Tipos de iluminación Dahua</h3><table class="dtbl"><thead><tr><th>Tecnología</th><th>Imagen nocturna</th><th>Color</th><th>Aplicación</th></tr></thead><tbody><tr><td>IR estándar (Smart IR)</td><td>Blanco y negro</td><td>No</td><td>General, económico</td></tr><tr><td>IR + Starlight</td><td>Color en penumbra, B/N en oscuridad</td><td>Parcial</td><td>Zonas con algo de luz ambiental</td></tr><tr><td>Full-Color (LED blanco)</td><td>Color 24/7</td><td>Sí, siempre</td><td>Accesos, cajas, tiendas</td></tr><tr><td>IL-Array (IR + LED cálido)</td><td>Color activado por movimiento</td><td>Sí con activación</td><td>Eficiencia + color</td></tr></tbody></table></div><div class="g-sec"><h3>Efecto WhiteWash — Sobreexposición IR</h3><p>Ocurre cuando la cámara está demasiado cerca de una pared reflectante. Smart IR ajusta automáticamente la intensidad.</p><div class="wbox">⚠️ Instala la cámara a al menos 40cm de paredes blancas o superficies reflectantes para evitar sobreexposición del IR.</div></div></div>
-    <div class="g-panel" id="g-wdr"><div class="g-ttl">☀️ WDR — Wide Dynamic Range</div><p class="g-intro">El WDR (Rango Dinámico Amplio) permite obtener imágenes equilibradas en escenas con grandes diferencias de iluminación.</p><div class="g-sec"><h3>¿Cuándo usar WDR?</h3><ul><li>Entradas donde hay luz brillante afuera y oscuridad adentro</li><li>Ventanas en el fondo de la escena</li><li>Estacionamientos al amanecer/atardecer</li><li>Cajas registradoras con luz directa hacia la cámara</li></ul></div><div class="g-sec"><h3>Niveles WDR Dahua</h3><table class="dtbl"><thead><tr><th>Nivel</th><th>Descripción</th><th>Aplicación</th></tr></thead><tbody><tr><td>WDR 120dB</td><td>Estándar</td><td>Entradas de edificio</td></tr><tr><td>WDR 130dB</td><td>Alto</td><td>Lobbies con ventanales</td></tr><tr><td>WDR 140dB</td><td>Ultra</td><td>Escenas con luz solar directa</td></tr></tbody></table></div></div>
-    <div class="g-panel" id="g-poe"><div class="g-ttl">🔌 PoE — Guía completa para instaladores</div><p class="g-intro">Power over Ethernet permite alimentar cámaras IP a través del mismo cable de red. Es la forma más eficiente de instalar cámaras IP.</p><div class="g-sec"><h3>Estándares PoE</h3><table class="dtbl"><thead><tr><th>Estándar</th><th>Potencia máx.</th><th>Uso típico</th></tr></thead><tbody><tr><td>IEEE 802.3af (PoE)</td><td>15.4W/puerto</td><td>Cámaras IP fijas estándar</td></tr><tr><td>IEEE 802.3at (PoE+)</td><td>30W/puerto</td><td>Cámaras con calefactor o PTZ pequeño</td></tr><tr><td>IEEE 802.3bt (PoE++)</td><td>60W o 90W</td><td>PTZ grandes, cámaras térmicas</td></tr><tr><td>Hi-PoE Dahua</td><td>hasta 60W</td><td>Full-Color con IR potente</td></tr></tbody></table></div><div class="g-sec"><h3>Distancia y extensión</h3><ul><li><strong>Cat5e/Cat6 estándar:</strong> 100m máximo (IEEE 802.3)</li><li><strong>Modo extendido Dahua PFS:</strong> hasta 250m a 10Mbps</li><li><strong>Fibra óptica + conversor:</strong> kilómetros sin límite</li></ul><div class="ibox">💡 Los switches Dahua serie PFS tienen modo extendido (250m) activado por DIP switch. Ideal para cámaras en puntos lejanos.</div></div></div>
-    <div class="g-panel" id="g-ivs"><div class="g-ttl">🧠 Reglas IVS Dahua — Guía completa</div><p class="g-intro">IVS (Intelligent Video System) es el motor de análisis de video de Dahua. Permite alarmas inteligentes mucho más allá del simple movimiento.</p><div class="g-sec"><h3>Reglas disponibles en cámaras WizSense</h3><table class="dtbl"><thead><tr><th>Regla</th><th>Descripción</th><th>Parámetros clave</th></tr></thead><tbody><tr><td>Cruce de línea</td><td>Detecta cruce de línea virtual</td><td>Dirección A→B, B→A o ambas</td></tr><tr><td>Intrusión</td><td>Objeto dentro de zona definida</td><td>Zona, tiempo mínimo, sensibilidad</td></tr><tr><td>Objeto abandonado</td><td>Objeto dejado estático</td><td>Tiempo mínimo, zona</td></tr><tr><td>Merodeador</td><td>Persona en zona tiempo prolongado</td><td>Tiempo umbral, zona</td></tr><tr><td>Conteo personas</td><td>Entrada/salida bidireccional</td><td>Línea virtual, dirección</td></tr><tr><td>LPR</td><td>Lectura de patentes vehiculares</td><td>Requiere cámara ITC o LPR</td></tr></tbody></table></div><div class="g-sec"><h3>SMD+ en WizSense</h3><p>SMD+ clasifica automáticamente alarmas de movimiento en: 🚶 <strong>Persona</strong>, 🚗 <strong>Vehículo</strong>, 🌿 <strong>Otros</strong>.</p><div class="obox">✅ Configura el NVR para grabar/alarmar solo con "Human" o "Vehicle" y elimina el 90% de las falsas alarmas.</div></div></div>
-    <div class="g-panel" id="g-grabadores"><div class="g-ttl">📼 NVR y XVR — Grabadores Dahua</div><p class="g-intro">Los grabadores son el corazón del sistema. Almacenan las imágenes y permiten revisar el historial.</p><div class="g-sec"><h3>NVR — Para cámaras IP</h3><ul><li>Soporta cámaras de red por protocolo ONVIF o Dahua privado</li><li>Easy4IP: autodetección en red local sin configuración IP manual</li><li>Canales: 4, 8, 16, 32, 64, 128</li><li>Algunos traen switch PoE integrado</li></ul></div><div class="g-sec"><h3>XVR — Para cámaras HDCVI</h3><ul><li>Soporta HDCVI, AHD, TVI, analógico y cámaras IP simultáneamente</li><li>Resolución máxima de grabación: hasta 4K en canales seleccionados</li><li>Entradas BNC por canal analógico</li></ul></div></div>
-    <div class="g-panel" id="g-storage"><div class="g-ttl">💾 Almacenamiento y discos duros</div><p class="g-intro">El dimensionamiento del disco es crítico. Un disco mal calculado significa pérdida de evidencia.</p><div class="g-sec"><h3>Fórmula de cálculo</h3><p>GB/día = (bitrate_Mbps × 3600 × horas) / 8 / 1024 × número_cámaras</p><div class="ibox">💡 Usa la calculadora de disco duro en la pestaña Calculadoras para obtener resultados precisos según tu configuración.</div></div><div class="g-sec"><h3>Discos recomendados para CCTV</h3><ul><li>WD Purple / Seagate Skyhawk: diseñados para grabación continua 24/7</li><li>No usar discos de PC convencionales — se degradan rápido con grabación continua</li><li>Agregar 10% de margen sobre el cálculo teórico</li></ul></div></div>
-    <div class="g-panel" id="g-cableado"><div class="g-ttl">🔧 Cableado para CCTV</div><p class="g-intro">La calidad del cableado determina la vida útil y el rendimiento del sistema.</p><div class="g-sec"><h3>Cámaras IP — Cable UTP</h3><ul><li>Cat5e: suficiente para la mayoría de cámaras IP hasta 100m</li><li>Cat6: recomendado para cámaras 4K o Hi-PoE (60W)</li><li>No usar Cat3 ni cable telefónico — causará problemas de PoE</li><li>Máximo 100m por segmento (estándar IEEE)</li></ul></div><div class="g-sec"><h3>Cámaras HDCVI — Cable Coaxial</h3><ul><li>RG59: estándar, hasta 500m en 1080P y 300m en 4K</li><li>RG6: mayor sección, mejor para distancias largas en 4K</li><li>Cable síamés: coaxial + bifilar de alimentación en una vaina</li></ul></div></div>
-    <div class="g-panel" id="g-fuentes"><div class="g-ttl">⚡ Fuentes de poder para CCTV</div><p class="g-intro">La alimentación es uno de los puntos más críticos. Una fuente mal dimensionada provoca reinicios y daño a los equipos.</p><div class="g-sec"><h3>Consumo típico cámaras Dahua</h3><table class="dtbl"><thead><tr><th>Tipo de cámara</th><th>Consumo promedio</th><th>Pico</th></tr></thead><tbody><tr><td>HDCVI domo 2MP</td><td>3.5W (300mA @ 12V)</td><td>5W</td></tr><tr><td>HDCVI bala 4K</td><td>5W (420mA @ 12V)</td><td>7W</td></tr><tr><td>IP 4MP PoE estándar</td><td>6W</td><td>10W</td></tr><tr><td>IP PTZ 2MP</td><td>20W</td><td>40W</td></tr></tbody></table></div><div class="g-sec"><h3>Regla de dimensionamiento</h3><p>Suma el consumo de todas las cámaras y multiplica por <strong>1.3 (30% de margen)</strong>.</p><div class="obox">✅ Ejemplo: 8 cámaras × 5W = 40W. Con margen: 40 × 1.3 = <strong>52W mínimo</strong> → Usar fuente 60W o 10A/12V.</div></div></div>
-
-    <div class="g-panel" id="g-configuracion"><div class="g-ttl">⚙️ Configuración inicial de equipos Dahua</div><p class="g-intro">Guía paso a paso para poner en marcha grabadores y cámaras Dahua por primera vez, basada en la DahuaWiki oficial.</p>
-    <div class="g-sec"><h3>NVR / XVR — Primera configuración</h3><ol>
-    <li><strong>Inicialización:</strong> Al encender por primera vez aparece el asistente. Define contraseña de admin (mín. 8 caracteres, combina letras y números).</li>
-    <li><strong>Fecha y hora:</strong> Configura zona horaria America/Santiago (UTC-4 o UTC-3 en verano).</li>
-    <li><strong>Agregar cámaras IP:</strong> Usa Smart Add → el NVR detecta automáticamente las cámaras Dahua en la misma red PoE.</li>
-    <li><strong>Configurar grabación:</strong> Menú Almacenamiento → Programación. Elige entre: Continua, Movimiento o Mixta.</li>
-    <li><strong>Formatear disco:</strong> Menú Almacenamiento → Administrador HDD → selecciona disco → Formatear. <em>Siempre formatea el disco en el grabador antes de usarlo.</em></li>
-    </ol><div class="ibox">💡 Si olvidaste la contraseña, usa el botón físico de reset o contacta a SSTT para recuperación de acceso.</div></div>
-    <div class="g-sec"><h3>Cámara IP — Configuración standalone</h3><ol>
-    <li>Localiza la cámara con ConfigTool de Dahua en la misma red.</li>
-    <li>Define IP estática: Configuración → Red → TCP/IP → Tipo: Estático.</li>
-    <li>Activa la contraseña inicial (la cámara viene sin password de fábrica).</li>
-    <li>Configura resolución: Configuración → Cámara → Codificación → elige calidad y FPS.</li>
-    <li>Configura grabación en SD: Almacenamiento → Programación → habilita canal.</li>
-    </ol></div>
-    <div class="g-sec"><h3>Acceso remoto P2P (sin IP pública)</h3><ol>
-    <li>En el NVR: Configuración → Red → P2P → Habilitar.</li>
-    <li>Anota el número de serie (S/N) del dispositivo.</li>
-    <li>Instala la app DMSS en tu smartphone.</li>
-    <li>Agrega dispositivo por SN → ingresa usuario y contraseña del NVR.</li>
-    <li>El P2P usa los servidores de Dahua como intermediario — funciona sin abrir puertos.</li>
-    </ol><div class="wbox">⚠️ El P2P requiere conexión a internet en el grabador. Verifica que el router permita tráfico saliente en puertos 80, 443 y UDP.</div></div></div>
-
-    <div class="g-panel" id="g-acupick"><div class="g-ttl">🔍 AcuPick — Búsqueda inteligente por descripción</div><p class="g-intro">AcuPick es la tecnología de búsqueda facial y de características de Dahua. Permite encontrar personas u objetos específicos en horas de grabación en segundos.</p>
-    <div class="g-sec"><h3>¿Cómo funciona?</h3><p>AcuPick analiza las grabaciones y extrae atributos de personas y vehículos:</p>
-    <ul><li>👤 Personas: género, color de ropa, sombrero, mochila, paraguas</li><li>🚗 Vehículos: color, tipo, patente (con cámara LPR)</li><li>🔍 Búsqueda por imagen: sube una foto y encuentra coincidencias</li></ul></div>
-    <div class="g-sec"><h3>Requisitos para AcuPick</h3><ul>
-    <li>NVR compatible: serie NVR4/5/6/7/8 con firmware 2023 o superior</li>
-    <li>Cámaras WizSense o WizMind (SMD+ activado)</li>
-    <li>La cámara debe tener activada la detección humana en IVS</li>
-    </ul><div class="obox">✅ En el NVR: Smart Search → AcuPick → selecciona canales → define período → filtra por atributos.</div></div>
-    <div class="g-sec"><h3>Búsqueda en UI local vs DMSS</h3><table class="dtbl"><thead><tr><th>Interfaz</th><th>Capacidades</th></tr></thead><tbody>
-    <tr><td>UI Local NVR</td><td>Búsqueda completa, exportar clips, sin límite de resultados</td></tr>
-    <tr><td>App DMSS</td><td>Búsqueda básica, visualización remota de resultados</td></tr>
-    <tr><td>SmartPSS Lite</td><td>Gestión multicámara, reportes, exportación masiva</td></tr>
-    </tbody></table></div></div>
-
-    <div class="g-panel" id="g-acceso-remoto"><div class="g-ttl">📱 Acceso remoto — DMSS y SmartPSS</div><p class="g-intro">Dahua ofrece múltiples formas de acceso remoto. Elige la que mejor se adapte a tu caso de uso.</p>
-    <div class="g-sec"><h3>App DMSS (móvil)</h3><ul>
-    <li><strong>Disponible:</strong> Android e iOS — busca "DMSS" en la tienda</li>
-    <li><strong>Agregar por P2P:</strong> usa el número de serie del NVR, no necesita IP pública</li>
-    <li><strong>Agregar por IP/dominio:</strong> requiere IP pública fija o DDNS configurado</li>
-    <li><strong>Funciones:</strong> live view, playback, push notifications, AcuPick básico, PTZ control</li>
-    </ul><div class="ibox">💡 Activa las notificaciones push para recibir alertas de movimiento o IVS directamente en tu teléfono.</div></div>
-    <div class="g-sec"><h3>SmartPSS Lite (PC)</h3><ul>
-    <li>Gestión de hasta 256 dispositivos simultáneos</li>
-    <li>Video Wall configurable, mapas de planta (E-Map)</li>
-    <li>Reportes de conteo de personas, heat map</li>
-    <li>Acceso por P2P (número de serie) o IP directa</li>
-    </ul></div>
-    <div class="g-sec"><h3>Acceso por reenvío de puertos</h3><table class="dtbl"><thead><tr><th>Puerto</th><th>Protocolo</th><th>Uso</th></tr></thead><tbody>
-    <tr><td>37777</td><td>TCP</td><td>Protocolo propietario Dahua (SmartPSS/DMSS)</td></tr>
-    <tr><td>80 / 443</td><td>HTTP/HTTPS</td><td>Interfaz web del grabador</td></tr>
-    <tr><td>554</td><td>RTSP</td><td>Stream de video RTSP (VLC, integraciones)</td></tr>
-    </tbody></table><div class="wbox">⚠️ Nunca expongas el puerto 80 del NVR directamente a internet sin HTTPS. Usa VPN o P2P siempre que sea posible.</div></div></div>
-
-    <div class="g-panel" id="g-ivs2"><div class="g-ttl">🎯 IVS — Configuración avanzada de reglas</div><p class="g-intro">Guía práctica para configurar las reglas IVS en cámaras y grabadores Dahua. Basado en la documentación oficial de DahuaWiki.</p>
-    <div class="g-sec"><h3>Cruce de línea (Tripwire)</h3><ol>
-    <li>IVS → Nueva regla → Tipo: Cruce de línea</li>
-    <li>Dibuja la línea virtual en la imagen</li>
-    <li>Define dirección: A→B (solo una dirección) o ambas</li>
-    <li>Activa Filtro de objetivo: Humano y/o Vehículo para reducir falsas alarmas</li>
-    <li>Configura acción: grabar, enviar email, activar alarma salida</li>
-    </ol></div>
-    <div class="g-sec"><h3>Intrusión (Intrusion)</h3><ol>
-    <li>IVS → Nueva regla → Tipo: Intrusión</li>
-    <li>Dibuja el polígono de la zona protegida</li>
-    <li>Define tiempo mínimo dentro de zona (p.ej. 2 segundos para evitar falsas alarmas)</li>
-    <li>Filtro: solo Humano para mayor precisión</li>
-    </ol><div class="ibox">💡 Para perímetros de bodegas o patios: usa Intrusión con tiempo mínimo 3-5s y filtro Humano solamente.</div></div>
-    <div class="g-sec"><h3>Conteo de personas</h3><ul>
-    <li>Dibuja la línea de conteo en el punto de acceso</li>
-    <li>Define qué dirección es "entrada" y cuál "salida"</li>
-    <li>Los reportes se exportan desde SmartPSS o la interfaz web</li>
-    <li>Útil para aforo en locales comerciales</li>
-    </ul></div></div>
-
-    <div class="g-panel" id="g-grabacion"><div class="g-ttl">📹 Modos de grabación y programación</div><p class="g-intro">Configura correctamente la grabación para optimizar el espacio en disco y asegurar la evidencia cuando la necesitas.</p>
-    <div class="g-sec"><h3>Modos disponibles</h3><table class="dtbl"><thead><tr><th>Modo</th><th>Descripción</th><th>Uso recomendado</th></tr></thead><tbody>
-    <tr><td>Continua</td><td>Graba las 24 horas sin interrupción</td><td>Zonas críticas, accesos, cajas</td></tr>
-    <tr><td>Movimiento</td><td>Solo graba cuando detecta movimiento</td><td>Bodegas, patios con bajo tráfico</td></tr>
-    <tr><td>Alarma</td><td>Graba al activarse una entrada de alarma física</td><td>Salas de servidores, zonas sensibles</td></tr>
-    <tr><td>IVS</td><td>Graba al dispararse una regla IVS (cruce de línea, etc.)</td><td>Perímetros inteligentes</td></tr>
-    <tr><td>SMD+</td><td>Graba solo con Humano o Vehículo detectado</td><td>Reemplaza movimiento en WizSense</td></tr>
-    </tbody></table></div>
-    <div class="g-sec"><h3>Resolución de grabación Dahua</h3><ul>
-    <li>El NVR graba en la resolución máxima de la cámara (hasta el límite del canal)</li>
-    <li>Puedes configurar un stream secundario de baja resolución para acceso remoto</li>
-    <li>H.265+ reduce hasta 70% el espacio versus H.264 con la misma calidad visual</li>
-    </ul><div class="obox">✅ Usa H.265+ siempre que sea posible. Reduce dramáticamente el tamaño de los archivos y permite guardar más días de grabación.</div></div>
-    <div class="g-sec"><h3>Solapamiento de grabación (Overlap)</h3><p>Cuando el disco se llena, el NVR sobrescribe automáticamente las grabaciones más antiguas (modo circular). Configura el porcentaje de disco reservado en Almacenamiento → Configuración avanzada.</p></div></div>
-
-    <div class="g-panel" id="g-troubleshoot"><div class="g-ttl">🔧 Resolución de problemas frecuentes</div><p class="g-intro">Los problemas más comunes en sistemas Dahua y cómo resolverlos. Basado en la guía oficial de DahuaWiki.</p>
-    <div class="g-sec"><h3>Cámara no aparece en el NVR</h3><ul>
-    <li>✅ Verifica que la cámara esté en la misma subred que el NVR (ej: 192.168.1.x)</li>
-    <li>✅ Comprueba el cable UTP con un tester — un cable malo es la causa #1</li>
-    <li>✅ El puerto PoE debe estar encendido: NVR → Red → Configuración PoE</li>
-    <li>✅ Usa ConfigTool para localizar la cámara independientemente del NVR</li>
-    <li>✅ Resetea la cámara al estado de fábrica si tiene contraseña desconocida</li>
-    </ul></div>
-    <div class="g-sec"><h3>Sin imagen o imagen en negro</h3><ul>
-    <li>Verifica resolución: la cámara no puede grabar a mayor resolución que el canal del NVR</li>
-    <li>Desactiva H.265 y prueba con H.264 para compatibilidad con grabadores antiguos</li>
-    <li>Revisa el ancho de banda: NVR → Sistema → Recursos de red</li>
-    <li>Para HDCVI: verifica que el XVR esté en modo CVI (no AHD o TVI)</li>
-    </ul></div>
-    <div class="g-sec"><h3>Acceso remoto no funciona (P2P)</h3><ul>
-    <li>NVR debe tener acceso a internet → prueba hacer ping a 8.8.8.8 desde el NVR</li>
-    <li>P2P habilitado: Configuración → Red → P2P → debe mostrar "En línea"</li>
-    <li>Verifica que el router no bloquee tráfico UDP saliente</li>
-    <li>Si el estado es "Sin conexión", espera 2 minutos o reinicia el NVR</li>
-    </ul></div>
-    <div class="g-sec"><h3>Disco no reconocido</h3><ul>
-    <li>Formatea el disco desde el NVR antes de usarlo (aunque sea nuevo)</li>
-    <li>Verifica compatibilidad en la lista oficial: NVR → Almacenamiento → Compatible HDDs</li>
-    <li>Un disco de PC no formateado para CCTV puede funcionar inicialmente pero degradarse rápido</li>
-    </ul></div>
-    <div class="g-sec"><h3>Reset de contraseña</h3><p>Si perdiste la contraseña del NVR o cámara:</p><ul>
-    <li><strong>Opción 1:</strong> Botón físico RESET en el equipo (mantener 5 segundos)</li>
-    <li><strong>Opción 2:</strong> Recuperación por email de seguridad configurado en DMSS</li>
-    <li><strong>Opción 3:</strong> Contacta a SSTT con el número de serie para generación de código de desbloqueo</li>
-    </ul></div></div>
-
-  </div><!-- /g-content -->
-</div><!-- /guides-layout -->
-</div><!-- /acGuias -->
-
-<!-- VIDEOS -->
-<div class="ac-panel" id="acVideos">
-<div style="display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap">
-  <button class="ac-tab active" style="border:1px solid var(--border);border-radius:var(--r-sm);padding:5px 12px" onclick="filterVid('all',this)">Todos</button>
-  <button class="ac-tab" style="border:1px solid var(--border);border-radius:var(--r-sm);padding:5px 12px" onclick="filterVid('inst',this)">Instalación</button>
-  <button class="ac-tab" style="border:1px solid var(--border);border-radius:var(--r-sm);padding:5px 12px" onclick="filterVid('config',this)">Configuración</button>
-  <button class="ac-tab" style="border:1px solid var(--border);border-radius:var(--r-sm);padding:5px 12px" onclick="filterVid('tech',this)">Técnico</button>
-  <button class="ac-tab" style="border:1px solid var(--border);border-radius:var(--r-sm);padding:5px 12px" onclick="filterVid('ivs',this)">IVS / IA</button>
-</div>
-<div class="vid-grid" id="vidGrid"></div>
-</div><!-- /acVideos -->
-
-<!-- DORI TABLE -->
-<div class="ac-panel" id="acDori">
-<div style="background:var(--white);border:1px solid var(--border);border-radius:var(--r);padding:20px">
-  <h3 style="font-size:18px;font-weight:700;color:var(--blue-d);margin-bottom:6px">🎯 Tabla DORI — Referencia rápida</h3>
-  <p style="font-size:13px;color:var(--muted);margin-bottom:16px;line-height:1.7">Basada en estándar europeo EN 62676-4 / IEC 62676-4. Densidades mínimas de píxeles por nivel de calidad.</p>
-  <table class="dtbl" style="margin-bottom:20px">
-    <thead><tr><th>Nivel</th><th>Función</th><th>Densidad mínima</th><th>Ejemplo práctico</th></tr></thead>
-    <tbody>
-      <tr><td><span class="dori-d">D — Detección</span></td><td>¿Hay alguien o algo?</td><td><strong>25 px/m</strong></td><td>Detectar presencia en perímetro</td></tr>
-      <tr><td><span class="dori-o">O — Observación</span></td><td>¿Qué ropa lleva? ¿Qué hace?</td><td><strong>62 px/m</strong></td><td>Ver comportamiento general</td></tr>
-      <tr><td><span class="dori-r">R — Reconocimiento</span></td><td>¿Es la misma persona de antes?</td><td><strong>125 px/m</strong></td><td>Reconocer persona conocida</td></tr>
-      <tr><td><span class="dori-i">I — Identificación</span></td><td>¿Quién es? Uso forense</td><td><strong>250 px/m</strong></td><td>Identificación en tribunal</td></tr>
-    </tbody>
-  </table>
-  <h4 style="font-size:13px;font-weight:700;margin-bottom:10px;padding-left:8px;border-left:3px solid var(--blue)">Distancias calculadas por modelo de cámara</h4>
-  <div id="doriExTable"></div>
-  <div class="ibox" style="margin-top:14px">💡 <strong>Para patentes vehiculares:</strong> Se recomienda nivel Identificación (250px/m) o superior con lente 6-8mm apuntando directamente a la zona de paso.</div>
-</div>
-</div><!-- /acDori -->
-
-</div><!-- /wrap -->
-
-<!-- ══════════════════════════════════════════════════════════
-     SECCIÓN PROPUESTA DE VALOR — Para el Integrador
-     ══════════════════════════════════════════════════════════ -->
-<div id="secPropuestaValor" style="background:#ffffff;padding:64px 0 48px;border-top:1px solid #f0f0f0">
-  <div class="wrap" style="max-width:1100px">
-
-    <!-- Header sección -->
-    <div style="text-align:center;margin-bottom:48px">
-      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(232,0,28,.07);border:1px solid rgba(232,0,28,.18);color:#c2001a;font-size:11px;font-weight:800;padding:5px 14px;border-radius:3px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px">
-        Para el Integrador Profesional
-      </div>
-      <h2 style="font-family:var(--font-d);font-size:36px;font-weight:800;color:#0a0a0f;letter-spacing:-.3px;margin:0 0 12px">
-        Por qué <em style="color:var(--red);font-style:normal">SSTT + Dahua</em> es el combo ganador
-      </h2>
-      <p style="font-size:15px;color:#666;max-width:520px;margin:0 auto;line-height:1.6">
-        Más que productos — una alianza estratégica para que tu negocio crezca.
-      </p>
-    </div>
-
-    <!-- 3 columnas -->
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px;margin-bottom:64px">
-
-      <!-- A: Rentabilidad -->
-      <div style="background:#fff;border:1px solid #efefef;border-radius:20px;padding:32px 28px;position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s" onmouseover="this.style.boxShadow='0 8px 32px rgba(0,0,0,.09)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='none';this.style.transform='none'">
-        <div style="width:48px;height:48px;background:rgba(232,0,28,.08);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:22px">💹</div>
-        <h3 style="font-size:18px;font-weight:800;color:#0a0a0f;margin:0 0 12px;letter-spacing:-.2px">Rentabilidad Inteligente</h3>
-        <p style="font-size:14px;color:#666;line-height:1.7;margin:0">
-          Deja de competir solo por precio. Con la tecnología <strong style="color:#0a0a0f">WizSense</strong> y <strong style="color:#0a0a0f">WizMind</strong>, ofreces soluciones de análisis de video avanzado que tus clientes valoran. Menos falsas alarmas significan menos visitas de servicio y más margen de utilidad para ti.
-        </p>
-        <div style="margin-top:20px;display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--red)">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-          Mayor margen · Menos callbacks
-        </div>
-      </div>
-
-      <!-- B: Soporte -->
-      <div style="background:#fff;border:1px solid #efefef;border-radius:20px;padding:32px 28px;position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s" onmouseover="this.style.boxShadow='0 8px 32px rgba(0,0,0,.09)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='none';this.style.transform='none'">
-        <div style="width:48px;height:48px;background:rgba(0,87,184,.08);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:22px">🛡️</div>
-        <h3 style="font-size:18px;font-weight:800;color:#0a0a0f;margin:0 0 12px;letter-spacing:-.2px">Soporte que Respalda tu Firma</h3>
-        <p style="font-size:14px;color:#666;line-height:1.7;margin:0">
-          Tu reputación es lo más importante. En SSTT te entregamos <strong style="color:#0a0a0f">soporte técnico especializado</strong> y garantía oficial. Si tienes un desafío técnico en terreno, nuestro equipo está contigo para asegurar que la entrega sea impecable.
-        </p>
-        <div style="margin-top:20px;display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:#0057B8">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          Garantía oficial · Preventa técnica
-        </div>
-      </div>
-
-      <!-- C: Logística -->
-      <div style="background:#fff;border:1px solid #efefef;border-radius:20px;padding:32px 28px;position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s" onmouseover="this.style.boxShadow='0 8px 32px rgba(0,0,0,.09)';this.style.transform='translateY(-3px)'" onmouseout="this.style.boxShadow='none';this.style.transform='none'">
-        <div style="width:48px;height:48px;background:rgba(30,143,78,.08);border-radius:14px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;font-size:22px">⚡</div>
-        <h3 style="font-size:18px;font-weight:800;color:#0a0a0f;margin:0 0 12px;letter-spacing:-.2px">Logística y Rapidez</h3>
-        <p style="font-size:14px;color:#666;line-height:1.7;margin:0">
-          Sabemos que las instalaciones no esperan. Contamos con <strong style="color:#0a0a0f">despacho inmediato a todo Chile</strong> y una plataforma B2B diseñada para que gestiones tus compras, facturas y guías en segundos. Tu bodega virtual, disponible 24/7.
-        </p>
-        <div style="margin-top:20px;display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:#1e8f4e">
-          <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-          Despacho 24h · Chilexpress · Starken · Bluexpress
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Banner de cierre -->
-    <div style="background:linear-gradient(135deg,#0C1A2E 0%,#001E3C 50%,#003870 100%);border-radius:24px;padding:48px 40px;display:flex;align-items:center;justify-content:space-between;gap:32px;flex-wrap:wrap;position:relative;overflow:hidden">
-      <!-- Decoración -->
-      <div style="position:absolute;right:-60px;top:-60px;width:300px;height:300px;border:1px solid rgba(255,255,255,.06);border-radius:50%;pointer-events:none"></div>
-      <div style="position:absolute;right:40px;bottom:-80px;width:200px;height:200px;border:1px solid rgba(255,255,255,.04);border-radius:50%;pointer-events:none"></div>
-      <div style="flex:1;min-width:260px">
-        <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(0,180,230,.15);border:1px solid rgba(0,180,230,.25);color:#00B4E6;font-size:10.5px;font-weight:800;padding:4px 12px;border-radius:3px;text-transform:uppercase;letter-spacing:.8px;margin-bottom:16px">
-          Proyectos Corporativos
-        </div>
-        <h3 style="font-family:var(--font-d);font-size:28px;font-weight:800;color:#fff;margin:0 0 12px;letter-spacing:-.3px;line-height:1.2">
-          ¿Tienes un proyecto<br>de gran escala?
-        </h3>
-        <p style="font-size:14px;color:rgba(255,255,255,.65);line-height:1.65;margin:0;max-width:460px">
-          Protege tu oportunidad. Declara tu proyecto corporativo con nosotros y accede a precios de volumen, soporte de ingeniería en preventa y exclusividad técnica.
-        </p>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:12px;flex-shrink:0">
-        <button onclick="abrirProyectoModal(null)" style="display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:50px;background:linear-gradient(135deg,#E8001C,#c2001a);color:#fff;border:none;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--font);box-shadow:0 6px 24px rgba(232,0,28,.4),inset 0 1px 0 rgba(255,255,255,.2);transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 32px rgba(232,0,28,.5)'" onmouseout="this.style.transform='';this.style.boxShadow='0 6px 24px rgba(232,0,28,.4),inset 0 1px 0 rgba(255,255,255,.2)'">
-          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Registrar Proyecto Ahora
-        </button>
-        <div style="text-align:center;font-size:11px;color:rgba(255,255,255,.35)">
-          Respuesta en máx. 24 horas hábiles · Sin costo
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-</div><!-- /secAcademia<!-- ══ SECCIÓN: SIMULADOR FOV v2 ══════════════════════════════ -->
 <div class="app-section" id="secFov">
 <div class="fov-wrap">
   <div class="fov-hero">
@@ -17385,8 +17427,15 @@ if (window.pdfjsLib) {
             <div class="tools-menu-desc">Cumplimiento por sector (8 sectores chilenos)</div>
           </div>
         </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('glossary',this)">
+        <button class="tools-menu-btn" onclick="toolsOpen('concepts',this)">
           <div class="tools-menu-ico">📖</div>
+          <div class="tools-menu-info">
+            <div class="tools-menu-name">Conceptos rápidos</div>
+            <div class="tools-menu-desc">WDR, IR, codecs, IA, disuasión y más</div>
+          </div>
+        </button>
+        <button class="tools-menu-btn" onclick="toolsOpen('glossary',this)">
+          <div class="tools-menu-ico">🔤</div>
           <div class="tools-menu-info">
             <div class="tools-menu-name">Glosario CCTV</div>
             <div class="tools-menu-desc">64 términos técnicos en 9 categorías</div>
@@ -20652,18 +20701,7 @@ function showSection(id, btn, _fromPop) {
       if (b.dataset.sec === id) b.classList.add('active');
     });
   }
-  if (id === 'academia') {
-    renderVideos(); renderDoriEx();
-    // Forzar primer panel visible
-    setTimeout(() => {
-      document.querySelectorAll('.ac-panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.ac-tab').forEach(t => t.classList.remove('active'));
-      const fp = document.getElementById('acCalc');
-      const ft = document.querySelector('.ac-tab');
-      if (fp) fp.classList.add('active');
-      if (ft) ft.classList.add('active');
-    }, 0);
-  }
+  /* academia removida */
   window.scrollTo(0, 0);
   // Push to browser history (skip when called FROM popstate to avoid loop)
   if (!_fromPop) {
@@ -20871,15 +20909,7 @@ function autoResizeTA(el) { el.style.height='38px'; el.style.height=Math.min(el.
 // ════════════════════════════════════════════════════════
 // ACADEMIA
 // ════════════════════════════════════════════════════════
-function showAcPanel(id, btn) {
-  document.querySelectorAll('.ac-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.ac-tab').forEach(b=>b.classList.remove('active'));
-  const p = document.getElementById('ac'+id.charAt(0).toUpperCase()+id.slice(1));
-  if (p) p.classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (id==='dori') renderDoriEx();
-  if (id==='videos') loadVideosFromYouTube();
-}
+
 
 function showGuide(id, el) {
   document.querySelectorAll('.g-panel').forEach(p=>p.classList.remove('active'));
@@ -23336,7 +23366,7 @@ window.addEventListener('popstate', function(e) {
   const parts  = hash.split('/');
   const sec    = parts[0];
   const cat    = parts[1] || 'todas';
-  const validSecs = ['catalogo','asistente','academia'];
+  const validSecs = ['catalogo','asistente'];
   if (validSecs.includes(sec)) {
     showSection(sec, null, true);
     if (sec === 'catalogo' && cat !== 'todas') {
@@ -24778,12 +24808,6 @@ window.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(prodModal);
   }
 
-  // 2. Move secAcademia to correct position (after secAsistente) if misplaced
-  const secAcademia = document.getElementById('secAcademia');
-  const secAsistente = document.getElementById('secAsistente');
-  if (secAcademia && secAsistente && secAsistente.contains(secAcademia)) {
-    secAsistente.parentNode.insertBefore(secAcademia, secAsistente.nextSibling);
-  }
 
   // 3. Move any other misplaced modals/sections
   ['sceneModal','cmpModal','vmod'].forEach(id => {
@@ -26876,7 +26900,7 @@ function setNav(btn, cat) {
     'todas':      () => { showSection && showSection('catalogo'); },
     'camaras-ip': () => { showSection && showSection('catalogo'); setCat && setCat('camaras-ip'); },
     'asistente':  () => { showSection && showSection('asistente'); },
-    'academia':   () => { showSection && showSection('academia'); },
+
   };
   if (secMap[cat]) secMap[cat]();
   else if (typeof setCat === 'function') setCat(cat);
@@ -30012,7 +30036,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 09:44 hrs';
+  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 10:03 hrs';
 })();
 
 
@@ -42402,6 +42426,279 @@ if (document.readyState === 'loading') {
 
   // ── ROUTER ──
   // ════════════════════════════════════════════════════════════
+  // HERRAMIENTA: CONCEPTOS RÁPIDOS
+  // Guías textuales temáticas (WDR, IR, WizSense, SMD+, codecs, etc.)
+  // ════════════════════════════════════════════════════════════
+  var CONCEPTS_DATA = [
+    {
+      id: 'wdr',
+      icon: '☀️',
+      titulo: 'WDR — Wide Dynamic Range',
+      sub: 'Cuándo usarlo y qué nivel elegir',
+      tags: ['imagen', 'iluminación'],
+      content: function() {
+        return '<p>El <b>WDR (Wide Dynamic Range, Rango Dinámico Amplio)</b> es una tecnología que permite a la cámara capturar bien <b>zonas muy oscuras y muy iluminadas en la misma imagen</b>. Sin WDR, una zona queda quemada (toda blanca) o aplastada (toda negra).</p>' +
+          '<p><b>¿Cuándo lo necesitas?</b></p>' +
+          '<ul>' +
+          '<li><b>Entradas con luz natural</b>: cuando la cámara mira hacia la puerta y entra el sol detrás del visitante (efecto contraluz).</li>' +
+          '<li><b>Estacionamientos al aire libre</b>: zonas con sombras profundas y zonas asoleadas en el mismo encuadre.</li>' +
+          '<li><b>Vidrieras comerciales</b>: el reflejo del sol en la vidriera satura la imagen.</li>' +
+          '<li><b>Túneles, pasillos largos</b>: con luz al final.</li>' +
+          '</ul>' +
+          '<p><b>Niveles WDR Dahua</b>:</p>' +
+          '<ul>' +
+          '<li><b>DWDR (digital)</b>: simulado por software. Útil si no hay contraste extremo. Casi cualquier cámara IP/HDCVI lo tiene.</li>' +
+          '<li><b>WDR 120dB</b>: real (dual exposure). Bueno para mayoría de casos con contraluz.</li>' +
+          '<li><b>WDR 130-140dB</b>: superior. Para zonas con luz solar directa entrando.</li>' +
+          '<li><b>WDR 150dB</b>: lo máximo. Para condiciones extremas (bocas de túnel, muelles soleados).</li>' +
+          '</ul>' +
+          '<p>💡 <b>Consejo</b>: WDR consume procesamiento. Si la cámara debe correr análisis IA simultáneo, modelos con procesador débil pueden bajar fps. Con la línea WizMind y WizSense de gama media+, WDR 120dB es el equilibrio dulce.</p>';
+      }
+    },
+    {
+      id: 'whitewash',
+      icon: '🌫️',
+      titulo: 'Efecto WhiteWash — Sobreexposición IR',
+      sub: 'Por qué tu cámara aparece "blanca" de noche',
+      tags: ['imagen', 'iluminación', 'IR'],
+      content: function() {
+        return '<p>El <b>efecto WhiteWash</b> es cuando, de noche, los objetos cercanos a la cámara aparecen <b>completamente blancos y sin detalle</b>. Esto pasa porque los LEDs IR de la cámara <b>iluminan demasiado</b> a corta distancia.</p>' +
+          '<p><b>Causa típica</b>: pones una cámara con IR de 60m apuntando a una pared a 3 metros. Los IR pegan en la pared y rebotan a la lente — la cámara queda "ciega" por exceso de luz reflejada.</p>' +
+          '<p><b>Cómo solucionarlo</b>:</p>' +
+          '<ol>' +
+          '<li><b>Reducir intensidad IR en el menú</b>: la mayoría de cámaras Dahua tienen un slider 0-100 (Smart IR / IR Setting). Bajar a 30-50%.</li>' +
+          '<li><b>Activar Smart IR</b>: ajusta automáticamente la intensidad según la distancia de los objetos detectados.</li>' +
+          '<li><b>Cambiar el ángulo</b>: si apunta a un muro cercano, mover la cámara o ladearla para que los IR no peguen frontal a una superficie reflectante a corta distancia.</li>' +
+          '<li><b>Usar cámara con IR de menor alcance</b> si el objetivo está siempre cerca: una IR30 puede ser mejor que una IR60 para áreas pequeñas.</li>' +
+          '</ol>' +
+          '<p>⚠️ <b>Cuidado con superficies reflectantes</b>: vidrios, espejos, metal pulido, agua, e incluso paredes blancas devuelven mucha luz IR a la lente.</p>';
+      }
+    },
+    {
+      id: 'iluminacion-dahua',
+      icon: '💡',
+      titulo: 'Tipos de iluminación Dahua',
+      sub: 'IR, Smart Dual Light, Warm Light, Laser y más',
+      tags: ['iluminación', 'IR'],
+      content: function() {
+        return '<p>Dahua tiene varias tecnologías de iluminación para visión nocturna. Cada una tiene su uso óptimo:</p>' +
+          '<div class="cqr-tech-grid">' +
+          '<div class="cqr-tech-card"><b>🔴 IR LED estándar</b><br>El más común. Imagen B/N de noche. Distancias 10-100m según modelo. <i>Uso típico: vigilancia general, no se ve en escenas.</i></div>' +
+          '<div class="cqr-tech-card"><b>⚪ Warm Light (luz blanca)</b><br>LED blanco continuo. Imagen a color de noche. <i>Uso típico: fachadas comerciales, donde quieres ver vehículos visibles y la luz disuade.</i></div>' +
+          '<div class="cqr-tech-card"><b>🌈 Smart Dual Light</b><br>Combina IR + luz blanca. Modo IR por defecto, luz blanca cuando WizSense detecta humano/vehículo. <i>Lo mejor de los dos mundos: discreción + color cuando importa.</i></div>' +
+          '<div class="cqr-tech-card"><b>🎨 Dual Light Fusion</b><br>Versión más avanzada: fusiona IR y blanco simultáneamente para imagen color en bajas luces sin parpadeo. <i>Familia WizMind 8.</i></div>' +
+          '<div class="cqr-tech-card"><b>🔬 Laser LED</b><br>Iluminadores láser para distancias muy largas (200m+). <i>Uso típico: perímetros industriales, frontera. Cámaras especializadas.</i></div>' +
+          '<div class="cqr-tech-card"><b>🌟 Full Color (sin LED)</b><br>Sensor especialmente sensible que captura color con luz ambiente mínima (luna, lampara distante). <i>Necesita ALGO de luz, no funciona en oscuridad absoluta.</i></div>' +
+          '</div>' +
+          '<p>💡 <b>Decisión rápida</b>: <br>• Para grabar discretamente: IR estándar.<br>• Para fachadas y disuasión: Warm Light o Smart Dual Light.<br>• Para identificar colores de noche: Full Color (con luz ambiente) o Smart Dual Light.</p>';
+      }
+    },
+    {
+      id: 'wizsense',
+      icon: '🧠',
+      titulo: 'WizSense — IA en la cámara',
+      sub: 'Detección humano/vehículo + IVS perimetral',
+      tags: ['IA', 'WizSense'],
+      content: function() {
+        return '<p><b>WizSense</b> es la línea de cámaras Dahua con <b>IA en el procesador de la cámara</b> (no en el NVR ni en la nube). El procesamiento es local, en tiempo real, y se mantiene aunque pierdas conexión.</p>' +
+          '<p><b>Capacidades clave de WizSense</b>:</p>' +
+          '<ul>' +
+          '<li><b>Detección humano/vehículo</b>: distingue entre personas, autos, y "otros" (animales, sombras). Reduce 90%+ de falsas alarmas vs detección de movimiento clásica.</li>' +
+          '<li><b>IVS (Intelligent Video Surveillance)</b>: reglas perimetrales — línea virtual cruzada, área protegida, objeto abandonado, merodeo.</li>' +
+          '<li><b>SMD+ (Smart Motion Detection Plus)</b>: el motion detection clásico pero filtrado por humano/vehículo. Útil porque la mayoría de NVRs ya saben grabar por motion — SMD+ hace que solo grabe cuando hay alguien.</li>' +
+          '<li><b>Audio analytics</b>: detecta sonidos de cristales rotos, gritos, disparos (en algunos modelos).</li>' +
+          '</ul>' +
+          '<p><b>Cómo identificar una cámara WizSense</b>: el modelo tiene sufijo <b>-AS</b>, <b>-IL</b>, <b>-PV</b>, o el "3" en la familia (IPC-HFW3xxx, IPC-HDBW3xxx). Las Lite Series 2xxx normalmente NO son WizSense.</p>' +
+          '<p>💡 <b>Consejo</b>: WizSense funciona aunque tu NVR sea básico. Si tu NVR es serie 4xxx-EI o 5xxx-EI, además puedes hacer <b>búsqueda inteligente posterior</b> (AcuPick) y combinar reglas de varias cámaras.</p>';
+      }
+    },
+    {
+      id: 'smd-plus',
+      icon: '👁️',
+      titulo: 'SMD+ — Smart Motion Detection Plus',
+      sub: 'La forma correcta de grabar por movimiento',
+      tags: ['IA', 'WizSense', 'grabación'],
+      content: function() {
+        return '<p>El <b>motion detection clásico</b> de cámaras CCTV es una pesadilla: graba cuando se mueven hojas, cuando un perro pasa, cuando hay sombras de nubes. Llenas el disco con eventos inútiles.</p>' +
+          '<p><b>SMD+ (Smart Motion Detection Plus)</b> es el motion detection <b>filtrado por IA</b>: solo dispara cuando detecta humano o vehículo. Las hojas, mascotas, sombras y ruido son ignoradas.</p>' +
+          '<p><b>Ventajas concretas</b>:</p>' +
+          '<ul>' +
+          '<li><b>Reduce 90% el storage usado</b> vs motion clásico — porque graba solo cuando ocurre algo relevante.</li>' +
+          '<li><b>Notificaciones útiles</b>: te avisa al móvil solo cuando hay alguien, no cada vez que pasa una mariposa.</li>' +
+          '<li><b>Búsquedas más rápidas</b>: revisar 8 horas de video filtrado por humanos toma 5 minutos vs revisar 8 horas de motion crudo.</li>' +
+          '</ul>' +
+          '<p><b>Configuración</b>: en el menú de la cámara o NVR, ir a "Eventos" → "SMD" → activar y elegir el tipo de objeto (humano, vehículo o ambos). Ajustar sensibilidad si se requiere.</p>' +
+          '<p>⚠️ <b>Importante</b>: SMD+ requiere cámara WizSense. En cámaras de gama básica solo está el motion clásico.</p>';
+      }
+    },
+    {
+      id: 'tioc',
+      icon: '🚨',
+      titulo: 'TiOC — Disuasión activa',
+      sub: 'La cámara que ahuyenta antes de que pase algo',
+      tags: ['IA', 'disuasión'],
+      content: function() {
+        return '<p><b>TiOC (Three-in-One Camera)</b> es una línea Dahua que combina:</p>' +
+          '<ol>' +
+          '<li><b>Visión 24/7 a color</b> (Full Color con luz ambiente)</li>' +
+          '<li><b>Detección IA</b> (WizSense)</li>' +
+          '<li><b>Disuasión activa</b>: cuando la IA detecta un intruso, automáticamente <b>enciende luz blanca + emite sonido de alarma</b> (sirena pre-grabada o personalizada).</li>' +
+          '</ol>' +
+          '<p><b>El cambio conceptual</b>: en vez de ser solo testigo de un robo, la cámara <b>actúa como primera línea de defensa</b>. La mayoría de intrusos abandonan al ver luz y oír alarma — antes de causar daño.</p>' +
+          '<p><b>Casos donde brilla</b>:</p>' +
+          '<ul>' +
+          '<li>Bodegas y patios cerrados de noche</li>' +
+          '<li>Estacionamientos privados sin guardia</li>' +
+          '<li>Casas de fin de semana</li>' +
+          '<li>Comercios cerrados (refuerzo a la alarma de movimiento)</li>' +
+          '</ul>' +
+          '<p><b>Identificar TiOC</b>: el código tiene <b>-PV</b> (e.g., IPC-HFW3849T1-AS-PV) o aparece en el nombre como "TiOC" o "Disuasión".</p>' +
+          '<p>💡 <b>Configuración importante</b>: ajusta los horarios de disuasión activa. No quieres que de día, frente a un peatón normal, la cámara active alarma. Configura para que solo dispare en horarios donde no debe haber nadie.</p>';
+      }
+    },
+    {
+      id: 'codec-h265plus',
+      icon: '🎬',
+      titulo: 'Codec H.264+, H.265, H.265+ y AI Codec',
+      sub: 'Cuál usar y cuándo',
+      tags: ['video', 'storage', 'codec'],
+      content: function() {
+        return '<p>Los <b>codecs de video</b> determinan cuánto espacio ocupa la grabación y cuán fluido se ve. Dahua tiene varias generaciones:</p>' +
+          '<table class="cqr-codec-tbl"><thead><tr><th>Codec</th><th>Ahorro storage</th><th>Cuándo usar</th></tr></thead><tbody>' +
+          '<tr><td><b>H.264</b></td><td>Referencia 100%</td><td>Compatibilidad universal. Cuando el NVR es viejo o de otra marca.</td></tr>' +
+          '<tr><td><b>H.264+</b> (Smart H.264)</td><td>~50%</td><td>Vigilancia general donde la escena cambia poco. Compatibilidad con NVRs Dahua.</td></tr>' +
+          '<tr><td><b>H.265</b></td><td>~50%</td><td>Mismo ahorro que H.264+ pero estándar global. Compatible con NVR de cualquier marca moderna.</td></tr>' +
+          '<tr><td><b>H.265+</b> (Smart H.265)</td><td>~70%</td><td>Vigilancia general. <b>Default recomendado</b> para la mayoría de casos.</td></tr>' +
+          '<tr><td><b>AI Codec / WizMind</b></td><td>~85-90%</td><td>Cámaras WizMind con análisis IA. Comprime más en zonas sin objetos detectados (sin humano/vehículo).</td></tr>' +
+          '</tbody></table>' +
+          '<p>⚠️ <b>Cuidado para LPR</b>: los Smart Codecs (H.264+/H.265+/AI) <b>pueden afectar el OCR de patentes</b> porque comprimen agresivamente las zonas de "fondo" donde aparece la patente brevemente. Para LPR, usa H.265 estándar (no "+"). Lee la guía LPR para más detalle.</p>' +
+          '<p>💡 <b>Configuración recomendada</b>: H.265+ para grabación general, H.265 estándar para LPR/forense, sub stream siempre en H.264 para compatibilidad con clientes web.</p>';
+      }
+    },
+    {
+      id: 'resolucion-vs-luz',
+      icon: '📷',
+      titulo: 'Resolución vs Luz',
+      sub: 'Por qué más MP no siempre es mejor',
+      tags: ['imagen', 'sensor'],
+      content: function() {
+        return '<p>Es una creencia común que <b>"más megapíxeles = mejor cámara"</b>. Es <b>falso</b> cuando la luz es escasa.</p>' +
+          '<p><b>El compromiso técnico</b>: a igual tamaño de sensor (ej: 1/2.7"), una cámara de 8MP tiene los píxeles <b>físicamente más pequeños</b> que una de 2MP. Cada pixel pequeño capta menos fotones — menos luz — y el resultado nocturno es ruidoso (granulado).</p>' +
+          '<p>Por eso los modelos de gama alta tienen <b>sensores más grandes</b>: 1/1.8" vs 1/2.7". Un sensor más grande tiene píxeles más grandes incluso a la misma resolución, capturando más luz.</p>' +
+          '<p><b>Decisión práctica</b>:</p>' +
+          '<ul>' +
+          '<li><b>Escena bien iluminada (interior, exterior diurno con buena luz)</b>: privilegia más MP. Detalle gana.</li>' +
+          '<li><b>Escena oscura (estacionamiento nocturno, calle sin luminarias)</b>: privilegia sensor grande. Una 4MP con sensor 1/1.8" puede ver mejor de noche que una 8MP con 1/2.8".</li>' +
+          '<li><b>Necesitas leer patentes a distancia</b>: privilegia MP (más detalle), pero combinado con buen IR o iluminación dedicada.</li>' +
+          '<li><b>Identificación facial en interior</b>: 4MP con buen sensor es más que suficiente; 8MP solo desperdicia storage.</li>' +
+          '</ul>' +
+          '<p>💡 <b>Tip de pro</b>: en vez de pedir "la cámara con más MP", pide "la cámara con mejor desempeño en bajas luces para mi caso". El sensor importa más que el número grande del marketing.</p>';
+      }
+    },
+    {
+      id: 'distancia-utp',
+      icon: '🔌',
+      titulo: 'Distancias máximas por cable',
+      sub: 'IP por UTP, HDCVI por coaxial y UTP+balun',
+      tags: ['cable', 'instalación'],
+      content: function() {
+        return '<p>Las <b>distancias máximas</b> reales para cada tipo de cable:</p>' +
+          '<table class="cqr-codec-tbl"><thead><tr><th>Tipo</th><th>Cable</th><th>Distancia máxima</th></tr></thead><tbody>' +
+          '<tr><td rowspan="3"><b>IP</b></td><td>UTP Cat 5e/6 (estándar)</td><td>100 m</td></tr>' +
+          '<tr><td>UTP + ePoE (extendido)</td><td>300 m a 10 Mbps · 800 m a 1 Mbps</td></tr>' +
+          '<tr><td>Fibra óptica</td><td>2-20 km según fibra</td></tr>' +
+          '<tr><td rowspan="4"><b>HDCVI</b></td><td>Coaxial RG-59 (1080P)</td><td>800 m</td></tr>' +
+          '<tr><td>UTP + balun pasivo (1080P)</td><td>300 m</td></tr>' +
+          '<tr><td>UTP + balun pasivo (4MP)</td><td>200 m</td></tr>' +
+          '<tr><td>UTP + balun pasivo (4K)</td><td>100 m</td></tr>' +
+          '</tbody></table>' +
+          '<p><b>ePoE — la tecnología que cambia las reglas</b>: switches Dahua compatibles con ePoE permiten cámaras IP a <b>300m manteniendo 10 Mbps</b> (suficiente para 4MP H.265). Y hasta 800m a velocidades menores. Esto cambia proyectos que antes requerían fibra.</p>' +
+          '<p>⚠️ <b>Distancia para video ≠ distancia para alimentación</b>. UTP puede llevar el video 100-300m sin problema, pero el voltaje cae con la distancia. Usa la calculadora de Cable & energía para validar voltaje en cámara final, especialmente con IR alto.</p>';
+      }
+    },
+    {
+      id: 'consumo-camaras',
+      icon: '⚡',
+      titulo: 'Consumo típico de cámaras',
+      sub: 'Cuánta corriente realmente usan',
+      tags: ['energía', 'instalación'],
+      content: function() {
+        return '<p>Tabla de <b>consumos reales</b> de cámaras Dahua. Fíjate que el consumo nocturno (con IR/LED encendidos) puede ser 2-3× el diurno:</p>' +
+          '<table class="cqr-codec-tbl"><thead><tr><th>Tipo de cámara</th><th>Día (mA)</th><th>Noche (mA)</th><th>Estándar PoE</th></tr></thead><tbody>' +
+          '<tr><td>Bullet/Dome simple sin IR</td><td>200</td><td>300</td><td>802.3af clase 1-2</td></tr>' +
+          '<tr><td>Dome con IR moderado (30m)</td><td>300</td><td>500</td><td>802.3af clase 3</td></tr>' +
+          '<tr><td>Bullet con IR alto (60-80m)</td><td>400</td><td>830</td><td>802.3at (PoE+)</td></tr>' +
+          '<tr><td>Full-Color con LEDs blancos</td><td>300</td><td>900</td><td>802.3at (PoE+)</td></tr>' +
+          '<tr><td>Mini-PTZ</td><td>1200</td><td>1800</td><td>802.3at (PoE+)</td></tr>' +
+          '<tr><td>PTZ grande con IR/calefactor</td><td>1500</td><td>2500</td><td>802.3bt (PoE++/Hi-PoE)</td></tr>' +
+          '</tbody></table>' +
+          '<p>📌 <b>Por qué importa esto en proyectos</b>:</p>' +
+          '<ul>' +
+          '<li>Si calculas la fuente solo con consumo diurno, tu cámara <b>se apagará al encender los IR de noche</b>. Siempre dimensiona con consumo nocturno + 20% de margen.</li>' +
+          '<li>Para PoE: un switch de 60W con 8 cámaras IR alto consumiendo 7W cada una de noche está al límite (56W). Ya cualquier pico te apaga puertos.</li>' +
+          '<li>Para fuentes 12VDC: una fuente 5A para 8 cámaras IR alto se queda chica de noche (8 × 0.83 = 6.6A). Necesitas una de 8A o dividir en dos fuentes.</li>' +
+          '</ul>' +
+          '<p>💡 Usa la <b>Calculadora de Cable & Energía</b> para validar caída de voltaje y la <b>Calculadora de Presupuesto PoE</b> para validar tu switch.</p>';
+      }
+    }
+  ];
+
+  function renderConcepts() {
+    var saved = JSON.parse(localStorage.getItem('sstt_concepts_v1') || '{}');
+    var activeId = saved.activeId || CONCEPTS_DATA[0].id;
+
+    var html = '';
+    html += '<div class="cqr-header">';
+    html += '<h2 class="tools-h2">📖 Conceptos rápidos</h2>';
+    html += '<p class="tools-sub">Guías cortas sobre temas frecuentes en CCTV: <b>WDR, IR, WhiteWash, codecs, distancias, IA, disuasión activa</b>. Para consulta rápida cuando un cliente te pregunta o cuando necesitas decidir entre dos opciones técnicas.</p>';
+    html += '</div>';
+
+    // Lista de conceptos en sidebar + contenido
+    html += '<div class="cqr-layout">';
+    html += '<div class="cqr-sidebar">';
+    CONCEPTS_DATA.forEach(function(c){
+      var sel = c.id === activeId ? ' active' : '';
+      html += '<button class="cqr-sidebar-item'+sel+'" onclick="conceptsSelect(\''+c.id+'\')">';
+      html += '<span class="cqr-sb-icon">'+c.icon+'</span>';
+      html += '<span class="cqr-sb-text"><b>'+c.titulo+'</b><span>'+c.sub+'</span></span>';
+      html += '</button>';
+    });
+    html += '</div>';
+    html += '<div class="cqr-content" id="cqrContent"></div>';
+    html += '</div>';
+
+    document.getElementById('toolsContent').innerHTML = html;
+    conceptsRender(activeId);
+  }
+
+  window.conceptsSelect = function(id) {
+    document.querySelectorAll('.cqr-sidebar-item').forEach(function(b){ b.classList.remove('active'); });
+    event.target.closest('.cqr-sidebar-item').classList.add('active');
+    conceptsRender(id);
+    try { localStorage.setItem('sstt_concepts_v1', JSON.stringify({ activeId: id })); } catch(e){}
+  };
+
+  function conceptsRender(id) {
+    var concept = CONCEPTS_DATA.find(function(c){ return c.id === id; });
+    if (!concept) return;
+    var content = document.getElementById('cqrContent');
+    if (!content) return;
+    var html = '';
+    html += '<div class="cqr-content-head">';
+    html += '<div class="cqr-ch-icon">'+concept.icon+'</div>';
+    html += '<div>';
+    html += '<div class="cqr-ch-title">'+concept.titulo+'</div>';
+    html += '<div class="cqr-ch-sub">'+concept.sub+'</div>';
+    html += '</div>';
+    html += '</div>';
+    html += '<div class="cqr-content-body">'+concept.content()+'</div>';
+    html += '<div class="cqr-tags">';
+    concept.tags.forEach(function(t){ html += '<span class="cqr-tag">#'+t+'</span>'; });
+    html += '</div>';
+    content.innerHTML = html;
+  }
+
+  // ════════════════════════════════════════════════════════════
   // HERRAMIENTA: COMPARADOR INTELIGENTE DE CÁMARAS
   // Análisis técnico + lenguaje natural + recomendación contextual
   // ════════════════════════════════════════════════════════════
@@ -42556,13 +42853,16 @@ if (document.readyState === 'loading') {
     } catch(e){}
   }
 
-  // ── Extraer specs combinados (compatExtract + FOV data) ──
+  // ── Extraer specs combinados (compatExtract + FOV data + heurísticas adicionales) ──
   function cmpExtract(p) {
     var s = (typeof compatExtractSpecs === 'function') ? compatExtractSpecs(p) : { codigo:p.codigo, nombre:p.nombre, cat:p.cat };
     s.precio = p.ptotal;
+    var n = p.nombre || '';
+    var c = (p.codigo || '').toUpperCase();
+
     // Datos del FOV si la cámara está allí (focal, sensor)
     if (typeof FOV !== 'undefined' && FOV.allCams) {
-      var fovCam = FOV.allCams.find(function(c){ return c.cod === p.codigo; });
+      var fovCam = FOV.allCams.find(function(cam){ return cam.cod === p.codigo; });
       if (fovCam) {
         s.focalMin = fovCam.focal.min;
         s.focalMax = fovCam.focal.max;
@@ -42573,23 +42873,81 @@ if (document.readyState === 'loading') {
         s.mp = fovCam.mp;
       }
     }
-    // Familia / serie por código
-    var c = (p.codigo||'').toUpperCase();
-    if (/HDBW8/i.test(c) || /HDBW7/i.test(c)) s.familia = 'WizMind 8/7 Pro';
-    else if (/HDBW5|HFW5|HDW5/i.test(c) || /HDBW6|HFW6/i.test(c)) s.familia = 'WizMind 5/6';
+
+    // ── Mejorar extracción de IR: capturar también "IR y LED 30", "IR30 y LED 30", etc. ──
+    var irMatches = n.match(/IR\s*(\d{2,3})/gi);
+    if (irMatches && irMatches.length > 0) {
+      var irNums = irMatches.map(function(x){ return parseInt(x.replace(/IR\s*/i,'')); });
+      s.alcanceIR = Math.max.apply(null, irNums);
+    } else if (/IR\s+y\s+LED\s+(\d+)/i.test(n)) {
+      s.alcanceIR = parseInt(n.match(/IR\s+y\s+LED\s+(\d+)/i)[1]);
+    }
+    // LED warm light separado
+    s.tieneLED = /\bLED\b/i.test(n) || /-IL\b|-IL[-\s]/i.test(c);
+
+    // ── Audio ──
+    s.tieneMic = /\bmic|microf/i.test(n);
+    s.tieneAudioOut = /audio\s*(?:in\s*\/?\s*out|i\s*\/?\s*o|bidireccional|2-?way)/i.test(n);
+    s.tieneAudioIn = /audio\s*in|mic|microf/i.test(n);
+
+    // ── Slot SD ──
+    s.slotSD = /(?:micro\s*)?SD|TF\s*card|slot/i.test(n);
+
+    // ── Familia / serie por código (más detallado) ──
+    if (/^DH-IPC-HDBW8|HDBW8/i.test(c) || /^DH-IPC-HDBW7|HDBW7/i.test(c)) s.familia = 'WizMind 8/7 Pro';
+    else if (/HDBW5|HFW5|HDW5/i.test(c)) s.familia = 'WizMind 5';
+    else if (/HDBW6|HFW6/i.test(c)) s.familia = 'WizMind 6';
     else if (/HDBW3|HFW3|HDW3/i.test(c)) s.familia = 'WizSense 3 Series';
     else if (/HDBW2|HFW2|HDW2/i.test(c)) s.familia = 'Lite 2 Series';
-    else if (/HAC-/i.test(c)) s.familia = 'HDCVI Lite';
+    else if (/HDBW1|HFW1|HDW1/i.test(c)) s.familia = 'Lite (1 Series)';
+    else if (/HAC-/i.test(c)) s.familia = 'HDCVI';
     else if (/SD\d/i.test(c) || /PTZ/i.test(c)) s.familia = 'PTZ';
     else if (/ITC/i.test(c)) s.familia = 'ITC (LPR/ANPR)';
+    else if (/IPC-EB/i.test(c)) s.familia = 'Fisheye 360°';
     else s.familia = 'Otra';
+
+    // Generación / Lite vs Pro: ranking de gama (1=básica, 5=pro)
+    if (/HDBW8|HDBW7/i.test(c)) s.gamaRank = 5;
+    else if (/HDBW6|HFW6/i.test(c)) s.gamaRank = 4;
+    else if (/HDBW5|HFW5|HDW5/i.test(c)) s.gamaRank = 4;
+    else if (/HDBW3|HFW3|HDW3/i.test(c)) s.gamaRank = 3;
+    else if (/HDBW2|HFW2|HDW2/i.test(c)) s.gamaRank = 2;
+    else if (/HDBW1|HFW1|HDW1/i.test(c)) s.gamaRank = 1;
+    else s.gamaRank = 2;
+
     // Forma física
-    if (/HFW/i.test(c)) s.forma = 'Bullet';
+    if (/HFW|HAC-HFW|HAC-B/i.test(c)) s.forma = 'Bullet';
     else if (/HDBW/i.test(c)) s.forma = 'Eyeball/Dome antivandálica';
-    else if (/HDW/i.test(c)) s.forma = 'Dome';
+    else if (/HDW|HAC-HDW/i.test(c)) s.forma = 'Dome';
     else if (/SD/i.test(c)) s.forma = 'PTZ';
-    else if (/IPC-EB/i.test(c)) s.forma = 'Fisheye/360°';
+    else if (/IPC-EB|EBW/i.test(c)) s.forma = 'Fisheye/360°';
     else s.forma = 'Otra';
+
+    // Detectar tecnologías más completas (incluyendo del código)
+    s.wizsense = s.wizsense || /AS-IL|WizSense|SMD|IVS/i.test(n + ' ' + c);
+    s.wizcolor = s.wizcolor || /-IL\b|-IL[-\s]|Full Color|FullColor|ColorVu|Color 24|nightcolor/i.test(n + ' ' + c);
+    s.tioc = s.tioc || /-PV|TiOC|Disuasi[oó]n|Deterrent|Active/i.test(n + ' ' + c);
+    s.acupick = s.acupick || /AcuPick/i.test(n + ' ' + c);
+    s.wizmind = /WizMind|HDBW8|HDBW7|HDBW6|HDBW5|HFW5|HFW6/i.test(n + ' ' + c);
+
+    // Lente motorizada (foco automático/zoom)
+    s.lenteMotorizado = /motorizad/i.test(n) || /-Z[-\s]|-IZ|-ZAS|-ZS|-IZS/i.test(c);
+    s.lenteVarifocal = (s.focalMin && s.focalMax && s.focalMin !== s.focalMax) || /varifocal/i.test(n);
+    s.lenteFija = (s.focalMin && s.focalMax && s.focalMin === s.focalMax) || (!s.lenteVarifocal && /\d+\.?\d*\s*mm/i.test(n) && !/zoom/i.test(n));
+
+    // PTZ zoom óptico
+    var zoomMatch = n.match(/(\d{1,3})\s*[xX]/);
+    if (zoomMatch && /PTZ|SD/i.test(c+n)) s.ptzZoom = parseInt(zoomMatch[1]);
+
+    // Anti-corrosión / IP68
+    s.antiCorrosion = /anticorro|anti-corro|nema/i.test(n) || s.ipRating === 68;
+
+    // Estimar consumo PoE más certero
+    if (s.tipoCamara === 'IP') {
+      if (s.ptzZoom) s.consumoPoE = s.ptzZoom > 20 ? 25 : 12;
+      else if (s.alcanceIR >= 60) s.consumoPoE = (s.consumoPoE || 8) + 2;
+    }
+
     return s;
   }
 
@@ -42623,95 +42981,224 @@ if (document.readyState === 'loading') {
     return diffs;
   }
 
-  // ── Generador de análisis en lenguaje natural ──
+  // ── Generador de análisis en lenguaje natural (prosa consultiva) ──
+  // En vez de bullets robóticos, genera párrafos conectados que un integrador experto le diría a su cliente.
+  // Cada bloque empieza con un título de sección, luego prosa, y cuando aplica, una recomendación práctica.
   function cmpNarrative(a, b, diffs, context) {
-    var lines = [];
+    var sections = [];
 
-    // Diagnóstico cuando son la misma serie con leve variación
-    if (a.familia === b.familia && a.tipoCamara === b.tipoCamara && !diffs.resolution && !diffs.ai) {
-      lines.push({ type:'info', text:'<b>Ambas son de la misma familia '+a.familia+'</b>. Las diferencias son menores y suelen reducirse a forma física, focal o configuración específica.' });
-    }
+    // ═══════════ SECCIÓN 1: Resumen ejecutivo ═══════════
+    var execSummary = cmpBuildExecSummary(a, b, diffs, context);
+    if (execSummary) sections.push({ kind:'exec', title:'📋 En resumen', body:execSummary });
 
-    // Tipo (IP vs HDCVI)
+    // ═══════════ SECCIÓN 2: Diferencias técnicas significativas ═══════════
+    var techPara = cmpBuildTechSection(a, b, diffs);
+    if (techPara) sections.push({ kind:'tech', title:'🔍 Diferencias técnicas que importan', body:techPara });
+
+    // ═══════════ SECCIÓN 3: Aspectos de instalación ═══════════
+    var instPara = cmpBuildInstallSection(a, b, diffs);
+    if (instPara) sections.push({ kind:'install', title:'🔧 Para el integrador en obra', body:instPara });
+
+    // ═══════════ SECCIÓN 4: Costo-beneficio ═══════════
+    var costPara = cmpBuildCostSection(a, b, diffs);
+    if (costPara) sections.push({ kind:'cost', title:'💰 Análisis costo-beneficio', body:costPara });
+
+    return sections;
+  }
+
+  // Convierte un objeto specs en un sustantivo natural ("la 3MP varifocal", "la HDCVI bullet 2MP")
+  function cmpDescribe(s) {
+    var parts = [];
+    if (s.tipoCamara === 'HDCVI') parts.push('HDCVI');
+    if (s.forma) parts.push(s.forma.toLowerCase().split('/')[0]);
+    if (s.resolucionMP) parts.push(s.resolucionMP+'MP');
+    return parts.join(' ');
+  }
+
+  // ── Resumen ejecutivo ──
+  function cmpBuildExecSummary(a, b, diffs, context) {
+    // Caso 1: tipos distintos → la decisión es OTRA antes
     if (diffs.type) {
-      lines.push({ type:'critical', text:'<b>Tipos distintos de transmisión</b>: la '+a.codigo+' es <b>'+a.tipoCamara+'</b> mientras la '+b.codigo+' es <b>'+b.tipoCamara+'</b>. Esto NO es comparable directamente — usan grabadores distintos (NVR vs XVR/HDCVI), cableado distinto (UTP vs coaxial/UTP+balun) y son ecosistemas separados. Decide primero qué tecnología usarás.' });
+      return 'Antes de comparar características, ten en cuenta que estas dos cámaras pertenecen a <b>ecosistemas distintos</b>: la '+a.codigo+' es <b>'+a.tipoCamara+'</b> y la '+b.codigo+' es <b>'+b.tipoCamara+'</b>. Eso significa cableado distinto, grabador distinto y son tecnologías que no se mezclan en el mismo proyecto. La elección entre ellas es realmente una decisión de qué tecnología vas a usar — y eso depende de si el proyecto reutiliza cableado coaxial existente (HDCVI) o se cablea desde cero con UTP (IP).';
     }
 
-    // Resolución
+    // Caso 2: misma familia, casi idénticas
+    if (a.familia === b.familia && !diffs.resolution && !diffs.ai && !diffs.ir) {
+      return 'Estas dos cámaras pertenecen a la <b>misma familia '+a.familia+'</b> y comparten las características técnicas principales. Las diferencias son menores — generalmente forma física, focal o algún detalle de configuración. Para la mayoría de proyectos, cualquiera de las dos funciona; <b>elige por precio, disponibilidad o forma</b>.';
+    }
+
+    // Caso 3: familias distintas → narrativa de gama
+    var rankFam = function(f){
+      if (/WizMind 8|WizMind 7/.test(f)) return 4;
+      if (/WizMind 5|WizMind 6/.test(f)) return 3;
+      if (/WizSense 3/.test(f)) return 2;
+      if (/Lite 2/.test(f)) return 1;
+      if (/HDCVI Lite/.test(f)) return 1;
+      return 0;
+    };
+    var rA = rankFam(a.familia||''), rB = rankFam(b.familia||'');
+    if (rA !== rB) {
+      var gama = rA > rB ? a : b;
+      var entry = rA > rB ? b : a;
+      var diff = Math.abs(rA - rB);
+      var msg = 'Estás comparando equipos de <b>distintas gamas</b>: la <b>'+entry.codigo+'</b> es de la línea <b>'+entry.familia+'</b> (entrada/lite) mientras la <b>'+gama.codigo+'</b> es de <b>'+gama.familia+'</b> (gama superior). ';
+      if (diff >= 2) {
+        msg += 'No es una comparación pareja — la diferencia es significativa: ' + (gama.codigo === a.codigo ? 'la A' : 'la B') + ' tiene mejor procesador, más capacidades de IA y mejor desempeño en bajas luces. ';
+      } else {
+        msg += 'La diferencia de gama es moderada: ambas son útiles, pero la superior trae IA más avanzada o mejor sensibilidad. ';
+      }
+      msg += 'La elección depende de si necesitas las características adicionales — sigue leyendo para ver cuáles son.';
+      return msg;
+    }
+
+    return null;
+  }
+
+  // ── Diferencias técnicas ──
+  function cmpBuildTechSection(a, b, diffs) {
+    var paras = [];
+
+    // Resolución como párrafo conectado
     if (diffs.resolution) {
-      var winnerCam = diffs.resolution.winner === 'A' ? a : b;
-      var loserCam = diffs.resolution.winner === 'A' ? b : a;
-      lines.push({ type:'win-'+diffs.resolution.winner.toLowerCase(), text:'<b>Mayor resolución en '+winnerCam.codigo+'</b>: '+winnerCam.resolucionMP+'MP vs '+loserCam.resolucionMP+'MP. Más resolución = más detalle a la misma distancia, mejor para LPR, identificación facial, o cuando necesitas hacer zoom digital al video después.' });
+      var winner = diffs.resolution.winner === 'A' ? a : b;
+      var loser = diffs.resolution.winner === 'A' ? b : a;
+      var ratio = winner.resolucionMP / loser.resolucionMP;
+      var ratioMsg = ratio >= 2 ? 'el doble' : ratio >= 1.5 ? 'una vez y media' : 'algo más de';
+      var msg = 'En resolución hay una diferencia <b>real</b>: la <b>'+winner.codigo+'</b> entrega <b>'+winner.resolucionMP+'MP</b> contra los '+loser.resolucionMP+'MP de la otra — '+ratioMsg+' detalle a la misma distancia. ';
+      if (winner.resolucionMP >= 8) {
+        msg += 'Con 4K o superior, puedes hacer zoom digital al video grabado y aún ver patentes y rostros que en menor resolución se perderían. Es una ventaja muy concreta para investigaciones post-evento.';
+      } else if (winner.resolucionMP >= 4) {
+        msg += 'Para vigilancia general 4MP es el estándar moderno; el salto desde 2MP es notorio en detalle. ';
+      } else {
+        msg += 'Aún así, recuerda que más MP no siempre es mejor: con menos luz, los pixeles más pequeños capturan menos fotones cada uno. Para escenarios oscuros, a veces conviene una 2MP de buena gama que una 8MP de gama básica.';
+      }
+      paras.push(msg);
     }
 
-    // IR
+    // IR / Visión nocturna
     if (diffs.ir) {
       var winnerIr = diffs.ir.winner === 'A' ? a : b;
       var loserIr = diffs.ir.winner === 'A' ? b : a;
-      var diffIr = Math.abs(diffs.ir.aVal - diffs.ir.bVal);
-      lines.push({ type:'win-'+diffs.ir.winner.toLowerCase(), text:'<b>Más alcance IR en '+winnerIr.codigo+'</b>: llega a '+winnerIr.alcanceIR+'m vs '+loserIr.alcanceIR+'m de la otra ('+diffIr+'m de diferencia). Crítico si vas a vigilar áreas grandes de noche; irrelevante en interiores con luz constante.' });
+      var diffM = Math.abs(diffs.ir.aVal - diffs.ir.bVal);
+      var msg = 'Para uso nocturno, la <b>'+winnerIr.codigo+'</b> tiene una clara ventaja: alcance IR de <b>'+winnerIr.alcanceIR+'m</b> contra '+loserIr.alcanceIR+'m de la otra ('+diffM+'m de diferencia). ';
+      if (diffM >= 30) {
+        msg += 'Es una brecha grande — pensar que de noche, una cubre el doble de área que la otra. Si la zona vigilada de noche es amplia (estacionamiento, patio industrial, fachada extensa), la diferencia se nota inmediatamente. ';
+      } else {
+        msg += 'La brecha es moderada: en distancias hasta '+loserIr.alcanceIR+'m ambas funcionan, después de eso solo la primera "ve" bien. ';
+      }
+      msg += 'Recuerda que el <b>alcance IR efectivo es menor cuando llueve, hay neblina, o el objeto es de color oscuro</b> — los fabricantes miden a condiciones ideales.';
+      paras.push(msg);
     }
 
-    // Focal
+    // IA / Tecnologías inteligentes — el plato fuerte de las gamas modernas
+    if (diffs.ai) {
+      var aiA = diffs.ai.aVal || [];
+      var aiB = diffs.ai.bVal || [];
+      var unique = function(arr1, arr2){ return arr1.filter(function(x){ return arr2.indexOf(x) < 0; }); };
+      var onlyA = unique(aiA, aiB);
+      var onlyB = unique(aiB, aiA);
+      var common = aiA.filter(function(x){ return aiB.indexOf(x) >= 0; });
+      var msg = '';
+      if (common.length > 0) {
+        msg += '<b>Ambas comparten</b> '+common.join(' + ')+'. ';
+      }
+      if (onlyA.length > 0) {
+        msg += 'La <b>'+a.codigo+'</b> agrega <b>'+onlyA.join(' + ')+'</b>. ' + cmpExplainAiInline(onlyA) + ' ';
+      }
+      if (onlyB.length > 0) {
+        msg += 'La <b>'+b.codigo+'</b> agrega <b>'+onlyB.join(' + ')+'</b>. ' + cmpExplainAiInline(onlyB) + ' ';
+      }
+      if (onlyA.length === 0 && onlyB.length === 0 && common.length > 0) {
+        msg += 'En IA están parejas — ninguna tiene ventaja sobre la otra en este aspecto.';
+      }
+      if (msg) paras.push(msg);
+    }
+
+    if (paras.length === 0) {
+      paras.push('No hay diferencias técnicas mayores entre las dos en resolución, IR ni capacidades de IA. La decisión va por otros lados — sigue leyendo.');
+    }
+    return paras.join('<br><br>');
+  }
+
+  function cmpExplainAiInline(items) {
+    var explain = {
+      'WizSense': 'WizSense filtra falsas alarmas detectando solo humanos y vehículos: descarta ramas movidas por viento, sombras, mascotas. En la práctica, reduce ~90% de notificaciones inútiles.',
+      'Full Color': 'Full Color (también llamado WizColor) mantiene <b>color de noche</b> con luz tenue, en vez de cambiar a blanco y negro. Útil para identificar colores de ropa, vehículos. Necesita algo de luz ambiente — si la oscuridad es absoluta, requiere iluminador.',
+      'TiOC': 'TiOC suma <b>disuasión activa</b>: cuando detecta un intruso, enciende luz blanca y emite sonido de alarma automáticamente. Ahuyenta al ladrón antes de que actúe — convierte la cámara en una primera línea de defensa, no solo en un grabador.',
+      'AcuPick': 'AcuPick permite <b>búsqueda inteligente posterior</b>: "muéstrame todo lo que pasó ayer, persona vestida de rojo entre 14:00-15:00". Útil para investigaciones post-evento donde no sabes el momento exacto.'
+    };
+    return items.map(function(i){ return explain[i] || (i+'.'); }).join(' ');
+  }
+
+  // ── Aspectos de instalación ──
+  function cmpBuildInstallSection(a, b, diffs) {
+    var paras = [];
+
+    // Focal — fija vs varifocal
     if (diffs.focal && diffs.focal.note === 'flexibility') {
       var fixedCam = a.focalMin === a.focalMax ? a : b;
       var varCam = a.focalMin === a.focalMax ? b : a;
-      lines.push({ type:'info', text:'<b>Una es fija, otra varifocal</b>: la '+fixedCam.codigo+' tiene focal fija de '+fixedCam.focalMin+'mm. La '+varCam.codigo+' es varifocal '+varCam.focalMin+'-'+varCam.focalMax+'mm, ajustable después de instalada. Si NO sabes exactamente el ángulo que necesitas, varifocal evita errores. Si el ángulo ya lo conoces y la cámara se mantendrá ahí, fija es más barata y más confiable.' });
+      paras.push('Una decisión importante en obra: la <b>'+fixedCam.codigo+'</b> tiene focal <b>fija de '+fixedCam.focalMin+'mm</b> mientras la <b>'+varCam.codigo+'</b> es <b>varifocal '+varCam.focalMin+'-'+varCam.focalMax+'mm</b>. La varifocal te permite ajustar el ángulo después de instalada, lo que perdona errores de cálculo previo. Pero si ya conoces exactamente el ángulo que necesitas (calculaste con DORI o el simulador FOV) y la cámara queda fija ahí para siempre, una focal fija es <b>más barata, más confiable y mecánicamente más simple</b>.');
     } else if (diffs.focal && diffs.focal.note === 'range') {
-      lines.push({ type:'info', text:'<b>Rangos focales distintos</b>: la '+a.codigo+' '+diffs.focal.aVal+'mm vs la '+b.codigo+' '+diffs.focal.bVal+'mm. Más mm = más zoom, ángulo más cerrado, mejor para distancia. Menos mm = más amplio, mejor para áreas cercanas.' });
+      paras.push('Los rangos focales son distintos: '+a.codigo+' es <b>'+diffs.focal.aVal+'mm</b> y '+b.codigo+' es <b>'+diffs.focal.bVal+'mm</b>. Más mm = más zoom y ángulo más cerrado (mejor para distancia y detalle). Menos mm = más amplio y mejor para áreas cercanas. Si dudas qué usar, pasa al simulador FOV con cada una y mide la cobertura real.');
     }
 
-    // IA / Tecnologías
-    if (diffs.ai) {
-      var aiA = diffs.ai.aVal, aiB = diffs.ai.bVal;
-      var unique = function(arr1, arr2){ return arr1.filter(function(x){ return arr2.indexOf(x) < 0; }); };
-      var onlyA = unique(aiA, aiB), onlyB = unique(aiB, aiA);
-      if (onlyA.length > 0) {
-        lines.push({ type:'win-a', text:'<b>'+a.codigo+' agrega '+onlyA.join(' + ')+'</b>. ' + cmpExplainAi(onlyA) });
-      }
-      if (onlyB.length > 0) {
-        lines.push({ type:'win-b', text:'<b>'+b.codigo+' agrega '+onlyB.join(' + ')+'</b>. ' + cmpExplainAi(onlyB) });
-      }
-    }
-
-    // Protección
+    // Protección IP/IK
     if (diffs.protection) {
       var pA = a.ipRating||0, pB = b.ipRating||0;
-      if (pA > 0 && pB === 0) {
-        lines.push({ type:'win-a', text:'<b>Solo '+a.codigo+' es exterior</b> (IP'+pA+'). La '+b.codigo+' no menciona protección IP, asumir interior.' });
-      } else if (pB > 0 && pA === 0) {
-        lines.push({ type:'win-b', text:'<b>Solo '+b.codigo+' es exterior</b> (IP'+pB+'). La '+a.codigo+' no menciona protección IP, asumir interior.' });
-      }
       var ikA = a.ikRating||0, ikB = b.ikRating||0;
+      if (pA > 0 && pB === 0) {
+        paras.push('<b>Solo la '+a.codigo+' es exterior</b> (IP'+pA+'). La otra no menciona IP, asumir que es para interior. Si tu instalación es a la intemperie, esto define la decisión.');
+      } else if (pB > 0 && pA === 0) {
+        paras.push('<b>Solo la '+b.codigo+' es exterior</b> (IP'+pB+'). La otra no menciona IP, asumir que es para interior. Si tu instalación es a la intemperie, esto define la decisión.');
+      } else if (pA !== pB && pA > 0 && pB > 0) {
+        var winner = pA > pB ? a : b;
+        var loser = pA > pB ? b : a;
+        paras.push('Ambas son outdoor pero con sellado distinto: la '+winner.codigo+' es IP'+(pA>pB?pA:pB)+' (sellado mayor) y la '+loser.codigo+' es IP'+(pA>pB?pB:pA)+'. La diferencia importa en climas extremos (lluvia con viento fuerte, costa con sal en el aire); para uso urbano normal en Chile, IP66 ya alcanza.');
+      }
       if (ikA >= 10 && ikB < 10) {
-        lines.push({ type:'win-a', text:'<b>'+a.codigo+' es antivandálica IK'+ikA+'</b>. Resiste impactos físicos — clave en lugares con público (estacionamientos, escuelas, accesos públicos).' });
+        paras.push('La '+a.codigo+' es <b>antivandálica IK'+ikA+'</b> y la otra no. Si la cámara va al alcance del público (estacionamiento de centro comercial, escuela, acceso peatonal), esto evita reemplazos por vandalismo. Si va en altura o área restringida, no agrega valor.');
       } else if (ikB >= 10 && ikA < 10) {
-        lines.push({ type:'win-b', text:'<b>'+b.codigo+' es antivandálica IK'+ikB+'</b>. Resiste impactos físicos — clave en lugares con público.' });
+        paras.push('La '+b.codigo+' es <b>antivandálica IK'+ikB+'</b> y la otra no. Si la cámara va al alcance del público (estacionamiento de centro comercial, escuela, acceso peatonal), esto evita reemplazos por vandalismo. Si va en altura o área restringida, no agrega valor.');
       }
     }
 
-    // Precio
-    if (diffs.price) {
-      var cheaperCam = diffs.price.cheaper === 'A' ? a : b;
-      var pricerCam = diffs.price.cheaper === 'A' ? b : a;
-      var pct = ((diffs.price.diff / cheaperCam.precio) * 100).toFixed(0);
-      lines.push({ type:'info', text:'<b>Diferencia de precio</b>: la '+pricerCam.codigo+' cuesta $'+pricerCam.precio.toLocaleString('es-CL')+' vs $'+cheaperCam.precio.toLocaleString('es-CL')+' de la '+cheaperCam.codigo+' (+'+pct+'% más). El sobreprecio se justifica solo si las características adicionales aplican a tu caso de uso real.' });
+    if (paras.length === 0) return null;
+    return paras.join('<br><br>');
+  }
+
+  // ── Costo-beneficio ──
+  function cmpBuildCostSection(a, b, diffs) {
+    if (!diffs.price) {
+      return 'Ambas tienen precios similares ($'+a.precio.toLocaleString('es-CL')+' vs $'+b.precio.toLocaleString('es-CL')+'). La decisión va por características técnicas, no por presupuesto.';
     }
+    var cheaper = diffs.price.cheaper === 'A' ? a : b;
+    var pricier = diffs.price.cheaper === 'A' ? b : a;
+    var diff = pricier.precio - cheaper.precio;
+    var pct = (diff / cheaper.precio * 100);
 
-    return lines;
+    var msg = 'La <b>'+pricier.codigo+'</b> cuesta $'+pricier.precio.toLocaleString('es-CL')+', un <b>'+pct.toFixed(0)+'% más</b> que la '+cheaper.codigo+' (delta de $'+diff.toLocaleString('es-CL')+'). ';
+
+    // Determinar si vale la pena
+    var pricierFamilyRank = (function(f){ if (/WizMind/.test(f)) return 3; if (/WizSense 3/.test(f)) return 2; return 1; })(pricier.familia||'');
+    var cheaperFamilyRank = (function(f){ if (/WizMind/.test(f)) return 3; if (/WizSense 3/.test(f)) return 2; return 1; })(cheaper.familia||'');
+
+    if (pricierFamilyRank > cheaperFamilyRank) {
+      msg += 'El sobreprecio se justifica si vas a aprovechar las características de gama superior (mejor IA, mejor sensor, más capacidades). ';
+      if (pct > 50) {
+        msg += '<b>Más de 50% más caro</b>: solo vale la pena si el proyecto realmente necesita las características avanzadas — para vigilancia básica no las usarás.';
+      } else {
+        msg += 'Para un cliente que valora el ecosistema completo (mejor video, IA real, búsqueda inteligente), el delta es razonable.';
+      }
+    } else {
+      msg += 'Ambas son de gama similar, así que el delta de precio podría ser por características puntuales (más MP, más IR) o simplemente posicionamiento de mercado. Si el rendimiento técnico es parejo (revisa la tabla abajo), la más barata es la elección obvia.';
+    }
+    if (pct < 15) msg = '<b>Diferencia de precio menor al 15%</b> ('+pct.toFixed(0)+'%). En proyectos típicos esta brecha no debe ser el factor decisivo — elige por la cámara que mejor se ajuste técnicamente.';
+
+    return msg;
   }
 
-  function cmpExplainAi(items) {
-    var explain = {
-      'WizSense': 'Filtra falsas alarmas detectando solo humanos/vehículos (descarta ramas, mascotas, sombras). Reduce 90% de notificaciones inútiles.',
-      'Full Color': 'Mantiene color de noche con luz tenue. Útil para fachadas comerciales, accesos. Ojo: si la luz es 0 absoluto necesita iluminador adicional.',
-      'TiOC': 'Disuasión activa: luz blanca y sirena cuando detecta intrusos. Ahuyenta antes de que pase algo.',
-      'AcuPick': 'Búsqueda inteligente posterior: "muéstrame todo lo que pasó vestido de rojo entre 14:00-15:00". Útil para investigaciones post-evento.'
-    };
-    return items.map(function(i){ return explain[i] || i; }).join(' ');
-  }
-
-  // ── Veredicto contextual ──
+  // ── Veredicto contextual mejorado (con prosa) ──
   function cmpVerdict(a, b, diffs, context) {
     if (!context) return null;
     var pros = { A:[], B:[] };
@@ -42729,83 +43216,117 @@ if (document.readyState === 'loading') {
     };
     var w = contextWeights[context] || {};
 
-    // Resolución
     if (diffs.resolution && w.resolution) {
       weight[diffs.resolution.winner] += w.resolution;
-      pros[diffs.resolution.winner].push('mayor resolución (+'+w.resolution+'pts)');
+      pros[diffs.resolution.winner].push({ pts: w.resolution, label: 'mayor resolución' });
     }
-    // IR
     if (diffs.ir && w.ir) {
       weight[diffs.ir.winner] += w.ir;
-      pros[diffs.ir.winner].push('mayor alcance IR (+'+w.ir+'pts)');
+      pros[diffs.ir.winner].push({ pts: w.ir, label: 'mayor alcance IR' });
     }
-    // IA features
     if (diffs.ai && w.ai) {
       var aCount = (diffs.ai.aVal||[]).length;
       var bCount = (diffs.ai.bVal||[]).length;
-      if (aCount > bCount) { weight.A += w.ai; pros.A.push('más tecnologías IA (+'+w.ai+'pts)'); }
-      else if (bCount > aCount) { weight.B += w.ai; pros.B.push('más tecnologías IA (+'+w.ai+'pts)'); }
+      if (aCount > bCount) { weight.A += w.ai; pros.A.push({ pts: w.ai, label: 'más tecnologías IA' }); }
+      else if (bCount > aCount) { weight.B += w.ai; pros.B.push({ pts: w.ai, label: 'más tecnologías IA' }); }
     }
-    // Full Color
     if (w.fullcolor) {
-      if (a.wizcolor && !b.wizcolor) { weight.A += w.fullcolor; pros.A.push('Full Color (+'+w.fullcolor+'pts)'); }
-      else if (b.wizcolor && !a.wizcolor) { weight.B += w.fullcolor; pros.B.push('Full Color (+'+w.fullcolor+'pts)'); }
+      if (a.wizcolor && !b.wizcolor) { weight.A += w.fullcolor; pros.A.push({ pts: w.fullcolor, label: 'Full Color' }); }
+      else if (b.wizcolor && !a.wizcolor) { weight.B += w.fullcolor; pros.B.push({ pts: w.fullcolor, label: 'Full Color' }); }
     }
-    // IP/IK
     if (diffs.protection && w.ip) {
-      if ((a.ipRating||0) > (b.ipRating||0)) { weight.A += w.ip; pros.A.push('mejor IP (+'+w.ip+'pts)'); }
-      else if ((b.ipRating||0) > (a.ipRating||0)) { weight.B += w.ip; pros.B.push('mejor IP (+'+w.ip+'pts)'); }
+      if ((a.ipRating||0) > (b.ipRating||0)) { weight.A += w.ip; pros.A.push({ pts: w.ip, label: 'mejor sellado IP' }); }
+      else if ((b.ipRating||0) > (a.ipRating||0)) { weight.B += w.ip; pros.B.push({ pts: w.ip, label: 'mejor sellado IP' }); }
     }
     if (diffs.protection && w.ik) {
-      if ((a.ikRating||0) >= 10 && (b.ikRating||0) < 10) { weight.A += w.ik; pros.A.push('antivandálica (+'+w.ik+'pts)'); }
-      else if ((b.ikRating||0) >= 10 && (a.ikRating||0) < 10) { weight.B += w.ik; pros.B.push('antivandálica (+'+w.ik+'pts)'); }
+      if ((a.ikRating||0) >= 10 && (b.ikRating||0) < 10) { weight.A += w.ik; pros.A.push({ pts: w.ik, label: 'antivandálica' }); }
+      else if ((b.ikRating||0) >= 10 && (a.ikRating||0) < 10) { weight.B += w.ik; pros.B.push({ pts: w.ik, label: 'antivandálica' }); }
     }
-    // Focal flexibility
     if (diffs.focal && w.focal) {
       var aVar = a.focalMin !== a.focalMax;
       var bVar = b.focalMin !== b.focalMax;
-      if (aVar && !bVar) { weight.A += w.focal; pros.A.push('focal varifocal (+'+w.focal+'pts)'); }
-      else if (bVar && !aVar) { weight.B += w.focal; pros.B.push('focal varifocal (+'+w.focal+'pts)'); }
+      if (aVar && !bVar) { weight.A += w.focal; pros.A.push({ pts: w.focal, label: 'focal varifocal' }); }
+      else if (bVar && !aVar) { weight.B += w.focal; pros.B.push({ pts: w.focal, label: 'focal varifocal' }); }
     }
-
-    // Precio: penalización suave para el más caro (si ambas son técnicamente similares)
     if (diffs.price) {
       var pricerKey = diffs.price.cheaper === 'A' ? 'B' : 'A';
       var diffPct = (diffs.price.diff / (diffs.price.cheaper === 'A' ? a.precio : b.precio));
-      if (diffPct > 0.5) { weight[pricerKey] -= 3; }  // más de 50% más caro: -3
+      if (diffPct > 0.5) { weight[pricerKey] -= 3; }
       else if (diffPct > 0.25) { weight[pricerKey] -= 1; }
     }
 
     var winner = weight.A > weight.B ? 'A' : weight.B > weight.A ? 'B' : null;
     var diff = Math.abs(weight.A - weight.B);
-    var confidence = diff >= 5 ? 'alta' : diff >= 2 ? 'moderada' : 'baja (técnicamente similares)';
+    var confLabel, confClass;
+    if (diff >= 5) { confLabel = 'alta'; confClass = 'high'; }
+    else if (diff >= 2) { confLabel = 'moderada'; confClass = 'medium'; }
+    else { confLabel = 'baja (técnicamente similares)'; confClass = 'low'; }
 
     var ctxLabels = {
-      parking:'estacionamiento o acceso vehicular', condominio:'condominio o área residencial',
-      fachada:'fachada o comercio', interior:'interior', perimetro:'perímetro',
-      lpr:'identificación de patentes (LPR)', oficina:'oficina', industrial:'industrial o bodega'
+      parking:'estacionamiento o acceso vehicular',
+      condominio:'condominio o área residencial',
+      fachada:'fachada o comercio',
+      interior:'interior',
+      perimetro:'perímetro',
+      lpr:'identificación de patentes (LPR)',
+      oficina:'oficina',
+      industrial:'industrial o bodega'
     };
+
+    // Construir prosa del veredicto
+    var verdictProse = '';
+    var alternateProse = '';
+    if (winner) {
+      var winCam = winner === 'A' ? a : b;
+      var loseCam = winner === 'A' ? b : a;
+      var pHigh = pros[winner].filter(function(p){ return p.pts >= 4; }).map(function(p){ return p.label; });
+      var pMid = pros[winner].filter(function(p){ return p.pts >= 2 && p.pts < 4; }).map(function(p){ return p.label; });
+      var allPros = pros[winner].map(function(p){ return p.label; });
+
+      if (confClass === 'high') {
+        verdictProse = 'Para tu caso de uso de <b>'+ctxLabels[context]+'</b>, la elección clara es la <b>'+winCam.codigo+'</b>. ';
+        if (pHigh.length > 0) verdictProse += 'Sus ventajas críticas son: '+pHigh.join(' + ')+'. ';
+        if (pMid.length > 0) verdictProse += 'Adicionalmente aporta '+pMid.join(' y ')+'. ';
+        verdictProse += 'No es una decisión cerrada — pero el delta sobre la otra en este contexto es lo bastante grande para no dudar.';
+      } else if (confClass === 'medium') {
+        verdictProse = 'Para <b>'+ctxLabels[context]+'</b>, la <b>'+winCam.codigo+'</b> tiene ventaja por '+allPros.join(' y ')+'. ';
+        verdictProse += 'Es la recomendación, aunque la otra también es viable si el presupuesto manda o si la disponibilidad lo justifica.';
+      } else {
+        verdictProse = 'Para <b>'+ctxLabels[context]+'</b>, ambas funcionan y la diferencia técnica es marginal. La <b>'+winCam.codigo+'</b> tiene una ligera ventaja por '+allPros.join(' y ')+', pero no es suficiente para descartar la otra. ';
+        verdictProse += 'Decide por <b>precio o disponibilidad</b>.';
+      }
+
+      // ¿Cuándo elegir la otra?
+      if (loseCam.precio < winCam.precio) {
+        alternateProse = 'La <b>'+loseCam.codigo+'</b> conviene si: el presupuesto es ajustado y las ventajas de la otra no aplican a tu caso, o si las características que las diferencian (mira la tabla abajo) no son críticas para este proyecto específico.';
+      } else if (loseCam.familia !== winCam.familia) {
+        alternateProse = 'La <b>'+loseCam.codigo+'</b> tiene su rol — particularmente si necesitas algo más simple o el cliente no aprovechará las funciones avanzadas del modelo recomendado.';
+      }
+    }
 
     return {
       winner: winner,
       winnerCam: winner === 'A' ? a : winner === 'B' ? b : null,
       loserCam: winner === 'A' ? b : winner === 'B' ? a : null,
-      proWinner: winner ? pros[winner] : [],
-      confidence: confidence,
+      proWinner: pros[winner] || [],
+      confidence: confLabel,
+      confidenceClass: confClass,
       ctxLabel: ctxLabels[context] || context,
       scoreA: weight.A,
-      scoreB: weight.B
+      scoreB: weight.B,
+      verdictProse: verdictProse,
+      alternateProse: alternateProse
     };
   }
 
-  function cmpRender() {
+    function cmpRender() {
     var resultDiv = document.getElementById('cmpResult');
     if (!resultDiv) return;
 
     var a = COMPARE_STATE.camA;
     var b = COMPARE_STATE.camB;
     if (!a || !b) {
-      resultDiv.innerHTML = '<div class="cmp-empty">👈 Selecciona <b>dos cámaras</b> arriba para empezar a comparar.<br><br>Te diremos qué se gana, qué se pierde, y cuál te conviene según tu proyecto.</div>';
+      resultDiv.innerHTML = '<div class="cmp-empty">👈 Selecciona <b>dos cámaras</b> arriba para empezar a comparar.<br><br>Te diremos qué se gana, qué se pierde, y cuál te conviene según tu proyecto — con análisis en lenguaje natural, no solo una tabla.</div>';
       return;
     }
     if (a.codigo === b.codigo) {
@@ -42816,49 +43337,57 @@ if (document.readyState === 'loading') {
     var sA = cmpExtract(a);
     var sB = cmpExtract(b);
     var diffs = cmpDiffs(sA, sB);
-    var narrative = cmpNarrative(sA, sB, diffs, COMPARE_STATE.context);
+    var sections = cmpNarrative(sA, sB, diffs, COMPARE_STATE.context);
     var verdict = cmpVerdict(sA, sB, diffs, COMPARE_STATE.context);
 
     var html = '';
 
-    // Análisis en lenguaje natural (lo más importante arriba)
-    html += '<div class="cmp-section">';
-    html += '<div class="cmp-section-title">🧠 Análisis técnico</div>';
-    if (narrative.length === 0) {
-      html += '<div class="cmp-narrative-empty">Estas dos cámaras son técnicamente muy similares. Las diferencias son menores y probablemente cualquier elección funciona. Mira la tabla técnica abajo para ver detalles puntuales.</div>';
-    } else {
-      narrative.forEach(function(n){
-        html += '<div class="cmp-narrative-item cmp-nar-'+n.type+'">'+n.text+'</div>';
-      });
-    }
-    html += '</div>';
-
-    // Veredicto contextual
-    if (verdict) {
-      html += '<div class="cmp-section cmp-verdict">';
-      html += '<div class="cmp-section-title">🎯 Recomendación para <span class="cmp-ctx-label">'+verdict.ctxLabel+'</span></div>';
-      if (verdict.winner) {
-        html += '<div class="cmp-verdict-card cmp-verdict-'+verdict.winner.toLowerCase()+'">';
-        html += '<div class="cmp-verdict-head"><span class="cmp-verdict-trophy">🏆</span><span>'+verdict.winnerCam.codigo+' es la mejor opción</span></div>';
-        html += '<div class="cmp-verdict-conf">Confianza: <b>'+verdict.confidence+'</b> · Score A:'+verdict.scoreA+' · B:'+verdict.scoreB+'</div>';
-        if (verdict.proWinner.length > 0) {
-          html += '<div class="cmp-verdict-pros"><b>Por qué para '+verdict.ctxLabel+'</b>: '+verdict.proWinner.join(', ')+'.</div>';
-        }
-        html += '</div>';
-      } else {
-        html += '<div class="cmp-verdict-tie">Para tu caso de uso, ambas cámaras son <b>técnicamente equivalentes</b>. Decide por precio o disponibilidad.</div>';
+    // Veredicto contextual ARRIBA si hay contexto (más visible que abajo)
+    if (verdict && verdict.winner) {
+      html += '<div class="cmp-verdict-hero cmp-verdict-conf-'+verdict.confidenceClass+'">';
+      html += '<div class="cmp-vh-top">';
+      html += '<div class="cmp-vh-trophy">🏆</div>';
+      html += '<div class="cmp-vh-content">';
+      html += '<div class="cmp-vh-tag">RECOMENDACIÓN PARA <span>'+verdict.ctxLabel.toUpperCase()+'</span></div>';
+      html += '<div class="cmp-vh-winner">'+verdict.winnerCam.codigo+'</div>';
+      html += '<div class="cmp-vh-conf">Confianza: <b>'+verdict.confidence+'</b></div>';
+      html += '</div>';
+      html += '<div class="cmp-vh-score">';
+      html += '<div class="cmp-vh-sa '+(verdict.winner==='A'?'cmp-vh-win':'')+'">A<br><span>'+verdict.scoreA+'</span></div>';
+      html += '<div class="cmp-vh-vs">vs</div>';
+      html += '<div class="cmp-vh-sb '+(verdict.winner==='B'?'cmp-vh-win':'')+'">B<br><span>'+verdict.scoreB+'</span></div>';
+      html += '</div>';
+      html += '</div>';
+      html += '<div class="cmp-vh-prose">'+verdict.verdictProse+'</div>';
+      if (verdict.alternateProse) {
+        html += '<div class="cmp-vh-alt"><b>¿Cuándo elegir la otra?</b> '+verdict.alternateProse+'</div>';
       }
       html += '</div>';
+    } else if (verdict) {
+      html += '<div class="cmp-verdict-tie-hero">';
+      html += '<div class="cmp-vth-icon">🤝</div>';
+      html += '<div><b>Para tu caso de uso, ambas son técnicamente equivalentes.</b><br>Decide por precio o disponibilidad.</div>';
+      html += '</div>';
     } else {
-      html += '<div class="cmp-section cmp-verdict-prompt">';
-      html += '<div class="cmp-verdict-prompt-icon">💡</div>';
-      html += '<div><b>¿Quieres recomendación contextual?</b> Selecciona arriba el tipo de proyecto y te diremos cuál de las dos conviene para tu caso específico.</div>';
+      html += '<div class="cmp-prompt-hero">';
+      html += '<div class="cmp-vh-trophy">💡</div>';
+      html += '<div><b>¿Quieres recomendación contextual?</b><br>Selecciona arriba el tipo de proyecto y te diremos cuál de las dos conviene para tu caso específico.</div>';
       html += '</div>';
     }
 
-    // Tabla side-by-side
+    // Análisis narrativo (secciones de prosa)
+    if (sections.length > 0) {
+      sections.forEach(function(sec){
+        html += '<div class="cmp-prose-section cmp-ps-'+sec.kind+'">';
+        html += '<div class="cmp-prose-title">'+sec.title+'</div>';
+        html += '<div class="cmp-prose-body">'+sec.body+'</div>';
+        html += '</div>';
+      });
+    }
+
+    // Tabla técnica side-by-side
     html += '<div class="cmp-section">';
-    html += '<div class="cmp-section-title">📊 Tabla técnica side-by-side</div>';
+    html += '<div class="cmp-section-title">📊 Tabla técnica completa</div>';
     html += '<table class="cmp-table">';
     html += '<thead><tr><th></th><th class="cmp-th-a">A: '+a.codigo+'</th><th class="cmp-th-b">B: '+b.codigo+'</th></tr></thead>';
     html += '<tbody>';
@@ -42891,15 +43420,15 @@ if (document.readyState === 'loading') {
     html += '</tbody></table>';
     html += '</div>';
 
-    // Acciones
+    // Acciones rápidas
     html += '<div class="cmp-actions">';
-    html += '<button class="cmp-action-btn cmp-action-fov" onclick="alert(\'Próxima feature: ver ambas cámaras lado a lado en el Simulador FOV\')">📐 Ver en simulador FOV</button>';
-    html += '<button class="cmp-action-btn cmp-action-cart-a" onclick="cmpAddToCart(\'A\')">🛒 Agregar A al carro</button>';
-    html += '<button class="cmp-action-btn cmp-action-cart-b" onclick="cmpAddToCart(\'B\')">🛒 Agregar B al carro</button>';
+    html += '<button class="cmp-action-btn cmp-action-cart-a" onclick="cmpAddToCart(\'A\')">🛒 Agregar A al carro · $'+a.ptotal.toLocaleString('es-CL')+'</button>';
+    html += '<button class="cmp-action-btn cmp-action-cart-b" onclick="cmpAddToCart(\'B\')">🛒 Agregar B al carro · $'+b.ptotal.toLocaleString('es-CL')+'</button>';
     html += '</div>';
 
     resultDiv.innerHTML = html;
   }
+
 
   window.cmpAddToCart = function(which) {
     var p = which === 'A' ? COMPARE_STATE.camA : COMPARE_STATE.camB;
@@ -43185,6 +43714,7 @@ if (document.readyState === 'loading') {
     else if (toolId === 'bwCalc') renderBwCalc();
     else if (toolId === 'lprGuide') renderLprGuide();
     else if (toolId === 'compareCams') renderCompareCams();
+    else if (toolId === 'concepts') renderConcepts();
     else if (toolId === 'doriCalc') renderDoriCalc();
     else if (toolId === 'poeBudget') renderPoeBudget();
     else if (toolId === 'readyCheck') renderReadyCheck();
@@ -43257,4 +43787,238 @@ if (document.readyState === 'loading') {
   };
 </script>
 </body>
-</html>
+</html>  // ── Generador de análisis en lenguaje natural (estilo consultor experto) ──
+  // Devuelve un array de secciones {kind, title, body}
+  function cmpNarrative(a, b, diffs, context) {
+    var sections = [];
+    var contextLabels = {
+      parking: 'estacionamiento o acceso vehicular',
+      condominio: 'condominio residencial',
+      fachada: 'fachada comercial',
+      interior: 'interior',
+      perimetro: 'perímetro',
+      lpr: 'identificación de patentes (LPR)',
+      oficina: 'oficina',
+      industrial: 'bodega o industrial'
+    };
+
+    // === BLOQUEADOR: Tipos de transmisión incompatibles ===
+    if (diffs.type) {
+      sections.push({
+        kind: 'critical',
+        title: '⛔ Atención: tipos de transmisión incompatibles',
+        body: 'La <b>'+a.codigo+'</b> es <b>'+a.tipoCamara+'</b> y la <b>'+b.codigo+'</b> es <b>'+b.tipoCamara+'</b>. <b>No son intercambiables</b>: usan grabadores distintos (NVR vs XVR/HDCVI), cableado distinto (UTP vs coaxial+balun) y son ecosistemas separados. Antes de elegir, decide qué tecnología domina tu instalación. Si arrancas de cero hoy en 2026, IP es la apuesta moderna; si reaprovechas cableado coaxial existente, HDCVI te ahorra obra civil.'
+      });
+    }
+
+    // === Apertura contextual ===
+    if (a.familia === b.familia && a.tipoCamara === b.tipoCamara) {
+      var precioA = a.precio, precioB = b.precio;
+      var cheaperCam = precioA < precioB ? a : b;
+      var pricerCam = precioA < precioB ? b : a;
+      var diffPct = Math.abs(precioA - precioB) / Math.min(precioA, precioB) * 100;
+      if (diffPct > 5) {
+        sections.push({
+          kind: 'info',
+          title: '🎯 Hermanas de la misma familia',
+          body: 'Ambas pertenecen a <b>'+a.familia+'</b>. La <b>'+pricerCam.codigo+'</b> es <b>'+diffPct.toFixed(0)+'% más cara</b> que la <b>'+cheaperCam.codigo+'</b> — vamos a ver si las diferencias justifican el sobreprecio.'
+        });
+      }
+    } else if (a.familia !== b.familia && a.gamaRank !== b.gamaRank) {
+      var higher = a.gamaRank > b.gamaRank ? a : b;
+      var lower = a.gamaRank > b.gamaRank ? b : a;
+      sections.push({
+        kind: 'info',
+        title: '🎯 Comparación de gamas distintas',
+        body: 'La <b>'+higher.codigo+'</b> pertenece a <b>'+higher.familia+'</b> mientras la <b>'+lower.codigo+'</b> es <b>'+lower.familia+'</b>. La gama superior trae mejor sensor, más procesamiento IA y características que la inferior no tiene. La pregunta no es si la superior es "mejor" — claramente lo es — sino si tu caso de uso justifica el sobrecosto.'
+      });
+    }
+
+    // === Resolución ===
+    if (diffs.resolution) {
+      var winnerR = diffs.resolution.winner === 'A' ? a : b;
+      var loserR = diffs.resolution.winner === 'A' ? b : a;
+      var ratio = winnerR.resolucionMP / loserR.resolucionMP;
+      var pixelGain = Math.round((ratio - 1) * 100);
+      var body = '<b>'+winnerR.codigo+'</b> entrega <b>'+winnerR.resolucionMP+'MP</b> vs <b>'+loserR.resolucionMP+'MP</b> de la otra (+'+pixelGain+'% más píxeles). ';
+      if (winnerR.resolucionMP >= 8) {
+        body += '8MP/4K ya es <i>identification grade</i>: a 10m de distancia obtienes ~250 px/m, suficiente para reconocer rostros con seguridad. ';
+      } else if (winnerR.resolucionMP === 4) {
+        body += '4MP es el sweet spot actual: buena densidad de píxeles sin disparar el storage como pasa con 4K. ';
+      } else if (winnerR.resolucionMP === 2) {
+        body += '2MP/1080p sigue siendo correcto para escenas cercanas con punto fijo, pero queda corto para identificación a distancia. ';
+      }
+      body += 'Más resolución importa solo si el contenido lo necesita: rostros lejanos, patentes, áreas grandes con una sola cámara. Para un punto fijo cercano, mayor resolución solo gasta más storage sin mejorar el resultado.';
+      sections.push({
+        kind: 'win-' + diffs.resolution.winner.toLowerCase(),
+        title: '📷 Mayor resolución en ' + winnerR.codigo,
+        body: body
+      });
+    }
+
+    // === IR + LED ===
+    if (diffs.ir) {
+      var winnerI = diffs.ir.winner === 'A' ? a : b;
+      var loserI = diffs.ir.winner === 'A' ? b : a;
+      var diffIr = Math.abs(diffs.ir.aVal - diffs.ir.bVal);
+      var body = '<b>'+winnerI.codigo+'</b> tiene IR de <b>'+winnerI.alcanceIR+'m</b> vs <b>'+loserI.alcanceIR+'m</b> de la otra ('+diffIr+'m de ventaja). ';
+      if (winnerI.alcanceIR >= 50) {
+        body += 'IR de '+winnerI.alcanceIR+'m cubre patios largos, bodegas, áreas residenciales amplias. ';
+      } else if (winnerI.alcanceIR >= 30) {
+        body += 'IR '+winnerI.alcanceIR+'m alcanza para escenas típicas de fachada o entrada residencial. ';
+      } else {
+        body += 'IR moderado, suficiente para áreas pequeñas o accesos. ';
+      }
+      if (winnerI.tieneLED && !loserI.tieneLED) {
+        body += '<b>Plus crítico</b>: además incluye LED warm light. Cuando detecta movimiento de noche, activa luz blanca y convierte la escena a color completo, mientras dispara una notificación. Es notoriamente superior al IR puro: disuade visualmente y la evidencia capturada en color identifica mejor a los intrusos.';
+      }
+      sections.push({
+        kind: 'win-' + diffs.ir.winner.toLowerCase(),
+        title: '💡 Mejor visión nocturna en ' + winnerI.codigo,
+        body: body
+      });
+    } else if (a.tieneLED !== b.tieneLED) {
+      var withLED = a.tieneLED ? a : b;
+      var noLED = a.tieneLED ? b : a;
+      var winnerKey = a.tieneLED ? 'a' : 'b';
+      sections.push({
+        kind: 'win-' + winnerKey,
+        title: '💡 ' + withLED.codigo + ' incluye LED warm light',
+        body: '<b>'+withLED.codigo+'</b> agrega LED de luz blanca además del IR. Cuando detecta movimiento nocturno, activa la luz blanca: convierte la escena a color, disuade visualmente al intruso y produce evidencia más rica. La <b>'+noLED.codigo+'</b> solo tiene IR — graba en blanco y negro de noche, sin disuasión activa.'
+      });
+    }
+
+    // === Focal ===
+    if (diffs.focal && diffs.focal.note === 'flexibility') {
+      var fixedCam = a.focalMin === a.focalMax ? a : b;
+      var varCam = a.focalMin === a.focalMax ? b : a;
+      var body = 'La <b>'+fixedCam.codigo+'</b> tiene focal fija de <b>'+fixedCam.focalMin+'mm</b>; la <b>'+varCam.codigo+'</b> es varifocal <b>'+varCam.focalMin+'-'+varCam.focalMax+'mm</b>';
+      if (varCam.lenteMotorizado) body += ' <b>motorizada</b> (ajustable desde el NVR sin escalera)';
+      body += '. ';
+      body += 'La fija es más barata, más confiable mecánicamente y elimina riesgo de que se descalibre el zoom con el tiempo. La varifocal te permite ajustar el ángulo después de montada y experimentar hasta encontrar el encuadre correcto. ';
+      body += '<b>Regla práctica</b>: si el ángulo lo conoces y la cámara va a quedar fija ahí 5+ años, fija. Si dudas o la escena puede cambiar, varifocal motorizada.';
+      sections.push({
+        kind: 'info',
+        title: '🔭 Lente fija vs varifocal',
+        body: body
+      });
+    } else if (diffs.focal && diffs.focal.note === 'range') {
+      sections.push({
+        kind: 'info',
+        title: '🔭 Rangos focales distintos',
+        body: '<b>'+a.codigo+'</b> '+diffs.focal.aVal+'mm vs <b>'+b.codigo+'</b> '+diffs.focal.bVal+'mm. Más mm = ángulo más cerrado y mayor zoom (mejor para distancia). Menos mm = ángulo más amplio (mejor para espacios cercanos). Usa la <b>calculadora DORI</b> para calcular a qué distancia logras identificación con cada lente.'
+      });
+    }
+
+    // === IA / Tecnologías ===
+    if (diffs.ai) {
+      var aiA = diffs.ai.aVal, aiB = diffs.ai.bVal;
+      var unique = function(arr1, arr2){ return arr1.filter(function(x){ return arr2.indexOf(x) < 0; }); };
+      var onlyA = unique(aiA, aiB), onlyB = unique(aiB, aiA);
+      if (onlyA.length > 0) {
+        sections.push({
+          kind: 'win-a',
+          title: '🧠 ' + a.codigo + ' agrega ' + onlyA.join(' + '),
+          body: cmpExplainAi(onlyA)
+        });
+      }
+      if (onlyB.length > 0) {
+        sections.push({
+          kind: 'win-b',
+          title: '🧠 ' + b.codigo + ' agrega ' + onlyB.join(' + '),
+          body: cmpExplainAi(onlyB)
+        });
+      }
+    }
+
+    // === Protección IP/IK ===
+    var pA = a.ipRating||0, pB = b.ipRating||0;
+    var ikA = a.ikRating||0, ikB = b.ikRating||0;
+    if (pA !== pB) {
+      if (pA > 0 && pB === 0) {
+        sections.push({
+          kind: 'win-a',
+          title: '🛡️ Solo ' + a.codigo + ' es exterior',
+          body: '<b>'+a.codigo+'</b> es IP'+pA+' (sellada contra polvo y agua). La <b>'+b.codigo+'</b> no menciona protección IP — para uso intemperie podrías tener problemas en lluvia, humedad costera o condensación.'
+        });
+      } else if (pB > 0 && pA === 0) {
+        sections.push({
+          kind: 'win-b',
+          title: '🛡️ Solo ' + b.codigo + ' es exterior',
+          body: '<b>'+b.codigo+'</b> es IP'+pB+'. La <b>'+a.codigo+'</b> no menciona protección IP — usar solo en interior.'
+        });
+      } else if (Math.abs(pA - pB) >= 1) {
+        var winnerP = pA > pB ? a : b;
+        var winnerKey = pA > pB ? 'a' : 'b';
+        sections.push({
+          kind: 'win-' + winnerKey,
+          title: '🛡️ Mejor sellado en ' + winnerP.codigo,
+          body: 'IP'+(pA > pB ? pA : pB)+' vs IP'+(pA > pB ? pB : pA)+'. La diferencia importa en zonas de alta humedad costera, lluvias intensas o limpieza con manguera a presión.'
+        });
+      }
+    }
+    if (ikA !== ikB) {
+      if (ikA >= 10 && ikB < 10) {
+        sections.push({
+          kind: 'win-a',
+          title: '⚒️ ' + a.codigo + ' es antivandálica IK' + ikA,
+          body: 'Resiste impactos físicos de hasta 20 joules (un palo, piedra o golpe). Crítico en lugares con público: estacionamientos, escuelas, accesos públicos. La <b>'+b.codigo+'</b> es más vulnerable a daño físico intencional.'
+        });
+      } else if (ikB >= 10 && ikA < 10) {
+        sections.push({
+          kind: 'win-b',
+          title: '⚒️ ' + b.codigo + ' es antivandálica IK' + ikB,
+          body: 'Resiste impactos físicos. La <b>'+a.codigo+'</b> es más vulnerable a daño intencional.'
+        });
+      }
+    }
+
+    // === Audio ===
+    if (a.tieneAudioOut !== b.tieneAudioOut) {
+      var winnerA = a.tieneAudioOut ? a : b;
+      var winnerKey = a.tieneAudioOut ? 'a' : 'b';
+      sections.push({
+        kind: 'win-' + winnerKey,
+        title: '🔊 ' + winnerA.codigo + ' tiene audio bidireccional',
+        body: 'Mic + altavoz integrados permiten avisos por voz remotos: <i>"está siendo grabado, abandone el recinto"</i> directo desde la app. Útil para disuasión en tiempo real, comunicación con visitantes, o atención al cliente cuando la cámara está en local comercial.'
+      });
+    } else if (a.tieneMic !== b.tieneMic) {
+      var winnerM = a.tieneMic ? a : b;
+      var loserM = a.tieneMic ? b : a;
+      var winnerKey = a.tieneMic ? 'a' : 'b';
+      sections.push({
+        kind: 'win-' + winnerKey,
+        title: '🎤 ' + winnerM.codigo + ' incluye micrófono integrado',
+        body: 'Captura audio sincronizado al video — útil para investigaciones donde necesites escuchar lo que pasó. La <b>'+loserM.codigo+'</b> requiere micrófono externo conectado al NVR si lo necesitas.'
+      });
+    }
+
+    // === Anti-corrosión ===
+    if (a.antiCorrosion !== b.antiCorrosion) {
+      var winnerC = a.antiCorrosion ? a : b;
+      var loserC = a.antiCorrosion ? b : a;
+      var winnerKey = a.antiCorrosion ? 'a' : 'b';
+      sections.push({
+        kind: 'win-' + winnerKey,
+        title: '🌊 ' + winnerC.codigo + ' es anti-corrosión / NEMA',
+        body: 'Diseñada para ambientes salinos (costa marítima, plantas químicas) o de alta humedad. La <b>'+loserC.codigo+'</b> en condiciones extremas se oxidaría en meses, perdiendo la garantía y la imagen.'
+      });
+    }
+
+    // === Precio (cierre del análisis) ===
+    if (diffs.price) {
+      var cheaperCam = diffs.price.cheaper === 'A' ? a : b;
+      var pricerCam = diffs.price.cheaper === 'A' ? b : a;
+      var pct = ((diffs.price.diff / cheaperCam.precio) * 100).toFixed(0);
+      sections.push({
+        kind: 'info',
+        title: '💵 Diferencia de precio: $' + diffs.price.diff.toLocaleString('es-CL') + ' (' + pct + '%)',
+        body: '<b>'+pricerCam.codigo+'</b> cuesta $'+pricerCam.precio.toLocaleString('es-CL')+' vs $'+cheaperCam.precio.toLocaleString('es-CL')+' de la <b>'+cheaperCam.codigo+'</b>. El sobreprecio se justifica solo si las características adicionales que listamos arriba aplican a tu caso real. Si no las vas a aprovechar, ahorra esa diferencia y reinvierte en más cámaras o mejor cableado.'
+      });
+    }
+
+    return sections;
+  }
+
+
+  function cmpExplainAi(items) {
