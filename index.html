@@ -19243,7 +19243,7 @@ function render() {
         })()}
         <div class="pcard-quickview" onclick="openProdModal(${p.id})">👁 Ver ficha técnica</div>
         ${(()=>{
-          var _type = B2B.classify(p);
+          var _type = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
           if (_type === 'enterprise') {
             return '<div class="enterprise-badge">Proyecto</div>';
           }
@@ -19280,9 +19280,9 @@ function render() {
         }).join('')}</div>
         <div class="pcard-price">
           ${(()=>{
-            var _t = B2B.classify(p);
+            var _t = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
             if (_t === 'enterprise') {
-              if (B2B.canSeePriceEnterprise()) {
+              if (typeof B2B !== 'undefined' && B2B.canSeePriceEnterprise()) {
                 return `<div class="price-neto">Neto ${fmt(p.pneto)} + IVA ${fmt(p.piva)}</div>
                          <div class="price-total">${fmt(p.ptotal)}</div>
                          <div class="price-sub" style="color:#1B5FD4">Precio Integrador Certificado</div>`;
@@ -19293,11 +19293,11 @@ function render() {
               </div>`;
             }
             // SMB — mostrar precio tramo si aplica
-            var tramoP = B2B.getPrecioTramo(p);
+            var tramoP = typeof B2B !== 'undefined' ? B2B.getPrecioTramo(p) : null;
             if (tramoP) {
               return `<div class="price-neto">Neto ${fmt(Math.round(tramoP/1.19))}</div>
                        <div class="price-total">${fmt(tramoP)}</div>
-                       <div class="price-sub"><span class="tramo-badge">Tramo ${B2B.userTramo}</span> · Precio personalizado</div>`;
+                       <div class="price-sub"><span class="tramo-badge">Tramo ${typeof B2B !== 'undefined' ? B2B.userTramo : ''}</span> · Precio personalizado</div>`;
             }
             return `<div class="price-neto">Neto ${fmt(p.pneto)} + IVA ${fmt(p.piva)}</div>
                      <div class="price-total">${fmt(p.ptotal)}</div>
@@ -19306,7 +19306,7 @@ function render() {
         </div>
         <div class="pcard-actions">
           ${(()=>{
-            var _t = B2B.classify(p);
+            var _t = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
             if (_t === 'enterprise') {
               return `<button class="pca-btn pca-btn-blue" onclick="abrirProyectoModal(${p.id})" title="Cotizar Proyecto">
                 <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -19322,7 +19322,7 @@ function render() {
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
             <span>Ficha</span>
           </button>
-          <button class="pca-btn pca-btn-light" data-id="${p.id}" onclick="cmpToggle(${p.id});this.classList.toggle('added')" title="Comparar">
+          <button class="pca-btn pca-btn-light" data-id="${p.id}" onclick="event.stopPropagation();cmpToggle(${p.id});this.classList.toggle('added')" title="Comparar">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 8 22 12 18 16"/><polyline points="6 8 2 12 6 16"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
             <span>Comparar</span>
           </button>
@@ -19491,7 +19491,7 @@ function renderSD(q) {
         <div class="sd-code">${hlText(p.codigo, q, 0)}</div>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0">
-        <div class="sd-price">${B2B.classify(p)==='enterprise' ? '<span style="font-size:10px;color:#888;font-style:italic">Bajo solicitud</span>' : fmt(p.ptotal)}</div>
+        <div class="sd-price">${(typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb')==='enterprise' ? '<span style="font-size:10px;color:#888;font-style:italic">Bajo solicitud</span>' : fmt(p.ptotal)}</div>
         <span class="sd-score" style="background:${col}22;color:${col}">${score}% ${lbl}</span>
       </div>
     </div>`;
@@ -21542,7 +21542,7 @@ function _pmBuildModal(id) {
                 Agregar al carro
               </button>
               <button class="pm-btn-secondary" onclick="pmAddCot(${id})">📋 Cotizar</button>
-              <button class="pm-btn-ghost" onclick="cmpToggle(${id})" title="Comparar este producto" style="background:linear-gradient(135deg,rgba(232,0,28,.06),rgba(232,0,28,.04));border:1px solid rgba(232,0,28,.2);color:var(--red);display:inline-flex;align-items:center;gap:5px;font-weight:700">
+              <button class="pm-btn-ghost" onclick="event.stopPropagation();cmpToggle(${id})" title="Comparar este producto" style="background:linear-gradient(135deg,rgba(232,0,28,.06),rgba(232,0,28,.04));border:1px solid rgba(232,0,28,.2);color:var(--red);display:inline-flex;align-items:center;gap:5px;font-weight:700">
                 <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="18 8 22 12 18 16"/><polyline points="6 8 2 12 6 16"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
                 Comparar
               </button>
