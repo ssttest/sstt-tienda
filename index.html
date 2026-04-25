@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 10:03 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 10:17 hrs (UTC-4 Chile) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -7275,6 +7275,24 @@ body.cart-open #proyectoListadoBtn {
 .fov-cam-box.fov-cam-b { border-top:3px solid #ff6b35; }
 .fov-cam-hdr { display:flex; align-items:center; gap:7px; margin-bottom:11px; }
 .fov-cam-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+
+.fov-cam-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  min-width: 0;
+}
+.fov-cam-model {
+  font-size: 11px;
+  font-weight: 700;
+  font-family: ui-monospace, monospace;
+  letter-spacing: -.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .fov-cam-title { font-size:12px; font-weight:800; color:#333; flex:1;
   text-transform:uppercase; letter-spacing:.5px; }
 .fov-clear-btn {
@@ -15400,10 +15418,7 @@ if (window.pdfjsLib) {
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       Seguimiento
     </button>
-    <button data-sec="asistente" class="mnav-tab" onclick="showSection('asistente',this)">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Asistente IA CCTV
-    </button>
+    
     
     <div style="margin-left:auto;display:flex;align-items:center;gap:10px;padding-right:4px">
       <span style="font-size:11px;color:rgba(255,255,255,.4)">Distribuidor Oficial</span>
@@ -15835,7 +15850,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Sábado 25 de Abril del 2026 · 10:03 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Sábado 25 de Abril del 2026 · 10:17 hrs</span>
   </div>
 </div>
 
@@ -16778,7 +16793,10 @@ if (window.pdfjsLib) {
     <div class="fov-cam-box fov-cam-a">
       <div class="fov-cam-hdr">
         <span class="fov-cam-dot" style="background:#00aaff"></span>
-        <span class="fov-cam-title">Cámara A</span>
+        <div class="fov-cam-title-wrap">
+          <span class="fov-cam-title">Cámara A</span>
+          <span class="fov-cam-model" id="fovModelA" style="color:#00aaff"></span>
+        </div>
         <button class="fov-clear-btn" onclick="fovClear('A')" title="Limpiar">✕</button>
       </div>
       <div class="fov-searchbox">
@@ -16804,7 +16822,10 @@ if (window.pdfjsLib) {
     <div class="fov-cam-box fov-cam-b" id="fovCompareWrap" style="display:none">
       <div class="fov-cam-hdr">
         <span class="fov-cam-dot" style="background:#ff6b35"></span>
-        <span class="fov-cam-title">Cámara B</span>
+        <div class="fov-cam-title-wrap">
+          <span class="fov-cam-title">Cámara B</span>
+          <span class="fov-cam-model" id="fovModelB" style="color:#ff6b35"></span>
+        </div>
         <button class="fov-clear-btn" onclick="fovClear('B')" title="Limpiar">✕</button>
       </div>
       <div class="fov-searchbox">
@@ -28243,7 +28264,7 @@ function aiSend() {
     'MODOS GRABACIÓN: Continua, Movimiento, SMD+ (solo humano/vehículo), IVS, Alarma física. Disco en modo circular (sobrescribe lo más antiguo).\n' +
     'TROUBLESHOOTING: Cámara no aparece→verificar subred/cable/PoE. Sin imagen→verificar resolución del canal/H.265 compatibilidad. P2P falla→verificar internet en NVR (ping 8.8.8.8). Disco no reconocido→formatear desde el NVR. Reset contraseña→botón físico RESET 5s.\n' +
     'CABLEADO: Cat5e para IP estándar, Cat6 para 4K/HiPoE. RG59 para HDCVI. Cable síamés coaxial+bifilar para HDCVI sin fuente separada.\n' +
-    'DISCOS: WD Purple o Seagate SkyHawk para grabación 24/7. Fórmula: GB/día=(bitrate_Mbps×3600×horas)/8/1024×N_cámaras.\n\n' +
+    'DISCOS: Seagate SkyHawk para grabación 24/7. Fórmula: GB/día=(bitrate_Mbps×3600×horas)/8/1024×N_cámaras.\n\n' +
     '=== REGLAS ===\n' +
     '1. Español, conciso, máx 3-4 oraciones para respuesta de voz.\n' +
     '2. Una sola contrapregunta por turno.\n' +
@@ -29608,7 +29629,7 @@ function compatAnalizarCarro() {
       tipo: 'info',
       titulo: 'Falta disco duro para almacenamiento',
       mensaje: 'Tus ' + totalCamaras + ' cámara' + (totalCamaras>1?'s':'') + ' no podrán grabar sin un HDD instalado.',
-      solucion: 'Recomendamos HDD de vigilancia (Purple/Skyhawk) acorde al NVR. Guía: 4CH→1-2TB · 8CH→2-4TB · 16CH→4-8TB',
+      solucion: 'Recomendamos HDD de vigilancia Seagate SkyHawk acorde al NVR. Guía: 4CH→1-2TB · 8CH→2-4TB · 16CH→4-8TB',
       icon: '💾'
     });
   }
@@ -30036,7 +30057,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 10:03 hrs';
+  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 10:17 hrs';
 })();
 
 
@@ -32235,12 +32256,16 @@ function renderPanel(which, r) {
   var prefix = 'fov'+which;
   var specs = document.getElementById(prefix+'Specs');
   var dori = document.getElementById(prefix+'Dori');
+  var modelLbl = document.getElementById('fovModel'+which);
   if (!specs || !dori) return;
   if (!r) {
     specs.innerHTML = '<div class="fov-empty">Selecciona una cámara para ver sus datos</div>';
     dori.innerHTML = '';
+    if (modelLbl) modelLbl.textContent = '';
     return;
   }
+  // Mostrar código de la cámara con su color (azul A, naranja B)
+  if (modelLbl) modelLbl.textContent = r.cam.cod || '';
   var focalStr = r.cam.focal.type === 'fixed' ? r.cam.focal.min+'mm (fija)' :
                  r.cam.focal.type === 'ptz' ? r.cam.focal.zoom+'X zoom' :
                  r.cam.focal.min+'–'+r.cam.focal.max+'mm (varifocal)';
@@ -34755,12 +34780,12 @@ window.fovCamStart = function() {
   }
   // Verificar si estamos en HTTPS (o localhost)
   if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && window.location.protocol !== 'file:') {
-    alert('La cámara requiere HTTPS. Sube el sitio a GitHub Pages o usa localhost.');
+    alert('La cámara requiere HTTPS. Accede desde sstt.cl o usa localhost.');
     return;
   }
   // Si protocolo es file://, advertir
   if (window.location.protocol === 'file:') {
-    if (!confirm('Estás abriendo el archivo localmente (file://). Los navegadores bloquean la cámara en este modo. Sube el archivo a un servidor HTTPS (ej. GitHub Pages) para que funcione.\n\n¿Intentar de todos modos?')) return;
+    if (!confirm('Estás abriendo el archivo localmente (file://). Los navegadores bloquean la cámara en este modo. Sube el archivo a un servidor HTTPS para que funcione.\n\n¿Intentar de todos modos?')) return;
   }
 
   var constraints = {
@@ -36492,18 +36517,19 @@ function calcStorage(bitrate_mbps_total, days, hoursPerDay, motionFactor) {
   return effectiveBitrate * 3600 * hoursPerDay * days / 8 / 1024;  // GB
 }
 
-// Recomienda HDD del catálogo Purple/Skyhawk según GB requeridos
+// Recomienda HDD del catálogo SkyHawk/Exos según GB requeridos
 function recommendHDD(gb) {
-  if (gb < 1024) return { size:'1TB', model:'WD10PURX o ST1000VX001', detail:'1TB Purple/Skyhawk' };
-  if (gb < 2048) return { size:'2TB', model:'WD20PURX o ST2000VX008', detail:'2TB Purple/Skyhawk' };
-  if (gb < 4096) return { size:'4TB', model:'WD40PURX o ST4000VX007', detail:'4TB Purple/Skyhawk' };
-  if (gb < 6144) return { size:'6TB', model:'WD60PURX o ST6000VX001', detail:'6TB Purple/Skyhawk' };
-  if (gb < 8192) return { size:'8TB', model:'WD80PURX', detail:'8TB Purple' };
-  if (gb < 10240) return { size:'10TB', model:'WD100PURZ', detail:'10TB Purple' };
-  if (gb < 14336) return { size:'12TB', model:'WD121PURP', detail:'12TB Purple' };
+  if (gb < 1024) return { size:'1TB', model:'041000GSV', detail:'1TB SkyHawk' };
+  if (gb < 2048) return { size:'2TB', model:'042000GSV', detail:'2TB SkyHawk' };
+  if (gb < 4096) return { size:'4TB', model:'044000GSV', detail:'4TB SkyHawk' };
+  if (gb < 6144) return { size:'6TB', model:'046000GSV', detail:'6TB SkyHawk' };
+  if (gb < 8192) return { size:'8TB', model:'048000GSV', detail:'8TB SkyHawk' };
+  if (gb < 10240) return { size:'10TB', model:'0410TB', detail:'10TB SkyHawk AI' };
+  if (gb < 18000) return { size:'16TB', model:'ST16000NM002H', detail:'16TB Exos Enterprise' };
+  if (gb < 22000) return { size:'20TB', model:'ST20000VE003', detail:'20TB SkyHawk AI' };
   // Múltiples discos
-  var n = Math.ceil(gb / 14336);
-  return { size: n + 'x12TB', model: n + ' × WD121PURP', detail: n + ' discos de 12TB en RAID/JBOD' };
+  var n = Math.ceil(gb / 20000);
+  return { size: n + 'x20TB', model: n + ' × ST20000VE003', detail: n + ' discos de 20TB en RAID/JBOD' };
 }
 
 // Recomienda NVR según N canales y bandwidth total
@@ -36812,8 +36838,8 @@ var FOV_TOOLTIPS = {
     title: 'Disco duro (HDD) para CCTV',
     body: '<b>No cualquier disco sirve</b><br><br>' +
           'Los HDDs estándar de PC se queman con el ciclo 24/7 de CCTV. Se usan modelos específicos:<br><br>' +
-          '<b>💾 WD Purple:</b> diseñado para 24/7 grabación de video, soporta 64+ cámaras. La opción estándar.<br><br>' +
-          '<b>💾 Seagate SkyHawk:</b> alternativa equivalente, con tecnología ImagePerfect™.<br><br>' +
+          '<b>💾 Seagate SkyHawk:</b> diseñado para 24/7 grabación de video, soporta 64+ cámaras simultáneas. Tecnología ImagePerfect™ que evita pérdida de frames y reduce vibración. Es la opción que SSTT recomienda.<br><br>' +
+          '<b>💾 Seagate SkyHawk AI:</b> versión avanzada con caché optimizado para análisis de video con IA, ideal para NVR con WizMind/AcuPick.<br><br>' +
           '<b>Capacidades típicas Chile:</b> 1TB / 2TB / 4TB / 6TB / 8TB / 10TB / 12TB / 18TB.<br><br>' +
           '<b>RAID en NVR:</b> para sistemas críticos (banca, retail), usar varios discos en RAID 1/5/10 garantiza no perder grabaciones si un disco falla.<br><br>' +
           '<b>Recomendación:</b> calcular storage requerido + 30% de margen para no llenar el disco al 100% (afecta rendimiento).'
@@ -37295,7 +37321,7 @@ function fovPresRender() {
     html += '<div class="fov-pres-closing-icon">🤝</div>';
     html += '<div class="fov-pres-closing-title">¿Avanzamos con la cotización?</div>';
     html += '<div class="fov-pres-closing-sub">Esta comparación fue realizada con datos técnicos certificados por estándar EN 62676-4 (DORI)</div>';
-    html += '<div class="fov-pres-closing-contact"><b>SSTT — Distribuidor oficial Dahua®</b><br>ssttest.github.io/sstt-tienda</div>';
+    html += '<div class="fov-pres-closing-contact"><b>SSTT — Distribuidor oficial Dahua®</b><br>sstt.cl</div>';
     html += '</div>';
   }
 
@@ -37812,7 +37838,7 @@ function _continuePDF(doc, pageW, pageH, margin, y, fechaStr, btn, txtEl, loadEl
       doc.setTextColor(150,150,150);
       doc.text('Generado por Simulador FOV SSTT · ' + fechaStr + ' · Página ' + i + ' de ' + pageCount, margin, pageH - 6);
       doc.setTextColor(0,87,184);
-      doc.text('ssttest.github.io/sstt-tienda', pageW - margin, pageH - 6, { align: 'right' });
+      doc.text('sstt.cl', pageW - margin, pageH - 6, { align: 'right' });
     }
 
     var fileName = 'SSTT_Comparacion_' + (clientData.name.replace(/[^a-zA-Z0-9]/g,'_').slice(0,30) || 'cliente') + '_' + new Date().toISOString().slice(0,10) + '.pdf';
@@ -38258,7 +38284,7 @@ window.fovTrackSendWhatsApp = function() {
   });
   msg += '*Parámetros:* ' + FOV.dist + 'm distancia · ' + FOV.height + 'm altura\n';
   if (stats) msg += '*Bandwidth total:* ' + stats.totalH265.toFixed(1) + ' Mbps (H.265)\n';
-  msg += '\n_Comparación generada en ssttest.github.io/sstt-tienda_';
+  msg += '\n_Comparación generada en sstt.cl_';
   // Abrir WhatsApp
   var url = 'https://wa.me/?text=' + encodeURIComponent(msg);
   window.open(url, '_blank');
@@ -38588,8 +38614,9 @@ if (document.readyState === 'loading') {
 
     // Almacenamiento
     { cat:'Almacenamiento', term:'TB / GB', def:'Terabyte (1024 GB) y Gigabyte. Capacidad de disco. CCTV típico requiere 1-4 TB por mes según número de cámaras y configuración.' },
-    { cat:'Almacenamiento', term:'WD Purple', def:'Disco duro Western Digital específico CCTV 24/7. Soporta 64+ cámaras simultáneas. Estándar.' },
-    { cat:'Almacenamiento', term:'Seagate SkyHawk', def:'Alternativa Seagate al WD Purple. Tecnología ImagePerfect™ para CCTV continuo.' },
+    { cat:'Almacenamiento', term:'Seagate SkyHawk', def:'Disco duro Seagate específico CCTV 24/7. Tecnología ImagePerfect™. Soporta 64+ cámaras simultáneas. La línea estándar para CCTV.' },
+    { cat:'Almacenamiento', term:'Seagate SkyHawk AI', def:'Versión SkyHawk con caché optimizado para análisis IA (WizMind, AcuPick). Recomendado para NVR con análisis avanzado.' },
+    { cat:'Almacenamiento', term:'Seagate Exos', def:'Disco duro Enterprise Seagate. Para grabaciones de muy alta capacidad (16TB+) en proyectos con muchas cámaras y/o retención larga.' },
     { cat:'Almacenamiento', term:'RAID (1/5/10)', def:'Configuración con varios discos para redundancia. RAID 1 = espejo · RAID 5 = striping con paridad · RAID 10 = espejo + striping.' },
     { cat:'Almacenamiento', term:'Edge storage / SD card', def:'Grabación local en SD dentro de la cámara. Backup ante caída de red. Capacidad típica 64-256GB.' },
 
@@ -39458,7 +39485,12 @@ if (document.readyState === 'loading') {
       'ST8000NM0075',   // Disco SAS — no compatible con NVR estándar SATA
       'MQ01ABD100V',    // Toshiba 1TB para EQUIPO MÓVIL — no soporta 24/7 CCTV
       'ST8000NM055',    // Enterprise SAS legacy — interface incompatible
-      'SSD-S820GS1TB'   // SSD — no diseñado para escritura sostenida CCTV
+      'SSD-S820GS1TB',  // SSD — no diseñado para escritura sostenida CCTV
+      // WD Purple — sin stock, NO recomendar
+      '041000GWDP',     // WD Purple 1TB → SkyHawk 041000GSV
+      '042000GWDP',     // WD Purple 2TB → SkyHawk 042000GSV
+      '043000GWDP',     // WD Purple 3TB → SkyHawk 043000GSV
+      '044000GWDP'      // WD Purple 4TB → SkyHawk 044000GSV
     ],
     not_switches: [
       'TAM01GT01GT-75', // Inyector HI-PoE 75W (1 puerto, no switch)
@@ -39472,11 +39504,7 @@ if (document.readyState === 'loading') {
     // Cuando AMBOS están en el catálogo, preferir el de la derecha (moderno).
     // Si solo está el de la izquierda (porque el moderno se agotó), igual se recomienda.
     'ST8000VX004': '048000GSV',    // Surveillance 8TB → SkyHawk 8TB
-    'ST4000NM0035': '044000GSV',   // Enterprise 4TB SATA → SkyHawk 4TB
-    '041000GWDP':   '041000GSV',   // WD Purple 1TB → SkyHawk 1TB
-    '042000GWDP':   '042000GSV',   // WD Purple 2TB → SkyHawk 2TB
-    '043000GWDP':   '043000GSV',   // WD Purple 3TB → SkyHawk 3TB
-    '044000GWDP':   '044000GSV'    // WD Purple 4TB → SkyHawk 4TB
+    'ST4000NM0035': '044000GSV'    // Enterprise 4TB SATA → SkyHawk 4TB
   };
 
   function isTechnicallyExcluded(codigo, ctx) {
@@ -39494,28 +39522,26 @@ if (document.readyState === 'loading') {
   }
 
   function bomFindHdds() {
-    // Discos compatibles con NVR (SATA): SkyHawk, SkyHawk AI, Exos, Surveillance plain, WD Purple
+    // Discos compatibles con NVR (SATA): SkyHawk, SkyHawk AI, Exos
     // Excluye técnicamente incompatibles: SAS, SSD, móviles, storage chasis 48HDD
     if (typeof PRODUCTS === 'undefined') return [];
     return PRODUCTS.filter(function(p){
       if (p.cat !== 'accesorios') return false;
       if (isTechnicallyExcluded(p.codigo, 'hdd_for_nvr')) return false;
-      // Cualquier disco diseñado para CCTV/vigilancia o enterprise SATA
-      if (!/(skyhawk|surveillance|exos|purple|purpura|enterprise)/i.test(p.nombre)) return false;
-      if (/SAS/i.test(p.nombre)) return false;       // Interfaz SAS no compatible con NVR
-      if (/SSD/i.test(p.nombre)) return false;       // SSDs no para retención sostenida
-      if (/storage.*\d+\s*HDD/i.test(p.nombre)) return false;  // Chasis EVS para 48 HDD
-      if (/m[oó]vil|laptop|notebook/i.test(p.nombre)) return false;  // No 24/7
+      // SOLO SkyHawk, SkyHawk AI o Exos (líneas vigentes para CCTV)
+      // Excluir WD Purple, Surveillance plain, Toshiba, etc.
+      if (!/(skyhawk|exos)/i.test(p.nombre)) return false;
+      if (/SAS/i.test(p.nombre)) return false;
+      if (/SSD/i.test(p.nombre)) return false;
+      if (/storage.*\d+\s*HDD/i.test(p.nombre)) return false;
+      if (/m[oó]vil|laptop|notebook/i.test(p.nombre)) return false;
       return true;
     }).map(function(p){
       var tbM = p.nombre.match(/(\d+)\s*TB/i);
-      // Identificar serie por nombre y asignar rank de preferencia
       var serie, rank;
       if (/skyhawk\s+ai/i.test(p.nombre))      { serie = 'SkyHawk AI';       rank = 5; }
       else if (/exos/i.test(p.nombre))          { serie = 'Exos Enterprise';  rank = 4; }
-      else if (/skyhawk/i.test(p.nombre))       { serie = 'SkyHawk';          rank = 5; }  // SkyHawk = nivel preferido CCTV
-      else if (/(purple|purpura|wd|western)/i.test(p.nombre)) { serie = 'WD Purple'; rank = 2; }
-      else if (/surveillance/i.test(p.nombre))  { serie = 'Surveillance';     rank = 3; }
+      else if (/skyhawk/i.test(p.nombre))       { serie = 'SkyHawk';          rank = 5; }
       else                                       { serie = 'Otro';             rank = 1; }
       return {
         codigo: p.codigo, nombre: p.nombre, ptotal: p.ptotal,
@@ -39524,6 +39550,137 @@ if (document.readyState === 'loading') {
       };
     }).filter(function(p){ return p.tb > 0; }).sort(function(a,b){ return a.tb - b.tb; });
   }
+  // ── XVRs (grabadores HDCVI) ──
+  function bomFindXvrs() {
+    if (typeof PRODUCTS === 'undefined') return [];
+    return PRODUCTS.filter(function(p){
+      return p.cat === 'nvr' &&
+        /XVR|HCVR/i.test(p.codigo) &&
+        !/MXVR|MNVR|MCVR/i.test(p.codigo);  // excluir mobile
+    }).map(function(p){
+      var c = (p.codigo||'').toUpperCase();
+      // Canales
+      var chM = p.nombre.match(/(\d+)\s*(?:CH|canales?)/i);
+      if (!chM) {
+        var mcod = c.match(/(?:XVR|HCVR)\w*?(0?[48]|16|32|64)(?!\d)/);
+        if (mcod) chM = [null, String(parseInt(mcod[1]))];
+      }
+      var ch = chM ? parseInt(chM[1]) : 0;
+      // Soporte 4K
+      var is4K = /4K|4KL|8MP/i.test(p.nombre + ' ' + p.codigo);
+      // Serie y rank
+      var serie = 'otra', serieRank = 1;
+      if (/^DH-XVR1B|XVR1B/i.test(c))      { serie = 'XVR1B (entrada económica)'; serieRank = 1; }
+      else if (/^DH-XVR4|XVR4/i.test(c))   { serie = 'XVR4 (estándar)';            serieRank = 2; }
+      else if (/^DH-XVR5|XVR5/i.test(c))   { serie = 'XVR5 (Pro)';                  serieRank = 3; }
+      else if (/^DH-XVR7|XVR7/i.test(c))   { serie = 'XVR7 (Ultra/Pro)';            serieRank = 4; }
+      else if (/HCVR/i.test(c))             { serie = 'HCVR (legacy)';              serieRank = 1; }
+      // Bahías HDD: XVR4/5/7 grandes con 8 bahías son XVR5832, XVR5432
+      var bays = 1;
+      if (/XVR(?:5|7)8\d\d/i.test(c)) bays = 8;
+      else if (/XVR(?:5|7)4\d\d/i.test(c)) bays = 4;
+      else if (/XVR(?:5|7)2\d\d|XVR4232/i.test(c)) bays = 2;
+      // IA en XVR5/7 con sufijos -EI/-I3
+      var hasAI = /-(?:EI[0-9]?|XI|I3|I)\b/i.test(c);
+      return {
+        codigo: p.codigo, nombre: p.nombre, ptotal: p.ptotal,
+        ch: ch, is4K: is4K, hasAI: hasAI,
+        serie: serie, serieRank: serieRank, bays: bays
+      };
+    }).filter(function(p){ return p.ch > 0; });
+  }
+
+  function bomAutoSelectXvr(channels, options) {
+    options = options || {};
+    var camMP = options.camMP || 2;
+    var prefer4K = !!options.prefer4K;
+
+    var xvrs = bomFindXvrs();
+    if (xvrs.length === 0) return null;
+
+    // Tamaños estándar
+    var standardSizes = [4, 8, 16, 32, 64];
+    var minCh = channels, maxCh = channels;
+    for (var i = 0; i < standardSizes.length; i++) {
+      if (standardSizes[i] >= channels) {
+        minCh = standardSizes[i];
+        maxCh = standardSizes[Math.min(i+1, standardSizes.length-1)];
+        break;
+      }
+    }
+
+    var candidates = xvrs.filter(function(x){
+      if (x.ch < channels) return false;
+      if (x.ch > maxCh) return false;
+      // Cámara HDCVI 4MP+ requiere XVR 4K
+      if (camMP >= 4 && !x.is4K) return false;
+      // No HCVR legacy si hay alternativa moderna
+      if (/HCVR/i.test(x.codigo) && xvrs.some(function(y){ return /XVR/i.test(y.codigo) && y.ch >= channels; })) return false;
+      return true;
+    });
+
+    var relaxed = false;
+    if (candidates.length === 0) {
+      relaxed = true;
+      candidates = xvrs.filter(function(x){ return x.ch >= channels && !/HCVR/i.test(x.codigo); });
+    }
+    if (candidates.length === 0) {
+      relaxed = true;
+      candidates = xvrs.filter(function(x){ return x.ch >= channels; });
+    }
+    if (candidates.length === 0) {
+      return { item: xvrs.sort(function(a,b){return b.ch - a.ch;})[0], insufficient: true };
+    }
+
+    // Scoring específico para XVR
+    candidates.forEach(function(x){
+      var s = 0;
+      // Para cámaras simples (1-2MP), preferir XVR1B/XVR4 (serie básica = más barato)
+      // Para cámaras 4MP+, preferir XVR5/XVR7
+      if (camMP <= 2) {
+        // Cámaras simples: la serie básica es la correcta, no necesitan 4K
+        if (x.serieRank === 1) s += 35;        // XVR1B se prefiere fuertemente
+        else if (x.serieRank === 2) s += 25;   // XVR4 acepta
+        else s += x.serieRank * 3;             // Series altas penalizan (sobrediseño)
+        if (x.is4K) s += 5;                    // 4K marginal en cámaras 2MP
+        if (x.hasAI) s += 8;                   // IA marginal en HDCVI básico
+      } else {
+        // Cámaras 4MP+: privilegiar series altas
+        s += x.serieRank * 25;
+        if (x.is4K) s += 25;                   // 4K crítico para 4MP+
+        if (x.hasAI) s += 15;
+      }
+      if (x.bays >= 2) s += 5;
+      if (x.bays >= 4) s += 5;
+
+      // Penalizar exceso de canales
+      var chExcess = x.ch - minCh;
+      if (chExcess > 0) s -= chExcess * 2;
+
+      // Penalizar precio (suave)
+      var priceK = x.ptotal / 1000;
+      s -= priceK * 0.04;
+
+      x._score = s;
+    });
+
+    candidates.sort(function(a, b){ return b._score - a._score; });
+    var winner = candidates[0];
+
+    var highlights = [];
+    if (winner.is4K) highlights.push('4K/8MP');
+    if (winner.hasAI) highlights.push('IA integrada');
+    if (winner.bays >= 4) highlights.push(winner.bays + ' bahías HDD');
+
+    return {
+      item: winner,
+      insufficient: relaxed,
+      highlights: highlights,
+      reason: 'Recomendado por: ' + winner.serie + (highlights.length ? ' + ' + highlights.join(' + ') : '')
+    };
+  }
+
+
 
   function bomFindUps() {
     if (typeof PRODUCTS === 'undefined') return [];
@@ -40094,20 +40251,48 @@ if (document.readyState === 'loading') {
     var hdd = bomAutoSelectHdd(Math.ceil(storageTb * 1.3));  // 30% margen
 
     // === NVR del catálogo ===
-    var nvr = bomAutoSelectNvr(effectiveNCams, {
-      camMP: camMP,
-      prefer4K: prefer4kNvr || camMP >= 4,  // 4K obligatorio si cámara 4MP+
-      requiresAI: false  // futuro: detectar si proyecto usa LPR/perimetro
-    });
-
-    // === Switch PoE (asumimos NVR tiene PoE para algunos canales, agregamos extra) ===
-    // Si el NVR tiene PoE, asumimos cubre N puertos; si no, hay que cubrir todas
-    var nvrPoEPorts = nvr && /PoE/i.test(nvr.item.nombre) ? (nvr.item.ch || 0) : 0;
-    var sw = null;
-    var swCamsExtra = Math.max(0, effectiveNCams - nvrPoEPorts);
-    if (swCamsExtra > 0) {
-      sw = bomAutoSelectSwitch(swCamsExtra);
+    // === Detectar si las cámaras son HDCVI o IP ===
+    // HDCVI usa XVR + cableado coaxial/UTP+balun · NO usa PoE · cable estándar a 30m
+    var isHdcviProject = false;
+    if (useFovCams && fovCamRows.length > 0) {
+      // Si todas las cámaras del FOV son HDCVI
+      var hdcviCount = fovCamRows.filter(function(fr){
+        var p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(function(pp){ return pp.codigo === fr.cod; }) : null;
+        return p && p.cat === 'camaras-hdcvi';
+      }).length;
+      isHdcviProject = (hdcviCount === fovCamRows.length);
     }
+
+    // === Selección de grabador: XVR para HDCVI, NVR para IP ===
+    var nvr, isXvr = false;
+    if (isHdcviProject) {
+      // Cámaras HDCVI → XVR
+      nvr = bomAutoSelectXvr(effectiveNCams, {
+        camMP: camMP,
+        prefer4K: prefer4kNvr || camMP >= 4
+      });
+      isXvr = true;
+    } else {
+      // Cámaras IP → NVR
+      nvr = bomAutoSelectNvr(effectiveNCams, {
+        camMP: camMP,
+        prefer4K: prefer4kNvr || camMP >= 4,
+        requiresAI: false
+      });
+    }
+
+    // === Switch PoE: SOLO para cámaras IP (HDCVI no usa PoE) ===
+    var sw = null;
+    if (!isXvr) {
+      // Cámaras IP: si el NVR tiene PoE integrado cubre algunos canales, el switch cubre el resto
+      var nvrPoEPorts = nvr && /PoE/i.test(nvr.item.nombre) ? (nvr.item.ch || 0) : 0;
+      var swCamsExtra = Math.max(0, effectiveNCams - nvrPoEPorts);
+      if (swCamsExtra > 0) {
+        sw = bomAutoSelectSwitch(swCamsExtra);
+      }
+    }
+    // Si es HDCVI: NO se necesita switch PoE — la cámara se alimenta por fuente externa 12V
+    // y el video viaja por coaxial o UTP+balun
 
     // === UPS ===
     var ups = null;
@@ -40137,7 +40322,9 @@ if (document.readyState === 'loading') {
     var rj45 = null;
     var cableMetersTotal = 0;
     if (addCable) {
-      cableMetersTotal = effectiveNCams * avgCableDist * 1.15;  // 15% margen
+      // HDCVI usa cableado a 30m estándar por defecto si el usuario no especifica más
+      var distancia = isXvr ? Math.max(avgCableDist, 30) : avgCableDist;
+      cableMetersTotal = effectiveNCams * distancia * 1.15;
       cable = bomAutoSelectCable(cableMetersTotal, cableExterior);
       rj45 = bomAutoSelectRj45();
     }
@@ -40202,7 +40389,8 @@ if (document.readyState === 'loading') {
         html += '<div class="bom-warning"><b>HDD: necesitas múltiples discos</b><br>El sistema requiere '+Math.ceil(storageTb*1.3)+'TB. El HDD más grande del catálogo es '+hdd.item.tb+'TB → se sugieren '+hdd.multiple+' unidades. Considera RAID 5 o RAID 10 en NVR de gama alta.</div>';
       }
       if (nvr && nvr.insufficient) {
-        html += '<div class="bom-warning"><b>NVR insuficiente</b><br>Necesitas '+effectiveNCams+' canales. El NVR más grande del catálogo es de '+nvr.item.ch+' canales. Opciones: cotizar NVR mayor capacidad o agrupar en dos NVRs.</div>';
+        var grabadorLabel = isXvr ? 'XVR (HDCVI)' : 'NVR (IP)';
+        html += '<div class="bom-warning"><b>'+grabadorLabel+' insuficiente</b><br>Necesitas '+effectiveNCams+' canales. El '+grabadorLabel+' más grande del catálogo es de '+nvr.item.ch+' canales. Opciones: cotizar capacidad mayor o agrupar en dos grabadores.</div>';
       }
       html += '</div>';
     }
@@ -40323,9 +40511,16 @@ if (document.readyState === 'loading') {
       html += '<div><b>Mounts auto-detectados:</b> '+detectedMounts.length+' tipo(s) — '+srcMsg+'</div>';
     }
     html += '<div><b>Storage requerido:</b> '+storageTb.toFixed(1)+' TB para '+retentionDays+' días @ '+effectiveNCams+' cams '+effectiveCamMP.toFixed(1)+'MP promedio</div>';
+    if (isXvr) {
+      // Calcular consumo total de las cámaras HDCVI (típico 5W cada una)
+      var hdcviConsumo = effectiveNCams * 5;
+      html += '<div><b>⚡ Consumo HDCVI (cámaras):</b> ~'+hdcviConsumo+'W total ('+effectiveNCams+' × 5W). Las HDCVI no usan PoE — cada una requiere fuente externa 12VDC. Considera fuentes centralizadas (12V/10A) en racks o fuentes individuales por cámara.</div>';
+      html += '<div><b>📏 Cableado HDCVI:</b> distancia recomendada ≤ 30m con UTP CAT5e estándar para señal limpia. Para distancias mayores, usar coaxial RG59 (alcanza 500m+).</div>';
+    }
     if (hdd) html += '<div><b>HDD seleccionado:</b> '+(hdd.multiple>1?hdd.multiple+' × ':'')+hdd.item.tb+'TB</div>';
     if (nvr) {
-      var nvrInfo = '<div><b>NVR seleccionado:</b> '+nvr.item.codigo+' · '+nvr.item.ch+' canales';
+      var grabadorTipo = isXvr ? 'XVR (HDCVI)' : 'NVR (IP)';
+      var nvrInfo = '<div><b>'+grabadorTipo+' seleccionado:</b> '+nvr.item.codigo+' · '+nvr.item.ch+' canales';
       if (nvr.item.serie) nvrInfo += ' · <i>'+nvr.item.serie+'</i>';
       if (nvr.highlights && nvr.highlights.length > 0) {
         nvrInfo += '<br><span style="color:#1e6e3e;font-size:11px">✓ ' + nvr.highlights.join(' · ') + '</span>';
@@ -40333,7 +40528,7 @@ if (document.readyState === 'loading') {
       nvrInfo += '</div>';
       html += nvrInfo;
     }
-    if (sw) html += '<div><b>Switch:</b> '+sw.item.ports+' puertos PoE para cámaras adicionales</div>';
+    if (sw && !isXvr) html += '<div><b>Switch:</b> '+sw.item.ports+' puertos PoE para cámaras adicionales</div>';
     if (ups) html += '<div><b>UPS:</b> '+ups.item.va+'VA, '+(ups.insufficient?'<span style="color:#c0392b">⚠ insuficiente para '+upsMinutes+' min</span>':'aprobado para '+upsMinutes+' min')+'</div>';
     html += '</div></div>';
 
@@ -41059,7 +41254,7 @@ if (document.readyState === 'loading') {
 // ── ROUTER ──
   // ── HERRAMIENTA: GUÍA DE DISCOS DUROS CCTV ──
 
-  // Filtrar HDD: solo SkyHawk y Exos del catálogo (excluir WD Purple, Toshiba, SSD genéricos)
+  // Filtrar HDD: solo SkyHawk + SkyHawk AI + Exos del catálogo (líneas vigentes)
   function bomFindHddsRecommended() {
     // Mismo filtro que bomFindHdds — SOLO SkyHawk/SkyHawk AI/Exos vigentes
     return bomFindHdds();
