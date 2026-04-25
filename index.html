@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 11:24 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 11:38 hrs -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1719,48 +1719,6 @@ nav {
 .app-section { display: none; background: #ffffff; }
 .app-section.active { display: block; background: #ffffff; }
 
-.ac-hero {
-  background: linear-gradient(160deg, #0C1A2E 0%, #001E3C 50%, #003870 100%);
-  color: var(--white);
-  padding: 56px 0;
-  position: relative;
-  overflow: hidden;
-}
-.ac-hero::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse 50% 90% at 85% 50%, rgba(0,87,184,.20) 0%, transparent 60%);
-  pointer-events: none;
-}
-.ac-hero-inner { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 40px; position: relative; z-index: 1; }
-.ac-title { font-family: var(--font-d); font-size: 44px; font-weight: 800; line-height: 1.05; margin-bottom: 10px; letter-spacing: -.3px; }
-.ac-sub { font-size: 15px; color: rgba(255,255,255,.6); line-height: 1.65; max-width: 500px; }
-.ac-stats { display: flex; gap: 10px; }
-.ac-stat { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: var(--r); padding: 16px 20px; text-align: center; min-width: 90px; }
-.ac-stat-n { font-family: var(--font-d); font-size: 36px; font-weight: 800; color: var(--white); line-height: 1; }
-.ac-stat-l { font-size: 10px; text-transform: uppercase; letter-spacing: .5px; color: rgba(255,255,255,.4); margin-top: 4px; font-weight: 500; }
-.ac-tabs-bar {
-  background: var(--white);
-  border-bottom: 1px solid var(--g5);
-  display: flex;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.ac-tabs-bar::-webkit-scrollbar { display: none; }
-.ac-tab {
-  padding: 13px 22px;
-  font-size: 13px; font-weight: 600;
-  color: var(--g3);
-  background: transparent; border: none;
-  border-bottom: 3px solid transparent;
-  cursor: pointer;
-  transition: all .15s;
-  white-space: nowrap;
-}
-.ac-tab:hover { color: var(--black); background: var(--g6); }
-.ac-tab.active { color: var(--red); border-bottom-color: var(--red); }
-.ac-panel { display: none; padding: 28px 0; }
-.ac-panel.active { display: block; }
 .calc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 32px; }
 .calc-card { background: var(--white); border: 1px solid var(--g5); border-radius: var(--r-lg); overflow: hidden; transition: box-shadow .2s, transform .2s; }
 .calc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
@@ -4771,30 +4729,6 @@ nav {
 @media(max-width:480px){
   #cmpFab { bottom: 72px; right: 14px }
 }
-
-/* ═══════════════════════════════════════════════════════
-   ACADEMIA CCTV — CSS completo
-   ═══════════════════════════════════════════════════════ */
-
-/* Hero */
-.ac-hero-inner { display:grid; grid-template-columns:1fr auto; align-items:center; gap:32px; position:relative; z-index:1 }
-.ac-title { font-family:var(--font-d); font-size:40px; font-weight:800; line-height:1.05; margin-bottom:10px; letter-spacing:-.3px }
-.ac-sub   { font-size:14px; color:rgba(255,255,255,.6); line-height:1.65; max-width:500px }
-.ac-stats { display:flex; gap:10px }
-.ac-stat  { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); border-radius:var(--r); padding:14px 20px; text-align:center; min-width:80px }
-.ac-stat-n { font-family:var(--font-d); font-size:34px; font-weight:800; color:#fff; line-height:1 }
-.ac-stat-l { font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:rgba(255,255,255,.4); margin-top:4px; font-weight:500 }
-
-/* Tabs */
-.ac-tabs-bar { background:var(--white); border-bottom:1px solid var(--g5); display:flex; overflow-x:auto; scrollbar-width:none; position:sticky; top:114px; z-index:10 }
-.ac-tabs-bar::-webkit-scrollbar { display:none }
-.ac-tab { padding:13px 22px; font-size:13px; font-weight:600; color:var(--g3); background:transparent; border:none; border-bottom:3px solid transparent; cursor:pointer; transition:all .15s; white-space:nowrap; font-family:var(--font) }
-.ac-tab:hover { color:var(--black); background:var(--g6) }
-.ac-tab.active { color:var(--red); border-bottom-color:var(--red) }
-
-/* Panels */
-.ac-panel { display:none; padding:28px 0; min-height:400px }
-.ac-panel.active { display:block }
 
 /* ── CALCULADORAS ─────────────────────────────────────── */
 .calc-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; margin-bottom:32px }
@@ -17816,95 +17750,95 @@ const PRODUCTS = [
   {id:105,codigo:'IPC-C22EN-D',nombre:'Cámara Cue 2C Imou IP 2MP 2.8mm IR10 Wifi Slot MicroSD',cat:'camaras-ip',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_IPC-C22EN-D.webp'},
   {id:106,codigo:'SDZW2030UN-SL',nombre:'Camara Dahua anticorrosiva 2MP 30X IR100 IP68 h.265',cat:'camaras-ip',pneto:1176387,piva:223513,ptotal:1399900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SDZW2030UN-SL.webp'},
   {id:107,codigo:'SDZW2000TN-SL-0600',nombre:'CAMARA DAHUA ANTICORROSIVA 2MP 6mm IR100 IP68 IK10 NEMA 4X H.265',cat:'camaras-ip',pneto:504118,piva:95782,ptotal:599900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SDZW2000TN-SL-0600.webp'},
-  {id:108,codigo:'HAC-HFW1100R-VF-IRE6',nombre:'Cámara Dahua HDCVI Bala 1MP 720P 2.7-13.5mm IR60 IP67',cat:'camaras-ip',pneto:19748,piva:3752,ptotal:23500,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1100R-VF-IRE6.webp'},
-  {id:109,codigo:'DH-HAC-B1A11N-0280B',nombre:'Cámara Dahua HDCVI Bala 1MP 720P 2.8mm IR20 IP67',cat:'camaras-ip',pneto:7479,piva:1421,ptotal:8900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-B1A11N-0280B.webp'},
-  {id:110,codigo:'HAC-hFw1100R-s3',nombre:'Cámara Dahua HDCVI Bala 1MP 720P 3.6mm IR20 IP67',cat:'camaras-ip',pneto:9160,piva:1740,ptotal:10900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-hFw1100R-s3.webp'},
-  {id:111,codigo:'HAC-HFW1100D-0800B',nombre:'Cámara Dahua HDCVI Bala 1MP 720P 8mm IR80 IP67',cat:'camaras-ip',pneto:20084,piva:3816,ptotal:23900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1100D-0800B.webp'},
-  {id:112,codigo:'DH-HAC-HFW1200RN-Z-IRE6-S4',nombre:'Camara Dahua HDCVI Bala 2MP 1080p 2.7-12mm Motor IR60 IP67 HD switchable',cat:'camaras-ip',pneto:36891,piva:7009,ptotal:43900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW1200RN-Z-IRE6-S4.webp'},
-  {id:113,codigo:'DH-HAC-B4A21N-VF-2712',nombre:'Camara Dahua HDCVI Bala 2MP 1080p 2.7-12mm Varifocal manual IR30 IP67',cat:'camaras-ip',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-B4A21N-VF-2712.webp'},
-  {id:114,codigo:'HAC-ME1200DN-LED-0280B-S4',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 2.8mm IR20 IP67 con LED y Sirena',cat:'camaras-ip',pneto:30168,piva:5732,ptotal:35900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1200DN-LED-0280B-S4.webp'},
-  {id:115,codigo:'HAC-ME1200BN-PIR-0280B-S3A',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 2.8mm IR20 IP67.',cat:'camaras-ip',pneto:13025,piva:2475,ptotal:15500,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1200BN-PIR-0280B-S3A.webp'},
-  {id:116,codigo:'HAC-HFW1200SN-0280B-S5',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 2.8mm IR30 IP67',cat:'camaras-ip',pneto:21765,piva:4135,ptotal:25900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1200SN-0280B-S5.webp'},
+  {id:108,codigo:'HAC-HFW1100R-VF-IRE6',nombre:'Cámara Dahua HDCVI Bala 1MP 720P 2.7-13.5mm IR60 IP67',cat:'camaras-hdcvi',pneto:19748,piva:3752,ptotal:23500,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1100R-VF-IRE6.webp'},
+  {id:109,codigo:'DH-HAC-B1A11N-0280B',nombre:'Cámara Dahua HDCVI Bala 1MP 720P 2.8mm IR20 IP67',cat:'camaras-hdcvi',pneto:7479,piva:1421,ptotal:8900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-B1A11N-0280B.webp'},
+  {id:110,codigo:'HAC-hFw1100R-s3',nombre:'Cámara Dahua HDCVI Bala 1MP 720P 3.6mm IR20 IP67',cat:'camaras-hdcvi',pneto:9160,piva:1740,ptotal:10900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-hFw1100R-s3.webp'},
+  {id:111,codigo:'HAC-HFW1100D-0800B',nombre:'Cámara Dahua HDCVI Bala 1MP 720P 8mm IR80 IP67',cat:'camaras-hdcvi',pneto:20084,piva:3816,ptotal:23900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1100D-0800B.webp'},
+  {id:112,codigo:'DH-HAC-HFW1200RN-Z-IRE6-S4',nombre:'Camara Dahua HDCVI Bala 2MP 1080p 2.7-12mm Motor IR60 IP67 HD switchable',cat:'camaras-hdcvi',pneto:36891,piva:7009,ptotal:43900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW1200RN-Z-IRE6-S4.webp'},
+  {id:113,codigo:'DH-HAC-B4A21N-VF-2712',nombre:'Camara Dahua HDCVI Bala 2MP 1080p 2.7-12mm Varifocal manual IR30 IP67',cat:'camaras-hdcvi',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-B4A21N-VF-2712.webp'},
+  {id:114,codigo:'HAC-ME1200DN-LED-0280B-S4',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 2.8mm IR20 IP67 con LED y Sirena',cat:'camaras-hdcvi',pneto:30168,piva:5732,ptotal:35900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1200DN-LED-0280B-S4.webp'},
+  {id:115,codigo:'HAC-ME1200BN-PIR-0280B-S3A',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 2.8mm IR20 IP67.',cat:'camaras-hdcvi',pneto:13025,piva:2475,ptotal:15500,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1200BN-PIR-0280B-S3A.webp'},
+  {id:116,codigo:'HAC-HFW1200SN-0280B-S5',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 2.8mm IR30 IP67',cat:'camaras-hdcvi',pneto:21765,piva:4135,ptotal:25900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1200SN-0280B-S5.webp'},
   {id:117,codigo:'HAC-ME1200BN-L-0280B-S6',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 2.8mm IR30 IP67 con LED Disuasivo',cat:'camaras-hdcvi',pneto:29328,piva:5572,ptotal:34900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1200BN-L-0280B-S6.webp'},
   {id:118,codigo:'HAC-HFW1200TN-0280B-S6',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 2.8mm IR30 IP67 metalica',cat:'camaras-hdcvi',pneto:20924,piva:3976,ptotal:24900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1200TN-0280B-S6.webp'},
-  {id:119,codigo:'DH-HAC-B1A21N-0360B',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 3.6mm IR20 IP67',cat:'camaras-ip',pneto:10882,piva:2068,ptotal:12950,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-B1A21N-0360B.webp'},
-  {id:120,codigo:'DH-HAC-HFW1200DN-0360B-S4',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 3.6mm IR80 IP67',cat:'camaras-ip',pneto:25126,piva:4774,ptotal:29900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW1200DN-0360B-S4.webp'},
-  {id:121,codigo:'HAC-HFW1200D-0800B',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 8mm IR80 IP67',cat:'camaras-ip',pneto:24286,piva:4614,ptotal:28900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1200D-0800B.webp'},
+  {id:119,codigo:'DH-HAC-B1A21N-0360B',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 3.6mm IR20 IP67',cat:'camaras-hdcvi',pneto:10882,piva:2068,ptotal:12950,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-B1A21N-0360B.webp'},
+  {id:120,codigo:'DH-HAC-HFW1200DN-0360B-S4',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 3.6mm IR80 IP67',cat:'camaras-hdcvi',pneto:25126,piva:4774,ptotal:29900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW1200DN-0360B-S4.webp'},
+  {id:121,codigo:'HAC-HFW1200D-0800B',nombre:'Cámara Dahua HDCVI Bala 2MP 1080P 8mm IR80 IP67',cat:'camaras-hdcvi',pneto:24286,piva:4614,ptotal:28900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1200D-0800B.webp'},
   {id:122,codigo:'HAC-ME1239THN-A-PV-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 2MP 3.6mm Active Deterrence IR y LED 40M microfono IP67',cat:'camaras-hdcvi',pneto:45294,piva:8606,ptotal:53900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1239THN-A-PV-0360B-S2.webp'},
-  {id:123,codigo:'HAC-HFW1239TMN-IL-A-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 2MP 3.6mm IR y LED 40M microfono Full-Color IP67',cat:'camaras-ip',pneto:34370,piva:6530,ptotal:40900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1239TMN-IL-A-0360B-S2.webp'},
-  {id:124,codigo:'DH-HAC-HFW2802EN-A-0280B',nombre:'Cámara Dahua HDCVI Bala 4K 2.8mm IR40 Starlight Audio in IP67',cat:'camaras-ip',pneto:58739,piva:11161,ptotal:69900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW2802EN-A-0280B.webp'},
-  {id:125,codigo:'HAC-HFW1809TN-A-LED-0280B',nombre:'Cámara Dahua HDCVI Bala 4K 2.8mm LED 20M Full-Color microfono IP67',cat:'camaras-ip',pneto:61261,piva:11639,ptotal:72900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1809TN-A-LED-0280B.webp'},
-  {id:126,codigo:'HAC-HFW1801RN-Z-IRE6-27135-',nombre:'Cámara Dahua HDCVI Bala 4K 2160p 2.7-13.5mm motor IR60 IP67',cat:'camaras-ip',pneto:69664,piva:13236,ptotal:82900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1801RN-Z-IRE6-27135-.webp'},
-  {id:127,codigo:'HAC-HFW1800RN-0280B',nombre:'Cámara Dahua HDCVI Bala 4K 2160P 2.8mm IR20 IP67',cat:'camaras-ip',pneto:32689,piva:6211,ptotal:38900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1800RN-0280B.webp'},
-  {id:128,codigo:'HAC-ME1809THN-A-PV-0360B',nombre:'Cámara Dahua HDCVI Bala 4K 3.6mm Active Deterrence IR y LED 40M microfono IP67',cat:'camaras-ip',pneto:75546,piva:14354,ptotal:89900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1809THN-A-PV-0360B.webp'},
-  {id:129,codigo:'HAC-HFW1500RN-Z-IRE6-2712-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 2.7-12mm motor IR60 IP67',cat:'camaras-ip',pneto:54538,piva:10362,ptotal:64900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1500RN-Z-IRE6-2712-S2.webp'},
-  {id:130,codigo:'DH-HAC-HFW2501TN-Z-A',nombre:'Camara Dahua HDCVI Bala 5MP 2.7-13.5mm Motor IR80 Starlight Audio in IP67',cat:'camaras-ip',pneto:67143,piva:12757,ptotal:79900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW2501TN-Z-A.webp'},
+  {id:123,codigo:'HAC-HFW1239TMN-IL-A-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 2MP 3.6mm IR y LED 40M microfono Full-Color IP67',cat:'camaras-hdcvi',pneto:34370,piva:6530,ptotal:40900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1239TMN-IL-A-0360B-S2.webp'},
+  {id:124,codigo:'DH-HAC-HFW2802EN-A-0280B',nombre:'Cámara Dahua HDCVI Bala 4K 2.8mm IR40 Starlight Audio in IP67',cat:'camaras-hdcvi',pneto:58739,piva:11161,ptotal:69900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW2802EN-A-0280B.webp'},
+  {id:125,codigo:'HAC-HFW1809TN-A-LED-0280B',nombre:'Cámara Dahua HDCVI Bala 4K 2.8mm LED 20M Full-Color microfono IP67',cat:'camaras-hdcvi',pneto:61261,piva:11639,ptotal:72900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1809TN-A-LED-0280B.webp'},
+  {id:126,codigo:'HAC-HFW1801RN-Z-IRE6-27135-',nombre:'Cámara Dahua HDCVI Bala 4K 2160p 2.7-13.5mm motor IR60 IP67',cat:'camaras-hdcvi',pneto:69664,piva:13236,ptotal:82900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1801RN-Z-IRE6-27135-.webp'},
+  {id:127,codigo:'HAC-HFW1800RN-0280B',nombre:'Cámara Dahua HDCVI Bala 4K 2160P 2.8mm IR20 IP67',cat:'camaras-hdcvi',pneto:32689,piva:6211,ptotal:38900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1800RN-0280B.webp'},
+  {id:128,codigo:'HAC-ME1809THN-A-PV-0360B',nombre:'Cámara Dahua HDCVI Bala 4K 3.6mm Active Deterrence IR y LED 40M microfono IP67',cat:'camaras-hdcvi',pneto:75546,piva:14354,ptotal:89900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1809THN-A-PV-0360B.webp'},
+  {id:129,codigo:'HAC-HFW1500RN-Z-IRE6-2712-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 2.7-12mm motor IR60 IP67',cat:'camaras-hdcvi',pneto:54538,piva:10362,ptotal:64900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1500RN-Z-IRE6-2712-S2.webp'},
+  {id:130,codigo:'DH-HAC-HFW2501TN-Z-A',nombre:'Camara Dahua HDCVI Bala 5MP 2.7-13.5mm Motor IR80 Starlight Audio in IP67',cat:'camaras-hdcvi',pneto:67143,piva:12757,ptotal:79900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW2501TN-Z-A.webp'},
   {id:131,codigo:'HAC-HFW1509CN-LED-0280B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 2.8mm 20M LED Full-Color IP67',cat:'camaras-hdcvi',pneto:35210,piva:6690,ptotal:41900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1509CN-LED-0280B-S2.webp'},
   {id:132,codigo:'HAC-HFW1509TMN-IL-A-0280B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 2.8mm IR y LED 40M microfono IP67',cat:'camaras-hdcvi',pneto:50336,piva:9564,ptotal:59900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1509TMN-IL-A-0280B-S2.webp'},
-  {id:133,codigo:'HAC-B1A51N-0280B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 2.8mm IR20 IP67',cat:'camaras-ip',pneto:21765,piva:4135,ptotal:25900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-B1A51N-0280B-S2.webp'},
+  {id:133,codigo:'HAC-B1A51N-0280B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 2.8mm IR20 IP67',cat:'camaras-hdcvi',pneto:21765,piva:4135,ptotal:25900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-B1A51N-0280B-S2.webp'},
   {id:134,codigo:'HAC-B1A51N-U-0280B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 2.8mm IR30 IP67',cat:'camaras-hdcvi',pneto:20084,piva:3816,ptotal:23900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-B1A51N-U-0280B-S2.webp'},
-  {id:135,codigo:'HAC-HFW1500TN-0280B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 2.8mm IR30 IP67 Starlight',cat:'camaras-ip',pneto:27647,piva:5253,ptotal:32900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1500TN-0280B-S2.webp'},
+  {id:135,codigo:'HAC-HFW1500TN-0280B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 2.8mm IR30 IP67 Starlight',cat:'camaras-hdcvi',pneto:27647,piva:5253,ptotal:32900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1500TN-0280B-S2.webp'},
   {id:136,codigo:'HAC-HFW1500CLN-IL-A-0280B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 2.8mm IR30 LED30 IP67 Audio',cat:'camaras-hdcvi',pneto:31008,piva:5892,ptotal:36900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1500CLN-IL-A-0280B-S2.webp'},
-  {id:137,codigo:'HAC-HFW1509TN-A-LED-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm 20M LED Full-Color audio IP67',cat:'camaras-ip',pneto:37731,piva:7169,ptotal:44900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1509TN-A-LED-0360B-S2.webp'},
-  {id:138,codigo:'HAC-HFW1509TN-LED-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm 20M LED Full-Color IP67',cat:'camaras-ip',pneto:36891,piva:7009,ptotal:43900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1509TN-LED-0360B-S2.webp'},
+  {id:137,codigo:'HAC-HFW1509TN-A-LED-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm 20M LED Full-Color audio IP67',cat:'camaras-hdcvi',pneto:37731,piva:7169,ptotal:44900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1509TN-A-LED-0360B-S2.webp'},
+  {id:138,codigo:'HAC-HFW1509TN-LED-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm 20M LED Full-Color IP67',cat:'camaras-hdcvi',pneto:36891,piva:7009,ptotal:43900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1509TN-LED-0360B-S2.webp'},
   {id:139,codigo:'HAC-HFW1509CN-LED-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm 20M LED Full-Color IP67',cat:'camaras-hdcvi',pneto:35210,piva:6690,ptotal:41900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1509CN-LED-0360B-S2.webp'},
   {id:140,codigo:'HAC-HFW1509TLMN-IL-A-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm 40M LED e IR IP67 con mic',cat:'camaras-hdcvi',pneto:41933,piva:7967,ptotal:49900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1509TLMN-IL-A-0360B-S2.webp'},
-  {id:141,codigo:'HAC-ME1509THN-A-PV-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm Active Deterrence IR y LED 40M microfono IP67',cat:'camaras-ip',pneto:62941,piva:11959,ptotal:74900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1509THN-A-PV-0360B-S2.webp'},
-  {id:142,codigo:'HAC-B1A51N-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm IR20 IP67',cat:'camaras-ip',pneto:21765,piva:4135,ptotal:25900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-B1A51N-0360B-S2.webp'},
+  {id:141,codigo:'HAC-ME1509THN-A-PV-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm Active Deterrence IR y LED 40M microfono IP67',cat:'camaras-hdcvi',pneto:62941,piva:11959,ptotal:74900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1509THN-A-PV-0360B-S2.webp'},
+  {id:142,codigo:'HAC-B1A51N-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm IR20 IP67',cat:'camaras-hdcvi',pneto:21765,piva:4135,ptotal:25900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-B1A51N-0360B-S2.webp'},
   {id:143,codigo:'HAC-B1A51N-U-0360B-S3',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm IR30 IP67 Smart IR',cat:'camaras-hdcvi',pneto:20924,piva:3976,ptotal:24900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-B1A51N-U-0360B-S3.webp'},
   {id:144,codigo:'HAC-HFW1500CMN-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm IR30 IP67 Starlight',cat:'camaras-hdcvi',pneto:29328,piva:5572,ptotal:34900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1500CMN-0360B-S2.webp'},
-  {id:145,codigo:'HAC-HFW1500DN-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm IR80 IP67 Starlight',cat:'camaras-ip',pneto:37731,piva:7169,ptotal:44900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1500DN-0360B-S2.webp'},
-  {id:146,codigo:'HAC-HFW1801SN-0280B',nombre:'Cámara Dahua HDCVI bullet 4K 2.8mm IR30 IP67',cat:'camaras-ip',pneto:41933,piva:7967,ptotal:49900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1801SN-0280B.webp'},
-  {id:147,codigo:'HAC-HFW1801TN-0280B',nombre:'Cámara Dahua HDCVI bullet 4K 2.8mm IR30 IP67 sin audio',cat:'camaras-ip',pneto:41933,piva:7967,ptotal:49900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1801TN-0280B.webp'},
+  {id:145,codigo:'HAC-HFW1500DN-0360B-S2',nombre:'Cámara Dahua HDCVI Bala 5MP 3.6mm IR80 IP67 Starlight',cat:'camaras-hdcvi',pneto:37731,piva:7169,ptotal:44900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1500DN-0360B-S2.webp'},
+  {id:146,codigo:'HAC-HFW1801SN-0280B',nombre:'Cámara Dahua HDCVI bullet 4K 2.8mm IR30 IP67',cat:'camaras-hdcvi',pneto:41933,piva:7967,ptotal:49900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1801SN-0280B.webp'},
+  {id:147,codigo:'HAC-HFW1801TN-0280B',nombre:'Cámara Dahua HDCVI bullet 4K 2.8mm IR30 IP67 sin audio',cat:'camaras-hdcvi',pneto:41933,piva:7967,ptotal:49900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1801TN-0280B.webp'},
   {id:148,codigo:'HAC-HFW1801RMN-IL-A-0280B-S3-DIP',nombre:'Cámara Dahua HDCVI bullet 4K 2.8mm IR30 LED 30 IP67 con mic',cat:'camaras-hdcvi',pneto:38571,piva:7329,ptotal:45900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1801RMN-IL-A-0280B-S3-DIP.webp'},
-  {id:149,codigo:'HAC-HFW1801THN-I4-0280B-S2',nombre:'Cámara Dahua HDCVI bullet 4K 2.8mm IR40 IP67 True WDR',cat:'camaras-ip',pneto:44454,piva:8446,ptotal:52900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1801THN-I4-0280B-S2.webp'},
-  {id:150,codigo:'HAC-HFW1801THN-I8-0600B-S2',nombre:'Cámara Dahua HDCVI bullet 4K 6mm IR80 IP67 True WDR',cat:'camaras-ip',pneto:46134,piva:8766,ptotal:54900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1801THN-I8-0600B-S2.webp'},
-  {id:151,codigo:'HAC-HFW1209CMN-LED-0280B-S2',nombre:'Cámara Dahua HDCVI Bullet Full-Color 2MP 1080P 2.8mm LED20 IP67',cat:'camaras-ip',pneto:21765,piva:4135,ptotal:25900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1209CMN-LED-0280B-S2.webp'},
-  {id:152,codigo:'HAC-HFW1239TN-LED-0280B-S2',nombre:'Cámara Dahua HDCVI Bullet Full-Color 2MP 1080P 2.8mm LED20 IP67 nuevo modelo',cat:'camaras-ip',pneto:28487,piva:5413,ptotal:33900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1239TN-LED-0280B-S2.webp'},
-  {id:153,codigo:'HAC-HFW2249TN-A-LED-0360B-S2-DIP',nombre:'Cámara Dahua HDCVI Bullet Full-Color 2MP 1080P 3.6mm LED20 IP67 Microfono',cat:'camaras-ip',pneto:46134,piva:8766,ptotal:54900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW2249TN-A-LED-0360B-S2-DIP.webp'},
-  {id:154,codigo:'HAC-HFW1239MHN-A-LED-0360B',nombre:'Cámara Dahua HDCVI Bullet Full-Color 2MP 1080P 3.6mm LED50 IP67 microfono',cat:'camaras-ip',pneto:35210,piva:6690,ptotal:41900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1239MHN-A-LED-0360B.webp'},
-  {id:155,codigo:'HAC-T1A11N-0280B',nombre:'Cámara Dahua HDCVI domo 1MP 720P 2.8mm IR20',cat:'camaras-ip',pneto:7143,piva:1357,ptotal:8500,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-T1A11N-0280B.webp'},
-  {id:156,codigo:'DH-HAC-T3A21N-VF',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.7-12mm IR30 IP67',cat:'camaras-ip',pneto:25126,piva:4774,ptotal:29900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-T3A21N-VF.webp'},
-  {id:157,codigo:'DH-HAC-D3A21N-VF',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.7-12mm IR30 IP67 con mica',cat:'camaras-ip',pneto:31008,piva:5892,ptotal:36900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-D3A21N-VF.webp'},
-  {id:158,codigo:'HAC-HDBW1200R-VF-S3',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.7-12mm IR30 IP67 IK10',cat:'camaras-ip',pneto:19664,piva:3736,ptotal:23400,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDBW1200R-VF-S3.webp'},
-  {id:159,codigo:'HAC-HDBW1200RN-Z',nombre:'Camara Dahua HDCVI Domo 2MP 1080p 2.7-12mm Motor IR30 IP67 IK10',cat:'camaras-ip',pneto:36891,piva:7009,ptotal:43900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDBW1200RN-Z.webp'},
-  {id:160,codigo:'DH-HAC-D1A21N-0280B',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.8mm IR20 con mica',cat:'camaras-ip',pneto:15882,piva:3018,ptotal:18900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-D1A21N-0280B.webp'},
-  {id:161,codigo:'HAC-ME1200EN-LED-0280B-S4',nombre:'Cámara Dahua HDCVI domo 2MP 1080P 2.8mm IR20 IP67 con LED',cat:'camaras-ip',pneto:25126,piva:4774,ptotal:29900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1200EN-LED-0280B-S4.webp'},
-  {id:162,codigo:'HAC-HDW1200MN-0280B-S4',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.8mm IR30 IP67',cat:'camaras-ip',pneto:16723,piva:3177,ptotal:19900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1200MN-0280B-S4.webp'},
+  {id:149,codigo:'HAC-HFW1801THN-I4-0280B-S2',nombre:'Cámara Dahua HDCVI bullet 4K 2.8mm IR40 IP67 True WDR',cat:'camaras-hdcvi',pneto:44454,piva:8446,ptotal:52900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1801THN-I4-0280B-S2.webp'},
+  {id:150,codigo:'HAC-HFW1801THN-I8-0600B-S2',nombre:'Cámara Dahua HDCVI bullet 4K 6mm IR80 IP67 True WDR',cat:'camaras-hdcvi',pneto:46134,piva:8766,ptotal:54900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1801THN-I8-0600B-S2.webp'},
+  {id:151,codigo:'HAC-HFW1209CMN-LED-0280B-S2',nombre:'Cámara Dahua HDCVI Bullet Full-Color 2MP 1080P 2.8mm LED20 IP67',cat:'camaras-hdcvi',pneto:21765,piva:4135,ptotal:25900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1209CMN-LED-0280B-S2.webp'},
+  {id:152,codigo:'HAC-HFW1239TN-LED-0280B-S2',nombre:'Cámara Dahua HDCVI Bullet Full-Color 2MP 1080P 2.8mm LED20 IP67 nuevo modelo',cat:'camaras-hdcvi',pneto:28487,piva:5413,ptotal:33900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1239TN-LED-0280B-S2.webp'},
+  {id:153,codigo:'HAC-HFW2249TN-A-LED-0360B-S2-DIP',nombre:'Cámara Dahua HDCVI Bullet Full-Color 2MP 1080P 3.6mm LED20 IP67 Microfono',cat:'camaras-hdcvi',pneto:46134,piva:8766,ptotal:54900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW2249TN-A-LED-0360B-S2-DIP.webp'},
+  {id:154,codigo:'HAC-HFW1239MHN-A-LED-0360B',nombre:'Cámara Dahua HDCVI Bullet Full-Color 2MP 1080P 3.6mm LED50 IP67 microfono',cat:'camaras-hdcvi',pneto:35210,piva:6690,ptotal:41900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HFW1239MHN-A-LED-0360B.webp'},
+  {id:155,codigo:'HAC-T1A11N-0280B',nombre:'Cámara Dahua HDCVI domo 1MP 720P 2.8mm IR20',cat:'camaras-hdcvi',pneto:7143,piva:1357,ptotal:8500,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-T1A11N-0280B.webp'},
+  {id:156,codigo:'DH-HAC-T3A21N-VF',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.7-12mm IR30 IP67',cat:'camaras-hdcvi',pneto:25126,piva:4774,ptotal:29900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-T3A21N-VF.webp'},
+  {id:157,codigo:'DH-HAC-D3A21N-VF',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.7-12mm IR30 IP67 con mica',cat:'camaras-hdcvi',pneto:31008,piva:5892,ptotal:36900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-D3A21N-VF.webp'},
+  {id:158,codigo:'HAC-HDBW1200R-VF-S3',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.7-12mm IR30 IP67 IK10',cat:'camaras-hdcvi',pneto:19664,piva:3736,ptotal:23400,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDBW1200R-VF-S3.webp'},
+  {id:159,codigo:'HAC-HDBW1200RN-Z',nombre:'Camara Dahua HDCVI Domo 2MP 1080p 2.7-12mm Motor IR30 IP67 IK10',cat:'camaras-hdcvi',pneto:36891,piva:7009,ptotal:43900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDBW1200RN-Z.webp'},
+  {id:160,codigo:'DH-HAC-D1A21N-0280B',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.8mm IR20 con mica',cat:'camaras-hdcvi',pneto:15882,piva:3018,ptotal:18900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-D1A21N-0280B.webp'},
+  {id:161,codigo:'HAC-ME1200EN-LED-0280B-S4',nombre:'Cámara Dahua HDCVI domo 2MP 1080P 2.8mm IR20 IP67 con LED',cat:'camaras-hdcvi',pneto:25126,piva:4774,ptotal:29900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1200EN-LED-0280B-S4.webp'},
+  {id:162,codigo:'HAC-HDW1200MN-0280B-S4',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.8mm IR30 IP67',cat:'camaras-hdcvi',pneto:16723,piva:3177,ptotal:19900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1200MN-0280B-S4.webp'},
   {id:163,codigo:'HAC-HDW1200TLMN-0280B-S6',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.8mm IR30 IP67 switchable',cat:'camaras-hdcvi',pneto:22101,piva:4199,ptotal:26300,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1200TLMN-0280B-S6.webp'},
-  {id:164,codigo:'DH-HAC-HDW1200EMN-A-0280B-S4',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.8mm IR50 Mic Integrado IP67',cat:'camaras-ip',pneto:22605,piva:4295,ptotal:26900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HDW1200EMN-A-0280B-S4.webp'},
-  {id:165,codigo:'HAC-D1A21N-0360B',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 3.6mm IR20 con mica',cat:'camaras-ip',pneto:15882,piva:3018,ptotal:18900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-D1A21N-0360B.webp'},
-  {id:166,codigo:'DH-HAC-T2A21N-0360B',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 3.6mm IR20 metalica',cat:'camaras-ip',pneto:12563,piva:2387,ptotal:14950,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-T2A21N-0360B.webp'},
-  {id:167,codigo:'DH-HAC-T1A21N-0360B',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 3.6mm IR20 Plastica',cat:'camaras-ip',pneto:13361,piva:2539,ptotal:15900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-T1A21N-0360B.webp'},
+  {id:164,codigo:'DH-HAC-HDW1200EMN-A-0280B-S4',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 2.8mm IR50 Mic Integrado IP67',cat:'camaras-hdcvi',pneto:22605,piva:4295,ptotal:26900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HDW1200EMN-A-0280B-S4.webp'},
+  {id:165,codigo:'HAC-D1A21N-0360B',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 3.6mm IR20 con mica',cat:'camaras-hdcvi',pneto:15882,piva:3018,ptotal:18900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-D1A21N-0360B.webp'},
+  {id:166,codigo:'DH-HAC-T2A21N-0360B',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 3.6mm IR20 metalica',cat:'camaras-hdcvi',pneto:12563,piva:2387,ptotal:14950,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-T2A21N-0360B.webp'},
+  {id:167,codigo:'DH-HAC-T1A21N-0360B',nombre:'Cámara Dahua HDCVI Domo 2MP 1080P 3.6mm IR20 Plastica',cat:'camaras-hdcvi',pneto:13361,piva:2539,ptotal:15900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-T1A21N-0360B.webp'},
   {id:168,codigo:'HAC-HDW1200CLQN-IL-A-0280B-S6',nombre:'Cámara Dahua HDCVI domo 2MP 2.8mm IR y LED 20M microfono IP67',cat:'camaras-hdcvi',pneto:17563,piva:3337,ptotal:20900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1200CLQN-IL-A-0280B-S6.webp'},
-  {id:169,codigo:'HAC-ME1239HN-A-PV-0360B-S2',nombre:'Cámara Dahua HDCVI domo 2MP 3.6mm Active Deterrence IR y LED 40M microfono IP67',cat:'camaras-ip',pneto:57059,piva:10841,ptotal:67900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1239HN-A-PV-0360B-S2.webp'},
-  {id:170,codigo:'HAC-HDW1801MN-0280B',nombre:'Cámara Dahua HDCVI domo 4K  2.8mm IR30 IP67',cat:'camaras-ip',pneto:41933,piva:7967,ptotal:49900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1801MN-0280B.webp'},
+  {id:169,codigo:'HAC-ME1239HN-A-PV-0360B-S2',nombre:'Cámara Dahua HDCVI domo 2MP 3.6mm Active Deterrence IR y LED 40M microfono IP67',cat:'camaras-hdcvi',pneto:57059,piva:10841,ptotal:67900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1239HN-A-PV-0360B-S2.webp'},
+  {id:170,codigo:'HAC-HDW1801MN-0280B',nombre:'Cámara Dahua HDCVI domo 4K  2.8mm IR30 IP67',cat:'camaras-hdcvi',pneto:41933,piva:7967,ptotal:49900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1801MN-0280B.webp'},
   {id:171,codigo:'HAC-HDW1801TLMN-IL-A-0280B-S2',nombre:'Cámara Dahua HDCVI Domo 4K 2.8mm IR20 LED20 microfono IP67',cat:'camaras-hdcvi',pneto:50336,piva:9564,ptotal:59900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1801TLMN-IL-A-0280B-S2.webp'},
   {id:172,codigo:'HAC-HDW1801CLQN-IL-A-0280B-S3-DIP',nombre:'Cámara Dahua HDCVI domo 4K 2.8mm IR30 LED 30 IP67 con mic',cat:'camaras-hdcvi',pneto:36891,piva:7009,ptotal:43900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1801CLQN-IL-A-0280B-S3-DIP.webp'},
-  {id:173,codigo:'HAC-HDW2802TN-A-0280B',nombre:'Cámara Dahua HDCVI Domo 4K 2.8mm IR50 Starlight Audio in, microfono IP67',cat:'camaras-ip',pneto:58739,piva:11161,ptotal:69900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW2802TN-A-0280B.webp'},
+  {id:173,codigo:'HAC-HDW2802TN-A-0280B',nombre:'Cámara Dahua HDCVI Domo 4K 2.8mm IR50 Starlight Audio in, microfono IP67',cat:'camaras-hdcvi',pneto:58739,piva:11161,ptotal:69900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW2802TN-A-0280B.webp'},
   {id:174,codigo:'HAC-HDW1800RN-0280B',nombre:'Cámara Dahua HDCVI domo 4K 2160P 2.8mm IR30 IP67',cat:'camaras-hdcvi',pneto:31008,piva:5892,ptotal:36900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1800RN-0280B.webp'},
-  {id:175,codigo:'HAC-HDBW1500RN-Z',nombre:'Camara Dahua HDCVI Domo 5MP 2.7-12mm MOTOR IR30 IP67 IK10',cat:'camaras-ip',pneto:50336,piva:9564,ptotal:59900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDBW1500RN-Z.webp'},
-  {id:176,codigo:'HAC-HDW1509TLQN-A-LED-0280B-S2',nombre:'Cámara Dahua HDCVI domo 5MP 2.8mm 40M LED Full-Color audio IP67',cat:'camaras-ip',pneto:36891,piva:7009,ptotal:43900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1509TLQN-A-LED-0280B-S2.webp'},
+  {id:175,codigo:'HAC-HDBW1500RN-Z',nombre:'Camara Dahua HDCVI Domo 5MP 2.7-12mm MOTOR IR30 IP67 IK10',cat:'camaras-hdcvi',pneto:50336,piva:9564,ptotal:59900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDBW1500RN-Z.webp'},
+  {id:176,codigo:'HAC-HDW1509TLQN-A-LED-0280B-S2',nombre:'Cámara Dahua HDCVI domo 5MP 2.8mm 40M LED Full-Color audio IP67',cat:'camaras-hdcvi',pneto:36891,piva:7009,ptotal:43900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1509TLQN-A-LED-0280B-S2.webp'},
   {id:177,codigo:'HAC-D1A51N-0280B-S2',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR20 con mica',cat:'camaras-hdcvi',pneto:20924,piva:3976,ptotal:24900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-D1A51N-0280B-S2.webp'},
-  {id:178,codigo:'HAC-T1A51N-0280B-S2',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR20 Plástica',cat:'camaras-ip',pneto:23445,piva:4455,ptotal:27900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-T1A51N-0280B-S2.webp'},
+  {id:178,codigo:'HAC-T1A51N-0280B-S2',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR20 Plástica',cat:'camaras-hdcvi',pneto:23445,piva:4455,ptotal:27900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-T1A51N-0280B-S2.webp'},
   {id:179,codigo:'HAC-T1A51N-U-0280B-S3-DIP',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR25',cat:'camaras-hdcvi',pneto:19244,piva:3656,ptotal:22900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-T1A51N-U-0280B-S3-DIP.webp'},
-  {id:180,codigo:'HAC-HDW1500TRQN-0280B-S2',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR25 IP50',cat:'camaras-ip',pneto:23445,piva:4455,ptotal:27900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1500TRQN-0280B-S2.webp'},
-  {id:181,codigo:'HAC-HDW1500TLMQN-0280B',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR30 IP67',cat:'camaras-ip',pneto:31008,piva:5892,ptotal:36900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1500TLMQN-0280B.webp'},
-  {id:182,codigo:'HAC-HDW1500TMQN-0280B-S2',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR60 IP67 sin audio',cat:'camaras-ip',pneto:31849,piva:6051,ptotal:37900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1500TMQN-0280B-S2.webp'},
-  {id:183,codigo:'HAC-HDW1500TMQN-A-0280B-S2',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR60 microfono IP67',cat:'camaras-ip',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1500TMQN-A-0280B-S2.webp'},
-  {id:184,codigo:'HAC-ME1509TQN-A-PV-0360B-S2',nombre:'Cámara Dahua HDCVI domo 5MP 3.6mm Active Deterrence IR y LED 40M microfono IP67',cat:'camaras-ip',pneto:67143,piva:12757,ptotal:79900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1509TQN-A-PV-0360B-S2.webp'},
+  {id:180,codigo:'HAC-HDW1500TRQN-0280B-S2',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR25 IP50',cat:'camaras-hdcvi',pneto:23445,piva:4455,ptotal:27900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1500TRQN-0280B-S2.webp'},
+  {id:181,codigo:'HAC-HDW1500TLMQN-0280B',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR30 IP67',cat:'camaras-hdcvi',pneto:31008,piva:5892,ptotal:36900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1500TLMQN-0280B.webp'},
+  {id:182,codigo:'HAC-HDW1500TMQN-0280B-S2',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR60 IP67 sin audio',cat:'camaras-hdcvi',pneto:31849,piva:6051,ptotal:37900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1500TMQN-0280B-S2.webp'},
+  {id:183,codigo:'HAC-HDW1500TMQN-A-0280B-S2',nombre:'Cámara Dahua HDCVI Domo 5MP 2.8mm IR60 microfono IP67',cat:'camaras-hdcvi',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1500TMQN-A-0280B-S2.webp'},
+  {id:184,codigo:'HAC-ME1509TQN-A-PV-0360B-S2',nombre:'Cámara Dahua HDCVI domo 5MP 3.6mm Active Deterrence IR y LED 40M microfono IP67',cat:'camaras-hdcvi',pneto:67143,piva:12757,ptotal:79900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1509TQN-A-PV-0360B-S2.webp'},
   {id:185,codigo:'HAC-EW2501N-0140B',nombre:'Cámara Dahua HDCVI Domo 5MP Fisheye 10mts IR audio',cat:'camaras-hdcvi',pneto:83950,piva:15950,ptotal:99900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-EW2501N-0140B.webp'},
-  {id:186,codigo:'DH-HAC-EBW3802N',nombre:'Cámara Dahua HDCVI Domo 8MP 2.5mm Fisheye IR15 Alarma 2/1 Audio Slot IP67 IK10',cat:'camaras-ip',pneto:167983,piva:31917,ptotal:199900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-EBW3802N.webp'},
+  {id:186,codigo:'DH-HAC-EBW3802N',nombre:'Cámara Dahua HDCVI Domo 8MP 2.5mm Fisheye IR15 Alarma 2/1 Audio Slot IP67 IK10',cat:'camaras-hdcvi',pneto:167983,piva:31917,ptotal:199900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-EBW3802N.webp'},
   {id:187,codigo:'HAC-HDW1809TLMN-A-LED-0280B',nombre:'Cámara Dahua HDCVI domo 8MP 2.8mm 20M LED Full-Color audio IP67 Microfono',cat:'camaras-hdcvi',pneto:62101,piva:11799,ptotal:73900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1809TLMN-A-LED-0280B.webp'},
-  {id:188,codigo:'HAC-HDBW2802RN-0280B',nombre:'Cámara Dahua HDCVI Domo 8MP 4K 2.8mm  IR30 Starlight IP67 IK10',cat:'camaras-ip',pneto:62941,piva:11959,ptotal:74900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDBW2802RN-0280B.webp'},
-  {id:189,codigo:'HAC-ME1200EQN-L-0280B-S5',nombre:'Cámara Dahua HDCVI Domo Disuasion activa 2MP 1080P 2.8mm IR30 PIR10 IP67',cat:'camaras-ip',pneto:30168,piva:5732,ptotal:35900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1200EQN-L-0280B-S5.webp'},
+  {id:188,codigo:'HAC-HDBW2802RN-0280B',nombre:'Cámara Dahua HDCVI Domo 8MP 4K 2.8mm  IR30 Starlight IP67 IK10',cat:'camaras-hdcvi',pneto:62941,piva:11959,ptotal:74900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDBW2802RN-0280B.webp'},
+  {id:189,codigo:'HAC-ME1200EQN-L-0280B-S5',nombre:'Cámara Dahua HDCVI Domo Disuasion activa 2MP 1080P 2.8mm IR30 PIR10 IP67',cat:'camaras-hdcvi',pneto:30168,piva:5732,ptotal:35900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-ME1200EQN-L-0280B-S5.webp'},
   {id:190,codigo:'DH-HDW2241MN-E2-0280B',nombre:'Cámara Dahua HDCVI Domo doble 2MP 1080P 2.8mm IR30 starlight aluminio IP67',cat:'camaras-ip',pneto:64622,piva:12278,ptotal:76900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HDW2241MN-E2-0280B.webp'},
   {id:191,codigo:'HAC-HDW1239TN-IL-A-0280B-S2',nombre:'Cámara Dahua HDCVI Domo Doble iluminacion 2MP 1080P 2.8mm Mic integrado IR40 Led40 IP67',cat:'camaras-hdcvi',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1239TN-IL-A-0280B-S2.webp'},
-  {id:192,codigo:'HAC-HDW1209TLQN-LED-0280B',nombre:'Cámara Dahua HDCVI Domo Full-Color 2MP 1080P 2.8mm LED20 IP67',cat:'camaras-ip',pneto:20084,piva:3816,ptotal:23900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1209TLQN-LED-0280B.webp'},
-  {id:193,codigo:'HAC-T2A11N-0280B',nombre:'Cámara Dahua HDCVI domo metalica 1MP 720P 2.8mm IR20 IP67',cat:'camaras-ip',pneto:10042,piva:1908,ptotal:11950,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-T2A11N-0280B.webp'},
-  {id:194,codigo:'HAC-T2A11N-0360B',nombre:'Cámara Dahua HDCVI domo metalica 1MP 720P 3.6mm IR20 IP67',cat:'camaras-ip',pneto:9202,piva:1748,ptotal:10950,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-T2A11N-0360B.webp'},
-  {id:195,codigo:'DH-HAC-HUM1220GN-B-P-0280B',nombre:'Cámara Dahua HDCVI Pinhole 2MP 1080P 2.8mm',cat:'camaras-ip',pneto:31008,piva:5892,ptotal:36900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HUM1220GN-B-P-0280B.webp'},
-  {id:196,codigo:'HAC-HUM3201BN-0280P-S2',nombre:'Cámara Dahua HDCVI Pinhole 2MP 1080P 2.8mm Starlight',cat:'camaras-ip',pneto:54538,piva:10362,ptotal:64900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HUM3201BN-0280P-S2.webp'},
+  {id:192,codigo:'HAC-HDW1209TLQN-LED-0280B',nombre:'Cámara Dahua HDCVI Domo Full-Color 2MP 1080P 2.8mm LED20 IP67',cat:'camaras-hdcvi',pneto:20084,piva:3816,ptotal:23900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1209TLQN-LED-0280B.webp'},
+  {id:193,codigo:'HAC-T2A11N-0280B',nombre:'Cámara Dahua HDCVI domo metalica 1MP 720P 2.8mm IR20 IP67',cat:'camaras-hdcvi',pneto:10042,piva:1908,ptotal:11950,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-T2A11N-0280B.webp'},
+  {id:194,codigo:'HAC-T2A11N-0360B',nombre:'Cámara Dahua HDCVI domo metalica 1MP 720P 3.6mm IR20 IP67',cat:'camaras-hdcvi',pneto:9202,piva:1748,ptotal:10950,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-T2A11N-0360B.webp'},
+  {id:195,codigo:'DH-HAC-HUM1220GN-B-P-0280B',nombre:'Cámara Dahua HDCVI Pinhole 2MP 1080P 2.8mm',cat:'camaras-hdcvi',pneto:31008,piva:5892,ptotal:36900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HUM1220GN-B-P-0280B.webp'},
+  {id:196,codigo:'HAC-HUM3201BN-0280P-S2',nombre:'Cámara Dahua HDCVI Pinhole 2MP 1080P 2.8mm Starlight',cat:'camaras-hdcvi',pneto:54538,piva:10362,ptotal:64900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HUM3201BN-0280P-S2.webp'},
   {id:197,codigo:'DH-SD49212IN-HC-S3',nombre:'Cámara Dahua HDCVI PTZ 2MP 1080P 12X IR100 Alarma 2/1 1-Audio Starlight IP66',cat:'camaras-ip',pneto:138571,piva:26329,ptotal:164900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-SD49212IN-HC-S3.webp'},
   {id:198,codigo:'SD42C215N-HC-LA',nombre:'Cámara Dahua HDCVI PTZ 2MP 1080P 15X Alarma 2/1 1-Audio Starlight IK10',cat:'camaras-ip',pneto:201597,piva:38303,ptotal:239900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SD42C215N-HC-LA.webp'},
   {id:199,codigo:'SD42215N-HC-LA',nombre:'Cámara Dahua HDCVI PTZ 2MP 1080P 15X Alarma 2/1 1-Audio Starlight IK10 IP66',cat:'camaras-ip',pneto:268824,piva:51076,ptotal:319900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SD42215N-HC-LA.webp'},
@@ -18120,11 +18054,11 @@ const PRODUCTS = [
   {id:409,codigo:'CA-DW181EN',nombre:'Camara domo 720 tvl 3.6mm DAHUA',cat:'camaras-ip',pneto:20924,piva:3976,ptotal:24900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_CA-DW181EN.webp'},
   {id:410,codigo:'CA-DBW181RN-VF',nombre:'Camara domo 720 tvl VARIFOCAL DAHUA',cat:'camaras-ip',pneto:25126,piva:4774,ptotal:29900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_CA-DBW181RN-VF.webp'},
   {id:411,codigo:'SSTT-CVI-018',nombre:'Cámara HDCVI Oculta 2MP 3.7mm',cat:'camaras-ip',pneto:16723,piva:3177,ptotal:19900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SSTT-CVI-018.webp'},
-  {id:412,codigo:'HAC-HDBW2241FN-M-A-0360B',nombre:'Cámara HDCVI Vehicular 2mp 2.8mm Shock-proof IP67 IK10 IP6K9K DAHUA',cat:'camaras-ip',pneto:45294,piva:8606,ptotal:53900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDBW2241FN-M-A-0360B.webp'},
-  {id:413,codigo:'HAC-HMW3200LN-FR-0210B',nombre:'Cámara HDCVI Vehicular doble lente 2MP 2.1mm Shock-proof DAHUA',cat:'camaras-ip',pneto:41092,piva:7808,ptotal:48900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HMW3200LN-FR-0210B.webp'},
-  {id:414,codigo:'HAC-HMW3200LN-FR-BUS-0210B-S5',nombre:'Cámara HDCVI Vehicular doble lente 2MP 2.1mm Shock-proof modelo S5 DAHUA',cat:'camaras-ip',pneto:50336,piva:9564,ptotal:59900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HMW3200LN-FR-BUS-0210B-S5.webp'},
+  {id:412,codigo:'HAC-HDBW2241FN-M-A-0360B',nombre:'Cámara HDCVI Vehicular 2mp 2.8mm Shock-proof IP67 IK10 IP6K9K DAHUA',cat:'camaras-hdcvi',pneto:45294,piva:8606,ptotal:53900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDBW2241FN-M-A-0360B.webp'},
+  {id:413,codigo:'HAC-HMW3200LN-FR-0210B',nombre:'Cámara HDCVI Vehicular doble lente 2MP 2.1mm Shock-proof DAHUA',cat:'camaras-hdcvi',pneto:41092,piva:7808,ptotal:48900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HMW3200LN-FR-0210B.webp'},
+  {id:414,codigo:'HAC-HMW3200LN-FR-BUS-0210B-S5',nombre:'Cámara HDCVI Vehicular doble lente 2MP 2.1mm Shock-proof modelo S5 DAHUA',cat:'camaras-hdcvi',pneto:50336,piva:9564,ptotal:59900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HMW3200LN-FR-BUS-0210B-S5.webp'},
   {id:415,codigo:'HAC-HDBW3200FN-M-0280B-S5',nombre:'Cámara HDCVI Vehicular domo 2mp 2.8mm 20m IR Shock-proof DAHUA',cat:'especiales',pneto:32689,piva:6211,ptotal:38900,stock:'normal',nuevo:0,peso:0.5,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDBW3200FN-M-0280B-S5.webp'},
-  {id:416,codigo:'HAC-HM3200LN-F-0280B',nombre:'Cámara HDCVI Vehicular parabrisas 2mp 2.8mm Shock-proof DAHUA',cat:'camaras-ip',pneto:23445,piva:4455,ptotal:27900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HM3200LN-F-0280B.webp'},
+  {id:416,codigo:'HAC-HM3200LN-F-0280B',nombre:'Cámara HDCVI Vehicular parabrisas 2mp 2.8mm Shock-proof DAHUA',cat:'camaras-hdcvi',pneto:23445,piva:4455,ptotal:27900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HM3200LN-F-0280B.webp'},
   {id:417,codigo:'DHI-UAV-GA-TV-0623TA',nombre:'Camara hibrida Termal 640x512 19mm - optica Full HD 30X para Drone Dahua',cat:'camaras-ip',pneto:12857059,piva:2442841,ptotal:15299900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DHI-UAV-GA-TV-0623TA.webp'},
   {id:418,codigo:'IPC-F22FEN-0280B-V3-imou',nombre:'Cámara imou Full Color IP Bala 2MP 2.8mm IR30 Wifi Slot MicroSD IP67 microfono h.265',cat:'camaras-ip',pneto:54538,piva:10362,ptotal:64900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_IPC-F22FEN-0280B-V3-imou.webp'},
   {id:419,codigo:'IPC-L26N-imou',nombre:'Cámara imou IP 2MP 2.8mm LED10 Wifi Slot MicroSD IP67 microfono parlante y sirena',cat:'camaras-ip',pneto:83950,piva:15950,ptotal:99900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_IPC-L26N-imou.webp'},
@@ -18219,7 +18153,7 @@ const PRODUCTS = [
   {id:508,codigo:'ARD1731-W2',nombre:'Camara y Pir Inalambrico para alarma W2 Dahua',cat:'camaras-ip',pneto:75546,piva:14354,ptotal:89900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_ARD1731-W2.webp'},
   {id:509,codigo:'70maiA800',nombre:'Camara Frontal para Vehiculo 70mai 4K Dashcam',cat:'especiales',pneto:125966,piva:23934,ptotal:149900,stock:'normal',nuevo:0,peso:0.5,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_70maiA800.webp'},
   {id:510,codigo:'ITC352-RU2D-IRL8',nombre:'Camara IP 3MP control de trafico Dahua',cat:'camaras-ip',pneto:1596555,piva:303345,ptotal:1899900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_ITC352-RU2D-IRL8.webp'},
-  {id:511,codigo:'DH-HAC-HFW2220DN-B',nombre:'Camera, 2.4MP, 1080P Water-proof 1/2.8″ 2.4Megapixel CMOS, 25/30fps@1080P, 25/30/50/60fps@720P, High',cat:'camaras-ip',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW2220DN-B.webp'},
+  {id:511,codigo:'DH-HAC-HFW2220DN-B',nombre:'Camera, 2.4MP, 1080P Water-proof 1/2.8″ 2.4Megapixel CMOS, 25/30fps@1080P, 25/30/50/60fps@720P, High',cat:'camaras-hdcvi',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW2220DN-B.webp'},
   {id:512,codigo:'DHI-DS11',nombre:'Campana interior Dahua',cat:'accesorios',pneto:20084,piva:3816,ptotal:23900,stock:'normal',nuevo:0,peso:0.15,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DHI-DS11.webp'},
   {id:513,codigo:'MAE-D100',nombre:'Cargador batería para equipo portatil',cat:'accesorios',pneto:37731,piva:7169,ptotal:44900,stock:'normal',nuevo:0,peso:0.15,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_MAE-D100.webp'},
   {id:514,codigo:'04CCTVT',nombre:'CCTV Tester',cat:'accesorios',pneto:109160,piva:20740,ptotal:129900,stock:'normal',nuevo:0,peso:0.15,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_04CCTVT.webp'},
@@ -18270,8 +18204,8 @@ const PRODUCTS = [
   {id:559,codigo:'NVD0200FX-A01',nombre:'Decodificador de Video Dahua 2CH UHD',cat:'nvr',pneto:189832,piva:36068,ptotal:225900,stock:'normal',nuevo:0,peso:1.5,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_NVD0200FX-A01.webp'},
   {id:560,codigo:'DESD',nombre:'Desarrollo de software Dahua',cat:'accesorios',pneto:2671200,piva:507528,ptotal:3178728,stock:'normal',nuevo:0,peso:0.15,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DESD.webp'},
   {id:561,codigo:'ARD512-W2',nombre:'Detector de quiebre de vidrio para alarmas W2 Dahua',cat:'alarmas',pneto:25126,piva:4774,ptotal:29900,stock:'normal',nuevo:0,peso:0.2,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_ARD512-W2.webp'},
-  {id:562,codigo:'DH-HAC-HDW1220EMN-A-0280B',nombre:'DH-HAC-HDW1220EMN-A-0280B',cat:'camaras-ip',pneto:13350,piva:2536,ptotal:15886,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HDW1220EMN-A-0280B.webp'},
-  {id:563,codigo:'DH-HAC-HFW1220RN-0280B',nombre:'DH-HAC-HFW1220RN-0280B',cat:'camaras-ip',pneto:10237,piva:1945,ptotal:12182,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW1220RN-0280B.webp'},
+  {id:562,codigo:'DH-HAC-HDW1220EMN-A-0280B',nombre:'DH-HAC-HDW1220EMN-A-0280B',cat:'camaras-hdcvi',pneto:13350,piva:2536,ptotal:15886,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HDW1220EMN-A-0280B.webp'},
+  {id:563,codigo:'DH-HAC-HFW1220RN-0280B',nombre:'DH-HAC-HFW1220RN-0280B',cat:'camaras-hdcvi',pneto:10237,piva:1945,ptotal:12182,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-HAC-HFW1220RN-0280B.webp'},
   {id:564,codigo:'DH-IPC-A26N',nombre:'DH-IPC-A26N',cat:'camaras-ip',pneto:49526,piva:9410,ptotal:58936,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-IPC-A26N.webp'},
   {id:565,codigo:'DH-TPC-BF2221-T-HTM+Blackbody',nombre:'DH-TPC-BF2221-T-HTM+Blackbody',cat:'camaras-ip',pneto:6209918,piva:1179884,ptotal:7389802,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-TPC-BF2221-T-HTM+Blackbody.webp'},
   {id:566,codigo:'DH-TPC-BF5421P-T-HTM',nombre:'DH-TPC-BF3221N-TB7F8-HTM Cámara de seguridad IP híbrida térmica con medición de temperatura corporal',cat:'camaras-ip',pneto:5708026,piva:1084525,ptotal:6792551,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_DH-TPC-BF5421P-T-HTM.webp'},
@@ -18477,7 +18411,7 @@ const PRODUCTS = [
   {id:766,codigo:'MXVR1004-GFI',nombre:'MXVR1004-GFI',cat:'nvr',pneto:321465,piva:61078,ptotal:382543,stock:'normal',nuevo:0,peso:1.5,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_MXVR1004-GFI.webp'},
   {id:767,codigo:'SD59225N-HC-LA',nombre:'Nueva Cámara Dahua HDCVI PTZ 2MP 1080P 25X IR150 Alarma 2/1 1-Audio Starlight IP66',cat:'camaras-ip',pneto:336050,piva:63850,ptotal:399900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_SD59225N-HC-LA.webp'},
   {id:768,codigo:'IPC-HFW2841SP-S-0280B',nombre:'Nueva Cámara Dahua IP Bala 8MP 2.8mm IR30 PoE IP67 WDR Starlight Dahua',cat:'camaras-ip',pneto:100756,piva:19144,ptotal:119900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_IPC-HFW2841SP-S-0280B.webp'},
-  {id:769,codigo:'HAC-HDW1220G-M',nombre:'Nueva Cámara HDCVI Vehicular 2mp Shock-proof DAHUA',cat:'camaras-ip',pneto:29328,piva:5572,ptotal:34900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1220G-M.webp'},
+  {id:769,codigo:'HAC-HDW1220G-M',nombre:'Nueva Cámara HDCVI Vehicular 2mp Shock-proof DAHUA',cat:'camaras-hdcvi',pneto:29328,piva:5572,ptotal:34900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-HDW1220G-M.webp'},
   {id:770,codigo:'PFM904',nombre:'Nuevo CCTV Tester Analogo Dahua HDCVI AHD TVI CVBS PFM904',cat:'accesorios',pneto:100756,piva:19144,ptotal:119900,stock:'normal',nuevo:0,peso:0.15,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFM904.webp'},
   {id:771,codigo:'KIT-XVR1B04-I-1T-4xB1A21N-0360B',nombre:'Nuevo Kit HDCVI 4 Cámaras bullet 1 TB Dahua',cat:'camaras-ip',pneto:193193,piva:36707,ptotal:229900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_KIT-XVR1B04-I-1T-4xB1A21N-0360B.webp'},
   {id:772,codigo:'KIT-XVR1B04-I-1T-4xT1A21N-0360B',nombre:'Nuevo Kit HDCVI 4 Cámaras domo con disco 1 TB Dahua',cat:'camaras-ip',pneto:184790,piva:35110,ptotal:219900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_KIT-XVR1B04-I-1T-4xT1A21N-0360B.webp'},
@@ -18757,8 +18691,8 @@ const PRODUCTS = [
   {id:1046,codigo:'PFM350-360',nombre:'UPS Dahua 600VA con estabilizador de voltaje',cat:'accesorios',pneto:41933,piva:7967,ptotal:49900,stock:'normal',nuevo:0,peso:0.15,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_PFM350-360.webp'},
   {id:1047,codigo:'LLT-201C',nombre:'Video Balun economico',cat:'accesorios',pneto:1084,piva:206,ptotal:1290,stock:'normal',nuevo:0,peso:0.15,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_LLT-201C.webp'},
   {id:1048,codigo:'VTO2000A-2',nombre:'Videportero 2 Hilos IK07 Dahua',cat:'accesorios',pneto:83950,piva:15950,ptotal:99900,stock:'normal',nuevo:0,peso:0.15,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_VTO2000A-2.webp'},
-  {id:1049,codigo:'HAC-UZ3-Z-A-0360B',nombre:'Webcam Dahua 2MP 3.6mm USB',cat:'camaras-ip',pneto:36050,piva:6850,ptotal:42900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-UZ3-Z-A-0360B.webp'},
-  {id:1050,codigo:'HAC-UZ5-Z-A-0360B',nombre:'Webcam Dahua 5MP 3.6mm USB',cat:'camaras-ip',pneto:41933,piva:7967,ptotal:49900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-UZ5-Z-A-0360B.webp'},
+  {id:1049,codigo:'HAC-UZ3-Z-A-0360B',nombre:'Webcam Dahua 2MP 3.6mm USB',cat:'camaras-hdcvi',pneto:36050,piva:6850,ptotal:42900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-UZ3-Z-A-0360B.webp'},
+  {id:1050,codigo:'HAC-UZ5-Z-A-0360B',nombre:'Webcam Dahua 5MP 3.6mm USB',cat:'camaras-hdcvi',pneto:41933,piva:7967,ptotal:49900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_HAC-UZ5-Z-A-0360B.webp'},
   {id:1051,codigo:'WBCF26',nombre:'WEBCAM Full HD 1080p USB Microfono incorporado',cat:'camaras-ip',pneto:13361,piva:2539,ptotal:15900,stock:'normal',nuevo:0,peso:0.3,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_WBCF26.webp'},
   {id:1052,codigo:'MXVR8212-GFWI',nombre:'XVR 12CH (8 HDCVI + 4 IP) Movil con GPS 4G WiFi DAHUA',cat:'nvr',pneto:714202,piva:135698,ptotal:849900,stock:'normal',nuevo:0,peso:1.5,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_MXVR8212-GFWI.webp'},
   {id:1053,codigo:'MXVR4104-GFWI',nombre:'XVR 4CH Movil con GPS 4G WiFi DAHUA',cat:'nvr',pneto:654202,piva:124298,ptotal:778500,stock:'normal',nuevo:0,peso:1.5,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_MXVR4104-GFWI.webp'},
@@ -30057,7 +29991,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 11:24 hrs';
+  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 11:38 hrs';
 })();
 
 
@@ -44365,6 +44299,7 @@ if (document.readyState === 'loading') {
 
     // Acciones rápidas
     html += '<div class="cmp-actions">';
+    html += '<button class="cmp-action-btn cmp-action-fov" onclick="cmpViewInFov()" title="Abre A y B lado a lado en el Simulador FOV">📐 Ver A vs B en Simulador FOV</button>';
     html += '<button class="cmp-action-btn cmp-action-cart-a" onclick="cmpAddToCart(\'A\')">🛒 Agregar A al carro · $'+a.ptotal.toLocaleString('es-CL')+'</button>';
     html += '<button class="cmp-action-btn cmp-action-cart-b" onclick="cmpAddToCart(\'B\')">🛒 Agregar B al carro · $'+b.ptotal.toLocaleString('es-CL')+'</button>';
     html += '</div>';
@@ -44378,6 +44313,41 @@ if (document.readyState === 'loading') {
     if (!p) return;
     if (typeof addCart === 'function') addCart(p);
     if (typeof showToast === 'function') showToast('🛒 '+p.codigo+' agregada al carro');
+  };
+
+  // Cargar A y B en el Simulador FOV en modo comparación
+  window.cmpViewInFov = function() {
+    var ca = COMPARE_STATE.camA, cb = COMPARE_STATE.camB;
+    if (!ca || !cb) { if (typeof showToast === 'function') showToast('⚠️ Selecciona ambas cámaras primero'); return; }
+    // Verificar que estén en FOV.allCams (puede no estar si la cámara no es de las cats que el FOV indexa)
+    if (!window.FOV || !FOV.allCams) {
+      if (typeof showToast === 'function') showToast('⚠️ Simulador FOV no está disponible');
+      return;
+    }
+    var inFovA = FOV.allCams.find(function(c){ return c.cod === ca.codigo; });
+    var inFovB = FOV.allCams.find(function(c){ return c.cod === cb.codigo; });
+    if (!inFovA || !inFovB) {
+      var miss = [];
+      if (!inFovA) miss.push('A ('+ca.codigo+')');
+      if (!inFovB) miss.push('B ('+cb.codigo+')');
+      if (typeof showToast === 'function') showToast('⚠️ El simulador no tiene foco en: '+miss.join(', ')+'. Requiere lente con focal numérico.');
+      return;
+    }
+    // Activar modo comparación si no lo está
+    if (typeof FOV !== 'undefined' && !FOV.compare && typeof fovToggleCompare === 'function') {
+      fovToggleCompare();
+    }
+    // Cargar A y B
+    if (typeof fovPick === 'function') {
+      fovPick(ca.codigo, 'A');
+      fovPick(cb.codigo, 'B');
+    }
+    // Scroll al simulador
+    setTimeout(function(){
+      var fovEl = document.getElementById('secFov');
+      if (fovEl) fovEl.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 100);
+    if (typeof showToast === 'function') showToast('📐 '+ca.codigo+' vs '+cb.codigo+' cargadas en el simulador');
   };
 
   // ════════════════════════════════════════════════════════════
