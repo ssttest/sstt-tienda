@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 11:38 hrs -->
+<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 11:56 hrs -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -4829,8 +4829,6 @@ nav {
 .dori-i { background:var(--red-p)!important; color:var(--red); font-weight:700; border-radius:3px; padding:3px 8px; display:inline-block }
 
 @media(max-width:768px){
-  .ac-hero-inner { grid-template-columns:1fr }
-  .ac-stats { display:none }
   .guides-layout { grid-template-columns:1fr }
   .g-nav { display:flex; overflow-x:auto; border-right:none; border-bottom:1px solid var(--g5) }
   .g-item { white-space:nowrap; border-left:none; border-bottom:3px solid transparent }
@@ -5324,9 +5322,6 @@ input[data-validated="1"]::after {
   .mnav-tab { padding:0 14px; font-size:12.5px }
   /* Carro drawer — tablet y mobile */
   .cart-drawer { top:0; right:0; bottom:0; width:100% !important; border-radius:0 !important; }
-  /* Academia */
-  .ac-hero-inner { grid-template-columns:1fr }
-  .ac-stats { flex-wrap:wrap }
   .calc-grid { grid-template-columns:1fr }
   .videos-grid, .guias-grid { grid-template-columns:1fr }
   /* Comparador modal */
@@ -5385,9 +5380,6 @@ input[data-validated="1"]::after {
   .pm-tabbar { gap:0 }
   .pm-tab { padding:0 12px; font-size:12px }
   .pm-quickspecs { grid-template-columns:1fr 1fr }
-  /* Academia */
-  .ac-tabs-bar { gap:0 }
-  .ac-tab { padding:10px 14px; font-size:12px }
 }
 
 /* ── Móvil pequeño / Fold cerrado (≤ 400px) ─────────────────────── */
@@ -21735,6 +21727,10 @@ function _pmBuildModal(id) {
                 Agregar al carro
               </button>
               <button class="pm-btn-secondary" onclick="pmAddCot(${id})">📋 Cotizar</button>
+              <button class="pm-btn-ghost" onclick="cmpToggle(${id})" title="Comparar este producto" style="background:linear-gradient(135deg,rgba(232,0,28,.06),rgba(232,0,28,.04));border:1px solid rgba(232,0,28,.2);color:var(--red);display:inline-flex;align-items:center;gap:5px;font-weight:700">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="18 8 22 12 18 16"/><polyline points="6 8 2 12 6 16"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                Comparar
+              </button>
               ${_fovBtn}`;
             })()}
             <button class="pm-btn-ghost" onclick="copyTxt('${p.codigo}');showToast('✅ Código copiado')" title="Copiar código de modelo">📋</button>
@@ -22670,6 +22666,13 @@ function closeCmpPanel() {
   const o = document.getElementById('cmpOverlay');
   if (p) { p.classList.remove('open'); p.style.transform = 'translateX(100%)'; }
   if (o) { o.classList.remove('open'); o.style.display = 'none'; }
+}
+
+
+function toggleCmpPanel() {
+  const p = document.getElementById('cmpPanel');
+  if (p && p.classList.contains('open')) closeCmpPanel();
+  else openCmpPanel();
 }
 
 
@@ -24491,9 +24494,6 @@ window.addEventListener('DOMContentLoaded', () => {
   </button>
 </div>
 
-<!-- Overlay -->
-<div id="cmpPanelOverlay" onclick="toggleCmpPanel()"></div>
-
 <!-- Panel deslizante -->
 
 
@@ -24803,6 +24803,11 @@ window.addEventListener('DOMContentLoaded', () => {
     const o = document.getElementById('cmpOverlay');
     if (p) { p.classList.remove('open'); p.style.transform = 'translateX(100%)'; }
     if (o) { o.classList.remove('open'); o.style.display = 'none'; }
+  };
+  window.toggleCmpPanel = function() {
+    const p = document.getElementById('cmpPanel');
+    if (p && p.classList.contains('open')) window.closeCmpPanel();
+    else window.openCmpPanel();
   };
 
   // 6. Fix body overflow that can get stuck
@@ -29991,7 +29996,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 11:38 hrs';
+  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 11:56 hrs';
 })();
 
 
@@ -37160,6 +37165,37 @@ var NVR_DB = [
   { model: 'NVR608-128-4KS2', channels: 128,bw: 1024,hdds: 8, label: 'NVR Ultra 128ch' }
 ];
 
+// Catálogo XVR para sistemas HDCVI (códigos reales del catálogo SSTT)
+var XVR_DB = [
+  { model: 'XVR1B04-I',         channels: 4,  hdds: 1, label: 'XVR 4ch WizSense' },
+  { model: 'XVR4104HS-I',       channels: 4,  hdds: 1, label: 'XVR 4ch IA H.265+' },
+  { model: 'XVR5104H-I3',       channels: 4,  hdds: 1, label: 'XVR 4ch WizSense IVS' },
+  { model: 'XVR1B08-I',         channels: 8,  hdds: 1, label: 'XVR 8ch WizSense' },
+  { model: 'XVR4108HS-I',       channels: 8,  hdds: 1, label: 'XVR 8ch IA H.265+' },
+  { model: 'XVR5108H-I3',       channels: 8,  hdds: 1, label: 'XVR 8ch WizSense IVS' },
+  { model: 'XVR5108HE-I3',      channels: 8,  hdds: 1, label: 'XVR 8ch WizSense IVS Audio/Alarma' },
+  { model: 'XVR1B16-I',         channels: 16, hdds: 1, label: 'XVR 16ch WizSense' },
+  { model: 'XVR4116HS-I',       channels: 16, hdds: 1, label: 'XVR 16ch básico' },
+  { model: 'XVR5116HS-I3',      channels: 16, hdds: 1, label: 'XVR 16ch IA H.265+' },
+  { model: 'XVR5116HE-I3',      channels: 16, hdds: 1, label: 'XVR 16ch +8IP Audio/Alarma' },
+  { model: 'XVR5116H-4KL-I3',   channels: 16, hdds: 1, label: 'XVR 16ch 4K +16IP' },
+  { model: 'DH-XVR5216AN-4KL-X',channels: 16, hdds: 2, label: 'XVR 16ch 4K +8IP 2HDD' },
+  { model: 'XVR4232AN-I',       channels: 32, hdds: 2, label: 'XVR 32ch IA 2HDD' },
+  { model: 'XVR5232AN-I3',      channels: 32, hdds: 2, label: 'XVR 32ch IVS soporta 5MP' },
+  { model: 'XVR5432L-I3',       channels: 32, hdds: 4, label: 'XVR 32ch Rackeable 4HDD' },
+  { model: 'XVR7416L-4K-I3',    channels: 16, hdds: 4, label: 'XVR Pro 16ch 4K +16IP 4HDD' },
+  { model: 'XVR5832S-I3',       channels: 32, hdds: 8, label: 'XVR 32ch 2U 8HDD' }
+];
+
+// Catálogo de fuentes 12VDC multicanal para alimentar cámaras HDCVI
+var HDCVI_PSU_DB = [
+  { model: '0312V10A',   amps: 10, channels: 4,  label: 'Fuente 12V 10A con potenciómetro' },
+  { model: '12v15a9ch',  amps: 15, channels: 9,  label: 'Fuente 12V 15A · 9 canales' },
+  { model: '12v20a18ch', amps: 20, channels: 18, label: 'Fuente 12V 20A · 18 canales' },
+  { model: '12v30a18ch', amps: 30, channels: 18, label: 'Fuente 12V 30A · 18 canales' },
+  { model: '0312V30A',   amps: 30, channels: 24, label: 'Fuente 12V 30A con potenciómetro' }
+];
+
 // Calcula consumo total del proyecto a partir del tracking
 function fovProjectStats(items) {
   if (!items || items.length === 0) return null;
@@ -37173,21 +37209,39 @@ function fovProjectStats(items) {
       if (mp >= keys[i]) { key = String(keys[i]); break; }
     }
     var br = BITRATE_TABLE[key];
+    // Detectar tipo de cámara desde catálogo PRODUCTS por código
+    var tipo = 'IP'; // default
+    if (typeof PRODUCTS !== 'undefined' && it.cod) {
+      var prod = PRODUCTS.find(function(p){ return p.codigo === it.cod; });
+      if (prod) {
+        if (prod.cat === 'camaras-hdcvi') tipo = 'HDCVI';
+        else if (prod.cat === 'camaras-ip' || prod.cat === 'camaras-ptz') tipo = 'IP';
+      }
+    }
     return {
       cod: it.cod, mp: mp,
       h264: br.h264,
-      h265: br.h265
+      h265: br.h265,
+      tipo: tipo
     };
   });
   perCam.forEach(function(p){
     totalBitrate264 += p.h264;
     totalBitrate265 += p.h265;
   });
+  // Determinar tipo de sistema global
+  var tiposUnicos = perCam.reduce(function(acc, p){ if (acc.indexOf(p.tipo) < 0) acc.push(p.tipo); return acc; }, []);
+  var tipoSistema = tiposUnicos.length > 1 ? 'mixto' : tiposUnicos[0] || 'IP';
+  var camsHdcvi = perCam.filter(function(p){ return p.tipo === 'HDCVI'; }).length;
+  var camsIP = perCam.filter(function(p){ return p.tipo === 'IP'; }).length;
   return {
     perCam: perCam,
     totalH264: totalBitrate264,
     totalH265: totalBitrate265,
-    cams: items.length
+    cams: items.length,
+    tipoSistema: tipoSistema,
+    camsHdcvi: camsHdcvi,
+    camsIP: camsIP
   };
 }
 
@@ -37251,6 +37305,43 @@ function recommendSwitch(channels, totalBwMbps) {
   return { model: model, ports: ports, poeBudget: poeBudget, msg: msg };
 }
 
+// Recomienda XVR para sistemas HDCVI (no usa bandwidth, solo canales)
+function recommendXvr(channels) {
+  var candidates = XVR_DB.filter(function(x){ return x.channels >= channels; });
+  if (candidates.length === 0) {
+    return { ok: false, msg: 'Ningún XVR del catálogo soporta esta cantidad de canales. Considera dividir en 2 XVRs.' };
+  }
+  // Ordenar por canales ascendente para tomar el más eficiente
+  candidates.sort(function(a,b){ return (a.channels - b.channels) || (a.hdds - b.hdds); });
+  return { ok: true, xvr: candidates[0], alternatives: candidates.slice(1, 3) };
+}
+
+// Recomienda fuente 12VDC multicanal para alimentar cámaras HDCVI
+// HDCVI no usa PoE: cada cámara va con cable coaxial (video) + par 12VDC (alimentación)
+function recommendFuenteHdcvi(channels) {
+  // Cámaras HDCVI Dahua promedian ~0.5A @ 12V (algunas IR alto llegan a 1A)
+  // Margen 30% sobre consumo nominal
+  var ampsRequeridos = channels * 0.5 * 1.3;
+  var candidates = HDCVI_PSU_DB.filter(function(f){
+    return f.channels >= channels && f.amps >= ampsRequeridos;
+  });
+  if (candidates.length === 0) {
+    // Si no alcanza, sugerir múltiples fuentes
+    return {
+      ok: false,
+      msg: 'Para ' + channels + ' cámaras HDCVI necesitas múltiples fuentes 12VDC. Considera 2 unidades de 12V 30A 18CH.',
+      ampsRequeridos: ampsRequeridos.toFixed(1)
+    };
+  }
+  candidates.sort(function(a,b){ return (a.channels - b.channels) || (a.amps - b.amps); });
+  return {
+    ok: true,
+    fuente: candidates[0],
+    alternatives: candidates.slice(1, 3),
+    ampsRequeridos: ampsRequeridos.toFixed(1)
+  };
+}
+
 // === RENDER PANEL DEL PROYECTO ===
 function fovRenderProjectPanel() {
   var el = document.getElementById('fovProjectPanel');
@@ -37274,8 +37365,11 @@ function fovRenderProjectPanel() {
   var nvrRec = recommendNVR(stats.cams, bitrateTotal * motionFactor * fpsFactor);
   var switchRec = recommendSwitch(stats.cams, bitrateTotal * motionFactor * fpsFactor);
   // Render
+  var sistemaLabel = stats.tipoSistema === 'HDCVI' ? ' · sistema HDCVI' :
+                     stats.tipoSistema === 'mixto' ? ' · sistema mixto' :
+                     ' · sistema IP';
   var html = '<div class="fov-proj-header">';
-  html += '<div><b>🏗️ Cálculo del proyecto</b> <span style="opacity:.6;font-weight:400">según los ' + stats.cams + ' modelos comparados</span></div>';
+  html += '<div><b>🏗️ Cálculo del proyecto</b> <span style="opacity:.6;font-weight:400">según los ' + stats.cams + ' modelos comparados' + sistemaLabel + '</span></div>';
   html += '</div>';
   // Controles
   html += '<div class="fov-proj-controls">';
@@ -37316,43 +37410,94 @@ function fovRenderProjectPanel() {
   html += '<div class="fov-proj-card-sub">total de las '+stats.cams+' cámaras (' + codec.toUpperCase() + ')</div>';
   html += '<div class="fov-proj-card-rec">' + (bitrateTotal < 100 ? 'Cualquier red Gigabit' : bitrateTotal < 500 ? 'Switch Gigabit dedicado' : 'Backbone 2.5G+') + '</div>';
   html += '</div>';
-  // Switch PoE
+  // Switch PoE / Fuente 12VDC (según tipo de sistema)
   html += '<div class="fov-proj-card">';
-  html += '<div class="fov-proj-card-icon">🔌</div>';
-  html += '<div class="fov-proj-card-title">Switch PoE <button class="fov-info-icon-sm" onclick="event.stopPropagation();fovShowTooltip(&#39;poe&#39;, this)" type="button">&#8505;</button></div>';
-  html += '<div class="fov-proj-card-big" style="font-size:13px">' + switchRec.model + '</div>';
-  html += '<div class="fov-proj-card-sub">' + switchRec.msg + '</div>';
-  html += '<div class="fov-proj-card-rec">PoE budget: '+switchRec.poeBudget+'W para '+stats.cams+' cámaras</div>';
+  if (stats.tipoSistema === 'HDCVI') {
+    var psuRec = recommendFuenteHdcvi(stats.cams);
+    html += '<div class="fov-proj-card-icon">🔋</div>';
+    html += '<div class="fov-proj-card-title">Fuente de poder 12VDC</div>';
+    if (psuRec.ok) {
+      html += '<div class="fov-proj-card-big" style="font-size:13px">' + psuRec.fuente.model + '</div>';
+      html += '<div class="fov-proj-card-sub">' + psuRec.fuente.label + '</div>';
+      html += '<div class="fov-proj-card-rec">Consumo estimado: '+psuRec.ampsRequeridos+'A para '+stats.cams+' cámaras HDCVI</div>';
+    } else {
+      html += '<div class="fov-proj-card-big" style="color:#e67e22;font-size:14px">⚠ Múltiples fuentes</div>';
+      html += '<div class="fov-proj-card-sub">' + psuRec.msg + '</div>';
+    }
+  } else if (stats.tipoSistema === 'mixto') {
+    html += '<div class="fov-proj-card-icon">⚠️</div>';
+    html += '<div class="fov-proj-card-title">Alimentación</div>';
+    html += '<div class="fov-proj-card-big" style="font-size:13px;color:#e67e22">Sistemas mixtos</div>';
+    html += '<div class="fov-proj-card-sub">'+stats.camsIP+' IP + '+stats.camsHdcvi+' HDCVI</div>';
+    html += '<div class="fov-proj-card-rec">No se mezclan en un solo grabador. Considera dividir el proyecto.</div>';
+  } else {
+    html += '<div class="fov-proj-card-icon">🔌</div>';
+    html += '<div class="fov-proj-card-title">Switch PoE <button class="fov-info-icon-sm" onclick="event.stopPropagation();fovShowTooltip(&#39;poe&#39;, this)" type="button">&#8505;</button></div>';
+    html += '<div class="fov-proj-card-big" style="font-size:13px">' + switchRec.model + '</div>';
+    html += '<div class="fov-proj-card-sub">' + switchRec.msg + '</div>';
+    html += '<div class="fov-proj-card-rec">PoE budget: '+switchRec.poeBudget+'W para '+stats.cams+' cámaras</div>';
+  }
   html += '</div>';
-  // NVR
+  // Grabador (NVR para IP, XVR para HDCVI)
   html += '<div class="fov-proj-card">';
   html += '<div class="fov-proj-card-icon">🎛️</div>';
-  html += '<div class="fov-proj-card-title">Grabador NVR <button class="fov-info-icon-sm" onclick="event.stopPropagation();fovShowTooltip(&#39;nvr&#39;, this)" type="button">&#8505;</button></div>';
-  if (nvrRec.ok) {
-    html += '<div class="fov-proj-card-big" style="font-size:13px">' + nvrRec.nvr.model + '</div>';
-    html += '<div class="fov-proj-card-sub">' + nvrRec.nvr.label + ' · ' + nvrRec.nvr.bw + ' Mbps · ' + nvrRec.nvr.hdds + ' HDD slots</div>';
-    if (nvrRec.alternatives && nvrRec.alternatives.length) {
-      html += '<div class="fov-proj-card-rec">Alternativas: ' + nvrRec.alternatives.map(function(a){return a.model;}).join(', ') + '</div>';
+  if (stats.tipoSistema === 'HDCVI') {
+    var xvrRec = recommendXvr(stats.cams);
+    html += '<div class="fov-proj-card-title">Grabador XVR (HDCVI)</div>';
+    if (xvrRec.ok) {
+      html += '<div class="fov-proj-card-big" style="font-size:13px">' + xvrRec.xvr.model + '</div>';
+      html += '<div class="fov-proj-card-sub">' + xvrRec.xvr.label + ' · ' + xvrRec.xvr.hdds + ' HDD slot' + (xvrRec.xvr.hdds>1?'s':'') + '</div>';
+      if (xvrRec.alternatives && xvrRec.alternatives.length) {
+        html += '<div class="fov-proj-card-rec">Alternativas: ' + xvrRec.alternatives.map(function(a){return a.model;}).join(', ') + '</div>';
+      } else {
+        html += '<div class="fov-proj-card-rec">'+stats.cams+' canal'+(stats.cams>1?'es':'')+' HDCVI · cable coaxial RG-59</div>';
+      }
     } else {
-      html += '<div class="fov-proj-card-rec">Capacidad usada: '+Math.round(bitrateTotal*motionFactor*100/nvrRec.nvr.bw)+'%</div>';
+      html += '<div class="fov-proj-card-big" style="color:#e74c3c;font-size:14px">⚠ Sobrecarga</div>';
+      html += '<div class="fov-proj-card-sub">' + xvrRec.msg + '</div>';
     }
+  } else if (stats.tipoSistema === 'mixto') {
+    html += '<div class="fov-proj-card-title">Grabador</div>';
+    html += '<div class="fov-proj-card-big" style="font-size:13px;color:#e67e22">⚠ Tecnologías incompatibles</div>';
+    html += '<div class="fov-proj-card-sub">IP necesita NVR · HDCVI necesita XVR</div>';
+    html += '<div class="fov-proj-card-rec">Algunos XVR híbridos aceptan canales IP extra (ej: XVR5116H-4KL-I3 acepta +16IP), pero lo mejor es separar.</div>';
   } else {
-    html += '<div class="fov-proj-card-big" style="color:#e74c3c;font-size:14px">⚠ Sobrecarga</div>';
-    html += '<div class="fov-proj-card-sub">' + nvrRec.msg + '</div>';
+    html += '<div class="fov-proj-card-title">Grabador NVR <button class="fov-info-icon-sm" onclick="event.stopPropagation();fovShowTooltip(&#39;nvr&#39;, this)" type="button">&#8505;</button></div>';
+    if (nvrRec.ok) {
+      html += '<div class="fov-proj-card-big" style="font-size:13px">' + nvrRec.nvr.model + '</div>';
+      html += '<div class="fov-proj-card-sub">' + nvrRec.nvr.label + ' · ' + nvrRec.nvr.bw + ' Mbps · ' + nvrRec.nvr.hdds + ' HDD slots</div>';
+      if (nvrRec.alternatives && nvrRec.alternatives.length) {
+        html += '<div class="fov-proj-card-rec">Alternativas: ' + nvrRec.alternatives.map(function(a){return a.model;}).join(', ') + '</div>';
+      } else {
+        html += '<div class="fov-proj-card-rec">Capacidad usada: '+Math.round(bitrateTotal*motionFactor*100/nvrRec.nvr.bw)+'%</div>';
+      }
+    } else {
+      html += '<div class="fov-proj-card-big" style="color:#e74c3c;font-size:14px">⚠ Sobrecarga</div>';
+      html += '<div class="fov-proj-card-sub">' + nvrRec.msg + '</div>';
+    }
   }
   html += '</div>';
   html += '</div>';
-  // Detector cuello de botella
-  if (nvrRec.ok) {
-    var usagePct = Math.round((bitrateTotal*motionFactor*100)/nvrRec.nvr.bw);
-    if (usagePct > 80) {
-      html += '<div class="fov-proj-warn">⚠️ <b>Cuello de botella:</b> Estás usando ' + usagePct + '% del bandwidth del NVR. Si agregas más cámaras o subes calidad, va a saturar. Considera el siguiente modelo: <b>' + (nvrRec.alternatives[0] ? nvrRec.alternatives[0].model : 'serie superior') + '</b></div>';
+  // Detector cuello de botella (solo aplica a IP/NVR)
+  if (stats.tipoSistema === 'IP') {
+    if (nvrRec.ok) {
+      var usagePct = Math.round((bitrateTotal*motionFactor*100)/nvrRec.nvr.bw);
+      if (usagePct > 80) {
+        html += '<div class="fov-proj-warn">⚠️ <b>Cuello de botella:</b> Estás usando ' + usagePct + '% del bandwidth del NVR. Si agregas más cámaras o subes calidad, va a saturar. Considera el siguiente modelo: <b>' + (nvrRec.alternatives[0] ? nvrRec.alternatives[0].model : 'serie superior') + '</b></div>';
+      }
+    } else {
+      html += '<div class="fov-proj-warn" style="border-left-color:#e74c3c;background:rgba(231,76,60,.06)">🚫 <b>Configuración no viable con un solo NVR.</b> El bandwidth combinado (' + Math.round(bitrateTotal*motionFactor) + ' Mbps) excede la capacidad del NVR más grande del catálogo (1024 Mbps). Considera: 1) reducir resolución, 2) usar H.265+, 3) dividir en 2 NVRs por zonas, o 4) usar VMS profesional.</div>';
     }
-  } else {
-    html += '<div class="fov-proj-warn" style="border-left-color:#e74c3c;background:rgba(231,76,60,.06)">🚫 <b>Configuración no viable con un solo NVR.</b> El bandwidth combinado (' + Math.round(bitrateTotal*motionFactor) + ' Mbps) excede la capacidad del NVR más grande del catálogo (1024 Mbps). Considera: 1) reducir resolución, 2) usar H.265+, 3) dividir en 2 NVRs por zonas, o 4) usar VMS profesional.</div>';
+  } else if (stats.tipoSistema === 'mixto') {
+    html += '<div class="fov-proj-warn" style="border-left-color:#e67e22;background:rgba(230,126,34,.06)">⚠️ <b>Estás mezclando '+stats.camsIP+' cámara'+(stats.camsIP>1?'s':'')+' IP con '+stats.camsHdcvi+' HDCVI.</b> Son ecosistemas distintos: IP usa cable UTP+switch PoE+NVR, HDCVI usa coaxial+fuente 12V+XVR. <b>No se mezclan en el mismo proyecto</b> salvo que uses un XVR híbrido (algunos modelos aceptan canales IP extra). Decide qué tecnología domina y replantea las cámaras del otro tipo, o sepáralo en dos sistemas.</div>';
   }
   // Footer técnico
-  html += '<div class="fov-proj-footer">⚙️ Cálculos basados en bitrate típico Dahua 30fps · factor escena ' + motion + ' (×' + motionFactor + ') · margen NVR 20%. Los valores reales pueden variar ±20% según calidad de imagen, complejidad de escena y configuración VBR.</div>';
+  var footerNote = stats.tipoSistema === 'HDCVI' ?
+    'Cálculos basados en bitrate típico Dahua 30fps · factor escena ' + motion + ' (×' + motionFactor + ') · consumo HDCVI 0.5A/cámara + 30% margen. Los valores reales pueden variar ±20%.' :
+    stats.tipoSistema === 'mixto' ?
+    'Cálculos basados en bitrate típico Dahua 30fps · factor escena ' + motion + ' (×' + motionFactor + '). El sistema mixto requiere planificación específica — los cálculos asumen tratamiento separado por tecnología.' :
+    'Cálculos basados en bitrate típico Dahua 30fps · factor escena ' + motion + ' (×' + motionFactor + ') · margen NVR 20%. Los valores reales pueden variar ±20% según calidad de imagen, complejidad de escena y configuración VBR.';
+  html += '<div class="fov-proj-footer">⚙️ ' + footerNote + '</div>';
   el.innerHTML = html;
 }
 
@@ -43517,6 +43662,45 @@ if (document.readyState === 'loading') {
           '</ul>' +
           '<p>💡 Usa la <b>Calculadora de Cable & Energía</b> para validar caída de voltaje y la <b>Calculadora de Presupuesto PoE</b> para validar tu switch.</p>';
       }
+    },
+    {
+      id: 'poe-estandares',
+      icon: '🔌',
+      titulo: 'PoE — Estándares y elección de switch',
+      sub: '802.3af / at / bt: cuál necesita cada cámara',
+      tags: ['energía', 'PoE', 'instalación'],
+      content: function() {
+        return '<p><b>PoE (Power over Ethernet)</b> permite alimentar la cámara IP por el mismo cable UTP que transporta el video. Una sola corrida desde el switch al techo, sin enchufe en altura. Es el estándar moderno para CCTV IP.</p>' +
+          '<p><b>Los tres estándares PoE</b>:</p>' +
+          '<table class="cqr-codec-tbl"><thead><tr><th>Estándar</th><th>Watts máx</th><th>Voltaje</th><th>Cámaras típicas</th></tr></thead><tbody>' +
+          '<tr><td><b>802.3af</b> (PoE clásico)</td><td>12.95W (15.4W al puerto)</td><td>48V</td><td>Bullet/Dome 2-4MP IR moderado, sin extras</td></tr>' +
+          '<tr><td><b>802.3at</b> (PoE+)</td><td>25.5W (30W al puerto)</td><td>48-54V</td><td>Bullet IR alto, Full-Color con LEDs, mini-PTZ, 4K</td></tr>' +
+          '<tr><td><b>802.3bt Tipo 3</b> (PoE++ / Hi-PoE)</td><td>51W (60W al puerto)</td><td>54V</td><td>PTZ con calefactor, multi-sensor, equipos auxiliares</td></tr>' +
+          '<tr><td><b>802.3bt Tipo 4</b> (Ultra PoE)</td><td>71W (90W al puerto)</td><td>54V</td><td>Cámaras térmicas, PTZ grandes con limpiador</td></tr>' +
+          '</tbody></table>' +
+          '<p><b>Cómo elegir el switch correcto</b>:</p>' +
+          '<ol>' +
+          '<li><b>Suma el consumo nocturno</b> de TODAS las cámaras (no el diurno — los IR consumen mucho).</li>' +
+          '<li><b>Multiplica por 1.3</b> (margen de seguridad para picos y futuro crecimiento).</li>' +
+          '<li><b>Elige un switch con PoE budget ≥ ese total</b>. Ejemplos catálogo Dahua: 4p PoE 60W, 8p PoE 96W, 16p PoE 240W, 24p PoE 360W.</li>' +
+          '<li><b>Verifica el estándar por puerto</b>. Un switch puede tener "240W total" pero limitar cada puerto a 30W (PoE+). Si tienes una PTZ que necesita 60W, ese switch no sirve.</li>' +
+          '</ol>' +
+          '<p><b>Distancia máxima del cable</b>:</p>' +
+          '<ul>' +
+          '<li><b>UTP Cat5e/Cat6 estándar</b>: 100m de cable PoE garantizado por norma.</li>' +
+          '<li><b>Modo "Extend" Dahua</b>: algunos switches PoE Dahua (línea LR2110, CS4006, PFS3008) permiten hasta <b>250m a 10Mbps</b> en un puerto especial. Útil para cámaras lejanas.</li>' +
+          '<li><b>Más de 250m</b>: necesitas extensor PoE (PFT1300 da +100m) o pasar a fibra óptica con conversor.</li>' +
+          '</ul>' +
+          '<p><b>Problemas frecuentes en obra</b>:</p>' +
+          '<ul>' +
+          '<li><b>Cámara reinicia al activarse IR</b>: el switch o el cable no entrega suficiente potencia. Usa cable Cat6 puro cobre (no CCA) y verifica budget total.</li>' +
+          '<li><b>Cámara funciona pero no graba audio/no encuentra micrófono</b>: a veces es PoE de baja calidad. Probar con switch de marca confiable.</li>' +
+          '<li><b>Caída de voltaje en cables largos</b>: cable barato (CCA) tiene resistencia 2× la del cobre puro. A 80m con CCA, una cámara PoE+ puede no encender.</li>' +
+          '<li><b>Switch no-PoE y necesitas alimentar cámaras</b>: usa <b>inyectores PoE</b> (uno por cámara) o reemplaza el switch.</li>' +
+          '</ul>' +
+          '<p>💡 <b>Cuándo NO usar PoE</b>: si la cámara es HDCVI (códigos HAC-, DH-HAC-) <b>nunca</b> usa PoE — va con coaxial + fuente 12VDC. Solo cámaras IP usan PoE.</p>' +
+          '<p>📐 Para validar tu instalación específica, usa la <b>Calculadora de Presupuesto PoE</b> y la <b>Calculadora de Cable &amp; Energía</b>.</p>';
+      }
     }
   ];
 
@@ -43527,7 +43711,7 @@ if (document.readyState === 'loading') {
     var html = '';
     html += '<div class="cqr-header">';
     html += '<h2 class="tools-h2">📖 Conceptos rápidos</h2>';
-    html += '<p class="tools-sub">Guías cortas sobre temas frecuentes en CCTV: <b>WDR, IR, WhiteWash, codecs, distancias, IA, disuasión activa</b>. Para consulta rápida cuando un cliente te pregunta o cuando necesitas decidir entre dos opciones técnicas.</p>';
+    html += '<p class="tools-sub">Guías cortas sobre temas frecuentes en CCTV: <b>WDR, IR, WhiteWash, codecs, PoE, distancias, IA, disuasión activa</b>. Para consulta rápida cuando un cliente te pregunta o cuando necesitas decidir entre dos opciones técnicas.</p>';
     html += '</div>';
 
     // Lista de conceptos en sidebar + contenido
