@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 10:17 hrs (UTC-4 Chile) -->
+<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 11:24 hrs (UTC-4 Chile) -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -15850,7 +15850,7 @@ if (window.pdfjsLib) {
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Sábado 25 de Abril del 2026 · 10:17 hrs</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Sábado 25 de Abril del 2026 · 11:24 hrs</span>
   </div>
 </div>
 
@@ -16986,7 +16986,7 @@ if (window.pdfjsLib) {
       <!-- Panel modo LIVE -->
       <!-- Selector de lente del móvil (visible solo si hay múltiples) -->
       <div id="fovCamLensSelector" style="display:none;padding:8px 10px;background:rgba(0,0,0,.4);border-bottom:1px solid rgba(255,255,255,.08)">
-        <div style="font-size:9px;color:#888;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Lente del teléfono</div>
+        <div style="font-size:9px;color:#888;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px">Lente del teléfono · FOV detectado automáticamente</div>
         <div id="fovCamLensChips" style="display:flex;gap:5px;overflow-x:auto;scrollbar-width:none"></div>
       </div>
       <div id="fovCamLive" style="position:relative;height:340px;background:#000">
@@ -17134,7 +17134,7 @@ if (window.pdfjsLib) {
             <div id="fovCalibHint" style="position:absolute;top:6px;left:6px;background:rgba(0,255,136,.85);color:#000;font-size:10px;font-weight:800;padding:4px 8px;border-radius:5px"></div>
           </div>
           <div style="font-size:11px;color:#aaa;margin-bottom:5px;display:flex;justify-content:space-between"><span>Tamaño del rectángulo verde</span><span id="fovCalibPct" style="color:#00ff88;font-weight:700">40%</span></div>
-          <input type="range" id="fovCalibSlider" min="5" max="95" value="40" oninput="fovCalibAdjust(this.value)" style="width:100%">
+          <input type="range" id="fovCalibSlider" min="2" max="80" value="15" step="0.5" oninput="fovCalibAdjust(this.value)" style="width:100%">
           <button onclick="fovCalibSave()" style="width:100%;background:#00aa55;color:#fff;border:none;padding:10px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;margin-top:10px;font-family:var(--font)">✓ Guardar calibración</button>
           <button onclick="fovCalibCancel()" style="width:100%;background:transparent;color:#aaa;border:1px solid rgba(255,255,255,.15);padding:8px;border-radius:8px;font-size:11px;cursor:pointer;margin-top:6px;font-family:var(--font)">← Cambiar referencia</button>
         </div>
@@ -30057,7 +30057,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 10:17 hrs';
+  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 11:24 hrs';
 })();
 
 
@@ -34374,60 +34374,672 @@ var FOVCAM = {
   phoneFovDeg: null,
   calibrationKey: 'sstt_fov_phone_calib_v2',
   calibRefKey: null,    // Referencia elegida en wizard de calibración
-  simDist: 10           // Distancia para simular resolución
+  simDist: 10,          // Distancia para simular resolución
+  detectedModel: null,  // String: nombre del modelo detectado (poblado vía UA-Client-Hints async, fallback a UA string)
+  detectedModelTried: false
 };
 
 // Referencias para calibración (anchos en cm)
 var CALIB_REFS = {
-  bill10k: { name: 'Billete $10.000 chileno', width: 14.5, icon: '💵' },
-  card:    { name: 'Tarjeta crédito/débito',  width:  8.6, icon: '💳' },
-  letter:  { name: 'Hoja Carta',              width: 27.94, icon: '📄' },  // 11" = 27.94cm horizontal
-  a4:      { name: 'Hoja A4',                 width: 29.7, icon: '📃' },
-  id:      { name: 'Carnet identidad chileno',width:  8.6, icon: '🪪' },
-  phone:   { name: 'Custom',                  width: null, icon: '📱' }
+  // ancho y alto en cm — el ratio se usa para que el rectángulo verde respete proporciones reales
+  bill10k: { name: 'Billete $10.000 chileno', width: 14.5,  height:  7.0,  icon: '💵' },
+  card:    { name: 'Tarjeta crédito/débito',  width:  8.6,  height:  5.4,  icon: '💳' },  // estándar ISO 7810
+  letter:  { name: 'Hoja Carta',              width: 27.94, height: 21.59, icon: '📄' },  // 11" × 8.5" horizontal
+  a4:      { name: 'Hoja A4',                 width: 29.7,  height: 21.0,  icon: '📃' },  // horizontal
+  id:      { name: 'Carnet identidad chileno',width:  8.6,  height:  5.4,  icon: '🪪' },  // mismo ISO 7810
+  phone:   { name: 'Custom',                  width: null,  height: null,  icon: '📱' }
 };
 
-// Base de datos pequeña de modelos comunes (focal eq. 35mm del lente principal)
+// Base de datos de modelos · focal eq. 35mm por lente
+// Schema: { main, ultrawide, telephoto } en mm focal eq. 35mm
+// IMPORTANTE: el orden importa — keys más específicos primero (ej: "iPhone 15 Pro Max" antes que "iPhone 15")
+// Datos basados en specs de GSMArena, DXOMark, EXIF y reviews 2019-2026.
 var PHONE_DB = {
-  'iPhone 15 Pro Max': 24, 'iPhone 15 Pro': 24, 'iPhone 15 Plus': 26, 'iPhone 15': 26,
-  'iPhone 14 Pro Max': 24, 'iPhone 14 Pro': 24, 'iPhone 14 Plus': 26, 'iPhone 14': 26,
-  'iPhone 13 Pro Max': 26, 'iPhone 13 Pro': 26, 'iPhone 13': 26, 'iPhone 13 mini': 26,
-  'iPhone 12 Pro Max': 26, 'iPhone 12 Pro': 26, 'iPhone 12': 26, 'iPhone 12 mini': 26,
-  'iPhone 11 Pro Max': 26, 'iPhone 11 Pro': 26, 'iPhone 11': 26,
-  'iPhone XS': 26, 'iPhone XR': 26, 'iPhone X': 28,
-  'SM-S928': 23, 'SM-S918': 23, 'SM-S908': 23,
-  'SM-S921': 23, 'SM-S911': 23, 'SM-S901': 24,
-  'SM-G998': 24, 'SM-G991': 26,
-  'Pixel 8 Pro': 24, 'Pixel 8': 25, 'Pixel 7 Pro': 25, 'Pixel 7': 25,
-  'Pixel 6 Pro': 25, 'Pixel 6': 25,
-  'Mi 11': 26, 'Redmi': 26, 'P50': 24, 'P40': 27, 'Magic V3': 23, 'Magic V': 23,
-  '_default': 26
+  // ═══ APPLE iPhone ═══════════════════════════════════════════
+  // Pro Max y Pro tienen UW + Tele. Plus y modelo base solo main + UW (modelos sin tele óptico).
+  'iPhone 16 Pro Max': { main: 24, ultrawide: 13, telephoto: 120 },  // 5x periscopio
+  'iPhone 16 Pro':     { main: 24, ultrawide: 13, telephoto: 120 },  // 5x desde iPhone 16 Pro
+  'iPhone 16 Plus':    { main: 26, ultrawide: 13 },
+  'iPhone 16':         { main: 26, ultrawide: 13 },
+  'iPhone 15 Pro Max': { main: 24, ultrawide: 13, telephoto: 120 },  // 5x periscopio
+  'iPhone 15 Pro':     { main: 24, ultrawide: 13, telephoto: 77 },   // 3x
+  'iPhone 15 Plus':    { main: 26, ultrawide: 13 },
+  'iPhone 15':         { main: 26, ultrawide: 13 },
+  'iPhone 14 Pro Max': { main: 24, ultrawide: 13, telephoto: 77 },
+  'iPhone 14 Pro':     { main: 24, ultrawide: 13, telephoto: 77 },
+  'iPhone 14 Plus':    { main: 26, ultrawide: 13 },
+  'iPhone 14':         { main: 26, ultrawide: 13 },
+  'iPhone 13 Pro Max': { main: 26, ultrawide: 13, telephoto: 77 },
+  'iPhone 13 Pro':     { main: 26, ultrawide: 13, telephoto: 77 },
+  'iPhone 13':         { main: 26, ultrawide: 13 },
+  'iPhone 13 mini':    { main: 26, ultrawide: 13 },
+  'iPhone 12 Pro Max': { main: 26, ultrawide: 13, telephoto: 65 },   // 2.5x
+  'iPhone 12 Pro':     { main: 26, ultrawide: 13, telephoto: 52 },   // 2x
+  'iPhone 12':         { main: 26, ultrawide: 13 },
+  'iPhone 12 mini':    { main: 26, ultrawide: 13 },
+  'iPhone 11 Pro Max': { main: 26, ultrawide: 13, telephoto: 52 },
+  'iPhone 11 Pro':     { main: 26, ultrawide: 13, telephoto: 52 },
+  'iPhone 11':         { main: 26, ultrawide: 13 },
+  'iPhone SE':         { main: 28 },                                  // SE 2nd/3rd gen, solo main
+  'iPhone XS Max':     { main: 26, telephoto: 52 },
+  'iPhone XS':         { main: 26, telephoto: 52 },
+  'iPhone XR':         { main: 26 },
+  'iPhone X':          { main: 28, telephoto: 52 },
+
+  // ═══ SAMSUNG GALAXY (model code) ════════════════════════════
+  // Galaxy S — flagship serie
+  'SM-S938': { main: 23, ultrawide: 13, telephoto: 67 },   // S25 Ultra (3x + 5x periscopio 110mm — uso 67mm como activo principal)
+  'SM-S931': { main: 24, ultrawide: 13, telephoto: 67 },   // S25
+  'SM-S928': { main: 23, ultrawide: 13, telephoto: 67 },   // S24 Ultra
+  'SM-S926': { main: 24, ultrawide: 13, telephoto: 67 },   // S24+
+  'SM-S921': { main: 23, ultrawide: 13, telephoto: 67 },   // S24
+  'SM-S918': { main: 23, ultrawide: 13, telephoto: 70 },   // S23 Ultra
+  'SM-S916': { main: 24, ultrawide: 13, telephoto: 70 },   // S23+
+  'SM-S911': { main: 24, ultrawide: 13, telephoto: 70 },   // S23
+  'SM-S908': { main: 23, ultrawide: 13, telephoto: 70 },   // S22 Ultra
+  'SM-S906': { main: 24, ultrawide: 13, telephoto: 70 },   // S22+
+  'SM-S901': { main: 24, ultrawide: 13, telephoto: 70 },   // S22
+  'SM-G998': { main: 24, ultrawide: 13, telephoto: 70 },   // S21 Ultra
+  'SM-G996': { main: 26, ultrawide: 13, telephoto: 70 },   // S21+
+  'SM-G991': { main: 26, ultrawide: 13, telephoto: 70 },   // S21
+  'SM-G988': { main: 26, ultrawide: 13, telephoto: 76 },   // S20 Ultra
+  'SM-G986': { main: 26, ultrawide: 13, telephoto: 76 },   // S20+
+  'SM-G981': { main: 26, ultrawide: 13, telephoto: 76 },   // S20
+  // Galaxy Z (foldables)
+  'SM-F956': { main: 23, ultrawide: 12, telephoto: 67 },   // Z Fold6
+  'SM-F946': { main: 24, ultrawide: 12, telephoto: 66 },   // Z Fold5
+  'SM-F936': { main: 23, ultrawide: 12, telephoto: 66 },   // Z Fold4
+  'SM-F926': { main: 26, ultrawide: 12 },                  // Z Fold3 (sin tele óptico real)
+  'SM-F741': { main: 24, ultrawide: 12 },                  // Z Flip6
+  'SM-F731': { main: 24, ultrawide: 12 },                  // Z Flip5
+  'SM-F721': { main: 24, ultrawide: 12 },                  // Z Flip4
+  // Galaxy A (gama media)
+  'SM-A566': { main: 23, ultrawide: 13 },                  // A56 (sin tele)
+  'SM-A556': { main: 23, ultrawide: 13 },                  // A55
+  'SM-A546': { main: 23, ultrawide: 13 },                  // A54
+  'SM-A536': { main: 26, ultrawide: 13 },                  // A53
+  'SM-A526': { main: 26, ultrawide: 13 },                  // A52
+  'SM-A356': { main: 23, ultrawide: 16 },                  // A35
+  'SM-A346': { main: 26, ultrawide: 16 },                  // A34
+  'SM-A336': { main: 26, ultrawide: 16 },                  // A33
+  'SM-A256': { main: 26, ultrawide: 16 },                  // A25
+  'SM-A156': { main: 26, ultrawide: 16 },                  // A15
+  'SM-A146': { main: 26 },                                  // A14
+  'SM-A136': { main: 26 },                                  // A13
+  // Galaxy Note (legacy)
+  'SM-N986': { main: 26, ultrawide: 13, telephoto: 70 },   // Note 20 Ultra
+  'SM-N981': { main: 26, ultrawide: 13, telephoto: 76 },   // Note 20
+
+  // ═══ GOOGLE PIXEL ═══════════════════════════════════════════
+  'Pixel 9 Pro XL': { main: 25, ultrawide: 13, telephoto: 112 },  // 5x
+  'Pixel 9 Pro':    { main: 25, ultrawide: 13, telephoto: 112 },
+  'Pixel 9':        { main: 25, ultrawide: 13 },
+  'Pixel 8 Pro':    { main: 24, ultrawide: 11, telephoto: 112 },  // 5x
+  'Pixel 8a':       { main: 25, ultrawide: 17 },
+  'Pixel 8':        { main: 25, ultrawide: 17 },
+  'Pixel 7 Pro':    { main: 25, ultrawide: 16, telephoto: 120 },  // 5x
+  'Pixel 7a':       { main: 25, ultrawide: 19 },
+  'Pixel 7':        { main: 25, ultrawide: 18 },
+  'Pixel 6 Pro':    { main: 25, ultrawide: 16, telephoto: 104 },  // 4x
+  'Pixel 6a':       { main: 26, ultrawide: 17 },
+  'Pixel 6':        { main: 25, ultrawide: 17 },
+  'Pixel 5':        { main: 27, ultrawide: 17 },
+  'Pixel 4a':       { main: 27 },
+  'Pixel 4 XL':     { main: 27, telephoto: 44 },
+  'Pixel 4':        { main: 27, telephoto: 44 },
+
+  // ═══ XIAOMI / REDMI / POCO ══════════════════════════════════
+  // Xiaomi flagship
+  'Xiaomi 14 Ultra': { main: 23, ultrawide: 12, telephoto: 75 },   // 3.2x + 5x (uso 3.2x activo)
+  'Xiaomi 14 Pro':   { main: 23, ultrawide: 14, telephoto: 75 },
+  'Xiaomi 14':       { main: 23, ultrawide: 14, telephoto: 75 },
+  'Xiaomi 13 Ultra': { main: 23, ultrawide: 12, telephoto: 75 },
+  'Xiaomi 13 Pro':   { main: 23, ultrawide: 14, telephoto: 75 },
+  'Xiaomi 13':       { main: 23, ultrawide: 15, telephoto: 75 },
+  'Xiaomi 12':       { main: 24, ultrawide: 13 },
+  'Mi 11 Ultra':     { main: 24, ultrawide: 12, telephoto: 120 },
+  'Mi 11':           { main: 26, ultrawide: 13 },
+  'Mi 10':           { main: 25, ultrawide: 13, telephoto: 50 },
+  // Redmi Note (los más vendidos en Chile)
+  'Redmi Note 13 Pro+': { main: 23, ultrawide: 16 },
+  'Redmi Note 13 Pro':  { main: 23, ultrawide: 16 },
+  'Redmi Note 13':      { main: 26, ultrawide: 16 },
+  'Redmi Note 12 Pro+': { main: 24, ultrawide: 16 },
+  'Redmi Note 12 Pro':  { main: 24, ultrawide: 16 },
+  'Redmi Note 12':      { main: 26, ultrawide: 16 },
+  'Redmi Note 11 Pro':  { main: 26, ultrawide: 16 },
+  'Redmi Note 11':      { main: 26, ultrawide: 16 },
+  'Redmi Note 10 Pro':  { main: 26, ultrawide: 16 },
+  'Redmi Note 10':      { main: 26, ultrawide: 16 },
+  'Redmi 13':           { main: 26, ultrawide: 16 },
+  'Redmi 12':           { main: 26 },
+  // POCO
+  'POCO F6 Pro':  { main: 24, ultrawide: 16 },
+  'POCO F6':      { main: 24, ultrawide: 16 },
+  'POCO F5 Pro':  { main: 24, ultrawide: 16 },
+  'POCO F5':      { main: 24, ultrawide: 16 },
+  'POCO X6 Pro':  { main: 23, ultrawide: 16 },
+  'POCO X6':      { main: 26, ultrawide: 16 },
+  'POCO X5':      { main: 26, ultrawide: 16 },
+  'POCO M6':      { main: 26 },
+
+  // ═══ HUAWEI / HONOR ═════════════════════════════════════════
+  'Mate 60 Pro':  { main: 23, ultrawide: 13, telephoto: 90 },
+  'Mate 50 Pro':  { main: 24, ultrawide: 13, telephoto: 90 },
+  'Mate 40 Pro':  { main: 23, ultrawide: 18, telephoto: 125 },
+  'P60 Pro':      { main: 23, ultrawide: 13, telephoto: 90 },
+  'P50 Pro':      { main: 23, ultrawide: 13, telephoto: 90 },
+  'P50':          { main: 24, ultrawide: 13, telephoto: 90 },
+  'P40 Pro':      { main: 23, ultrawide: 18, telephoto: 125 },
+  'P40':          { main: 27, ultrawide: 18, telephoto: 80 },
+  'P30 Pro':      { main: 27, ultrawide: 16, telephoto: 125 },
+  'P30':          { main: 27, ultrawide: 17, telephoto: 80 },
+  // Honor — Magic V3 es tu equipo (foldable)
+  'Magic V3':     { main: 23, ultrawide: 13, telephoto: 75 },
+  'Magic V2':     { main: 23, ultrawide: 13, telephoto: 75 },
+  'Magic V':      { main: 23, ultrawide: 13, telephoto: 75 },
+  'Magic 6 Pro':  { main: 23, ultrawide: 13, telephoto: 68 },
+  'Magic 6':      { main: 23, ultrawide: 13, telephoto: 68 },
+  'Magic 5 Pro':  { main: 23, ultrawide: 13, telephoto: 90 },
+  'Magic 5':      { main: 23, ultrawide: 13, telephoto: 75 },
+  'Honor 200 Pro':{ main: 23, ultrawide: 12, telephoto: 70 },
+  'Honor 100':    { main: 24, ultrawide: 16 },
+  'Honor 90':     { main: 24, ultrawide: 16 },
+  'Honor X9':     { main: 26, ultrawide: 16 },
+
+  // ═══ MOTOROLA ═══════════════════════════════════════════════
+  'Edge 50 Ultra': { main: 23, ultrawide: 12, telephoto: 73 },
+  'Edge 50 Pro':   { main: 24, ultrawide: 12, telephoto: 73 },
+  'Edge 50':       { main: 24, ultrawide: 14 },
+  'Edge 40 Pro':   { main: 23, ultrawide: 14, telephoto: 50 },
+  'Edge 40':       { main: 24, ultrawide: 14 },
+  'Edge 30':       { main: 24, ultrawide: 14 },
+  'Razr 50 Ultra': { main: 24, ultrawide: 14, telephoto: 47 },
+  'Razr 50':       { main: 24, ultrawide: 14 },
+  'Razr 40 Ultra': { main: 24, ultrawide: 14 },
+  'Moto G84':      { main: 24, ultrawide: 16 },
+  'Moto G73':      { main: 26, ultrawide: 16 },
+  'Moto G54':      { main: 24, ultrawide: 16 },
+  'Moto G53':      { main: 26, ultrawide: 16 },
+  'Moto G34':      { main: 26 },
+  'Moto G24':      { main: 26 },
+  'Moto G14':      { main: 26 },
+
+  // ═══ OPPO / REALME / ONEPLUS / VIVO / NOTHING (BBK group) ═══
+  'OnePlus 12':       { main: 23, ultrawide: 14, telephoto: 70 },
+  'OnePlus 11':       { main: 24, ultrawide: 15, telephoto: 48 },
+  'OnePlus 10 Pro':   { main: 23, ultrawide: 14, telephoto: 77 },
+  'OnePlus Nord 4':   { main: 23, ultrawide: 16 },
+  'OnePlus Nord 3':   { main: 24, ultrawide: 16 },
+  'Find X7 Ultra':    { main: 23, ultrawide: 14, telephoto: 73 },
+  'Find X7':          { main: 23, ultrawide: 15, telephoto: 65 },
+  'Find X6 Pro':      { main: 23, ultrawide: 15, telephoto: 65 },
+  'Reno 11 Pro':      { main: 24, ultrawide: 16, telephoto: 47 },
+  'Reno 10':          { main: 26, ultrawide: 16, telephoto: 47 },
+  'Vivo X100 Pro':    { main: 23, ultrawide: 15, telephoto: 100 },
+  'Vivo X90 Pro':     { main: 23, ultrawide: 15, telephoto: 50 },
+  'Vivo V30':         { main: 24, ultrawide: 15 },
+  'Realme GT 6':      { main: 24, ultrawide: 16, telephoto: 47 },
+  'Realme GT 5':      { main: 24, ultrawide: 14, telephoto: 47 },
+  'Realme 12 Pro':    { main: 24, ultrawide: 16, telephoto: 47 },
+  'Realme 12':        { main: 26, ultrawide: 16 },
+  'Realme 11 Pro':    { main: 24, ultrawide: 16 },
+  'Nothing Phone (2)':{ main: 24, ultrawide: 14 },
+  'Nothing Phone (1)':{ main: 24, ultrawide: 14 },
+
+  // ═══ SONY XPERIA ════════════════════════════════════════════
+  'Xperia 1 VI':   { main: 24, ultrawide: 16, telephoto: 85 },     // periscopio variable 85-170mm
+  'Xperia 1 V':    { main: 24, ultrawide: 16, telephoto: 85 },
+  'Xperia 1 IV':   { main: 24, ultrawide: 16, telephoto: 85 },
+  'Xperia 5 V':    { main: 24, ultrawide: 16 },
+  'Xperia 10 VI':  { main: 26, ultrawide: 16 },
+
+  // ═══ ASUS ROG / Zenfone ═════════════════════════════════════
+  'ROG Phone 8 Pro': { main: 24, ultrawide: 13, telephoto: 65 },
+  'ROG Phone 8':     { main: 24, ultrawide: 13, telephoto: 65 },
+  'ROG Phone 7':     { main: 24, ultrawide: 13 },
+  'ROG Phone 6':     { main: 24, ultrawide: 13 },
+  'Zenfone 11 Ultra':{ main: 24, ultrawide: 13, telephoto: 65 },
+  'Zenfone 10':      { main: 24, ultrawide: 14 },
+
+  // ═══ NOKIA / HMD ════════════════════════════════════════════
+  'Nokia G42':  { main: 26, ultrawide: 16 },
+  'Nokia G22':  { main: 26 },
+  'Nokia X30':  { main: 26, ultrawide: 16 },
+  'Nokia XR21': { main: 26, ultrawide: 16 },
+  'HMD Pulse':  { main: 26 },
+  'HMD Skyline':{ main: 24, ultrawide: 16 },
+
+  // ═══ TOP CHILE 2024-2025 (rankings Claro/Movistar/WOM) ══════
+  // Samsung Galaxy A16/A15/A06/A26 — los #1 de venta en Chile
+  // Latam usa sufijo M: SM-A166M, SM-A156M, SM-A065M, SM-A266M
+  'SM-A166': { main: 26, ultrawide: 13 },                  // A16 5G — 50MP+5MP UW 120°+2MP macro
+  'SM-A165': { main: 26 },                                  // A16 4G — 50MP+5MP+2MP (sin UW funcional)
+  'SM-A155': { main: 26, ultrawide: 16 },                  // A15 5G — 50MP+5MP UW+2MP macro
+  'SM-A156': { main: 26, ultrawide: 16 },                  // A15 5G alt SKU
+  'SM-A266': { main: 26, ultrawide: 16 },                  // A26 5G — 50MP+8MP UW+2MP
+  'SM-A065': { main: 26 },                                  // A06 — sólo 50MP (gama entrada, sin UW)
+  'SM-A057': { main: 26 },                                  // A05s — 50MP main
+  'SM-A055': { main: 26 },                                  // A05
+  'SM-A047': { main: 26 },                                  // A04s
+  'SM-A045': { main: 26 },                                  // A04 / A04e
+  'SM-A042': { main: 26 },                                  // A04e
+  'SM-A037': { main: 26 },                                  // A03s
+  'SM-A035': { main: 26 },                                  // A03
+  'SM-A032': { main: 26 },                                  // A03 core
+
+  // Xiaomi/Redmi top Chile 2025
+  'Redmi 14C':           { main: 26 },                      // 50MP main, sin UW óptico
+  'Redmi 13C':           { main: 26 },
+  'Redmi 12C':           { main: 26 },
+  'Redmi A3':            { main: 26 },
+  'Redmi A2':            { main: 28 },
+  'Redmi A1':            { main: 28 },
+  'Redmi Note 14 Pro+':  { main: 23, ultrawide: 16 },
+  'Redmi Note 14 Pro':   { main: 23, ultrawide: 16 },
+  'Redmi Note 14':       { main: 26, ultrawide: 16 },
+
+  // Motorola top Chile 2025
+  'moto g35':       { main: 26, ultrawide: 16 },
+  'moto g34':       { main: 26 },                           // sólo 50MP main
+  'moto g24':       { main: 26 },
+  'moto g14':       { main: 26 },
+  'moto g04':       { main: 26 },
+  'moto g54':       { main: 24, ultrawide: 16 },
+  'moto g64':       { main: 24, ultrawide: 16 },
+  'moto g84':       { main: 24, ultrawide: 16 },
+  'moto g85':       { main: 24, ultrawide: 16 },
+  'moto e14':       { main: 26 },
+  'moto e13':       { main: 26 },
+
+  // Honor top Chile 2025
+  'Honor X5b Plus': { main: 26 },                           // 50MP main, gama entrada
+  'Honor X5b':      { main: 26 },
+  'Honor X6a':      { main: 26 },
+  'Honor X6':       { main: 26 },
+  'Honor X7b':      { main: 26 },
+  'Honor X7a':      { main: 26 },
+  'Honor X7':       { main: 26 },
+  'Honor X8b':      { main: 26, ultrawide: 16 },
+  'Honor X8a':      { main: 26, ultrawide: 16 },
+  'Honor X8':       { main: 26, ultrawide: 16 },
+  'Honor X9b':      { main: 24, ultrawide: 16 },
+  'Honor X9a':      { main: 26, ultrawide: 16 },
+  'Honor 70':       { main: 24, ultrawide: 16 },
+  'Honor 50':       { main: 24, ultrawide: 16 },
+
+  // ═══ SAMSUNG SKU REGIONALES (sufijos B=Europa, M=Latam, U=USA, F=Internacional, N=Korea, W=Canadá) ═══
+  // Galaxy S series — todas las regiones apuntan al mismo specs
+  'SM-S938B': { main: 23, ultrawide: 13, telephoto: 67 },  'SM-S938U': { main: 23, ultrawide: 13, telephoto: 67 },  'SM-S9380': { main: 23, ultrawide: 13, telephoto: 67 },
+  'SM-S931B': { main: 24, ultrawide: 13, telephoto: 67 },  'SM-S931U': { main: 24, ultrawide: 13, telephoto: 67 },  'SM-S9310': { main: 24, ultrawide: 13, telephoto: 67 },
+  'SM-S928B': { main: 23, ultrawide: 13, telephoto: 67 },  'SM-S928U': { main: 23, ultrawide: 13, telephoto: 67 },  'SM-S9280': { main: 23, ultrawide: 13, telephoto: 67 },  'SM-S928N': { main: 23, ultrawide: 13, telephoto: 67 },
+  'SM-S926B': { main: 24, ultrawide: 13, telephoto: 67 },  'SM-S926U': { main: 24, ultrawide: 13, telephoto: 67 },  'SM-S9260': { main: 24, ultrawide: 13, telephoto: 67 },
+  'SM-S921B': { main: 23, ultrawide: 13, telephoto: 67 },  'SM-S921U': { main: 23, ultrawide: 13, telephoto: 67 },  'SM-S9210': { main: 23, ultrawide: 13, telephoto: 67 },
+  'SM-S918B': { main: 23, ultrawide: 13, telephoto: 70 },  'SM-S918U': { main: 23, ultrawide: 13, telephoto: 70 },  'SM-S9180': { main: 23, ultrawide: 13, telephoto: 70 },
+  'SM-S916B': { main: 24, ultrawide: 13, telephoto: 70 },  'SM-S916U': { main: 24, ultrawide: 13, telephoto: 70 },
+  'SM-S911B': { main: 24, ultrawide: 13, telephoto: 70 },  'SM-S911U': { main: 24, ultrawide: 13, telephoto: 70 },
+  'SM-S908B': { main: 23, ultrawide: 13, telephoto: 70 },  'SM-S908U': { main: 23, ultrawide: 13, telephoto: 70 },  'SM-S9080': { main: 23, ultrawide: 13, telephoto: 70 },
+  'SM-S906B': { main: 24, ultrawide: 13, telephoto: 70 },  'SM-S906U': { main: 24, ultrawide: 13, telephoto: 70 },
+  'SM-S901B': { main: 24, ultrawide: 13, telephoto: 70 },  'SM-S901U': { main: 24, ultrawide: 13, telephoto: 70 },
+
+  // Galaxy A series — sufijos comunes
+  'SM-A166M': { main: 26, ultrawide: 13 },  'SM-A166B': { main: 26, ultrawide: 13 },  'SM-A166E': { main: 26, ultrawide: 13 },  'SM-A166U': { main: 26, ultrawide: 13 },  'SM-A1660': { main: 26, ultrawide: 13 },
+  'SM-A165M': { main: 26 },  'SM-A165F': { main: 26 },  'SM-A155M': { main: 26, ultrawide: 16 },  'SM-A155F': { main: 26, ultrawide: 16 },  'SM-A156B': { main: 26, ultrawide: 16 },
+  'SM-A266M': { main: 26, ultrawide: 16 },  'SM-A266B': { main: 26, ultrawide: 16 },  'SM-A2660': { main: 26, ultrawide: 16 },
+  'SM-A356M': { main: 23, ultrawide: 16 },  'SM-A356B': { main: 23, ultrawide: 16 },  'SM-A356E': { main: 23, ultrawide: 16 },  'SM-A356U': { main: 23, ultrawide: 16 },
+  'SM-A346M': { main: 26, ultrawide: 16 },  'SM-A346B': { main: 26, ultrawide: 16 },  'SM-A346E': { main: 26, ultrawide: 16 },  'SM-A3460': { main: 26, ultrawide: 16 },
+  'SM-A546M': { main: 23, ultrawide: 13 },  'SM-A546B': { main: 23, ultrawide: 13 },  'SM-A546E': { main: 23, ultrawide: 13 },  'SM-A546U': { main: 23, ultrawide: 13 },
+  'SM-A556M': { main: 23, ultrawide: 13 },  'SM-A556B': { main: 23, ultrawide: 13 },  'SM-A556E': { main: 23, ultrawide: 13 },
+  'SM-A566M': { main: 23, ultrawide: 13 },  'SM-A566B': { main: 23, ultrawide: 13 },
+  'SM-A065M': { main: 26 },  'SM-A065F': { main: 26 },  'SM-A0650': { main: 26 },
+  'SM-A057M': { main: 26 },  'SM-A057F': { main: 26 },  'SM-A057G': { main: 26 },
+  'SM-A055M': { main: 26 },  'SM-A055F': { main: 26 },  'SM-A047M': { main: 26 },  'SM-A047F': { main: 26 },
+  'SM-A045M': { main: 26 },  'SM-A045F': { main: 26 },  'SM-A042M': { main: 26 },  'SM-A042F': { main: 26 },
+
+  // ═══ HISTÓRICO SAMSUNG (2017-2021) — modelos aún en uso ══════
+  'SM-G973': { main: 26, ultrawide: 12, telephoto: 52 },   // S10
+  'SM-G975': { main: 26, ultrawide: 12, telephoto: 52 },   // S10+
+  'SM-G977': { main: 26, ultrawide: 12, telephoto: 52 },   // S10 5G
+  'SM-G960': { main: 26, telephoto: 52 },                  // S9
+  'SM-G965': { main: 26, telephoto: 52 },                  // S9+
+  'SM-G950': { main: 26 },                                  // S8
+  'SM-G955': { main: 26 },                                  // S8+
+  'SM-N970': { main: 26, ultrawide: 12, telephoto: 52 },   // Note 10
+  'SM-N975': { main: 26, ultrawide: 12, telephoto: 52 },   // Note 10+
+  'SM-N960': { main: 26, telephoto: 52 },                  // Note 9
+  'SM-N950': { main: 26, telephoto: 52 },                  // Note 8
+  'SM-A536': { main: 26, ultrawide: 13 },                   // A53 (legacy)
+  'SM-A526': { main: 26, ultrawide: 13 },                   // A52
+  'SM-A515': { main: 26, ultrawide: 13 },                   // A51
+  'SM-A505': { main: 26, ultrawide: 13 },                   // A50
+  'SM-A507': { main: 26, ultrawide: 13 },                   // A50s
+  'SM-A405': { main: 26, ultrawide: 13 },                   // A40
+  'SM-A305': { main: 26, ultrawide: 13 },                   // A30
+  'SM-A205': { main: 26 },                                  // A20
+  'SM-A105': { main: 26 },                                  // A10
+  'SM-J730': { main: 28 },                                  // J7 Pro
+  'SM-J600': { main: 28 },                                  // J6
+  'SM-J400': { main: 28 },                                  // J4
+  'SM-J330': { main: 28 },                                  // J3 2017
+  'SM-M515': { main: 26, ultrawide: 13 },                   // M51
+  'SM-M315': { main: 26, ultrawide: 13 },                   // M31
+  'SM-M215': { main: 26, ultrawide: 13 },                   // M21
+
+  // ═══ APPLE iPhone HISTÓRICO (2015-2018) ══════════════════════
+  'iPhone 8 Plus':  { main: 28, telephoto: 56 },
+  'iPhone 8':       { main: 28 },
+  'iPhone 7 Plus':  { main: 28, telephoto: 56 },
+  'iPhone 7':       { main: 28 },
+  'iPhone 6s Plus': { main: 29 },
+  'iPhone 6s':      { main: 29 },
+  'iPhone 6 Plus':  { main: 29 },
+  'iPhone 6':       { main: 29 },
+
+  // ═══ XIAOMI / REDMI HISTÓRICO ════════════════════════════════
+  'Mi 9':           { main: 26, ultrawide: 16, telephoto: 50 },
+  'Mi 9 SE':        { main: 26, telephoto: 50 },
+  'Mi 8':           { main: 26 },
+  'Mi A3':          { main: 26, ultrawide: 17 },
+  'Mi A2':          { main: 26 },
+  'Mi A1':          { main: 26, telephoto: 50 },
+  'Redmi Note 9':   { main: 26, ultrawide: 16 },
+  'Redmi Note 8':   { main: 26, ultrawide: 16 },
+  'Redmi Note 7':   { main: 26 },
+  'Redmi Note 6':   { main: 26 },
+  'Redmi Note 5':   { main: 26 },
+  'Redmi Note 4':   { main: 26 },
+  'Redmi 9':        { main: 26 },
+  'Redmi 8':        { main: 26 },
+  'Redmi 7':        { main: 26 },
+  'Redmi 6':        { main: 26 },
+  'Mi Note 10':     { main: 25, ultrawide: 13, telephoto: 50 },
+  'Mi 10T':         { main: 26, ultrawide: 16 },
+  'Mi 10 Lite':     { main: 26, ultrawide: 17 },
+
+  // ═══ HUAWEI HISTÓRICO (pre-sanción y post) ═══════════════════
+  'P30 Lite':       { main: 26, ultrawide: 17 },
+  'P30':            { main: 27, ultrawide: 17, telephoto: 80 },
+  'P20 Pro':        { main: 27, telephoto: 80 },
+  'P20':            { main: 27 },
+  'P10':            { main: 28 },
+  'P9':             { main: 27 },
+  'Mate 30 Pro':    { main: 27, ultrawide: 18, telephoto: 80 },
+  'Mate 30':        { main: 27, ultrawide: 17, telephoto: 80 },
+  'Mate 20 Pro':    { main: 27, ultrawide: 16, telephoto: 80 },
+  'Mate 20':        { main: 27, ultrawide: 17 },
+  'Mate 10':        { main: 27 },
+  'Y9':             { main: 26 },
+  'Y7':             { main: 26 },
+  'Y6':             { main: 26 },
+  'Nova 9':         { main: 26, ultrawide: 17 },
+  'Nova 8':         { main: 26, ultrawide: 17 },
+
+  // ═══ HONOR HISTÓRICO ═════════════════════════════════════════
+  'Honor 30':       { main: 27, ultrawide: 17, telephoto: 80 },
+  'Honor 20':       { main: 27, ultrawide: 17, telephoto: 80 },
+  'Honor 10':       { main: 27 },
+  'Honor 9X':       { main: 26, ultrawide: 17 },
+  'Honor 8X':       { main: 26 },
+  'Honor 7X':       { main: 26 },
+
+  // ═══ OPPO / REALME / VIVO / ONEPLUS HISTÓRICO ════════════════
+  'OnePlus 9 Pro':  { main: 23, ultrawide: 14, telephoto: 77 },
+  'OnePlus 9':      { main: 23, ultrawide: 14 },
+  'OnePlus 8 Pro':  { main: 24, ultrawide: 14, telephoto: 77 },
+  'OnePlus 8':      { main: 26, ultrawide: 14 },
+  'OnePlus 7 Pro':  { main: 26, ultrawide: 17, telephoto: 78 },
+  'OnePlus 7':      { main: 27, telephoto: 51 },
+  'OnePlus 6T':     { main: 27 },
+  'OnePlus 6':      { main: 27 },
+  'OnePlus Nord 2': { main: 26, ultrawide: 16 },
+  'OnePlus Nord':   { main: 26, ultrawide: 16 },
+  'Find X5 Pro':    { main: 24, ultrawide: 15, telephoto: 52 },
+  'Find X5':        { main: 24, ultrawide: 16, telephoto: 52 },
+  'Find X3 Pro':    { main: 23, ultrawide: 14, telephoto: 52 },
+  'Reno 8':         { main: 26, ultrawide: 16 },
+  'Reno 7':         { main: 26, ultrawide: 16 },
+  'Reno 6':         { main: 26, ultrawide: 16 },
+  'Reno 5':         { main: 26, ultrawide: 16 },
+  'Vivo X80 Pro':   { main: 23, ultrawide: 16, telephoto: 50 },
+  'Vivo X70 Pro':   { main: 24, ultrawide: 16, telephoto: 50 },
+  'Vivo X60 Pro':   { main: 24, ultrawide: 16, telephoto: 50 },
+  'Vivo Y36':       { main: 26 },
+  'Vivo Y22':       { main: 26 },
+  'Vivo Y15':       { main: 26 },
+  'Realme GT 2 Pro':{ main: 23, ultrawide: 14, telephoto: 47 },
+  'Realme 10 Pro':  { main: 26, ultrawide: 16 },
+  'Realme 9 Pro':   { main: 26, ultrawide: 16 },
+  'Realme 8':       { main: 26, ultrawide: 16 },
+  'Realme 7':       { main: 26, ultrawide: 16 },
+  'Realme 6':       { main: 26, ultrawide: 16 },
+  'Realme C55':     { main: 26 },
+  'Realme C53':     { main: 26 },
+  'Realme C51':     { main: 26 },
+  'Realme C35':     { main: 26 },
+  'Realme C33':     { main: 26 },
+  'Realme C30':     { main: 26 },
+  'Realme C25':     { main: 26 },
+  'Realme C21':     { main: 26 },
+
+  // ═══ MOTOROLA HISTÓRICO ═════════════════════════════════════
+  'Edge 20 Pro':    { main: 26, ultrawide: 14, telephoto: 77 },
+  'Edge 20':        { main: 26, ultrawide: 16 },
+  'Edge Plus':      { main: 26, ultrawide: 17, telephoto: 80 },
+  'moto g100':      { main: 26, ultrawide: 16 },
+  'moto g60':       { main: 26, ultrawide: 16 },
+  'moto g50':       { main: 26 },
+  'moto g30':       { main: 26 },
+  'moto g20':       { main: 26 },
+  'moto g10':       { main: 26 },
+  'moto g9':        { main: 26 },
+  'moto g8':        { main: 26 },
+  'moto g7':        { main: 26 },
+  'moto g6':        { main: 26 },
+  'moto e7':        { main: 26 },
+  'moto e6':        { main: 26 },
+  'moto e5':        { main: 28 },
+  'Moto E32':       { main: 26 },
+  'Moto E22':       { main: 26 },
+  'Moto E20':       { main: 26 },
+
+  // ═══ SONY XPERIA HISTÓRICO ══════════════════════════════════
+  'Xperia 1 III':   { main: 24, ultrawide: 16, telephoto: 70 },
+  'Xperia 1 II':    { main: 24, ultrawide: 16, telephoto: 70 },
+  'Xperia 5 IV':    { main: 24, ultrawide: 16, telephoto: 60 },
+  'Xperia 5 III':   { main: 24, ultrawide: 16, telephoto: 70 },
+  'Xperia 5 II':    { main: 24, ultrawide: 16, telephoto: 70 },
+  'Xperia 10 V':    { main: 26, ultrawide: 16, telephoto: 54 },
+  'Xperia 10 IV':   { main: 27, ultrawide: 16, telephoto: 54 },
+  'Xperia XZ':      { main: 24 },
+
+  // ═══ NOTHING ════════════════════════════════════════════════
+  'Nothing Phone (3)':{ main: 24, ultrawide: 14, telephoto: 70 },
+  'Nothing Phone (2a)':{ main: 24, ultrawide: 14 },
+  'CMF Phone 1':    { main: 26, ultrawide: 16 },
+
+  // ═══ TECNO / INFINIX (gama entrada Latam) ═══════════════════
+  'Tecno Spark':    { main: 26 },
+  'Tecno Camon':    { main: 26 },
+  'Tecno Pova':     { main: 26 },
+  'Infinix Hot':    { main: 26 },
+  'Infinix Note':   { main: 26 },
+  'Infinix Smart':  { main: 28 },
+  'Infinix Zero':   { main: 26 },
+
+  // ═══ ZTE / Alcatel / Lenovo ══════════════════════════════════
+  'ZTE Blade':      { main: 26 },
+  'ZTE Axon':       { main: 26, ultrawide: 16 },
+  'Alcatel':        { main: 28 },
+  'Lenovo':         { main: 26 },
+
+  // ═══ LG (descontinuado pero aún en uso) ══════════════════════
+  'LG-V60':         { main: 26, ultrawide: 14 },
+  'LG-V50':         { main: 27, ultrawide: 16, telephoto: 52 },
+  'LG-V40':         { main: 27, ultrawide: 16, telephoto: 52 },
+  'LG-G8':          { main: 27, ultrawide: 16 },
+  'LG-G7':          { main: 27, ultrawide: 16 },
+  'LG-K':           { main: 28 },
+  'LG Velvet':      { main: 27, ultrawide: 16 },
+
+  // ═══ FALLBACK POR FAMILIA SAMSUNG ═══════════════════════════
+  // Si UA dice "SM-A0" pero no matchea modelo específico → gama entrada
+  // Si dice "SM-A1" → entrada-media   "SM-A2" → media   "SM-A3"-"SM-A5" → media-alta   "SM-A7"-"SM-A9" → premium
+  // Estos van AL FINAL para que solo apliquen si nada más matcheó
+  'SM-A0': { main: 26 },                                    // gama entrada Samsung
+  'SM-A1': { main: 26 },                                    // A1x — entrada
+  'SM-A2': { main: 26, ultrawide: 16 },                     // A2x — media-baja
+  'SM-A3': { main: 26, ultrawide: 16 },                     // A3x — media
+  'SM-A5': { main: 23, ultrawide: 13 },                     // A5x — media-alta
+  'SM-A7': { main: 23, ultrawide: 13 },                     // A7x
+  'SM-M0': { main: 26 },                                    // M0x
+  'SM-M1': { main: 26, ultrawide: 13 },                     // M1x
+  'SM-M2': { main: 26, ultrawide: 13 },                     // M2x
+  'SM-M5': { main: 23, ultrawide: 13 },                     // M5x
+
+  // ═══ FALLBACK GENÉRICO ══════════════════════════════════════
+  '_default': { main: 26, ultrawide: 14, telephoto: 70 }
+};
+
+// FOV típicos por tipo de lente cuando ni track.getCapabilities ni PHONE_DB ayudan
+// (focales eq. 35mm "promedio de la industria" en 2024-2026)
+var LENS_TYPE_FALLBACK = {
+  main:       { focal: 25, name: 'Principal' },   // ~71° H
+  ultrawide:  { focal: 14, name: 'Ultra Wide' }, // ~104° H
+  telephoto:  { focal: 75, name: 'Tele' },       // ~26° H
+  macro:      { focal: 22, name: 'Macro' },      // ~78° H
+  front:      { focal: 24, name: 'Frontal' }     // ~74° H
 };
 
 function fovPhoneFovFrom35mm(focal35) {
-  // FOV horizontal a partir de focal equivalente 35mm
+  // FOV horizontal a partir de focal equivalente 35mm (sensor 36×24mm, ancho 36mm)
   return 2 * Math.atan(36 / (2 * focal35)) * 180 / Math.PI;
 }
 
-function fovGetPhoneFov() {
-  // 1. Calibración guardada
-  try {
-    var saved = localStorage.getItem(FOVCAM.calibrationKey);
-    if (saved) {
-      var data = JSON.parse(saved);
-      if (data.fovDeg) return { source: 'calibrado con ' + (data.refName||'objeto'), fov: data.fovDeg, when: data.when };
-    }
-  } catch(e) {}
-  // 2. UA detection
-  var ua = navigator.userAgent;
-  for (var key in PHONE_DB) {
-    if (key === '_default') continue;
-    if (ua.indexOf(key) >= 0) {
-      return { source: 'detectado (' + key + ')', fov: fovPhoneFovFrom35mm(PHONE_DB[key]) };
+// Devuelve la entrada de PHONE_DB para el modelo detectado o null
+// Usa: 1) modelo precalculado vía UA-Client-Hints (si Android Chrome lo entregó), 2) UA string
+function fovDetectPhoneModel() {
+  // Si ya intentamos UA-CH y entregó modelo, usarlo como primera fuente
+  var sources = [];
+  if (FOVCAM.detectedModel) sources.push(FOVCAM.detectedModel);
+  sources.push(navigator.userAgent);
+  for (var s = 0; s < sources.length; s++) {
+    var src = sources[s];
+    for (var key in PHONE_DB) {
+      if (key === '_default') continue;
+      if (src.indexOf(key) >= 0) {
+        var entry = PHONE_DB[key];
+        if (typeof entry === 'number') entry = { main: entry };
+        return { name: key, focals: entry };
+      }
     }
   }
-  // 3. Default
-  return { source: 'estimado (sin detectar modelo)', fov: fovPhoneFovFrom35mm(PHONE_DB._default) };
+  return null;
+}
+
+// Intenta obtener modelo de UA-Client-Hints (Chrome Android, Edge). Async, dispara al cargar.
+function fovTryUAClientHints() {
+  if (FOVCAM.detectedModelTried) return;
+  FOVCAM.detectedModelTried = true;
+  if (!navigator.userAgentData || !navigator.userAgentData.getHighEntropyValues) return;
+  navigator.userAgentData.getHighEntropyValues(['model']).then(function(ua) {
+    if (ua && ua.model) {
+      FOVCAM.detectedModel = ua.model;
+      // Si la cámara ya está activa, refrescar selector y status
+      if (FOVCAM.stream && typeof fovCamRenderLensSelector === 'function') {
+        try {
+          // Re-enumerar para recalcular FOV de cada lente con el nuevo modelo detectado
+          fovCamEnumerateLenses().then(function() {
+            fovCamRenderLensSelector();
+            fovCamUpdateStatus();
+          });
+        } catch(e) {}
+      }
+    }
+  }).catch(function() { /* silent — UA-CH no disponible o bloqueado */ });
+}
+// Disparar la detección al cargar (idempotente)
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fovTryUAClientHints);
+  } else {
+    fovTryUAClientHints();
+  }
+}
+
+// Devuelve focal eq.35mm para un tipo de lente dado, según mejor fuente disponible
+function fovGetLensFocal(lensType) {
+  var detected = fovDetectPhoneModel();
+  if (detected && detected.focals[lensType] != null) {
+    return { focal: detected.focals[lensType], source: 'modelo (' + detected.name + ')' };
+  }
+  // Fallback genérico por tipo
+  var fb = LENS_TYPE_FALLBACK[lensType] || LENS_TYPE_FALLBACK.main;
+  return { focal: fb.focal, source: 'estimado por tipo de lente' };
+}
+
+// Devuelve info del lente actualmente activo: { fov, focal, source, type, name }
+// Cascada: getCapabilities (real) > calibración guardada (solo main) > PHONE_DB > fallback por tipo
+function fovGetActiveLensInfo() {
+  var lensType = 'main';
+  var lens = null;
+  // Encontrar lente activo en availableLenses
+  if (FOVCAM.currentDeviceId && FOVCAM.availableLenses && FOVCAM.availableLenses.length) {
+    for (var i = 0; i < FOVCAM.availableLenses.length; i++) {
+      if (FOVCAM.availableLenses[i].deviceId === FOVCAM.currentDeviceId) {
+        lens = FOVCAM.availableLenses[i];
+        lensType = lens.type || 'main';
+        break;
+      }
+    }
+  }
+
+  // 1. focalLength real desde getCapabilities (si lo guardamos al iniciar el track)
+  if (lens && lens.fovDeg) {
+    return {
+      fov: lens.fovDeg,
+      focal: lens.focal35 || null,
+      source: 'cámara reportada',
+      type: lensType,
+      name: (LENS_TYPE_FALLBACK[lensType] || LENS_TYPE_FALLBACK.main).name
+    };
+  }
+
+  // 2. Calibración guardada — SOLO aplica al lente principal
+  if (lensType === 'main') {
+    try {
+      var saved = localStorage.getItem(FOVCAM.calibrationKey);
+      if (saved) {
+        var data = JSON.parse(saved);
+        if (data.fovDeg) {
+          return {
+            fov: data.fovDeg,
+            focal: null,
+            source: 'calibrado con ' + (data.refName || 'objeto'),
+            type: 'main',
+            name: 'Principal',
+            when: data.when
+          };
+        }
+      }
+    } catch(e) {}
+  }
+
+  // 3. Tabla por modelo + tipo de lente
+  var focal = fovGetLensFocal(lensType);
+  var fb = LENS_TYPE_FALLBACK[lensType] || LENS_TYPE_FALLBACK.main;
+  return {
+    fov: fovPhoneFovFrom35mm(focal.focal),
+    focal: focal.focal,
+    source: focal.source,
+    type: lensType,
+    name: fb.name
+  };
+}
+
+// Wrapper retrocompatible — devuelve { fov, source, when? } como antes
+function fovGetPhoneFov() {
+  var info = fovGetActiveLensInfo();
+  return { fov: info.fov, source: info.source, when: info.when };
 }
 
 window.fovCamSetMode = function(mode) {
@@ -34452,11 +35064,17 @@ function fovCamUpdateStatus() {
   var comparator = document.getElementById('fovCamComparator');
   var resSimWrap = document.getElementById('fovCamResSimWrap');
   if (!st) return;
-  var info = fovGetPhoneFov();
+  var info = fovGetActiveLensInfo();
   var rA = FOV.camA ? calcFOV(FOV.camA, FOV.focalA, FOV.lensA) : null;
-  var html = '<b style="color:#fff">📱 FOV de tu móvil:</b> ' + info.fov.toFixed(1) + '° · <span style="opacity:.7">' + info.source + '</span>';
-  if (info.source.indexOf('calibrado') < 0 && info.source.indexOf('detectado') < 0) {
-    html += '<br><span style="color:#ffaa00;font-size:10px">💡 Usa "📐 Calibrar" para mayor precisión</span>';
+  var typeIcons = { main:'📷', ultrawide:'🌐', telephoto:'🔭', macro:'🔬', front:'🤳' };
+  var icon = typeIcons[info.type] || '📷';
+  var lensLabel = icon + ' ' + info.name;
+  var focalTxt = info.focal ? ' · ' + info.focal + 'mm eq.' : '';
+  var html = '<b style="color:#fff">📱 ' + lensLabel + ':</b> ' + info.fov.toFixed(1) + '°' + focalTxt +
+             ' <span style="opacity:.7">· ' + info.source + '</span>';
+  // Aviso de calibración: solo aplica al lente principal y solo si no está calibrado/reportado
+  if (info.type === 'main' && info.source.indexOf('calibrado') < 0 && info.source.indexOf('cámara reportada') < 0) {
+    html += '<br><span style="color:#ffaa00;font-size:10px">💡 La calibración es opcional — los lentes ya se detectan automáticamente. Úsala solo si quieres precisión extra.</span>';
   }
   st.innerHTML = html;
   // Comparador visual claro
@@ -34729,16 +35347,44 @@ function fovCamEnumerateLenses() {
   if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return Promise.resolve([]);
   return navigator.mediaDevices.enumerateDevices().then(function(devices) {
     var videoInputs = devices.filter(function(d) { return d.kind === 'videoinput'; });
+    // Separar back/front por label
+    var backCount = 0;
     FOVCAM.availableLenses = videoInputs.map(function(d, i) {
       var lbl = d.label || ('Cámara ' + (i+1));
-      // Heurística para detectar tipo de lente
-      var type = 'main';
       var lblLower = lbl.toLowerCase();
-      if (lblLower.indexOf('front') >= 0 || lblLower.indexOf('user') >= 0 || lblLower.indexOf('selfie') >= 0) type = 'front';
-      else if (lblLower.indexOf('ultra') >= 0 || lblLower.indexOf('wide') >= 0 || lblLower.indexOf('0.5') >= 0) type = 'ultrawide';
-      else if (lblLower.indexOf('tele') >= 0 || lblLower.indexOf('zoom') >= 0 || lblLower.match(/[2-5]x/)) type = 'telephoto';
+      // Heurística para detectar tipo de lente desde el label
+      var type = 'main';
+      var isFront = lblLower.indexOf('front') >= 0 || lblLower.indexOf('user') >= 0 || lblLower.indexOf('selfie') >= 0;
+      if (isFront) type = 'front';
+      else if (lblLower.indexOf('ultra') >= 0 || lblLower.indexOf('wide angle') >= 0 || lblLower.indexOf('0.5') >= 0) type = 'ultrawide';
+      else if (lblLower.indexOf('tele') >= 0 || lblLower.indexOf('zoom') >= 0 || /[2-9]x|1[0-9]x/.test(lblLower)) type = 'telephoto';
       else if (lblLower.indexOf('macro') >= 0) type = 'macro';
-      return { deviceId: d.deviceId, label: lbl, type: type };
+      else { backCount++; }
+      return { deviceId: d.deviceId, label: lbl, type: type, isFront: isFront, _idx: i };
+    });
+
+    // Si Safari/iOS no entrega labels descriptivos, todas las traseras quedan como 'main'.
+    // En ese caso, asignar tipos por orden típico: [ultrawide, main, telephoto] cuando hay 3 traseras
+    var unlabeledBacks = FOVCAM.availableLenses.filter(function(l) { return !l.isFront && l.type === 'main'; });
+    if (unlabeledBacks.length >= 2 && unlabeledBacks.length === FOVCAM.availableLenses.filter(function(l){return !l.isFront;}).length) {
+      // Todas las traseras sin etiquetar — asignar por convención: 0=UW, 1=main, 2=tele
+      var orderMap2 = ['ultrawide', 'main'];
+      var orderMap3 = ['ultrawide', 'main', 'telephoto'];
+      var orderMap4 = ['ultrawide', 'main', 'telephoto', 'telephoto'];
+      var order = unlabeledBacks.length === 2 ? orderMap2 : (unlabeledBacks.length === 3 ? orderMap3 : (unlabeledBacks.length >= 4 ? orderMap4 : null));
+      if (order) {
+        unlabeledBacks.forEach(function(lens, i) {
+          if (i < order.length) lens.type = order[i];
+        });
+      }
+    }
+
+    // Calcular FOV y focal de cada lente
+    FOVCAM.availableLenses.forEach(function(lens) {
+      var info = fovGetLensFocal(lens.type);
+      lens.focal35 = info.focal;
+      lens.fovDeg = fovPhoneFovFrom35mm(info.focal);
+      lens.focalSource = info.source;
     });
     return FOVCAM.availableLenses;
   });
@@ -34748,19 +35394,37 @@ function fovCamRenderLensSelector() {
   var sel = document.getElementById('fovCamLensSelector');
   var chips = document.getElementById('fovCamLensChips');
   if (!sel || !chips) return;
-  if (FOVCAM.availableLenses.length < 2) {
+  // Mostrar solo lentes traseros + frontal si hay variedad
+  var lenses = FOVCAM.availableLenses;
+  if (!lenses || lenses.length < 2) {
     sel.style.display = 'none';
     return;
   }
   sel.style.display = 'block';
   var typeIcons = { main:'📷', ultrawide:'🌐', telephoto:'🔭', macro:'🔬', front:'🤳' };
   var typeNames = { main:'Principal', ultrawide:'Ultra Wide', telephoto:'Tele', macro:'Macro', front:'Frontal' };
-  chips.innerHTML = FOVCAM.availableLenses.map(function(lens) {
+  // Calcular zoom equivalente respecto al lente principal
+  var mainLens = lenses.filter(function(l){return l.type==='main' && !l.isFront;})[0];
+  var mainFocal = mainLens ? mainLens.focal35 : 25;
+  chips.innerHTML = lenses.map(function(lens) {
     var isOn = lens.deviceId === FOVCAM.currentDeviceId;
     var icon = typeIcons[lens.type] || '📷';
     var name = typeNames[lens.type] || 'Cámara';
-    return '<button class="fov-cam-mode' + (isOn?' on':'') + '" onclick="fovCamSelectLens(\'' + lens.deviceId + '\')" style="white-space:nowrap;font-size:10px;padding:6px 10px">' +
-           icon + ' ' + name + '</button>';
+    var fovTxt = lens.fovDeg ? lens.fovDeg.toFixed(0) + '°' : '';
+    // Zoom relativo al main: 0.5x para UW, 1x main, 3x/5x tele
+    var zoomTxt = '';
+    if (lens.focal35 && mainFocal && lens.type !== 'front') {
+      var z = lens.focal35 / mainFocal;
+      if (z < 0.95) zoomTxt = z.toFixed(1) + 'x';
+      else if (z > 1.05) zoomTxt = z < 10 ? z.toFixed(1) + 'x' : z.toFixed(0) + 'x';
+      else zoomTxt = '1x';
+    }
+    var sub = [zoomTxt, fovTxt].filter(Boolean).join(' · ');
+    return '<button class="fov-cam-mode' + (isOn?' on':'') + '" onclick="fovCamSelectLens(\'' + lens.deviceId + '\')" ' +
+           'style="white-space:nowrap;font-size:10px;padding:6px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;line-height:1.1">' +
+           '<span>' + icon + ' ' + name + '</span>' +
+           (sub ? '<span style="font-size:9px;opacity:.75;font-weight:600">' + sub + '</span>' : '') +
+           '</button>';
   }).join('');
 }
 
@@ -34768,9 +35432,14 @@ window.fovCamSelectLens = function(deviceId) {
   FOVCAM.currentDeviceId = deviceId;
   if (FOVCAM.stream) {
     fovCamStop();
-    setTimeout(fovCamStart, 200);
+    setTimeout(function() {
+      fovCamStart();
+    }, 200);
+  } else {
+    // Si la cámara no está activa, igual refrescar UI
+    fovCamRenderLensSelector();
+    fovCamUpdateStatus();
   }
-  fovCamRenderLensSelector();
 };
 
 window.fovCamStart = function() {
@@ -34813,12 +35482,37 @@ window.fovCamStart = function() {
     document.getElementById('fovCamSwitchBtn').style.display = 'inline-block';
     // Capturar dispositivo actual y enumerar todos
     var track = stream.getVideoTracks()[0];
+    var realFocal = null;
     if (track) {
       var settings = track.getSettings();
       FOVCAM.currentDeviceId = settings.deviceId;
+      // Intentar obtener focalLength real desde el navegador (Chrome lo expone en algunos Android)
+      try {
+        var caps = track.getCapabilities ? track.getCapabilities() : {};
+        // focalLength puede venir como número, array (min/max) o no venir
+        if (caps.focalLength != null) {
+          if (typeof caps.focalLength === 'number') realFocal = caps.focalLength;
+          else if (caps.focalLength.max != null) realFocal = caps.focalLength.max;
+        }
+      } catch(e) {}
     }
-    fovCamEnumerateLenses().then(fovCamRenderLensSelector);
-    fovCamUpdateStatus();
+    fovCamEnumerateLenses().then(function() {
+      // Si el navegador entregó focalLength real, sobrescribir el valor del lente activo
+      if (realFocal && FOVCAM.availableLenses) {
+        for (var i = 0; i < FOVCAM.availableLenses.length; i++) {
+          if (FOVCAM.availableLenses[i].deviceId === FOVCAM.currentDeviceId) {
+            // focalLength reportado es focal real (no eq.35mm), pero como aproximación
+            // usamos un factor de crop típico de móvil (~7.6 para 1/1.7" sensor)
+            // Mejor: dejar nuestra estimación por modelo. Solo marcamos source.
+            // Nota: si en el futuro tenemos sensor size real, podemos calcular eq.35mm
+            FOVCAM.availableLenses[i].focalReal = realFocal;
+            break;
+          }
+        }
+      }
+      fovCamRenderLensSelector();
+      fovCamUpdateStatus();
+    });
   }).catch(function(err) {
     var msg = 'No se pudo acceder a la cámara: ' + err.message;
     if (err.name === 'NotAllowedError') msg = 'Permiso de cámara denegado. Habilítalo en la configuración del navegador.';
@@ -35609,6 +36303,9 @@ window.fovCalibPickRef = function(refKey) {
   // Mostrar input custom si es 'phone'
   var customRow = document.getElementById('fovCalibCustomRow');
   customRow.style.display = (refKey === 'phone') ? 'block' : 'none';
+  // Mostrar también el campo de alto si existe
+  var customRowH = document.getElementById('fovCalibCustomRowH');
+  if (customRowH) customRowH.style.display = (refKey === 'phone') ? 'block' : 'none';
   var startBtn = document.getElementById('fovCalibStartBtn');
   startBtn.disabled = false;
   startBtn.style.opacity = '1';
@@ -35625,24 +36322,64 @@ window.fovCalibStart = function() {
   if (FOVCAM.calibRefKey === 'phone') {
     width = parseFloat(document.getElementById('fovCalibCustomW').value) || 14.5;
   }
+  var refH = ref.height;
+  if (FOVCAM.calibRefKey === 'phone') {
+    var customH = document.getElementById('fovCalibCustomH');
+    refH = customH ? (parseFloat(customH.value) || width * 0.5) : width * 0.5;
+  }
+  var ratioStr = refH ? ' (proporción ' + (width/refH).toFixed(2) + ':1)' : '';
   document.getElementById('fovCalibLensInfo').innerHTML =
-    '📏 Apunta a tu <b>' + ref.icon + ' ' + ref.name + '</b> (' + width + 'cm de ancho) a <b>1m de distancia</b><br>' +
-    'Ajusta el slider hasta que el rectángulo verde coincida con el ancho del objeto';
-  document.getElementById('fovCalibHint').textContent = 'Ajusta hasta cubrir el ' + ref.name;
+    '📏 Apunta a tu <b>' + ref.icon + ' ' + ref.name + '</b> (' + width + ' × ' + (refH||'?') + ' cm' + ratioStr + ') a <b>1m de distancia</b>.<br>' +
+    'El rectángulo verde respeta las proporciones reales del objeto. Ajusta el slider hasta que el <b>ancho</b> del rectángulo coincida exactamente con el ancho del objeto en pantalla.';
+  document.getElementById('fovCalibHint').textContent = 'Encuadra el ' + ref.name + ' centrado a 1m';
   fovCamStart();
 };
 
 window.fovCalibAdjust = function(pct) {
   var box = document.getElementById('fovCalibBox');
   var lbl = document.getElementById('fovCalibPct');
-  var margin = (100 - parseInt(pct)) / 2;
-  if (box) {
-    box.style.left = margin + '%';
-    box.style.right = margin + '%';
-    box.style.top = margin + '%';
-    box.style.bottom = margin + '%';
+  var video = document.getElementById('fovCalibVideo');
+  if (!box) return;
+  var pctNum = parseInt(pct);
+  // Margin horizontal según el slider (ancho del rectángulo)
+  var marginH = (100 - pctNum) / 2;
+  box.style.left = marginH + '%';
+  box.style.right = marginH + '%';
+
+  // ── ALTO: respetar aspect ratio real del objeto referencia ──
+  // ratio_objeto = ancho/alto (ej: tarjeta 8.6/5.4 = 1.59)
+  // El rectángulo en pantalla debe tener mismo aspect ratio → si el video es más ancho que el objeto,
+  // calculamos altura del box en función del ancho del box × (alto_obj/ancho_obj) × (ancho_video/alto_video)
+  var ref = CALIB_REFS[FOVCAM.calibRefKey];
+  var refW = ref ? ref.width : null;
+  var refH = ref ? ref.height : null;
+  if (FOVCAM.calibRefKey === 'phone') {
+    refW = parseFloat(document.getElementById('fovCalibCustomW').value) || 14.5;
+    var customH = document.getElementById('fovCalibCustomH');
+    refH = customH ? (parseFloat(customH.value) || refW * 0.5) : refW * 0.5;
   }
-  if (lbl) lbl.textContent = pct + '%';
+
+  if (refW && refH && video && video.videoWidth && video.videoHeight) {
+    // Aspect ratio del objeto: ancho/alto
+    var objRatio = refW / refH;
+    // Aspect ratio del video en pantalla
+    var videoRatio = video.videoWidth / video.videoHeight;
+    // El alto del box (en % del video) que mantiene el aspect ratio del objeto:
+    // box_w_% × video_w_px / objRatio = altura_box_px → en %: (box_w_% × videoRatio / objRatio)
+    var boxHeightPct = pctNum * (videoRatio / objRatio);
+    // Limitar para no salirse del frame
+    if (boxHeightPct > 95) boxHeightPct = 95;
+    if (boxHeightPct < 2) boxHeightPct = 2;
+    var marginV = (100 - boxHeightPct) / 2;
+    box.style.top = marginV + '%';
+    box.style.bottom = marginV + '%';
+  } else {
+    // Fallback: cuadrado simétrico (objeto desconocido o video aún no listo)
+    box.style.top = marginH + '%';
+    box.style.bottom = marginH + '%';
+  }
+
+  if (lbl) lbl.textContent = pctNum + '% del ancho';
 };
 
 window.fovCalibSave = function() {
@@ -35652,9 +36389,20 @@ window.fovCalibSave = function() {
   if (FOVCAM.calibRefKey === 'phone') {
     width = parseFloat(document.getElementById('fovCalibCustomW').value) || 14.5;
   }
+  // Sanity check: pct debe ser razonable (entre 0.5% y 80%)
+  if (pct < 0.005 || pct > 0.8) {
+    alert('El ancho ajustado parece incorrecto. Asegúrate de que el rectángulo verde coincida con el ancho real del objeto a 1m de distancia.');
+    return;
+  }
   // El objeto de width cm ocupa pct% del frame a 1m → frame entero = (width/pct) cm = width/(100*pct) m
   var widthAt1m = (width / 100) / pct;  // metros
   var fovDeg = 2 * Math.atan(widthAt1m / 2 / 1) * 180 / Math.PI;
+  // Sanity check del FOV resultante (típico: 20°-180°)
+  if (fovDeg < 5 || fovDeg > 200) {
+    if (!confirm('El FOV calculado es ' + fovDeg.toFixed(1) + '° — fuera del rango típico (20°-120°). ¿Estás seguro de que el rectángulo coincide bien con el objeto a 1m? Click OK para guardar de todos modos, Cancelar para reintentar.')) {
+      return;
+    }
+  }
   try {
     localStorage.setItem(FOVCAM.calibrationKey, JSON.stringify({
       fovDeg: fovDeg,
