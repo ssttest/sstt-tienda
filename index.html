@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 11:56 hrs -->
+<!-- SSTT Tienda · Generado: Sábado 25 de Abril del 2026 · 13:01 hrs -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -4857,7 +4857,7 @@ nav {
   display: none;
   position: fixed; inset: 0;
   background: rgba(0,0,0,.45);
-  z-index: 800;
+  z-index: 859;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
 }
@@ -4871,7 +4871,7 @@ nav {
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border-left: 1px solid rgba(255,255,255,.1);
-  z-index: 801;
+  z-index: 860;
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
@@ -22587,6 +22587,8 @@ function cmpUpdateBar() {
   // Mostrar/ocultar el FAB del comparador
   const fab = document.getElementById('cmpFab');
   if (fab) fab.style.display = n > 0 ? 'block' : 'none';
+  const fabBadge = document.getElementById('cmpFabBadge');
+  if (fabBadge) fabBadge.textContent = n;
 
   // Update trigger button
   const trigger = document.getElementById('cmpTrigger');
@@ -23260,7 +23262,13 @@ function cmpBuildTable(products, allSpecs, modal) {
     <div class="cmp-modal-wrap">
       <div class="cmp-modal-head">
         <h2>⚖️ Comparando ${products.length} productos · ${allSpecs.filter(s=>s._source==='pdf').length} con datos PDF</h2>
-        <button class="cmp-modal-x" onclick="closeCmpModal()">✕</button>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="cmp-modal-export" onclick="cmpExportPDF()" title="Exportar comparación a PDF" style="background:linear-gradient(135deg,#0057B8,#003d80);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--font);transition:all .15s" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 12px rgba(0,87,184,.3)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
+            Exportar PDF
+          </button>
+          <button class="cmp-modal-x" onclick="closeCmpModal()">✕</button>
+        </div>
       </div>
       <div class="cmp-table-wrap">
         <table class="cmp-table">
@@ -23290,6 +23298,165 @@ function cmpBuildTable(products, allSpecs, modal) {
       </div>
     </div>`;
 }
+
+// ── Exportar comparación a PDF profesional ──────────────────────────────
+window.cmpExportPDF = function() {
+  var products = CMP.items;
+  if (products.length < 2) { showToast('⚠️ Agrega al menos 2 productos'); return; }
+
+  var jsPDFLib = window.jspdf || window.jsPDF;
+  if (!jsPDFLib || !jsPDFLib.jsPDF) { showToast('⚠️ Error cargando jsPDF'); return; }
+  var doc = new jsPDFLib.jsPDF({ unit: 'mm', format: 'a4', orientation: products.length > 3 ? 'landscape' : 'portrait' });
+
+  var pw = doc.internal.pageSize.getWidth();
+  var ph = doc.internal.pageSize.getHeight();
+  var ml = 14, mr = 14, cw = pw - ml - mr;
+  var fecha = new Date().toLocaleDateString('es-CL');
+
+  // ── Header SSTT ──
+  try { doc.addImage('data:image/png;base64,' + SSTT_LOGO_B64, 'PNG', ml, 8, 44, 14); } catch(e) {}
+  doc.setFontSize(7.5); doc.setTextColor(80,80,80);
+  ['SSTT SPA','76.047.629-3','General José Artigas 3028','Nuñoa  Santiago','ventas@sstt.cl','222042119']
+    .forEach(function(t,i){ doc.text(t, ml, 26 + i*4); });
+
+  // Título
+  var boxX = pw - mr - 65;
+  doc.setFillColor(0, 87, 184); doc.rect(boxX, 8, 65, 18, 'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold');
+  doc.setFontSize(11); doc.text('COMPARACIÓN TÉCNICA', boxX+32.5, 16, {align:'center'});
+  doc.setFontSize(8); doc.text(fecha + ' · ' + products.length + ' productos', boxX+32.5, 22, {align:'center'});
+
+  doc.setDrawColor(200,200,200); doc.setLineWidth(0.3);
+  doc.line(ml, 50, pw-mr, 50);
+
+  // ── Productos comparados (listado) ──
+  var y = 56;
+  doc.setTextColor(30,30,30); doc.setFont('helvetica','bold'); doc.setFontSize(10);
+  doc.text('Productos comparados', ml, y); y += 6;
+
+  doc.setFont('helvetica','normal'); doc.setFontSize(8);
+  products.forEach(function(p, i) {
+    var label = String.fromCharCode(65+i); // A, B, C, D
+    doc.setFont('helvetica','bold');
+    doc.text(label + ':', ml, y);
+    doc.setFont('helvetica','normal');
+    doc.text(p.codigo + ' — ' + (p.nombre||'').substring(0, 70), ml + 6, y);
+    doc.text('$' + p.ptotal.toLocaleString('es-CL'), pw - mr, y, {align:'right'});
+    y += 5;
+  });
+  y += 4;
+
+  // ── Tabla comparativa con autoTable ──
+  // Obtener specs de cada producto (usar cache PDF si disponible)
+  var allSpecs = products.map(function(p) {
+    if (typeof PDF_CACHE !== 'undefined' && PDF_CACHE[p.codigo]) return PDF_CACHE[p.codigo];
+    if (typeof pmParseSpecsFlat === 'function') return pmParseSpecsFlat(p);
+    return {};
+  });
+
+  var COMPARE_FIELDS = [
+    { key:'resolucion',       label:'Resolución' },
+    { key:'sensor',           label:'Sensor CMOS' },
+    { key:'focal',            label:'Distancia focal' },
+    { key:'angulo',           label:'Ángulo de visión' },
+    { key:'alcance_ir',       label:'Alcance IR / Luz' },
+    { key:'iluminacion_min',  label:'Ilum. mínima (lux)' },
+    { key:'wdr',              label:'WDR' },
+    { key:'ia',               label:'Serie / IA' },
+    { key:'smd',              label:'SMD+' },
+    { key:'ivs',              label:'IVS / Perimeter' },
+    { key:'microfono',        label:'Micrófono' },
+    { key:'poe',              label:'PoE' },
+    { key:'alimentacion',     label:'Alimentación' },
+    { key:'consumo_max',      label:'Consumo máx.' },
+    { key:'proteccion_ip',    label:'Protección IP' },
+    { key:'ik',               label:'Anti-vandálico' },
+    { key:'temperatura_op',   label:'Temperatura op.' },
+    { key:'dimensiones',      label:'Dimensiones' },
+    { key:'peso',             label:'Peso neto' }
+  ];
+
+  // Filtrar campos que tengan al menos un dato
+  var activeFields = COMPARE_FIELDS.filter(function(f) {
+    return allSpecs.some(function(s){ return s[f.key] && s[f.key] !== '—'; });
+  });
+
+  // Construir header y body para autoTable
+  var head = ['Característica'].concat(products.map(function(p){ return p.codigo; }));
+  var body = activeFields.map(function(f) {
+    var row = [f.label];
+    allSpecs.forEach(function(s) {
+      row.push((s[f.key] || '—').toString().substring(0, 40));
+    });
+    return row;
+  });
+
+  // Agregar fila de precio
+  body.push(['Precio'].concat(products.map(function(p){ return '$' + p.ptotal.toLocaleString('es-CL'); })));
+
+  if (doc.autoTable) {
+    doc.autoTable({
+      startY: y,
+      head: [head],
+      body: body,
+      theme: 'grid',
+      styles: { fontSize: 7, cellPadding: 2.5, lineColor: [220,220,220], overflow: 'linebreak' },
+      headStyles: { fillColor: [0, 87, 184], textColor: [255,255,255], fontStyle: 'bold', fontSize: 7.5 },
+      alternateRowStyles: { fillColor: [248, 250, 253] },
+      columnStyles: { 0: { fontStyle: 'bold', cellWidth: 30 } },
+      margin: { left: ml, right: mr }
+    });
+    y = doc.lastAutoTable.finalY + 8;
+  } else {
+    // Fallback sin autoTable
+    doc.setFontSize(7);
+    body.forEach(function(row) {
+      doc.text(row.join(' | '), ml, y); y += 4;
+    });
+    y += 4;
+  }
+
+  // ── Resumen de ganador ──
+  if (y + 25 > ph) { doc.addPage(); y = 20; }
+  var winCount = {};
+  products.forEach(function(p){ winCount[p.id] = 0; });
+  activeFields.forEach(function(field) {
+    if (!field.key) return;
+    var vals = products.map(function(p, i){
+      var raw = allSpecs[i][field.key] || '';
+      var m = raw.match(/(\d+\.?\d*)/);
+      return m ? parseFloat(m[1]) : null;
+    });
+    var validVals = vals.filter(function(v){ return v !== null; });
+    if (validVals.length < 2) return;
+    var maxVal = Math.max.apply(null, validVals);
+    products.forEach(function(p, i){
+      if (vals[i] === maxVal && vals[i] !== null) winCount[p.id]++;
+    });
+  });
+
+  doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(0, 87, 184);
+  doc.text('Resumen comparativo', ml, y); y += 6;
+  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(30,30,30);
+  products.forEach(function(p) {
+    var wins = winCount[p.id] || 0;
+    doc.text(p.codigo + ': ' + wins + ' categoría' + (wins !== 1 ? 's' : '') + ' destacada' + (wins !== 1 ? 's' : ''), ml + 2, y);
+    y += 5;
+  });
+
+  // ── Footer ──
+  y += 6;
+  if (y + 12 > ph) { doc.addPage(); y = 20; }
+  doc.setFontSize(7); doc.setTextColor(120,120,120);
+  doc.text('Documento generado por SSTT SpA · sstt.cl · Distribuidor Autorizado Dahua Technology Chile', ml, y);
+  doc.text('Los datos provienen de fichas técnicas PDF oficiales del fabricante. Sujeto a cambios sin previo aviso.', ml, y + 4);
+
+  // Guardar
+  var filename = 'comparacion-' + products.map(function(p){ return p.codigo; }).join('-vs-') + '.pdf';
+  if (filename.length > 100) filename = 'comparacion-' + products.length + '-productos-SSTT.pdf';
+  doc.save(filename);
+  showToast('✅ PDF descargado: ' + filename);
+};
 
 // ── Alias para compatibilidad ────────────────────────────────────────────
 window.openProdModal = openProdModalWithPDF;
@@ -29996,7 +30163,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 11:56 hrs';
+  if (txt) txt.textContent = 'Última actualización: Sábado 25 de Abril del 2026 · 13:01 hrs';
 })();
 
 
