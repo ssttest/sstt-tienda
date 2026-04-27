@@ -15903,6 +15903,161 @@ body.cart-open #proyectoListadoBtn {
   .ac-ct-v { font-size: 20px; }
 }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   MESÓN TÉCNICO — Menú rediseñado v2 (sesión 8)
+   Separación cliente final / integrador + grid compacto 3 cols
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Cliente final (sección superior discreta) ── */
+.mn-client {
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--g5);
+}
+.mn-client-h {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--g3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 10px;
+}
+.mn-client-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.mn-cl-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--r-lg);
+  border: 1px solid var(--g5);
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--white);
+  text-align: left;
+  font-family: inherit;
+}
+.mn-cl-card:hover {
+  border-color: var(--g4);
+  background: var(--g7);
+}
+.mn-cl-ico {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.mn-cl-t {
+  font-size: 12px; font-weight: 600;
+  color: var(--text);
+  margin: 0; line-height: 1.3;
+}
+.mn-cl-s {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 1px 0 0;
+  line-height: 1.3;
+}
+
+/* ── Grid de herramientas del Mesón ── */
+.mn-group-hdr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 8px;
+  padding: 0 2px;
+}
+.mn-group-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--g3);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+.mn-group-line {
+  flex: 1;
+  height: 1px;
+  background: var(--g5);
+}
+
+.mn-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.mn-tool-card {
+  background: var(--white);
+  border: 1px solid var(--g5);
+  border-radius: var(--r-lg);
+  padding: 10px;
+  cursor: pointer;
+  transition: all .15s;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-height: 54px;
+  text-align: left;
+  font-family: inherit;
+}
+.mn-tool-card:hover {
+  border-color: var(--blue);
+  background: var(--g7);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.mn-tool-card:active {
+  transform: translateY(0);
+}
+.mn-tool-card.active {
+  border-color: var(--blue);
+  background: var(--blue-p);
+  box-shadow: 0 0 0 3px rgba(0,87,184,0.1);
+}
+.mn-tool-ico {
+  font-size: 16px;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.mn-tool-body {
+  flex: 1;
+  min-width: 0;
+}
+.mn-tool-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.3;
+}
+.mn-tool-desc {
+  font-size: 10px;
+  color: var(--muted);
+  margin: 2px 0 0;
+  line-height: 1.35;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .mn-grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .mn-client-row { grid-template-columns: 1fr; }
+  .mn-tool-card { min-height: 48px; padding: 8px; }
+  .mn-tool-name { font-size: 11.5px; }
+  .mn-tool-desc { font-size: 9.5px; }
+}
+
+@media (max-width: 380px) {
+  .mn-grid-3 { grid-template-columns: 1fr; }
+}
+
 </style>
 
 <!-- Google Places Autocomplete — configurable via localStorage('sstt_gmaps_key') -->
@@ -15947,6 +16102,7 @@ window._gmapsReady = function() {
     };
   </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
 // Configurar worker de pdf.js
@@ -17959,199 +18115,136 @@ if (window.pdfjsLib) {
      ════════════════════════════════════════════════════════════ -->
 <section id="secTools" style="padding:24px 16px 80px;background:linear-gradient(180deg,#fafbfc,#fff)">
   <div style="max-width:1100px;margin:0 auto">
-    <div class="tools-hero">
-      <div class="tools-hero-badge">🧰 Caja de Herramientas</div>
-      <div class="tools-hero-title">La navaja suiza del integrador</div>
-      <div class="tools-hero-sub">Calculadoras técnicas, simuladores visuales, guías y un evaluador de auditoría — todo lo que necesitas para <b>elegir el producto correcto para tu cliente</b> antes de salir a terreno. Sin registro, gratis, optimizado para Chile.</div>
+    <!-- ── Para el cliente final ── -->
+    <div class="mn-client">
+      <div class="mn-client-h">Para el cliente final</div>
+      <div class="mn-client-row">
+        <button class="mn-cl-card" onclick="wizOpen()">
+          <div class="mn-cl-ico" style="background:#E8001C">?</div>
+          <div>
+            <div class="mn-cl-t">Asistente de descubrimiento</div>
+            <div class="mn-cl-s">No sabes qué necesitas — te guiamos</div>
+          </div>
+        </button>
+        <button class="mn-cl-card" onclick="acOpen()">
+          <div class="mn-cl-ico" style="background:#0057B8">vs</div>
+          <div>
+            <div class="mn-cl-t">Analizador de cotización</div>
+            <div class="mn-cl-s">Compara tu cotización con Dahua</div>
+          </div>
+        </button>
+      </div>
     </div>
 
-    <!-- Menú de herramientas -->
+    <!-- ── Mesón Técnico ── -->
+    <div class="tools-hero">
+      <div class="tools-hero-badge">🧰 Mesón técnico</div>
+      <div class="tools-hero-title">La navaja suiza del integrador</div>
+      <div class="tools-hero-sub">Simuladores, calculadoras y guías para dimensionar antes de salir a terreno.</div>
+    </div>
+
     <div class="tools-menu" id="toolsMenu">
-      <div class="tools-menu-group tools-group-wizard">
-        <div class="tools-menu-group-hdr">
-          <span class="tools-menu-group-icon">✨</span>
-          <div>
-            <div class="tools-menu-group-title">¿No sabes por dónde empezar?</div>
-            <div class="tools-menu-group-sub">Te guiamos en 6 preguntas (1 minuto)</div>
+
+      <!-- SIMULADORES -->
+      <div class="mn-group-hdr"><span class="mn-group-label">Simuladores</span><span class="mn-group-line"></span></div>
+      <div class="mn-grid-3">
+        <button class="mn-tool-card" onclick="document.getElementById('fovCanvas').scrollIntoView({behavior:'smooth'})">
+          <div class="mn-tool-ico">📐</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">Simulador FOV</div>
+            <div class="mn-tool-desc">Campo visual 3D + DORI + comparador dual</div>
           </div>
-        </div>
-        <button class="tools-menu-btn tools-menu-btn-special" onclick="wizOpen()" style="border-color:#E8001C;background:linear-gradient(135deg,#FFF5F6 0%,#FFE8EC 100%);">
-          <div class="tools-menu-ico" style="background:#E8001C;color:#fff;">🎯</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name" style="color:#791F1F;">Asistente de Descubrimiento</div>
-            <div class="tools-menu-desc">Encuentra tu sistema ideal con preguntas simples — propuesta lista para agregar al carro</div>
+        </button>
+        <button class="mn-tool-card" onclick="toolsOpen('compareCams',this)">
+          <div class="mn-tool-ico">⚡</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">Comparador IA</div>
+            <div class="mn-tool-desc">Specs + recomendación contextual</div>
+          </div>
+        </button>
+        <button class="mn-tool-card" onclick="toolsOpen('lprGuide',this)">
+          <div class="mn-tool-ico">🚗</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">Captura patentes</div>
+            <div class="mn-tool-desc">LPR + shutter + 3 tipos cámaras</div>
           </div>
         </button>
       </div>
 
-      <div class="tools-menu-group tools-group-analizador">
-        <div class="tools-menu-group-hdr">
-          <span class="tools-menu-group-icon">🔍</span>
-          <div>
-            <div class="tools-menu-group-title">¿Tienes una cotización en mano?</div>
-            <div class="tools-menu-group-sub">Analízala con IA y obtén contrapropuesta Dahua</div>
+      <!-- CALCULADORAS -->
+      <div class="mn-group-hdr"><span class="mn-group-label">Calculadoras de dimensionamiento</span><span class="mn-group-line"></span></div>
+      <div class="mn-grid-3">
+        <button class="mn-tool-card" onclick="toolsOpen('hddGuide',this)">
+          <div class="mn-tool-ico">💾</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">Discos duros</div>
+            <div class="mn-tool-desc">Retención + estrategias de ahorro</div>
           </div>
-        </div>
-        <button class="tools-menu-btn tools-menu-btn-special" onclick="acOpen()" style="border-color:#0057B8;background:linear-gradient(135deg,#F0F6FF 0%,#E0EBFA 100%);">
-          <div class="tools-menu-ico" style="background:#0057B8;color:#fff;">📋</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name" style="color:#042C53;">Analizador de Cotización</div>
-            <div class="tools-menu-desc">Sube una foto, PDF o pega el texto. La IA detecta marca, productos y precios. Recibes contrapropuesta SSTT con ahorro y ventajas en segundos</div>
+        </button>
+        <button class="mn-tool-card" onclick="toolsOpen('bwCalc',this)">
+          <div class="mn-tool-ico">📡</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">Ancho de banda</div>
+            <div class="mn-tool-desc">Consumo red + planes ISP</div>
+          </div>
+        </button>
+        <button class="mn-tool-card" onclick="toolsOpen('poeBudget',this)">
+          <div class="mn-tool-ico">⚡</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">Presupuesto PoE</div>
+            <div class="mn-tool-desc">Watts vs capacidad switch</div>
+          </div>
+        </button>
+        <button class="mn-tool-card" onclick="toolsOpen('upsCalc',this)">
+          <div class="mn-tool-ico">🔋</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">UPS</div>
+            <div class="mn-tool-desc">Autonomía eléctrica</div>
+          </div>
+        </button>
+        <button class="mn-tool-card" onclick="toolsOpen('sdEdge',this)">
+          <div class="mn-tool-ico">💿</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">SD edge</div>
+            <div class="mn-tool-desc">Retención en cámara</div>
+          </div>
+        </button>
+        <button class="mn-tool-card" onclick="toolsOpen('bomGen',this)">
+          <div class="mn-tool-ico">📋</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">BOM proyecto</div>
+            <div class="mn-tool-desc">Lista materiales → carro</div>
           </div>
         </button>
       </div>
 
-      <div class="tools-menu-group tools-group-simulators">
-        <div class="tools-menu-group-hdr">
-          <span class="tools-menu-group-icon">📐</span>
-          <div>
-            <div class="tools-menu-group-title">Simuladores visuales</div>
-            <div class="tools-menu-group-sub">Para visualizar y comparar antes de instalar</div>
-          </div>
-        </div>
-        <button class="tools-menu-btn" onclick="document.getElementById('fovCanvas').scrollIntoView({behavior:'smooth',block:'start'})">
-          <div class="tools-menu-ico">📷</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">Simulador FOV</div>
-            <div class="tools-menu-desc">Campo visual 3D + comparador visual (arriba ↑)</div>
+      <!-- EVALUACIÓN Y GUÍAS -->
+      <div class="mn-group-hdr"><span class="mn-group-label">Evaluación y guías</span><span class="mn-group-line"></span></div>
+      <div class="mn-grid-3">
+        <button class="mn-tool-card" onclick="toolsOpen('readyCheck',this)">
+          <div class="mn-tool-ico">🔍</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">Auditoría CCTV</div>
+            <div class="mn-tool-desc">Seguridad + normativa</div>
           </div>
         </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('compareCams',this)">
-          <div class="tools-menu-ico">⇆</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">Comparador Inteligente</div>
-            <div class="tools-menu-desc">Análisis técnico + recomendación contextual</div>
+        <button class="mn-tool-card" onclick="toolsOpen('hdcviVsIp',this)">
+          <div class="mn-tool-ico">⚖️</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">HDCVI vs IP</div>
+            <div class="mn-tool-desc">Comparador + casos de uso</div>
           </div>
         </button>
-      </div>
-
-      <div class="tools-menu-group tools-group-calc">
-        <div class="tools-menu-group-hdr">
-          <span class="tools-menu-group-icon">🔢</span>
-          <div>
-            <div class="tools-menu-group-title">Calculadoras técnicas</div>
-            <div class="tools-menu-group-sub">Resultados en tiempo real con productos del catálogo</div>
-          </div>
-        </div>
-        <button class="tools-menu-btn active" onclick="toolsOpen('lprGuide',this)">
-          <div class="tools-menu-ico">🚗</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">Captura de patentes</div>
-            <div class="tools-menu-desc">Calculadora LPR + shutter + 3 tipos cámaras</div>
-          </div>
-        </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('cableCalc',this)">
-          <div class="tools-menu-ico">📏</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">Cable &amp; energía</div>
-            <div class="tools-menu-desc">Caída de voltaje + estimación + guía técnica</div>
-          </div>
-        </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('hddGuide',this)">
-          <div class="tools-menu-ico">💽</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">Discos duros CCTV</div>
-            <div class="tools-menu-desc">Storage + 5 estrategias de ahorro + códecs</div>
-          </div>
-        </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('bomGen',this)">
-          <div class="tools-menu-ico">📋</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">BOM del proyecto</div>
-            <div class="tools-menu-desc">Lista de materiales + ítems propios → carro</div>
-          </div>
-        </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('doriCalc',this)">
-          <div class="tools-menu-ico">🎯</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">DORI (EN 62676-4)</div>
-            <div class="tools-menu-desc">Detección · Observación · Reconocimiento · Identificación</div>
-          </div>
-        </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('poeBudget',this)">
-          <div class="tools-menu-ico">⚡</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">Presupuesto PoE</div>
-            <div class="tools-menu-desc">¿Tu switch alcanza para todas las cámaras?</div>
-          </div>
-        </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('bwCalc',this)">
-          <div class="tools-menu-ico">📡</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">Ancho de banda</div>
-            <div class="tools-menu-desc">Visualización remota + planes ISP chilenos</div>
-          </div>
-        </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('sdEdge',this)">
-          <div class="tools-menu-ico">💾</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">SD edge</div>
-            <div class="tools-menu-desc">Retención en cámara + memorias del catálogo</div>
-          </div>
-        </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('upsCalc',this)">
-          <div class="tools-menu-ico">🔋</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">UPS</div>
-            <div class="tools-menu-desc">Calculadora eléctrica + autonomía</div>
+        <button class="mn-tool-card" onclick="toolsOpen('concepts',this)">
+          <div class="mn-tool-ico">💡</div>
+          <div class="mn-tool-body">
+            <div class="mn-tool-name">Conceptos rápidos</div>
+            <div class="mn-tool-desc">WDR, IR, códecs, IA, glosario</div>
           </div>
         </button>
       </div>
 
-      <div class="tools-menu-group tools-group-guides">
-        <div class="tools-menu-group-hdr">
-          <span class="tools-menu-group-icon">📚</span>
-          <div>
-            <div class="tools-menu-group-title">Guías y referencias</div>
-            <div class="tools-menu-group-sub">Para consultar y aprender</div>
-          </div>
-        </div>
-        <button class="tools-menu-btn" onclick="toolsOpen('hdcviVsIp',this)">
-          <div class="tools-menu-ico">🔌</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">HDCVI vs IP</div>
-            <div class="tools-menu-desc">Comparador y casos de uso</div>
-          </div>
-        </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('normCheck',this)">
-          <div class="tools-menu-ico">⚖️</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">Retención normativa</div>
-            <div class="tools-menu-desc">Cumplimiento por sector (8 sectores chilenos)</div>
-          </div>
-        </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('concepts',this)">
-          <div class="tools-menu-ico">📖</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">Conceptos rápidos</div>
-            <div class="tools-menu-desc">WDR, IR, codecs, IA, disuasión y más</div>
-          </div>
-        </button>
-        <button class="tools-menu-btn" onclick="toolsOpen('glossary',this)">
-          <div class="tools-menu-ico">🔤</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">Glosario CCTV</div>
-            <div class="tools-menu-desc">64 términos técnicos en 9 categorías</div>
-          </div>
-        </button>
-      </div>
-
-      <div class="tools-menu-group tools-group-audit">
-        <div class="tools-menu-group-hdr">
-          <span class="tools-menu-group-icon">🚨</span>
-          <div>
-            <div class="tools-menu-group-title">Evaluador</div>
-            <div class="tools-menu-group-sub">Audita un sistema existente</div>
-          </div>
-        </div>
-        <button class="tools-menu-btn tools-menu-btn-special" onclick="toolsOpen('readyCheck',this)">
-          <div class="tools-menu-ico">🔍</div>
-          <div class="tools-menu-info">
-            <div class="tools-menu-name">¿Estás preparado?</div>
-            <div class="tools-menu-desc">Si te roban hoy, ¿tu CCTV te sirve?</div>
-          </div>
-        </button>
-      </div></div>
+    </div>
 
     <!-- Contenido de las herramientas -->
     <div id="toolsContent" class="tools-content"></div>
@@ -46546,48 +46639,83 @@ if (document.readyState === 'loading') {
         return { id: p.id, codigo: p.codigo, nombre: p.nombre, ptotal: p.ptotal };
       });
 
-    return 'Eres un asistente técnico experto en CCTV de SSTT (sstt.cl), distribuidor oficial Dahua en Chile. ' +
-      'Recibirás una cotización de la competencia (texto, imagen o PDF) y debes analizarla.\n\n' +
+    return 'Eres un ingeniero experto en CCTV de SSTT (sstt.cl), distribuidor oficial Dahua en Chile. ' +
+      'Recibirás una cotización de la competencia (texto, imagen o PDF) y debes analizarla con rigor técnico.\n\n' +
 
-      'CATÁLOGO SSTT DISPONIBLE (usa SOLO estos productos para tu contrapropuesta):\n' +
+      '═══ REGLAS TÉCNICAS CCTV — OBLIGATORIAS, NUNCA VIOLAR ═══\n\n' +
+
+      'REGLA 1 — ARQUITECTURAS INCOMPATIBLES:\n' +
+      '· Cámaras IP (IPC-*, DS-2CD*, etc.) → SOLO NVR + switch PoE + cable UTP. NUNCA XVR/DVR. NUNCA fuente 12VDC (PoE alimenta las cámaras por el cable de red, la fuente 12VDC sobra si hay switch PoE).\n' +
+      '· Cámaras HDCVI/Turbo HD/analógicas (HAC-*, DS-2CE*, etc.) → SOLO XVR/DVR + cable coaxial + fuente 12VDC. NUNCA NVR. NUNCA switch PoE.\n' +
+      '· Si la cotización mezcla cámaras IP con DVR/XVR → ERROR GRAVE del cotizante. Advertir como primera advertencia.\n' +
+      '· Si la cotización tiene cámaras IP + switch PoE + fuentes 12VDC → la fuente SOBRA, el PoE ya alimenta. Advertir redundancia.\n' +
+      '· Tu contrapropuesta NUNCA debe mezclar arquitecturas. IP → NVR+PoE+UTP. HDCVI → XVR+fuente+coaxial.\n\n' +
+
+      'REGLA 2 — ALMACENAMIENTO:\n' +
+      '· Fórmula: cada cámara 4MP 25fps H.265 ≈ 0.04 TB/día\n' +
+      '· Ejemplo: 8 cámaras × 30 días × 0.04 = 9.6 TB → disco de 10 TB\n' +
+      '· SIEMPRE verificar si el disco cotizado alcanza para los días solicitados.\n' +
+      '· Solo discos certificados: SkyHawk, SkyHawk AI, WD Purple, Exos. Discos desktop (Barracuda) NO sirven 24/7.\n\n' +
+
+      'REGLA 3 — MATRÍCULAS Y DISTANCIA:\n' +
+      '· Rostros <5m → cualquier 2MP+ con 2.8mm\n' +
+      '· Rostros 5-10m → 4MP+ con 2.8mm\n' +
+      '· Matrículas → REQUIERE lente ≥6mm o cámara LPR/ANPR dedicada. Cámara estándar 4MP con 2.8mm NO lee matrículas >5m. Si la cotización promete eso, es FALSO.\n' +
+      '· Si el cliente necesita matrículas, tu contrapropuesta DEBE incluir al menos 1 cámara LPR o lente largo.\n\n' +
+
+      'REGLA 4 — SWITCH PoE:\n' +
+      '· Debe tener ≥ puertos PoE que cámaras IP + 1 uplink.\n' +
+      '· Si cotización dice "switch" sin decir PoE para sistema IP → sospechoso.\n\n' +
+
+      'REGLA 5 — GRABADOR:\n' +
+      '· NVR/XVR debe tener ≥ canales que cámaras. 8 cámaras → mínimo 8ch.\n\n' +
+
+      'REGLA 6 — CONTRAPROPUESTA COHERENTE:\n' +
+      '· Toda tu contrapropuesta DEBE cumplir REGLAS 1-5. Si no las cumple, tu recomendación es peligrosa.\n' +
+      '· Preferir cámaras IP por defecto (mejor calidad, app DMSS remota). Solo recomendar HDCVI si el presupuesto es muy bajo.\n\n' +
+
+      '═══════════════════════════════════════════════════════════\n\n' +
+
+      'CATÁLOGO SSTT DISPONIBLE (usa SOLO estos productos):\n' +
       'Cámaras y grabadores:\n' + JSON.stringify(miniCatalog) + '\n\n' +
-      'Accesorios principales (HDDs, cables, switches):\n' + JSON.stringify(commonAccessories) + '\n\n' +
+      'Accesorios (HDDs, cables, switches):\n' + JSON.stringify(commonAccessories) + '\n\n' +
 
       'TU MISIÓN:\n' +
-      '1. Detectar marca, productos, cantidades y precios de la cotización\n' +
-      '2. Identificar lo que está flojo o falta (HDD no certificado, cable cat5e, sin protector, garantía corta, etc.)\n' +
-      '3. Para cada producto detectado, encontrar el equivalente Dahua del catálogo SSTT (SOLO usa IDs reales del catálogo arriba)\n' +
-      '4. Calcular total de la contrapropuesta\n\n' +
+      '1. Detectar marca, productos, cantidades y precios\n' +
+      '2. Verificar compatibilidad técnica según las 6 REGLAS\n' +
+      '3. Identificar lo que falta, sobra, o es TÉCNICAMENTE INCORRECTO\n' +
+      '4. Armar contrapropuesta Dahua que CUMPLA las 6 REGLAS con SOLO IDs del catálogo\n' +
+      '5. Calcular total\n\n' +
 
       'CRITERIOS:\n' +
-      '· Sé honesto: si la cotización es competitiva, dilo. No inventes problemas.\n' +
-      '· Si detectas Hikvision, ezviz, TP-Link, Imou, ofrece equivalencia Dahua de calidad similar o mejor.\n' +
-      '· Sesgo SSTT permitido: destaca ventajas reales de Dahua (3 años garantía, soporte Chile, certificación).\n' +
-      '· NUNCA mientas sobre specs ni inventes productos. Solo IDs del catálogo.\n' +
-      '· Si no detectas nada parseable, devuelve { "error": "no_parseable", "reason": "..." }\n\n' +
+      '· Sé honesto: si la cotización es competitiva y técnicamente correcta, dilo.\n' +
+      '· Si detectas errores técnicos graves, pónlos como primeras advertencias.\n' +
+      '· Sesgo SSTT: destaca ventajas reales de Dahua (3 años garantía, soporte Chile).\n' +
+      '· NUNCA mientas sobre specs ni inventes productos.\n' +
+      '· Si no detectas nada parseable: { "error": "no_parseable", "reason": "..." }\n\n' +
 
-      'FORMATO DE RESPUESTA — DEVUELVE SOLO UN JSON VÁLIDO, SIN MARKDOWN, SIN BACKTICKS:\n' +
+      'FORMATO — DEVUELVE SOLO JSON VÁLIDO, SIN MARKDOWN, SIN BACKTICKS:\n' +
       '{\n' +
       '  "marca_detectada": "Hikvision" | "TP-Link" | "Genérico" | "Desconocida",\n' +
-      '  "total_cotizado": 1250000,\n' +
+      '  "total_cotizado": 1480000,\n' +
       '  "moneda": "CLP",\n' +
       '  "detectados": [\n' +
-      '    { "tipo": "Cámara IP 4MP", "cantidad": 6, "precio_unitario": 89000, "subtotal": 534000, "spec": "Hikvision DS-2CD1043G2 estimado, sin starlight" }\n' +
+      '    { "tipo": "Cámara IP 4MP", "cantidad": 8, "precio_unitario": 89000, "subtotal": 712000, "spec": "DS-2CD2143G2-IS 4MP IR 30m" }\n' +
       '  ],\n' +
       '  "advertencias": [\n' +
-      '    "No mencionan disco duro de marca certificada (Skyhawk/Purple)",\n' +
-      '    "Cable cat5e en vez de cat6"\n' +
+      '    "ERROR TÉCNICO: Cámaras IP cotizadas con DVR Turbo HD — son incompatibles",\n' +
+      '    "Disco 1TB insuficiente para 8 cámaras 4MP × 30 días (necesita mínimo 10TB)"\n' +
       '  ],\n' +
       '  "contrapropuesta": [\n' +
-      '    { "id": 281, "qty": 6, "razon": "Equivalente starlight con IA" }\n' +
+      '    { "id": 281, "qty": 8, "razon": "IPC 4MP starlight, equivalente superior" }\n' +
       '  ],\n' +
       '  "ventajas_sstt": [\n' +
-      '    "3 años de garantía vs 1 año del competidor",\n' +
-      '    "Soporte técnico en Chile"\n' +
+      '    "3 años de garantía vs 1 año",\n' +
+      '    "Soporte técnico Chile"\n' +
       '  ],\n' +
       '  "evaluacion_general": "competitiva" | "buena" | "sobreprecio" | "incompleta"\n' +
       '}\n\n' +
-      'IMPORTANTE: Los IDs en contrapropuesta DEBEN existir en el catálogo SSTT que te di arriba. NO inventes IDs.';
+      'IMPORTANTE: IDs en contrapropuesta DEBEN existir en el catálogo. Tu contrapropuesta DEBE cumplir las 6 REGLAS TÉCNICAS.';
   };
 
   window.acCallAPI = function() {
