@@ -15430,6 +15430,479 @@ body.cart-open #proyectoListadoBtn {
 .wiz-hero-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(232,0,28,0.4); }
 .wiz-hero-cta:active { transform: translateY(0); }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   ANALIZADOR DE COTIZACIÓN — Estilos del modal
+   Sesión 8 (segunda parte): comparativa con la competencia
+   ═══════════════════════════════════════════════════════════════ */
+.ac-overlay {
+  position: fixed; inset: 0;
+  background: rgba(20,22,28,0.55);
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  z-index: 9998;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  animation: ac-fade-in .2s ease-out;
+  overflow-y: auto;
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+@keyframes ac-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ac-slide-up { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes ac-spin { to { transform: rotate(360deg); } }
+
+.ac-panel {
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-radius: 18px;
+  border: 1px solid rgba(200,210,230,0.6);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.7);
+  padding: 18px 20px 16px;
+  max-width: 480px;
+  width: 100%;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+  position: relative;
+  animation: ac-slide-up .25s ease-out;
+  font-family: var(--font, 'IBM Plex Sans', system-ui, sans-serif);
+}
+
+.ac-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 14px; padding-bottom: 14px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.ac-step {
+  font-size: 11px; font-weight: 600;
+  color: #888; text-transform: uppercase; letter-spacing: 0.6px;
+}
+.ac-bar {
+  height: 3px; background: #f0f0f0; border-radius: 3px;
+  overflow: hidden; margin-top: 6px;
+}
+.ac-bar-fill {
+  height: 100%; background: #0057B8;
+  transition: width .35s ease-out;
+}
+.ac-close {
+  background: none; border: none; cursor: pointer;
+  color: #888; padding: 0; margin-left: 12px;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 10px; flex-shrink: 0;
+  transition: all .15s;
+}
+.ac-close:hover { background: rgba(0,0,0,0.05); color: #1A1A1A; }
+
+.ac-content { min-height: 240px; }
+.ac-q {
+  font-size: 17px; font-weight: 600; color: #1A1A1A;
+  margin: 0 0 4px; line-height: 1.35;
+}
+.ac-sub {
+  font-size: 13px; color: #666;
+  margin: 0 0 14px; line-height: 1.5;
+}
+.ac-or {
+  font-size: 12px; color: #888;
+  text-align: center; margin: 12px 0;
+}
+
+/* Drop zone */
+.ac-drop {
+  display: block;
+  border: 2px dashed rgba(0,0,0,0.18);
+  border-radius: 12px;
+  padding: 22px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .15s;
+  margin-bottom: 4px;
+}
+.ac-drop:hover {
+  border-color: #0057B8;
+  background: rgba(0,87,184,0.04);
+}
+.ac-drop-icon {
+  width: 42px; height: 42px;
+  margin: 0 auto 8px;
+  color: #888;
+}
+.ac-drop-t {
+  font-size: 14px; font-weight: 600;
+  margin: 0 0 2px; color: #1A1A1A;
+}
+.ac-drop-s {
+  font-size: 12px; color: #888; margin: 0 0 8px;
+}
+.ac-input-types {
+  display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;
+}
+.ac-type-pill {
+  font-size: 10px;
+  padding: 3px 9px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  color: #666;
+  font-weight: 600;
+}
+
+/* Archivo cargado */
+.ac-file-card {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(0,87,184,0.06);
+  border: 1px solid rgba(0,87,184,0.18);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 4px;
+}
+.ac-file-icon {
+  font-size: 26px; line-height: 1;
+}
+.ac-file-body { flex: 1; min-width: 0; }
+.ac-file-name {
+  font-size: 13px; font-weight: 600;
+  color: #042C53; margin: 0 0 2px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ac-file-size {
+  font-size: 11px; color: #185FA5; margin: 0;
+}
+.ac-file-rm {
+  background: rgba(0,0,0,0.06); border: none;
+  width: 28px; height: 28px; border-radius: 50%;
+  font-size: 18px; line-height: 1;
+  cursor: pointer; color: #555;
+  flex-shrink: 0;
+}
+.ac-file-rm:hover { background: rgba(232,0,28,0.15); color: #E8001C; }
+
+/* Textarea */
+.ac-textarea {
+  width: 100%;
+  min-height: 90px;
+  max-height: 180px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+  resize: vertical;
+  box-sizing: border-box;
+  margin-bottom: 4px;
+}
+.ac-textarea:focus {
+  outline: none;
+  border-color: #0057B8;
+  box-shadow: 0 0 0 3px rgba(0,87,184,0.12);
+}
+
+/* Privacidad */
+.ac-priv {
+  font-size: 11px; color: #888;
+  margin: 12px 0 14px;
+  line-height: 1.5;
+  display: flex; gap: 6px; align-items: flex-start;
+}
+.ac-priv svg { flex-shrink: 0; margin-top: 1px; color: #888; }
+
+/* Error */
+.ac-error {
+  background: #FCEBEB;
+  border: 1px solid #F09595;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: #791F1F;
+  display: flex; gap: 8px; align-items: flex-start;
+  line-height: 1.5;
+}
+.ac-error svg { flex-shrink: 0; margin-top: 1px; }
+
+/* Botones */
+.ac-btn {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  background: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1A1A1A;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.ac-btn:hover:not(:disabled) { background: #fafafa; border-color: #888; }
+.ac-btn:active:not(:disabled) { transform: scale(0.98); }
+.ac-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.ac-btn-primary {
+  background: #0057B8;
+  border-color: #0057B8;
+  color: #fff;
+}
+.ac-btn-primary:hover:not(:disabled) {
+  background: #003a7d;
+  border-color: #003a7d;
+}
+.ac-btn-2 {
+  width: 100%;
+  padding: 10px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.12);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #1A1A1A;
+  font-family: inherit;
+}
+.ac-btn-2:hover { background: rgba(0,0,0,0.04); }
+
+/* Loading */
+.ac-loading {
+  padding: 36px 20px;
+  text-align: center;
+}
+.ac-spinner {
+  width: 40px; height: 40px;
+  border: 3px solid #f0f0f0;
+  border-top-color: #0057B8;
+  border-radius: 50%;
+  animation: ac-spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+.ac-load-msg {
+  font-size: 14px; font-weight: 600;
+  color: #1A1A1A; margin: 0 0 4px;
+}
+.ac-load-hint {
+  font-size: 11.5px; color: #888;
+  margin: 0;
+}
+
+/* Resultado: advertencias */
+.ac-summary {
+  background: #FAEEDA;
+  border: 1px solid #FAC775;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+}
+.ac-summary-h {
+  font-size: 12px; font-weight: 600;
+  color: #854F0B;
+  margin: 0 0 6px;
+  display: flex; gap: 6px; align-items: center;
+}
+.ac-summary-list {
+  margin: 0; padding-left: 18px;
+  font-size: 12.5px; color: #633806;
+  line-height: 1.6;
+}
+.ac-summary-list li { margin-bottom: 2px; }
+
+/* Sección título */
+.ac-section-h {
+  font-size: 11px; font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+  margin: 14px 0 8px;
+}
+
+/* Detected rows */
+.ac-row {
+  display: flex; gap: 10px;
+  padding: 10px 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  align-items: flex-start;
+}
+.ac-row-icon {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #FCEBEB;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.ac-row-body { flex: 1; min-width: 0; }
+.ac-row-h {
+  display: flex; justify-content: space-between;
+  align-items: baseline; gap: 6px;
+}
+.ac-row-name {
+  font-size: 13px; font-weight: 600;
+  color: #1A1A1A;
+  margin: 0; line-height: 1.3;
+  word-break: break-word;
+}
+.ac-row-price {
+  font-size: 12px; color: #555;
+  white-space: nowrap; flex-shrink: 0;
+}
+.ac-row-note {
+  font-size: 11px; color: #888;
+  margin: 3px 0 0; line-height: 1.4;
+}
+
+/* Contrapropuesta SSTT */
+.ac-counter-card {
+  background: #E1F5EE;
+  border: 1px solid #5DCAA5;
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 14px;
+}
+.ac-counter-h {
+  font-size: 13.5px; font-weight: 700;
+  color: #04342C;
+  margin: 0 0 10px;
+  display: flex; gap: 6px; align-items: center;
+}
+.ac-counter-row {
+  background: rgba(255,255,255,0.7);
+  border-radius: 8px;
+  padding: 9px 11px;
+  margin-bottom: 6px;
+}
+.ac-counter-row-h {
+  display: flex; justify-content: space-between;
+  align-items: baseline; gap: 6px;
+  margin-bottom: 3px;
+}
+.ac-counter-row-name {
+  font-size: 12.5px; font-weight: 600;
+  color: #04342C; margin: 0; line-height: 1.3;
+  word-break: break-word;
+}
+.ac-counter-row-price {
+  font-size: 12px; font-weight: 600; color: #04342C;
+  white-space: nowrap;
+}
+.ac-counter-row-note {
+  font-size: 11px; color: #085041;
+  margin: 0; line-height: 1.4;
+}
+.ac-counter-code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; color: #0F6E56;
+  letter-spacing: 0.3px;
+  font-weight: 600;
+}
+
+.ac-ventajas {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+.ac-ventaja {
+  font-size: 11.5px; color: #04342C;
+  line-height: 1.5; margin-bottom: 3px;
+}
+
+.ac-counter-total {
+  display: flex; justify-content: space-between;
+  align-items: baseline;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #9FE1CB;
+}
+.ac-ct-l {
+  font-size: 12px; color: #085041;
+  font-weight: 500;
+}
+.ac-ct-v {
+  font-size: 22px; font-weight: 700;
+  color: #04342C;
+}
+.ac-counter-diff {
+  font-size: 12px; color: #04342C;
+  margin: 8px 0 0;
+  text-align: center;
+  line-height: 1.5;
+}
+.ac-counter-diff strong {
+  color: #0F6E56;
+}
+
+/* Disclaimer */
+.ac-disclaimer {
+  font-size: 10.5px;
+  color: #888;
+  margin: 12px 0 8px;
+  text-align: center;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Acciones */
+.ac-actions {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+.ac-actions-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+/* FAB del Analizador (azul, distinto al rojo del wizard) */
+.ac-fab {
+  position: fixed;
+  right: 16px;
+  bottom: 154px; /* sobre el wiz-fab (86px) + 56px + 12px gap */
+  z-index: 850;
+  background: linear-gradient(135deg, #0057B8 0%, #003a7d 100%);
+  color: #fff;
+  border: none;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0,87,184,0.35), 0 2px 6px rgba(0,0,0,0.1);
+  display: flex; align-items: center; justify-content: center;
+  transition: all .25s ease;
+  font-family: inherit;
+}
+.ac-fab:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0 8px 24px rgba(0,87,184,0.45); }
+.ac-fab:active { transform: scale(0.95); }
+.ac-fab svg { width: 26px; height: 26px; }
+.ac-fab-label {
+  position: absolute; right: calc(100% + 10px);
+  background: #1A1A1A; color: #fff;
+  padding: 6px 10px; border-radius: 8px;
+  font-size: 12px; font-weight: 500;
+  white-space: nowrap; opacity: 0;
+  transform: translateX(8px); pointer-events: none;
+  transition: all .2s;
+}
+.ac-fab:hover .ac-fab-label { opacity: 1; transform: translateX(0); }
+
+@media (min-width: 769px) {
+  .ac-fab { bottom: 92px; }
+}
+
+/* Mobile (≤ 480px) */
+@media (max-width: 480px) {
+  .ac-overlay { padding: 8px; }
+  .ac-panel { padding: 14px 16px 12px; border-radius: 14px; max-height: calc(100vh - 16px); }
+  .ac-q { font-size: 16px; }
+  .ac-counter-row-name { font-size: 12px; }
+  .ac-ct-v { font-size: 20px; }
+}
+
 </style>
 
 <!-- Google Places Autocomplete — configurable via localStorage('sstt_gmaps_key') -->
@@ -15577,6 +16050,10 @@ if (window.pdfjsLib) {
     <button class="mnav-tab" onclick="wizOpen()" style="background:linear-gradient(90deg,rgba(232,0,28,0.18),rgba(232,0,28,0.08));color:#ffd0d6;">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 4"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/></svg>
       Asistente
+    </button>
+    <button class="mnav-tab" onclick="acOpen()" style="background:linear-gradient(90deg,rgba(0,87,184,0.18),rgba(0,87,184,0.08));color:#cfe0f5;">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+      Comparar
     </button>
     
     
@@ -17503,6 +17980,23 @@ if (window.pdfjsLib) {
           <div class="tools-menu-info">
             <div class="tools-menu-name" style="color:#791F1F;">Asistente de Descubrimiento</div>
             <div class="tools-menu-desc">Encuentra tu sistema ideal con preguntas simples — propuesta lista para agregar al carro</div>
+          </div>
+        </button>
+      </div>
+
+      <div class="tools-menu-group tools-group-analizador">
+        <div class="tools-menu-group-hdr">
+          <span class="tools-menu-group-icon">🔍</span>
+          <div>
+            <div class="tools-menu-group-title">¿Tienes una cotización en mano?</div>
+            <div class="tools-menu-group-sub">Analízala con IA y obtén contrapropuesta Dahua</div>
+          </div>
+        </div>
+        <button class="tools-menu-btn tools-menu-btn-special" onclick="acOpen()" style="border-color:#0057B8;background:linear-gradient(135deg,#F0F6FF 0%,#E0EBFA 100%);">
+          <div class="tools-menu-ico" style="background:#0057B8;color:#fff;">📋</div>
+          <div class="tools-menu-info">
+            <div class="tools-menu-name" style="color:#042C53;">Analizador de Cotización</div>
+            <div class="tools-menu-desc">Sube una foto, PDF o pega el texto. La IA detecta marca, productos y precios. Recibes contrapropuesta SSTT con ahorro y ventajas en segundos</div>
           </div>
         </button>
       </div>
@@ -45805,6 +46299,618 @@ if (document.readyState === 'loading') {
   };
 
 
+  // ═══════════════════════════════════════════════════════════════════
+  // ANALIZADOR DE COTIZACIÓN — Recibe cotización de la competencia
+  // (texto, imagen o PDF), la procesa con Claude Sonnet 4 vía Worker
+  // proxy y devuelve análisis técnico + contrapropuesta Dahua del
+  // catálogo SSTT.
+  // ═══════════════════════════════════════════════════════════════════
+
+  window.acState = {
+    file: null,        // { type: 'image'|'document', mediaType, base64, name, size }
+    text: '',          // texto pegado
+    analysis: null,    // resultado del análisis
+    loading: false,
+    error: null
+  };
+
+  window.acOpen = function() {
+    window.acState = { file: null, text: '', analysis: null, loading: false, error: null };
+    var existing = document.getElementById('acModal');
+    if (existing) existing.remove();
+
+    var modal = document.createElement('div');
+    modal.id = 'acModal';
+    modal.className = 'ac-overlay';
+    modal.innerHTML =
+      '<div class="ac-panel" role="dialog" aria-modal="true">' +
+        '<div class="ac-head">' +
+          '<div style="flex:1">' +
+            '<div class="ac-step" id="acStepLabel">Paso 1 — Carga la cotización</div>' +
+            '<div class="ac-bar"><div class="ac-bar-fill" id="acBar" style="width:33%"></div></div>' +
+          '</div>' +
+          '<button class="ac-close" id="acCloseBtn" aria-label="Cerrar">' +
+            '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+          '</button>' +
+        '</div>' +
+        '<div id="acContent" class="ac-content"></div>' +
+      '</div>';
+    document.body.appendChild(modal);
+
+    document.getElementById('acCloseBtn').addEventListener('click', acCloseConfirm);
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) acCloseConfirm();
+    });
+
+    document.body.style.overflow = 'hidden';
+    acRenderStep1();
+  };
+
+  window.acClose = function() {
+    var modal = document.getElementById('acModal');
+    if (modal) modal.remove();
+    document.body.style.overflow = '';
+  };
+
+  window.acCloseConfirm = function() {
+    if (window.acState.loading) {
+      if (!confirm('Hay un análisis en curso. ¿Cerrar de todos modos?')) return;
+    }
+    if (window.acState.analysis || window.acState.file || window.acState.text) {
+      if (!confirm('¿Cerrar el analizador? Perderás el análisis.')) return;
+    }
+    acClose();
+  };
+
+  // ── STEP 1: captura ──────────────────────────────────────────────
+  window.acRenderStep1 = function() {
+    var c = document.getElementById('acContent');
+    var lbl = document.getElementById('acStepLabel');
+    var bar = document.getElementById('acBar');
+    lbl.textContent = 'Paso 1 — Carga la cotización';
+    bar.style.width = '33%';
+
+    var hasFile = !!window.acState.file;
+    var fileBlock = hasFile
+      ? '<div class="ac-file-card">' +
+          '<div class="ac-file-icon">' + (window.acState.file.type === 'image' ? '🖼' : '📄') + '</div>' +
+          '<div class="ac-file-body">' +
+            '<p class="ac-file-name">' + window.acState.file.name + '</p>' +
+            '<p class="ac-file-size">' + acFormatBytes(window.acState.file.size) + '</p>' +
+          '</div>' +
+          '<button class="ac-file-rm" onclick="acClearFile()" aria-label="Quitar">×</button>' +
+        '</div>'
+      : '';
+
+    c.innerHTML =
+      '<p class="ac-q">¿Te cotizaron en otro lado?</p>' +
+      '<p class="ac-sub">Sube una foto o PDF, o pega el texto. Te decimos qué te están vendiendo y cómo se compara con productos Dahua originales del catálogo SSTT.</p>' +
+
+      (hasFile ? fileBlock :
+      '<label class="ac-drop" for="acFileInput">' +
+        '<svg class="ac-drop-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">' +
+          '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>' +
+          '<polyline points="17 8 12 3 7 8"/>' +
+          '<line x1="12" y1="3" x2="12" y2="15"/>' +
+        '</svg>' +
+        '<p class="ac-drop-t">Subir imagen o PDF</p>' +
+        '<p class="ac-drop-s">Foto WhatsApp, screenshot, PDF · máx 4 MB</p>' +
+        '<div class="ac-input-types">' +
+          '<span class="ac-type-pill">JPG</span>' +
+          '<span class="ac-type-pill">PNG</span>' +
+          '<span class="ac-type-pill">WebP</span>' +
+          '<span class="ac-type-pill">PDF</span>' +
+        '</div>' +
+      '</label>' +
+      '<input type="file" id="acFileInput" accept="image/jpeg,image/png,image/webp,application/pdf" style="display:none" onchange="acHandleFile(event)">') +
+
+      '<p class="ac-or">— o pega el texto —</p>' +
+
+      '<textarea id="acTextarea" class="ac-textarea" placeholder="Hola me cotizaron 6 cámaras 4MP IP, NVR 8 canales con disco 2TB, instalación incluida $1.250.000 todo IVA...">' + (window.acState.text || '') + '</textarea>' +
+
+      (window.acState.error ?
+        '<div class="ac-error">' +
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>' +
+          '<span>' + window.acState.error + '</span>' +
+        '</div>' : '') +
+
+      '<div class="ac-priv">' +
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>' +
+        '<span>El análisis se procesa de forma anónima. No guardamos nombres, RUTs ni datos del competidor.</span>' +
+      '</div>' +
+
+      '<button class="ac-btn ac-btn-primary" id="acAnalyzeBtn" onclick="acStartAnalysis()">Analizar cotización →</button>';
+
+    var ta = document.getElementById('acTextarea');
+    if (ta) {
+      ta.addEventListener('input', function() {
+        window.acState.text = this.value;
+        acUpdateAnalyzeBtn();
+      });
+    }
+    acUpdateAnalyzeBtn();
+  };
+
+  window.acUpdateAnalyzeBtn = function() {
+    var btn = document.getElementById('acAnalyzeBtn');
+    if (!btn) return;
+    var has = window.acState.file || (window.acState.text && window.acState.text.trim().length > 10);
+    btn.disabled = !has;
+  };
+
+  window.acClearFile = function() {
+    window.acState.file = null;
+    acRenderStep1();
+  };
+
+  window.acHandleFile = function(event) {
+    var f = event.target.files[0];
+    if (!f) return;
+    var maxSize = 4 * 1024 * 1024; // 4 MB
+    if (f.size > maxSize) {
+      window.acState.error = 'El archivo supera 4 MB. Toma una foto con menor resolución o comprime el PDF.';
+      acRenderStep1();
+      return;
+    }
+    var allowed = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
+    if (allowed.indexOf(f.type) === -1) {
+      window.acState.error = 'Formato no soportado. Usa JPG, PNG, WebP o PDF.';
+      acRenderStep1();
+      return;
+    }
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var b64 = e.target.result.split(',')[1];
+      window.acState.file = {
+        type: f.type === 'application/pdf' ? 'document' : 'image',
+        mediaType: f.type,
+        base64: b64,
+        name: f.name,
+        size: f.size
+      };
+      window.acState.error = null;
+      acRenderStep1();
+    };
+    reader.onerror = function() {
+      window.acState.error = 'No se pudo leer el archivo.';
+      acRenderStep1();
+    };
+    reader.readAsDataURL(f);
+  };
+
+  window.acFormatBytes = function(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / 1024 / 1024).toFixed(2) + ' MB';
+  };
+
+  // ── STEP 2: análisis (llamada al Worker) ─────────────────────────
+  window.acStartAnalysis = function() {
+    if (window.acState.loading) return;
+    window.acState.loading = true;
+    window.acState.error = null;
+    acRenderStep2();
+    acCallAPI();
+  };
+
+  window.acRenderStep2 = function() {
+    var c = document.getElementById('acContent');
+    var lbl = document.getElementById('acStepLabel');
+    var bar = document.getElementById('acBar');
+    lbl.textContent = 'Paso 2 — Analizando con IA…';
+    bar.style.width = '66%';
+
+    c.innerHTML =
+      '<div class="ac-loading">' +
+        '<div class="ac-spinner"></div>' +
+        '<p class="ac-load-msg" id="acLoadMsg">Detectando productos…</p>' +
+        '<p class="ac-load-hint">Esto puede tardar 5 a 15 segundos</p>' +
+      '</div>';
+
+    // Mensajes rotativos durante la espera
+    var msgs = [
+      'Detectando productos y marcas…',
+      'Identificando especificaciones técnicas…',
+      'Calculando equivalencias con catálogo Dahua…',
+      'Detectando lo que falta o está flojo…',
+      'Armando contrapropuesta SSTT…'
+    ];
+    var i = 0;
+    var lm = document.getElementById('acLoadMsg');
+    window.acLoadInterval = setInterval(function() {
+      i = (i + 1) % msgs.length;
+      if (lm) lm.textContent = msgs[i];
+    }, 1800);
+  };
+
+  window.acBuildPrompt = function() {
+    // Catálogo compacto inyectado: solo info útil para mapeo
+    // Filtramos a categorías relevantes para reducir tokens
+    var relevantCats = ['camaras-ip', 'camaras-hdcvi', 'camaras-ptz', 'nvr', 'switches'];
+    var miniCatalog = (typeof PRODUCTS !== 'undefined' ? PRODUCTS : [])
+      .filter(function(p) { return relevantCats.indexOf(p.cat) >= 0; })
+      .map(function(p) {
+        return { id: p.id, codigo: p.codigo, nombre: p.nombre, cat: p.cat, ptotal: p.ptotal };
+      });
+
+    // HDDs y cables comunes
+    var commonAccessories = (typeof PRODUCTS !== 'undefined' ? PRODUCTS : [])
+      .filter(function(p) {
+        var n = (p.nombre || '').toLowerCase();
+        return /skyhawk|exos|cat6|cat5e|utp|rj45|fuente|switch poe/i.test(n) ||
+               (p.cat === 'accesorios' && p.ptotal > 30000 && p.ptotal < 250000);
+      })
+      .slice(0, 80) // Limitar para tokens
+      .map(function(p) {
+        return { id: p.id, codigo: p.codigo, nombre: p.nombre, ptotal: p.ptotal };
+      });
+
+    return 'Eres un asistente técnico experto en CCTV de SSTT (sstt.cl), distribuidor oficial Dahua en Chile. ' +
+      'Recibirás una cotización de la competencia (texto, imagen o PDF) y debes analizarla.\n\n' +
+
+      'CATÁLOGO SSTT DISPONIBLE (usa SOLO estos productos para tu contrapropuesta):\n' +
+      'Cámaras y grabadores:\n' + JSON.stringify(miniCatalog) + '\n\n' +
+      'Accesorios principales (HDDs, cables, switches):\n' + JSON.stringify(commonAccessories) + '\n\n' +
+
+      'TU MISIÓN:\n' +
+      '1. Detectar marca, productos, cantidades y precios de la cotización\n' +
+      '2. Identificar lo que está flojo o falta (HDD no certificado, cable cat5e, sin protector, garantía corta, etc.)\n' +
+      '3. Para cada producto detectado, encontrar el equivalente Dahua del catálogo SSTT (SOLO usa IDs reales del catálogo arriba)\n' +
+      '4. Calcular total de la contrapropuesta\n\n' +
+
+      'CRITERIOS:\n' +
+      '· Sé honesto: si la cotización es competitiva, dilo. No inventes problemas.\n' +
+      '· Si detectas Hikvision, ezviz, TP-Link, Imou, ofrece equivalencia Dahua de calidad similar o mejor.\n' +
+      '· Sesgo SSTT permitido: destaca ventajas reales de Dahua (3 años garantía, soporte Chile, certificación).\n' +
+      '· NUNCA mientas sobre specs ni inventes productos. Solo IDs del catálogo.\n' +
+      '· Si no detectas nada parseable, devuelve { "error": "no_parseable", "reason": "..." }\n\n' +
+
+      'FORMATO DE RESPUESTA — DEVUELVE SOLO UN JSON VÁLIDO, SIN MARKDOWN, SIN BACKTICKS:\n' +
+      '{\n' +
+      '  "marca_detectada": "Hikvision" | "TP-Link" | "Genérico" | "Desconocida",\n' +
+      '  "total_cotizado": 1250000,\n' +
+      '  "moneda": "CLP",\n' +
+      '  "detectados": [\n' +
+      '    { "tipo": "Cámara IP 4MP", "cantidad": 6, "precio_unitario": 89000, "subtotal": 534000, "spec": "Hikvision DS-2CD1043G2 estimado, sin starlight" }\n' +
+      '  ],\n' +
+      '  "advertencias": [\n' +
+      '    "No mencionan disco duro de marca certificada (Skyhawk/Purple)",\n' +
+      '    "Cable cat5e en vez de cat6"\n' +
+      '  ],\n' +
+      '  "contrapropuesta": [\n' +
+      '    { "id": 281, "qty": 6, "razon": "Equivalente starlight con IA" }\n' +
+      '  ],\n' +
+      '  "ventajas_sstt": [\n' +
+      '    "3 años de garantía vs 1 año del competidor",\n' +
+      '    "Soporte técnico en Chile"\n' +
+      '  ],\n' +
+      '  "evaluacion_general": "competitiva" | "buena" | "sobreprecio" | "incompleta"\n' +
+      '}\n\n' +
+      'IMPORTANTE: Los IDs en contrapropuesta DEBEN existir en el catálogo SSTT que te di arriba. NO inventes IDs.';
+  };
+
+  window.acCallAPI = function() {
+    var prompt = acBuildPrompt();
+
+    // Construir el content del usuario (texto + opcional imagen/PDF)
+    var userContent = [];
+    if (window.acState.file) {
+      if (window.acState.file.type === 'image') {
+        userContent.push({
+          type: 'image',
+          source: {
+            type: 'base64',
+            media_type: window.acState.file.mediaType,
+            data: window.acState.file.base64
+          }
+        });
+      } else if (window.acState.file.type === 'document') {
+        userContent.push({
+          type: 'document',
+          source: {
+            type: 'base64',
+            media_type: 'application/pdf',
+            data: window.acState.file.base64
+          }
+        });
+      }
+    }
+
+    var userText = window.acState.text && window.acState.text.trim()
+      ? window.acState.text.trim()
+      : 'Analiza esta cotización adjunta.';
+    userContent.push({ type: 'text', text: userText });
+
+    var payload = {
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 2048,
+      system: prompt,
+      messages: [{ role: 'user', content: userContent }]
+    };
+
+    // Llamar al Worker
+    var proxyUrl = (typeof PROXY_URL !== 'undefined') ? PROXY_URL : 'https://sstt-proxy.ryanodina.workers.dev';
+
+    fetch(proxyUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (window.acLoadInterval) clearInterval(window.acLoadInterval);
+
+      if (data.error) {
+        throw new Error(data.error.message || data.error || 'Error en el análisis');
+      }
+
+      // Extraer texto de la respuesta de Anthropic
+      var responseText = '';
+      if (data.content && Array.isArray(data.content)) {
+        data.content.forEach(function(block) {
+          if (block.type === 'text') responseText += block.text;
+        });
+      }
+
+      if (!responseText) throw new Error('Respuesta vacía de la IA');
+
+      // Parsear JSON (puede venir con markdown a pesar del prompt)
+      var cleaned = responseText.replace(/```json|```/g, '').trim();
+      var parsed;
+      try {
+        parsed = JSON.parse(cleaned);
+      } catch (e) {
+        // Intentar extraer JSON del texto
+        var match = cleaned.match(/\{[\s\S]*\}/);
+        if (!match) throw new Error('La IA no devolvió un JSON válido');
+        parsed = JSON.parse(match[0]);
+      }
+
+      if (parsed.error === 'no_parseable') {
+        throw new Error(parsed.reason || 'No se pudo identificar productos en la cotización');
+      }
+
+      window.acState.analysis = parsed;
+      window.acState.loading = false;
+      acRenderStep3();
+    })
+    .catch(function(err) {
+      if (window.acLoadInterval) clearInterval(window.acLoadInterval);
+      window.acState.loading = false;
+      window.acState.error = err.message || 'Error inesperado. Intenta de nuevo.';
+      acRenderStep1();
+    });
+  };
+
+  // ── STEP 3: resultado ────────────────────────────────────────────
+  window.acRenderStep3 = function() {
+    var c = document.getElementById('acContent');
+    var lbl = document.getElementById('acStepLabel');
+    var bar = document.getElementById('acBar');
+    var a = window.acState.analysis;
+
+    lbl.textContent = '✓ Análisis completo';
+    bar.style.width = '100%';
+
+    // Calcular total contrapropuesta
+    var totalSstt = 0;
+    var contraDetalle = (a.contrapropuesta || []).map(function(item) {
+      var prod = null;
+      if (typeof PRODUCTS !== 'undefined') {
+        for (var i = 0; i < PRODUCTS.length; i++) {
+          if (PRODUCTS[i].id === item.id) { prod = PRODUCTS[i]; break; }
+        }
+      }
+      if (prod) totalSstt += prod.ptotal * item.qty;
+      return { item: item, prod: prod };
+    });
+
+    var html = '';
+    html += '<p class="ac-q" style="margin-bottom:6px">Esto te están vendiendo</p>';
+    html += '<p class="ac-sub" style="margin-bottom:14px">' +
+      'Marca detectada: <strong>' + (a.marca_detectada || 'Desconocida') + '</strong> · ' +
+      'Total cotizado: <strong>$' + (a.total_cotizado || 0).toLocaleString('es-CL') + '</strong></p>';
+
+    // Advertencias
+    if (a.advertencias && a.advertencias.length > 0) {
+      html += '<div class="ac-summary">';
+      html += '<p class="ac-summary-h">⚠ Lo que falta o está flojo</p>';
+      html += '<ul class="ac-summary-list">';
+      a.advertencias.forEach(function(adv) {
+        html += '<li>' + adv + '</li>';
+      });
+      html += '</ul></div>';
+    }
+
+    // Productos detectados
+    html += '<div class="ac-section-h">Productos detectados</div>';
+    (a.detectados || []).forEach(function(d) {
+      html += '<div class="ac-row">' +
+        '<div class="ac-row-icon">📷</div>' +
+        '<div class="ac-row-body">' +
+          '<div class="ac-row-h">' +
+            '<p class="ac-row-name">' + d.tipo + (d.cantidad > 1 ? ' × ' + d.cantidad : '') + '</p>' +
+            '<span class="ac-row-price">$' + (d.subtotal || 0).toLocaleString('es-CL') + '</span>' +
+          '</div>' +
+          (d.spec ? '<p class="ac-row-note">' + d.spec + '</p>' : '') +
+        '</div>' +
+      '</div>';
+    });
+
+    // Contrapropuesta SSTT
+    html += '<div class="ac-counter-card">';
+    html += '<p class="ac-counter-h">✓ Contrapropuesta SSTT — Dahua original</p>';
+
+    contraDetalle.forEach(function(d) {
+      if (!d.prod) return;
+      html += '<div class="ac-counter-row">' +
+        '<div class="ac-counter-row-h">' +
+          '<p class="ac-counter-row-name">' + d.prod.nombre + (d.item.qty > 1 ? ' × ' + d.item.qty : '') + '</p>' +
+          '<span class="ac-counter-row-price">$' + (d.prod.ptotal * d.item.qty).toLocaleString('es-CL') + '</span>' +
+        '</div>' +
+        '<p class="ac-counter-row-note"><span class="ac-counter-code">' + d.prod.codigo + '</span> · ' + (d.item.razon || '') + '</p>' +
+      '</div>';
+    });
+
+    if (a.ventajas_sstt && a.ventajas_sstt.length > 0) {
+      html += '<div class="ac-ventajas">';
+      a.ventajas_sstt.forEach(function(v) {
+        html += '<div class="ac-ventaja">✓ ' + v + '</div>';
+      });
+      html += '</div>';
+    }
+
+    html += '<div class="ac-counter-total">' +
+      '<span class="ac-ct-l">Tu inversión SSTT</span>' +
+      '<span class="ac-ct-v">$' + totalSstt.toLocaleString('es-CL') + '</span>' +
+    '</div>';
+
+    var diff = (a.total_cotizado || 0) - totalSstt;
+    if (Math.abs(diff) > 1000) {
+      var diffPct = a.total_cotizado ? Math.round(Math.abs(diff) / a.total_cotizado * 100) : 0;
+      html += '<p class="ac-counter-diff">' +
+        (diff > 0 ? 'Ahorras' : 'Inviertes') + ' ' +
+        '<strong>$' + Math.abs(diff).toLocaleString('es-CL') + '</strong> ' +
+        '(' + diffPct + '%) ' +
+        (diff > 0 ? 'vs la otra cotización' : 'más, pero con calidad superior') +
+      '</p>';
+    }
+
+    html += '</div>'; // counter-card
+
+    // Disclaimer
+    html += '<p class="ac-disclaimer">Este análisis es referencial. Verifica con un asesor SSTT antes de comprar para confirmar disponibilidad y compatibilidad.</p>';
+
+    // Acciones
+    html += '<div class="ac-actions">';
+    html += '<button class="ac-btn ac-btn-primary" onclick="acAddCounterToCart()">🛒 Agregar contrapropuesta al carro</button>';
+    html += '<div class="ac-actions-row">';
+    html += '<button class="ac-btn-2" onclick="acExportPDF()">📄 PDF comparativa</button>';
+    html += '<button class="ac-btn-2" onclick="acContactWA()">💬 Asesor</button>';
+    html += '</div>';
+    html += '<button class="ac-btn-2" style="font-size:11px;padding:8px" onclick="acRestart()">↻ Analizar otra cotización</button>';
+    html += '</div>';
+
+    c.innerHTML = html;
+  };
+
+  // ── Acciones finales ─────────────────────────────────────────────
+  window.acAddCounterToCart = function() {
+    var a = window.acState.analysis;
+    if (!a || !a.contrapropuesta) return;
+    var added = 0;
+    a.contrapropuesta.forEach(function(item) {
+      if (typeof PRODUCTS === 'undefined') return;
+      var prod = null;
+      for (var i = 0; i < PRODUCTS.length; i++) {
+        if (PRODUCTS[i].id === item.id) { prod = PRODUCTS[i]; break; }
+      }
+      if (!prod || typeof addCart !== 'function') return;
+      for (var q = 0; q < item.qty; q++) {
+        try { addCart(prod); added++; } catch (e) { console.error('acAddCounterToCart:', e); }
+      }
+    });
+    acClose();
+    if (typeof showToast === 'function') {
+      showToast('✓ Contrapropuesta agregada (' + added + ' productos)');
+    }
+  };
+
+  window.acExportPDF = function() {
+    var a = window.acState.analysis;
+    if (!a) return;
+    try {
+      var jsPDF = window.jspdf && window.jspdf.jsPDF ? window.jspdf.jsPDF : window.jsPDF;
+      if (!jsPDF) { if (typeof showToast === 'function') showToast('⚠️ jsPDF no disponible'); return; }
+      var doc = new jsPDF();
+      var y = 18;
+      doc.setFontSize(15);
+      doc.setFont(undefined, 'bold');
+      doc.text('SSTT — Análisis comparativo de cotización', 14, y);
+      y += 7;
+      doc.setFontSize(9);
+      doc.setFont(undefined, 'normal');
+      doc.text('Marca detectada: ' + (a.marca_detectada || 'Desconocida'), 14, y);
+      y += 5;
+      doc.text('Evaluación general: ' + (a.evaluacion_general || 'sin clasificar'), 14, y);
+      y += 10;
+
+      // Tabla detectados
+      if (doc.autoTable && a.detectados && a.detectados.length > 0) {
+        doc.setFont(undefined, 'bold');
+        doc.text('Productos detectados en la cotización', 14, y);
+        y += 4;
+        doc.autoTable({
+          startY: y,
+          head: [['Tipo', 'Cant', 'Subtotal', 'Spec']],
+          body: a.detectados.map(function(d) {
+            return [d.tipo, d.cantidad || 1, '$' + (d.subtotal || 0).toLocaleString('es-CL'), d.spec || ''];
+          }),
+          theme: 'striped',
+          headStyles: { fillColor: [120, 120, 120] },
+          styles: { fontSize: 8 }
+        });
+        y = doc.lastAutoTable.finalY + 6;
+      }
+
+      // Tabla contrapropuesta
+      var totalSstt = 0;
+      var rows = [];
+      (a.contrapropuesta || []).forEach(function(item) {
+        if (typeof PRODUCTS === 'undefined') return;
+        var prod = null;
+        for (var i = 0; i < PRODUCTS.length; i++) {
+          if (PRODUCTS[i].id === item.id) { prod = PRODUCTS[i]; break; }
+        }
+        if (!prod) return;
+        var sub = prod.ptotal * item.qty;
+        totalSstt += sub;
+        rows.push([prod.codigo, prod.nombre.substring(0, 50), item.qty, '$' + sub.toLocaleString('es-CL')]);
+      });
+      if (doc.autoTable && rows.length > 0) {
+        doc.setFont(undefined, 'bold');
+        doc.text('Contrapropuesta SSTT — Dahua original', 14, y);
+        y += 4;
+        doc.autoTable({
+          startY: y,
+          head: [['Código', 'Producto', 'Cant', 'Subtotal']],
+          body: rows,
+          theme: 'striped',
+          headStyles: { fillColor: [232, 0, 28] },
+          styles: { fontSize: 8 }
+        });
+        y = doc.lastAutoTable.finalY + 6;
+        doc.setFontSize(11);
+        doc.setFont(undefined, 'bold');
+        doc.text('Total SSTT con IVA: $' + totalSstt.toLocaleString('es-CL'), 14, y);
+      }
+
+      doc.save('analisis-cotizacion-' + Date.now() + '.pdf');
+      if (typeof showToast === 'function') showToast('✓ PDF generado');
+    } catch (e) {
+      console.error('acExportPDF error:', e);
+      if (typeof showToast === 'function') showToast('❌ Error al generar PDF');
+    }
+  };
+
+  window.acContactWA = function() {
+    var a = window.acState.analysis;
+    if (!a) return;
+    var msg = 'Hola, vengo del Analizador de Cotizaciones SSTT. Me cotizaron ' +
+              (a.marca_detectada || 'otro proveedor') + ' por $' +
+              (a.total_cotizado || 0).toLocaleString('es-CL') + '. ' +
+              'Me gustaría revisar la contrapropuesta SSTT con un asesor.';
+    var url = 'https://wa.me/56930502234?text=' + encodeURIComponent(msg);
+    window.open(url, '_blank');
+  };
+
+  window.acRestart = function() {
+    window.acState = { file: null, text: '', analysis: null, loading: false, error: null };
+    acRenderStep1();
+  };
+
+
     window.toolsOpen = function(toolId, btn) {
     document.querySelectorAll('.tools-menu-btn').forEach(function(b){ b.classList.remove('active'); });
     if (btn) btn.classList.add('active');
@@ -45899,6 +47005,17 @@ if (document.readyState === 'loading') {
     <circle cx="12" cy="12" r="9"/>
     <path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 4"/>
     <circle cx="12" cy="17" r="0.5" fill="currentColor"/>
+  </svg>
+</button>
+
+<!-- ANALIZADOR FAB — Compara con la competencia (Sesión 8 parte 2) -->
+<button class="ac-fab" onclick="acOpen()" aria-label="Abrir analizador de cotización">
+  <span class="ac-fab-label">Analizar cotización de la competencia</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+    <polyline points="14 2 14 8 20 8"/>
+    <line x1="9" y1="13" x2="15" y2="13"/>
+    <line x1="9" y1="17" x2="15" y2="17"/>
   </svg>
 </button>
 
