@@ -7035,6 +7035,8 @@ body.cart-open #proyectoListadoBtn {
 /* ══ SIMULADOR FOV v2 ═══════════════════════════════════════ */
 #secFov { background:#f5f6fa; min-height:100%; padding-bottom:env(safe-area-inset-bottom,0); }
 .fov-wrap { max-width:1100px; margin:0 auto; padding:24px 16px calc(80px + env(safe-area-inset-bottom)); }
+.fov-client-wrap { max-width:1100px; margin:0 auto; padding:18px 16px 0; }
+.fov-client-wrap .ms-acc { background: rgba(255,255,255,.7); }
 .fov-hero {
   text-align:center;
   margin-bottom: 28px;
@@ -15099,6 +15101,17 @@ body.cart-open #proyectoListadoBtn {
 }
 #fovCanvas { width:100%; border-radius:11px; background:#0f1923; display:block;
   box-shadow:inset 0 2px 8px rgba(0,0,0,.3); }
+.fov-tool-title {
+  font-size: 18px; font-weight: 700; color: var(--text);
+  margin: 18px 0 14px; padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(0,87,184,.08), rgba(0,87,184,.03));
+  border-left: 3px solid #0057B8;
+  border-radius: 8px;
+  letter-spacing: -0.2px;
+}
+@media (max-width: 600px) {
+  .fov-tool-title { font-size: 15px; padding: 9px 12px; margin: 14px 0 10px; }
+}
 .dori-legend { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
 .dori-leg-item { display:flex; align-items:center; gap:5px; font-size:10px; color:#666; }
 .dori-leg-dot { width:9px; height:9px; border-radius:50%; }
@@ -17535,6 +17548,40 @@ if (window.pdfjsLib) {
 
 
 <div class="app-section" id="secFov">
+
+<!-- ── Para el cliente final (acordeón colapsado) ── -->
+<div class="fov-client-wrap">
+  <div class="ms-acc" id="acc-client">
+    <button class="ms-acc-head" type="button" onclick="msToggle('acc-client')">
+      <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+      <div class="ms-acc-ico" style="background:#FFEBEE;color:#E8001C">👤</div>
+      <div class="ms-acc-text">
+        <div class="ms-acc-label">Para el cliente final</div>
+        <div class="ms-acc-sub">Asistente de descubrimiento + analizador de cotización</div>
+      </div>
+      <span class="ms-acc-count">2</span>
+    </button>
+    <div class="ms-acc-body">
+      <div class="mn-client-row">
+        <button class="mn-cl-card" onclick="wizOpen()">
+          <div class="mn-cl-ico" style="background:#E8001C">?</div>
+          <div>
+            <div class="mn-cl-t">Asistente de descubrimiento</div>
+            <div class="mn-cl-s">No sabes qué necesitas — te guiamos</div>
+          </div>
+        </button>
+        <button class="mn-cl-card" onclick="acOpen()">
+          <div class="mn-cl-ico" style="background:#0057B8">vs</div>
+          <div>
+            <div class="mn-cl-t">Analizador de cotización</div>
+            <div class="mn-cl-s">Compara tu cotización con Dahua</div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="fov-wrap">
   <div class="fov-hero">
     <div class="fov-hero-badge">
@@ -17544,6 +17591,9 @@ if (window.pdfjsLib) {
     <div class="fov-title">Mesón Técnico SSTT</div>
     <div class="fov-sub">La <b>navaja suiza del integrador profesional</b>: simulador de campo visual, calculadoras técnicas, comparador de cámaras y guías para que diseñes el proyecto correcto antes de salir a terreno.</div>
   </div>
+
+  <!-- Título de la herramienta activa -->
+  <div class="fov-tool-title">Simulador de Campo Visual FOV</div>
 
   <!-- Buscador A -->
   <div class="fov-cam-row">
@@ -18078,28 +18128,6 @@ if (window.pdfjsLib) {
      ════════════════════════════════════════════════════════════ -->
 <section id="secTools" style="padding:24px 16px 80px;background:linear-gradient(180deg,#fafbfc,#fff)">
   <div style="max-width:1100px;margin:0 auto">
-    <!-- ── Para el cliente final ── -->
-    <!-- ── Para el cliente final ── -->
-    <div class="mn-client">
-      <div class="mn-client-h">Para el cliente final</div>
-      <div class="mn-client-row">
-        <button class="mn-cl-card" onclick="wizOpen()">
-          <div class="mn-cl-ico" style="background:#E8001C">?</div>
-          <div>
-            <div class="mn-cl-t">Asistente de descubrimiento</div>
-            <div class="mn-cl-s">No sabes qué necesitas — te guiamos</div>
-          </div>
-        </button>
-        <button class="mn-cl-card" onclick="acOpen()">
-          <div class="mn-cl-ico" style="background:#0057B8">vs</div>
-          <div>
-            <div class="mn-cl-t">Analizador de cotización</div>
-            <div class="mn-cl-s">Compara tu cotización con Dahua</div>
-          </div>
-        </button>
-      </div>
-    </div>
-
     <!-- ── Mesón Técnico ── -->
     <div class="tools-hero">
       <div class="tools-hero-badge">🧰 Mesón técnico</div>
@@ -18109,8 +18137,8 @@ if (window.pdfjsLib) {
 
     <div class="tools-menu" id="toolsMenu">
 
-      <!-- SIMULADORES (abierto por defecto) -->
-      <div class="ms-acc open" id="acc-sim">
+      <!-- SIMULADORES -->
+      <div class="ms-acc" id="acc-sim">
         <button class="ms-acc-head" type="button" onclick="msToggle('acc-sim')">
           <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
           <div class="ms-acc-ico" style="background:#EAF1FB;color:#0057B8">📐</div>
@@ -18220,9 +18248,17 @@ if (window.pdfjsLib) {
             <div class="ms-acc-label">Evaluación y guías</div>
             <div class="ms-acc-sub">Auditar, comparar tecnologías y aprender</div>
           </div>
-          <span class="ms-acc-count">4</span>
+          <span class="ms-acc-count">5</span>
         </button>
         <div class="ms-acc-body">
+          <button class="ms-item" type="button" onclick="audOpen()">
+            <div class="ms-item-ico">📷</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">Auditor de sistema instalado <span style="display:inline-block;background:#0057B8;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:4px;vertical-align:middle;letter-spacing:.3px">PREVIEW</span></div>
+              <div class="ms-item-desc">Sube una captura desde DMSS y la IA evalúa si tu sistema cumple con lo que necesitas ver</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
           <button class="ms-item" type="button" onclick="toolsOpen('readyCheck',this)">
             <div class="ms-item-ico">🔍</div>
             <div class="ms-item-body">
@@ -47050,6 +47086,629 @@ if (document.readyState === 'loading') {
     acRenderStep1();
   };
 
+
+  // ════════════════════════════════════════════════════════════════════
+  // 📷 AUDITOR DE SISTEMA INSTALADO — Sesión 9
+  // Modo PREVIEW: 1 cámara, análisis completo, gratis, con PDF.
+  // TODO Bsale: validar tier server-side para multi-cámara y modo full.
+  // ════════════════════════════════════════════════════════════════════
+  window.audState = {
+    step: 0,           // 0=aviso costos, 1=upload, 2=loading, 3=resultado
+    file: null,        // { name, size, mediaType, base64, type }
+    needs: [],         // ['caras','patentes','perimetro','mercaderia','interior']
+    timeOfDay: '',     // 'dia' | 'noche' | 'ambas'
+    notes: '',         // texto libre cliente
+    analysis: null,    // resultado parseado IA
+    loading: false,
+    error: null,
+    tier: 'preview'    // futuro: 'prime' | 'mayorista'
+  };
+
+  window.audOpen = function() {
+    window.audState = {
+      step: 0, file: null, needs: [], timeOfDay: '', notes: '',
+      analysis: null, loading: false, error: null, tier: 'preview'
+    };
+    var existing = document.getElementById('audOverlay');
+    if (existing) existing.remove();
+    var ov = document.createElement('div');
+    ov.id = 'audOverlay';
+    ov.className = 'ac-overlay';
+    ov.innerHTML =
+      '<div class="ac-panel" id="audPanel">' +
+        '<div class="ac-head">' +
+          '<div>' +
+            '<div class="ac-step" id="audStepLabel">Aviso de uso</div>' +
+            '<div class="ac-bar"><div class="ac-bar-fill" id="audBar" style="width:25%"></div></div>' +
+          '</div>' +
+          '<button class="ac-close" onclick="audCloseConfirm()" aria-label="Cerrar">✕</button>' +
+        '</div>' +
+        '<div id="audContent"></div>' +
+      '</div>';
+    document.body.appendChild(ov);
+    audRenderStep0();
+  };
+
+  window.audClose = function() {
+    var ov = document.getElementById('audOverlay');
+    if (ov) ov.remove();
+  };
+
+  window.audCloseConfirm = function() {
+    if (window.audState.loading) {
+      if (!confirm('Hay un análisis en progreso. ¿Cancelar y cerrar?')) return;
+    }
+    if (window.audState.analysis || window.audState.file) {
+      if (!confirm('¿Cerrar la auditoría? Se perderá el análisis actual.')) return;
+    }
+    audClose();
+  };
+
+  // ── STEP 0: aviso de costo / preview ─────────────────────────────
+  window.audRenderStep0 = function() {
+    var c = document.getElementById('audContent');
+    document.getElementById('audStepLabel').textContent = 'Antes de empezar';
+    document.getElementById('audBar').style.width = '25%';
+    c.innerHTML =
+      '<div style="text-align:center;padding:8px 4px 4px">' +
+        '<div style="font-size:42px;line-height:1;margin-bottom:8px">📷</div>' +
+        '<h3 style="margin:0 0 6px;font-size:18px;color:#0057B8;font-weight:700">Auditor de sistema instalado</h3>' +
+        '<p style="margin:0 0 14px;color:#555;font-size:13px;line-height:1.5">' +
+          'Sube una captura tomada desde tu app DMSS y la IA evalúa si tu cámara cumple con lo que necesitas ver.' +
+        '</p>' +
+      '</div>' +
+      '<div style="background:linear-gradient(135deg,#FFF8E1,#FFF3D6);border:1px solid #F0C74E;border-radius:12px;padding:13px 14px;margin-bottom:12px">' +
+        '<div style="display:flex;gap:10px;align-items:flex-start">' +
+          '<div style="font-size:20px;line-height:1">⚠️</div>' +
+          '<div style="flex:1">' +
+            '<div style="font-weight:700;font-size:13px;color:#8a5a00;margin-bottom:4px">Esta herramienta usa recursos de IA</div>' +
+            '<div style="font-size:12px;color:#5e3d00;line-height:1.45">' +
+              'Cada análisis tiene un costo aproximado de <b>USD $0.06</b> que SSTT asume. ' +
+              'Hoy es <b>gratis en modo PREVIEW</b> (1 cámara por análisis).' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="background:#EAF1FB;border-left:3px solid #0057B8;border-radius:8px;padding:11px 12px;margin-bottom:14px;font-size:12px;color:#1a3556;line-height:1.45">' +
+        '<b>Próximamente:</b> auditoría completa multi-cámara con reporte detallado y comparativa contra normativa, exclusiva para clientes <b>Prime</b> y <b>Mayoristas</b> SSTT.' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;flex-direction:column">' +
+        '<button onclick="audGoStep1()" style="background:#0057B8;color:#fff;border:none;padding:13px;border-radius:11px;font-weight:600;font-size:14px;cursor:pointer;width:100%">Entiendo, continuar →</button>' +
+        '<button onclick="audClose()" style="background:transparent;color:#666;border:1px solid #ddd;padding:11px;border-radius:11px;font-weight:500;font-size:13px;cursor:pointer;width:100%">Cancelar</button>' +
+      '</div>';
+  };
+
+  window.audGoStep1 = function() {
+    window.audState.step = 1;
+    audRenderStep1();
+  };
+
+  // ── STEP 1: subir foto + necesidades ─────────────────────────────
+  window.audRenderStep1 = function() {
+    var c = document.getElementById('audContent');
+    document.getElementById('audStepLabel').textContent = 'Paso 1 de 2 — Tu cámara';
+    document.getElementById('audBar').style.width = '50%';
+    var s = window.audState;
+    var hasFile = !!s.file;
+    var needs = s.needs || [];
+    function chk(val) { return needs.indexOf(val) !== -1 ? 'checked' : ''; }
+    function tod(val) { return s.timeOfDay === val ? 'checked' : ''; }
+
+    c.innerHTML =
+      '<div style="font-size:13px;color:#444;margin-bottom:10px;line-height:1.45">' +
+        'Sube una <b>captura desde DMSS</b> de la cámara que quieres auditar.' +
+      '</div>' +
+      (hasFile ?
+        '<div style="background:#EAF6EE;border:1px solid #98C9A8;border-radius:11px;padding:11px;margin-bottom:12px;display:flex;gap:10px;align-items:center">' +
+          '<div style="font-size:24px">🖼</div>' +
+          '<div style="flex:1;min-width:0">' +
+            '<div style="font-weight:600;font-size:13px;color:#1a3d2a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + s.file.name + '</div>' +
+            '<div style="font-size:11px;color:#3d6650">' + audFormatBytes(s.file.size) + '</div>' +
+          '</div>' +
+          '<button onclick="audClearFile()" style="background:#fff;color:#c00;border:1px solid #fcc;padding:6px 10px;border-radius:8px;font-size:11px;cursor:pointer;font-weight:600">Quitar</button>' +
+        '</div>'
+        :
+        '<label style="display:block;border:2px dashed #ccd5e5;border-radius:13px;padding:24px 16px;text-align:center;cursor:pointer;background:#fafbfd;margin-bottom:12px;transition:all .15s" ' +
+        'onmouseover="this.style.borderColor=\'#0057B8\';this.style.background=\'#f0f6ff\'" onmouseout="this.style.borderColor=\'#ccd5e5\';this.style.background=\'#fafbfd\'">' +
+          '<div style="font-size:32px;margin-bottom:6px">📤</div>' +
+          '<div style="font-size:13px;font-weight:600;color:#0057B8;margin-bottom:3px">Toca para subir captura</div>' +
+          '<div style="font-size:11px;color:#888">JPG, PNG o WebP — máximo 4 MB</div>' +
+          '<input type="file" accept="image/jpeg,image/png,image/webp" onchange="audHandleFile(event)" style="display:none">' +
+        '</label>'
+      ) +
+      (s.error ?
+        '<div style="background:#FFEBEE;border:1px solid #F5C2C7;border-radius:9px;padding:9px 11px;margin-bottom:11px;font-size:12px;color:#842029">' +
+          '⚠️ ' + s.error +
+        '</div>' : ''
+      ) +
+      '<div style="font-weight:600;font-size:12px;color:#333;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.4px">¿Qué necesitas ver?</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px">' +
+        '<label style="display:flex;align-items:center;gap:7px;padding:8px 10px;background:#f5f7fb;border-radius:9px;font-size:12px;cursor:pointer"><input type="checkbox" ' + chk('caras') + ' onchange="audToggleNeed(\'caras\')"> 👤 Caras</label>' +
+        '<label style="display:flex;align-items:center;gap:7px;padding:8px 10px;background:#f5f7fb;border-radius:9px;font-size:12px;cursor:pointer"><input type="checkbox" ' + chk('patentes') + ' onchange="audToggleNeed(\'patentes\')"> 🚗 Patentes</label>' +
+        '<label style="display:flex;align-items:center;gap:7px;padding:8px 10px;background:#f5f7fb;border-radius:9px;font-size:12px;cursor:pointer"><input type="checkbox" ' + chk('perimetro') + ' onchange="audToggleNeed(\'perimetro\')"> 🏠 Perímetro</label>' +
+        '<label style="display:flex;align-items:center;gap:7px;padding:8px 10px;background:#f5f7fb;border-radius:9px;font-size:12px;cursor:pointer"><input type="checkbox" ' + chk('mercaderia') + ' onchange="audToggleNeed(\'mercaderia\')"> 📦 Mercadería</label>' +
+        '<label style="display:flex;align-items:center;gap:7px;padding:8px 10px;background:#f5f7fb;border-radius:9px;font-size:12px;cursor:pointer;grid-column:span 2"><input type="checkbox" ' + chk('interior') + ' onchange="audToggleNeed(\'interior\')"> 🛋 Interior / movimiento general</label>' +
+      '</div>' +
+      '<div style="font-weight:600;font-size:12px;color:#333;margin:0 0 8px;text-transform:uppercase;letter-spacing:.4px">¿Cuándo se tomó la captura?</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:14px">' +
+        '<label style="display:flex;align-items:center;justify-content:center;gap:5px;padding:9px;background:' + (s.timeOfDay==='dia'?'#0057B8':'#f5f7fb') + ';color:' + (s.timeOfDay==='dia'?'#fff':'#444') + ';border-radius:9px;font-size:12px;cursor:pointer;font-weight:' + (s.timeOfDay==='dia'?'600':'500') + '"><input type="radio" name="audTod" ' + tod('dia') + ' onchange="audSetTod(\'dia\')" style="display:none"> ☀️ Día</label>' +
+        '<label style="display:flex;align-items:center;justify-content:center;gap:5px;padding:9px;background:' + (s.timeOfDay==='noche'?'#0057B8':'#f5f7fb') + ';color:' + (s.timeOfDay==='noche'?'#fff':'#444') + ';border-radius:9px;font-size:12px;cursor:pointer;font-weight:' + (s.timeOfDay==='noche'?'600':'500') + '"><input type="radio" name="audTod" ' + tod('noche') + ' onchange="audSetTod(\'noche\')" style="display:none"> 🌙 Noche</label>' +
+        '<label style="display:flex;align-items:center;justify-content:center;gap:5px;padding:9px;background:' + (s.timeOfDay==='ambas'?'#0057B8':'#f5f7fb') + ';color:' + (s.timeOfDay==='ambas'?'#fff':'#444') + ';border-radius:9px;font-size:12px;cursor:pointer;font-weight:' + (s.timeOfDay==='ambas'?'600':'500') + '"><input type="radio" name="audTod" ' + tod('ambas') + ' onchange="audSetTod(\'ambas\')" style="display:none"> 🌓 No sé</label>' +
+      '</div>' +
+      '<textarea id="audNotes" placeholder="(Opcional) Comenta algo específico: lo que esperas ver, problemas que notas, distancia al objetivo, etc." style="width:100%;min-height:60px;padding:10px;border:1px solid #ddd;border-radius:9px;font-family:inherit;font-size:12px;resize:vertical;margin-bottom:12px;box-sizing:border-box">' + (s.notes || '') + '</textarea>' +
+      '<button id="audSubmitBtn" onclick="audSubmit()" ' + (audCanSubmit() ? '' : 'disabled') + ' style="background:' + (audCanSubmit()?'#0057B8':'#ccc') + ';color:#fff;border:none;padding:13px;border-radius:11px;font-weight:600;font-size:14px;cursor:' + (audCanSubmit()?'pointer':'not-allowed') + ';width:100%">Analizar con IA →</button>';
+
+    var ta = document.getElementById('audNotes');
+    if (ta) ta.addEventListener('input', function() { window.audState.notes = this.value; });
+  };
+
+  window.audCanSubmit = function() {
+    var s = window.audState;
+    return !!s.file && (s.needs.length > 0) && !!s.timeOfDay;
+  };
+
+  window.audToggleNeed = function(val) {
+    var n = window.audState.needs;
+    var i = n.indexOf(val);
+    if (i === -1) n.push(val); else n.splice(i, 1);
+    audRenderStep1();
+  };
+
+  window.audSetTod = function(val) {
+    window.audState.timeOfDay = val;
+    audRenderStep1();
+  };
+
+  window.audClearFile = function() {
+    window.audState.file = null;
+    window.audState.error = null;
+    audRenderStep1();
+  };
+
+  window.audFormatBytes = function(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+    return (bytes/(1024*1024)).toFixed(2) + ' MB';
+  };
+
+  window.audHandleFile = function(ev) {
+    var file = ev.target.files && ev.target.files[0];
+    if (!file) return;
+    if (file.size > 4 * 1024 * 1024) {
+      window.audState.error = 'La imagen supera 4 MB. Toma la captura con menor resolución o reduce calidad.';
+      audRenderStep1();
+      return;
+    }
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
+      window.audState.error = 'Formato no soportado. Usa JPG, PNG o WebP.';
+      audRenderStep1();
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var b64 = (e.target.result || '').split(',')[1] || '';
+      window.audState.file = {
+        name: file.name,
+        size: file.size,
+        mediaType: file.type,
+        base64: b64,
+        type: 'image'
+      };
+      window.audState.error = null;
+      audRenderStep1();
+    };
+    reader.onerror = function() {
+      window.audState.error = 'No se pudo leer la imagen.';
+      audRenderStep1();
+    };
+    reader.readAsDataURL(file);
+  };
+
+  window.audSubmit = function() {
+    if (!audCanSubmit() || window.audState.loading) return;
+    window.audState.loading = true;
+    window.audState.error = null;
+    window.audState.step = 2;
+    audRenderStep2();
+    audCallAPI();
+  };
+
+  // ── STEP 2: loading ──────────────────────────────────────────────
+  window.audRenderStep2 = function() {
+    var c = document.getElementById('audContent');
+    document.getElementById('audStepLabel').textContent = 'Analizando...';
+    document.getElementById('audBar').style.width = '75%';
+    var msgs = [
+      'Revisando encuadre y resolución…',
+      'Evaluando nitidez frente a tus objetivos…',
+      'Comparando con casos típicos CCTV…',
+      'Redactando recomendaciones…'
+    ];
+    c.innerHTML =
+      '<div style="text-align:center;padding:30px 12px">' +
+        '<div style="width:48px;height:48px;border:4px solid #e5eaf2;border-top-color:#0057B8;border-radius:50%;margin:0 auto 16px;animation:ac-spin .9s linear infinite"></div>' +
+        '<div id="audLoadMsg" style="font-size:13px;color:#0057B8;font-weight:600;margin-bottom:6px">' + msgs[0] + '</div>' +
+        '<div style="font-size:11px;color:#888">Esto toma 8-15 segundos</div>' +
+      '</div>';
+    var i = 0;
+    if (window.audLoadInterval) clearInterval(window.audLoadInterval);
+    window.audLoadInterval = setInterval(function() {
+      i = (i + 1) % msgs.length;
+      var el = document.getElementById('audLoadMsg');
+      if (el) el.textContent = msgs[i];
+    }, 2200);
+  };
+
+  // ── Construir prompt ─────────────────────────────────────────────
+  window.audBuildPrompt = function() {
+    var s = window.audState;
+    var needsLbl = {
+      caras: 'reconocer caras de personas',
+      patentes: 'leer patentes de vehículos',
+      perimetro: 'vigilar perímetro / zona amplia',
+      mercaderia: 'monitorear mercadería / productos',
+      interior: 'detectar movimiento en interior'
+    };
+    var needsTxt = s.needs.map(function(n) { return '- ' + (needsLbl[n] || n); }).join('\n');
+    var todTxt = { dia: 'durante el día', noche: 'durante la noche', ambas: 'condición no especificada por el cliente' }[s.timeOfDay] || '';
+
+    return 'Eres un consultor experto en CCTV de Dahua para SSTT (distribuidor oficial Dahua Chile). ' +
+      'Recibes una imagen capturada desde la app DMSS de un sistema instalado y debes auditarla técnicamente.\n\n' +
+      'CONTEXTO DEL CLIENTE:\n' +
+      'La captura fue tomada ' + todTxt + '.\n' +
+      'El cliente quiere que esta cámara le permita:\n' + needsTxt + '\n' +
+      (s.notes ? '\nComentario adicional del cliente: "' + s.notes.replace(/"/g, "'") + '"\n' : '') +
+      '\nREGLAS DE AUDITORÍA:\n' +
+      '1. Evalúa NITIDEZ real (no resolución teórica): ¿el detalle se ve a la distancia que importa?\n' +
+      '2. Para CARAS: necesita 80+ pixeles entre ojos. Si es lejana o angular, es insuficiente.\n' +
+      '3. Para PATENTES: necesita lente ≥6mm o cámara LPR. Lentes 2.8mm NO sirven >5m.\n' +
+      '4. Para NOCHE: evalúa rango IR efectivo, ruido, exposición, claridad.\n' +
+      '5. Encuadre: ¿está bien apuntada, mal angulada, demasiado alta/baja?\n' +
+      '6. Si la cámara ES adecuada, dilo claramente. No inventes problemas.\n' +
+      '7. Si NO cumple, recomienda solución concreta del catálogo Dahua/SSTT (modelos genéricos como "bullet 4MP con lente 6mm" o "cámara LPR ITC215", sin precios).\n\n' +
+      'Responde SOLO con un JSON válido (sin markdown, sin texto adicional) con este formato:\n' +
+      '{\n' +
+      '  "calificacion_general": "excelente|buena|regular|insuficiente",\n' +
+      '  "score": 0-10,\n' +
+      '  "resumen": "1-2 frases con el veredicto principal",\n' +
+      '  "fortalezas": ["punto positivo 1", "punto positivo 2"],\n' +
+      '  "problemas": [{ "tema": "...", "detalle": "...", "gravedad": "alta|media|baja" }],\n' +
+      '  "evaluacion_por_objetivo": [{ "objetivo": "caras|patentes|...", "cumple": true|false|"parcial", "comentario": "..." }],\n' +
+      '  "recomendaciones": ["acción concreta 1", "acción concreta 2"],\n' +
+      '  "producto_sugerido": "modelo o tipo de cámara Dahua si aplica reemplazo, o null",\n' +
+      '  "nota_tecnica": "advertencia o aclaración técnica relevante (puede ser null)"\n' +
+      '}';
+  };
+
+  // ── Llamar Worker (multimodal) ───────────────────────────────────
+  window.audCallAPI = function() {
+    var prompt = audBuildPrompt();
+    var s = window.audState;
+
+    var userContent = [];
+    if (s.file && s.file.type === 'image') {
+      userContent.push({
+        type: 'image',
+        source: { type: 'base64', media_type: s.file.mediaType, data: s.file.base64 }
+      });
+    }
+    userContent.push({ type: 'text', text: 'Audita esta cámara según las reglas del sistema. Responde solo JSON.' });
+
+    var payload = {
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 1800,
+      system: prompt,
+      messages: [{ role: 'user', content: userContent }]
+    };
+
+    var proxyUrl = (typeof PROXY_URL !== 'undefined') ? PROXY_URL : 'https://sstt-proxy.ryanodina.workers.dev';
+
+    fetch(proxyUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (window.audLoadInterval) clearInterval(window.audLoadInterval);
+      if (data.error) throw new Error(data.error.message || data.error || 'Error en el análisis');
+      var responseText = '';
+      if (data.content && Array.isArray(data.content)) {
+        data.content.forEach(function(block) {
+          if (block.type === 'text') responseText += block.text;
+        });
+      }
+      if (!responseText) throw new Error('Respuesta vacía de la IA');
+      var cleaned = responseText.replace(/```json|```/g, '').trim();
+      var parsed;
+      try { parsed = JSON.parse(cleaned); }
+      catch (e) {
+        var match = cleaned.match(/\{[\s\S]*\}/);
+        if (!match) throw new Error('La IA no devolvió un JSON válido');
+        parsed = JSON.parse(match[0]);
+      }
+      window.audState.analysis = parsed;
+      window.audState.loading = false;
+      window.audState.step = 3;
+      audRenderStep3();
+    })
+    .catch(function(err) {
+      if (window.audLoadInterval) clearInterval(window.audLoadInterval);
+      window.audState.loading = false;
+      window.audState.error = err.message || 'Error inesperado. Intenta de nuevo.';
+      window.audState.step = 1;
+      audRenderStep1();
+    });
+  };
+
+  // ── STEP 3: resultado ────────────────────────────────────────────
+  window.audRenderStep3 = function() {
+    var c = document.getElementById('audContent');
+    document.getElementById('audStepLabel').textContent = 'Resultado de la auditoría';
+    document.getElementById('audBar').style.width = '100%';
+    var a = window.audState.analysis;
+    if (!a) {
+      c.innerHTML = '<div style="padding:20px;text-align:center;color:#888">Sin datos.</div>';
+      return;
+    }
+
+    var calMap = {
+      excelente: { color: '#1A7F3C', bg: '#E8F5EC', label: 'Excelente', emoji: '✅' },
+      buena: { color: '#1A7F3C', bg: '#EAF6EE', label: 'Buena', emoji: '✓' },
+      regular: { color: '#C05000', bg: '#FFF3E8', label: 'Regular', emoji: '⚠️' },
+      insuficiente: { color: '#B71C1C', bg: '#FFEBEE', label: 'Insuficiente', emoji: '✗' }
+    };
+    var cal = calMap[a.calificacion_general] || calMap.regular;
+    var score = (typeof a.score === 'number') ? a.score : 5;
+
+    var html = '';
+
+    // Header con calificación
+    html += '<div style="background:' + cal.bg + ';border-radius:13px;padding:14px;margin-bottom:14px;border:1px solid ' + cal.color + '33">' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">' +
+        '<div style="font-size:28px">' + cal.emoji + '</div>' +
+        '<div style="flex:1">' +
+          '<div style="font-weight:700;font-size:16px;color:' + cal.color + '">' + cal.label + '</div>' +
+          '<div style="font-size:11px;color:#666;font-weight:500">Calificación general · ' + score + '/10</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="font-size:13px;color:#333;line-height:1.5">' + (a.resumen || '') + '</div>' +
+    '</div>';
+
+    // Evaluación por objetivo
+    if (a.evaluacion_por_objetivo && a.evaluacion_por_objetivo.length) {
+      html += '<div style="font-weight:700;font-size:12px;color:#333;margin:0 0 8px;text-transform:uppercase;letter-spacing:.4px">Por cada objetivo</div>';
+      html += '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">';
+      a.evaluacion_por_objetivo.forEach(function(o) {
+        var ico = o.cumple === true ? '✓' : (o.cumple === 'parcial' ? '⚠' : '✗');
+        var col = o.cumple === true ? '#1A7F3C' : (o.cumple === 'parcial' ? '#C05000' : '#B71C1C');
+        var bg = o.cumple === true ? '#EAF6EE' : (o.cumple === 'parcial' ? '#FFF3E8' : '#FFEBEE');
+        html += '<div style="background:' + bg + ';border-left:3px solid ' + col + ';border-radius:8px;padding:9px 11px">' +
+          '<div style="display:flex;gap:8px;align-items:center;margin-bottom:3px">' +
+            '<span style="color:' + col + ';font-weight:700;font-size:14px">' + ico + '</span>' +
+            '<span style="font-weight:600;font-size:12.5px;color:#333;text-transform:capitalize">' + (o.objetivo || '') + '</span>' +
+          '</div>' +
+          '<div style="font-size:11.5px;color:#555;line-height:1.4">' + (o.comentario || '') + '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Problemas
+    if (a.problemas && a.problemas.length) {
+      html += '<div style="font-weight:700;font-size:12px;color:#333;margin:0 0 8px;text-transform:uppercase;letter-spacing:.4px">⚠️ Problemas detectados</div>';
+      html += '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">';
+      a.problemas.forEach(function(p) {
+        var gCol = p.gravedad === 'alta' ? '#B71C1C' : (p.gravedad === 'media' ? '#C05000' : '#7A6500');
+        html += '<div style="background:#fff;border:1px solid ' + gCol + '33;border-radius:9px;padding:9px 11px">' +
+          '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:3px">' +
+            '<div style="font-weight:600;font-size:12.5px;color:#333">' + (p.tema || '') + '</div>' +
+            '<div style="font-size:9.5px;font-weight:700;color:' + gCol + ';background:' + gCol + '15;padding:2px 7px;border-radius:5px;text-transform:uppercase">' + (p.gravedad || '') + '</div>' +
+          '</div>' +
+          '<div style="font-size:11.5px;color:#555;line-height:1.4">' + (p.detalle || '') + '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    }
+
+    // Fortalezas
+    if (a.fortalezas && a.fortalezas.length) {
+      html += '<div style="font-weight:700;font-size:12px;color:#333;margin:0 0 8px;text-transform:uppercase;letter-spacing:.4px">✓ Lo que está bien</div>';
+      html += '<ul style="margin:0 0 14px;padding-left:18px;font-size:12px;color:#1a3d2a;line-height:1.5">';
+      a.fortalezas.forEach(function(f) { html += '<li>' + f + '</li>'; });
+      html += '</ul>';
+    }
+
+    // Recomendaciones
+    if (a.recomendaciones && a.recomendaciones.length) {
+      html += '<div style="background:linear-gradient(135deg,#EAF1FB,#F4F8FE);border-left:3px solid #0057B8;border-radius:10px;padding:12px;margin-bottom:14px">' +
+        '<div style="font-weight:700;font-size:12px;color:#0057B8;margin-bottom:7px;text-transform:uppercase;letter-spacing:.4px">Recomendaciones</div>' +
+        '<ol style="margin:0;padding-left:18px;font-size:12.5px;color:#1a3556;line-height:1.5">';
+      a.recomendaciones.forEach(function(r) { html += '<li style="margin-bottom:3px">' + r + '</li>'; });
+      html += '</ol></div>';
+    }
+
+    // Producto sugerido
+    if (a.producto_sugerido) {
+      html += '<div style="background:#FFF8E1;border:1px solid #F0C74E;border-radius:10px;padding:11px 13px;margin-bottom:14px">' +
+        '<div style="font-size:11px;font-weight:700;color:#8a5a00;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px">💡 Modelo sugerido</div>' +
+        '<div style="font-size:13px;color:#5e3d00;font-weight:500">' + a.producto_sugerido + '</div>' +
+      '</div>';
+    }
+
+    // Nota técnica
+    if (a.nota_tecnica) {
+      html += '<div style="font-size:11px;color:#888;font-style:italic;padding:8px 11px;border-left:2px solid #ddd;margin-bottom:14px;line-height:1.5">' + a.nota_tecnica + '</div>';
+    }
+
+    // Acciones
+    html += '<div style="display:flex;gap:8px;flex-direction:column;margin-top:8px">' +
+      '<button onclick="audExportPDF()" style="background:#0057B8;color:#fff;border:none;padding:13px;border-radius:11px;font-weight:600;font-size:13.5px;cursor:pointer;width:100%">📄 Descargar PDF</button>' +
+      '<button onclick="audOpen()" style="background:#fff;color:#0057B8;border:1px solid #0057B8;padding:11px;border-radius:11px;font-weight:500;font-size:12.5px;cursor:pointer;width:100%">↻ Auditar otra cámara</button>' +
+      '<button onclick="audClose()" style="background:transparent;color:#888;border:none;padding:9px;font-size:11.5px;cursor:pointer;width:100%">Cerrar</button>' +
+    '</div>';
+
+    c.innerHTML = html;
+  };
+
+  // ── Exportar PDF ─────────────────────────────────────────────────
+  window.audExportPDF = function() {
+    if (!window.audState.analysis) return;
+    if (typeof window.jspdf === 'undefined') {
+      alert('PDF no disponible: la librería jsPDF no cargó. Recarga la página.');
+      return;
+    }
+    var jsPDF = window.jspdf.jsPDF;
+    var doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    var a = window.audState.analysis;
+    var s = window.audState;
+    var pw = doc.internal.pageSize.getWidth();
+    var ph = doc.internal.pageSize.getHeight();
+    var y = 16;
+
+    // Header
+    doc.setFillColor(0, 87, 184);
+    doc.rect(0, 0, pw, 22, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(15);
+    doc.text('Auditoría de cámara CCTV', 14, 11);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+    doc.text('SSTT — Distribuidor oficial Dahua Chile · sstt.cl', 14, 17);
+    y = 30;
+
+    doc.setTextColor(40, 40, 40);
+
+    // Calificación
+    var calLbl = (a.calificacion_general || 'regular').toUpperCase();
+    var score = (typeof a.score === 'number') ? a.score : 5;
+    doc.setFillColor(245, 247, 252);
+    doc.roundedRect(14, y, pw - 28, 18, 3, 3, 'F');
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(13);
+    doc.setTextColor(0, 87, 184);
+    doc.text('Calificación: ' + calLbl, 18, y + 8);
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+    doc.setTextColor(80, 80, 80);
+    doc.text('Score: ' + score + '/10', 18, y + 14);
+    y += 24;
+
+    // Resumen
+    if (a.resumen) {
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+      doc.setTextColor(40, 40, 40);
+      doc.text('Resumen', 14, y); y += 5;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(10);
+      var lines = doc.splitTextToSize(a.resumen, pw - 28);
+      doc.text(lines, 14, y);
+      y += lines.length * 5 + 3;
+    }
+
+    // Contexto cliente
+    doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+    doc.text('Contexto', 14, y); y += 5;
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+    var ctxNeeds = (s.needs || []).join(', ') || 'no especificado';
+    var ctxTod = ({ dia: 'día', noche: 'noche', ambas: 'no especificada' })[s.timeOfDay] || '-';
+    var ctxLines = doc.splitTextToSize(
+      'Objetivos del cliente: ' + ctxNeeds + '\nCondición: ' + ctxTod +
+      (s.notes ? '\nComentario: ' + s.notes : ''),
+      pw - 28
+    );
+    doc.text(ctxLines, 14, y);
+    y += ctxLines.length * 4.5 + 4;
+
+    // Tabla evaluación por objetivo
+    if (a.evaluacion_por_objetivo && a.evaluacion_por_objetivo.length && doc.autoTable) {
+      doc.autoTable({
+        startY: y,
+        head: [['Objetivo', 'Cumple', 'Comentario']],
+        body: a.evaluacion_por_objetivo.map(function(o) {
+          var c = o.cumple === true ? 'Sí' : (o.cumple === 'parcial' ? 'Parcial' : 'No');
+          return [o.objetivo || '', c, o.comentario || ''];
+        }),
+        styles: { fontSize: 8.5, cellPadding: 2 },
+        headStyles: { fillColor: [0, 87, 184], textColor: 255, fontStyle: 'bold' },
+        margin: { left: 14, right: 14 }
+      });
+      y = doc.lastAutoTable.finalY + 6;
+    }
+
+    // Problemas
+    if (a.problemas && a.problemas.length) {
+      if (y > ph - 30) { doc.addPage(); y = 16; }
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+      doc.setTextColor(183, 28, 28);
+      doc.text('Problemas detectados', 14, y); y += 5;
+      doc.setTextColor(40, 40, 40);
+      a.problemas.forEach(function(p) {
+        if (y > ph - 25) { doc.addPage(); y = 16; }
+        doc.setFont('helvetica', 'bold'); doc.setFontSize(9.5);
+        doc.text('• ' + (p.tema || '') + ' [' + (p.gravedad || '') + ']', 14, y); y += 4;
+        doc.setFont('helvetica', 'normal'); doc.setFontSize(9);
+        var pl = doc.splitTextToSize(p.detalle || '', pw - 32);
+        doc.text(pl, 18, y); y += pl.length * 4.2 + 2;
+      });
+      y += 2;
+    }
+
+    // Fortalezas
+    if (a.fortalezas && a.fortalezas.length) {
+      if (y > ph - 30) { doc.addPage(); y = 16; }
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+      doc.setTextColor(26, 127, 60);
+      doc.text('Fortalezas', 14, y); y += 5;
+      doc.setTextColor(40, 40, 40);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5);
+      a.fortalezas.forEach(function(f) {
+        var fl = doc.splitTextToSize('✓ ' + f, pw - 28);
+        if (y + fl.length * 4.5 > ph - 15) { doc.addPage(); y = 16; }
+        doc.text(fl, 14, y); y += fl.length * 4.5 + 1;
+      });
+      y += 3;
+    }
+
+    // Recomendaciones
+    if (a.recomendaciones && a.recomendaciones.length) {
+      if (y > ph - 30) { doc.addPage(); y = 16; }
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+      doc.setTextColor(0, 87, 184);
+      doc.text('Recomendaciones', 14, y); y += 5;
+      doc.setTextColor(40, 40, 40);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5);
+      a.recomendaciones.forEach(function(r, i) {
+        var rl = doc.splitTextToSize((i + 1) + '. ' + r, pw - 28);
+        if (y + rl.length * 4.5 > ph - 15) { doc.addPage(); y = 16; }
+        doc.text(rl, 14, y); y += rl.length * 4.5 + 1;
+      });
+      y += 3;
+    }
+
+    // Producto sugerido
+    if (a.producto_sugerido) {
+      if (y > ph - 25) { doc.addPage(); y = 16; }
+      doc.setFillColor(255, 248, 225);
+      doc.roundedRect(14, y, pw - 28, 16, 2, 2, 'F');
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(10);
+      doc.setTextColor(138, 90, 0);
+      doc.text('Modelo sugerido:', 18, y + 6);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9.5);
+      var ps = doc.splitTextToSize(a.producto_sugerido, pw - 36);
+      doc.text(ps, 18, y + 12);
+      y += 20;
+    }
+
+    // Footer
+    var pages = doc.internal.getNumberOfPages();
+    for (var p = 1; p <= pages; p++) {
+      doc.setPage(p);
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(7.5);
+      doc.setTextColor(140, 140, 140);
+      doc.text('Auditoría generada por IA · sstt.cl · Documento orientativo, no reemplaza visita técnica.', 14, ph - 7);
+      doc.text('Pág ' + p + '/' + pages, pw - 22, ph - 7);
+    }
+
+    var fname = 'auditoria-sstt-' + new Date().toISOString().slice(0, 10) + '.pdf';
+    doc.save(fname);
+  };
 
   // ── Acordeón del Mesón Técnico ──
   window.msToggle = function(id) {
