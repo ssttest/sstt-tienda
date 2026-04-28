@@ -26306,25 +26306,24 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
 <script>
-/* ── REPAIR SCRIPT: Fix DOM structure if elements are misplaced ── */
+/* ─────────────────────────────────────────────────────────────────────
+   POST-INIT FIXES & STYLES (originalmente "REPAIR SCRIPT")
+   ─────────────────────────────────────────────────────────────────────
+   Auditoría s15: el bloque era llamado "REPAIR" pero auditado en runtime
+   no repara nada activo — los modales que pretendía reubicar (prodModal,
+   cmpModal, sceneModal) ya están directamente en <body> desde el HTML
+   estático, y 'vmod' ni siquiera existe. Las funciones openCmpPanel /
+   closeCmpPanel / toggleCmpPanel que pretendía "arreglar" eran copias
+   byte-por-byte de las originales (L23934-23954).
+   
+   Eliminadas en s15: pasos #1 (mover prodModal), #3 (mover otros modales)
+   y #5 (duplicar funciones cmp panel). Conservados: #4 (showToast con
+   try-catch), #6 (reset body.overflow), #7 (parche cssText cmpModal),
+   #7b (CSS modal-overlay global), #8 (CSS cart layout flex), #9 (hooks
+   GMaps + scroll-cart). Estos sí aportan valor real.
+   ───────────────────────────────────────────────────────────────────── */
 (function() {
-  // 1. Move prodModal to body if it's inside any section
-  const prodModal = document.getElementById('prodModal');
-  if (prodModal && prodModal.parentElement !== document.body) {
-    document.body.appendChild(prodModal);
-  }
-
-
-  // 3. Move any other misplaced modals/sections
-  ['sceneModal','cmpModal','vmod'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el && el.parentElement !== document.body && 
-        el.parentElement?.classList?.contains('app-section')) {
-      document.body.appendChild(el);
-    }
-  });
-
-  // 4. Fix showToast to never crash
+  // showToast con try-catch defensivo (sobreescribe la original L21337)
   const origShowToast = window.showToast;
   window.showToast = function(msg, ms) {
     try {
@@ -26342,26 +26341,7 @@ window.addEventListener('DOMContentLoaded', () => {
     } catch(e) { console.warn('toast error:', e); }
   };
 
-  // 5. Fix openCmpPanel / closeCmpPanel
-  window.openCmpPanel = function() {
-    const p = document.getElementById('cmpPanel');
-    const o = document.getElementById('cmpOverlay');
-    if (p) { p.classList.add('open'); p.style.transform = 'translateX(0)'; }
-    if (o) { o.classList.add('open'); o.style.display = 'block'; }
-  };
-  window.closeCmpPanel = function() {
-    const p = document.getElementById('cmpPanel');
-    const o = document.getElementById('cmpOverlay');
-    if (p) { p.classList.remove('open'); p.style.transform = 'translateX(100%)'; }
-    if (o) { o.classList.remove('open'); o.style.display = 'none'; }
-  };
-  window.toggleCmpPanel = function() {
-    const p = document.getElementById('cmpPanel');
-    if (p && p.classList.contains('open')) window.closeCmpPanel();
-    else window.openCmpPanel();
-  };
-
-  // 6. Fix body overflow that can get stuck
+  // Reset body.overflow por si algún modal previo dejó scroll lock
   document.body.style.overflow = '';
 
   // 7. Fix cmpModal CSS — ensure it's always a proper fixed overlay
@@ -26462,7 +26442,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }, 400);
   });
 
-  console.log('[REPAIR] DOM repair complete');
+  console.log('[REPAIR] post-init fixes & styles ready');
 })();
 
 
