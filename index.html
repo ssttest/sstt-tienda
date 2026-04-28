@@ -24857,8 +24857,12 @@ window.cmpExportPDF = function() {
   showToast('✅ PDF descargado: ' + filename);
 };
 
-// ── Alias para compatibilidad ────────────────────────────────────────────
-window.openProdModal = openProdModalWithPDF;
+// ── Alias para compatibilidad (s14) ──────────────────────────────────────
+// FIX s14: openProdModalWithPDF nunca se definió en este archivo — el alias
+// rompía con ReferenceError y mataba el resto del script #11. La función real
+// openProdModal está declarada en L24264 (async function). La exponemos a
+// window aquí porque los onclick inline del HTML la invocan como global.
+window.openProdModal = openProdModal;
 
 
 // ════════════════════════════════════════════════════════
