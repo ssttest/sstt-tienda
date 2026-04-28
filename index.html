@@ -18707,7 +18707,9 @@ function _closeAllModals() {
   document.getElementById('prodModal')?.classList.remove('open');
   document.getElementById('cmpModal')?.classList.remove('open');
   document.getElementById('sceneModal')?.classList.remove('open');
-  document.getElementById('vmod')?.classList.remove('open');
+  // FIX s16b: removida referencia a #vmod (modal video legacy).
+  // El elemento no existe en el HTML estático y nunca se crea
+  // dinámicamente. CSS muerto en L3927-3970 queda como deuda 🟡 v17.
   document.body.style.overflow = '';
 }
 
@@ -21335,18 +21337,24 @@ function checkout() {
 function copyTxt(txt) { navigator.clipboard?.writeText(txt).then(()=>showToast(`Código ${txt} copiado`)); }
 
 function showToast(msg, ms=2800) {
-  let t = document.getElementById('toast');
-  let tm = document.getElementById('toastMsg');
-  if (!t) {
-    t = document.createElement('div'); t.id='toast';
-    t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;z-index:9999;display:none;white-space:nowrap;align-items:center;gap:8px';
-    tm = document.createElement('span'); tm.id='toastMsg'; t.appendChild(tm);
-    document.body.appendChild(t);
-  }
-  if (tm) tm.textContent = msg;
-  t.style.display = 'flex';
-  clearTimeout(showToast._t);
-  showToast._t = setTimeout(() => { t.style.display='none'; }, ms);
+  // FIX s16c: try-catch defensivo absorbido del override REPAIR
+  // (eliminado de L26326). Esta versión preserva el SVG checkmark del
+  // toast estático L17505 escribiendo a #toastMsg en vez de a #toast,
+  // que el override REPAIR rompía con t.textContent = msg.
+  try {
+    let t = document.getElementById('toast');
+    let tm = document.getElementById('toastMsg');
+    if (!t) {
+      t = document.createElement('div'); t.id='toast';
+      t.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;z-index:9999;display:none;white-space:nowrap;align-items:center;gap:8px';
+      tm = document.createElement('span'); tm.id='toastMsg'; t.appendChild(tm);
+      document.body.appendChild(t);
+    }
+    if (tm) tm.textContent = msg;
+    t.style.display = 'flex';
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(() => { t.style.display='none'; }, ms);
+  } catch(e) { console.warn('toast error:', e); }
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -23739,118 +23747,14 @@ function cmpGenerateSummary() {
 }
 
 // ── Renderizar el modal de comparación ──────────────────────────
-function cmpRenderModal() {
-  const products = CMP.items;
-  if (products.length < 2) { showToast('⚠️ Agrega al menos 2 productos para comparar'); return; }
-
-  const specKeys  = ['res','ir','ia','prot','noche','poe','sd','audio','forma','price'];
-  const groups = [
-    {label:'Imagen', keys:['res']},
-    {label:'Iluminación', keys:['ir','noche']},
-    {label:'Inteligencia Artificial', keys:['ia']},
-    {label:'Protección', keys:['prot']},
-    {label:'Conectividad', keys:['poe','sd','audio']},
-    {label:'Forma', keys:['forma']},
-    {label:'Precio', keys:['price']},
-  ];
-
-  // Header row: product columns
-  const headerCols = products.map(p => `
-    <th>
-      <img class="cmp-th-img" src="${imgProxyUrl(p.codigo)}" alt="${p.codigo}" onerror="this.style.opacity='.2'">
-      <div class="cmp-th-code">${p.codigo}</div>
-      <div class="cmp-th-name">${p.nombre}</div>
-      <div class="cmp-th-price">${fmt(p.ptotal)}</div>
-      <div class="cmp-th-actions">
-        <button class="cmp-th-btn-cart" onclick="addCart(PRODUCTS.find(x=>x.id===${p.id}));showToast('✅ Agregado')">🛒 Carro</button>
-        <button class="cmp-th-btn-ficha" onclick="closeCmpModal();openProdModal(${p.id})">📋 Ficha</button>
-        <button class="cmp-th-remove" onclick="cmpRemove(${p.id});cmpRenderModal()">✕</button>
-      </div>
-    </th>`).join('');
-
-  // Body rows
-  const bodyRows = groups.map(g => {
-    const groupRow = `
-      <tr class="cmp-row-group">
-        <td colspan="${products.length+1}">${g.label}</td>
-      </tr>`;
-
-    const dataRows = g.keys.map(key => {
-      const ranks = cmpRank(key);
-      const firstSpecs = cmpGetSpecs(products[0]);
-      const label = firstSpecs[key]?.label || key;
-
-      const cells = products.map(p => {
-        const specs = cmpGetSpecs(p);
-        const val   = specs[key]?.val || '—';
-        const rank  = ranks[p.id];
-        const cls   = rank==='best' ? 'cmp-cell-best'
-                    : rank==='low'  ? 'cmp-cell-low'
-                    : rank==='mid'  ? 'cmp-cell-mid'
-                    : 'cmp-cell-equal';
-        const icon  = rank==='best' ? ' <span style="color:var(--green);font-size:11px">▲</span>'
-                    : rank==='low'  ? ' <span style="color:var(--red);font-size:11px">▼</span>'
-                    : '';
-        return `<td class="${cls}">${val}${icon}</td>`;
-      }).join('');
-
-      return `
-        <tr class="cmp-row">
-          <td>${label}</td>
-          ${cells}
-        </tr>`;
-    }).join('');
-
-    return groupRow + dataRows;
-  }).join('');
-
-  const summary = cmpGenerateSummary();
-
-  // Assemble modal
-  let modal = document.getElementById('cmpModal');
-  if (!modal) {
-    modal = document.createElement('div');
-    modal.id = 'cmpModal';
-    modal.style.cssText = 'position:fixed;inset:0;z-index:900;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;overflow-y:auto;padding:16px;';
-    modal.onclick = function(e){ if(e.target===this) closeCmpModal(); };
-    document.body.appendChild(modal);
-  }
-
-  modal.innerHTML = `
-    <div class="cmp-modal-wrap">
-      <div class="cmp-modal-head">
-        <h2>⚖️ Comparando ${products.length} productos</h2>
-        <button class="cmp-modal-x" onclick="closeCmpModal()">✕</button>
-      </div>
-      <div class="cmp-table-wrap">
-        <table class="cmp-table">
-          <thead>
-            <tr class="cmp-prod-header">
-              <th style="vertical-align:bottom;padding-bottom:12px">
-                <div style="font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px">Característica</div>
-              </th>
-              ${headerCols}
-            </tr>
-          </thead>
-          <tbody>${bodyRows}</tbody>
-        </table>
-      </div>
-      ${summary ? `
-      <div class="cmp-summary">
-        <h3>🤖 Análisis de diferencias</h3>
-        <p style="font-size:12px;color:var(--muted);margin-bottom:12px">
-          <span style="background:var(--green-p);color:var(--green);padding:2px 7px;border-radius:3px;font-weight:700;font-size:11px">▲ Verde</span> = mejor valor en esa categoría &nbsp;·&nbsp;
-          <span style="background:var(--red-p);color:var(--red-d);padding:2px 7px;border-radius:3px;font-weight:700;font-size:11px">▼ Rojo</span> = valor inferior &nbsp;·&nbsp;
-          <span style="background:var(--yellow-p);color:var(--yellow);padding:2px 7px;border-radius:3px;font-weight:700;font-size:11px">Naranja</span> = intermedio
-        </p>
-        <div class="cmp-summary-grid">${summary}</div>
-      </div>` : ''}
-    </div>`;
-
-  modal.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
+// FIX s16a (sesión 16): cmpRenderModal sync ELIMINADA.
+// Auditoría s15 documentó que existían 2 declaraciones top-level:
+//   - sync (esta posición, L23742) — usaba cmpRank/cmpGetSpecs/cmpGenerateSummary
+//   - async (L24467, ahora L24355) — usa fetchSpecsFromPDF + cmpBuildTable
+// Por hoisting JS la última declarada (async) sobreescribía a la primera,
+// por lo que la sync NUNCA se ejecutaba en runtime. Verificado: ningún
+// otro código depende de la sync. Las helpers cmpRank/cmpGetSpecs/
+// cmpGenerateSummary quedan huérfanas (deuda 🟡 v17, ~115 líneas).
 function closeCmpModal() {
   const m = document.getElementById('cmpModal');
   if (m) { m.classList.remove('open'); document.body.style.overflow=''; }
@@ -26323,23 +26227,11 @@ window.addEventListener('DOMContentLoaded', () => {
    GMaps + scroll-cart). Estos sí aportan valor real.
    ───────────────────────────────────────────────────────────────────── */
 (function() {
-  // showToast con try-catch defensivo (sobreescribe la original L21337)
-  const origShowToast = window.showToast;
-  window.showToast = function(msg, ms) {
-    try {
-      let t = document.getElementById('toast');
-      if (!t) {
-        t = document.createElement('div');
-        t.id = 'toast';
-        t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 20px;border-radius:6px;font-size:13px;font-weight:600;z-index:9999;white-space:nowrap;display:none;align-items:center;gap:8px';
-        document.body.appendChild(t);
-      }
-      t.textContent = msg || '';
-      t.style.display = 'flex';
-      clearTimeout(window._toastT);
-      window._toastT = setTimeout(() => { t.style.display = 'none'; }, ms || 2800);
-    } catch(e) { console.warn('toast error:', e); }
-  };
+  // FIX s16c: override de showToast ELIMINADO (sesión 16).
+  // El override original (L26230-26246) escribía a t.textContent = msg
+  // directamente, lo que destruía el SVG checkmark y el span #toastMsg
+  // del toast estático L17505. La original (L21337) ya fue endurecida
+  // con try-catch en s16c, conservando la API original sin romper el DOM.
 
   // Reset body.overflow por si algún modal previo dejó scroll lock
   document.body.style.overflow = '';
