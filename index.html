@@ -16252,6 +16252,50 @@ body.cart-open #proyectoListadoBtn {
 }
 .ms-item:hover .ms-item-go { opacity: 1; color: var(--blue); }
 
+/* ── Item destacado — resalta el Simulador FOV en el menú ── */
+.ms-item-hero {
+  background: linear-gradient(135deg, rgba(0,87,184,0.04) 0%, rgba(0,180,230,0.03) 100%);
+  border-left: 3px solid #0057B8 !important;
+  position: relative;
+}
+.ms-item-hero::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, #0057B8, #00B4E6);
+  pointer-events: none;
+}
+.ms-item-hero:hover {
+  background: linear-gradient(135deg, rgba(0,87,184,0.08) 0%, rgba(0,180,230,0.06) 100%);
+}
+.ms-item-hero .ms-item-go {
+  opacity: 1;
+  color: #0057B8;
+  font-weight: 700;
+}
+.ms-item-hero .ms-item-name {
+  font-weight: 800;
+  color: #0a1628;
+}
+.ms-item-badge {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #5a3a00;
+  padding: 2px 7px;
+  border-radius: 100px;
+  margin-left: 6px;
+  letter-spacing: .3px;
+  vertical-align: middle;
+  box-shadow: 0 1px 3px rgba(255,165,0,.3), inset 0 1px 0 rgba(255,255,255,.5);
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .ms-item-badge { font-size: 8.5px; padding: 1.5px 6px; }
+}
+
 /* ── Responsive ── */
 @media (max-width: 600px) {
   .mn-client-row { grid-template-columns: 1fr; }
@@ -17768,7 +17812,174 @@ if (window.pdfjsLib) {
   </div>
 </div>
 
-<div class="fov-wrap">
+  <!-- ── Herramientas del Mesón (movido dentro de #secFov) ── -->
+  <div class="tools-section-wrap" style="max-width:1100px;margin:0 auto;padding:24px 16px 80px">
+    <div class="tools-menu" id="toolsMenu">
+
+      <!-- SIMULADORES — abierto por defecto, FOV destacado visualmente -->
+      <div class="ms-acc open" id="acc-sim">
+        <button class="ms-acc-head" type="button" onclick="msToggle('acc-sim')">
+          <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+          <div class="ms-acc-ico" style="background:#EAF1FB;color:#0057B8">📐</div>
+          <div class="ms-acc-text">
+            <div class="ms-acc-label">Simuladores</div>
+            <div class="ms-acc-sub">Visualizar y comparar antes de instalar</div>
+          </div>
+          <span class="ms-acc-count">3</span>
+        </button>
+        <div class="ms-acc-body">
+          <button class="ms-item ms-item-hero" type="button" onclick="document.querySelector('.fov-tool-title').scrollIntoView({behavior:'smooth',block:'start'})">
+            <div class="ms-item-ico" style="background:linear-gradient(135deg,#0057B8,#00B4E6);color:#fff">📐</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">Simulador FOV</div>
+              <div class="ms-item-desc">Campo visual 3D + DORI + comparador dual de cámaras Dahua</div>
+            </div>
+            <span class="ms-item-go">ver abajo ↓</span>
+          </button>
+          <button class="ms-item" type="button" onclick="toolsOpen('compareCams',this)">
+            <div class="ms-item-ico">⚡</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">Comparador inteligente</div>
+              <div class="ms-item-desc">Análisis técnico side-by-side + recomendación contextual</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+          <button class="ms-item" type="button" onclick="toolsOpen('lprGuide',this)">
+            <div class="ms-item-ico">🚗</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">Captura de patentes</div>
+              <div class="ms-item-desc">Calculadora LPR + shutter speed + 3 tipos de cámaras</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- CALCULADORAS -->
+      <div class="ms-acc" id="acc-calc">
+        <button class="ms-acc-head" type="button" onclick="msToggle('acc-calc')">
+          <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+          <div class="ms-acc-ico" style="background:#EAF6EE;color:#1A7F3C">🧮</div>
+          <div class="ms-acc-text">
+            <div class="ms-acc-label">Calculadoras de dimensionamiento</div>
+            <div class="ms-acc-sub">Discos, red, energía y materiales</div>
+          </div>
+          <span class="ms-acc-count">6</span>
+        </button>
+        <div class="ms-acc-body">
+          <button class="ms-item" type="button" onclick="toolsOpen('hddGuide',this)">
+            <div class="ms-item-ico">💾</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">Discos duros CCTV</div>
+              <div class="ms-item-desc">Storage + retención + 5 estrategias de ahorro + códecs</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+          <button class="ms-item" type="button" onclick="toolsOpen('bwCalc',this)">
+            <div class="ms-item-ico">📡</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">Ancho de banda</div>
+              <div class="ms-item-desc">Visualización remota + estimación consumo + planes ISP chilenos</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+          <button class="ms-item" type="button" onclick="toolsOpen('poeBudget',this)">
+            <div class="ms-item-ico">⚡</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">Presupuesto PoE</div>
+              <div class="ms-item-desc">Watts por cámara vs capacidad real del switch</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+          <button class="ms-item" type="button" onclick="toolsOpen('upsCalc',this)">
+            <div class="ms-item-ico">🔋</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">UPS</div>
+              <div class="ms-item-desc">Calculadora eléctrica + autonomía del sistema</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+          <button class="ms-item" type="button" onclick="toolsOpen('sdEdge',this)">
+            <div class="ms-item-ico">💿</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">SD edge</div>
+              <div class="ms-item-desc">Retención en cámara + memorias microSD del catálogo</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+          <button class="ms-item" type="button" onclick="toolsOpen('bomGen',this)">
+            <div class="ms-item-ico">📋</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">BOM del proyecto</div>
+              <div class="ms-item-desc">Lista de materiales + items propios → agregar al carro</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- EVALUACIÓN Y GUÍAS -->
+      <div class="ms-acc" id="acc-eval">
+        <button class="ms-acc-head" type="button" onclick="msToggle('acc-eval')">
+          <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
+          <div class="ms-acc-ico" style="background:#FFF3E8;color:#C05000">📚</div>
+          <div class="ms-acc-text">
+            <div class="ms-acc-label">Evaluación y guías</div>
+            <div class="ms-acc-sub">Auditar, comparar tecnologías y aprender</div>
+          </div>
+          <span class="ms-acc-count">5</span>
+        </button>
+        <div class="ms-acc-body">
+          <button class="ms-item" type="button" onclick="audOpen()">
+            <div class="ms-item-ico">📷</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">Auditor de sistema instalado <span style="display:inline-block;background:#0057B8;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:4px;vertical-align:middle;letter-spacing:.3px">PREVIEW</span></div>
+              <div class="ms-item-desc">Sube una captura desde DMSS y la IA evalúa si tu sistema cumple con lo que necesitas ver</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+          <button class="ms-item" type="button" onclick="toolsOpen('readyCheck',this)">
+            <div class="ms-item-ico">🔍</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">Auditoría CCTV</div>
+              <div class="ms-item-desc">¿Tu sistema cumple? Evaluación de seguridad + normativa chilena</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+          <button class="ms-item" type="button" onclick="toolsOpen('hdcviVsIp',this)">
+            <div class="ms-item-ico">⚖️</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">HDCVI vs IP</div>
+              <div class="ms-item-desc">Comparador técnico + casos de uso reales</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+          <button class="ms-item" type="button" onclick="toolsOpen('concepts',this)">
+            <div class="ms-item-ico">💡</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">Conceptos rápidos</div>
+              <div class="ms-item-desc">WDR, IR, códecs, IA, disuasión y más en fichas visuales</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+          <button class="ms-item" type="button" onclick="toolsOpen('glossary',this)">
+            <div class="ms-item-ico" style="font-size:11px;font-weight:700;color:#0057B8">abc</div>
+            <div class="ms-item-body">
+              <div class="ms-item-name">Glosario CCTV</div>
+              <div class="ms-item-desc">64 términos técnicos organizados en 9 categorías</div>
+            </div>
+            <span class="ms-item-go">abrir →</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Contenido de las herramientas -->
+    <div id="toolsContent" class="tools-content"></div>
+  </div>
+
+  <div class="fov-wrap">
   <!-- ── Mesón Técnico — La navaja suiza del integrador (Liquid Glass + Tahoe) ── -->
   <div class="tools-hero tools-hero-tahoe">
     <div class="tools-hero-badge">
@@ -18266,172 +18477,7 @@ if (window.pdfjsLib) {
   </div>
 </div>
 
-  <!-- ── Herramientas del Mesón (movido dentro de #secFov) ── -->
-  <div class="tools-section-wrap" style="max-width:1100px;margin:0 auto;padding:24px 16px 80px">
-    <div class="tools-menu" id="toolsMenu">
 
-      <!-- SIMULADORES -->
-      <div class="ms-acc" id="acc-sim">
-        <button class="ms-acc-head" type="button" onclick="msToggle('acc-sim')">
-          <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
-          <div class="ms-acc-ico" style="background:#EAF1FB;color:#0057B8">📐</div>
-          <div class="ms-acc-text">
-            <div class="ms-acc-label">Simuladores</div>
-            <div class="ms-acc-sub">Visualizar y comparar antes de instalar</div>
-          </div>
-          <span class="ms-acc-count">3</span>
-        </button>
-        <div class="ms-acc-body">
-          <button class="ms-item" type="button" onclick="document.getElementById('fovCanvas').scrollIntoView({behavior:'smooth'})">
-            <div class="ms-item-ico">📐</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">Simulador FOV</div>
-              <div class="ms-item-desc">Campo visual 3D + DORI + comparador dual de cámaras</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-          <button class="ms-item" type="button" onclick="toolsOpen('compareCams',this)">
-            <div class="ms-item-ico">⚡</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">Comparador inteligente</div>
-              <div class="ms-item-desc">Análisis técnico side-by-side + recomendación contextual</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-          <button class="ms-item" type="button" onclick="toolsOpen('lprGuide',this)">
-            <div class="ms-item-ico">🚗</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">Captura de patentes</div>
-              <div class="ms-item-desc">Calculadora LPR + shutter speed + 3 tipos de cámaras</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- CALCULADORAS -->
-      <div class="ms-acc" id="acc-calc">
-        <button class="ms-acc-head" type="button" onclick="msToggle('acc-calc')">
-          <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
-          <div class="ms-acc-ico" style="background:#EAF6EE;color:#1A7F3C">🧮</div>
-          <div class="ms-acc-text">
-            <div class="ms-acc-label">Calculadoras de dimensionamiento</div>
-            <div class="ms-acc-sub">Discos, red, energía y materiales</div>
-          </div>
-          <span class="ms-acc-count">6</span>
-        </button>
-        <div class="ms-acc-body">
-          <button class="ms-item" type="button" onclick="toolsOpen('hddGuide',this)">
-            <div class="ms-item-ico">💾</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">Discos duros CCTV</div>
-              <div class="ms-item-desc">Storage + retención + 5 estrategias de ahorro + códecs</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-          <button class="ms-item" type="button" onclick="toolsOpen('bwCalc',this)">
-            <div class="ms-item-ico">📡</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">Ancho de banda</div>
-              <div class="ms-item-desc">Visualización remota + estimación consumo + planes ISP chilenos</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-          <button class="ms-item" type="button" onclick="toolsOpen('poeBudget',this)">
-            <div class="ms-item-ico">⚡</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">Presupuesto PoE</div>
-              <div class="ms-item-desc">Watts por cámara vs capacidad real del switch</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-          <button class="ms-item" type="button" onclick="toolsOpen('upsCalc',this)">
-            <div class="ms-item-ico">🔋</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">UPS</div>
-              <div class="ms-item-desc">Calculadora eléctrica + autonomía del sistema</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-          <button class="ms-item" type="button" onclick="toolsOpen('sdEdge',this)">
-            <div class="ms-item-ico">💿</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">SD edge</div>
-              <div class="ms-item-desc">Retención en cámara + memorias microSD del catálogo</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-          <button class="ms-item" type="button" onclick="toolsOpen('bomGen',this)">
-            <div class="ms-item-ico">📋</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">BOM del proyecto</div>
-              <div class="ms-item-desc">Lista de materiales + items propios → agregar al carro</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- EVALUACIÓN Y GUÍAS -->
-      <div class="ms-acc" id="acc-eval">
-        <button class="ms-acc-head" type="button" onclick="msToggle('acc-eval')">
-          <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
-          <div class="ms-acc-ico" style="background:#FFF3E8;color:#C05000">📚</div>
-          <div class="ms-acc-text">
-            <div class="ms-acc-label">Evaluación y guías</div>
-            <div class="ms-acc-sub">Auditar, comparar tecnologías y aprender</div>
-          </div>
-          <span class="ms-acc-count">5</span>
-        </button>
-        <div class="ms-acc-body">
-          <button class="ms-item" type="button" onclick="audOpen()">
-            <div class="ms-item-ico">📷</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">Auditor de sistema instalado <span style="display:inline-block;background:#0057B8;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:4px;vertical-align:middle;letter-spacing:.3px">PREVIEW</span></div>
-              <div class="ms-item-desc">Sube una captura desde DMSS y la IA evalúa si tu sistema cumple con lo que necesitas ver</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-          <button class="ms-item" type="button" onclick="toolsOpen('readyCheck',this)">
-            <div class="ms-item-ico">🔍</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">Auditoría CCTV</div>
-              <div class="ms-item-desc">¿Tu sistema cumple? Evaluación de seguridad + normativa chilena</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-          <button class="ms-item" type="button" onclick="toolsOpen('hdcviVsIp',this)">
-            <div class="ms-item-ico">⚖️</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">HDCVI vs IP</div>
-              <div class="ms-item-desc">Comparador técnico + casos de uso reales</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-          <button class="ms-item" type="button" onclick="toolsOpen('concepts',this)">
-            <div class="ms-item-ico">💡</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">Conceptos rápidos</div>
-              <div class="ms-item-desc">WDR, IR, códecs, IA, disuasión y más en fichas visuales</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-          <button class="ms-item" type="button" onclick="toolsOpen('glossary',this)">
-            <div class="ms-item-ico" style="font-size:11px;font-weight:700;color:#0057B8">abc</div>
-            <div class="ms-item-body">
-              <div class="ms-item-name">Glosario CCTV</div>
-              <div class="ms-item-desc">64 términos técnicos organizados en 9 categorías</div>
-            </div>
-            <span class="ms-item-go">abrir →</span>
-          </button>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Contenido de las herramientas -->
-    <div id="toolsContent" class="tools-content"></div>
-  </div>
 </div></div>
 </div>
 
