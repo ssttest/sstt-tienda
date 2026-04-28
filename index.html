@@ -3923,51 +3923,15 @@ nav {
   transition:all .2s;
 }
 .csm-continue:hover { transform:translateY(-1px); box-shadow:0 6px 22px rgba(0,0,0,.3); }
-/* ── VIDEO MODAL ─────────────────────────────────────────────── */
-#vmod {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.75);
-  z-index: 950;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(6px);
-}
-#vmod.open { display: flex }
-.vmod-inner {
-  background: #1a1a1a;
-  border-radius: 12px;
-  overflow: hidden;
-  width: 90%;
-  max-width: 900px;
-  box-shadow: 0 24px 80px rgba(0,0,0,.5);
-  animation: fadeUp .25s ease;
-}
-.vmod-hd {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 16px;
-  background: #111;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-}
-.vmod-x {
-  background: rgba(255,255,255,.1);
-  color: #fff;
-  border: none;
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  font-size: 15px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .15s;
-}
-.vmod-x:hover { background: rgba(255,255,255,.25) }
-.vmod-frame { position: relative; padding-bottom: 56.25%; height: 0 }
-.vmod-frame iframe { position: absolute; inset: 0; width: 100%; height: 100% }
+/* ── VIDEO MODAL ELIMINADO (FIX s17a) ──────────────────────────
+   Bloque CSS de #vmod (modal de video legacy) eliminado en s17a.
+   Selectores borrados: #vmod, #vmod.open, .vmod-inner, .vmod-hd,
+   .vmod-x, .vmod-x:hover, .vmod-frame, .vmod-frame iframe.
+   Verificado pre-borrado: 0 matches de class="...vmod-..." y 0
+   matches de id="vmod" en el HTML (ningún element usaba estos
+   estilos). La referencia JS en _closeAllModals ya había sido
+   eliminada en s16b. CSS muerto cerrado completamente.
+   ──────────────────────────────────────────────────────────── */
 
 
 /* ══════════════════════════════════════════════════════════════
@@ -20209,6 +20173,22 @@ const CATS = {
 // API KEY — Pega tu key de console.anthropic.com aquí
 // ═══════════════════════════════════════════════════
 // API via Cloudflare Worker proxy — key guardada en Cloudflare, no en el browser
+//
+// ── PROXY ENDPOINTS (documentado FIX s17b, descubrimiento s16) ──
+// El Worker `sstt-proxy.ryanodina.workers.dev` sirve 2 endpoints:
+//   • POST /           → proxy a Anthropic API (10 call sites: waThink,
+//                        acCallAPI, audCallAPI, y otros consumidores IA).
+//                        Espera body JSON con { model, max_tokens, system,
+//                        messages }. Modelo unificado: 'claude-sonnet-4-6'.
+//   • GET  /img?url=…  → proxy de thumbnails de productos (cientos de hits
+//                        durante page load). Construido en IMG_BASE (~L20506)
+//                        y en el helper de re-proxy (~L20511).
+//
+// CORS: el worker debe responder OPTIONS preflight con
+// `Access-Control-Allow-Headers: Content-Type` para que el browser dispare
+// el POST real. Si ves OPTIONS sin POST en el devtools, el preflight falló
+// (no la llamada de aplicación). Validado en sandbox con mock interceptor.
+// ─────────────────────────────────────────────────────────────────
 const PROXY_URL = 'https://sstt-proxy.ryanodina.workers.dev';
 let ANTHROPIC_API_KEY = ''; // API key en Cloudflare Worker — no se necesita en el browser
 
@@ -23594,157 +23574,18 @@ function cmpNumVal(val) {
   return m ? parseFloat(m[1]) : null;
 }
 
-// ── Extraer specs resumidas de un producto ───────────────────────
-function cmpGetSpecs(p) {
-  const n = p.nombre.toLowerCase();
-  const specs = {};
-
-  // Resolución → número de MP
-  if      (/\b8mp\b|4k/.test(n))  specs.res = {label:'Resolución', val:'4K 8MP', num:8};
-  else if (/\b6mp\b/.test(n))     specs.res = {label:'Resolución', val:'6MP',    num:6};
-  else if (/\b5mp\b/.test(n))     specs.res = {label:'Resolución', val:'5MP',    num:5};
-  else if (/\b4mp\b/.test(n))     specs.res = {label:'Resolución', val:'4MP',    num:4};
-  else if (/\b3mp\b/.test(n))     specs.res = {label:'Resolución', val:'3MP',    num:3};
-  else if (/\b2mp\b|1080/.test(n))specs.res = {label:'Resolución', val:'2MP FHD',num:2};
-  else                            specs.res = {label:'Resolución', val:'Ver ficha',num:0};
-
-  // IR
-  const ir = n.match(/\bir\s*(\d+)\b/i);
-  specs.ir = {label:'Alcance IR', val: ir ? ir[1]+'m' : '—', num: ir ? parseInt(ir[1]) : 0};
-
-  // Precio
-  specs.price = {label:'Precio c/IVA', val: fmt(p.ptotal), num: p.ptotal};
-
-  // IA
-  let ia = '—', iaScore = 0;
-  if (/wizmind/.test(n))           { ia='WizMind AI';   iaScore=4; }
-  else if (/wizsense/.test(n))     { ia='WizSense';     iaScore=3; }
-  else if (/tioc|disuasion/.test(n)){ ia='TiOC 2.0';   iaScore=3; }
-  else if (/smd\+/.test(n))        { ia='SMD+';         iaScore=2; }
-  else if (/ivs/.test(n))          { ia='IVS';          iaScore=1; }
-  specs.ia = {label:'IA / IVS', val:ia, num:iaScore};
-
-  // Protección
-  let prot = '—', protScore = 0;
-  if (/ip68/.test(n))  { prot='IP68 / IK10'; protScore=5; }
-  else if (/ip67/.test(n)&&/ik10/.test(n)){ prot='IP67 / IK10'; protScore=4; }
-  else if (/ip67/.test(n))  { prot='IP67'; protScore=3; }
-  else if (/ip66/.test(n))  { prot='IP66'; protScore=2; }
-  else if (/ip65/.test(n))  { prot='IP65'; protScore=1; }
-  specs.prot = {label:'Protección', val:prot, num:protScore};
-
-  // PoE
-  let poe='—', poeScore=0;
-  if (/hi.?poe/.test(n))        { poe='Hi-PoE 60W'; poeScore=3; }
-  else if (/poe\+/.test(n))     { poe='PoE+ 30W';   poeScore=2; }
-  else if (/poe/.test(n))       { poe='PoE 15W';    poeScore=1; }
-  specs.poe = {label:'Alimentación', val:poe, num:poeScore};
-
-  // Visión nocturna
-  let noche='IR estándar', nocheScore=1;
-  if (/full.?color|wizcolor/.test(n)) { noche='Full-Color'; nocheScore=4; }
-  else if (/tioc/.test(n))            { noche='TiOC (luz+sirena)'; nocheScore=4; }
-  else if (/starlight/.test(n))       { noche='Starlight'; nocheScore=3; }
-  else if (/smart ir/.test(n))        { noche='Smart IR'; nocheScore=2; }
-  specs.noche = {label:'Visión nocturna', val:noche, num:nocheScore};
-
-  // MicroSD
-  specs.sd = {
-    label:'MicroSD',
-    val: /micro.?sd|sd.*slot/.test(n) ? 'Sí (hasta 256GB)' : 'No',
-    num: /micro.?sd|sd.*slot/.test(n) ? 1 : 0
-  };
-
-  // Audio
-  specs.audio = {
-    label:'Micrófono',
-    val: /mic|microfono|audio/.test(n) ? 'Integrado' : 'No',
-    num: /mic|microfono|audio/.test(n) ? 1 : 0
-  };
-
-  // Tipo forma
-  let forma='—';
-  const c = p.codigo.toLowerCase();
-  if (/ptz|sd\d/.test(c))       forma='PTZ Motorizado';
-  else if (/hfw|bullet/.test(c)) forma='Bala (Bullet)';
-  else if (/hdw|hdbw/.test(c))  forma='Domo';
-  else if (/eyw/.test(c))        forma='Eyeball';
-  specs.forma = {label:'Tipo de cámara', val:forma, num:0};
-
-  return specs;
-}
-
-// ── Determinar qué productos son mejores/peores en cada spec ─────
-function cmpRank(specKey) {
-  // Returns array of {id, class} for each product
-  const nums = CMP.items.map(p => {
-    const sp = cmpGetSpecs(p);
-    return { id: p.id, num: sp[specKey]?.num ?? null };
-  }).filter(x => x.num !== null && x.num > 0);
-
-  if (nums.length < 2) return {}; // no ranking if all same or only 1
-
-  const max = Math.max(...nums.map(x=>x.num));
-  const min = Math.min(...nums.map(x=>x.num));
-  if (max === min) return {}; // all equal
-
-  const result = {};
-  nums.forEach(x => {
-    if (x.num === max)      result[x.id] = 'best';
-    else if (x.num === min) result[x.id] = 'low';
-    else                    result[x.id] = 'mid';
-  });
-
-  // Price is inverted: lower = better
-  if (specKey === 'price') {
-    nums.forEach(x => {
-      if (x.num === min)      result[x.id] = 'best';
-      else if (x.num === max) result[x.id] = 'low';
-      else                    result[x.id] = 'mid';
-    });
-  }
-
-  return result;
-}
-
-// ── Generar resumen inteligente ──────────────────────────────────
-function cmpGenerateSummary() {
-  if (CMP.items.length < 2) return '';
-
-  const winners = {};
-  const specKeys = ['res','ir','ia','prot','noche','sd','audio'];
-  const specLabels = {res:'Mayor resolución',ir:'Mayor alcance IR',ia:'Mejor IA',
-    prot:'Mayor protección',noche:'Mejor visión nocturna',sd:'Almacenamiento local',audio:'Audio'};
-
-  specKeys.forEach(key => {
-    const ranks = cmpRank(key);
-    const winnerId = Object.entries(ranks).find(([,v])=>v==='best')?.[0];
-    if (winnerId) {
-      if (!winners[winnerId]) winners[winnerId] = [];
-      winners[winnerId].push(specLabels[key]);
-    }
-  });
-
-  // Precio mejor
-  const pRanks = cmpRank('price');
-  const cheapId = Object.entries(pRanks).find(([,v])=>v==='best')?.[0];
-  if (cheapId) {
-    if (!winners[cheapId]) winners[cheapId] = [];
-    winners[cheapId].push('Mejor precio');
-  }
-
-  return Object.entries(winners).map(([id, wins]) => {
-    const p = CMP.items.find(x => x.id == id);
-    if (!p) return '';
-    const isOverall = wins.length >= 3;
-    return `
-      <div class="cmp-winner-card ${isOverall?'winner':''}">
-        <div class="cmp-winner-title">${isOverall?'🏆 Más recomendado':'✓ Destaca en'}</div>
-        <div class="cmp-winner-val">${p.codigo}</div>
-        <div class="cmp-winner-desc">${wins.join(' · ')}</div>
-      </div>`;
-  }).join('');
-}
+// ── Helpers cmp* (cmpGetSpecs / cmpRank / cmpGenerateSummary) ELIMINADAS (FIX s17c) ──
+// Las 3 helpers formaban una cadena cerrada cuyo único punto de entrada era
+// la `cmpRenderModal` sync borrada en s16a:
+//   cmpGenerateSummary → cmpRank → cmpGetSpecs (única entrada: sync de s16a)
+// Verificado pre-borrado con grep: 0 call sites externos.
+// La `async cmpRenderModal` (la única viva) usa su propio sistema de ranking
+// vía getFieldRanks/numericVal sobre specs extraídas del PDF, no estas helpers.
+// ~150 líneas de código muerto eliminadas. La cadena queda completamente cerrada.
+//
+// Hallazgo nuevo (deuda 🟡 v18): `cmpNumVal` (L~23570) también es huérfana
+// ahora — sin call sites, era helper auxiliar de la cadena borrada. Se deja
+// para s18 por disciplina de alcance (borrar lo documentado, registrar lo nuevo).
 
 // ── Renderizar el modal de comparación ──────────────────────────
 // FIX s16a (sesión 16): cmpRenderModal sync ELIMINADA.
@@ -23754,7 +23595,7 @@ function cmpGenerateSummary() {
 // Por hoisting JS la última declarada (async) sobreescribía a la primera,
 // por lo que la sync NUNCA se ejecutaba en runtime. Verificado: ningún
 // otro código depende de la sync. Las helpers cmpRank/cmpGetSpecs/
-// cmpGenerateSummary quedan huérfanas (deuda 🟡 v17, ~115 líneas).
+// cmpGenerateSummary fueron eliminadas en s17c (cleanup completo).
 function closeCmpModal() {
   const m = document.getElementById('cmpModal');
   if (m) { m.classList.remove('open'); document.body.style.overflow=''; }
@@ -33356,6 +33197,27 @@ function parseFocal(nombre, codigo) {
 
   // 0B) DETECTAR MULTISENSOR (prioridad después de térmica)
   var multi = parseMultiSensor(nombre, codigo);
+
+  // 0C) EXCEPCIONES EXPLÍCITAS POR CÓDIGO (FIX s17d) ─────────────────
+  // Productos cuyo código no encaja en las heurísticas genéricas y que
+  // requerían un mapping manual. Solo agregar acá si:
+  //  (1) el producto está realmente mal cubierto por las reglas 1-6, y
+  //  (2) el blast radius de generalizar la regla genérica supera 1-2
+  //      productos (riesgo de falso positivo).
+  //
+  // SDZW2030UN-SL: cámara Speed Dome PTZ 30X anticorrosiva. El código
+  // empieza con "SD" (Speed Dome Dahua) no "PTZ"; la heurística de
+  // s15b solo cubre "^PTZ". Generalizar a "^SD" introduciría un falso
+  // positivo en SDZW2000TN-SL-0600 (focal fijo 6mm, donde "NEMA 4X"
+  // del nombre lo haría matchear como zoom 4X).
+  if (c === 'SDZW2030UN-SL') {
+    return {
+      min: 4.8, max: 4.8 * 30, type: 'ptz', zoom: 30,
+      variant: 'PTZ', variantDesc: 'PTZ con zoom óptico 30X',
+      source: 'excepción explícita s17d',
+      multi: multi
+    };
+  }
 
   // 1) Detectar VARIANTE por segmento exacto del código
   //    ZS  = motorizada estándar (ajuste remoto desde NVR)
