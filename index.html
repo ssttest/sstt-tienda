@@ -440,6 +440,7 @@ header {
 /* ══════════════════════════════════════════════════════════════
    CATEGORY NAV — barra de subcategorías
    Dahua: fondo blanco, texto gris, indicador azul al activo
+   Slider horizontal continuo con scroll-snap suave + momentum nativo
    ══════════════════════════════════════════════════════════════ */
 nav {
   background: var(--white);
@@ -453,8 +454,21 @@ nav {
   align-items: center;
   height: 44px;
   overflow-x: auto;
+  overflow-y: hidden;
   scrollbar-width: none;
   gap: 0;
+  /* Slider continuo — momentum + snap suave */
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scroll-snap-type: x proximity;
+  scroll-padding-left: 16px;
+  /* Mascarillas de fade en los bordes para indicar scroll horizontal */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
+  /* Anti-bounce vertical */
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: none;
+  touch-action: pan-x;
 }
 .nav-inner::-webkit-scrollbar { display: none }
 .nav-link {
@@ -471,6 +485,10 @@ nav {
   cursor: pointer;
   transition: all .15s;
   white-space: nowrap;
+  /* Cada chip es un punto de snap suave */
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  -webkit-tap-highlight-color: transparent;
 }
 .nav-link:hover { color: var(--black) }
 .nav-link.active {
@@ -5179,20 +5197,89 @@ input[data-validated="1"]::after {
 @media(max-width:768px) {
   /* Topbar completamente oculto */
   .topbar { display:none !important; }
-  /* Header compacto mobile */
-  .header-inner { grid-template-columns: auto 1fr auto; height:52px; padding:0 12px; gap:8px; }
+
+  /* ══ 4 LÍNEAS UNIFICADAS A 40px DE ALTO EN MÓVIL ══════════════════
+     L1 Header · L2 Module-nav · L3 Mob-search · L4 B2B-dualbar
+     Líneas 1,2,3: Liquid Glass blanco translúcido
+     Línea 4: gradiente oscuro sólido (mantiene identidad B2B)
+     ═════════════════════════════════════════════════════════════════ */
+
+  /* L1 — HEADER 40px Liquid Glass */
+  .header-inner {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    grid-template-columns: none !important;
+    height:40px; padding:0 10px; gap:6px;
+  }
+  /* En móvil el grupo de botones derecho es el último child del header-inner */
+  .header-inner > .logo { flex: 0 0 auto; margin-right: auto; }
+  .header-inner > div:last-child { flex: 0 0 auto; margin-left: auto; }
+  header {
+    background: rgba(255,255,255,0.72) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255,255,255,.6);
+    box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 2px 12px rgba(0,0,0,.04);
+  }
+  /* Logo más pequeño */
+  .logo img, header img[alt="Dahua Technology"] { height:22px !important; }
+  .logo-divider, .logo-dist { display:none !important; }
+  .logo { gap:0 !important; }
+  /* Search desktop oculto, mob-search visible */
   .search-wrap { display:none }
   .mob-search { display:block }
-  /* Mantener botones Carro e Ingresar siempre visibles */
+  /* Botones header compactos */
   #loginBtn { display:none !important; }
   #cartToggle { display:flex !important; }
   #userPill { display:flex !important; }
   .hbtn span { display:none; }
-  .hbtn { padding:8px 10px; gap:0; display:flex !important; border-radius:50px !important; }
-  /* Barra de módulos fija en móvil — sticky debajo del header */
-  .module-nav { display:block !important; position:sticky; top:52px; z-index:490; }
+  .hbtn {
+    padding:5px 9px !important; gap:0; display:flex !important;
+    border-radius:50px !important;
+    height:30px;
+    font-size:12px;
+  }
+  .hbtn svg { width:13px !important; height:13px !important; }
+  /* User pill compacto */
+  .user-pill {
+    padding:3px 7px 3px 3px !important; gap:0 !important;
+    height:30px;
+  }
+  .user-pill .user-avatar {
+    width:22px !important; height:22px !important;
+    font-size:11px !important;
+  }
+  .user-pill #userNameShort { display:none !important; }
+  .user-pill svg { width:9px !important; height:9px !important; }
+  /* Theme toggle compacto */
+  #themeToggleBtn {
+    padding:3px 7px !important;
+    height:26px !important;
+    font-size:10px !important;
+  }
+  /* Cart badge compacto */
+  .cart-cnt {
+    min-width:15px; height:15px;
+    font-size:9px;
+    border-radius:8px;
+    padding:0 3px;
+  }
+
+  /* L2 — MODULE-NAV 40px Liquid Glass (ya casi listo, solo refinamos) */
+  .module-nav {
+    display:block !important;
+    position:sticky; top:40px; z-index:490;
+    background: rgba(255,255,255,0.72) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255,255,255,.5);
+    box-shadow: 0 1px 0 rgba(255,255,255,.9) inset;
+  }
   .module-nav-inner { height:40px; gap:0; padding:0 8px; }
-  .mnav-tab { padding:0 10px; font-size:11px; white-space:nowrap; }
+  .mnav-tab { padding:0 12px; font-size:12px; white-space:nowrap; }
+  .mnav-tab svg { width:13px !important; height:13px !important; }
+
   /* Sidebar oculto, layout 1col */
   .main-wrap { grid-template-columns: 1fr }
   .sidebar { display:none }
@@ -5208,9 +5295,6 @@ input[data-validated="1"]::after {
   /* Catálogo */
   .cp-row { grid-template-columns: repeat(2, 1fr); gap:6px }
   .catalog-area { padding:4px 6px }
-  /* Módulo nav */
-  .module-nav-inner { gap:0 }
-  .mnav-tab { padding:0 14px; font-size:12.5px }
   /* Carro drawer — tablet y mobile */
   .cart-drawer { top:0; right:0; bottom:0; width:100% !important; border-radius:0 !important; }
   .calc-grid { grid-template-columns:1fr }
@@ -5387,13 +5471,49 @@ input[data-validated="1"]::after {
   footer      { padding-bottom:62px !important; }
   /* Carro drawer full screen en móvil */
   .cart-drawer { padding-bottom:56px; }
-  /* Buscador sticky — top = altura header móvil */
-  .mob-search { top:42px; }
-  /* Buscador más prominente */
-  .mob-search { padding:8px 14px; }
-  .mob-search .search-input { padding:11px 14px; font-size:15px; }
-  .mob-search .search-btn   { padding:10px 16px; }
-  .mob-search .search-form  { border-radius:12px; }
+  /* L3 — MOB-SEARCH 40px Liquid Glass (ahora sticky justo debajo del module-nav) */
+  .mob-search {
+    top:80px;       /* header 40px + module-nav 40px = 80px */
+    padding:4px 10px;
+    background: rgba(255,255,255,0.72) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255,255,255,.5);
+    box-shadow: 0 1px 0 rgba(255,255,255,.9) inset;
+    height:40px;
+    box-sizing: border-box;
+    display: block;
+  }
+  .mob-search .search-form {
+    border-radius:50px !important;
+    padding:2px 2px 2px 12px !important;
+    height:32px;
+    box-sizing:border-box;
+  }
+  .mob-search .search-input {
+    padding:4px 10px 4px 0 !important;
+    font-size:13px !important;
+    height:28px !important;
+    line-height:28px !important;
+  }
+  .mob-search .search-btn {
+    padding:0 14px !important;
+    height:28px !important;
+    font-size:12px !important;
+    border-radius:50px !important;
+  }
+  .mob-search .search-btn svg { width:12px !important; height:12px !important; }
+
+  /* L4 — B2B-DUALBAR 40px (mantiene gradiente oscuro sólido) */
+  .b2b-dualbar { position: sticky; top: 120px; z-index: 200; }  /* header 40 + nav 40 + search 40 = 120 */
+  .b2b-dualbar-inner { height:40px !important; }
+  .b2b-canal { padding:0 10px !important; gap:6px !important; }
+  .b2b-canal-icon { font-size:14px !important; }
+  .b2b-canal-title { font-size:11.5px !important; }
+  .b2b-canal-sub { display:none; }
+  .b2b-divider { margin:6px 0 !important; }
+  .b2b-profile-badge { display:none; }
+
   /* Nav glass más compacto */
   .mnav-item  { font-size:9px; gap:1px; padding:4px 4px; min-height:44px; }
   .mnav-item svg { width:16px !important; height:16px !important; }
@@ -5405,19 +5525,49 @@ input[data-validated="1"]::after {
   .main-wrap { padding:0 !important; }
   .catalog-area { border-radius:0 !important; }
   .catalog-area .wrap { padding:0 !important; }
-  /* Logo más pequeño en móvil para no solaparse con el buscador */
-  .logo img, header img[alt="Dahua Technology"] { height:28px !important; }
-  .logo-divider, .logo-dist { display:none !important; }
-  .logo { gap:0 !important; }
+
+  /* Breadcrumb redundante en móvil — el page-title + resCount ya muestra
+     "Todos los productos · 1079 productos encontrados". */
+  .bcrumb-bar { display: none !important; }
+
+  /* Como el breadcrumb desapareció, dale al rbar (page-title + resCount)
+     un poco de padding superior y lateral para que no quede pegado al borde. */
+  .rbar { padding: 10px 12px 0 !important; margin-bottom: 10px !important; }
+  .rbar-l strong { font-size: 15px !important; }
+  .rbar-l { font-size: 12px !important; }
+
+  /* Footer trust bar redundante en móvil — los teléfonos, dirección, email
+     y horarios aparecen en el bloque "Brand" del footer un poco más abajo.
+     En desktop se mantiene como elemento visual de confianza. */
+  .footer-trust-bar { display: none !important; }
 }
 
-/* Fold cerrado / móvil muy pequeño */
+/* Fold cerrado / móvil muy pequeño — bajamos un pelo más para ganar espacio */
 @media (max-width: 400px) {
   .mobile-nav { height:44px; }
   .mnav-item  { font-size:8.5px; min-height:40px; }
   body        { padding-bottom:48px; }
-  .header-inner { height:36px; padding:0 10px; }
-  .mob-search { top:36px; padding:6px 10px; }
+  /* Header / nav / search bajan a 36px */
+  .header-inner { height:36px !important; padding:0 8px !important; }
+  .module-nav { top:36px !important; }
+  .module-nav-inner { height:36px !important; }
+  .mnav-tab { font-size:11.5px !important; }
+  .mob-search { top:72px !important; height:36px !important; padding:3px 8px !important; }
+  .mob-search .search-form { height:30px !important; }
+  .mob-search .search-input { height:26px !important; line-height:26px !important; font-size:12.5px !important; }
+  .mob-search .search-btn { height:26px !important; padding:0 12px !important; }
+  .b2b-dualbar { top:108px !important; }   /* 36+36+36 */
+  .b2b-dualbar-inner { height:36px !important; }
+  .b2b-canal-title { font-size:11px !important; }
+  .b2b-canal { padding:0 8px !important; }
+  /* Botones header aún más compactos */
+  .hbtn { padding:4px 7px !important; height:26px !important; }
+  .hbtn svg { width:12px !important; height:12px !important; }
+  .user-pill { height:26px !important; padding:2px 6px 2px 2px !important; }
+  .user-pill .user-avatar { width:20px !important; height:20px !important; font-size:10px !important; }
+  #themeToggleBtn { height:22px !important; padding:2px 6px !important; font-size:9px !important; }
+  /* Logo todavía más chico */
+  .logo img, header img[alt="Dahua Technology"] { height:20px !important; }
 }
 
 
@@ -6756,11 +6906,13 @@ body.cart-open #proyectoListadoBtn {
   .b2b-profile-badge { display: none; }
 }
 
+/* NOTA: las reglas móviles principales de .b2b-dualbar viven en el bloque
+   @media (max-width: 768px) consolidado al inicio del archivo (L~5481).
+   Aquí solo dejamos refinamientos que NO toquen 'top' ni 'height' para no
+   romper el stack vertical de las 4 líneas (header / module-nav / mob-search / b2b). */
 @media (max-width: 480px) {
-  .b2b-dualbar { position: sticky; top: 0; z-index: 200; }
   .b2b-canal-sub { display: none; }
-  .b2b-canal { padding: 0 10px; gap: 6px; }
-  .b2b-canal-title { font-size: 12px; }
+  .b2b-canal-title { font-size: 11.5px; }
   .b2b-profile-badge { display: none; }
   /* Footer trust bar */
   .footer-trust-item .ft-sub { display: none; }
@@ -17685,46 +17837,6 @@ if (window.pdfjsLib) {
     </div>
   </div>
 
-  <!-- QUICK WIN: el cliente describe y el sistema sugiere -->
-  <div class="fov-quickwin-wrap">
-    <button class="fov-quickwin-btn" onclick="fovOpenQuickWin()">
-      <span class="fov-qw-icon">⚡</span>
-      <div class="fov-qw-text">
-        <div class="fov-qw-title">¿No sabes qué cámara comprar?</div>
-        <div class="fov-qw-sub">Responde 4 preguntas y te recomendamos modelos exactos del catálogo</div>
-      </div>
-      <span class="fov-qw-arrow">→</span>
-    </button>
-  </div>
-
-  <!-- Modal Quick Win -->
-  <div id="fovQuickWinModal" class="fov-pdf-modal-overlay" style="display:none" onclick="if(event.target===this)fovCloseQuickWin()">
-    <div class="fov-pdf-modal" style="max-width:560px">
-      <div class="fov-pdf-modal-header">
-        <h3>⚡ Asesoría rápida CCTV</h3>
-        <button onclick="fovCloseQuickWin()" class="fov-pdf-modal-close">✕</button>
-      </div>
-      <div class="fov-pdf-modal-body" id="fovQwBody">
-        <!-- Se llena dinámicamente -->
-      </div>
-    </div>
-  </div>
-
-  <!-- TOGGLE CLIENTE vs INSTALADOR -->
-  <div class="fov-mode-toggle-wrap" style="position:relative">
-      <button class="fov-info-icon-sm" onclick="event.stopPropagation();fovShowTooltip('clientmode', this)" type="button" style="position:absolute;right:0;top:50%;transform:translateY(-50%)">&#8505;</button>
-    <div class="fov-mode-toggle">
-      <button class="fov-mode-btn on" id="fovModeInstaller" onclick="fovSetUserMode('installer')">
-        🔧 <b>Modo instalador</b>
-        <span class="fov-mode-sub">Datos técnicos completos</span>
-      </button>
-      <button class="fov-mode-btn" id="fovModeClient" onclick="fovSetUserMode('client')">
-        👤 <b>Modo cliente</b>
-        <span class="fov-mode-sub">Lenguaje simple, conclusiones</span>
-      </button>
-    </div>
-  </div>
-
   <!-- ESCENARIOS PREDEFINIDOS -->
   <div class="fov-scenarios">
     <div class="fov-scenarios-title">🎯 Aplicar escenario típico <button class="fov-info-icon-sm" onclick="event.stopPropagation();fovShowTooltip('scenario', this)" type="button">&#8505;</button></div>
@@ -18326,7 +18438,7 @@ if (window.pdfjsLib) {
 <footer style="background:#fff;border-top:2px solid #f0f0f0;color:#333;padding:0;margin-top:0">
 
   <!-- ── Barra superior: métricas de confianza ── -->
-  <div style="background:#f8f9fa;border-bottom:1px solid #eee;padding:16px 0">
+  <div class="footer-trust-bar" style="background:#f8f9fa;border-bottom:1px solid #eee;padding:16px 0">
     <div class="wrap footer-grid-trust" style="max-width:1200px;gap:0">
       <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#E8001C" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
@@ -20499,6 +20611,46 @@ document.querySelectorAll('.nav-link[data-cat]').forEach(el => {
     setCat(el.dataset.cat);
   });
 });
+
+// ── PERSISTENCIA DEL SCROLL DE CATEGORÍAS (slider continuo) ──────────
+// Guarda el scroll horizontal del nav de categorías para que cuando
+// el usuario baje a ver productos y vuelva arriba, la posición se mantenga.
+(function setupNavScrollPersistence(){
+  var nav = document.getElementById('navInner');
+  if (!nav) return;
+  var KEY = 'sstt_nav_scroll_x';
+
+  // Restaurar posición guardada (con un pequeño delay para que el layout esté listo)
+  try {
+    var saved = sessionStorage.getItem(KEY);
+    if (saved !== null) {
+      requestAnimationFrame(function(){ nav.scrollLeft = parseInt(saved, 10) || 0; });
+    }
+  } catch(e){}
+
+  // Guardar mientras el usuario scrollea (debounced ~80ms para no abusar)
+  var t = null;
+  nav.addEventListener('scroll', function(){
+    if (t) clearTimeout(t);
+    t = setTimeout(function(){
+      try { sessionStorage.setItem(KEY, String(nav.scrollLeft)); } catch(e){}
+    }, 80);
+  }, { passive: true });
+
+  // Al hacer click en una categoría, centrar el chip activo dentro del viewport
+  // del slider (no de la página) — esto NO mueve el scroll vertical de productos.
+  nav.addEventListener('click', function(ev){
+    var link = ev.target.closest('.nav-link');
+    if (!link) return;
+    // Esperar a que setCat aplique la clase .active
+    setTimeout(function(){
+      var rect = link.getBoundingClientRect();
+      var navRect = nav.getBoundingClientRect();
+      var offset = rect.left + rect.width/2 - (navRect.left + navRect.width/2);
+      nav.scrollBy({ left: offset, behavior: 'smooth' });
+    }, 30);
+  });
+})();
 
 // ── CARRO ────────────────────────────────────────────────────
 function saveCart() {
@@ -38853,17 +39005,6 @@ var FOV_TOOLTIPS = {
           '• ESC o ✕ para salir<br><br>' +
           '<b>Tip:</b> antes de la reunión activa modo final con los modelos que vas a defender. La presentación solo muestra esos.'
   },
-  clientmode: {
-    title: 'Modo cliente vs Modo instalador',
-    body: '<b>Mismo sistema, dos lenguajes</b><br><br>' +
-          '<b>🔧 Modo instalador (default):</b><br>' +
-          'Muestra TODO: pixel pitch, F-number, lux, fórmulas DRI Johnson, ley física 4×, footer técnico, sensor en pulgadas, focal en mm, métricas avanzadas.<br><br>' +
-          'Para ti, distribuidor o instalador con conocimiento técnico que toma decisiones fundamentadas.<br><br>' +
-          '<b>👤 Modo cliente:</b><br>' +
-          'Oculta tecnicismos profundos. Mantiene resultados, conclusiones y recomendaciones en lenguaje simple. El cliente final ve <i>"esta cámara identifica rostros hasta 12m"</i> en vez de <i>"PPM=283 a 12m con sensor 1/2.7\""</i>.<br><br>' +
-          'Para mostrar el sistema en una reunión sin abrumar al cliente.<br><br>' +
-          '<b>Tip:</b> el toggle se persiste — si te quedas en modo cliente, queda activo aunque cierres el navegador.'
-  },
   trackpanel: {
     title: 'Lista de modelos comparados',
     body: '<b>Tu carrito de "ofertas técnicas"</b><br><br>' +
@@ -39843,15 +39984,26 @@ var FOVQW = {
   answers: {}
 };
 
+// QUICKWIN ELIMINADO (sesión 10) — bot\u00f3n y modal del simulador FOV fueron retirados
+// porque eran redundantes con la secci\u00f3n "Para el cliente final" + Wizard global.
+// La funci\u00f3n se conserva como redirector seguro: el bot\u00f3n "Ver recomendaciones"
+// del Auditor visual (fovAuditOpenQuickWin) sigue llamando aqu\u00ed, pero ahora abre
+// el Wizard oficial en lugar de un modal hu\u00e9rfano.
 window.fovOpenQuickWin = function() {
-  FOVQW.step = 0;
-  FOVQW.answers = {};
-  document.getElementById('fovQuickWinModal').style.display = 'flex';
-  fovQwRenderStep();
+  if (typeof window.wizOpen === 'function') {
+    window.wizOpen();
+    return;
+  }
+  // Fallback: si por algún motivo wizOpen no existe, no romper la app.
+  if (typeof showToast === 'function') {
+    showToast('El asistente no está disponible en este momento');
+  }
 };
 
 window.fovCloseQuickWin = function() {
-  document.getElementById('fovQuickWinModal').style.display = 'none';
+  // Modal eliminado — función no-op preservada por compatibilidad con código viejo.
+  var m = document.getElementById('fovQuickWinModal');
+  if (m) m.style.display = 'none';
 };
 
 function fovQwRenderStep() {
@@ -40070,34 +40222,37 @@ window.fovQwAddCart = function(cod) {
 };
 
 // ════════════════════════════════════════════════════════════
-// MODO CLIENTE vs MODO INSTALADOR
+// MODO USUARIO — TOGGLE UI ELIMINADO (sesión 10)
+// El Mesón Técnico es para integradores → modo instalador permanente.
+// La función queda definida pero solo opera en modo 'installer' y
+// es null-safe para que no rompa si los botones del toggle ya no existen.
 // ════════════════════════════════════════════════════════════
-window.fovUserMode = 'installer'; // por defecto
+window.fovUserMode = 'installer';
 
 window.fovSetUserMode = function(mode) {
-  window.fovUserMode = mode;
-  document.getElementById('fovModeInstaller').classList.toggle('on', mode === 'installer');
-  document.getElementById('fovModeClient').classList.toggle('on', mode === 'client');
-  // Aplicar/quitar clase global al body de fov
+  // Forzar siempre installer, ignorar el parámetro recibido
+  window.fovUserMode = 'installer';
+  // Botones del toggle ya no existen — null-safe:
+  var bI = document.getElementById('fovModeInstaller');
+  var bC = document.getElementById('fovModeClient');
+  if (bI) bI.classList.add('on');
+  if (bC) bC.classList.remove('on');
+  // Asegurar que el body de fov no tenga clase de cliente residual:
   var fovWrap = document.querySelector('.fov-wrap');
   if (fovWrap) {
-    fovWrap.classList.toggle('fov-client-mode', mode === 'client');
-    fovWrap.classList.toggle('fov-installer-mode', mode === 'installer');
+    fovWrap.classList.remove('fov-client-mode');
+    fovWrap.classList.add('fov-installer-mode');
   }
-  // Persistir
-  try { localStorage.setItem('sstt_fov_user_mode', mode); } catch(e){}
-  showToast && showToast(mode === 'client' ? '👤 Modo cliente activado · lenguaje simple' : '🔧 Modo instalador · datos completos');
-  fovRender();
+  // Limpiar la persistencia previa por si quedó "client" guardado en sesiones viejas
+  try { localStorage.removeItem('sstt_fov_user_mode'); } catch(e){}
+  if (typeof fovRender === 'function') fovRender();
 };
 
-// Al cargar, restaurar modo guardado
+// Auto-bootstrap: aplicar modo instalador siempre al cargar (limpia cualquier residuo
+// de la versión anterior del simulador donde había toggle).
 (function(){
-  try {
-    var m = localStorage.getItem('sstt_fov_user_mode');
-    if (m === 'client') {
-      setTimeout(function(){ fovSetUserMode('client'); }, 800);
-    }
-  } catch(e){}
+  try { localStorage.removeItem('sstt_fov_user_mode'); } catch(e){}
+  // No es necesario llamar fovSetUserMode aquí — el default ya es installer.
 })();
 
 // ════════════════════════════════════════════════════════════
