@@ -29670,7 +29670,8 @@ function aiMicStop() {
   var micBtn = document.getElementById('aiMicBtn');
   if (micBtn) { micBtn.style.background = '#1a1a1a'; micBtn.style.borderColor = 'rgba(232,0,28,.3)'; }
   var fab = document.getElementById('aiFab');
-  if (fab) { fab.style.borderColor = '#e8001c'; fab.style.boxShadow = '0 4px 20px rgba(232,0,28,.35),0 2px 8px rgba(0,0,0,.3)'; }
+  // Restaurar halo azul cian del orb (matching style.cssText original)
+  if (fab) { fab.style.borderColor = ''; fab.style.boxShadow = '0 0 0 1px rgba(0,217,255,0.35) inset,0 0 14px rgba(0,93,255,0.55),0 0 28px rgba(0,217,255,0.35),0 8px 24px rgba(0,0,0,0.45),0 2px 8px rgba(0,0,0,0.35)'; }
 }
 
 // Pre-inicializar SR al cargar (solicita permiso una sola vez)
@@ -29773,7 +29774,7 @@ document.addEventListener('click', function(e) {
     fab.id = 'aiFab';
     fab.title = 'annastasIA';
     fab.onclick = function(){ aiToggle(); };
-    // ── ORB — Liquid Glass camuflaje ambiental ──
+    // ── ORB — Globo Digital Futurista (network visualization) ──
     fab.style.cssText = [
       'position:fixed',
       'bottom:'+fabBot+'px',
@@ -29782,58 +29783,139 @@ document.addEventListener('click', function(e) {
       'width:'+fabSize+'px',
       'height:'+fabSize+'px',
       'border-radius:50%',
-      'background:rgba(255,255,255,0.08)',
+      'background:radial-gradient(circle at 50% 50%,#061A55 0%,#020722 75%)',
       'border:none',
-      'backdrop-filter:blur(32px) saturate(280%) brightness(1.15) contrast(0.95)',
-      '-webkit-backdrop-filter:blur(32px) saturate(280%) brightness(1.15) contrast(0.95)',
-      'box-shadow:0 0 0 1px rgba(255,255,255,0.45) inset,0 0 0 1.5px rgba(255,255,255,0.15),0 8px 32px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.08)',
+      'box-shadow:0 0 0 1px rgba(0,217,255,0.35) inset,0 0 14px rgba(0,93,255,0.55),0 0 28px rgba(0,217,255,0.35),0 8px 24px rgba(0,0,0,0.45),0 2px 8px rgba(0,0,0,0.35)',
       'cursor:pointer',
       'display:flex',
       'align-items:center',
       'justify-content:center',
-      'transition:transform .3s cubic-bezier(.32,.72,0,1),box-shadow .3s,backdrop-filter .3s',
+      'transition:transform .3s cubic-bezier(.32,.72,0,1),box-shadow .3s',
       'overflow:hidden',
     ].join(';');
 
-    // Interior del orb: capas de lensing + estrella
+    // Interior del orb: fondo dotted-map + globo cian + órbitas + halo + estrella(persiste para toggle voz)
+    // Nota: fabSize varía mobile/desktop (44/50). El SVG usa viewBox 100x100 y se escala al 100%.
     fab.innerHTML =
-      // Capa 1: reflejo especular superior (lente)
-      '<div style="position:absolute;inset:0;border-radius:50%;background:linear-gradient(135deg,rgba(255,255,255,0.55) 0%,rgba(255,255,255,0.08) 40%,transparent 65%);pointer-events:none;z-index:3"></div>' +
-      // Capa 2: brillo inferior difuso
-      '<div style="position:absolute;bottom:0;left:10%;right:10%;height:35%;border-radius:0 0 50% 50%;background:radial-gradient(ellipse at center,rgba(255,255,255,0.25) 0%,transparent 70%);pointer-events:none;z-index:3"></div>' +
-      // Capa 3: anillo iris exterior
-      '<div style="position:absolute;inset:-1px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.35);pointer-events:none;z-index:4"></div>' +
-      // Estrella central
-      '<div id="aiFabInner" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:relative;z-index:2">' +
-        '<div id="aiFabStar" style="transition:opacity .3s,transform .3s">' +
-          '<svg width="18" height="18" viewBox="0 0 40 40" fill="none" style="animation:ssttSpin 12s linear infinite;filter:drop-shadow(0 0 6px rgba(255,255,255,0.8))">' +
-            '<defs><linearGradient id="gORB" x1="0" y1="0" x2="1" y2="1">' +
-              '<stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>' +
-              '<stop offset="50%" stop-color="rgba(255,220,220,0.9)"/>' +
-              '<stop offset="100%" stop-color="rgba(232,0,28,0.85)"/>' +
-            '</linearGradient></defs>' +
-            '<path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gORB)"/>' +
-            '<path d="M20 14C20 14 21.5 19 26 19C26 19 21.5 20 20 25C20 25 18.5 20 14 19C14 19 18.5 19 20 14Z" fill="rgba(255,255,255,0.7)"/>' +
-          '</svg>' +
-        '</div>' +
-        '<div id="aiFabSono" style="display:none;align-items:center;justify-content:center;height:100%">' +
+      // Capa SVG: dotted-map background + globo + órbitas
+      '<svg width="100%" height="100%" viewBox="0 0 100 100" style="position:absolute;inset:0;pointer-events:none;z-index:1" xmlns="http://www.w3.org/2000/svg">' +
+        '<defs>' +
+          // Patrón de puntos para el "mapa mundial" del fondo
+          '<pattern id="orbDots" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">' +
+            '<circle cx="2" cy="2" r="0.45" fill="#005DFF" opacity="0.35"/>' +
+          '</pattern>' +
+          // Gradiente esférico del globo (cian → azul oscuro)
+          '<radialGradient id="orbSphere" cx="38%" cy="35%" r="65%">' +
+            '<stop offset="0%" stop-color="#BCEEFF" stop-opacity="0.95"/>' +
+            '<stop offset="35%" stop-color="#00D9FF" stop-opacity="0.9"/>' +
+            '<stop offset="70%" stop-color="#005DFF" stop-opacity="0.85"/>' +
+            '<stop offset="100%" stop-color="#020E3A" stop-opacity="0.95"/>' +
+          '</radialGradient>' +
+          // Halo azul eléctrico exterior
+          '<radialGradient id="orbHalo" cx="50%" cy="50%" r="50%">' +
+            '<stop offset="55%" stop-color="rgba(0,217,255,0)"/>' +
+            '<stop offset="78%" stop-color="rgba(0,217,255,0.45)"/>' +
+            '<stop offset="100%" stop-color="rgba(0,93,255,0)"/>' +
+          '</radialGradient>' +
+          // Gradientes para las trazas orbitales
+          '<linearGradient id="orbTrail1" x1="0" y1="0" x2="1" y2="0">' +
+            '<stop offset="0%" stop-color="rgba(255,255,255,0)"/>' +
+            '<stop offset="50%" stop-color="rgba(255,255,255,0.95)"/>' +
+            '<stop offset="100%" stop-color="rgba(0,217,255,0)"/>' +
+          '</linearGradient>' +
+          '<linearGradient id="orbTrail2" x1="0" y1="0" x2="1" y2="0">' +
+            '<stop offset="0%" stop-color="rgba(0,217,255,0)"/>' +
+            '<stop offset="50%" stop-color="rgba(0,217,255,0.95)"/>' +
+            '<stop offset="100%" stop-color="rgba(0,93,255,0)"/>' +
+          '</linearGradient>' +
+          '<linearGradient id="orbTrail3" x1="0" y1="0" x2="1" y2="0">' +
+            '<stop offset="0%" stop-color="rgba(255,154,74,0)"/>' +
+            '<stop offset="50%" stop-color="rgba(255,211,160,0.9)"/>' +
+            '<stop offset="100%" stop-color="rgba(255,154,74,0)"/>' +
+          '</linearGradient>' +
+          // Filtro glow/bloom
+          '<filter id="orbGlow" x="-50%" y="-50%" width="200%" height="200%">' +
+            '<feGaussianBlur stdDeviation="0.9" result="b"/>' +
+            '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+          '</filter>' +
+          '<filter id="orbBloom" x="-50%" y="-50%" width="200%" height="200%">' +
+            '<feGaussianBlur stdDeviation="1.6"/>' +
+          '</filter>' +
+        '</defs>' +
+        // Fondo: mapa de puntos
+        '<rect width="100" height="100" fill="url(#orbDots)" opacity="0.55">' +
+          '<animate attributeName="opacity" values="0.45;0.65;0.45" dur="3.5s" repeatCount="indefinite"/>' +
+        '</rect>' +
+        // Halo difuso
+        '<circle cx="50" cy="50" r="42" fill="url(#orbHalo)">' +
+          '<animate attributeName="r" values="40;44;40" dur="3s" repeatCount="indefinite"/>' +
+          '<animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>' +
+        '</circle>' +
+        // Globo (esfera central) con leve rotación de "continentes" interna
+        '<g filter="url(#orbGlow)">' +
+          '<circle cx="50" cy="50" r="20" fill="url(#orbSphere)"/>' +
+          // Meridianos sugeridos
+          '<ellipse cx="50" cy="50" rx="20" ry="7" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="0.4"/>' +
+          '<ellipse cx="50" cy="50" rx="20" ry="14" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="0.35"/>' +
+          // Continente sugerido (rotando)
+          '<g opacity="0.55">' +
+            '<animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="22s" repeatCount="indefinite"/>' +
+            '<path d="M44 46 q3 -2 6 0 t6 1 q-2 3 -5 4 q-4 0 -7 -2 z" fill="rgba(255,255,255,0.6)"/>' +
+            '<path d="M48 56 q2 -1 4 0 t3 2 q-3 1 -5 1 q-2 -1 -2 -3 z" fill="rgba(188,238,255,0.7)"/>' +
+          '</g>' +
+          // Brillo especular superior izquierdo (glossy)
+          '<ellipse cx="44" cy="42" rx="6" ry="3" fill="rgba(255,255,255,0.45)" transform="rotate(-30 44 42)"/>' +
+        '</g>' +
+        // Órbitas (5 trazos rotando a distintas velocidades/ejes)
+        // Órbita 1: horizontal blanca rápida
+        '<g style="transform-origin:50px 50px">' +
+          '<animateTransform attributeName="transform" type="rotate" from="0 50 50" to="360 50 50" dur="3.2s" repeatCount="indefinite"/>' +
+          '<ellipse cx="50" cy="50" rx="32" ry="9" fill="none" stroke="url(#orbTrail1)" stroke-width="1" stroke-linecap="round" filter="url(#orbBloom)"/>' +
+          '<circle cx="82" cy="50" r="1.4" fill="#fff" filter="url(#orbGlow)"/>' +
+        '</g>' +
+        // Órbita 2: inclinada 35° cian
+        '<g style="transform-origin:50px 50px">' +
+          '<animateTransform attributeName="transform" type="rotate" from="35 50 50" to="395 50 50" dur="4.5s" repeatCount="indefinite"/>' +
+          '<ellipse cx="50" cy="50" rx="34" ry="13" fill="none" stroke="url(#orbTrail2)" stroke-width="0.9" stroke-linecap="round"/>' +
+          '<circle cx="84" cy="50" r="1.2" fill="#00D9FF" filter="url(#orbGlow)"/>' +
+        '</g>' +
+        // Órbita 3: inclinada -45° azul claro lenta
+        '<g style="transform-origin:50px 50px">' +
+          '<animateTransform attributeName="transform" type="rotate" from="-45 50 50" to="315 50 50" dur="6s" repeatCount="indefinite"/>' +
+          '<ellipse cx="50" cy="50" rx="30" ry="16" fill="none" stroke="rgba(0,217,255,0.55)" stroke-width="0.6" stroke-linecap="round"/>' +
+        '</g>' +
+        // Órbita 4: vertical naranja cálido (acento)
+        '<g style="transform-origin:50px 50px">' +
+          '<animateTransform attributeName="transform" type="rotate" from="80 50 50" to="440 50 50" dur="5.2s" repeatCount="indefinite"/>' +
+          '<ellipse cx="50" cy="50" rx="11" ry="33" fill="none" stroke="url(#orbTrail3)" stroke-width="0.7" stroke-linecap="round" filter="url(#orbBloom)"/>' +
+          '<circle cx="50" cy="17" r="1.1" fill="#FFD3A0" filter="url(#orbGlow)"/>' +
+        '</g>' +
+        // Órbita 5: muy inclinada blanca difusa
+        '<g style="transform-origin:50px 50px">' +
+          '<animateTransform attributeName="transform" type="rotate" from="115 50 50" to="475 50 50" dur="7.5s" repeatCount="indefinite"/>' +
+          '<ellipse cx="50" cy="50" rx="36" ry="6" fill="none" stroke="rgba(255,255,255,0.35)" stroke-width="0.5"/>' +
+        '</g>' +
+        // Anillo exterior estable (borde tipo iris)
+        '<circle cx="50" cy="50" r="48" fill="none" stroke="rgba(0,217,255,0.45)" stroke-width="0.7"/>' +
+      '</svg>' +
+      // Contenedor interior — mantiene IDs aiFabInner / aiFabStar / aiFabSono para no romper toggle de voz
+      // El "aiFabStar" pasa a ser invisible por defecto (el orb ya es el contenido visual). Sólo se muestra el sonograma rojo cuando escucha.
+      '<div id="aiFabInner" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:relative;z-index:2;pointer-events:none">' +
+        '<div id="aiFabStar" style="transition:opacity .3s,transform .3s;opacity:0;width:0;height:0"></div>' +
+        '<div id="aiFabSono" style="display:none;align-items:center;justify-content:center;height:100%;background:rgba(2,7,34,0.55);backdrop-filter:blur(2px);width:100%;border-radius:50%">' +
           '<div class="sstt-bar"></div><div class="sstt-bar"></div><div class="sstt-bar"></div>' +
           '<div class="sstt-bar"></div><div class="sstt-bar"></div><div class="sstt-bar"></div>' +
           '<div class="sstt-bar"></div>' +
         '</div>' +
       '</div>';
 
-    // ── Efecto hover: el orb respira y amplía el lensing ──
+    // ── Efecto hover: el orb intensifica halo y crece ──
     fab.addEventListener('mouseenter', function() {
-      this.style.backdropFilter = 'blur(48px) saturate(320%) brightness(1.2) contrast(0.92)';
-      this.style.webkitBackdropFilter = 'blur(48px) saturate(320%) brightness(1.2) contrast(0.92)';
-      this.style.boxShadow = '0 0 0 1.5px rgba(255,255,255,0.6) inset,0 0 0 3px rgba(255,255,255,0.12),0 16px 48px rgba(0,0,0,0.16),0 4px 16px rgba(0,0,0,0.10)';
+      this.style.boxShadow = '0 0 0 1.5px rgba(0,217,255,0.7) inset,0 0 22px rgba(0,93,255,0.85),0 0 44px rgba(0,217,255,0.6),0 12px 36px rgba(0,0,0,0.5),0 4px 12px rgba(0,0,0,0.4)';
       this.style.transform = 'scale(1.12)';
     });
     fab.addEventListener('mouseleave', function() {
-      this.style.backdropFilter = 'blur(32px) saturate(280%) brightness(1.15) contrast(0.95)';
-      this.style.webkitBackdropFilter = 'blur(32px) saturate(280%) brightness(1.15) contrast(0.95)';
-      this.style.boxShadow = '0 0 0 1px rgba(255,255,255,0.45) inset,0 0 0 1.5px rgba(255,255,255,0.15),0 8px 32px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.08)';
+      this.style.boxShadow = '0 0 0 1px rgba(0,217,255,0.35) inset,0 0 14px rgba(0,93,255,0.55),0 0 28px rgba(0,217,255,0.35),0 8px 24px rgba(0,0,0,0.45),0 2px 8px rgba(0,0,0,0.35)';
       this.style.transform = 'scale(1)';
     });
 
