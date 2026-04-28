@@ -18635,7 +18635,7 @@ if (window.pdfjsLib) {
   </div>
 
   <!-- ── Botón flotante WhatsApp ── -->
-  <a href="https://wa.me/56222042119?text=Hola%20SSTT%2C%20necesito%20ayuda%20con%20una%20compra"
+  <a href="https://wa.me/56930502234?text=Hola%20SSTT%2C%20necesito%20ayuda%20con%20una%20compra"
     target="_blank" rel="noopener"
     id="waBtn"
     style="position:fixed;bottom:14px;left:14px;z-index:999;
@@ -18663,8 +18663,8 @@ if (window.pdfjsLib) {
       </svg>
     </div>
     <div class="wap-head-info">
-      <div class="wap-head-name">annastasIA · SSTT</div>
-      <div class="wap-head-status"><span class="wap-head-dot"></span> En línea · Asistente IA</div>
+      <div class="wap-head-name">Chat de ventas SSTT</div>
+      <div class="wap-head-status"><span class="wap-head-dot"></span> En línea · Asesor comercial</div>
     </div>
     <button class="wap-close" onclick="waPanelClose()">
       <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -18697,7 +18697,7 @@ if (window.pdfjsLib) {
 
   <div class="wap-footer">
     <svg width="10" height="10" fill="#25D366" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
-    Continuar en <a id="wapWaLink" href="https://wa.me/56222042119" target="_blank">WhatsApp real →</a>
+    Continuar en <a id="wapWaLink" href="https://wa.me/56930502234" target="_blank">WhatsApp real →</a>
   </div>
 </div>
 
@@ -18711,6 +18711,362 @@ function _closeAllModals() {
   document.body.style.overflow = '';
 }
 
+
+// ════════════════════════════════════════════════════════════════
+// ── SSTT_KB · KNOWLEDGE BASE COMPARTIDA ─────────────────────────
+// Única fuente de verdad para los 4 asistentes IA + el validador
+// algorítmico del carrito. Cualquier actualización a reglas
+// técnicas, vocabulario o heurísticas DEBE hacerse aquí.
+//
+// Consumidores:
+//   - Asesor SSTT (FAB orb)             → buildAISysPrompt()
+//   - Chat de ventas SSTT (WhatsApp)    → waThink()
+//   - Asistente de descubrimiento       → wizBuildProposal()
+//   - Analizador de cotización          → acBuildPrompt()
+//   - Validador técnico del carrito     → compatBuscarGrabadoresAlternativos()
+// ════════════════════════════════════════════════════════════════
+window.SSTT_KB = (function(){
+
+  // ── IDENTIDAD COMÚN (la usan los 4 asistentes IA) ─────────────
+  var identidad =
+    'SSTT SpA es distribuidor oficial autorizado Dahua Technology en Chile (sstt.cl). ' +
+    'Ofrece 3 años de garantía en equipos Dahua, soporte técnico local en Chile, ' +
+    'despacho a todo el país y stock real en Santiago. Línea de productos: ' +
+    'cámaras IP/HDCVI/PTZ, grabadores NVR/XVR, switches PoE, alarmas Wisualarm, ' +
+    'control de acceso, intercomunicación, accesorios y discos certificados.';
+
+  // ── TECNOLOGÍAS DAHUA (vocabulario unificado, los 9 términos) ──
+  var tecnologias = {
+    'WizSense':    'IA básica · SMD+ distingue humanos/vehículos · IVS básico (cruce línea, intrusión, merodeo)',
+    'WizMind':     'IA avanzada · reconocimiento facial, conteo personas, LPR avanzado, atributos de vehículo',
+    'WizColor':    'Imagen color 24/7 con LED blanco cálido (también llamado Full-color)',
+    'TiOC':        'Three-in-One Camera · disuasión activa con luz+sirena+IA al detectar intrusión',
+    'AcuPick':     'Búsqueda IA en grabaciones por características (ropa, color, tipo vehículo)',
+    'Xinghan':     'IA gran escala · plataforma analítica para proyectos enterprise',
+    'Starlight':   'Sensibilidad 0.005 lux · color en casi oscuridad sin requerir LED',
+    'Smart IR':    'Ajuste automático de potencia IR para evitar sobreexposición (anti-WhiteWash)',
+    'HDCVI':       'Coaxial hasta 500m · multiformato (AHD/TVI/CVBS) · hasta 8MP/4K · NO requiere red'
+  };
+
+  // ── ÓPTICA Y LENTES ───────────────────────────────────────────
+  var optica = {
+    formula_focal: 'F (mm) = (D × sensor_mm) / objeto_m   donde D = distancia al objeto en metros',
+    sensores_dahua: ['1/1.8"', '1/2"', '1/2.7"', '1/2.8"', '1/3"', '1/4"'],
+    sensor_nota: 'Mayor sensor = mejor desempeño en baja luz',
+    lentes_fijos_grados: {
+      '2.8mm': '~107°', '3.6mm': '~90°', '4mm': '~80°', '6mm': '~52°', '8mm': '~36°'
+    },
+    varifocales_motorizados: ['2.7-13.5mm', '2.8-12mm', '5.5-24mm']
+  };
+
+  // ── ESTÁNDAR DORI EN 62676-4 ──────────────────────────────────
+  var dori = {
+    norma: 'EN 62676-4',
+    niveles: {
+      D: { px_m: 25,  uso: 'Detección — ¿hay alguien?' },
+      O: { px_m: 62,  uso: 'Observación — ¿qué hace?' },
+      R: { px_m: 125, uso: 'Reconocimiento — ¿lo reconocerías?' },
+      I: { px_m: 250, uso: 'Identificación forense' }
+    },
+    formula_distancia: 'distancia_m = (px_horizontal × focal_mm) / (densidad_px_m × sensor_mm)'
+  };
+
+  // ── ALMACENAMIENTO (fórmula completa parametrizable) ──────────
+  // Bitrates típicos Dahua (Mbps) por resolución y codec
+  var bitrate_table_mbps = {
+    1080P:  { 'H.264': 4,  'H.265': 2, 'H.265+': 1   },  // 2MP
+    '4MP':  { 'H.264': 8,  'H.265': 4, 'H.265+': 1.5 },
+    '5MP':  { 'H.264': 10, 'H.265': 5, 'H.265+': 2   },
+    '4K':   { 'H.264': 16, 'H.265': 8, 'H.265+': 3   }   // 8MP
+  };
+  // Multiplicadores por modo de grabación
+  var modo_mult = {
+    'continuo':   1.0,   // 24/7 grabando
+    'movimiento': 0.4,   // SMD+ activado, ~40% del tiempo hay actividad
+    'evento':     0.15   // sólo grabar al disparar reglas IVS
+  };
+
+  function calcAlmacen(opts){
+    // opts: {cams, dias, resolucionMP, codec, fps, modo, horasActivas}
+    var resKey = (opts.resolucionMP === 2 || opts.resolucionMP === 1) ? '1080P'
+               : (opts.resolucionMP === 4) ? '4MP'
+               : (opts.resolucionMP === 5) ? '5MP'
+               : (opts.resolucionMP === 8) ? '4K'
+               : '4MP';
+    var codec = opts.codec || 'H.265+';
+    var bitrate_mbps = (bitrate_table_mbps[resKey] && bitrate_table_mbps[resKey][codec]) || 1.5;
+    var fps = opts.fps || 25;
+    var fpsMult = fps / 25;
+    var modo = opts.modo || 'continuo';
+    var mMult = modo_mult[modo] || 1.0;
+    var horas = opts.horasActivas || 24;
+    var cams = opts.cams || 1;
+    var dias = opts.dias || 30;
+    // bitrate_kbps = bitrate_mbps * 1024
+    // bytes_por_dia_por_cam = bitrate_kbps * horas * 3600 * fpsMult * mMult / 8 (kB/s a bytes)
+    // TB = bytes / (1024^4) ; pero trabajando en kbps:
+    //   bits_dia = bitrate_kbps * 1024 * 3600 * horas * fpsMult * mMult
+    //   bytes_dia = bits_dia / 8
+    //   TB_dia = bytes_dia / (1024^4)
+    var bitsDiaCam = bitrate_mbps * 1024 * 1024 * 3600 * horas * fpsMult * mMult;
+    var bytesTotal = (bitsDiaCam / 8) * dias * cams;
+    var tb_calculado = bytesTotal / Math.pow(1024, 4);
+    var tb_recomendado = Math.ceil(tb_calculado);
+    return {
+      tb_calculado: Math.round(tb_calculado * 100) / 100,
+      tb_recomendado: tb_recomendado,
+      bitrate_mbps: bitrate_mbps,
+      supuestos: 'res=' + resKey + ', codec=' + codec + ', fps=' + fps + ', modo=' + modo + ', horas=' + horas
+    };
+  }
+
+  // Mapa SkyHawk: tb mínimo → id producto
+  var skyhawk_map = [
+    {tb_min: 1,  id: 578},
+    {tb_min: 2,  id: 579},
+    {tb_min: 3,  id: 580},
+    {tb_min: 4,  id: 581},
+    {tb_min: 6,  id: 582},
+    {tb_min: 8,  id: 583},
+    {tb_min: 10, id: 584}
+  ];
+  function tbToSkyHawkId(tb){
+    for (var i = 0; i < skyhawk_map.length; i++){
+      if (skyhawk_map[i].tb_min >= tb) return skyhawk_map[i];
+    }
+    return skyhawk_map[skyhawk_map.length - 1]; // 10TB tope
+  }
+
+  // ── PoE Y ALIMENTACIÓN ────────────────────────────────────────
+  var poe = {
+    estandares: {
+      '802.3af':   '15.4W · cámaras estándar',
+      '802.3at':   '30W · PoE+ · cámaras con calefactor o IR potente',
+      '802.3bt':   '60-90W · cámaras PTZ y multisensor',
+      'Hi-PoE':    '60W · estándar Dahua para PTZ Hi-PoE'
+    },
+    distancia_estandar_m: 100,
+    distancia_extendida_m: 250,
+    distancia_extendida_nota: 'Modo Extend en switches Dahua PFS · 10Mbps a 250m',
+    cable_recomendado: 'Cat5e mínimo · Cat6 recomendado · cobre puro (no CCA)',
+    formula_caida_tension_hdcvi: 'ΔV = 2 × R(Ω/km) × I(A) × L(m) / 1000   (máx 20% de caída aceptable)'
+  };
+
+  // ── REGLAS TÉCNICAS DURAS (las 6 + esLegacy + REGLA 10 + REGLA 11) ─
+  var reglas = {
+    R1_arquitecturas: {
+      titulo: 'ARQUITECTURAS INCOMPATIBLES',
+      ip:    'Cámaras IP (IPC-*, DH-IP*) → SOLO NVR + switch PoE + cable UTP. NUNCA XVR/DVR. NUNCA fuente 12VDC si hay PoE (es redundante).',
+      hdcvi: 'Cámaras HDCVI/Turbo HD (HAC-*, DH-HAC*) → SOLO XVR/DVR + cable coaxial + fuente 12VDC. NUNCA NVR. NUNCA switch PoE.',
+      mezcla_error: 'IP + DVR/XVR = ERROR GRAVE. HDCVI + NVR = ERROR GRAVE.',
+      redundancia: 'IP + switch PoE + fuente 12VDC = la fuente sobra (PoE alimenta)'
+    },
+    R2_almacenamiento: {
+      titulo: 'ALMACENAMIENTO',
+      formula: 'Usar SSTT_KB.calcAlmacen({cams,dias,resolucionMP,codec,fps,modo,horasActivas})',
+      discos_certificados: ['Seagate SkyHawk', 'Seagate SkyHawk AI', 'WD Purple', 'Seagate Exos'],
+      discos_prohibidos: 'Discos desktop (Barracuda, WD Blue) NO sirven para grabación 24/7'
+    },
+    R3_matriculas_distancia: {
+      titulo: 'MATRÍCULAS Y DISTANCIA',
+      rostros_corta:  'Rostros <5m → cualquier 2MP+ con 2.8mm',
+      rostros_media:  'Rostros 5-10m → 4MP+ con 2.8mm',
+      matriculas:     'Matrículas → REQUIERE lente ≥6mm o cámara LPR/ANPR dedicada',
+      anti_falsedad:  'Cámara estándar 4MP con 2.8mm NO lee matrículas >5m. Si una cotización lo promete, es FALSO.'
+    },
+    R4_switch_poe: {
+      titulo: 'SWITCH PoE',
+      regla: 'Debe tener ≥ puertos PoE que cámaras IP, + 1 uplink no-PoE',
+      sospecha: 'Si la cotización dice "switch" sin especificar PoE para sistema IP → sospechoso'
+    },
+    R5_grabador_canales: {
+      titulo: 'GRABADOR · CANALES',
+      regla: 'NVR/XVR debe tener ≥ canales que cámaras. 8 cámaras → mínimo 8ch (preferible 16ch para crecer)'
+    },
+    R6_contrapropuesta_coherente: {
+      titulo: 'CONTRAPROPUESTA COHERENTE',
+      regla: 'Toda recomendación DEBE cumplir R1-R5. Si no las cumple, es peligrosa.',
+      preferencia: 'Preferir cámaras IP por defecto (mejor calidad, app DMSS remota). Solo recomendar HDCVI si presupuesto muy bajo o instalación legacy.'
+    },
+    R10_camaras_sin_grabador: {
+      titulo: 'CÁMARAS SIN GRABADOR (REGLA 10 v10)',
+      regla: 'Si carrito tiene cámaras sin NVR/XVR, sugerir grabador acorde a cantidad y tipo. Excepción: cámaras WiFi/standalone con MicroSD declaradas.'
+    },
+    R11_legacy_stock: {
+      titulo: 'NUNCA SUGERIR LEGACY NI SIN STOCK (REGLA 11 v10)',
+      regla_11_1: 'compatBuscarGrabadoresAlternativos NUNCA sugiere productos con esLegacy=true ni stock="sin"',
+      regla_11_2: 'esLegacy identifica DVRs 960H/CIF y NVRs/XVRs pre-WizSense (sin SMD+ ni IA básica)',
+      aplicacion: 'Aplica también al FAB y al Analizador cuando proponen contrapropuesta. Stock="sin" → solo mencionar como referencia técnica, jamás como recomendación de compra.'
+    }
+  };
+
+  // Detector esLegacy (REGLA 11.2) — exportado para que cualquier consumidor lo use
+  // Versión simplificada para uso del FAB/Analizador/Wizard. El compat checker
+  // del carrito tiene su propio detector más detallado en compatExtractSpecs().
+  function esLegacy(producto){
+    if (!producto || !producto.nombre) return false;
+    var n = (producto.nombre || '').toLowerCase();
+    var c = (producto.codigo || '').toUpperCase();
+    // DVRs analógicos puros (960H, CIF, D1, AHD sin HDCVI)
+    if (/\b(960h|960\s*h|\bd1\b|cif|tvl|ahd)\b/.test(n) && !/hdcvi|cvi|tvi/.test(n)) return true;
+    // Familias por código con prefijos legacy conocidos
+    if (/^(?:02DVR|02iDVR|02NVR|DVR\d+C-W|iHCVR|01366ND)/.test(c)) return true;
+    // HCVR pre-I
+    if (/^HCVR/.test(c) && !/-I/.test(c)) return true;
+    // XVR Cooper 1A
+    if (/^(?:DH-)?XVR1A/.test(c)) return true;
+    // XVR/NVR con sufijo -X o -V2 sin sufijo moderno -I/-EI/-XI/-4KS2/-4KS3
+    if (/^(?:XVR|NVR)\d/.test(c) && /-X1?$|-V2$/.test(c) && !/-I[23]?$|-EI[2]?$|-XI$|-4KS[23]$/.test(c)) return true;
+    return false;
+  }
+
+  // ── HEURÍSTICAS DE DIMENSIONADO (del wizard) ───────────────────
+  var heuristicas = {
+    m2_a_camaras: [
+      { rango: 'Hasta 100 m²',   cantidad: 4 },
+      { rango: '100 a 300 m²',   cantidad: 6 },
+      { rango: '300 a 800 m²',   cantidad: 10 },
+      { rango: 'Más de 800 m²',  cantidad: 16 }
+    ],
+    presupuesto_a_tier: {
+      0: 'ahorro · HDCVI 1MP económica',
+      1: 'equilibrado · IP 4MP starlight',
+      2: 'premium · IP 5MP WizSense',
+      3: 'sin tope · termal o LPR dedicada'
+    },
+    luz_a_tecnologia: {
+      0: 'Siempre hay luz → cámara estándar con IR básico',
+      1: 'Luz parcial → Starlight (color de noche)',
+      2: 'Oscuro total → IR potente o WizColor con LED'
+    },
+    // Defaults declarados del wizard para cálculo de almacenamiento
+    wizard_defaults_storage: {
+      resolucionMP: 4,
+      codec: 'H.265+',
+      fps: 25,
+      modo: 'continuo',
+      horasActivas: 24,
+      nota: 'Estimación con cámaras 4MP H.265+ a 25fps continuo. Para cálculo exacto consulta el Asesor SSTT.'
+    }
+  };
+
+  // ── REGLAS IVS DAHUA (referencia para los asistentes) ──────────
+  var ivs = {
+    cruce_linea:        'Dirección A→B, B→A o ambas',
+    intrusion:          'Zona poligonal + tiempo mínimo + sensibilidad',
+    objeto_abandonado:  'Detecta cambios en escena (objeto que aparece o desaparece)',
+    merodeador:         'Persona en zona por tiempo prolongado',
+    conteo_personas:    'Bidireccional con estadísticas',
+    lpr:                'Requiere cámara ITC o algoritmo patentes · mín. 100px ancho de placa',
+    smd_plus:           'Clasifica movimiento en Persona/Vehículo/Otros · elimina ~90% falsas alarmas'
+  };
+
+  // ── HELPERS DE PROMPT (reuso entre asistentes IA) ─────────────
+  // Prompt base que comparten Asesor SSTT + Chat de ventas SSTT + Analizador
+  function buildBasePromptKnowledge(){
+    var techList = Object.keys(tecnologias).map(function(k){
+      return '· ' + k + ': ' + tecnologias[k];
+    }).join('\n');
+
+    var doriList = Object.keys(dori.niveles).map(function(k){
+      return '· ' + k + ' (' + dori.niveles[k].px_m + ' px/m): ' + dori.niveles[k].uso;
+    }).join('\n');
+
+    var poeList = Object.keys(poe.estandares).map(function(k){
+      return '· ' + k + ': ' + poe.estandares[k];
+    }).join('\n');
+
+    return [
+      '## IDENTIDAD',
+      identidad,
+      '',
+      '## TECNOLOGÍAS DAHUA (usar este vocabulario)',
+      techList,
+      '',
+      '## ÓPTICA Y LENTES',
+      'Fórmula focal: ' + optica.formula_focal,
+      'Sensores Dahua: ' + optica.sensores_dahua.join(', '),
+      'Lentes fijos típicos: 2.8mm (~107°), 3.6mm (~90°), 4mm (~80°), 6mm (~52°), 8mm (~36°)',
+      'Varifocales motorizados: ' + optica.varifocales_motorizados.join(', '),
+      '',
+      '## ESTÁNDAR DORI ' + dori.norma,
+      doriList,
+      'Fórmula: ' + dori.formula_distancia,
+      '',
+      '## ALMACENAMIENTO',
+      'NO uses atajos como "0.04 TB/día". Pide al usuario los parámetros y calcula con la fórmula completa:',
+      '· Bitrates típicos (Mbps): 1080P H.265+ 1 / 4MP H.265+ 1.5 / 5MP H.265+ 2 / 4K H.265+ 3',
+      '· Multiplicadores: H.264 = 4× del bitrate H.265+ · H.265 = 2× del bitrate H.265+',
+      '· Modo continuo=1.0 · movimiento=0.4 · evento=0.15',
+      '· TB = (bitrate_Mbps × 1024² × 3600 × horas × fps/25 × modoMult / 8) × dias × cams / 1024⁴',
+      '· Solo discos certificados: SkyHawk, SkyHawk AI, WD Purple, Exos. NUNCA Barracuda ni WD Blue.',
+      '',
+      '## PoE Y ALIMENTACIÓN',
+      poeList,
+      'Distancia estándar: ' + poe.distancia_estandar_m + 'm Cat6 · extendida: ' + poe.distancia_extendida_m + 'm modo Extend',
+      'Caída tensión HDCVI: ' + poe.formula_caida_tension_hdcvi,
+      '',
+      '## REGLAS TÉCNICAS DURAS — NUNCA VIOLAR',
+      'R1 — ' + reglas.R1_arquitecturas.titulo + ': ' + reglas.R1_arquitecturas.ip + ' ' + reglas.R1_arquitecturas.hdcvi,
+      'R2 — ALMACENAMIENTO: pedir parámetros, usar fórmula completa, sólo discos certificados.',
+      'R3 — ' + reglas.R3_matriculas_distancia.titulo + ': ' + reglas.R3_matriculas_distancia.matriculas + '. ' + reglas.R3_matriculas_distancia.anti_falsedad,
+      'R4 — ' + reglas.R4_switch_poe.titulo + ': ' + reglas.R4_switch_poe.regla,
+      'R5 — ' + reglas.R5_grabador_canales.titulo + ': ' + reglas.R5_grabador_canales.regla,
+      'R6 — ' + reglas.R6_contrapropuesta_coherente.titulo + ': ' + reglas.R6_contrapropuesta_coherente.regla + ' ' + reglas.R6_contrapropuesta_coherente.preferencia,
+      'R10 — ' + reglas.R10_camaras_sin_grabador.titulo + ': ' + reglas.R10_camaras_sin_grabador.regla,
+      'R11 — ' + reglas.R11_legacy_stock.titulo + ': ' + reglas.R11_legacy_stock.regla_11_1 + ' ' + reglas.R11_legacy_stock.aplicacion,
+      '',
+      '## REGLAS IVS DAHUA',
+      Object.keys(ivs).map(function(k){ return '· ' + k.replace(/_/g, ' ') + ': ' + ivs[k]; }).join('\n')
+    ].join('\n');
+  }
+
+  // Catálogo formateado para inyección en prompts (reduce tokens)
+  function buildCatalogList(opts){
+    opts = opts || {};
+    var P = (typeof PRODUCTS !== 'undefined') ? PRODUCTS : [];
+    if (opts.filterCats && opts.filterCats.length){
+      P = P.filter(function(p){ return opts.filterCats.indexOf(p.cat) >= 0; });
+    }
+    if (opts.excludeLegacy){
+      P = P.filter(function(p){ return !esLegacy(p); });
+    }
+    if (opts.excludeSinStock){
+      P = P.filter(function(p){ return p.stock !== 'sin'; });
+    }
+    if (opts.format === 'json'){
+      return JSON.stringify(P.map(function(p){
+        return { id: p.id, codigo: p.codigo, nombre: p.nombre, cat: p.cat, ptotal: p.ptotal };
+      }));
+    }
+    // formato texto compacto (default)
+    return P.map(function(p){
+      return '- ' + p.codigo + ': ' + p.nombre + ' → $' + (p.ptotal || 0).toLocaleString('es-CL');
+    }).join('\n');
+  }
+
+  // ── EXPOSICIÓN PÚBLICA ────────────────────────────────────────
+  return {
+    version: '1.0.0',
+    identidad: identidad,
+    tecnologias: tecnologias,
+    optica: optica,
+    dori: dori,
+    poe: poe,
+    reglas: reglas,
+    ivs: ivs,
+    heuristicas: heuristicas,
+    bitrate_table_mbps: bitrate_table_mbps,
+    modo_mult: modo_mult,
+    skyhawk_map: skyhawk_map,
+    // helpers
+    calcAlmacen: calcAlmacen,
+    tbToSkyHawkId: tbToSkyHawkId,
+    esLegacy: esLegacy,
+    buildBasePromptKnowledge: buildBasePromptKnowledge,
+    buildCatalogList: buildCatalogList
+  };
+})();
 
 // ── DATOS ────────────────────────────────────────────────────
 const PRODUCTS = [
@@ -21791,7 +22147,7 @@ function setAIMode(m) {
   const hints = {
     asesor:'Consulta técnica libre sobre CCTV, Dahua, instalación…',
     recomendacion:'Describe tu proyecto y te recomendaré equipos específicos…',
-    calculadora:'Dime qué calcular: lente, disco, DORI, caída de tensión, PoE…',
+    calculadora:'Cálculos técnicos: lente, almacén (te pediré codec/fps), DORI, caída V, PoE…',
     ivs:'Pregunta sobre reglas IVS: intrusión, cruce, conteo, LPR…',
   };
   const inp = qs('chatInput');
@@ -21799,68 +22155,35 @@ function setAIMode(m) {
 }
 
 function buildAISysPrompt() {
-  const modes = {
-    asesor: 'Eres un experto técnico en sistemas CCTV.',
-    recomendacion: 'Tu objetivo principal es recomendar productos del catálogo SSTT. Siempre termina con una recomendación concreta de producto con código exacto del modelo.',
-    calculadora: 'Realiza los cálculos técnicos solicitados paso a paso mostrando las fórmulas.',
-    ivs: 'Especialízate en reglas IVS Dahua: intrusión, cruce de línea, conteo de personas, LPR.',
+  // Modificadores de comportamiento por modo (lo único específico del rol)
+  var modes = {
+    asesor: 'Eres un experto técnico en sistemas CCTV. Responde con rigor técnico y cita reglas/fórmulas cuando aplique.',
+    recomendacion: 'Tu objetivo principal es recomendar productos del catálogo SSTT. Siempre termina con una recomendación concreta de producto con código exacto del modelo del catálogo.',
+    calculadora: 'Realiza los cálculos técnicos solicitados paso a paso mostrando las fórmulas. Para almacenamiento, primero pregunta resolución/codec/fps/modo si no fueron dados.',
+    ivs: 'Especialízate en reglas IVS Dahua: intrusión, cruce de línea, conteo de personas, LPR, SMD+.',
   };
-  return `Eres el Asesor Técnico Experto en CCTV de SSTT®, distribuidor oficial Dahua para Chile. ${modes[aiMode]}
 
-CONOCIMIENTO TÉCNICO COMPLETO:
+  // Conocimiento técnico común desde SSTT_KB
+  var kbBase = window.SSTT_KB.buildBasePromptKnowledge();
+  var catalogo = window.SSTT_KB.buildCatalogList({ excludeLegacy: true, excludeSinStock: false });
 
-## ÓPTICA Y LENTES
-- Fórmula focal: F = (D × sensor_mm) / objeto_m
-- Sensores Dahua: 1/1.8", 1/2", 1/2.7", 1/2.8", 1/3", 1/4" — mayor sensor = mejor low-light
-- Lentes fijos: 2.8mm (~107°), 3.6mm (~90°), 4mm (~80°), 6mm (~52°), 8mm (~36°)
-- Varifocal motorizado: 2.7-13.5mm, 2.8-12mm, 5.5-24mm
-
-## ESTÁNDAR DORI (EN 62676-4)
-- Detección (D): 25 px/m — ¿hay alguien?
-- Observación (O): 62 px/m — ¿qué hace?
-- Reconocimiento (R): 125 px/m — ¿lo reconocerías?
-- Identificación (I): 250 px/m — identificación forense
-- Fórmula: distancia = (px_horizontal × focal_mm) / (densidad_px_m × sensor_mm)
-
-## TECNOLOGÍAS DAHUA
-- HDCVI: coaxial hasta 500m, hasta 8MP/4K, multiformato (AHD/TVI/analógico)
-- IP: red Ethernet, máx 100m UTP, mayor resolución, IA avanzada
-- WizSense (IA básica): SMD+ distingue humanos/vehículos, IVS básico
-- WizMind (IA avanzada): reconocimiento facial, conteo personas, LPR avanzado
-- Starlight: sensibilidad 0.005 lux — color en casi oscuridad
-- Full-color: LED blanco cálido, imagen color 24/7
-- Smart IR: ajuste automático IR para evitar sobreexposición (WhiteWash)
-
-## ALMACENAMIENTO (H.265+)
-- 1080P: ~0.5 Mbps/cam | 4MP: ~1 Mbps/cam | 8MP: ~2 Mbps/cam
-- Fórmula: GB/día = (bitrate × 3600 × horas / 8 / 1024) × cámaras
-- H.265+ ahorra hasta 70% vs H.264
-
-## POE Y ALIMENTACIÓN
-- 802.3af: 15.4W | 802.3at (PoE+): 30W | 802.3bt: 60-90W | Hi-PoE Dahua: 60W
-- Límite estándar: 100m Cat5e/Cat6
-- Modo extendido switches Dahua PFS: hasta 250m a 10Mbps
-- Caída tensión HDCVI: ΔV = 2 × R(Ω/km) × I(A) × L(m) / 1000 — máx 20% de caída
-
-## REGLAS IVS DAHUA
-- Cruce de línea: dirección A→B, B→A o ambas
-- Intrusión: zona + tiempo mínimo + sensibilidad
-- Objeto abandonado/faltante: detecta cambios en escena
-- Merodeador: persona en zona por tiempo prolongado
-- Conteo personas: bidireccional con estadísticas
-- LPR: requiere cámara ITC o algoritmo patentes, mín. 100px de ancho en imagen
-- SMD+: clasifica movimiento en Persona/Vehículo/Otros — elimina 90% falsas alarmas
-
-## CATÁLOGO SSTT DISPONIBLE
-${PRODUCTS.map(p => `- ${p.codigo}: ${p.nombre} → $${p.ptotal.toLocaleString('es-CL')}`).join('\n')}
-
-FORMATO DE RESPUESTA:
-- Español chileno, respuestas concretas y útiles
-- Para cálculos, muestra fórmula y pasos
-- Usar emojis moderadamente
-- Para recomendaciones, incluir código exacto del modelo
-- Máximo 350 palabras salvo que se pida más detalle
-- Al final de respuestas con recomendación agrega: [PRODS:codigo1,codigo2]`;
+  return [
+    'Soy el Asesor SSTT, asistente técnico experto en CCTV de SSTT®.',
+    modes[aiMode],
+    '',
+    kbBase,
+    '',
+    '## CATÁLOGO SSTT DISPONIBLE',
+    catalogo,
+    '',
+    '## FORMATO DE RESPUESTA',
+    '· Español chileno, respuestas concretas y útiles',
+    '· Para cálculos, muestra fórmula y pasos',
+    '· Usar emojis moderadamente',
+    '· Para recomendaciones, incluir código exacto del modelo del catálogo',
+    '· Máximo 350 palabras salvo que se pida más detalle',
+    '· Al final de respuestas con recomendación agrega: [PRODS:codigo1,codigo2]'
+  ].join('\n');
 }
 
 async function sendAIMessage() {
@@ -25128,67 +25451,48 @@ async function runAnalysis() {
   const camCats = ['camaras-ip','camaras-hdcvi','camaras-ptz'];
   const prodSample = PRODUCTS
     .filter(p => camCats.includes(p.cat))
+    .filter(p => !window.SSTT_KB.esLegacy(p) && p.stock !== 'sin')
     .slice(0, 30)
     .map(p => `${p.codigo}: ${p.nombre.slice(0,60)} $${p.ptotal?.toLocaleString('es-CL')||'—'}`)
     .join('\n');
 
-  const systemPrompt = `Eres el Asesor Técnico de SSTT®, distribuidor Dahua Chile. 
-Analiza la imagen de la escena y los parámetros para recomendar la cámara de seguridad ideal del catálogo.
-
-CATÁLOGO DISPONIBLE (primeros productos):
-${prodSample}
-
-CONOCIMIENTO TÉCNICO:
-- DORI estándar EN 62676-4: Detección 25px/m, Observación 62px/m, Reconocimiento 125px/m, Identificación 250px/m
-- Sensores: 1/1.8" mayor = mejor low-light. Mín lux: Starlight 0.005lux, Full-color LED blanco
-- Lentes fijos: 2.8mm≈107°, 3.6mm≈90°, 4mm≈80°, 6mm≈52°, 8mm≈36°
-- Para reconocer rostros a Xm se necesita focal: F = (X × sensor_mm) / (ancho_escena_m)
-- WizSense: IA básica SMD+ humanos/vehículos. WizMind: IA avanzada reconocimiento facial, LPR
-- Teléfono capturó con ~${phoneData.fovH}° FOV horizontal (~${phoneData.focalEq}mm equiv 35mm), resolución ${phoneData.width}×${phoneData.height}
-
-Responde en JSON con este formato exacto:
-{
-  "escena": {
-    "tipo": "descripción breve (ej: Vereda residencial, iluminación mixta)",
-    "iluminacion": "descripción de condiciones de luz observadas",
-    "distancia_estimada": número en metros,
-    "ancho_escena_estimado": número en metros,
-    "desafios": ["desafío 1", "desafío 2"]
-  },
-  "analisis_optico": {
-    "focal_recomendada_mm": número,
-    "angulo_recomendado_grados": número,
-    "resolucion_minima": "ej: 4MP",
-    "justificacion": "texto breve"
-  },
-  "recomendaciones": [
-    {
-      "rank": 1,
-      "codigo": "CODIGO_EXACTO_DEL_CATÁLOGO",
-      "razon": "Por qué es ideal para esta escena (máx 2 líneas)",
-      "match_score": número del 1 al 100,
-      "como_se_veria": "descripción de qué se podría ver con esta cámara en la escena"
-    },
-    {
-      "rank": 2,
-      "codigo": "CODIGO_2",
-      "razon": "razón",
-      "match_score": número,
-      "como_se_veria": "descripción"
-    },
-    {
-      "rank": 3,
-      "codigo": "CODIGO_3",
-      "razon": "razón",
-      "match_score": número,
-      "como_se_veria": "descripción"
-    }
-  ],
-  "resumen_instalacion": "1-2 oraciones sobre dónde y cómo instalar",
-  "advertencias": ["advertencia óptica o técnica si aplica"]
-}
-
-USA SOLO códigos que existen en el catálogo. Responde ÚNICAMENTE con JSON válido, sin texto adicional.`;
+  const systemPrompt = [
+    'Soy el Asesor SSTT en modo análisis óptico de escena. Distribuidor Dahua Chile.',
+    'Analizo la imagen de la escena y los parámetros para recomendar la cámara de seguridad ideal del catálogo.',
+    '',
+    window.SSTT_KB.buildBasePromptKnowledge(),
+    '',
+    `CONTEXTO DE LA CAPTURA: teléfono con ~${phoneData.fovH}° FOV horizontal (~${phoneData.focalEq}mm equiv 35mm), resolución ${phoneData.width}×${phoneData.height}`,
+    '',
+    'CATÁLOGO DISPONIBLE (cámaras filtradas, sin legacy ni sin stock):',
+    prodSample,
+    '',
+    'Responde en JSON con este formato exacto:',
+    '{',
+    '  "escena": {',
+    '    "tipo": "descripción breve (ej: Vereda residencial, iluminación mixta)",',
+    '    "iluminacion": "descripción de condiciones de luz observadas",',
+    '    "distancia_estimada": número en metros,',
+    '    "ancho_escena_estimado": número en metros,',
+    '    "desafios": ["desafío 1", "desafío 2"]',
+    '  },',
+    '  "analisis_optico": {',
+    '    "focal_recomendada_mm": número,',
+    '    "angulo_recomendado_grados": número,',
+    '    "resolucion_minima": "ej: 4MP",',
+    '    "justificacion": "texto breve usando fórmula F=(D×sensor)/objeto"',
+    '  },',
+    '  "recomendaciones": [',
+    '    { "rank": 1, "codigo": "CODIGO_EXACTO_DEL_CATÁLOGO", "razon": "Por qué es ideal (máx 2 líneas)", "match_score": número del 1 al 100, "como_se_veria": "descripción" },',
+    '    { "rank": 2, "codigo": "CODIGO_2", "razon": "razón", "match_score": número, "como_se_veria": "descripción" },',
+    '    { "rank": 3, "codigo": "CODIGO_3", "razon": "razón", "match_score": número, "como_se_veria": "descripción" }',
+    '  ],',
+    '  "resumen_instalacion": "1-2 oraciones sobre dónde y cómo instalar",',
+    '  "advertencias": ["advertencia óptica o técnica si aplica"]',
+    '}',
+    '',
+    'USA SOLO códigos que existen en el catálogo entregado. Responde ÚNICAMENTE con JSON válido, sin texto adicional.'
+  ].join('\n');
 
   try {
     const resp = await fetch(PROXY_URL, {
@@ -29425,36 +29729,28 @@ function aiSend() {
   // ── PASO 2: Consulta conversacional → API con catálogo filtrado ──
   aiTypingStart();
 
-  // Pasar los resultados locales como contexto pre-filtrado
+  // Pasar los resultados locales como contexto pre-filtrado (limita tokens)
   var contextProds = localResult.results.length > 0 ? localResult.results : PRODUCTS.slice(0, 80);
   var catLines = contextProds.slice(0, 80).map(function(p){ return p.codigo+'|'+p.nombre.slice(0,50)+'|$'+p.ptotal+'|'+p.cat; });
   var catCtx = catLines.join('\n');
 
-  var sys = 'Eres annastasIA, asesora técnico-comercial de SSTT SpA, distribuidor oficial Dahua Chile. Tienes conocimiento completo de la DahuaWiki oficial.\n\n' +
-    '=== CONOCIMIENTO TÉCNICO (DahuaWiki) ===\n' +
-    'TECNOLOGÍAS CÁMARAS:\n' +
-    '- IP: Ethernet UTP Cat5e/6. PoE: 802.3af=15.4W, 802.3at=30W, 802.3bt=60-90W, Hi-PoE=60W. Distancia máx 100m (250m con switch PFS en modo extendido vía DIP switch). Resolución hasta 32MP. IA: WizSense (SMD+ humano/vehículo), WizMind (reconocimiento facial), TiOC (triple cámara + disuasión activa), Full-Color (LED visible 24/7).\n' +
-    '- HDCVI: coaxial RG59 o RG6. 500m en 1080P, 300m en 4K. Multiformato: HDCVI+AHD+TVI+analógico estándar. XVR debe estar en modo CVI para cámaras HDCVI.\n' +
-    '- PTZ IP: zoom óptico 4x hasta 45x. Auto-tracking. Protocolo Dahua o ONVIF. Hi-PoE necesario para modelos grandes.\n' +
-    'RESOLUCIONES: HD/720P=1MP, FullHD/1080P=2MP, 4MP, 5MP, 4K/UHD/2160P=8MP, 12MP.\n' +
-    'GRABADORES NVR (para IP): 4/8/16/32/64/128 canales. Smart Add detecta cámaras automáticamente en red. Algunos con PoE integrado. AcuPick para búsqueda inteligente. Puertos remotos: 37777(TCP), 80/443(HTTP), 554(RTSP).\n' +
-    'GRABADORES XVR (para HDCVI): soporta HDCVI+AHD+TVI+analógico+IP simultáneamente. Hasta 4K. H.265+ ahorra 70% espacio vs H.264.\n' +
-    'CONFIGURACIÓN INICIAL: 1)Inicializar contraseña admin 2)Fecha/hora Santiago UTC-4 3)Smart Add cámaras 4)Formatear HDD en grabador 5)Programar grabación.\n' +
-    'ACCESO REMOTO P2P: NVR→Red→P2P→Habilitar. App DMSS (iOS/Android) con número de serie del NVR. SmartPSS Lite para PC gestiona hasta 256 dispositivos. Sin IP pública necesaria con P2P.\n' +
-    'IVS REGLAS: Cruce de línea (dirección A→B o ambas), Intrusión (polígono + tiempo mínimo), Conteo personas (bidireccional), Objeto abandonado/faltante. Filtro Humano+Vehículo elimina 90% falsas alarmas.\n' +
-    'ACUPICK: búsqueda en grabaciones por atributos (ropa, género, vehículo, patente). Requiere NVR serie 4/5/6/7/8 + cámaras WizSense.\n' +
-    'MODOS GRABACIÓN: Continua, Movimiento, SMD+ (solo humano/vehículo), IVS, Alarma física. Disco en modo circular (sobrescribe lo más antiguo).\n' +
-    'TROUBLESHOOTING: Cámara no aparece→verificar subred/cable/PoE. Sin imagen→verificar resolución del canal/H.265 compatibilidad. P2P falla→verificar internet en NVR (ping 8.8.8.8). Disco no reconocido→formatear desde el NVR. Reset contraseña→botón físico RESET 5s.\n' +
-    'CABLEADO: Cat5e para IP estándar, Cat6 para 4K/HiPoE. RG59 para HDCVI. Cable síamés coaxial+bifilar para HDCVI sin fuente separada.\n' +
-    'DISCOS: Seagate SkyHawk para grabación 24/7. Fórmula: GB/día=(bitrate_Mbps×3600×horas)/8/1024×N_cámaras.\n\n' +
-    '=== REGLAS ===\n' +
-    '1. Español, conciso, máx 3-4 oraciones para respuesta de voz.\n' +
-    '2. Una sola contrapregunta por turno.\n' +
-    '3. Productos: PRODUCTOS:["COD1","COD2"] al final (máx 8 códigos exactos del catálogo).\n' +
-    '4. Kits HDCVI: cámaras HAC + XVR + disco + fuente 12V + balun si van por UTP.\n' +
-    '5. Kits IP: cámaras IPC + NVR + disco + switch PoE si NVR no tiene PoE integrado.\n' +
-    '6. Configuración: da pasos concretos del menú Dahua cuando pregunten cómo hacer algo.\n\n' +
-    'CATALOGO:\n' + catCtx;
+  var sys = [
+    'Soy el Asesor SSTT, asistente técnico-comercial experto en CCTV de SSTT®.',
+    'Modo conversacional con catálogo pre-filtrado. Aplica reglas técnicas duras y nunca contradice las reglas R1-R11.',
+    '',
+    window.SSTT_KB.buildBasePromptKnowledge(),
+    '',
+    '## REGLAS DE FORMATO',
+    '1. Español chileno, conciso, máx 3-4 oraciones para respuesta de voz.',
+    '2. Una sola contrapregunta por turno.',
+    '3. Productos: PRODUCTOS:["COD1","COD2"] al final (máx 8 códigos exactos del catálogo).',
+    '4. Kits HDCVI: cámaras HAC + XVR + disco + fuente 12V + balun si van por UTP.',
+    '5. Kits IP: cámaras IPC + NVR + disco + switch PoE si NVR no tiene PoE integrado.',
+    '6. Configuración: da pasos concretos del menú Dahua cuando pregunten cómo hacer algo.',
+    '',
+    '## CATÁLOGO RELEVANTE (pre-filtrado por búsqueda local)',
+    catCtx
+  ].join('\n');
 
   var msgs = aiHistory.slice(-4);
 
@@ -29544,7 +29840,6 @@ function aiAskAPI() {
     // Agregar contexto explícito para que la IA dé asesoría
     var inp = document.getElementById('aiInp');
     if (inp) inp.value = 'Dame tu recomendación experta para: ' + lastUser;
-    // Remover el flag que activa el motor local
     aiTypingStart();
     var q2 = 'Dame tu recomendación experta para: ' + lastUser;
     aiHistory.push({role:'user', content: q2});
@@ -29552,12 +29847,19 @@ function aiAskAPI() {
     if (!contextProds.length) contextProds = PRODUCTS.slice(0,80);
     var catLines = contextProds.slice(0,80).map(function(p){ return p.codigo+'|'+p.nombre.slice(0,50)+'|$'+p.ptotal+'|'+p.cat; });
     var catCtx = catLines.join('\n');
-    var sys = 'Eres annastasIA, asesora rusa técnico-comercial de SSTT SpA. Hablas español con personalidad rusa: directa, precisa, usas expresiones como Da (sí), Horosho (perfecto), Nyet (no).\n' +
-      'Resoluciones: 720P=1MP, 1080P=2MP, 4K=8MP. Tecnologías: IP(PoE/UTP/100m), HDCVI(coaxial/500m).\n' +
-      'Series IA: WizSense(SMD+), WizMind(facial), TiOC(disuasión), Full-Color(LED).\n' +
-      'Grabadores: NVR para IP, XVR para HDCVI+IP.\n' +
-      'Responde en español, conciso. Al final: PRODUCTOS:["COD1","COD2"] con los códigos exactos.\n\n' +
-      'CATALOGO:\n' + catCtx;
+    var sys = [
+      'Soy el Asesor SSTT, asistente técnico-comercial experto en CCTV.',
+      'Modo: asesoría enfocada con catálogo pre-filtrado. Aplica reglas R1-R11 y formato profesional.',
+      '',
+      window.SSTT_KB.buildBasePromptKnowledge(),
+      '',
+      '## REGLAS DE FORMATO',
+      '· Español chileno, conciso, máx 4-5 oraciones',
+      '· Productos: PRODUCTOS:["COD1","COD2"] al final con códigos exactos del catálogo',
+      '',
+      '## CATÁLOGO RELEVANTE (pre-filtrado)',
+      catCtx
+    ].join('\n');
     fetch(PROXY_URL, {method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({model:'claude-sonnet-4-6', max_tokens:400, system:sys, messages:aiHistory.slice(-4)})
     }).then(function(r){ return r.json(); }).then(function(data) {
@@ -29772,7 +30074,7 @@ document.addEventListener('click', function(e) {
     // ── FAB — logo Gemini con colores SSTT ──
     var fab = document.createElement('button');
     fab.id = 'aiFab';
-    fab.title = 'annastasIA';
+    fab.title = 'Asesor SSTT';
     fab.onclick = function(){ aiToggle(); };
     // ── ORB — Globo Digital Futurista (network visualization) ──
     fab.style.cssText = [
@@ -29965,8 +30267,8 @@ document.addEventListener('click', function(e) {
           '<path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gHP)"/>' +
         '</svg>' +
         '<div style="flex:1">' +
-          '<div style="font-size:13px;font-weight:800;color:#fff;letter-spacing:.2px">annastasIA®</div>' +
-          '<div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:1px">Dahua Chile · annastasIA</div>' +
+          '<div style="font-size:13px;font-weight:800;color:#fff;letter-spacing:.2px">Asesor SSTT®</div>' +
+          '<div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:1px">Dahua Chile · Asesor técnico</div>' +
         '</div>' +
         '<button onclick="aiToggleVoiceMode()" id="aiVoiceMode" title="Modo conversación" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s">🎙️</button>' +
         '<button onclick="aiClose()" style="background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;margin-left:4px">✕</button>' +
@@ -29978,7 +30280,7 @@ document.addEventListener('click', function(e) {
         '<div style="display:flex;gap:7px;align-items:flex-start">' +
           '<div style="width:24px;height:24px;border-radius:50%;background:'+DARK+';border:1.5px solid '+RED+';color:'+RED+';display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0;font-weight:800">✦</div>' +
           '<div style="max-width:85%;padding:9px 12px;border-radius:4px 16px 16px 16px;background:#f5f5f7;font-size:13px;line-height:1.5;color:#1a1a1a">' +
-            'Hola 👋 Soy <b>annastasIA</b>, tu asesora Dahua. Puedo ayudarte a elegir equipos por <b>texto</b> o <b>voz</b>.' +
+            'Hola 👋 Soy el <b>Asesor SSTT</b>, tu experto técnico Dahua. Puedo ayudarte a elegir equipos por <b>texto</b> o <b>voz</b>.' +
           '</div>' +
         '</div>' +
       '</div>' +
@@ -30021,7 +30323,7 @@ document.addEventListener('click', function(e) {
       panel.style.bottom = pb+'px';
     });
 
-    console.log('[SSTT] annastasIA inyectada ✅');
+    console.log('[SSTT] Asesor SSTT (FAB) inyectado ✅');
     // Mostrar wizard de bienvenida — esperar a que el JS principal esté listo
     function tryShowWelcome(attempts) {
       if (typeof aiShowWelcome === 'function') {
@@ -31494,7 +31796,7 @@ function waWelcome() {
   if (typeof S !== 'undefined' && S.cart && S.cart.length > 0) {
     cartInfo = ' Veo que tienes ' + S.cart.length + ' producto' + (S.cart.length > 1 ? 's' : '') + ' en tu carro.';
   }
-  waAddMsg('bot', '👋 Hola! Soy annastasIA, el asistente inteligente de SSTT.' + cartInfo + '\n\n¿En qué puedo ayudarte?');
+  waAddMsg('bot', '👋 Hola! Soy el Chat de ventas SSTT.' + cartInfo + '\n\n¿En qué puedo ayudarte?');
   
   // Quick replies iniciales
   waSetQuick([
@@ -31571,24 +31873,25 @@ function waThink(userMsg) {
     }).join(', ');
   }
   
-  // Construir prompt con contexto del negocio
+  // Construir prompt: identidad propia del Chat de ventas + KB compartida
   var systemPrompt = [
-    'Eres annastasIA, el asistente de ventas inteligente de SSTT SpA, distribuidor oficial Dahua Technology en Chile.',
-    'Eres experta en cámaras de seguridad IP y HDCVI, grabadores NVR/XVR, switches PoE, alarmas y accesorios Dahua.',
-    'Hablas en español chileno de forma amigable y profesional. Eres concisa — máximo 3-4 líneas por respuesta.',
-    'Cuando el cliente necesita una cámara, preguntas: ¿exterior o interior?, ¿necesita visión nocturna?, ¿qué área cubre?',
-    'Cuando mencionas productos, usas el catálogo real. Tecnologías: WizColor (color 24/7), WizSense (IA personas/vehículos), TiOC (disuasión activa), AcuPick (búsqueda IA), Xinghan (IA gran escala).',
-    'Si el cliente quiere continuar por WhatsApp real, le dices que puede hacer clic en "Continuar en WhatsApp real" abajo.',
-    'Precios en pesos chilenos, siempre mencionas que son neto + IVA.',
+    'Soy el Chat de ventas SSTT, asesor comercial de SSTT SpA.',
+    'Hablo en español chileno, amigable y profesional. Soy conciso — máximo 3-4 líneas por respuesta.',
+    'Mi rol es comercial: ayudo al cliente a elegir productos y avanzar a una compra o cotización formal.',
+    'Cuando el cliente necesita una cámara, pregunto: ¿exterior o interior?, ¿necesita visión nocturna?, ¿qué área cubre?',
+    'Si el cliente quiere continuar por WhatsApp real, le digo que puede hacer clic en "Continuar en WhatsApp real" abajo.',
+    'Precios en pesos chilenos, siempre menciono que son neto + IVA.',
+    '',
+    window.SSTT_KB.buildBasePromptKnowledge(),
     cartContext
-  ].join(' ');
+  ].join('\n');
   
-  // Llamar a la API de Claude
-  fetch('https://api.anthropic.com/v1/messages', {
+  // Llamar al PROXY (no api.anthropic.com directo - eso falla por CORS)
+  fetch(PROXY_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-6',
       max_tokens: 300,
       system: systemPrompt,
       messages: wapHistory.filter(function(m) { return m.role === 'user' || m.role === 'assistant'; })
@@ -31682,7 +31985,7 @@ function waUpdateWaLink(userMsg, reply) {
     summary += ' Tengo ' + S.cart.length + ' item' + (S.cart.length>1?'s':'') + ' en el carro.';
   }
   
-  link.href = 'https://wa.me/56222042119?text=' + encodeURIComponent(summary);
+  link.href = 'https://wa.me/56930502234?text=' + encodeURIComponent(summary);
 }
 
 // Inicializar — reemplazar el onclick del botón waBtn
@@ -31893,7 +32196,7 @@ function trackShowResult(pedido, email) {
   var waBtn = document.getElementById('trackWaBtn');
   if (waBtn) {
     var msg = 'Hola SSTT, consulto por mi pedido #' + pedido.num + '. Estado actual: ' + (pedido.estado || 'confirmado');
-    waBtn.onclick = function() { window.open('https://wa.me/56222042119?text=' + encodeURIComponent(msg), '_blank'); };
+    waBtn.onclick = function() { window.open('https://wa.me/56930502234?text=' + encodeURIComponent(msg), '_blank'); };
   }
 }
 
@@ -46610,16 +46913,28 @@ if (document.readyState === 'loading') {
   // ── Lógica de mapeo a productos del catálogo ──────────────────
   window.wizBuildProposal = function() {
     var ans = window.wizState.answers;
-    var cantCam = [4, 6, 10, 16][ans[1]] || 6;
+    var heur = window.SSTT_KB.heuristicas;
+    // Cantidad de cámaras según m² (heurística unificada en KB)
+    var cantCamMap = heur.m2_a_camaras.map(function(h){ return h.cantidad; });
+    var cantCam = cantCamMap[ans[1]] || 6;
     var dias = [7, 15, 30, 60][ans[4]];
     var presup = ans[5]; // 0=ahorro, 1=eq, 2=premium, 3=sin tope
     var luz = ans[3]; // 0=siempre, 1=parcial, 2=oscuro
     var verRostros = ans[2].indexOf(0) >= 0;
     var verMatriculas = ans[2].indexOf(1) >= 0;
 
-    // Calcular TB necesarios: aprox 0.04 TB/día por cámara 4MP
-    var tbNeeded = Math.ceil(cantCam * dias * 0.04);
-    if (tbNeeded < 1) tbNeeded = 1;
+    // Cálculo de almacenamiento usando la fórmula completa de KB con defaults declarados del wizard
+    var d = heur.wizard_defaults_storage;
+    var almacen = window.SSTT_KB.calcAlmacen({
+      cams: cantCam,
+      dias: dias,
+      resolucionMP: d.resolucionMP,
+      codec: d.codec,
+      fps: d.fps,
+      modo: d.modo,
+      horasActivas: d.horasActivas
+    });
+    var tbNeeded = almacen.tb_recomendado;
 
     var products = [];
     var P = (typeof PRODUCTS !== 'undefined') ? PRODUCTS : [];
@@ -46638,9 +46953,10 @@ if (document.readyState === 'loading') {
     ];
     // Si oscuro total y ahorro, mejor IP económica que HDCVI
     if (luz === 2 && presup === 0) {
-      // Buscar una cámara IP más económica con IR
+      // Buscar una cámara IP más económica con IR (R11: excluir legacy y sin stock)
       var ipCheap = null;
       for (var k = 0; k < P.length; k++) {
+        if (window.SSTT_KB.esLegacy(P[k]) || P[k].stock === 'sin') continue;
         if (P[k].cat === 'camaras-ip' && P[k].ptotal > 30000 && P[k].ptotal < 80000 &&
             (P[k].nombre || '').toLowerCase().indexOf('ir') >= 0) {
           if (!ipCheap || P[k].ptotal < ipCheap.ptotal) ipCheap = P[k];
@@ -46648,10 +46964,11 @@ if (document.readyState === 'loading') {
       }
       if (ipCheap) camIds[0] = ipCheap.id;
     }
-    // Si premium y ver matrículas, intentar cámara con lente largo
+    // Si premium y ver matrículas, intentar cámara con lente largo (R3 + R11)
     if (presup >= 2 && verMatriculas) {
       var lpr = null;
       for (var j = 0; j < P.length; j++) {
+        if (window.SSTT_KB.esLegacy(P[j]) || P[j].stock === 'sin') continue;
         var n = (P[j].nombre || '').toLowerCase();
         if (P[j].cat === 'camaras-ip' && (n.indexOf('lpr') >= 0 || n.indexOf('itc') >= 0) && P[j].ptotal < 800000) {
           if (!lpr || P[j].ptotal < lpr.ptotal) lpr = P[j];
@@ -46670,13 +46987,14 @@ if (document.readyState === 'loading') {
       });
     }
 
-    // ── 2. NVR/XVR según tipo de cámara ──────────────────────────
+    // ── 2. NVR/XVR según tipo de cámara (R1 arquitecturas) ────────
     var camIsHdcvi = cam && cam.cat === 'camaras-hdcvi';
     if (camIsHdcvi) {
-      // XVR — buscar uno acorde a canales
+      // XVR — buscar uno acorde a canales (R5 + R11)
       var xvrFind = null;
       var xvrLines = [];
       for (var x = 0; x < P.length; x++) {
+        if (window.SSTT_KB.esLegacy(P[x]) || P[x].stock === 'sin') continue;
         if ((P[x].cat === 'nvr' || P[x].cat === 'xvr') &&
             (P[x].nombre || '').toLowerCase().indexOf('xvr') >= 0) {
           xvrLines.push(P[x]);
@@ -46699,9 +47017,10 @@ if (document.readyState === 'loading') {
         });
       }
     } else {
-      // NVR — buscar
+      // NVR — buscar (R5 + R11)
       var nvrFind = null;
       for (var n2 = 0; n2 < P.length; n2++) {
+        if (window.SSTT_KB.esLegacy(P[n2]) || P[n2].stock === 'sin') continue;
         if (P[n2].cat === 'nvr' && (P[n2].nombre || '').toLowerCase().indexOf('nvr') >= 0) {
           var nm2 = P[n2].nombre.toLowerCase();
           var m2 = nm2.match(/(\d+)\s*ch|(\d+)\s*can/);
@@ -46720,33 +47039,22 @@ if (document.readyState === 'loading') {
       }
     }
 
-    // ── 3. HDD SkyHawk según TB ──────────────────────────────────
-    var skyhawkMap = [
-      {tb: 1, id: 578},
-      {tb: 2, id: 579},
-      {tb: 3, id: 580},
-      {tb: 4, id: 581},
-      {tb: 6, id: 582},
-      {tb: 8, id: 583},
-      {tb: 10, id: 584}
-    ];
-    var hddPick = skyhawkMap[skyhawkMap.length - 1];
-    for (var h = 0; h < skyhawkMap.length; h++) {
-      if (skyhawkMap[h].tb >= tbNeeded) { hddPick = skyhawkMap[h]; break; }
-    }
+    // ── 3. HDD SkyHawk según TB (mapa unificado en KB) ──────────
+    var hddPick = window.SSTT_KB.tbToSkyHawkId(tbNeeded);
     var hdd = findById(hddPick.id);
     if (hdd) {
       products.push({
         prod: hdd,
         qty: 1,
-        why: 'Capacidad para ' + dias + ' días con ' + cantCam + ' cámaras (' + hddPick.tb + ' TB)'
+        why: 'Capacidad para ' + dias + ' días con ' + cantCam + ' cámaras (' + hddPick.tb_min + ' TB)'
       });
     }
 
-    // ── 4. SWITCH PoE (solo si IP) ────────────────────────────────
+    // ── 4. SWITCH PoE (solo si IP, R4) ────────────────────────────
     if (!camIsHdcvi) {
       var swFind = null;
       for (var s = 0; s < P.length; s++) {
+        if (window.SSTT_KB.esLegacy(P[s]) || P[s].stock === 'sin') continue;
         if (P[s].cat === 'switches' && (P[s].nombre || '').toLowerCase().indexOf('poe') >= 0) {
           var snm = P[s].nombre.toLowerCase();
           var sm = snm.match(/(\d+)\s*p/);
@@ -46800,10 +47108,13 @@ if (document.readyState === 'loading') {
       meta: {
         cantCam: cantCam,
         dias: dias,
-        tb: hddPick.tb,
+        tb: hddPick.tb_min,
         lugar: window.wizSteps[0].opts[ans[0]].t,
         tamSize: window.wizSteps[1].opts[ans[1]].t,
-        presup: window.wizSteps[5].opts[presup].t.toLowerCase()
+        presup: window.wizSteps[5].opts[presup].t.toLowerCase(),
+        // Nota declarada de defaults del cálculo de storage
+        storage_disclaimer: d.nota,
+        storage_supuestos: almacen.supuestos
       }
     };
   };
@@ -47026,6 +47337,14 @@ if (document.readyState === 'loading') {
               '<span class="wiz-total-l">Total estimado con IVA</span>' +
               '<span class="wiz-total-v">$' + prop.total.toLocaleString('es-CL') + '</span>' +
             '</div>';
+
+    // Disclaimer de defaults usados para almacenamiento (transparencia con el usuario)
+    if (prop.meta.storage_disclaimer) {
+      html += '<div style="margin-top:12px;padding:10px 12px;background:#f5f6fa;border-left:3px solid #999;border-radius:6px;font-size:11.5px;color:#555;line-height:1.5">' +
+                '<strong style="color:#444">ℹ️ Sobre el cálculo de almacenamiento</strong><br>' +
+                prop.meta.storage_disclaimer +
+              '</div>';
+    }
 
     html += '<div class="wiz-actions">' +
               '<button class="wiz-btn wiz-btn-primary" type="button" onclick="wizAddAllToCart()">' +
@@ -47362,18 +47681,19 @@ if (document.readyState === 'loading') {
   };
 
   window.acBuildPrompt = function() {
-    // Catálogo compacto inyectado: solo info útil para mapeo
-    // Filtramos a categorías relevantes para reducir tokens
-    var relevantCats = ['camaras-ip', 'camaras-hdcvi', 'camaras-ptz', 'nvr', 'switches'];
-    var miniCatalog = (typeof PRODUCTS !== 'undefined' ? PRODUCTS : [])
-      .filter(function(p) { return relevantCats.indexOf(p.cat) >= 0; })
-      .map(function(p) {
-        return { id: p.id, codigo: p.codigo, nombre: p.nombre, cat: p.cat, ptotal: p.ptotal };
-      });
+    // Catálogo compacto inyectado: solo info útil para mapeo (filtramos a categorías relevantes para reducir tokens)
+    var miniCatalog = window.SSTT_KB.buildCatalogList({
+      filterCats: ['camaras-ip', 'camaras-hdcvi', 'camaras-ptz', 'nvr', 'switches'],
+      excludeLegacy: true,
+      excludeSinStock: true,
+      format: 'json'
+    });
 
-    // HDDs y cables comunes
+    // HDDs y cables comunes — filtro propio del analizador (no aplica el filtro genérico)
     var commonAccessories = (typeof PRODUCTS !== 'undefined' ? PRODUCTS : [])
       .filter(function(p) {
+        if (window.SSTT_KB.esLegacy(p)) return false;
+        if (p.stock === 'sin') return false;
         var n = (p.nombre || '').toLowerCase();
         return /skyhawk|exos|cat6|cat5e|utp|rj45|fuente|switch poe/i.test(n) ||
                (p.cat === 'accesorios' && p.ptotal > 30000 && p.ptotal < 250000);
@@ -47383,83 +47703,60 @@ if (document.readyState === 'loading') {
         return { id: p.id, codigo: p.codigo, nombre: p.nombre, ptotal: p.ptotal };
       });
 
-    return 'Eres un ingeniero experto en CCTV de SSTT (sstt.cl), distribuidor oficial Dahua en Chile. ' +
-      'Recibirás una cotización de la competencia (texto, imagen o PDF) y debes analizarla con rigor técnico.\n\n' +
-
-      '═══ REGLAS TÉCNICAS CCTV — OBLIGATORIAS, NUNCA VIOLAR ═══\n\n' +
-
-      'REGLA 1 — ARQUITECTURAS INCOMPATIBLES:\n' +
-      '· Cámaras IP (IPC-*, DS-2CD*, etc.) → SOLO NVR + switch PoE + cable UTP. NUNCA XVR/DVR. NUNCA fuente 12VDC (PoE alimenta las cámaras por el cable de red, la fuente 12VDC sobra si hay switch PoE).\n' +
-      '· Cámaras HDCVI/Turbo HD/analógicas (HAC-*, DS-2CE*, etc.) → SOLO XVR/DVR + cable coaxial + fuente 12VDC. NUNCA NVR. NUNCA switch PoE.\n' +
-      '· Si la cotización mezcla cámaras IP con DVR/XVR → ERROR GRAVE del cotizante. Advertir como primera advertencia.\n' +
-      '· Si la cotización tiene cámaras IP + switch PoE + fuentes 12VDC → la fuente SOBRA, el PoE ya alimenta. Advertir redundancia.\n' +
-      '· Tu contrapropuesta NUNCA debe mezclar arquitecturas. IP → NVR+PoE+UTP. HDCVI → XVR+fuente+coaxial.\n\n' +
-
-      'REGLA 2 — ALMACENAMIENTO:\n' +
-      '· Fórmula: cada cámara 4MP 25fps H.265 ≈ 0.04 TB/día\n' +
-      '· Ejemplo: 8 cámaras × 30 días × 0.04 = 9.6 TB → disco de 10 TB\n' +
-      '· SIEMPRE verificar si el disco cotizado alcanza para los días solicitados.\n' +
-      '· Solo discos certificados: SkyHawk, SkyHawk AI, WD Purple, Exos. Discos desktop (Barracuda) NO sirven 24/7.\n\n' +
-
-      'REGLA 3 — MATRÍCULAS Y DISTANCIA:\n' +
-      '· Rostros <5m → cualquier 2MP+ con 2.8mm\n' +
-      '· Rostros 5-10m → 4MP+ con 2.8mm\n' +
-      '· Matrículas → REQUIERE lente ≥6mm o cámara LPR/ANPR dedicada. Cámara estándar 4MP con 2.8mm NO lee matrículas >5m. Si la cotización promete eso, es FALSO.\n' +
-      '· Si el cliente necesita matrículas, tu contrapropuesta DEBE incluir al menos 1 cámara LPR o lente largo.\n\n' +
-
-      'REGLA 4 — SWITCH PoE:\n' +
-      '· Debe tener ≥ puertos PoE que cámaras IP + 1 uplink.\n' +
-      '· Si cotización dice "switch" sin decir PoE para sistema IP → sospechoso.\n\n' +
-
-      'REGLA 5 — GRABADOR:\n' +
-      '· NVR/XVR debe tener ≥ canales que cámaras. 8 cámaras → mínimo 8ch.\n\n' +
-
-      'REGLA 6 — CONTRAPROPUESTA COHERENTE:\n' +
-      '· Toda tu contrapropuesta DEBE cumplir REGLAS 1-5. Si no las cumple, tu recomendación es peligrosa.\n' +
-      '· Preferir cámaras IP por defecto (mejor calidad, app DMSS remota). Solo recomendar HDCVI si el presupuesto es muy bajo.\n\n' +
-
-      '═══════════════════════════════════════════════════════════\n\n' +
-
-      'CATÁLOGO SSTT DISPONIBLE (usa SOLO estos productos):\n' +
-      'Cámaras y grabadores:\n' + JSON.stringify(miniCatalog) + '\n\n' +
-      'Accesorios (HDDs, cables, switches):\n' + JSON.stringify(commonAccessories) + '\n\n' +
-
-      'TU MISIÓN:\n' +
-      '1. Detectar marca, productos, cantidades y precios\n' +
-      '2. Verificar compatibilidad técnica según las 6 REGLAS\n' +
-      '3. Identificar lo que falta, sobra, o es TÉCNICAMENTE INCORRECTO\n' +
-      '4. Armar contrapropuesta Dahua que CUMPLA las 6 REGLAS con SOLO IDs del catálogo\n' +
-      '5. Calcular total\n\n' +
-
-      'CRITERIOS:\n' +
-      '· Sé honesto: si la cotización es competitiva y técnicamente correcta, dilo.\n' +
-      '· Si detectas errores técnicos graves, pónlos como primeras advertencias.\n' +
-      '· Sesgo SSTT: destaca ventajas reales de Dahua (3 años garantía, soporte Chile).\n' +
-      '· NUNCA mientas sobre specs ni inventes productos.\n' +
-      '· Si no detectas nada parseable: { "error": "no_parseable", "reason": "..." }\n\n' +
-
-      'FORMATO — DEVUELVE SOLO JSON VÁLIDO, SIN MARKDOWN, SIN BACKTICKS:\n' +
-      '{\n' +
-      '  "marca_detectada": "Hikvision" | "TP-Link" | "Genérico" | "Desconocida",\n' +
-      '  "total_cotizado": 1480000,\n' +
-      '  "moneda": "CLP",\n' +
-      '  "detectados": [\n' +
-      '    { "tipo": "Cámara IP 4MP", "cantidad": 8, "precio_unitario": 89000, "subtotal": 712000, "spec": "DS-2CD2143G2-IS 4MP IR 30m" }\n' +
-      '  ],\n' +
-      '  "advertencias": [\n' +
-      '    "ERROR TÉCNICO: Cámaras IP cotizadas con DVR Turbo HD — son incompatibles",\n' +
-      '    "Disco 1TB insuficiente para 8 cámaras 4MP × 30 días (necesita mínimo 10TB)"\n' +
-      '  ],\n' +
-      '  "contrapropuesta": [\n' +
-      '    { "id": 281, "qty": 8, "razon": "IPC 4MP starlight, equivalente superior" }\n' +
-      '  ],\n' +
-      '  "ventajas_sstt": [\n' +
-      '    "3 años de garantía vs 1 año",\n' +
-      '    "Soporte técnico Chile"\n' +
-      '  ],\n' +
-      '  "evaluacion_general": "competitiva" | "buena" | "sobreprecio" | "incompleta"\n' +
-      '}\n\n' +
-      'IMPORTANTE: IDs en contrapropuesta DEBEN existir en el catálogo. Tu contrapropuesta DEBE cumplir las 6 REGLAS TÉCNICAS.';
+    return [
+      'Soy el Analizador de cotización de SSTT (sstt.cl), distribuidor oficial Dahua en Chile.',
+      'Recibirás una cotización de la competencia (texto, imagen o PDF) y debes analizarla con rigor técnico.',
+      '',
+      window.SSTT_KB.buildBasePromptKnowledge(),
+      '',
+      '═══════════════════════════════════════════════════════════',
+      '',
+      'CATÁLOGO SSTT DISPONIBLE (usa SOLO estos productos · ya filtrado sin legacy ni sin stock):',
+      'Cámaras y grabadores:',
+      miniCatalog,
+      '',
+      'Accesorios (HDDs, cables, switches):',
+      JSON.stringify(commonAccessories),
+      '',
+      'TU MISIÓN:',
+      '1. Detectar marca, productos, cantidades y precios',
+      '2. Verificar compatibilidad técnica según las reglas R1-R6',
+      '3. Identificar lo que falta, sobra, o es TÉCNICAMENTE INCORRECTO',
+      '4. Armar contrapropuesta Dahua que CUMPLA las reglas con SOLO IDs del catálogo (jamás IDs legacy o sin stock)',
+      '5. Calcular total',
+      '',
+      'CRITERIOS:',
+      '· Sé honesto: si la cotización es competitiva y técnicamente correcta, dilo.',
+      '· Si detectas errores técnicos graves, pónlos como primeras advertencias.',
+      '· Sesgo SSTT: destaca ventajas reales de Dahua (3 años garantía, soporte Chile).',
+      '· NUNCA mientas sobre specs ni inventes productos.',
+      '· Si necesitas calcular almacenamiento, usa la fórmula completa con los parámetros que detectes (resolución/codec/fps/modo).',
+      '· Si no detectas nada parseable: { "error": "no_parseable", "reason": "..." }',
+      '',
+      'FORMATO — DEVUELVE SOLO JSON VÁLIDO, SIN MARKDOWN, SIN BACKTICKS:',
+      '{',
+      '  "marca_detectada": "Hikvision" | "TP-Link" | "Genérico" | "Desconocida",',
+      '  "total_cotizado": 1480000,',
+      '  "moneda": "CLP",',
+      '  "detectados": [',
+      '    { "tipo": "Cámara IP 4MP", "cantidad": 8, "precio_unitario": 89000, "subtotal": 712000, "spec": "DS-2CD2143G2-IS 4MP IR 30m" }',
+      '  ],',
+      '  "advertencias": [',
+      '    "ERROR TÉCNICO: Cámaras IP cotizadas con DVR Turbo HD — son incompatibles",',
+      '    "Disco 1TB insuficiente para 8 cámaras 4MP × 30 días"',
+      '  ],',
+      '  "contrapropuesta": [',
+      '    { "id": 281, "qty": 8, "razon": "IPC 4MP starlight, equivalente superior" }',
+      '  ],',
+      '  "ventajas_sstt": [',
+      '    "3 años de garantía vs 1 año",',
+      '    "Soporte técnico Chile"',
+      '  ],',
+      '  "evaluacion_general": "competitiva" | "buena" | "sobreprecio" | "incompleta"',
+      '}',
+      '',
+      'IMPORTANTE: IDs en contrapropuesta DEBEN existir en el catálogo entregado (que ya excluye legacy y sin stock). Tu contrapropuesta DEBE cumplir las reglas técnicas R1-R6.'
+    ].join('\n');
   };
 
   window.acCallAPI = function() {
@@ -47495,7 +47792,7 @@ if (document.readyState === 'loading') {
     userContent.push({ type: 'text', text: userText });
 
     var payload = {
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-6',
       max_tokens: 2048,
       system: prompt,
       messages: [{ role: 'user', content: userContent }]
@@ -48048,32 +48345,40 @@ if (document.readyState === 'loading') {
     var needsTxt = s.needs.map(function(n) { return '- ' + (needsLbl[n] || n); }).join('\n');
     var todTxt = { dia: 'durante el día', noche: 'durante la noche', ambas: 'condición no especificada por el cliente' }[s.timeOfDay] || '';
 
-    return 'Eres un consultor experto en CCTV de Dahua para SSTT (distribuidor oficial Dahua Chile). ' +
-      'Recibes una imagen capturada desde la app DMSS de un sistema instalado y debes auditarla técnicamente.\n\n' +
-      'CONTEXTO DEL CLIENTE:\n' +
-      'La captura fue tomada ' + todTxt + '.\n' +
-      'El cliente quiere que esta cámara le permita:\n' + needsTxt + '\n' +
-      (s.notes ? '\nComentario adicional del cliente: "' + s.notes.replace(/"/g, "'") + '"\n' : '') +
-      '\nREGLAS DE AUDITORÍA:\n' +
-      '1. Evalúa NITIDEZ real (no resolución teórica): ¿el detalle se ve a la distancia que importa?\n' +
-      '2. Para CARAS: necesita 80+ pixeles entre ojos. Si es lejana o angular, es insuficiente.\n' +
-      '3. Para PATENTES: necesita lente ≥6mm o cámara LPR. Lentes 2.8mm NO sirven >5m.\n' +
-      '4. Para NOCHE: evalúa rango IR efectivo, ruido, exposición, claridad.\n' +
-      '5. Encuadre: ¿está bien apuntada, mal angulada, demasiado alta/baja?\n' +
-      '6. Si la cámara ES adecuada, dilo claramente. No inventes problemas.\n' +
-      '7. Si NO cumple, recomienda solución concreta del catálogo Dahua/SSTT (modelos genéricos como "bullet 4MP con lente 6mm" o "cámara LPR ITC215", sin precios).\n\n' +
-      'Responde SOLO con un JSON válido (sin markdown, sin texto adicional) con este formato:\n' +
-      '{\n' +
-      '  "calificacion_general": "excelente|buena|regular|insuficiente",\n' +
-      '  "score": 0-10,\n' +
-      '  "resumen": "1-2 frases con el veredicto principal",\n' +
-      '  "fortalezas": ["punto positivo 1", "punto positivo 2"],\n' +
-      '  "problemas": [{ "tema": "...", "detalle": "...", "gravedad": "alta|media|baja" }],\n' +
-      '  "evaluacion_por_objetivo": [{ "objetivo": "caras|patentes|...", "cumple": true|false|"parcial", "comentario": "..." }],\n' +
-      '  "recomendaciones": ["acción concreta 1", "acción concreta 2"],\n' +
-      '  "producto_sugerido": "modelo o tipo de cámara Dahua si aplica reemplazo, o null",\n' +
-      '  "nota_tecnica": "advertencia o aclaración técnica relevante (puede ser null)"\n' +
-      '}';
+    return [
+      'Soy el Auditor de cámara de SSTT (distribuidor oficial Dahua Chile).',
+      'Recibo una imagen capturada desde la app DMSS de un sistema instalado y debo auditarla técnicamente.',
+      '',
+      'CONTEXTO DEL CLIENTE:',
+      'La captura fue tomada ' + todTxt + '.',
+      'El cliente quiere que esta cámara le permita:',
+      needsTxt,
+      (s.notes ? '\nComentario adicional del cliente: "' + s.notes.replace(/"/g, "'") + '"\n' : ''),
+      '',
+      window.SSTT_KB.buildBasePromptKnowledge(),
+      '',
+      'REGLAS DE AUDITORÍA (específicas del rol auditor):',
+      '1. Evalúa NITIDEZ real (no resolución teórica): ¿el detalle se ve a la distancia que importa?',
+      '2. Para CARAS: necesita 80+ pixeles entre ojos (DORI nivel R: 125 px/m). Si es lejana o angular, es insuficiente.',
+      '3. Para PATENTES: aplica R3 — necesita lente ≥6mm o cámara LPR. Lentes 2.8mm NO sirven >5m.',
+      '4. Para NOCHE: evalúa rango IR efectivo, ruido, exposición, claridad. Si hay luz disponible, considerar Starlight o WizColor.',
+      '5. Encuadre: ¿está bien apuntada, mal angulada, demasiado alta/baja?',
+      '6. Si la cámara ES adecuada, dilo claramente. No inventes problemas.',
+      '7. Si NO cumple, recomienda solución concreta del catálogo Dahua/SSTT (modelos genéricos como "bullet 4MP con lente 6mm" o "cámara LPR ITC215", sin precios).',
+      '',
+      'Responde SOLO con un JSON válido (sin markdown, sin texto adicional) con este formato:',
+      '{',
+      '  "calificacion_general": "excelente|buena|regular|insuficiente",',
+      '  "score": 0-10,',
+      '  "resumen": "1-2 frases con el veredicto principal",',
+      '  "fortalezas": ["punto positivo 1", "punto positivo 2"],',
+      '  "problemas": [{ "tema": "...", "detalle": "...", "gravedad": "alta|media|baja" }],',
+      '  "evaluacion_por_objetivo": [{ "objetivo": "caras|patentes|...", "cumple": true|false|"parcial", "comentario": "..." }],',
+      '  "recomendaciones": ["acción concreta 1", "acción concreta 2"],',
+      '  "producto_sugerido": "modelo o tipo de cámara Dahua si aplica reemplazo, o null",',
+      '  "nota_tecnica": "advertencia o aclaración técnica relevante (puede ser null)"',
+      '}'
+    ].join('\n');
   };
 
   // ── Llamar Worker (multimodal) ───────────────────────────────────
@@ -48091,7 +48396,7 @@ if (document.readyState === 'loading') {
     userContent.push({ type: 'text', text: 'Audita esta cámara según las reglas del sistema. Responde solo JSON.' });
 
     var payload = {
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-4-6',
       max_tokens: 1800,
       system: prompt,
       messages: [{ role: 'user', content: userContent }]
