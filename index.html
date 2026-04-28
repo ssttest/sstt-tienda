@@ -33557,8 +33557,11 @@ function parseFocal(nombre, codigo) {
   }
 
   // 4) Zoom PTZ "12X" o "25X"
+  // FIX s15: además del nombre, aceptar códigos que empiezan con "PTZ"
+  // (e.g. PTZ19245UN-IRB-N-B donde el nombre dice "Network Positioning System"
+  // sin la palabra "PTZ" explícita). Audit: solo afecta 1 producto, 0 colateral.
   var zoom = n.match(/(\d+)\s*X/i);
-  if (zoom && /ptz/i.test(n)) {
+  if (zoom && (/ptz/i.test(n) || /^PTZ/i.test(c))) {
     var z = parseInt(zoom[1]);
     return {
       min: 4.8, max: 4.8 * z, type: 'ptz', zoom: z,
