@@ -427,6 +427,11 @@ header {
 }
 .mnav-tab:hover { color: var(--black); background: var(--g6) }
 .mnav-tab.active { color: var(--red); border-bottom-color: var(--red) }
+.mnav-tab-half {
+  flex: 1 1 0;
+  justify-content: center;
+  padding: 0 12px;
+}
 .mnav-sep {
   width: 1px; height: 20px;
   background: var(--g5); margin: 0 4px;
@@ -7675,6 +7680,75 @@ body.cart-open #proyectoListadoBtn {
   margin: 0 auto;
   line-height: 1.55;
   position: relative; z-index: 1;
+}
+
+/* ── Tahoe + Liquid Glass para el hero "navaja suiza" del Mesón Técnico ── */
+.tools-hero.tools-hero-tahoe {
+  margin: 18px auto 22px;
+  max-width: 1100px;
+  padding: 32px 22px;
+  /* Capas Tahoe: highlight superior + base translúcida + tinte azul suave */
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.72) 0%, rgba(255,255,255,.42) 55%, rgba(240,245,255,.55) 100%),
+    linear-gradient(135deg, #f5f8ff 0%, #ffffff 45%, #fff5f0 100%);
+  border: 1px solid rgba(255,255,255,.8);
+  border-radius: 22px;
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.9) inset,            /* highlight Tahoe superior */
+    0 -1px 0 rgba(0,87,184,.05) inset,             /* lowlight inferior sutil */
+    0 8px 32px rgba(17,30,58,.08),                 /* drop shadow suave */
+    0 2px 8px rgba(0,87,184,.06);
+}
+.tools-hero.tools-hero-tahoe::before {
+  content:'';
+  position:absolute;
+  top:-25%; right:-8%;
+  width:260px; height:260px;
+  background: radial-gradient(circle, rgba(0,87,184,.10), transparent 65%);
+  pointer-events:none;
+  filter: blur(8px);
+}
+.tools-hero.tools-hero-tahoe::after {
+  content:'';
+  position:absolute;
+  bottom:-30%; left:-10%;
+  width:220px; height:220px;
+  background: radial-gradient(circle, rgba(232,0,28,.07), transparent 65%);
+  pointer-events:none;
+  filter: blur(10px);
+}
+.tools-hero.tools-hero-tahoe .tools-hero-badge {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:11px; font-weight:700;
+  background: linear-gradient(135deg, rgba(0,87,184,.95), rgba(0,58,125,.95));
+  color:#fff;
+  padding:6px 14px;
+  border-radius:100px;
+  margin-bottom:14px;
+  letter-spacing:.6px;
+  text-transform:uppercase;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,.25) inset,
+    0 4px 14px rgba(0,87,184,.30);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.tools-hero.tools-hero-tahoe .tools-hero-title {
+  font-size: clamp(24px, 5vw, 36px);
+  font-weight: 900;
+  letter-spacing: -1.1px;
+  margin-bottom: 10px;
+}
+.tools-hero.tools-hero-tahoe .tools-hero-sub {
+  font-size: 14px;
+  color: #4a5568;
+}
+@media (max-width: 480px) {
+  .tools-hero.tools-hero-tahoe { padding: 24px 16px; border-radius: 18px; }
 }
 
 /* Menú de herramientas */
@@ -16167,32 +16241,14 @@ if (window.pdfjsLib) {
 <!-- MODULE NAV -->
 <nav class="module-nav">
   <div class="wrap module-nav-inner">
-    <button data-sec="catalogo" class="mnav-tab active" onclick="showSection('catalogo',this)">
+    <button data-sec="catalogo" class="mnav-tab mnav-tab-half active" onclick="showSection('catalogo',this)">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="7" height="7"/><rect x="15" y="3" width="7" height="7"/><rect x="15" y="14" width="7" height="7"/><rect x="2" y="14" width="7" height="7"/></svg>
       Catálogo
     </button>
-    <button data-sec="fov" class="mnav-tab" onclick="showSection('fov',this)">
+    <button data-sec="fov" class="mnav-tab mnav-tab-half" onclick="showSection('fov',this)">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3l3 3-9 9-3-3 9-9zM18 3l3 3-2 2-3-3 2-2zM3 18l3 3"/><circle cx="12" cy="12" r="2"/></svg>
       Mesón Técnico
     </button>
-    <button data-sec="seguimiento" class="mnav-tab" onclick="showSection('seguimiento',this)">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      Seguimiento
-    </button>
-    <button class="mnav-tab" onclick="wizOpen()" style="background:linear-gradient(90deg,rgba(232,0,28,0.18),rgba(232,0,28,0.08));color:#ffd0d6;">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 4"/><circle cx="12" cy="17" r="0.5" fill="currentColor"/></svg>
-      Asistente
-    </button>
-    <button class="mnav-tab" onclick="acOpen()" style="background:linear-gradient(90deg,rgba(0,87,184,0.18),rgba(0,87,184,0.08));color:#cfe0f5;">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
-      Comparar
-    </button>
-    
-    
-    <div style="margin-left:auto;display:flex;align-items:center;gap:10px;padding-right:4px">
-      <span style="font-size:11px;color:rgba(255,255,255,.4)">Distribuidor Oficial</span>
-      
-    </div>
   </div>
 </nav>
 
@@ -16574,28 +16630,6 @@ if (window.pdfjsLib) {
 
 
 <!-- NAV -->
-
-<!-- TARJETA PROMO SIMULADOR FOV (solo móvil) -->
-<div class="fov-promo-card-mob" onclick="showSection('fov', document.querySelector('[data-sec=\'fov\']'))" style="display:none;margin:12px 14px 6px;padding:14px 14px;border-radius:14px;background:linear-gradient(135deg,#0057B8,#003a7d);color:#fff;cursor:pointer;box-shadow:0 4px 16px rgba(0,87,184,.25);position:relative;overflow:hidden">
-  <div style="position:absolute;right:-20px;top:-10px;font-size:90px;opacity:.15;line-height:1">📡</div>
-  <div style="display:flex;align-items:center;gap:12px;position:relative;z-index:1">
-    <div style="width:42px;height:42px;background:rgba(255,255,255,.18);border-radius:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;backdrop-filter:blur(10px)">
-      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/></svg>
-    </div>
-    <div style="flex:1;min-width:0">
-      <div style="font-size:12px;font-weight:700;opacity:.9;letter-spacing:.5px;text-transform:uppercase">⚡ Nuevo</div>
-      <div style="font-size:15px;font-weight:800;line-height:1.25;margin-top:2px">Simulador de Cobertura FOV</div>
-      <div style="font-size:11px;opacity:.85;margin-top:2px;line-height:1.3">Compara cámaras y visualiza su alcance · Térmicas, multi-sensor, PTZ</div>
-    </div>
-    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5" style="flex-shrink:0;opacity:.85"><polyline points="9 18 15 12 9 6"/></svg>
-  </div>
-</div>
-<style>
-  @media(max-width:768px){
-    .fov-promo-card-mob { display:block !important; }
-  }
-  .fov-promo-card-mob:active { transform:scale(.98); transition:transform .1s; }
-</style>
 
 <nav>
   <div class="wrap nav-inner" id="navInner">
@@ -17583,13 +17617,14 @@ if (window.pdfjsLib) {
 </div>
 
 <div class="fov-wrap">
-  <div class="fov-hero">
-    <div class="fov-hero-badge">
+  <!-- ── Mesón Técnico — La navaja suiza del integrador (Liquid Glass + Tahoe) ── -->
+  <div class="tools-hero tools-hero-tahoe">
+    <div class="tools-hero-badge">
       <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14.7 6.3l3 3-9 9-3-3 9-9zM18 3l3 3-2 2-3-3 2-2zM3 18l3 3"/><circle cx="12" cy="12" r="2"/></svg>
       Mesón Técnico SSTT®
     </div>
-    <div class="fov-title">Mesón Técnico SSTT</div>
-    <div class="fov-sub">La <b>navaja suiza del integrador profesional</b>: simulador de campo visual, calculadoras técnicas, comparador de cámaras y guías para que diseñes el proyecto correcto antes de salir a terreno.</div>
+    <div class="tools-hero-title">La navaja suiza del integrador</div>
+    <div class="tools-hero-sub">Simulador de campo visual, calculadoras técnicas, comparador de cámaras y guías para diseñar el proyecto correcto antes de salir a terreno.</div>
   </div>
 
   <!-- Título de la herramienta activa -->
@@ -18118,23 +18153,9 @@ if (window.pdfjsLib) {
     <b style="color:#0057B8">Estándar DORI (EN 62676-4)</b> — define la densidad de píxeles mínima necesaria para cada nivel de análisis de video. Las distancias se calculan usando el tamaño real del sensor de cada cámara Dahua, su focal actual y su resolución. Ajusta la distancia y la altura de montaje para modelar tu instalación exacta.
   </div>
 </div>
-</div></div>
-</div>
 
-
-<!-- ════════════════════════════════════════════════════════════
-     🧰 CENTRO DE HERRAMIENTAS SSTT
-     Herramientas adicionales para instaladores y clientes
-     ════════════════════════════════════════════════════════════ -->
-<section id="secTools" style="padding:24px 16px 80px;background:linear-gradient(180deg,#fafbfc,#fff)">
-  <div style="max-width:1100px;margin:0 auto">
-    <!-- ── Mesón Técnico ── -->
-    <div class="tools-hero">
-      <div class="tools-hero-badge">🧰 Mesón técnico</div>
-      <div class="tools-hero-title">La navaja suiza del integrador</div>
-      <div class="tools-hero-sub">Simuladores, calculadoras y guías para dimensionar antes de salir a terreno.</div>
-    </div>
-
+  <!-- ── Herramientas del Mesón (movido dentro de #secFov) ── -->
+  <div class="tools-section-wrap" style="max-width:1100px;margin:0 auto;padding:24px 16px 80px">
     <div class="tools-menu" id="toolsMenu">
 
       <!-- SIMULADORES -->
@@ -18299,7 +18320,8 @@ if (window.pdfjsLib) {
     <!-- Contenido de las herramientas -->
     <div id="toolsContent" class="tools-content"></div>
   </div>
-</section>
+</div></div>
+</div>
 
 <footer style="background:#fff;border-top:2px solid #f0f0f0;color:#333;padding:0;margin-top:0">
 
@@ -47735,11 +47757,11 @@ if (document.readyState === 'loading') {
     else if (toolId === 'readyCheck') renderReadyCheck();
   };
 
-  // Inicializar con glosario por default
+  // Inicializar el contenedor de herramientas vacío (no auto-renderizar glosario).
+  // El usuario debe elegir una herramienta del menú para que aparezca contenido abajo.
   function init() {
-    if (document.getElementById('toolsContent')) {
-      renderGlossary('');
-    }
+    var c = document.getElementById('toolsContent');
+    if (c) c.innerHTML = '';
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
