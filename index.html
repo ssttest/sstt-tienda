@@ -5695,6 +5695,16 @@ body.cart-open #proyectoListadoBtn {
   transition: opacity .2s, transform .2s !important;
 }
 
+/* Móvil: waBtn sobre la mobile-nav (que ocupa los primeros 48px) */
+@media (max-width: 768px) {
+  #waBtn {
+    bottom: 56px !important;
+    left: 12px !important;
+    padding: 6px 11px !important;
+    font-size: 11px !important;
+  }
+}
+
 @keyframes gemSpin { to { transform:rotate(360deg); } }
 @keyframes orbBreathe {
   0%,100% {
@@ -18628,16 +18638,16 @@ if (window.pdfjsLib) {
   <a href="https://wa.me/56222042119?text=Hola%20SSTT%2C%20necesito%20ayuda%20con%20una%20compra"
     target="_blank" rel="noopener"
     id="waBtn"
-    style="position:fixed;bottom:28px;left:20px;z-index:999;
+    style="position:fixed;bottom:14px;left:14px;z-index:999;
       background:#25D366;color:#fff;border-radius:50px;
-      padding:10px 18px;font-size:13px;font-weight:700;
-      display:flex;align-items:center;gap:8px;
-      box-shadow:0 4px 20px rgba(37,211,102,.4);
+      padding:7px 13px;font-size:11.5px;font-weight:700;
+      display:flex;align-items:center;gap:6px;
+      box-shadow:0 3px 14px rgba(37,211,102,.38);
       text-decoration:none;transition:all .2s;
       font-family:var(--font)"
-    onmouseover="this.style.background='#1ebe5d';this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(37,211,102,.5)'"
-    onmouseout="this.style.background='#25D366';this.style.transform='';this.style.boxShadow='0 4px 20px rgba(37,211,102,.4)'">
-    <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+    onmouseover="this.style.background='#1ebe5d';this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 20px rgba(37,211,102,.5)'"
+    onmouseout="this.style.background='#25D366';this.style.transform='';this.style.boxShadow='0 3px 14px rgba(37,211,102,.38)'">
+    <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
     Contáctanos
   </a>
 
@@ -29740,9 +29750,9 @@ document.addEventListener('click', function(e) {
 
     // ── Calcular posición segura (dentro del viewport) ──
     var isMobile = window.innerWidth < 700;
-    var fabSize  = isMobile ? 52 : 60;
-    var fabRight = Math.min(20, window.innerWidth * 0.04);
-    var fabBot   = isMobile ? 68 : 24;
+    var fabSize  = isMobile ? 44 : 50;
+    var fabRight = Math.min(14, window.innerWidth * 0.035);
+    var fabBot   = isMobile ? 56 : 14;
 
     // ── Sonograma SVG animado para el FAB ──
     function makeSonogram(size, color) {
@@ -29796,7 +29806,7 @@ document.addEventListener('click', function(e) {
       // Estrella central
       '<div id="aiFabInner" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:relative;z-index:2">' +
         '<div id="aiFabStar" style="transition:opacity .3s,transform .3s">' +
-          '<svg width="22" height="22" viewBox="0 0 40 40" fill="none" style="animation:ssttSpin 12s linear infinite;filter:drop-shadow(0 0 6px rgba(255,255,255,0.8))">' +
+          '<svg width="18" height="18" viewBox="0 0 40 40" fill="none" style="animation:ssttSpin 12s linear infinite;filter:drop-shadow(0 0 6px rgba(255,255,255,0.8))">' +
             '<defs><linearGradient id="gORB" x1="0" y1="0" x2="1" y2="1">' +
               '<stop offset="0%" stop-color="rgba(255,255,255,0.95)"/>' +
               '<stop offset="50%" stop-color="rgba(255,220,220,0.9)"/>' +
@@ -30348,6 +30358,9 @@ function compatExtractSpecs(p) {
   var specs = { codigo: p.codigo, nombre: n, cat: p.cat };
 
   // ── CANALES (grabadores) ──
+  // Specs enriquecidos v9.1 (sesión 11): basados en datasheets oficiales Dahua.
+  // Se completaron las propiedades que las reglas usaban pero nunca se calculaban:
+  // serie, maxResIPMP, esWizsense, tieneChipIA, canalesIAporNVR, mbps, sufijo, es4K.
   if (p.cat === 'nvr') {
     // Buscar en nombre: "4CH", "8 canales", etc.
     var mch = n.match(/(\d+)\s*(?:CH|canales?)/i);
@@ -30358,32 +30371,174 @@ function compatExtractSpecs(p) {
     }
     specs.canales = mch ? parseInt(mch[1]) : null;
 
-    // Resolución máxima soportada
-    var mres = n.match(/(4K|8MP|12MP|16MP)/i);
-    if (mres) {
+    // ── Tipo: NVR (IP), XVR/HCVR/DVR (HDCVI), IVSS (IP gran escala) ──
+    if (/NVR|IVSS/.test(c)) specs.tipoGrabador = 'IP';
+    else if (/XVR|HCVR|DVR|MCVR/.test(c)) specs.tipoGrabador = 'HDCVI';
+    else specs.tipoGrabador = 'IP';
+
+    // ── SERIE (1ª cifra después del prefijo) ──
+    // Ej: NVR4216-EI → serie 4 · XVR5108H-I3 → serie 5 · XVR1B08-I → serie 1
+    //     HCVR4108HS-S3 → serie 4 · XVR7416L-4K-I3 → serie 7
+    var mserie = c.match(/(?:NVR|XVR|HCVR|DVR|IVSS|MCVR)(\d)/);
+    specs.serie = mserie ? parseInt(mserie[1]) : 4; // default 4 (Pro/Lite)
+
+    // ── ¿Producto legacy / desactualizado? ──
+    // Estos productos están en el catálogo por compatibilidad histórica pero NO
+    // deben sugerirse para sistemas nuevos. Incluye:
+    //  • DVRs 960H/D1/CIF (familias 02DVR, 02iDVR, DVR510xC-W, IS226xT)
+    //  • NVRs viejos sin sufijo IA (02NVR1, 02NVR2208-P, 02NVR4104-W)
+    //  • XVR Cooper original sin -I (XVR1A, XVR4-X sin sufijo I)
+    //  • HCVR pre-2018 (sin sufijo -I3, generalmente -S2/-S3 pero estos solo tienen
+    //    AHD/CVBS sin SMD ni IA — se exceptúan los muy modernos como HCVR4232AN-S3
+    //    que sí incluye 1080P y H.265+, pero como filtro genérico desactualizado).
+    //  • Todo lo que diga "960H", "D1", "CIF", "TVL", "AHD" en el nombre (sin -I3)
+    specs.esLegacy = (
+      // Familias claramente legacy por código
+      /^(?:02DVR|02iDVR|02NVR|DVR\d+C-W|iHCVR|01366ND|0134\d{2}|0184\d{2}|01968)/.test(c) ||
+      /^IS\d{4}T|^013413|^01HFW|^01HDB|^01SD|^018|^016|^013|^014/.test(c) ||
+      // Nombre con tecnología obsoleta (960H, D1, CIF, AHD analógico viejo)
+      /\b(?:960H|D1\b|4CIF|CIF\b|TVL|análog[ao]|AHD\b)/i.test(n) ||
+      // HCVR sin -I (versiones pre-WizSense, solo CIF/AHD)
+      (/^HCVR/.test(c) && !/-I/.test(c)) ||
+      // XVR Cooper viejo (1A, sin -I)
+      /^DH-XVR1A|^XVR1A/.test(c) ||
+      // XVR/NVR -X / -X1 (descontinuados pre-I3): sufijos -X, -X1, -V2 sin nada moderno después
+      (/^(?:XVR|NVR)\d/.test(c) && /-X1?$|-V2$|-X-/.test(c) && !/-I[23]?$|-EI[2]?$|-XI$|-4KS[23]$/.test(c))
+    );
+
+    // ── SUFIJO (último token tras el último guión, antes de variantes) ──
+    // -I3, -I2, -I, -EI, -EI2, -XI, -4KS2, -4KS3, -4KL-I3, -4K-I3, -X, -S2, -S3
+    var msuf = c.match(/-(4KS3|4KS2|4KL-I3|4KL-I2|4K-I3|4K-I2|4KL-X|EI2|EI|XI|I3|I2|I-L|I|S3|S2|X)\b/);
+    specs.sufijo = msuf ? msuf[1] : '';
+
+    // ── ¿Soporta 4K? (ya sea por código o nombre) ──
+    specs.es4K = /4K|4KL|4KS2|4KS3/i.test(c) || /4K|8MP|UHD/i.test(n);
+
+    // ── Resolución máxima general (live view + playback) ──
+    var mres = n.match(/(4K|8MP|12MP|16MP|32MP)/i);
+    if (specs.esLegacy) {
+      // DVRs 960H/D1: máx ~1MP, y a veces ni eso. Forzar 1.
+      specs.maxResMP = 1;
+    } else if (mres) {
       var r = mres[1].toUpperCase();
       specs.maxResMP = r === '4K' ? 8 : parseInt(r);
-    } else if (/(?:NVR|XVR|DVR)\w*(5\d{3}|4\d{3})/.test(c)) {
-      specs.maxResMP = 8; // Serie 5000/4000 soporta 4K
-    } else if (/(?:NVR|XVR|DVR)\w*(2\d{3}|1\d{3})/.test(c)) {
-      specs.maxResMP = 4; // Serie 2000 solo hasta 4MP
+    } else if (specs.tipoGrabador === 'IP') {
+      // NVR: la serie y el sufijo determinan la resolución máxima real
+      if (specs.serie >= 5) specs.maxResMP = specs.es4K ? 12 : 12; // serie 5+: hasta 12MP
+      else if (specs.serie === 4) specs.maxResMP = specs.es4K ? 12 : 8; // serie 4: 8-12MP
+      else if (specs.serie === 2) specs.maxResMP = specs.es4K ? 8 : 8;  // serie 2: hasta 8MP
+      else specs.maxResMP = 6; // serie 1: 6MP
     } else {
-      specs.maxResMP = 4; // Default conservador
+      // XVR/HCVR: la resolución HDCVI (analog) — el límite real lo fija maxResIPMP
+      if (specs.serie >= 7) specs.maxResMP = 8;       // XVR7xxx 4K
+      else if (specs.es4K) specs.maxResMP = 8;        // XVR5xxx-4KL/4K
+      else if (specs.serie === 5) specs.maxResMP = 5; // XVR5xxx-I3 estándar: 5M-N
+      else if (specs.serie === 4) specs.maxResMP = 2; // XVR4xxx 1080P-Lite
+      else specs.maxResMP = 2;                        // XVR1B Cooper: 1080P
+    }
+
+    // ── Resolución máxima IP (CLAVE para detectar incompatibilidades) ──
+    // Datasheets Dahua oficiales:
+    //  XVR1B (Cooper):    IP hasta 6MP (4CH puede ser 2MP)
+    //  XVR4xxx Lite:      IP hasta 6MP (modelos 4CH a 2MP)
+    //  XVR5xxx-I3:        IP hasta 6MP (estándar 5M-N)
+    //  XVR5xxx-4KL-I3:    IP hasta 8MP/4K
+    //  XVR7xxx:           IP hasta 8MP/4K
+    //  NVR1xxx:           IP hasta 6MP
+    //  NVR2xxx:           IP hasta 8MP (con 4K en sufijo: 12MP)
+    //  NVR4xxx/5xxx/6xxx: IP hasta 12MP (todos los modernos -I/-EI/-XI/-4KS2/-4KS3)
+    if (specs.esLegacy) {
+      specs.maxResIPMP = 1; // legacy 960H no soporta IP de verdad
+    } else if (specs.tipoGrabador === 'IP') {
+      if (specs.serie === 1) specs.maxResIPMP = 6;
+      else if (specs.serie === 2) specs.maxResIPMP = specs.es4K ? 12 : 8;
+      // NVR serie 4+: todos los modelos modernos soportan al menos 12MP
+      // (-EI, -EI2, -XI, -I, -I2, -I3, -I-L, -4KS2, -4KS3 todos llegan a 12MP)
+      else if (specs.serie >= 4) specs.maxResIPMP = 12;
+      else specs.maxResIPMP = 8;
+    } else {
+      // XVR/HCVR/DVR
+      if (specs.serie >= 7) specs.maxResIPMP = 8;             // 4K en todos los canales IP
+      else if (specs.es4K) specs.maxResIPMP = 8;              // -4KL-I3 / -4K-I3
+      else if (specs.serie === 5) specs.maxResIPMP = 6;       // 5xxx-I3 estándar
+      else if (specs.serie === 4) specs.maxResIPMP = (specs.canales <= 4) ? 2 : 6; // Lite chico vs grande
+      else if (specs.serie === 1) specs.maxResIPMP = (specs.canales <= 4) ? 2 : 6; // Cooper chico vs grande
+      else specs.maxResIPMP = 6;
+    }
+
+    // ── ¿Tiene IA WizSense (chip IA propio en el grabador)? ──
+    // Indicadores: "WizSense", "WizMind", "IVS" en nombre · sufijos -I, -I2, -I3, -EI, -EI2, -XI
+    // NVR Pro/Ultra modernos (-EI/-XI) tienen IA premium.
+    specs.esWizsense = /WizSense|WizMind|IVS|SMD|inteligen/i.test(n) ||
+                       /-I3|-I2|-EI2?\b|-XI\b|-I-L|^(-)?I$/.test(specs.sufijo) ||
+                       /-EI\b|-XI\b|-I3\b|-I2\b/.test(c);
+
+    // ── ¿Tiene chip IA dedicado para AI by NVR? ──
+    // Solo NVR serie 4+ con sufijos -EI/-EI2/-XI/-I (pero no Lite -4KS2/-4KS3 sin -I).
+    // En XVR: serie 5/7 con -I3 puede coordinar SMD. Serie 4 con -I también.
+    var tieneChipIA_NVR = specs.tipoGrabador === 'IP' &&
+                          specs.serie >= 4 &&
+                          /-EI|-EI2|-XI|-I3|-I2|-I-L|(?<!4K)\bI\b/.test(c);
+    var tieneChipIA_XVR = specs.tipoGrabador === 'HDCVI' &&
+                          /-I3|-I2|-I\b/.test(c);
+    specs.tieneChipIA = tieneChipIA_NVR || tieneChipIA_XVR;
+
+    // ── Canales IA simultáneos por NVR (cuando AI by NVR) ──
+    // NVR serie 2 con chip: ~4ch SMD, 2ch perimetral, 1ch facial
+    // NVR serie 4: 4-8ch SMD/perimetral según modelo
+    // NVR serie 5+: 8-32ch SMD según modelo
+    // XVR: -I3 hace SMD en todos los canales analógicos (no IP adicionales)
+    if (specs.tipoGrabador === 'IP') {
+      if (specs.serie === 2) specs.canalesIAporNVR = 4;
+      else if (specs.serie === 4) specs.canalesIAporNVR = 8;
+      else if (specs.serie >= 5) specs.canalesIAporNVR = Math.min(specs.canales || 16, 32);
+      else specs.canalesIAporNVR = 0;
+    } else {
+      // XVR -I3: todos los canales analógicos hacen SMD
+      specs.canalesIAporNVR = specs.tieneChipIA ? (specs.canales || 0) : 0;
+    }
+
+    // ── Bandwidth Mbps incoming (IP) ──
+    // NVR 1xxx: 40-80 Mbps · 2xxx: 80-160 · 4xxx: 200-256 · 5xxx: 320-1280 · 6xxx: 320-1280
+    // XVR 1B/4: 32-64 · 5xxx-I3: 32-160 · 5xxx-4KL: 128-160 · 7xxx: 256-320
+    // El nombre suele incluirlo: "144mbps", "200Mbps", "320Mbps". Si no, se estima.
+    var mmbps = n.match(/(\d+)\s*(?:Mbps|mbps)/i);
+    if (mmbps) {
+      specs.mbps = parseInt(mmbps[1]);
+    } else if (specs.tipoGrabador === 'IP') {
+      if (specs.serie === 1) specs.mbps = 48;
+      else if (specs.serie === 2) specs.mbps = specs.es4K ? 144 : 80;
+      else if (specs.serie === 4) specs.mbps = specs.es4K ? 256 : 200;
+      else if (specs.serie === 5) specs.mbps = /XI|EI2|EI/.test(specs.sufijo) ? 320 : 320;
+      else if (specs.serie === 6) specs.mbps = 384;
+      else specs.mbps = 200;
+    } else {
+      // XVR
+      if (specs.serie >= 7) specs.mbps = 256;
+      else if (specs.es4K && specs.serie === 5) specs.mbps = 128;
+      else if (specs.serie === 5) specs.mbps = (specs.canales >= 16) ? 96 : 64;
+      else if (specs.serie === 4) specs.mbps = 64;
+      else specs.mbps = 48; // Cooper 1B
     }
 
     // Puertos PoE integrados (NVR4104-P tiene 4 PoE)
     var mpoe = c.match(/-P(\d+)?/);
     if (mpoe) specs.puertosPoE = mpoe[1] ? parseInt(mpoe[1]) : specs.canales;
     else specs.puertosPoE = 0;
+    // Detección alternativa: "8P" embebido en serie+ch (ej: NVR2108HS-8P-I2, NVR4116HS-8P-EI)
+    if (!specs.puertosPoE) {
+      var mpoeAlt = c.match(/-?(\d+)P-/);
+      if (mpoeAlt) specs.puertosPoE = parseInt(mpoeAlt[1]);
+    }
 
     // Canales IP adicionales en grabadores híbridos (ej: '+1IP', '+4IP')
     var mipx = n.match(/\+(\d+)\s*IP/i) || n.match(/(\d+)\s*IP(?:\b)/i);
     specs.canalesIPExtra = mipx ? parseInt(mipx[1]) : 0;
+    // En XVR -I3 y -4KL-I3 modernos, los canales IP son SUMA pero algunos son reemplazo.
+    // Si el nombre dice "+NIP" → suma. Si solo dice "NIP" sin "+" puede ser total.
 
-    // Tipo: NVR (IP), XVR/HCVR/DVR (HDCVI), IVSS (IP gran escala)
-    if (/NVR|IVSS/.test(c)) specs.tipoGrabador = 'IP';
-    else if (/XVR|HCVR|DVR|MCVR/.test(c)) specs.tipoGrabador = 'HDCVI';
-    else specs.tipoGrabador = 'IP';
+    // ── Helper: ¿el grabador es apto para soportar todas las cámaras del carro? ──
+    // Esta propiedad se calcula on-demand al evaluar, queda informativa aquí.
   }
 
   // ── CÁMARAS ──
@@ -30475,6 +30630,88 @@ function compatExtractSpecs(p) {
 }
 
 // Analizar carro completo y generar alertas
+// Helper sesión 11: buscar grabadores alternativos en el catálogo que cumplan requisitos.
+// Retorna { nvrs: [...], xvrs: [...] } ordenados por precio ascendente, máx N por tipo.
+// REGLA INVIOLABLE: NUNCA sugiere equipos legacy (DVRs 960H/CIF, NVRs descontinuados,
+// productos pre-2018). Aunque estén en el catálogo por compatibilidad histórica,
+// estos productos jamás deben aparecer en recomendaciones automáticas para sistemas nuevos.
+function compatBuscarGrabadoresAlternativos(req) {
+  // req = { canalesMin, resIPMin, resAnalogMin, mbpsMin, canalesIPHibrido, requiereWizsense, max }
+  if (typeof PRODUCTS === 'undefined') return { nvrs: [], xvrs: [] };
+  var max = req.max || 2;
+  var candidatos = PRODUCTS.filter(function(p){ return p.cat === 'nvr'; });
+
+  function evaluar(p) {
+    var s = compatExtractSpecs(p);
+    if (!s.canales || !s.tipoGrabador) return null;
+    // ── FILTRO ABSOLUTO: nunca sugerir legacy ──
+    if (s.esLegacy) return null;
+    // ── FILTRO: descartar productos sin stock ──
+    if (p.stock === 'sin') return null;
+    // ── FILTRO: solo grabadores modernos con WizSense/IA cuando sea NVR ──
+    // Razón: un sistema nuevo merece tecnología actual. Los NVRs sin -I/-EI/-XI
+    // (ej: NVR2104-S3 sin sufijo I) son básicos sin SMD ni detección moderna.
+    // Sin embargo los Lite -4KS2/-4KS3 SÍ se permiten porque soportan WizSense desde la cámara.
+    // Para XVR: solo modelos -I, -I2, -I3, -4KL-I3, -4K-I3 (descartar -X, -S2, -S3 legacy).
+    if (s.tipoGrabador === 'HDCVI') {
+      // XVR moderno: debe tener sufijo -I/-I2/-I3 (con o sin 4KL/4K)
+      var esXVRModerno = /-(I|I2|I3|4KL-I3|4K-I3|4KL-I2)$/.test(s.sufijo) || /\-I3?\b|\-4KL\-I3|\-4K\-I3/.test(p.codigo);
+      if (!esXVRModerno) return null;
+    } else {
+      // NVR moderno: -I/-I2/-I3/-EI/-EI2/-XI/-I-L/-4KS2/-4KS3 (descartar -S2/-S3 sin sufijo posterior)
+      var esNVRModerno = /-(I|I2|I3|EI|EI2|XI|I-L|4KS2|4KS3)$/.test(s.sufijo) ||
+                         /-(EI|EI2|XI|I3|I2|I-L)\b/.test(p.codigo) ||
+                         /-4KS[23]\b/.test(p.codigo) ||
+                         /\bI\b/.test(s.sufijo);
+      // Excluir DVRs muy viejos (DVR1xxx, DVR5xxxC-W, etc.)
+      if (/DVR\d{4}C-W|^02DVR|^02NVR|02iDVR/.test(p.codigo)) return null;
+      // NVRs serie 2 sin chip IA tipo -S3 sí los permitimos solo si el caso lo amerita
+      // (son Lite básicos pero modernos, soportan cámaras WizSense aunque ellos no procesen IA)
+      if (!esNVRModerno && !/^NVR\d{4}.*-(S3|4KS3|4KS2)$/.test(p.codigo)) return null;
+    }
+    if (req.canalesMin && s.canales < req.canalesMin) return null;
+    if (req.resIPMin && (s.maxResIPMP || 0) < req.resIPMin) return null;
+    // Para XVR/HCVR: validar resolución analógica si la requerimos
+    if (req.resAnalogMin && s.tipoGrabador === 'HDCVI' && (s.maxResMP || 0) < req.resAnalogMin) return null;
+    if (req.mbpsMin && (s.mbps || 0) < req.mbpsMin) return null;
+    if (req.canalesIPHibrido && s.tipoGrabador === 'HDCVI') {
+      // Para XVR: el bus IP debe poder recibir las cámaras IP
+      var capacidadIP = (s.canalesIPExtra || 0);
+      if (capacidadIP < req.canalesIPHibrido) return null;
+    }
+    if (req.requiereWizsense && !s.esWizsense) return null;
+    s.codigoOriginal = p.codigo;
+    s.nombre = p.nombre;
+    s.precio = p.ptotal;
+    s.stockEst = p.stock;
+    return s;
+  }
+
+  var matches = candidatos.map(evaluar).filter(Boolean);
+  // Priorizar stock normal sobre poco stock
+  function stockRank(s) {
+    if (s === 'poco') return 2;
+    return 1; // normal o undefined
+  }
+  matches.sort(function(a, b){
+    var sa = stockRank(a.stockEst), sb = stockRank(b.stockEst);
+    if (sa !== sb) return sa - sb;
+    return a.precio - b.precio;
+  });
+
+  var nvrs = matches.filter(function(m){ return m.tipoGrabador === 'IP'; }).slice(0, max);
+  var xvrs = matches.filter(function(m){ return m.tipoGrabador === 'HDCVI'; }).slice(0, max);
+  return { nvrs: nvrs, xvrs: xvrs };
+}
+
+// Helper sesión 11: formatear precio CLP corto
+function compatFmtCLP(n) {
+  if (typeof n !== 'number' || isNaN(n)) return '';
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(n >= 10000000 ? 0 : 1).replace('.0','') + 'M';
+  if (n >= 1000) return '$' + Math.round(n/1000) + 'k';
+  return '$' + n;
+}
+
 function compatAnalizarCarro() {
   if (typeof S === 'undefined' || !S.cart || S.cart.length === 0) return [];
   
@@ -30484,6 +30721,8 @@ function compatAnalizarCarro() {
     if (!p) return null;
     var specs = compatExtractSpecs(p);
     specs.qty = it.qty || 1;
+    specs.ptotal = p.ptotal;
+    specs.stock = p.stock;
     return specs;
   }).filter(Boolean);
 
@@ -30565,17 +30804,49 @@ function compatAnalizarCarro() {
       }
 
       // ── Sub-regla 2b: Resolución IP excede límite del XVR/HCVR ──
+      // SESIÓN 11: en vez de mensaje genérico, sugerir SKUs concretos del catálogo
+      // — tanto NVR equivalentes como XVR de serie superior que sí soporten la resolución.
       var maxResIP = g.maxResIPMP || 2;
       var camsAltaRes = camarasIP.filter(function(c){return c.resolucionMP > maxResIP;});
       if (camsAltaRes.length > 0) {
         var ejemplos = camsAltaRes.slice(0,2).map(function(c){return c.codigo + ' (' + c.resolucionMP + 'MP)';}).join(', ');
+        var maxResNeeded = camsAltaRes.reduce(function(m, c){ return Math.max(m, c.resolucionMP); }, 0);
+
+        // Buscar alternativas en el catálogo: capacidad >= total cámaras IP, resolución >= la cámara más exigente
+        var alts = compatBuscarGrabadoresAlternativos({
+          canalesMin: totalCamarasIP,
+          resIPMin: maxResNeeded,
+          canalesIPHibrido: totalCamarasIP, // para XVR: que tenga slots IP suficientes
+          max: 2
+        });
+
+        var solucion = 'Tu ' + g.codigo + ' (XVR serie ' + g.serie + ') admite IP solo hasta ' + maxResIP + 'MP.';
+        var partes = [];
+        if (alts.nvrs.length) {
+          var nvrTxt = alts.nvrs.map(function(n){
+            return n.codigoOriginal + ' (' + n.canales + 'CH IP, hasta ' + n.maxResIPMP + 'MP'
+              + (n.precio ? ' · ' + compatFmtCLP(n.precio) : '') + ')';
+          }).join(' · ');
+          partes.push('Opción A — NVR (todo IP, sin cableado coaxial): ' + nvrTxt);
+        }
+        if (alts.xvrs.length) {
+          var xvrTxt = alts.xvrs.map(function(x){
+            return x.codigoOriginal + ' (' + x.canales + 'CH HDCVI + ' + (x.canalesIPExtra||x.canales) + 'IP hasta ' + x.maxResIPMP + 'MP'
+              + (x.precio ? ' · ' + compatFmtCLP(x.precio) : '') + ')';
+          }).join(' · ');
+          partes.push('Opción B — XVR híbrido (mantiene tus HDCVI si las hay): ' + xvrTxt);
+        }
+        if (!partes.length) {
+          partes.push(maxResIP <= 2
+            ? 'Necesitas un NVR o un XVR serie 5/7 con sufijo -4KL-I3 o -4K-I3 para soportar cámaras de mayor resolución.'
+            : 'Cambia a un XVR serie 5/7 con sufijo -4KL-I3 para soportar IP hasta 4K, o usa un NVR.');
+        }
+
         alertas.push({
           tipo: 'error',
           titulo: 'Resolución IP excede la capacidad del grabador híbrido',
-          mensaje: 'El ' + g.codigo + ' (serie ' + g.serie + '000) acepta cámaras IP hasta ' + maxResIP + 'MP. Tienes: ' + ejemplos + '.',
-          solucion: maxResIP <= 2
-            ? 'Los canales IP de este grabador solo soportan cámaras de máx 2MP. Para cámaras de mayor resolución necesitas un NVR.'
-            : 'Cambia a un XVR serie 7000 para soportar cámaras IP hasta 4K, o usa un NVR.',
+          mensaje: 'El ' + g.codigo + ' (serie ' + g.serie + ') acepta cámaras IP hasta ' + maxResIP + 'MP. Tienes: ' + ejemplos + '.',
+          solucion: solucion + ' ' + partes.join(' '),
           icon: '📐'
         });
       }
@@ -30711,18 +30982,39 @@ function compatAnalizarCarro() {
   });
 
   // ═══ REGLA 3: Resolución máxima del NVR vs cámaras ═══
+  // SESIÓN 11: usar maxResIPMP (más preciso que maxResMP) y sugerir SKUs concretos.
   grabadores.forEach(function(g) {
-    if (g.tipoGrabador !== 'IP' || !g.maxResMP) return;
+    if (g.tipoGrabador !== 'IP') return;
+    var limiteRes = g.maxResIPMP || g.maxResMP || 8;
     var camarasExceden = camarasIP.filter(function(c){
-      return c.resolucionMP > g.maxResMP;
+      return c.resolucionMP > limiteRes;
     });
     if (camarasExceden.length > 0) {
       var nombres = camarasExceden.map(function(c){return c.codigo + ' (' + c.resolucionMP + 'MP)';}).join(', ');
+      var maxResNeeded = camarasExceden.reduce(function(m, c){ return Math.max(m, c.resolucionMP); }, 0);
+
+      // Buscar NVR alternativos del catálogo que sí soporten esa resolución
+      var altsNVR = compatBuscarGrabadoresAlternativos({
+        canalesMin: totalCamarasIP,
+        resIPMin: maxResNeeded,
+        max: 2
+      });
+      var solucionTxt = 'El NVR actual grabará a menor resolución, perdiendo detalle.';
+      if (altsNVR.nvrs.length) {
+        var sug = altsNVR.nvrs.map(function(n){
+          return n.codigoOriginal + ' (' + n.canales + 'CH, hasta ' + n.maxResIPMP + 'MP'
+            + (n.precio ? ' · ' + compatFmtCLP(n.precio) : '') + ')';
+        }).join(' · ');
+        solucionTxt += ' Alternativas en stock: ' + sug + '.';
+      } else {
+        solucionTxt += ' Considera cambiar a un NVR serie 4xxx/5xxx (soporta hasta 12MP).';
+      }
+
       alertas.push({
         tipo: 'warning',
         titulo: 'Resolución de cámaras excede capacidad del NVR',
-        mensaje: 'Tu ' + g.codigo + ' graba máx ' + g.maxResMP + 'MP por canal pero tienes: ' + nombres + '.',
-        solucion: 'El NVR grabará a menor resolución. Para aprovecharlas cambia a un NVR serie 4000/5000 (soporta hasta 12MP).',
+        mensaje: 'Tu ' + g.codigo + ' graba máx ' + limiteRes + 'MP por canal pero tienes: ' + nombres + '.',
+        solucion: solucionTxt,
         icon: '📐'
       });
     }
@@ -30840,6 +31132,105 @@ function compatAnalizarCarro() {
       solucion: 'Para aprovechar al máximo la IA, considera uniformar la línea. WizSense reduce falsas alarmas 90%.',
       icon: '🤖'
     });
+  }
+
+  // ═══ REGLA 10: Cámaras sin grabador — sugerir NVR Y XVR cuando aplique ═══
+  // SESIÓN 11: cuando el carrito tiene cámaras pero ningún grabador, ofrecer
+  // alternativas según tipo de cámara. Si solo hay IP → recomendar NVR.
+  // Si hay HDCVI → recomendar XVR. Si hay mix IP+HDCVI → ambos caminos:
+  //   (A) NVR con conversores HDCVI→IP (no práctico, recomendamos cambiar)
+  //   (B) XVR híbrido que acepte ambas (preferido)
+  if (totalCamaras > 0 && grabadores.length === 0) {
+    var maxResIPCam = camarasIP.length > 0
+      ? camarasIP.reduce(function(m, c){ return Math.max(m, c.resolucionMP || 2); }, 0)
+      : 0;
+
+    // Caso: solo cámaras IP
+    if (camarasIP.length > 0 && camarasHDCVI.length === 0) {
+      var altsSoloIP = compatBuscarGrabadoresAlternativos({
+        canalesMin: totalCamarasIP,
+        resIPMin: maxResIPCam,
+        max: 2
+      });
+      var partesIP = [];
+      if (altsSoloIP.nvrs.length) {
+        var nvrTxtIP = altsSoloIP.nvrs.map(function(n){
+          return n.codigoOriginal + ' (' + n.canales + 'CH, ' + n.maxResIPMP + 'MP'
+            + (n.precio ? ' · ' + compatFmtCLP(n.precio) : '') + ')';
+        }).join(' · ');
+        partesIP.push('NVR (recomendado, todo IP): ' + nvrTxtIP);
+      }
+      if (maxResIPCam <= 6 && altsSoloIP.xvrs.length) {
+        var xvrTxtIP = altsSoloIP.xvrs.map(function(x){
+          return x.codigoOriginal + ' (' + x.canales + 'CH HDCVI + IP hasta ' + x.maxResIPMP + 'MP'
+            + (x.precio ? ' · ' + compatFmtCLP(x.precio) : '') + ')';
+        }).join(' · ');
+        partesIP.push('XVR híbrido (si quieres flexibilidad de mezclar HDCVI a futuro): ' + xvrTxtIP);
+      }
+      if (partesIP.length) {
+        alertas.push({
+          tipo: 'info',
+          titulo: 'Te falta el grabador',
+          mensaje: 'Tienes ' + totalCamarasIP + ' cámara' + (totalCamarasIP>1?'s':'') + ' IP de hasta ' + maxResIPCam + 'MP sin grabador en el carro.',
+          solucion: partesIP.join(' · '),
+          icon: '📼'
+        });
+      }
+    }
+
+    // Caso: solo cámaras HDCVI
+    else if (camarasHDCVI.length > 0 && camarasIP.length === 0) {
+      var maxResHDCVI = camarasHDCVI.reduce(function(m, c){ return Math.max(m, c.resolucionMP || 2); }, 0);
+      var altsHDCVI = compatBuscarGrabadoresAlternativos({
+        canalesMin: totalCamarasHDCVI,
+        // Mínimo 2MP (1080P) para descartar DVRs legacy 960H/CIF aunque estén en catálogo
+        resAnalogMin: Math.max(maxResHDCVI, 2),
+        max: 2
+      });
+      // Filtrar solo XVR de la sugerencia
+      var xvrsTxt = altsHDCVI.xvrs.length ? altsHDCVI.xvrs.map(function(x){
+        return x.codigoOriginal + ' (' + x.canales + 'CH HDCVI hasta ' + x.maxResMP + 'MP'
+          + (x.precio ? ' · ' + compatFmtCLP(x.precio) : '') + ')';
+      }).join(' · ') : '';
+      if (xvrsTxt) {
+        alertas.push({
+          tipo: 'info',
+          titulo: 'Te falta el grabador',
+          mensaje: 'Tienes ' + totalCamarasHDCVI + ' cámara' + (totalCamarasHDCVI>1?'s':'') + ' HDCVI de hasta ' + maxResHDCVI + 'MP. Las HDCVI requieren XVR (no NVR).',
+          solucion: 'Opciones recomendadas: ' + xvrsTxt + '. Recuerda agregar también fuente 12V DC y cable coaxial.',
+          icon: '📼'
+        });
+      }
+    }
+
+    // Caso: mix IP + HDCVI
+    else if (camarasIP.length > 0 && camarasHDCVI.length > 0) {
+      var maxResHDCVImix = camarasHDCVI.reduce(function(m, c){ return Math.max(m, c.resolucionMP || 2); }, 0);
+      var altsMix = compatBuscarGrabadoresAlternativos({
+        canalesMin: totalCamaras,
+        resIPMin: maxResIPCam,
+        resAnalogMin: maxResHDCVImix,
+        canalesIPHibrido: totalCamarasIP,
+        max: 2
+      });
+      var sol = 'Tienes ' + totalCamarasIP + ' IP + ' + totalCamarasHDCVI + ' HDCVI. ';
+      if (altsMix.xvrs.length) {
+        var xvrMixTxt = altsMix.xvrs.map(function(x){
+          return x.codigoOriginal + ' (' + x.canales + 'CH HDCVI + ' + (x.canalesIPExtra||x.canales) + 'IP hasta ' + x.maxResIPMP + 'MP'
+            + (x.precio ? ' · ' + compatFmtCLP(x.precio) : '') + ')';
+        }).join(' · ');
+        sol += 'XVR híbrido recomendado: ' + xvrMixTxt + '.';
+      } else {
+        sol += 'No hay XVR con capacidad para todas tus cámaras. Considera dividir el sistema: NVR para IP + XVR para HDCVI por separado.';
+      }
+      alertas.push({
+        tipo: 'warning',
+        titulo: 'Mix IP + HDCVI sin grabador',
+        mensaje: 'Para grabar ambas tecnologías a la vez necesitas un XVR híbrido (penta-brid).',
+        solucion: sol,
+        icon: '🔀'
+      });
+    }
   }
 
   return alertas;
