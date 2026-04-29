@@ -1363,7 +1363,8 @@ nav {
 @media(max-width:600px) {
   /* En mobile el drawer es full-width — ocultar overlay completamente */
   .cart-overlay.open { display: none !important; }
-  /* Padding para no quedar bajo el mobileNav */
+  /* s21a: comentario obsoleto eliminado (mencionaba mobileNav que ya no existe).
+     Las reglas .cart-sticky propias siguen vigentes con su safe-area-inset-bottom. */
   .cart-sticky {
   flex-shrink: 0;
   padding: 10px 14px max(14px, env(safe-area-inset-bottom));
@@ -1433,12 +1434,8 @@ nav {
   transform: scale(1.08) rotate(90deg);
 }
 
-/* Body scroll */
-.cart-body {
-  flex: 1; overflow-y: auto; padding: 14px 16px;
-  scrollbar-width: none;
-}
-.cart-body::-webkit-scrollbar { display: none }
+/* s21b: bloque .cart-body { ... } eliminado (selector huérfano post-s19a hallazgo).
+   El HTML del carro usa #cartItems directo (L16926), no .cart-body. */
 
 /* Empty */
 .cart-empty {
@@ -1509,17 +1506,10 @@ nav {
 }
 .ci-del:hover { color: var(--red) }
 
-/* Footer */
-.cart-foot {
-  display: contents; /* deja que cart-form y cart-sticky sean hijos directos del flex */
-}
-/* FIX s19a: .cart-form CSS eliminada (huérfana — sin uso en HTML/JS).
-   Auditoría grep exhaustiva: 0 hits en class= y 0 inyecciones dinámicas.
-   El comentario en .cart-foot arriba todavía la menciona como referencia
-   histórica del rename — se preserva intacto para contexto.
-   Hallazgo nuevo (deuda 🟡 v20): .cart-foot, .cart-body, #cartFoot, #cartBody
-   también son huérfanos (auditoría descubierta durante este cleanup). NO los
-   borré por disciplina de alcance — registrados para s20. */
+/* s21b: .cart-foot { display: contents } eliminado (selector huérfano).
+   Originalmente envolvía .cart-form (eliminada en s19a) y .cart-sticky (sigue viva).
+   Hoy .cart-sticky es hijo directo del .cart-drawer flex; no necesita wrapper.
+   FIX s19a sigue documentado en su zona dark CSS. */
 .cart-sticky {
   flex-shrink: 0;
   padding: 14px 16px 20px;
@@ -21164,10 +21154,7 @@ function renderCart() {
   if (typeof renderCrossSell === 'function') renderCrossSell();
 }
 
-function scrollToCartItems() {
-  const body = qs('cartBody');
-  if(body) body.scrollTo({top:0, behavior:'smooth'});
-}
+// s21b: function scrollToCartItems() eliminada (nunca llamada, qs('cartBody') era huérfano).
 
 function calcTotals() {
   const neto=S.cart.reduce((a,c)=>a+c.pneto*c.qty,0);
@@ -26115,37 +26102,12 @@ window.addEventListener('DOMContentLoaded', () => {
   `;
   document.head.appendChild(style);
 
-  // 8. Fix cart layout — cartFoot was overflowing and crushing cartBody
-  const cartStyle = document.createElement('style');
-  cartStyle.textContent = `
-    #cartDrawer { display:flex!important; flex-direction:column!important; overflow:hidden!important; }
-    #cartBody { flex:1!important; overflow-y:auto!important; min-height:120px!important; }
-    #cartFoot { flex-shrink:0!important; overflow-y:auto!important; max-height:65vh!important; }
-    .cart-foot { flex-shrink:0!important; overflow-y:auto!important; max-height:65vh!important; }
-    .cart-body { flex:1!important; overflow-y:auto!important; min-height:120px!important; }
-  `;
-  document.head.appendChild(cartStyle);
-
-  // Scroll cart to top when opened — usando hook
-  window._addOpenCartHook(function() {
-    setTimeout(function() {
-      var cb = document.getElementById('cartBody');
-      if (cb) cb.scrollTop = 0;
-    }, 50);
-  });
-
-  // 9. Fix cart items visibility — ensure .citem elements are not hidden
-  const origRenderCart = window.renderCart;
-  if (origRenderCart) {
-    window.renderCart = function() {
-      origRenderCart();
-      // After render, scroll cart to top so items are visible first
-      setTimeout(() => {
-        const cb = document.getElementById('cartBody');
-        if (cb) cb.scrollTop = 0;
-      }, 10);
-    };
-  }
+  // s21b: bloque "Fix cart layout cartFoot/cartBody" eliminado — selectores
+  // #cartBody/#cartFoot/.cart-body/.cart-foot no existen en el HTML actual
+  // (el carro usa #cartItems). La inyección era no-op silenciosa. También
+  // eliminados los 2 hooks (_addOpenCartHook + wrapper renderCart) que hacían
+  // getElementById('cartBody') → null → no-op. El layout flex del drawer se
+  // gobierna por .cart-drawer + .cart-head + .cart-sticky directamente.
 
   // GMaps autocomplete — usando hook
   window._addOpenCartHook(function() {
