@@ -48591,10 +48591,9 @@ if (document.readyState === 'loading') {
 <div id="fabStackBackdrop" aria-hidden="true"></div>
 <script>
 (function(){
-  // FIX s23b: solo activar el stack si es touch/mobile (pointer:coarse).
-  // En desktop con mouse, los FABs mantienen sus posiciones CSS originales (no agrupados).
+  // FIX s23b/s23c: stack activo en TODO dispositivo. Touch/mobile usa tap-toggle,
+  // desktop (mouse) usa hover-to-expand. Detección por matchMedia.
   function isTouch(){ return matchMedia('(pointer: coarse)').matches; }
-  if (!isTouch()) return;
 
   var initialized = false;
   function initStack() {
@@ -48617,22 +48616,47 @@ if (document.readyState === 'loading') {
       else open();
     }
 
-    toggle.addEventListener('click', function(e){
-      e.stopPropagation();
-      toggleOpen();
-    });
-    backdrop.addEventListener('click', close);
-
-    // Tap en cualquier FAB ejecuta su acción Y cierra el abanico.
-    // Los onclick existentes (wizOpen, acOpen, aiToggle) siguen funcionando.
-    [wiz, ac, ai].forEach(function(fab){
-      fab.addEventListener('click', function(){
-        // Pequeño delay para que la acción del FAB se dispare antes del cierre visual.
-        setTimeout(close, 50);
+    if (isTouch()) {
+      // ── MODO TOUCH: tap-toggle + backdrop ──
+      toggle.addEventListener('click', function(e){
+        e.stopPropagation();
+        toggleOpen();
       });
-    });
+      backdrop.addEventListener('click', close);
+      // Tap en cualquier FAB ejecuta su acción Y cierra el abanico.
+      [wiz, ac, ai].forEach(function(fab){
+        fab.addEventListener('click', function(){
+          setTimeout(close, 50);
+        });
+      });
+    } else {
+      // ── MODO DESKTOP: hover-to-expand ──
+      // El "stack zone" comprende los 3 FABs apilados + el área del abanico cuando está abierto.
+      // Mouseenter sobre cualquiera de los 3 FABs o el toggle → abrir.
+      // Mouseleave del cluster completo (con delay para evitar flicker entre transiciones) → cerrar.
+      var closeTimer = null;
+      function scheduleClose() {
+        if (closeTimer) clearTimeout(closeTimer);
+        closeTimer = setTimeout(close, 220);
+      }
+      function cancelClose() {
+        if (closeTimer) { clearTimeout(closeTimer); closeTimer = null; }
+      }
+      function bindHover(el) {
+        el.addEventListener('mouseenter', function(){ cancelClose(); open(); });
+        el.addEventListener('mouseleave', scheduleClose);
+      }
+      bindHover(wiz); bindHover(ac); bindHover(ai); bindHover(toggle);
 
-    // ESC cierra el abanico (accesibilidad)
+      // Click en cualquier FAB ejecuta su acción y colapsa (mismo UX que touch).
+      [wiz, ac, ai].forEach(function(fab){
+        fab.addEventListener('click', function(){ setTimeout(close, 100); });
+      });
+      // El toggle en desktop NO sirve como tap (el hover ya abre); pero si alguien lo clickea, igual cerramos.
+      toggle.addEventListener('click', function(e){ e.stopPropagation(); close(); });
+    }
+
+    // ESC cierra el abanico (accesibilidad — vale en ambos modos)
     document.addEventListener('keydown', function(e){
       if (e.key === 'Escape' && document.body.classList.contains('fab-open')) close();
     });
