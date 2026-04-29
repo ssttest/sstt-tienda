@@ -15546,7 +15546,7 @@ body.cart-open #proyectoListadoBtn {
 .wiz-fab {
   position: fixed;
   right: 16px;
-  bottom: 16px; /* FIX s23a: bajado de 24px a 16px (más cerca del borde, fuera del thumb area mobile). Histórico: s20a bajó 86px→24px tras eliminar mobile-nav. */
+  bottom: 16px; /* FIX s23a: posición base anchor del fab-stack en mobile/touch (16px del borde, fuera del thumb area). Histórico: s20a 86→24, s23a 24→16. NOTA: en mobile/touch, el stack JS reposiciona dinámicamente este FAB como parte del grupo colapsado. */
   z-index: 850;
   background: linear-gradient(135deg, #E8001C 0%, #C8001A 100%);
   color: #fff;
@@ -48452,6 +48452,212 @@ if (document.readyState === 'loading') {
     <line x1="9" y1="17" x2="15" y2="17"/>
   </svg>
 </button>
+
+<!-- ── FAB STACK s23b ──────────────────────────────────────────────
+  Agrupa los 3 FABs (wiz/ac/aiFab) en un stack colapsado en mobile/touch.
+  Tap en el principal → fan-out semicircular. Tap fuera o en cualquier
+  FAB del fan → cerrar. El #cmpFab (comparador) y el #waBtn (WhatsApp)
+  NO entran al stack — quedan en sus posiciones independientes.
+  Solo activa si matchMedia('(pointer: coarse)').matches (mobile/touch).
+  En desktop con mouse, los FABs mantienen sus posiciones CSS originales.
+─────────────────────────────────────────────────────────────────── -->
+<style>
+  /* Estado base del stack — ancla en esquina inferior derecha */
+  #fabStack {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    width: 50px;
+    height: 50px;
+    z-index: 9999;
+    pointer-events: none; /* el stack en sí no captura, solo sus hijos */
+  }
+  /* Cada FAB-en-stack: posición absoluta dentro del wrapper, transición suave */
+  body.fab-stacked .wiz-fab,
+  body.fab-stacked .ac-fab,
+  body.fab-stacked #aiFab {
+    position: fixed !important;
+    right: 16px !important;
+    bottom: 16px !important;
+    width: 50px !important;
+    height: 50px !important;
+    transition: transform .28s cubic-bezier(.32,.72,0,1), opacity .2s ease, box-shadow .25s ease !important;
+    pointer-events: auto;
+  }
+  /* FIX s23b: el aiFab tiene z-index inline 2147483647 (max int) que pisa al toggle.
+     Forzar z-index manejable con !important para que el stack funcione correctamente. */
+  body.fab-stacked #aiFab { z-index: 852 !important; }
+  /* Ajuste icono interno del aiFab para tamaño 50px */
+  body.fab-stacked #aiFab svg { transform: scale(.92); }
+  body.fab-stacked .wiz-fab svg,
+  body.fab-stacked .ac-fab svg { width: 22px !important; height: 22px !important; }
+
+  /* Estado COLAPSADO: 3 FABs apilados como capas con offset mínimo + escala progresiva */
+  body.fab-stacked:not(.fab-open) .wiz-fab {
+    transform: translate(0, 0) scale(1);
+    z-index: 853;
+  }
+  body.fab-stacked:not(.fab-open) #aiFab {
+    transform: translate(-6px, -6px) scale(.86);
+    z-index: 852;
+    opacity: .85;
+  }
+  body.fab-stacked:not(.fab-open) .ac-fab {
+    transform: translate(-12px, -12px) scale(.72);
+    z-index: 851;
+    opacity: .7;
+  }
+
+  /* Estado ABIERTO: los 3 FABs en abanico semicircular hacia arriba-izquierda.
+     Math: radio 92px, ángulos en arco de 90° desde 12 o'clock (top, x=0,y=-r)
+     hasta 9 o'clock (left, x=-r,y=0).
+       wiz   → 9 o'clock  → (-92, 0)     (más cerca del pulgar, abajo)
+       aiFab → 10:30 (135°) → (-65, -65)  (centro del arco)
+       ac    → 12 o'clock → (0, -92)    (arriba)
+     Los tres a tamaño 50px, centrados en el slot fijo (right:16, bottom:16).
+     Equidistantes: distancia entre cada par ≈ 70px (chord del arco). */
+  body.fab-stacked.fab-open .wiz-fab {
+    transform: translate(-92px, 0) scale(1);
+    opacity: 1;
+    z-index: 853;
+  }
+  body.fab-stacked.fab-open #aiFab {
+    transform: translate(-65px, -65px) scale(1);
+    opacity: 1;
+    z-index: 852;
+  }
+  body.fab-stacked.fab-open .ac-fab {
+    transform: translate(0, -92px) scale(1);
+    opacity: 1;
+    z-index: 851;
+  }
+
+  /* Botón principal del stack (toggle) — invisible mientras los FABs colapsados
+     están encima, pero captura los clicks. En estado abierto se vuelve un "x". */
+  #fabStackToggle {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    z-index: 854; /* por encima de los 3 FABs en estado colapsado */
+    cursor: pointer;
+    display: none; /* solo activo en mobile/touch */
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0);
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1;
+    padding: 0;
+    transition: background .22s ease, color .22s ease, transform .22s ease;
+  }
+  body.fab-stacked #fabStackToggle { display: flex; }
+  body.fab-stacked.fab-open #fabStackToggle {
+    background: rgba(60,60,60,.92);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    z-index: 856; /* sobre todo cuando está abierto, para mostrar el "×" */
+  }
+
+  /* Backdrop para cerrar al tocar fuera (transparente, captura clicks) */
+  #fabStackBackdrop {
+    position: fixed;
+    inset: 0;
+    background: transparent;
+    z-index: 850;
+    display: none;
+  }
+  body.fab-stacked.fab-open #fabStackBackdrop { display: block; }
+
+  /* Cuando el cart está abierto, el stack se oculta completo (consistente con regla heredada
+     de body.cart-open #aiFab/#waBtn que ya existía) */
+  body.cart-open.fab-stacked .wiz-fab,
+  body.cart-open.fab-stacked .ac-fab,
+  body.cart-open.fab-stacked #aiFab,
+  body.cart-open.fab-stacked #fabStackToggle {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Ocultar labels hover dentro del stack — confunden al estar agrupados */
+  body.fab-stacked .wiz-fab-label,
+  body.fab-stacked .ac-fab-label { display: none !important; }
+</style>
+<button id="fabStackToggle" aria-label="Abrir menú de asistentes" type="button">×</button>
+<div id="fabStackBackdrop" aria-hidden="true"></div>
+<script>
+(function(){
+  // FIX s23b: solo activar el stack si es touch/mobile (pointer:coarse).
+  // En desktop con mouse, los FABs mantienen sus posiciones CSS originales (no agrupados).
+  function isTouch(){ return matchMedia('(pointer: coarse)').matches; }
+  if (!isTouch()) return;
+
+  var initialized = false;
+  function initStack() {
+    if (initialized) return;
+    var wiz = document.querySelector('.wiz-fab');
+    var ac  = document.querySelector('.ac-fab');
+    var ai  = document.getElementById('aiFab');
+    // Esperar a los 3 — el aiFab se crea dinámicamente en otro script.
+    if (!wiz || !ac || !ai) return;
+    initialized = true;
+    document.body.classList.add('fab-stacked');
+
+    var toggle = document.getElementById('fabStackToggle');
+    var backdrop = document.getElementById('fabStackBackdrop');
+
+    function open()  { document.body.classList.add('fab-open'); }
+    function close() { document.body.classList.remove('fab-open'); }
+    function toggleOpen() {
+      if (document.body.classList.contains('fab-open')) close();
+      else open();
+    }
+
+    toggle.addEventListener('click', function(e){
+      e.stopPropagation();
+      toggleOpen();
+    });
+    backdrop.addEventListener('click', close);
+
+    // Tap en cualquier FAB ejecuta su acción Y cierra el abanico.
+    // Los onclick existentes (wizOpen, acOpen, aiToggle) siguen funcionando.
+    [wiz, ac, ai].forEach(function(fab){
+      fab.addEventListener('click', function(){
+        // Pequeño delay para que la acción del FAB se dispare antes del cierre visual.
+        setTimeout(close, 50);
+      });
+    });
+
+    // ESC cierra el abanico (accesibilidad)
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && document.body.classList.contains('fab-open')) close();
+    });
+  }
+
+  // El aiFab se crea con DOMContentLoaded en otro script. Hacemos polling breve
+  // hasta encontrarlo, con timeout de 5s para evitar loop infinito.
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', tryInit);
+  } else {
+    tryInit();
+  }
+  function tryInit() {
+    var attempts = 0;
+    var maxAttempts = 50; // 50 × 100ms = 5s
+    var poll = setInterval(function(){
+      attempts++;
+      initStack();
+      if (initialized || attempts >= maxAttempts) {
+        clearInterval(poll);
+      }
+    }, 100);
+  }
+})();
+</script>
 
 </body>
 </html>
