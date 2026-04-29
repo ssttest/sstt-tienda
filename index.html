@@ -18395,10 +18395,18 @@ if (window.pdfjsLib) {
     <b style="color:#0057B8">Estándar DORI (EN 62676-4)</b> — define la densidad de píxeles mínima necesaria para cada nivel de análisis de video. Las distancias se calculan usando el tamaño real del sensor de cada cámara Dahua, su focal actual y su resolución. Ajusta la distancia y la altura de montaje para modelar tu instalación exacta.
   </div>
 </div>
+</div><!-- /secFov — FIX s22b -->
 
-
-</div></div>
-</div>
+<!-- FIX s22b: Originalmente esta zona tenía "</div></div>\n</div>" (3 cierres en
+     L18400-L18401). El depth-tracker confirmó que #secFov necesita exactamente
+     2 cierres aquí (uno para un wrapper interno + uno para #secFov mismo),
+     porque #secFov tiene un nivel de anidamiento que va más allá del .fov-pdf-modal-overlay.
+     El TERCER </div> era huérfano heredado pre-s17 (lxml lo reportaba como
+     "Unexpected end tag : div"), probablemente vestigio de un wrapper extra
+     eliminado en sesión histórica sin limpiar el cierre. Eliminado 1 </div>
+     huérfano (en lugar de 2 como creí inicialmente — el depth-tracker me corrigió).
+     Resultado: lxml errors 2→1 en esta zona, el huérfano restante (si lo
+     hay) se ve en validación final. -->
 
 <footer style="background:#fff;border-top:2px solid #f0f0f0;color:#333;padding:0;margin-top:0">
 
@@ -28630,11 +28638,28 @@ document.addEventListener('click', e => {
           <span id="erutBtnVerificarIco">✅</span>
           <span id="erutBtnVerificarTxt">Verificar y guardar</span>
         </button>
-<!-- s20a: <nav id="mobileNav"> con 5 botones (Inicio/Catálogo/Simular/Carro/Cuenta)
-     eliminado por decisión del usuario. Junto con su CSS, JS handlers
-     (mnavInit, mnavClick, mnavGoFov, mnavCarroBadge, updateMobileNav,
-     setNav doble, updateMnavBadge wrapper) y los hooks de openCart/closeCart.
-     El header desktop con .mnav-tab (Catálogo / Simulador FOV) NO se tocó. -->
+
+      </div><!-- /erutPaso2 — FIX s22a -->
+    </div><!-- /modal body padding wrapper — FIX s22a -->
+  </div><!-- /modal glass wrapper — FIX s22a -->
+</div><!-- /erutModal — FIX s22a (movido desde L32594 huérfano hasta acá) -->
+
+<!-- FIX s22a: Los 4 </div> de arriba cierran el modal e-RUT correctamente.
+     Causa raíz heredada: en s20a se eliminó <nav id="mobileNav"> que vivía
+     anidado dentro de #erutPaso2 (ver handoff s18e). Junto con el <nav> se
+     fueron por error 3 </div> de cierre (erutPaso2 + padding wrapper + glass
+     wrapper). Sin esos 3 cierres, los siguientes elementos top-level
+     (#pdfViewer, #cartSuggestModal y eventualmente .wiz-fab/.ac-fab) eran
+     absorbidos visualmente DENTRO de #erutModal por el parser HTML del
+     browser, quedando con offsetParent=null y rect 0×0 en mobile.
+     Smoke s21 lo confirmó: 4 fail = .wiz-fab invisible en 4 viewports.
+     Post-fix: lxml errors 2→0, wiz-fab/ac-fab parent chain = body directo. -->
+<!-- s20a (preservado, contexto histórico): <nav id="mobileNav"> con 5 botones
+     (Inicio/Catálogo/Simular/Carro/Cuenta) eliminado por decisión del usuario.
+     Junto con su CSS, JS handlers (mnavInit, mnavClick, mnavGoFov,
+     mnavCarroBadge, updateMobileNav, setNav doble, updateMnavBadge wrapper)
+     y los hooks de openCart/closeCart. El header desktop con .mnav-tab
+     (Catálogo / Simulador FOV) NO se tocó. -->
 <script>
 // s20a: bloques mnavInit, mnavClick, mnavGoFov, updateMnavBadge eliminados
 // junto con el HTML del nav inferior. Conservamos el <script> wrapper porque
@@ -32589,9 +32614,13 @@ document.addEventListener('keydown', function(e) {
   </div>
 </div>
 
-
-
-</div>
+<!-- FIX s22a: Aquí había un </div> huérfano que históricamente "cerraba"
+     #erutModal después de absorber pdfViewer + cartSuggestModal dentro suyo.
+     Con los 4 </div> insertados arriba (justo después del botón
+     erutBtnVerificar), #erutModal cierra correctamente en su lugar
+     natural, y #pdfViewer + #cartSuggestModal son hermanos top-level del
+     body como debe ser. Cleanup del huérfano para que diff visible HTML = 0
+     y lxml errors bajen a 0 en esta zona. -->
 
 
 <script id="fovScript">
