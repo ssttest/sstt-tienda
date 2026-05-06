@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casa Maureira — Calculadora de Exportación</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --wine:    #7B1D1D;
+  --wine2:   #9B2226;
+  --gold:    #C9A84C;
+  --gold2:   #E8C96A;
+  --cream:   #FAF6EF;
+  --dark:    #1A1008;
+  --mid:     #3D2B1F;
+  --muted:   #8A7060;
+  --green:   #1A5E2A;
+  --green2:  #2D9142;
+  --blue:    #1F3A6E;
+  --blue2:   #2E5BA8;
+  --surface: #FFFFFF;
+  --border:  #E8DDD0;
+  --warn:    #C44A00;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--dark);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--dark);
+  padding: 28px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 3px solid var(--gold);
+}
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+}
+.logo span { color: #fff; font-weight: 400; font-size: 0.95rem; display: block; letter-spacing: 0.12em; font-family: 'DM Mono', monospace; margin-top: 2px; }
+.badge { background: var(--wine2); color: #fff; font-size: 0.7rem; font-family: 'DM Mono', monospace; padding: 4px 10px; border-radius: 2px; letter-spacing: 0.1em; }
+
+/* ── LAYOUT ── */
+.container { max-width: 1280px; margin: 0 auto; padding: 32px 24px 60px; }
+
+/* ── SECTION TITLE ── */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--wine);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  border-left: 4px solid var(--gold);
+  padding-left: 12px;
+  margin-bottom: 20px;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.card-dark {
+  background: var(--dark);
+  border-color: var(--mid);
+  color: #fff;
+}
+
+/* ── COSTOS FIJOS ── */
+.fixed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 8px;
+}
+.fixed-item {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px 16px;
+  position: relative;
+}
+.fixed-item .label {
+  font-size: 0.7rem;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.fixed-item .value {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--dark);
+}
+.fixed-item .sub {
+  font-size: 0.68rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.fixed-item.warn { border-left: 3px solid var(--warn); }
+.fixed-item.warn .value { color: var(--warn); }
+.fixed-item.ok { border-left: 3px solid var(--green2); }
+.fixed-item.ok .value { color: var(--green); }
+.fixed-item.neutral { border-left: 3px solid var(--gold); }
+.fixed-item.neutral .value { color: var(--wine); }
+
+/* ── SLIDER SECTION ── */
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+.slider-group { flex: 1; min-width: 240px; }
+.slider-group label {
+  display: block;
+  font-size: 0.75rem;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+.slider-group .val-display {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--wine);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.slider-group .val-display span { font-size: 1.1rem; color: var(--muted); font-family: 'DM Mono', monospace; font-weight: 400; }
+
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  outline: none;
+  cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--wine);
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.15); }
+
+.tick-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+.tick-row span {
+  font-size: 0.65rem;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+}
+
+/* margen toggle */
+.toggle-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.toggle-btn {
+  padding: 8px 20px;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  color: var(--muted);
+}
+.toggle-btn.active {
+  border-color: var(--green);
+  background: var(--green);
+  color: #fff;
+}
+
+/* ── FLUJO DE DINERO ── */
+.flow-container {
+  display: grid;
+  grid-template-columns: 1fr 40px 1fr 40px 1fr;
+  gap: 0;
+  align-items: stretch;
+  margin-bottom: 32px;
+}
+@media(max-width:800px) {
+  .flow-container { grid-template-columns: 1fr; }
+  .flow-arrow { display: none; }
+}
+.flow-box {
+  border-radius: 6px;
+  padding: 20px;
+  position: relative;
+}
+.flow-box.export-box { background: var(--dark); color: #fff; border: 2px solid var(--gold); }
+.flow-box.import-box { background: var(--blue); color: #fff; }
+.flow-box.super-box  { background: var(--green); color: #fff; }
+.flow-box .flow-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+  margin-bottom: 10px;
+}
+.flow-box .flow-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+.flow-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  font-size: 0.8rem;
+}
+.flow-line:last-child { border-bottom: none; }
+.flow-line .fl-label { opacity: 0.75; }
+.flow-line .fl-val { font-family: 'DM Mono', monospace; font-weight: 500; }
+.flow-line.total-line {
+  border-top: 1px solid rgba(255,255,255,0.3);
+  margin-top: 8px;
+  padding-top: 10px;
+  font-weight: 600;
+}
+.flow-line.total-line .fl-val { font-size: 1.05rem; color: var(--gold2); }
+.flow-line.margin-line .fl-val { color: #6EE7A0; font-size: 1rem; font-weight: 700; }
+.flow-line.red-line .fl-label { color: #FCA5A5; }
+.flow-line.red-line .fl-val   { color: #FCA5A5; }
+
+.flow-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 4px;
+}
+.flow-arrow .arrow-line {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--wine2));
+  position: relative;
+}
+.flow-arrow .arrow-label {
+  font-size: 0.58rem;
+  font-family: 'DM Mono', monospace;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.3;
+}
+.flow-arrow svg { color: var(--wine2); }
+
+/* ── TABLA IMPUESTOS ECUADOR ── */
+.tax-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.tax-chip {
+  background: #FFF5F5;
+  border: 1px solid #FECACA;
+  border-radius: 4px;
+  padding: 12px 14px;
+  position: relative;
+}
+.tax-chip .tc-label {
+  font-size: 0.65rem;
+  font-family: 'DM Mono', monospace;
+  color: var(--wine);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+.tax-chip .tc-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--wine2);
+}
+.tax-chip .tc-sub { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+.tax-chip .info-icon {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 16px; height: 16px;
+  background: var(--wine2);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.6rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  font-family: 'DM Mono', monospace;
+  font-weight: 700;
+}
+
+/* ── TOOLTIP ── */
+.tooltip-wrap { position: relative; display: inline-block; }
+.tooltip-content {
+  display: none;
+  position: absolute;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--dark);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.5;
+  width: 240px;
+  z-index: 100;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  border: 1px solid var(--gold);
+}
+.tooltip-content::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--dark);
+}
+.info-icon:hover + .tooltip-content,
+.tooltip-wrap:hover .tooltip-content { display: block; }
+
+/* ── ESCENARIOS TABLE ── */
+.scenarios-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.scenarios-table th {
+  background: var(--dark);
+  color: var(--gold);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 10px 12px;
+  text-align: right;
+  font-weight: 500;
+}
+.scenarios-table th:first-child { text-align: left; border-radius: 4px 0 0 0; }
+.scenarios-table th:last-child { border-radius: 0 4px 0 0; }
+.scenarios-table td {
+  padding: 10px 12px;
+  text-align: right;
+  border-bottom: 1px solid var(--border);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+}
+.scenarios-table td:first-child { text-align: left; font-family: 'DM Sans', sans-serif; font-weight: 600; }
+.scenarios-table tr:hover td { background: #FDF8F2; }
+.scenarios-table tr.active-row td { background: #FFF3E0; }
+.scenarios-table tr.active-row td:first-child { border-left: 3px solid var(--gold); }
+.pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+}
+.pill-green { background: #D1FAE5; color: var(--green); }
+.pill-blue  { background: #DBEAFE; color: var(--blue2); }
+.pill-red   { background: #FEE2E2; color: var(--wine2); }
+.pill-gold  { background: #FEF3C7; color: #92400E; }
+
+/* ── GAUGE / VISUAL MARGIN ── */
+.margin-bar-wrap { margin: 12px 0; }
+.margin-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 4px;
+}
+.margin-bar-track {
+  height: 10px;
+  background: var(--border);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.margin-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.4s ease;
+}
+
+/* ── ALERTA ZONA ── */
+.alert-box {
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 16px;
+}
+.alert-box.danger { background: #FEE2E2; border: 1px solid #FECACA; color: var(--wine2); }
+.alert-box.warn   { background: #FEF3C7; border: 1px solid #FDE68A; color: #92400E; }
+.alert-box.ok     { background: #D1FAE5; border: 1px solid #A7F3D0; color: var(--green); }
+.alert-box .icon  { font-size: 1.1rem; flex-shrink: 0; }
+
+/* ── NOTA DTHC ── */
+.nota {
+  background: #FFFBEB;
+  border: 1px dashed var(--gold);
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 0.75rem;
+  color: var(--mid);
+  line-height: 1.5;
+  margin-top: 12px;
+}
+.nota strong { color: var(--wine); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px) {
+  header { padding: 16px 20px; }
+  .container { padding: 20px 14px 40px; }
+  .flow-container { grid-template-columns: 1fr; gap: 12px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="logo">Casa Maureira <span>RUBILAR TRADE EXPORT</span></div>
+  </div>
+  <div class="badge">CALCULADORA EXPORTACIÓN 2026</div>
+</header>
+
+<div class="container">
+
+  <!-- COSTOS FIJOS EXPORTADOR -->
+  <div class="card" style="margin-bottom:20px">
+    <div class="section-title">Costos Fijos del Exportador — Rubilar Trade</div>
+    <div class="fixed-grid">
+      <div class="fixed-item neutral">
+        <div class="label">Vino (900 cajas × USD 20)</div>
+        <div class="value">USD 18.000</div>
+        <div class="sub">FOB bodega Korta Bucarey · 10.800 botellas</div>
+      </div>
+      <div class="fixed-item warn">
+        <div class="label">ILA — No recuperable</div>
+        <div class="value">USD 3.690</div>
+        <div class="sub">Impuesto Bebidas Alcohólicas · no exento en exportación</div>
+      </div>
+      <div class="fixed-item ok">
+        <div class="label">IVA Bodega — Recuperable</div>
+        <div class="value">USD 3.420</div>
+        <div class="sub">Se recupera vía devolución SII · no es costo real</div>
+      </div>
+      <div class="fixed-item neutral">
+        <div class="label">Flete Marítimo (Komex)</div>
+        <div class="value">USD 4.588</div>
+        <div class="sub">Flete USD 3.500 + Charges USD 988 + Fee USD 100</div>
+      </div>
+      <div class="fixed-item warn">
+        <div class="label">Seguro de Carga</div>
+        <div class="value" id="seguro-val">~USD 238</div>
+        <div class="sub">~0.55% sobre valor CIF · varía según precio</div>
+      </div>
+      <div class="fixed-item neutral">
+        <div class="label">Costo Total Real / Botella</div>
+        <div class="value" id="costo-bot-exp">USD 2.47</div>
+        <div class="sub">Vino + ILA + Flete + Seguro ÷ 10.800</div>
+      </div>
+    </div>
+    <div class="nota">
+      <strong>DTHC (USD 250):</strong> El Destination Terminal Handling Charge aparece en la cotización Komex pero corresponde a manipulación en puerto de Guayaquil. En estricto CIF el exportador cubre hasta llegada al puerto — este cargo puede quedar ambiguo. <strong>Recomendación:</strong> aclarar contractualmente si va incluido en el CIF o lo asume el importador. En este análisis se excluye del CIF de Rubilar Trade y se asigna al importador dentro de sus costos logísticos.
+    </div>
+  </div>
+
+  <!-- SELECTOR CIF + MARGEN -->
+  <div class="card">
+    <div class="section-title">Escenario Activo — Selecciona Precio CIF y Margen del Supermercado</div>
+    <div class="slider-row">
+      <div class="slider-group">
+        <label>Precio CIF cobrado al importador</label>
+        <div class="val-display" id="cif-display">USD 7 <span>/ botella</span></div>
+        <input type="range" id="cif-slider" min="4" max="8" step="1" value="7">
+        <div class="tick-row">
+          <span>USD 4</span><span>USD 5</span><span>USD 6</span><span>USD 7</span><span>USD 8</span>
+        </div>
+      </div>
+      <div class="slider-group">
+        <label>Margen del Supermercado sobre costo importador</label>
+        <div class="toggle-row" style="margin-bottom:12px">
+          <button class="toggle-btn" data-m="0.30" onclick="setMargen(0.30,this)">30%</button>
+          <button class="toggle-btn active" data-m="0.40" onclick="setMargen(0.40,this)">40%</button>
+          <button class="toggle-btn" data-m="0.50" onclick="setMargen(0.50,this)">50%</button>
+          <button class="toggle-btn" data-m="0.60" onclick="setMargen(0.60,this)">60%</button>
+        </div>
+        <div class="margin-bar-wrap">
+          <div class="margin-bar-label">
+            <span>PVP consumidor</span>
+            <span id="pvp-label" style="font-weight:600;color:var(--green)">USD –</span>
+          </div>
+          <div class="margin-bar-track">
+            <div class="margin-bar-fill" id="pvp-bar" style="width:0%;background:var(--green2)"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLUJO DE DINERO -->
+  <div class="section-title" style="margin-bottom:16px">Flujo de Dinero por Botella — Escenario Activo</div>
+  <div class="flow-container">
+
+    <!-- EXPORTADOR -->
+    <div class="flow-box export-box">
+      <div class="flow-title">Exportador · Chile</div>
+      <div class="flow-name">Rubilar Trade<br><small style="font-size:0.75rem;opacity:0.6">Casa Maureira</small></div>
+      <div class="flow-line"><span class="fl-label">Vino (Korta Bucarey)</span><span class="fl-val" style="color:#FCA5A5">– USD 1.667</span></div>
+      <div class="flow-line red-line"><span class="fl-label">ILA (no recuperable)</span><span class="fl-val">– USD 0.342</span></div>
+      <div class="flow-line"><span class="fl-label">Flete marítimo / bot</span><span class="fl-val" style="color:#FCA5A5">– USD 0.425</span></div>
+      <div class="flow-line"><span class="fl-label">Seguro carga / bot</span><span class="fl-val" id="f-seguro" style="color:#FCA5A5">– USD –</span></div>
+      <div class="flow-line" style="border-top:1px solid rgba(255,255,255,0.15);margin-top:4px;padding-top:8px">
+        <span class="fl-label" style="font-weight:600">Costo total / bot</span>
+        <span class="fl-val" id="f-costo-exp" style="color:#FCA5A5">– USD –</span>
+      </div>
+      <div class="flow-line"><span class="fl-label">Ingresa CIF cobrado</span><span class="fl-val" id="f-cif-ingreso" style="color:var(--gold2)">+ USD –</span></div>
+      <div class="flow-line total-line margin-line">
+        <span class="fl-label">MARGEN EXPORTADOR</span>
+        <span class="fl-val" id="f-margen-exp">USD –</span>
+      </div>
+      <div style="text-align:right;margin-top:4px">
+        <span class="pill pill-gold" id="f-margen-pct-exp">–%</span>
+      </div>
+    </div>
+
+    <!-- FLECHA 1 -->
+    <div class="flow-arrow">
+      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="arrow-label">CIF<br>Port GYE</div>
+    </div>
+
+    <!-- IMPORTADOR -->
+    <div class="flow-box import-box">
+      <div class="flow-title">Importador · Ecuador</div>
+      <div class="flow-name">Supermercado<br><small style="font-size:0.75rem;opacity:0.6">Cadena compradora</small></div>
+      <div class="flow-line"><span class="fl-label">Paga CIF</span><span class="fl-val" id="f-cif-imp" style="color:#FCA5A5">– USD –</span></div>
+      <div class="flow-line">
+        <span class="fl-label">
+          <span class="tooltip-wrap">FODINFA (0.5% CIF)<span class="info-icon">?</span><div class="tooltip-content">Fondo de Desarrollo para la Infancia. 0.5% sobre el valor CIF. Base legal: Código de la Niñez y Adolescencia de Ecuador.</div></span>
+        </span>
+        <span class="fl-val" id="f-fodinfa" style="color:#FCA5A5">– USD –</span>
+      </div>
+      <div class="flow-line">
+        <span class="fl-label">
+          <span class="tooltip-wrap">ICE Específico<span class="info-icon">?</span><div class="tooltip-content">Tarifa fija por litro de alcohol puro. Fórmula: 0.75L × 13% alc × USD 10.41/L. No depende del precio del vino.</div></span>
+        </span>
+        <span class="fl-val" id="f-ice-esp" style="color:#FCA5A5">– USD –</span>
+      </div>
+      <div class="flow-line">
+        <span class="fl-label">
+          <span class="tooltip-wrap">ICE Ad Valorem (75%)<span class="info-icon">?</span><div class="tooltip-content">Se aplica solo si el precio ex aduana por litro supera USD 4.72/L (umbral 2026). Fórmula: 75% × (CIF/0.75L – 4.72) × 0.75L. Si CIF ≤ USD 3.54/bot, este impuesto es cero.</div></span>
+        </span>
+        <span class="fl-val" id="f-ice-adv" style="color:#FCA5A5">– USD –</span>
+      </div>
+      <div class="flow-line">
+        <span class="fl-label">
+          <span class="tooltip-wrap">IVA Ecuador (15%)<span class="info-icon">?</span><div class="tooltip-content">Se aplica sobre: CIF + FODINFA + ICE total. Base imponible acumulada. El supermercado puede recuperar el IVA como crédito tributario en sus ventas, por lo que NO es un costo neto para ellos.</div></span>
+        </span>
+        <span class="fl-val" id="f-iva" style="color:#FCA5A5">– USD –</span>
+      </div>
+      <div class="flow-line">
+        <span class="fl-label">
+          <span class="tooltip-wrap">Logística local<span class="info-icon">?</span><div class="tooltip-content">Agente de aduana: USD 289.20 / despacho (60% SBU 2026). Transporte contenedor: USD 1.000 estimado. Total prorrateado en 10.800 botellas.</div></span>
+        </span>
+        <span class="fl-val" id="f-log" style="color:#FCA5A5">– USD –</span>
+      </div>
+      <div class="flow-line" style="border-top:1px solid rgba(255,255,255,0.2);margin-top:4px;padding-top:8px">
+        <span style="font-weight:600;font-size:0.85rem">Costo total importador</span>
+        <span class="fl-val" id="f-costo-imp" style="color:var(--gold2);font-weight:700">– USD –</span>
+      </div>
+      <div style="margin-top:10px;padding:8px;background:rgba(255,255,255,0.08);border-radius:4px;font-size:0.72rem;line-height:1.5;color:rgba(255,255,255,0.75)">
+        ⚡ El IVA es crédito tributario: el supermercado lo recupera en sus ventas. Costo real sin IVA: <strong id="f-costo-sin-iva" style="color:var(--gold2)">–</strong>
+      </div>
+    </div>
+
+    <!-- FLECHA 2 -->
+    <div class="flow-arrow">
+      <svg width="24" height="24" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="arrow-label">Vende<br>con margen</div>
+    </div>
+
+    <!-- SUPERMERCADO VENTA -->
+    <div class="flow-box super-box">
+      <div class="flow-title">Consumidor Final · Ecuador</div>
+      <div class="flow-name">Precio Góndola<br><small style="font-size:0.75rem;opacity:0.6">Precio de venta al público</small></div>
+      <div class="flow-line"><span class="fl-label">Costo real importador</span><span class="fl-val" id="f2-costo-imp">– USD –</span></div>
+      <div class="flow-line"><span class="fl-label">Margen supermercado</span><span class="fl-val" id="f2-margen-usd" style="color:#6EE7A0">+ USD –</span></div>
+      <div class="flow-line total-line">
+        <span>PVP AL CONSUMIDOR</span>
+        <span class="fl-val" id="f2-pvp" style="color:var(--gold2);font-size:1.3rem">USD –</span>
+      </div>
+      <div style="margin-top:16px">
+        <div class="margin-bar-label" style="color:rgba(255,255,255,0.7)">
+          <span>Posición en mercado Ecuador</span>
+        </div>
+        <div id="market-alert" class="alert-box ok" style="margin-top:8px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);color:#fff">
+          <span class="icon">📊</span>
+          <span id="market-alert-text">–</span>
+        </div>
+      </div>
+      <div style="margin-top:16px;padding:10px;background:rgba(255,255,255,0.1);border-radius:4px">
+        <div style="font-size:0.7rem;opacity:0.7;font-family:'DM Mono',monospace;margin-bottom:6px">REFERENCIA SUPERMAXI 2026</div>
+        <div style="font-size:0.75rem;line-height:1.8">
+          🔴 Gato Negro: <strong>USD 6.29</strong><br>
+          🟡 Ventisquero: <strong>USD 9.30</strong><br>
+          🟠 C. y Toro Rsv: <strong>USD 8.50</strong><br>
+          🔵 Casillero: <strong>USD 16.99</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IMPUESTOS ECUADOR DETALLE -->
+  <div class="card">
+    <div class="section-title">Desglose de Impuestos Ecuador — Escenario Activo</div>
+    <div class="tax-grid">
+      <div class="tax-chip">
+        <div class="tc-label">Ad Valorem (ACE N°75)</div>
+        <div class="tc-val" style="color:var(--green)">USD 0.00</div>
+        <div class="tc-sub">0% Chile–Ecuador · libre desde ACE 65</div>
+        <div class="tooltip-wrap"><div class="info-icon">?</div><div class="tooltip-content">El Acuerdo de Complementación Económica N°75, vigente desde mayo 2022, exime al vino chileno (subpartida 2204) de arancel ad valorem. Sin este acuerdo sería 15% = USD 1.05/botella a CIF 7.</div></div>
+      </div>
+      <div class="tax-chip">
+        <div class="tc-label">FODINFA</div>
+        <div class="tc-val" id="t-fodinfa">–</div>
+        <div class="tc-sub">0.5% sobre CIF</div>
+        <div class="tooltip-wrap"><div class="info-icon">?</div><div class="tooltip-content">Fondo de Desarrollo para la Infancia. Siempre se aplica sobre el valor CIF, independiente del arancel. No recuperable por el importador.</div></div>
+      </div>
+      <div class="tax-chip">
+        <div class="tc-label">ICE Específico 2026</div>
+        <div class="tc-val" id="t-ice-esp">–</div>
+        <div class="tc-sub">USD 10.41 × 0.75L × 13% alc</div>
+        <div class="tooltip-wrap"><div class="info-icon">?</div><div class="tooltip-content">Tarifa fija por litro de alcohol puro. Resolución NAC-DGERCGC25-00000040 vigente desde 1 enero 2026. Sube de USD 10.30 en 2025 (+IPC). Este valor es fijo sin importar el precio del vino.</div></div>
+      </div>
+      <div class="tax-chip">
+        <div class="tc-label">ICE Ad Valorem (75%)</div>
+        <div class="tc-val" id="t-ice-adv">–</div>
+        <div class="tc-sub" id="t-ice-adv-sub">75% × excedente s/ umbral 4.72/L</div>
+        <div class="tooltip-wrap"><div class="info-icon">?</div><div class="tooltip-content">Resolución NAC-DGERCGC25-00000042 (2026). Solo aplica si CIF/litro supera USD 4.72. Umbral para botella 750ml: CIF > USD 3.54. Fórmula: 75% × (CIF/0.75 – 4.72) × 0.75.</div></div>
+      </div>
+      <div class="tax-chip">
+        <div class="tc-label">IVA Ecuador (15%)</div>
+        <div class="tc-val" id="t-iva">–</div>
+        <div class="tc-sub">15% × (CIF+FOD+ICE) · recuperable</div>
+        <div class="tooltip-wrap"><div class="info-icon">?</div><div class="tooltip-content">El supermercado recupera el IVA pagado en importación como crédito tributario contra el IVA que cobra en ventas. Por eso el IVA NO es costo neto para el importador registrado.</div></div>
+      </div>
+      <div class="tax-chip" style="background:#FFF0D0;border-color:#FDE68A">
+        <div class="tc-label" style="color:#92400E">Total impuestos / bot</div>
+        <div class="tc-val" id="t-total" style="color:#92400E">–</div>
+        <div class="tc-sub" id="t-total-sin-iva">Sin IVA recuperable: –</div>
+        <div class="tooltip-wrap"><div class="info-icon" style="background:#92400E">?</div><div class="tooltip-content">Suma de todos los impuestos. Si el importador es un supermercado formal registrado en SRI, puede recuperar el IVA, reduciendo significativamente el costo neto de importación.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLA TODOS LOS ESCENARIOS -->
+  <div class="card">
+    <div class="section-title">Comparación Todos los Escenarios — CIF USD 4 a 8</div>
+    <div style="overflow-x:auto">
+      <table class="scenarios-table" id="scenarios-table">
+        <thead>
+          <tr>
+            <th>CIF / bot</th>
+            <th>Ingreso total exportador</th>
+            <th>Costo total exportador</th>
+            <th>Margen Rubilar Trade</th>
+            <th>% margen export</th>
+            <th>ICE total / bot</th>
+            <th>Imp. total / bot</th>
+            <th>Costo importer / bot</th>
+            <th>PVP 30% margen</th>
+            <th>PVP 40% margen</th>
+            <th>PVP 50% margen</th>
+            <th>PVP 60% margen</th>
+          </tr>
+        </thead>
+        <tbody id="scenarios-tbody"></tbody>
+      </table>
+    </div>
+    <div class="nota" style="margin-top:12px">
+      <strong>Fila resaltada</strong> = escenario activo en el simulador. Los PVP incluyen el costo total importador (con IVA). Si el supermercado recupera el IVA, el costo base baja y podría ofrecer menor precio al consumidor manteniendo el mismo margen.
+    </div>
+  </div>
+
+  <!-- NOTAS METODOLÓGICAS -->
+  <div class="card card-dark">
+    <div class="section-title" style="color:var(--gold)">Notas Metodológicas</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;font-size:0.8rem;color:rgba(255,255,255,0.8);line-height:1.6">
+      <div>
+        <div style="color:var(--gold);font-family:'DM Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Costos exportador</div>
+        • Vino: USD 18.000 neto (900 cajas × USD 20)<br>
+        • IVA bodega: USD 3.420 → <em>se recupera vía SII, no es costo</em><br>
+        • ILA: USD 3.690 → <em>no exento en exportación, es costo real</em><br>
+        • Flete Komex: USD 4.588 (sin DTHC)<br>
+        • Seguro: ~0.55% sobre valor CIF total<br>
+        • Costo base/bot (sin seguro): USD 2.433
+      </div>
+      <div>
+        <div style="color:var(--gold);font-family:'DM Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Impuestos Ecuador (ACE N°75)</div>
+        • Ad Valorem: 0% (libre bajo ACE 75)<br>
+        • FODINFA: 0.5% sobre CIF<br>
+        • ICE específico 2026: USD 10.41/L alc puro<br>
+        • ICE ad valorem: 75% sobre excedente (umbral USD 4.72/L)<br>
+        • IVA: 15% sobre base acumulada (CIF+FOD+ICE)<br>
+        • Logística EC: USD 1.289 / contenedor ÷ 10.800 bot
+      </div>
+      <div>
+        <div style="color:var(--gold);font-family:'DM Mono',monospace;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px">Supuestos y advertencias</div>
+        • Alc: 13% vol estimado para todos los varietales<br>
+        • DTHC USD 250: a cargo del importador (aclarar en contrato)<br>
+        • Seguro: estimado, cotizar con corredor antes de embarque<br>
+        • IVA es recuperable para supermercado formal (crédito SRI)<br>
+        • Precios Supermaxi obtenidos de supermaxi.com (referencia)
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// MOTOR DE CÁLCULO
+// ══════════════════════════════════════════════════════════
+const BOTELLAS     = 10800;
+const COSTO_VINO   = 18000;
+const ILA          = 3690;
+const FLETE        = 4588;
+const SEGURO_PCT   = 0.0055;
+const FODINFA_PCT  = 0.005;
+const ICE_ESP_26   = 10.41;
+const UMBRAL_26    = 4.72;
+const IVA_PCT      = 0.15;
+const VOL          = 0.750;
+const ALC          = 0.13;
+const LOG_EC_BOT   = (289.20 + 1000) / BOTELLAS;
+
+let currentCIF    = 7;
+let currentMargen = 0.40;
+
+function calcExport(cif) {
+  const ingresos   = cif * BOTELLAS;
+  const seguro     = ingresos * SEGURO_PCT;
+  const costoTotal = COSTO_VINO + ILA + FLETE + seguro;
+  const costoBot   = costoTotal / BOTELLAS;
+  const utilidad   = ingresos - costoTotal;
+  const margenPct  = utilidad / ingresos * 100;
+  const seguroBot  = seguro / BOTELLAS;
+  return { ingresos, seguro, seguroBot, costoTotal, costoBot, utilidad, margenPct };
+}
+
+function calcImport(cif) {
+  const fodinfa = cif * FODINFA_PCT;
+  const iceEsp  = VOL * ALC * ICE_ESP_26;
+  const excLit  = Math.max(0, cif / VOL - UMBRAL_26);
+  const iceAdv  = 0.75 * excLit * VOL;
+  const iceTot  = iceEsp + iceAdv;
+  const ivaBase = cif + fodinfa + iceTot;
+  const iva     = ivaBase * IVA_PCT;
+  const impTot  = fodinfa + iceTot + iva;
+  const costoImp = cif + impTot + LOG_EC_BOT;
+  const costoSinIva = cif + fodinfa + iceTot + LOG_EC_BOT;
+  return { fodinfa, iceEsp, iceAdv, iceTot, iva, impTot, costoImp, costoSinIva };
+}
+
+function f(n, d=2)  { return 'USD ' + n.toFixed(d).replace('.','.'); }
+function fp(n)      { return n.toFixed(1) + '%'; }
+
+function marketPosition(pvp) {
+  if (pvp < 6.29)  return { text: `Precio muy agresivo — por debajo de Gato Negro (USD 6.29). Competirías en el segmento más económico de góndola.`, cls: 'warn' };
+  if (pvp < 8.50)  return { text: `Segmento económico-medio. Comparable a Gato Negro–Ventisquero. Buen volumen, margen moderado.`, cls: 'ok' };
+  if (pvp < 11.00) return { text: `Segmento medio. Por encima de Concha y Toro Reservado (USD 8.50). Necesitas diferenciación clara.`, cls: 'ok' };
+  if (pvp < 17.00) return { text: `Segmento medio-alto. Entrando al rango de Casillero del Diablo (USD 16.99). Requiere posicionamiento premium.`, cls: 'warn' };
+  return { text: `Precio premium — por encima de Casillero del Diablo. Difícil para una marca nueva sin reconocimiento.`, cls: 'danger' };
+}
+
+function update() {
+  const cif = currentCIF;
+  const mg  = currentMargen;
+  const exp = calcExport(cif);
+  const imp = calcImport(cif);
+  const pvp = imp.costoImp * (1 + mg);
+
+  // Header display
+  document.getElementById('cif-display').innerHTML = `USD ${cif} <span>/ botella</span>`;
+  document.getElementById('costo-bot-exp').textContent = f(exp.costoBot);
+  document.getElementById('seguro-val').textContent = `~USD ${Math.round(exp.seguro)}`;
+
+  // PVP bar
+  document.getElementById('pvp-label').textContent = f(pvp);
+  const barPct = Math.min(100, (pvp / 25) * 100);
+  document.getElementById('pvp-bar').style.width = barPct + '%';
+
+  // Flow exportador
+  document.getElementById('f-seguro').textContent       = '– ' + f(exp.seguroBot,3);
+  document.getElementById('f-costo-exp').textContent    = '– ' + f(exp.costoBot);
+  document.getElementById('f-cif-ingreso').textContent  = '+ ' + f(cif);
+  document.getElementById('f-margen-exp').textContent   = f(exp.utilidad/BOTELLAS);
+  document.getElementById('f-margen-pct-exp').textContent = fp(exp.margenPct) + ' margen';
+
+  // Flow importador
+  document.getElementById('f-cif-imp').textContent     = '– ' + f(cif);
+  document.getElementById('f-fodinfa').textContent     = '– ' + f(imp.fodinfa,3);
+  document.getElementById('f-ice-esp').textContent     = '– ' + f(imp.iceEsp,3);
+  document.getElementById('f-ice-adv').textContent     = '– ' + f(imp.iceAdv,3);
+  document.getElementById('f-iva').textContent         = '– ' + f(imp.iva,3);
+  document.getElementById('f-log').textContent         = '– ' + f(LOG_EC_BOT,3);
+  document.getElementById('f-costo-imp').textContent   = f(imp.costoImp);
+  document.getElementById('f-costo-sin-iva').textContent = f(imp.costoSinIva);
+
+  // Flow PVP
+  document.getElementById('f2-costo-imp').textContent  = f(imp.costoImp);
+  document.getElementById('f2-margen-usd').textContent = '+ ' + f(pvp - imp.costoImp);
+  document.getElementById('f2-pvp').textContent        = f(pvp);
+
+  // Market position
+  const pos = marketPosition(pvp);
+  document.getElementById('market-alert-text').textContent = pos.text;
+
+  // Tax chips
+  document.getElementById('t-fodinfa').textContent    = f(imp.fodinfa,3);
+  document.getElementById('t-ice-esp').textContent    = f(imp.iceEsp,3);
+  document.getElementById('t-ice-adv').textContent    = f(imp.iceAdv,3);
+  document.getElementById('t-iva').textContent        = f(imp.iva,3);
+  document.getElementById('t-total').textContent      = f(imp.impTot);
+  document.getElementById('t-total-sin-iva').textContent = `Sin IVA recuperable: ${f(imp.impTot - imp.iva)}`;
+  if (imp.iceAdv < 0.001) {
+    document.getElementById('t-ice-adv-sub').textContent = '⚠ No aplica: CIF ≤ USD 3.54/bot';
+  } else {
+    document.getElementById('t-ice-adv-sub').textContent = `75% × (${f(cif/VOL,2)}/L – 4.72) × 0.75L`;
+  }
+
+  // Scenarios table
+  buildTable(cif, mg);
+}
+
+function buildTable(activeCif, activeMg) {
+  const tbody = document.getElementById('scenarios-tbody');
+  tbody.innerHTML = '';
+  [4,5,6,7,8].forEach(c => {
+    const exp = calcExport(c);
+    const imp = calcImport(c);
+    const pvp30 = imp.costoImp * 1.30;
+    const pvp40 = imp.costoImp * 1.40;
+    const pvp50 = imp.costoImp * 1.50;
+    const pvp60 = imp.costoImp * 1.60;
+    const isActive = c === activeCif;
+    const mgColor = exp.margenPct > 60 ? 'pill-green' : exp.margenPct > 40 ? 'pill-gold' : 'pill-blue';
+    const tr = document.createElement('tr');
+    if (isActive) tr.className = 'active-row';
+    tr.innerHTML = `
+      <td><strong>USD ${c}.00</strong> ${isActive ? '<span class="pill pill-gold">activo</span>' : ''}</td>
+      <td>${f(exp.ingresos,0)}</td>
+      <td>${f(exp.costoTotal,0)}</td>
+      <td>${f(exp.utilidad,0)}</td>
+      <td><span class="pill ${mgColor}">${fp(exp.margenPct)}</span></td>
+      <td>${f(imp.iceTot)}</td>
+      <td>${f(imp.impTot)}</td>
+      <td>${f(imp.costoImp)}</td>
+      <td>${f(pvp30)}</td>
+      <td><strong>${f(pvp40)}</strong></td>
+      <td>${f(pvp50)}</td>
+      <td>${f(pvp60)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function setMargen(val, btn) {
+  currentMargen = val;
+  document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  update();
+}
+
+document.getElementById('cif-slider').addEventListener('input', function() {
+  currentCIF = parseInt(this.value);
+  update();
+});
+
+// init
+update();
+</script>
+</body>
+</html>
