@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s93b -->
+<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s94 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -19279,6 +19279,27 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
 }
 </style>
 
+<!-- ═══ Scroll fluidity · s94 ═══
+     Fluidez de scroll (desktop + móvil) SIN hijacking JS (el smooth-wheel por JS
+     empeora el feel en trackpad/táctil, así que NO se usa):
+     · scroll-padding-top → los saltos a sección/anchor ya no quedan tapados por el
+       header sticky (68px) + module-nav (46px). Era el "salto raro" al navegar.
+     · overscroll-behavior-y:contain → sin scroll-chaining; mantiene el bounce nativo
+       iOS pero evita el pull-to-refresh accidental al hacer scroll rápido hacia arriba
+       (feel app). Reversible: cambiar a 'auto' si se quiere pull-to-refresh.
+     · scrollbar-gutter:stable → sin "salto" horizontal al abrir/cerrar modales (desktop).
+     Respeta prefers-reduced-motion (override global ya existente ~L19073). -->
+<style id="sstt-scroll-fluidity-s94">
+  html{
+    scroll-padding-top: 120px;       /* desktop: header 68 + module-nav 46 + margen */
+    overscroll-behavior-y: contain;
+    scrollbar-gutter: stable;
+  }
+  body{ overscroll-behavior-y: contain; }
+  @media (max-width:1024px){ html{ scroll-padding-top: 112px; } } /* header 60 + nav 46 */
+  @media (max-width:400px){  html{ scroll-padding-top: 72px;  } } /* header 32 + nav 32 */
+</style>
+
 <!-- ═══ PWA · Sprint 2 s74 ═══ -->
 <meta name="theme-color" content="#0A1628">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19785,7 +19806,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s93b</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s94</span>
   </div>
 </div>
 
@@ -21011,7 +21032,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <div class="ms-item-ico" style="font-size:11px;font-weight:700;color:#0057B8">abc</div>
             <div class="ms-item-body">
               <div class="ms-item-name">Glosario CCTV</div>
-              <div class="ms-item-desc">64 términos técnicos organizados en 9 categorías</div>
+              <div class="ms-item-desc">72 términos técnicos organizados en 10 categorías</div>
             </div>
             <span class="ms-item-go">abrir →</span>
           </button>
@@ -22251,7 +22272,7 @@ window.SSTT_KB = (function(){
       '· Normativa chilena (normCheck) — Retención por sector regulado: bancos, retail, minería, transporte. Verifica PPM, días de retención y audio vs requerimientos legales. Usar para cotizaciones formales a sectores regulados.',
       '· HDCVI vs IP — Comparador técnico + casos de uso reales. Usar cuando pregunten qué tecnología elegir.',
       '· Conceptos rápidos — WDR, IR, códecs, IA, disuasión en fichas visuales.',
-      '· Glosario CCTV — 64 términos técnicos en 9 categorías.',
+      '· Glosario CCTV — 72 términos técnicos en 10 categorías.',
       '',
       'REGLAS DE USO DE HERRAMIENTAS:',
       '· Cuando el cliente pregunta algo que una herramienta puede responder mejor (ej: "cuántos días graba mi disco de 2TB"), da una respuesta directa Y recomienda la herramienta para que pueda calcular con sus parámetros exactos.',
@@ -41187,7 +41208,7 @@ function waUpdateWaLink(userMsg, reply) {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Martes 02 de Junio del 2026 · s93b';
+  if (txt) txt.textContent = 'Última actualización: Martes 02 de Junio del 2026 · s94';
 })();
 
 
