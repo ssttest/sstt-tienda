@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Lunes 01 de Junio del 2026 · s91 -->
+<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s92 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -19769,7 +19769,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Lunes 01 de Junio del 2026 · s91</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s92</span>
   </div>
 </div>
 
@@ -20372,7 +20372,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
           <!-- s69: campo RUT eliminado — solo demos por email -->
           <!-- Sprint 10 s76: honeypot anti-bot — invisible para humanos -->
           <div style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none;height:0;overflow:hidden" aria-hidden="true">
-            <input type="text" id="lHoneypot" name="phone_number" autocomplete="off" tabindex="-1" value="">
+            <input type="text" id="lHoneypot" name="xfield_92z" autocomplete="nope" tabindex="-1" value="">
           </div>
         </div>
         <div style="margin:6px 0 0;font-size:11px;color:var(--g3);text-align:center">
@@ -21917,14 +21917,18 @@ window.SSTT_KB = (function(){
     'cámaras IP/HDCVI/PTZ, grabadores NVR/XVR, switches PoE, alarmas Wisualarm, ' +
     'control de acceso, intercomunicación, accesorios y discos certificados.';
 
-  // ── TECNOLOGÍAS DAHUA (vocabulario unificado, los 9 términos) ──
+  // ── TECNOLOGÍAS DAHUA (vocabulario unificado) ──
   var tecnologias = {
     'WizSense':    'IA básica · SMD+ distingue humanos/vehículos · IVS básico (cruce línea, intrusión, merodeo)',
     'WizMind':     'IA avanzada · reconocimiento facial, conteo personas, LPR avanzado, atributos de vehículo',
     'WizColor':    'Imagen color 24/7 con LED blanco cálido (también llamado Full-color)',
+    'Full-Color':  'Visión a color 24/7 · LED blanco cálido + sensor Starlight + lente F1.0 gran apertura',
+    'Full-Color Pro': 'Color 24/7 sin LED · sensor 1/1.8" + AI-ISP · ve a color con luz ambiente natural (luna, estrellas)',
     'TiOC':        'Three-in-One Camera · disuasión activa con luz+sirena+IA al detectar intrusión',
     'AcuPick':     'Búsqueda IA en grabaciones por características (ropa, color, tipo vehículo)',
-    'Xinghan':     'IA gran escala · plataforma analítica para proyectos enterprise',
+    'WizSeek':     'Búsqueda semántica de video por lenguaje natural · potenciado por Xinghan AI multimodal',
+    'Xinghan':     'IA gran escala · modelos multimodales (texto+imagen+video) · plataforma analítica enterprise',
+    'SMD+':        'Smart Motion Detection Plus · clasifica persona/vehículo/otro · base de WizSense',
     'Starlight':   'Sensibilidad 0.005 lux · color en casi oscuridad sin requerir LED',
     'Smart IR':    'Ajuste automático de potencia IR para evitar sobreexposición (anti-WhiteWash)',
     'HDCVI':       'Coaxial hasta 500m · multiformato (AHD/TVI/CVBS) · hasta 8MP/4K · NO requiere red'
@@ -27100,6 +27104,8 @@ function openModal(tab='login') {
     document.body.style.width = '100%';
   }
   if (USER && (tab === 'perfil' || tab === 'pedidos')) { setTab('perfil'); _initScrollHint(); return; }
+  // s92: limpiar honeypot al abrir (defensa contra autofill móvil)
+  var _hp = document.getElementById('lHoneypot'); if (_hp) _hp.value = '';
   setTab(tab);
 }
 function _initScrollHint() {
@@ -29978,7 +29984,7 @@ function _loginRateCheck() {
 
 function submitLogin() {
   var hp = document.getElementById('lHoneypot');
-  if (hp && hp.value) { console.warn('[SSTT] Honeypot activado'); return; }
+  if (hp && hp.value) { console.warn('[SSTT] Honeypot activado (autofill?), limpiando'); hp.value=''; }  // s92: ya no bloquea, solo limpia y sigue
   if (!_loginRateCheck()) {
     setFieldState('lEmail','lEmailMsg','lEmailIcon','err','Demasiados intentos. Espera 5 minutos.');
     return;
@@ -41165,7 +41171,7 @@ function waUpdateWaLink(userMsg, reply) {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Lunes 01 de Junio del 2026 · s91';
+  if (txt) txt.textContent = 'Última actualización: Martes 02 de Junio del 2026 · s92';
 })();
 
 
@@ -52090,13 +52096,20 @@ if (document.readyState === 'loading') {
     { cat:'Almacenamiento', term:'Edge storage / SD card', def:'Grabación local en SD dentro de la cámara. Backup ante caída de red. Capacidad típica 64-256GB.' },
 
     // Analítica IA
-    { cat:'Analítica IA', term:'WizSense', def:'IA Dahua para distinguir personas/vehículos de objetos. Reduce falsos positivos drásticamente.' },
-    { cat:'Analítica IA', term:'AcuPick / AcuPick 2.0', def:'Búsqueda por atributos: color de ropa, género, tipo de vehículo, etc. Acelera revisión post-evento.' },
-    { cat:'Analítica IA', term:'Tripwire / Cruce de línea', def:'Alerta cuando un objeto cruza una línea virtual definida en el frame.' },
-    { cat:'Analítica IA', term:'Intrusión / Área restringida', def:'Alerta cuando un objeto entra en zona definida.' },
+    { cat:'Analítica IA', term:'WizSense', def:'IA Dahua con chip dedicado para distinguir personas/vehículos de objetos. Incluye SMD+ (Smart Motion Detection Plus) e IVS básico. Reduce falsos positivos drásticamente. Serie más amplia de Dahua.' },
+    { cat:'Analítica IA', term:'WizMind', def:'IA avanzada Dahua para proyectos enterprise. Incluye reconocimiento facial, conteo de personas, metadata de vehículos, LPR avanzado y análisis de comportamiento. Requiere NVR serie 5000 o superior.' },
+    { cat:'Analítica IA', term:'Xinghan AI', def:'Plataforma de IA gran escala de Dahua basada en modelos multimodales (texto + imagen + video). Potencia funciones como WizSeek, alarmas definidas por texto y análisis de escena avanzado. Disponible en equipos PRO.' },
+    { cat:'Analítica IA', term:'WizSeek', def:'Búsqueda semántica de video por lenguaje natural, potenciada por Xinghan AI. Permite describir un objetivo (ej: \"persona con mochila roja junto a un auto\") y localizar el metraje en segundos. Disponible en NVR PRO/WizMind.' },
+    { cat:'Analítica IA', term:'AcuPick / AcuPick 2.0', def:'Búsqueda por atributos: color de ropa, género, tipo de vehículo, etc. Acelera revisión post-evento. Funciona con cámaras WizSense y WizMind.' },
+    { cat:'Analítica IA', term:'TiOC / TiOC 2.0', def:'Three in One Camera: cámara + sirena + luz de disuasión activa. Al detectar intrusión con IA, activa luces estroboscópicas y alarma sonora automáticamente. Combinable con Full-Color para vigilancia 24/7 a color con disuasión.' },
+    { cat:'Analítica IA', term:'Full-Color', def:'Tecnología de imagen a color 24/7. Usa LEDs blancos cálidos + sensor ultrasensible (Starlight) + lente gran apertura (F1.0-F1.6) para capturar color en la oscuridad sin recurrir a IR. Ideal para identificar colores de ropa, vehículos y detalles nocturnos.' },
+    { cat:'Analítica IA', term:'Full-Color Pro (WizColor)', def:'Evolución de Full-Color con sensor de gran tamaño (1/1.8\") y AI-ISP. Puede ver a color en la oscuridad sin LED blanco, usando solo luz ambiente natural (luna, estrellas, alumbrado lejano). Menor contaminación lumínica. Serie PRO de Dahua.' },
+    { cat:'Analítica IA', term:'SMD+ (Smart Motion Detection)', def:'Detección inteligente de movimiento que clasifica automáticamente si el evento fue causado por persona, vehículo u otro (animal, hojas, luces). Base de WizSense. Reduce falsas alarmas hasta en un 95%.' },
+    { cat:'Analítica IA', term:'Tripwire / Cruce de línea', def:'Alerta cuando un objeto cruza una línea virtual definida en el frame. Puede filtrar por dirección y tipo de objeto (persona/vehículo).' },
+    { cat:'Analítica IA', term:'Intrusión / Área restringida', def:'Alerta cuando un objeto entra en zona definida. Configurable por forma, permanencia mínima y tipo de objeto.' },
     { cat:'Analítica IA', term:'LPR / ANPR', def:'License Plate Recognition / Automatic Number Plate Recognition. Lectura automática de patentes. Lo crítico no es la resolución alta ni FPS alto, sino: shutter speed rápido (1/500s a 1/2500s según velocidad del vehículo) para congelar movimiento, lente con focal adecuado para tener ~150-250 px en la patente, IR específico LPR (740-850nm) para penetrar la lámina reflectiva del patente y compensar faros nocturnos. Cámaras dedicadas Dahua serie ITC.' },
-    { cat:'Analítica IA', term:'People counting', def:'Conteo de personas que cruzan una línea. Para retail, transporte público.' },
-    { cat:'Analítica IA', term:'Heat mapping', def:'Mapa de calor de zonas más transitadas. Para retail y planificación de espacios.' }
+    { cat:'Analítica IA', term:'People counting', def:'Conteo de personas que cruzan una línea con hasta 95% de precisión. Para retail, transporte público, control de aforo. Requiere WizMind o cámara con IA embebida.' },
+    { cat:'Analítica IA', term:'Heat mapping', def:'Mapa de calor de zonas más transitadas. Genera estadísticas por hora/día/semana. Para retail y planificación de espacios.' }
   ];
 
   // ── HDCVI vs IP COMPARATOR ──
