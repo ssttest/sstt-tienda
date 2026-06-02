@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s92 -->
+<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s93b -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -18453,6 +18453,22 @@ button,
   margin:12px 14px 0 !important;
   border-radius:30px !important;
   background:linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.62)) !important;
+  position:relative;
+  overflow:hidden;
+}
+/* s93→s93b: Red stripe revertido junto con Liquid Glass v3. El selector
+   .sstt-liquid-glass ya no se aplica, así que esta regla queda dormida.
+   Se conserva para reactivación futura del diseño v3. */
+/* s93: Red stripe accent — franja roja Dahua sobre el header */
+.sstt-liquid-glass header::before{
+  content:'';
+  position:absolute;
+  top:0; left:10%; right:10%;
+  height:3px;
+  background:linear-gradient(90deg, transparent, var(--lg-red,#FF453A) 20%, var(--lg-red-2,#E6362E) 80%, transparent);
+  border-radius:0 0 3px 3px;
+  z-index:10;
+  pointer-events:none;
 }
 .sstt-liquid-glass .header-inner{
   min-height:78px !important;
@@ -19769,7 +19785,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s92</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s93b</span>
   </div>
 </div>
 
@@ -41171,7 +41187,7 @@ function waUpdateWaLink(userMsg, reply) {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Martes 02 de Junio del 2026 · s92';
+  if (txt) txt.textContent = 'Última actualización: Martes 02 de Junio del 2026 · s93b';
 })();
 
 
@@ -84646,6 +84662,9 @@ function _getKBMatches(chatHistory) {
 <script id="sstt-liquid-glass-v4-performance-script">
 (function(){
   document.documentElement.classList.add('sstt-liquid-glass-v4-performance');
+  // s93→s93b: 'sstt-liquid-glass' desactivado — el diseño v3 (header flotante glass,
+  // segmented nav, hero gradient, red stripe) se veía raro en móvil. Reglas quedan
+  // dormidas para reactivación futura. No eliminar el bloque CSS v3.
 
   // Lightweight one-time stock marker. No MutationObserver, no getComputedStyle loop.
   function markOutOfStockCardsOnce(){
