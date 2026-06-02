@@ -177,7 +177,8 @@ header {
 .logo::before {
   content: '';
   position: absolute;
-  top: 50%;
+  /* s94: bajada ~4px para calcar con el trazo de la "D" de Dahua. Ajustable: cambiar el offset px. */
+  top: calc(50% + 4px);
   right: 100%;
   width: 100vw;
   height: 4px;
@@ -17008,14 +17009,11 @@ body.cart-open #proyectoListadoBtn {
   border-left: 3px solid var(--tool-accent) !important;
   position: relative;
 }
-.ms-item-hero::before {
-  content: '';
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: linear-gradient(180deg, #0057B8, #00B4E6);
-  pointer-events: none;
-}
+/* s94: barra azul afinada a una sola de 3px. Antes: border-left(3px sólido) +
+   ::before(3px degradado) ≈ 6px, y el ::before cuadrado sobresalía del border-radius:20px
+   (L18269) → "overlapping". Ahora solo queda el border-left, que sigue el radio de forma
+   nativa (a ras y redondeado, sin clip). --tool-accent (#0057B8) = inicio del degradado previo.
+   Tombstone: ::before eliminado. */
 .ms-item-hero:hover {
   background: linear-gradient(135deg, rgba(0,87,184,0.08) 0%, rgba(0,180,230,0.06) 100%);
 }
@@ -84846,7 +84844,7 @@ function _getKBMatches(chatHistory) {
     bar.id = 'sstt-logo-bar-mobile';
     bar.style.cssText = [
       'position:absolute',
-      'top:50%',
+      'top:calc(50% + 4px)',
       'left:0',
       'height:3px',
       'background:var(--red,#e8001c)',
