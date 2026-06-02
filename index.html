@@ -177,8 +177,8 @@ header {
 .logo::before {
   content: '';
   position: absolute;
-  /* s94: bajada ~4px para calcar con el trazo de la "D" de Dahua. Ajustable: cambiar el offset px. */
-  top: calc(50% + 4px);
+  /* s94: bajada ~3px para calcar con el trazo de la "D" de Dahua. Ajustable: cambiar el offset px. */
+  top: calc(50% + 3px);
   right: 100%;
   width: 100vw;
   height: 4px;
@@ -480,6 +480,14 @@ header {
 }
 .mnav-tab:hover { color: var(--black); background: var(--g6) }
 .mnav-tab.active { color: var(--red); border-bottom-color: var(--red) }
+/* s94 a11y: anillo de foco visible SOLO para teclado (:focus-visible). No afecta mouse/touch
+   ni el diseño. Cubre tabs de navegación y vistas FOV, que no tenían indicador de foco. */
+.mnav-tab:focus-visible,
+.fov-vtab:focus-visible {
+  outline: 2px solid var(--blue, #0057B8);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
 .mnav-tab-half {
   flex: 1 1 0;
   justify-content: center;
@@ -21193,7 +21201,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <button class="fov-vtab" onclick="fovSetView('side',this)">↕ Lat.</button>
       <button class="fov-vtab" onclick="fovSetView('maps',this)" style="background:linear-gradient(135deg,#16a085,#0e6655);color:#fff;border-color:transparent">📍 Maps</button>
       <button class="fov-vtab" onclick="fovSetView('camera',this)" style="background:linear-gradient(135deg,#0057B8,#003a7d);color:#fff;border-color:transparent">📱 Cámara</button>
-      <button class="fov-vtab fov-fs-btn" onclick="fovFullscreen()" title="Pantalla completa (modo horizontal)" style="flex:0 0 auto;background:#111;color:#fff;border-color:#111;padding:7px 11px">⛶</button>
+      <button class="fov-vtab fov-fs-btn" onclick="fovFullscreen()" title="Pantalla completa (modo horizontal)" aria-label="Pantalla completa (modo horizontal)" style="flex:0 0 auto;background:#111;color:#fff;border-color:#111;padding:7px 11px">⛶</button>
     </div>
     <div id="fovViewport">
     <canvas id="fovCanvas" width="900" height="480"></canvas>
@@ -84844,7 +84852,7 @@ function _getKBMatches(chatHistory) {
     bar.id = 'sstt-logo-bar-mobile';
     bar.style.cssText = [
       'position:absolute',
-      'top:calc(50% + 4px)',
+      'top:calc(50% + 3px)',
       'left:0',
       'height:3px',
       'background:var(--red,#e8001c)',
