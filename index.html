@@ -31880,22 +31880,184 @@ function cmpCompatible(p1, p2) {
 }
 
 // ── Leer PDF y extraer specs con Claude API ──────────────────────────────
+// s98: Parser de specs desde SSTT_DATA bullets — fuente primaria del comparador
+// Extrae specs estructuradas de los bullets del catálogo sin API call
+function cmpExtractFromSSTTData(codigo) {
+  var entry = (typeof getSSTTData === 'function') ? getSSTTData(codigo) : null;
+  if (!entry || !entry.s || !entry.s.length) return null;
+  var bullets = entry.s;
+  var all = bullets.join('\n').toLowerCase();
+  var specs = {_source:'sstt_data', _codigo:codigo};
+  var i, b, m;
+
+  for (i = 0; i < bullets.length; i++) {
+    b = bullets[i];
+    var bl = b.toLowerCase();
+
+    // Resolución + FPS: "4 megapíxeles 2688x1520px a 30fps" o "8 megapíxeles 3840x2160 a 30fps"
+    m = b.match(/(\d+)\s*megap[ií]xel\w*\s*([\dx]+)\s*(?:px\.?)?\s*(?:a\s*)?(\d+)\s*fps/i);
+    if (m && !specs.resolucion) { specs.resolucion = m[1] + 'MP (' + m[2] + ')'; specs.fps = m[3] + ' fps'; }
+    if (!m) { m = b.match(/(\d+)\s*megap[ií]xel/i); if (m && !specs.resolucion) specs.resolucion = m[1] + 'MP'; }
+    if (!specs.fps) { m = b.match(/(\d+)\s*fps/i); if (m) specs.fps = m[1] + ' fps'; }
+
+    // Sensor CMOS
+    m = b.match(/sensor\s*(starlight\s*)?(?:starvis\s*)?cmos\s*([\d\/\.]+)\s*pulgad/i);
+    if (m && !specs.sensor) specs.sensor = m[2] + '" CMOS' + (m[1] ? ' Starlight' : '');
+    if (!specs.sensor) { m = b.match(/sensor\s*([\d\/\.]+)\s*pulgad/i); if (m) specs.sensor = m[1] + '" CMOS'; }
+
+    // WDR
+    m = b.match(/wdr\s*(?:hasta\s*)?(\d+)\s*db/i);
+    if (m && !specs.wdr) specs.wdr = 'WDR ' + m[1] + 'dB';
+    if (!specs.wdr && bl.includes('dwdr')) specs.wdr = 'DWDR';
+
+    // Lente
+    m = b.match(/lente\s*(motorizado|fijo|varifocal)?\s*:?\s*([\d\.\-]+)\s*(?:mm|a\s*[\d\.]+\s*mm)?/i);
+    if (m && !specs.focal) {
+      var tipo = m[1] ? m[1].toLowerCase() : '';
+      var focalStr = b.match(/([\d\.]+)\s*(?:-|a)\s*([\d\.]+)\s*mm/i);
+      if (focalStr) {
+        specs.focal = focalStr[1] + '-' + focalStr[2] + 'mm (' + (tipo || 'varifocal') + ')';
+      } else {
+        var fijo = b.match(/([\d\.]+)\s*mm/i);
+        specs.focal = fijo ? fijo[1] + 'mm (fija)' : m[2] + 'mm';
+      }
+    }
+
+    // Ángulo de visión
+    m = b.match(/[aá]ngulo\s*(?:de\s*visi[oó]n)?\s*([\d\.°]+)\s*(?:a\s*([\d\.°]+))?/i);
+    if (m && !specs.angulo) { var a1=m[1].replace(/°/g,''), a2=m[2]?m[2].replace(/°/g,''):''; specs.angulo = a2 ? a1+'° a '+a2+'°' : a1+'°'; }
+
+    // IR + LED (pueden ser 2 bullets separados)
+    if (bl.includes('iluminaci') || bl.includes(' ir ') || bl.includes('ir\n')) {
+      m = b.match(/(?:smart\s*)?ir\s*(\d+)\s*m/i);
+      if (m) { specs._ir = (specs._ir || '') + 'IR ' + m[1] + 'm'; }
+      m = b.match(/(?:blanco\s*c[aá]lido|led|luz\s*blanca)\s*(\d+)\s*m/i);
+      if (m) { specs._led = (specs._led || '') + 'LED ' + m[1] + 'm'; }
+      // Combined: "IR 30m y LED 30m" or "50 metros IR"
+      if (!specs._ir) { m = b.match(/(\d+)\s*m(?:etros?)?\s*ir/i); if (m) specs._ir = 'IR ' + m[1] + 'm'; }
+      if (!specs._led) { m = b.match(/(\d+)\s*m(?:etros?)?\s*(?:led|blanco)/i); if (m) specs._led = 'LED ' + m[1] + 'm'; }
+    }
+
+    // Iluminación mínima (lux)
+    m = b.match(/([\d\.]+)\s*lux/i);
+    if (m && !specs.iluminacion_min) specs.iluminacion_min = m[1] + ' lux';
+
+    // PoE + alimentación + consumo
+    if (bl.includes('poe') || bl.includes('voltio') || bl.includes('funciona con')) {
+      m = b.match(/poe\s*\(?(802\.3\w+)\)?/i);
+      if (m && !specs.poe) specs.poe = 'PoE (' + m[1] + ')';
+      m = b.match(/([\d\.]+)\s*w/i);
+      if (m && !specs.consumo_max) specs.consumo_max = m[1] + 'W máx.';
+      if (bl.includes('12v') || bl.includes('12 v') || bl.includes('voltio')) {
+        if (!specs.alimentacion) specs.alimentacion = bl.includes('poe') ? 'PoE / 12V DC' : '12V DC';
+      }
+      if (bl.includes('24v') || bl.includes('24 v')) {
+        if (!specs.alimentacion) specs.alimentacion = bl.includes('poe') ? 'PoE / 24V AC' : '24V AC';
+      }
+    }
+
+    // IP rating
+    m = b.match(/ip\s*(6[5-9]|67|68)/i);
+    if (m && !specs.proteccion_ip) specs.proteccion_ip = 'IP' + m[1];
+
+    // IK rating
+    m = b.match(/ik\s*(\d+)/i);
+    if (m && !specs.ik) specs.ik = 'IK' + m[1];
+
+    // Temperatura operativa
+    m = b.match(/([-\d]+)\s*°?\s*[cC]\s*[~a]\s*\+?([\d]+)\s*°?\s*[cC]/);
+    if (m && !specs.temperatura_op) specs.temperatura_op = m[1] + '°C ~ +' + m[2] + '°C';
+
+    // Dimensiones
+    m = b.match(/(?:tama[ñn]o|dimensi)\s*:?\s*([\d\.x×]+\s*mm)/i);
+    if (m && !specs.dimensiones) specs.dimensiones = m[1];
+
+    // Micro SD
+    m = b.match(/(?:micro\s*sd|sd)\s*(?:de\s*)?(\d+)\s*gb/i);
+    if (m && !specs.micro_sd) specs.micro_sd = m[1] + 'GB';
+
+    // Audio / micrófono
+    if (bl.includes('micr') || bl.includes('parlante') || bl.includes('audio')) {
+      if (bl.includes('micr') && !specs.microfono) specs.microfono = 'Sí';
+      if (bl.includes('parlante') && !specs.parlante) specs.parlante = 'Sí';
+      if (bl.includes('bidireccional') && !specs.audio) specs.audio = 'Bidireccional';
+    }
+
+    // IA / Serie
+    if (bl.includes('tioc') || bl.includes('wizsense') || bl.includes('wizmind') || bl.includes('wizcolor') || bl.includes('full color') || bl.includes('acupick')) {
+      var series = [];
+      if (bl.includes('wizsense') || all.includes('wizsense')) series.push('WizSense');
+      if (bl.includes('wizmind') || all.includes('wizmind')) series.push('WizMind');
+      if (bl.includes('tioc') || all.includes('tioc')) series.push('TiOC');
+      if (bl.includes('wizcolor') || all.includes('wiz color') || all.includes('wizcolor')) series.push('Full Color');
+      if (bl.includes('acupick') || all.includes('acupick')) series.push('AcuPick');
+      if (series.length && !specs.ia) specs.ia = series.join(' + ');
+    }
+
+    // SMD
+    if (bl.includes('smd') && !specs.smd) specs.smd = 'SMD+' + (bl.includes('wizsense') ? ' (WizSense)' : '');
+
+    // IVS / Perimeter
+    if ((bl.includes('cruce') || bl.includes('perímetro') || bl.includes('perimetro') || bl.includes('ivs')) && !specs.ivs) {
+      specs.ivs = 'IVS disponible';
+    }
+
+    // DORI
+    m = b.match(/detect\w*\s*(?:hasta\s*)?(\d+)\s*m/i);
+    if (m && !specs.dori_detectar) specs.dori_detectar = m[1] + 'm';
+    m = b.match(/reconoc\w*\s*(?:hasta\s*)?(\d+)\s*m/i);
+    if (m && !specs.dori_reconocer) specs.dori_reconocer = m[1] + 'm';
+
+    // Compresión
+    m = b.match(/h\.?(265|264)\+?/i);
+    if (m && !specs.compresion) specs.compresion = 'H.' + m[1] + (b.includes('+') ? '+' : '');
+
+    // Alarma
+    m = b.match(/(\d+)\s*entrada.*(\d+)\s*salida.*alarm/i);
+    if (m && !specs.entradas_alarma) { specs.entradas_alarma = m[1]; specs.salidas_alarma = m[2]; }
+
+    // Certificaciones
+    if (bl.includes('ce,') || bl.includes('fcc')) {
+      if (!specs.certificaciones) specs.certificaciones = b.replace(/^.*?:\s*/, '');
+    }
+  }
+
+  // Combinar IR + LED
+  if (specs._ir || specs._led) {
+    var parts = [];
+    if (specs._ir) parts.push(specs._ir);
+    if (specs._led) parts.push(specs._led);
+    specs.alcance_ir = parts.join(' + ');
+    delete specs._ir; delete specs._led;
+  }
+
+  // IA fallback from product name
+  if (!specs.ia) {
+    var nombre = (entry.u || '').toLowerCase();
+    var series2 = [];
+    if (nombre.includes('tioc') || all.includes('disuaci')) series2.push('TiOC');
+    if (nombre.includes('wizsense') || all.includes('wizsense')) series2.push('WizSense');
+    if (all.includes('wiz color') || all.includes('wizcolor') || all.includes('full color') || all.includes('full-color')) series2.push('Full Color');
+    if (series2.length) specs.ia = series2.join(' + ');
+  }
+
+  // Verificar que se extrajo algo útil (al menos resolución)
+  if (!specs.resolucion && !specs.sensor && !specs.focal) return null;
+
+  return specs;
+}
+window.cmpExtractFromSSTTData = cmpExtractFromSSTTData;
+
 async function fetchSpecsFromPDF(producto) {
+  if (PDF_CACHE[producto.codigo]) return PDF_CACHE[producto.codigo];
   if (_proxyAlive === false) throw new Error("Servicio IA no disponible");
   // s47b: rate limit guard
   if (!aiRateGuard()) throw new Error("Demasiadas consultas seguidas. Espera un momento.");
-  if (PDF_CACHE[producto.codigo]) return PDF_CACHE[producto.codigo];
 
   const pdfUrl = 'https://cdn1.dori.cl/fichatecnica/' + producto.codigo + '.pdf';
 
   try {
-    // Intentar leer el PDF como base64
-    const resp = await fetch(pdfUrl);
-    if (!resp.ok) throw new Error('PDF no disponible');
-    const buf  = await resp.arrayBuffer();
-    const b64  = btoa(String.fromCharCode(...new Uint8Array(buf)));
-
-    // Llamar a Claude API con el PDF
+    // s98: enviar URL del PDF directo a Claude (él lo descarga, sin CORS)
     const apiResp = await fetch(PROXY_URL, {
       method: 'POST',
       headers: {
@@ -31908,7 +32070,7 @@ async function fetchSpecsFromPDF(producto) {
           content: [
             {
               type: 'document',
-              source: { type: 'base64', media_type: 'application/pdf', data: b64 }
+              source: { type: 'url', url: pdfUrl }
             },
             {
               type: 'text',
@@ -31964,12 +32126,28 @@ Si un campo no existe en el PDF pon "—". Solo JSON, nada más.`
     const specs = JSON.parse(jsonBody ? jsonBody[0] : clean);
     specs._source = 'pdf';
     specs._codigo = producto.codigo;
+    // s98: merge con SSTT_DATA para campos que varían por variante de SKU
+    // (lente, audio, micrófono, parlante — el PDF de Dahua cubre múltiples versiones)
+    var _ssttOverride = cmpExtractFromSSTTData(producto.codigo);
+    if (_ssttOverride) {
+      var _overrideFields = ['focal','angulo','microfono','parlante','audio','alcance_ir','consumo_max','alimentacion','poe','dimensiones','dori_detectar','dori_reconocer','iluminacion_min'];
+      _overrideFields.forEach(function(f) {
+        if (_ssttOverride[f] && _ssttOverride[f] !== '—') specs[f] = _ssttOverride[f];
+      });
+      specs._source = 'pdf+catalogo';
+    }
     PDF_CACHE[producto.codigo] = specs;
     return specs;
 
   } catch (e) {
     console.warn('PDF fetch/parse falló para', producto.codigo, e.message);
-    // Fallback: generar specs desde el nombre del producto
+    // s98: Fallback 1 — SSTT_DATA (datos curados del catálogo)
+    var _ssttFallback = cmpExtractFromSSTTData(producto.codigo);
+    if (_ssttFallback && _ssttFallback.resolucion) {
+      PDF_CACHE[producto.codigo] = _ssttFallback;
+      return _ssttFallback;
+    }
+    // Fallback 2 — parsear desde el nombre (último recurso)
     const fallback = pmParseSpecsFlat(producto);
     fallback._source = 'nombre';
     fallback._codigo = producto.codigo;
@@ -34486,9 +34664,11 @@ function cmpBuildTable(products, allSpecs, modal) {
   const groups = [...new Set(activeFields.map(f => f.group))];
 
   // Build header
-  const srcBadge = (specs) => specs._source === 'pdf'
-    ? `<span style="background:var(--green-p);color:var(--green);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700">✅ PDF</span>`
-    : `<span style="background:var(--yellow-p);color:var(--yellow);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700">⚠️ Nombre</span>`;
+  const srcBadge = (specs) => {
+    if (specs._source === 'sstt_data') return `<span style="background:var(--green-p);color:var(--green);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700">✅ Catálogo</span>`;
+    if (specs._source === 'pdf' || specs._source === 'pdf+catalogo') return `<span style="background:var(--green-p);color:var(--green);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700">✅ PDF</span>`;
+    return `<span style="background:var(--yellow-p);color:var(--yellow);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700">⚠️ Estimado</span>`;
+  };
 
   const headerCols = products.map((p, i) => `
     <th>
@@ -34589,7 +34769,7 @@ function cmpBuildTable(products, allSpecs, modal) {
   modal.innerHTML = `
     <div class="cmp-modal-wrap">
       <div class="cmp-modal-head">
-        <h2>⚖️ Comparando ${products.length} productos · ${allSpecs.filter(s=>s._source==='pdf').length} con datos PDF</h2>
+        <h2>⚖️ Comparando ${products.length} productos · ${allSpecs.filter(s=>s._source==='sstt_data'||s._source==='pdf'||s._source==='pdf+catalogo').length} con datos verificados</h2>
         <div style="display:flex;gap:8px;align-items:center">
           <button class="cmp-modal-export" onclick="cmpExportPDF()" title="Exportar comparación a PDF" style="background:linear-gradient(135deg,#0057B8,#003d80);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--font);transition:all .15s" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 12px rgba(0,87,184,.3)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
             <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
@@ -34618,7 +34798,7 @@ function cmpBuildTable(products, allSpecs, modal) {
       <div class="cmp-summary">
         <h3>🤖 Análisis comparativo</h3>
         <p style="font-size:12px;color:var(--muted);margin-bottom:14px">
-          Comparación basada en ${allSpecs.filter(s=>s._source==='pdf').length > 0 ? 'fichas técnicas PDF oficiales Dahua' : 'datos del catálogo'}.
+          Comparación basada en ${allSpecs.some(s=>s._source==='pdf+catalogo') ? 'fichas técnicas PDF Dahua + datos verificados por SKU' : allSpecs.some(s=>s._source==='pdf') ? 'fichas técnicas PDF Dahua' : allSpecs.some(s=>s._source==='sstt_data') ? 'datos curados del catálogo SSTT' : 'datos estimados'}.
           Celdas <span style="background:var(--green-p);color:var(--green);padding:1px 6px;border-radius:3px;font-weight:700">verdes ▲</span> = mejor valor · 
           <span style="background:var(--red-p);color:var(--red-d);padding:1px 6px;border-radius:3px;font-weight:700">rojas ▼</span> = valor inferior.
         </p>
