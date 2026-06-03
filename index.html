@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s95 -->
+<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s96 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -576,6 +576,36 @@ nav {
 .bcrumb a { color: var(--blue); transition: color .15s }
 .bcrumb a:hover { color: var(--red) }
 .update-txt { font-size: 11px; color: var(--g4) }
+/* s96: chip de versión chiquitito, fijo abajo-centro, visible en desktop y móvil.
+   pointer-events:none → nunca bloquea clics; centrado → no choca con los FAB
+   (abajo-dcha) ni el pill "Contáctanos" de WhatsApp (abajo-izq). Sirve para
+   confirmar de un vistazo qué build se está viendo (lío index_75/78/79). */
+.ver-chip {
+  position: fixed;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-m);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: .5px;
+  font-weight: 600;
+  color: var(--g2);
+  background: rgba(255,255,255,.8);
+  border: 1px solid var(--g5);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  padding: 2px 7px;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+  pointer-events: none;
+  user-select: none;
+  z-index: 400;
+  opacity: .85;
+}
+@media (max-width: 768px), (pointer: coarse) {
+  .ver-chip { font-size: 9px; bottom: 3px; padding: 1px 6px; }
+}
 
 /* ══════════════════════════════════════════════════════════════
    HERO BANNER — el único lugar oscuro, como en Dahua.com
@@ -5748,6 +5778,13 @@ input[data-validated="1"]::after {
     max-height:36px !important;
     min-height:0 !important;
   }
+  /* s96 fix2: el top:36px de arriba lo pisaban .module-nav{top:68px} (L~17969 global
+     y L~18344 @media≤980), dejando el nav anclado en y=68 mientras el header móvil
+     mide 36px → la barra mob-search (sticky top:72px) se le montaba encima y lo
+     ocultaba (síntoma: nav Catálogo/Mesón/Asesor invisible en iPhone). Subimos la
+     especificidad a nav.module-nav (0,1,1) para ganarle al 68px SIN pisar el ≤400
+     (top:32 !important) ni el liquid-glass (.sstt-liquid-glass .module-nav, 0,2,0). */
+  nav.module-nav { top:36px; }
   .module-nav-inner {
     height:36px !important;
     max-height:36px !important;
@@ -19819,7 +19856,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s95</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s96</span>
   </div>
 </div>
 
@@ -41291,10 +41328,16 @@ function waUpdateWaLink(userMsg, reply) {
 // waBtn onclick directo en HTML — no necesita DOMContentLoaded
 
 
-// ── Fecha de actualización dinámica ──
+// ── Fecha de actualización dinámica + chip de versión ──
+// s96: SSTT_VER es la ÚNICA fuente de verdad de la versión. Cambiar SOLO aquí
+// en cada sesión; alimenta #updateTxt (breadcrumb desktop) y #verChip (chip fijo
+// desktop+móvil). El comentario del <head> (L2) se actualiza aparte.
 (function() {
+  var SSTT_VER = 's96';
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Martes 02 de Junio del 2026 · s95';
+  if (txt) txt.textContent = 'Última actualización: Martes 02 de Junio del 2026 · ' + SSTT_VER;
+  var chip = document.getElementById('verChip');
+  if (chip) chip.textContent = SSTT_VER;
 })();
 
 
@@ -86874,5 +86917,9 @@ window.toolOut=(function(){
   window.addEventListener('scroll',schedule,{passive:true});
 })();
 </script>
+<!-- s96: chip de versión chiquitito (desktop + móvil). Hijo directo del body
+     para que no lo absorba ningún modal (offsetParent=null). El texto lo fija
+     la JS de versión desde una sola constante (SSTT_VER). -->
+<div class="ver-chip" id="verChip">s96</div>
 </body>
 </html>
