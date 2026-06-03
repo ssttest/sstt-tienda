@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s94 -->
+<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s95 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -19812,7 +19812,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s94</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s95</span>
   </div>
 </div>
 
@@ -25166,13 +25166,35 @@ function getFiltered() {
       return cb-ca||a.ptotal-b.ptotal;
     });
     else if (_so==='name') list.sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||''));
-    else if (_so==='vendidos') list.sort((a,b)=>{
-      // Proxy: frecuencia en CROSS_SELL como señal de popularidad
-      var va = typeof CROSS_SELL!=='undefined'&&CROSS_SELL[a.codigo] ? Object.values(CROSS_SELL[a.codigo]).reduce((s,v)=>s+v,0) : 0;
-      var vb = typeof CROSS_SELL!=='undefined'&&CROSS_SELL[b.codigo] ? Object.values(CROSS_SELL[b.codigo]).reduce((s,v)=>s+v,0) : 0;
-      var sa=a.stock==='sin'?1:0,sb=b.stock==='sin'?1:0;
-      return sa-sb||vb-va||a.ptotal-b.ptotal;
-    });
+    else if (_so==='vendidos') {
+      // s95: ranking real SSTT_TOPVENTAS (puestos 1..200) como base de popularidad
+      // + boost de PESO a cámaras/grabadores (suben sin bloquear al resto)
+      // + CROSS_SELL como señal secundaria para SKUs fuera del top-200.
+      // Antes el sort usaba solo CROSS_SELL (proxy) y discrepaba del badge "Top ventas".
+      // _TV_CAMREC / _TV_BOOST son ajustables: subir BOOST = cámaras/grabadores más arriba.
+      var _TV_BOOST = 30; // ~30 puestos equivalentes (base va de 1 a 200)
+      var _TV_CAMREC = function(p){ return p.cat==='nvr' || ['camaras-ip','camaras-hdcvi','camaras-ptz'].indexOf(p.cat)>=0; };
+      var _tvScore = function(p){
+        var cod=(p.codigo||'').toString().toUpperCase();
+        var rk=(window.SSTT_TOPVENTAS&&window.SSTT_TOPVENTAS[cod])||0;
+        var base=rk?(201-rk):0;            // rank 1 => 200 … rank 200 => 1; fuera del top => 0
+        var xs=(typeof CROSS_SELL!=='undefined'&&CROSS_SELL[p.codigo])
+          ? Object.values(CROSS_SELL[p.codigo]).reduce(function(s,v){return s+v;},0) : 0;
+        var sec=xs>0?Math.min(10,xs/100):0; // techo 10: matiza, no domina al ranking real
+        var sc=base+sec;
+        if(_TV_CAMREC(p)) sc+=_TV_BOOST;    // preferencia cámaras+grabadores: peso, no exclusión
+        return sc;
+      };
+      var _tvMap=new Map();
+      list.forEach(function(p){ _tvMap.set(p,_tvScore(p)); });
+      list.sort(function(a,b){
+        var sa=a.stock==='sin'?1:0, sb=b.stock==='sin'?1:0;
+        if(sa!==sb) return sa-sb;           // agotados al fondo
+        var va=_tvMap.get(a)||0, vb=_tvMap.get(b)||0;
+        if(vb!==va) return vb-va;
+        return a.ptotal-b.ptotal;           // empate => más barato primero
+      });
+    }
     else if (_so==='destacados'||_so===''||_so==='rel') {
       // FIX s86: relevancia por tecnologia (modernas primero, TVL/CCD al fondo).
       // Antes era stock->nuevo->PRECIO ASC, lo que subia accesorios baratos y camaras viejas.
@@ -41265,7 +41287,7 @@ function waUpdateWaLink(userMsg, reply) {
 // ── Fecha de actualización dinámica ──
 (function() {
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Martes 02 de Junio del 2026 · s94';
+  if (txt) txt.textContent = 'Última actualización: Martes 02 de Junio del 2026 · s95';
 })();
 
 
