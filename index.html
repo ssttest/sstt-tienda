@@ -20381,6 +20381,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         <div class="trow"><span>IVA (19%)</span><span id="tIva">$0</span></div>
         <div class="trow"><span id="tShipLbl">Despacho</span><span id="tShip">—</span></div>
         <div class="trow" id="tDescCertRow" style="display:none;color:#1A8C4E;font-weight:700"><span>🏅 Desc. instalador cert.</span><span id="tDescCert">—</span></div>
+        <div class="trow" id="tDescVolRow" style="display:none;color:#1A8C4E;font-weight:700"><span>📦 Dcto. volumen</span><span id="tDescVol">—</span></div>
         <div class="trow" id="tDescCuponRow" style="display:none;color:#1A8C4E;font-weight:700"><span>🏷️ Cupón descuento</span><span id="tDescCupon">—</span></div>
         <div class="trow" id="tDescGCRow" style="display:none;color:#6A1B9A;font-weight:700"><span>🎁 Gift card</span><span id="tDescGC">—</span></div>
         <div class="trow" id="tDescPtsRow" style="display:none;color:#D4A03C;font-weight:700"><span>⭐ Descuento puntos</span><span id="tDescPts">—</span></div>
@@ -26654,6 +26655,9 @@ function calcTotals() {
   var descCert = esCert ? Math.round(neto * _pct / 100) : 0;
   var netoConCert = neto - descCert;
   var ivaConCert = Math.round(netoConCert * 0.19);
+  // s98: descuento por volumen
+  var volInfo = (typeof VOL_DISCOUNT !== 'undefined') ? VOL_DISCOUNT.calcCartDiscount() : { total: 0, items: [] };
+  var descVol = volInfo.total;
   // s98: descuento por cupón (sobre neto con cert, antes de IVA)
   var descCupon = 0;
   if (S.cupon) {
@@ -26662,7 +26666,9 @@ function calcTotals() {
   } else {
     S.cuponDescuento = 0;
   }
-  var netoConCupon = netoConCert - descCupon;
+  // Volumen y cupón no acumulables — cupón tiene prioridad
+  if (descCupon > 0) descVol = 0;
+  var netoConCupon = netoConCert - descCupon - descVol;
   var ivaConCupon = Math.round(netoConCupon * 0.19);
   // Sprint 2 s74: descuento por canje de puntos
   var canje = puntosCanjeActivo();
@@ -26683,6 +26689,9 @@ function calcTotals() {
   var el;
   if ((el = document.getElementById('tNeto')))  el.textContent = fmt(netoConCupon);
   if ((el = document.getElementById('tIva')))   el.textContent = fmt(ivaConCupon);
+  // s98: fila descuento volumen
+  var rowVol = document.getElementById('tDescVolRow');
+  if (rowVol) { rowVol.style.display = descVol > 0 ? '' : 'none'; var eV = document.getElementById('tDescVol'); if (eV) eV.textContent = descVol > 0 ? '-' + fmt(descVol) : '—'; }
   // s98: fila descuento cupón
   var rowCupon = document.getElementById('tDescCuponRow');
   if (rowCupon) rowCupon.style.display = descCupon > 0 ? '' : 'none';
@@ -30998,6 +31007,51 @@ function _pmBuildModal(id) {
     </details>`;
   })() : '';
 
+  // s98: === "Frecuentemente comprados juntos" — Amazon-style widget ===
+  var fbtItems = [];
+  if (csRecs.length >= 1) {
+    var _skuMap2 = {}; PRODUCTS.forEach(function(x){ _skuMap2[x.codigo] = x; });
+    fbtItems = csRecs.slice().sort((a,b) => b.score - a.score).map(r => _skuMap2[r.sku]).filter(x => x && x.id !== id).slice(0, 3);
+  }
+  var fbtHTML = '';
+  if (fbtItems.length >= 1) {
+    var _fbtTotal = (typeof itemNeto === 'function') ? itemNeto(p) : p.ptotal;
+    fbtItems.forEach(function(it) { _fbtTotal += (typeof itemNeto === 'function') ? itemNeto(it) : it.ptotal; });
+    var _fbtBonus = rwBundleBonusCalc(_fbtTotal - ((typeof itemNeto === 'function') ? itemNeto(p) : p.ptotal), 1 + fbtItems.length);
+    fbtHTML = '<div class="pm-fbt-wrap" style="background:linear-gradient(135deg,#f0f7ff,#e8f0fe);border:1px solid rgba(0,87,184,0.12);border-radius:14px;padding:18px 20px;margin:0 0 8px">';
+    fbtHTML += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><span style="font-size:18px">🛒</span><span style="font-weight:800;font-size:14px;color:#0057B8">Frecuentemente comprados juntos</span></div>';
+    fbtHTML += '<div style="display:flex;align-items:center;gap:0;overflow-x:auto;padding:4px 0;-webkit-overflow-scrolling:touch">';
+    fbtHTML += '<div style="flex-shrink:0;text-align:center;width:90px">';
+    fbtHTML += '<img src="' + (typeof imgProxyUrl === 'function' ? imgProxyUrl(p.codigo) : p.img) + '" style="width:70px;height:70px;object-fit:contain;background:#fff;border-radius:10px;border:2px solid #0057B8;padding:4px" onerror="this.style.opacity=.3">';
+    fbtHTML += '<div style="font-size:10px;color:#0057B8;font-weight:700;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Este producto</div>';
+    fbtHTML += '</div>';
+    fbtItems.forEach(function(it, idx) {
+      fbtHTML += '<div style="flex-shrink:0;font-size:22px;color:#0057B8;font-weight:900;padding:0 6px">+</div>';
+      fbtHTML += '<div style="flex-shrink:0;text-align:center;width:90px;cursor:pointer" onclick="closeProdModal();setTimeout(()=>openProdModal(' + it.id + '),200)">';
+      fbtHTML += '<img src="' + (typeof imgProxyUrl === 'function' ? imgProxyUrl(it.codigo) : it.img) + '" style="width:70px;height:70px;object-fit:contain;background:#fff;border-radius:10px;border:1px solid rgba(0,0,0,0.1);padding:4px" onerror="this.style.opacity=.3">';
+      fbtHTML += '<div style="font-size:10px;color:#333;font-weight:600;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="' + it.codigo + '">' + it.codigo + '</div>';
+      fbtHTML += '</div>';
+    });
+    fbtHTML += '</div>';
+    fbtHTML += '<div style="margin-top:12px;border-top:1px solid rgba(0,87,184,0.1);padding-top:12px">';
+    fbtHTML += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><input type="checkbox" checked disabled style="width:15px;height:15px;accent-color:#0057B8"><span style="font-size:12px;font-weight:700;color:#111">' + escapeHtml(p.nombre) + '</span><span style="font-size:12px;color:#666;margin-left:auto;white-space:nowrap">' + (typeof fmtP === 'function' ? fmtP(p) : '') + '</span></div>';
+    fbtItems.forEach(function(it, idx) {
+      fbtHTML += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><input type="checkbox" checked class="pm-fbt-chk" data-id="' + it.id + '" data-precio="' + ((typeof itemNeto === 'function') ? itemNeto(it) : it.ptotal) + '" onchange="pmFbtUpdate(' + p.id + ')" style="width:15px;height:15px;accent-color:#0057B8"><span style="font-size:12px;color:#333;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escapeHtml(it.nombre) + '</span><span style="font-size:12px;color:#666;white-space:nowrap">' + (typeof fmtP === 'function' ? fmtP(it) : '') + '</span></div>';
+    });
+    fbtHTML += '</div>';
+    fbtHTML += '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:10px;border-top:1px solid rgba(0,87,184,0.1)">';
+    fbtHTML += '<div><div style="font-size:10px;color:#666;text-transform:uppercase;font-weight:700;letter-spacing:.05em">Total seleccionado</div>';
+    fbtHTML += '<div id="pmFbtTotal_' + p.id + '" style="font-size:20px;font-weight:900;color:#0057B8;line-height:1.1">$' + _fbtTotal.toLocaleString('es-CL') + '</div>';
+    if (_fbtBonus > 0) fbtHTML += '<div id="pmFbtBonus_' + p.id + '" style="font-size:11px;color:#1a7f3c;font-weight:700;margin-top:2px">+' + _fbtBonus + ' puntos fidelidad</div>';
+    fbtHTML += '</div>';
+    fbtHTML += '<button onclick="pmFbtAddToCart(' + p.id + ')" style="background:linear-gradient(135deg,#0057B8,#003d80);color:#fff;border:none;padding:11px 20px;border-radius:10px;font-weight:800;font-size:12.5px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:7px;box-shadow:0 4px 14px rgba(0,87,184,0.3);white-space:nowrap">';
+    fbtHTML += '<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
+    fbtHTML += 'Agregar todos';
+    fbtHTML += '</button>';
+    fbtHTML += '</div>';
+    fbtHTML += '</div>';
+  }
+
   // ─ ASSEMBLE MODAL ─────────────────────────────────────────────
   let modal = document.getElementById('prodModal');
   if (!modal) { modal = document.createElement('div'); modal.id='prodModal'; document.body.appendChild(modal); }
@@ -31151,6 +31205,12 @@ function _pmBuildModal(id) {
 
       <!-- Highlights bar -->
       ${hlHTML ? `<div class="pm-highlights">${hlHTML}</div>` : ''}
+
+      <!-- Frecuentemente comprados juntos -->
+      ${fbtHTML}
+
+      <!-- Compra por volumen -->
+      ${typeof VOL_DISCOUNT !== 'undefined' ? VOL_DISCOUNT.renderVolTable(p) : ''}
 
       <!-- Tabs -->
       <div class="pm-tabbar">
@@ -32044,6 +32104,10 @@ function cmpExtractFromSSTTData(codigo) {
   // Verificar que se extrajo algo útil (al menos resolución)
   if (!specs.resolucion && !specs.sensor && !specs.focal) return null;
 
+  // s98: marcar fuente por campo
+  specs._fieldSrc = {};
+  Object.keys(specs).forEach(function(k) { if (k[0] !== '_') specs._fieldSrc[k] = 'catalogo'; });
+
   return specs;
 }
 window.cmpExtractFromSSTTData = cmpExtractFromSSTTData;
@@ -32126,13 +32190,16 @@ Si un campo no existe en el PDF pon "—". Solo JSON, nada más.`
     const specs = JSON.parse(jsonBody ? jsonBody[0] : clean);
     specs._source = 'pdf';
     specs._codigo = producto.codigo;
+    // s98: marcar fuente por campo (todo PDF inicialmente)
+    specs._fieldSrc = {};
+    Object.keys(specs).forEach(function(k) { if (k[0] !== '_') specs._fieldSrc[k] = 'pdf'; });
     // s98: merge con SSTT_DATA para campos que varían por variante de SKU
     // (lente, audio, micrófono, parlante — el PDF de Dahua cubre múltiples versiones)
     var _ssttOverride = cmpExtractFromSSTTData(producto.codigo);
     if (_ssttOverride) {
       var _overrideFields = ['focal','angulo','microfono','parlante','audio','alcance_ir','consumo_max','alimentacion','poe','dimensiones','dori_detectar','dori_reconocer','iluminacion_min'];
       _overrideFields.forEach(function(f) {
-        if (_ssttOverride[f] && _ssttOverride[f] !== '—') specs[f] = _ssttOverride[f];
+        if (_ssttOverride[f] && _ssttOverride[f] !== '—') { specs[f] = _ssttOverride[f]; specs._fieldSrc[f] = 'catalogo'; }
       });
       specs._source = 'pdf+catalogo';
     }
@@ -32151,6 +32218,8 @@ Si un campo no existe en el PDF pon "—". Solo JSON, nada más.`
     const fallback = pmParseSpecsFlat(producto);
     fallback._source = 'nombre';
     fallback._codigo = producto.codigo;
+    fallback._fieldSrc = {};
+    Object.keys(fallback).forEach(function(k) { if (k[0] !== '_') fallback._fieldSrc[k] = 'estimado'; });
     PDF_CACHE[producto.codigo] = fallback;
     return fallback;
   }
@@ -34333,6 +34402,45 @@ function rwBundleAddToCart(mainId) {
   }
 }
 
+// s98: === FBT (Frecuentemente comprados juntos) — funciones de UI ===
+window.pmFbtUpdate = function(mainId) {
+  var totEl = document.getElementById('pmFbtTotal_' + mainId);
+  if (!totEl) return;
+  var pMain = PRODUCTS.find(function(p){ return p.id == mainId; });
+  if (!pMain) return;
+  var total = (typeof itemNeto === 'function') ? itemNeto(pMain) : pMain.ptotal;
+  var netoAdd = 0, cnt = 0;
+  document.querySelectorAll('.pm-fbt-chk').forEach(function(c) {
+    if (c.checked) { var v = parseFloat(c.dataset.precio || 0); total += v; netoAdd += v; cnt++; }
+  });
+  totEl.textContent = '$' + total.toLocaleString('es-CL');
+  var bonusEl = document.getElementById('pmFbtBonus_' + mainId);
+  if (bonusEl) {
+    var b = rwBundleBonusCalc(netoAdd, 1 + cnt);
+    bonusEl.textContent = b > 0 ? ('+' + b + ' puntos fidelidad') : '';
+  }
+};
+window.pmFbtAddToCart = function(mainId) {
+  var pMain = PRODUCTS.find(function(p){ return p.id == mainId; });
+  if (!pMain) return;
+  var added = 0, netoAdd = 0;
+  if (typeof addCart === 'function') { addCart(pMain); added++; }
+  document.querySelectorAll('.pm-fbt-chk').forEach(function(c) {
+    if (c.checked) {
+      var it = PRODUCTS.find(function(p){ return p.id == c.dataset.id; });
+      if (it) { addCart(it); added++; netoAdd += parseFloat(c.dataset.precio || 0); }
+    }
+  });
+  var _b = rwBundleBonusCalc(netoAdd, added);
+  if (_b > 0) rwBundleBonusPendingAdd(_b);
+  if (typeof closeProdModal === 'function') closeProdModal();
+  if (typeof showToast === 'function') {
+    showToast(_b > 0
+      ? ('\u2705 ' + added + ' productos agregados \u00B7 +' + _b + ' pts al confirmar')
+      : ('\u2705 ' + added + ' productos agregados al carro'));
+  }
+};
+
 // ── Helpers menores ──
 function rwFechaRel(ts) {
   if (!ts) return '';
@@ -34719,7 +34827,12 @@ function cmpBuildTable(products, allSpecs, modal) {
                   : rank === 'best' ? ' <span style="color:var(--green);font-size:10px;font-weight:900">▲</span>'
                   : rank === 'low'  ? ' <span style="color:var(--red);font-size:10px;font-weight:900">▼</span>'
                   : '';
-      return `<td class="${cls}">${val === '—' ? '<span style="color:var(--border)">—</span>' : val}${arrow}</td>`;
+      const fSrc = (allSpecs[i]._fieldSrc && allSpecs[i]._fieldSrc[field.key]) || '';
+      const srcDot = fSrc === 'pdf' ? ' <span title="Fuente: PDF oficial Dahua" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#1A8C4E;vertical-align:middle;margin-left:3px"></span>'
+                   : fSrc === 'catalogo' ? ' <span title="Fuente: Catálogo SSTT (por SKU)" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0057B8;vertical-align:middle;margin-left:3px"></span>'
+                   : fSrc === 'estimado' ? ' <span title="Fuente: Estimado del nombre" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#F5A623;vertical-align:middle;margin-left:3px"></span>'
+                   : '';
+      return `<td class="${cls}">${val === '—' ? '<span style="color:var(--border)">—</span>' : val}${srcDot}${arrow}</td>`;
     }).join('');
 
     bodyHTML += `<tr class="cmp-row"><td>${field.label}</td>${cells}</tr>`;
@@ -34736,7 +34849,9 @@ function cmpBuildTable(products, allSpecs, modal) {
         const rank = ranks[p.id];
         const cls  = rank==='best'?'cmp-cell-best':rank==='low'?'cmp-cell-low':'';
         const arrow = rank==='best'?' <span style="color:var(--green);font-size:10px">▲</span>':rank==='low'?' <span style="color:var(--red);font-size:10px">▼</span>':'';
-        return `<td class="${cls}">${val}${arrow}</td>`;
+        const dSrc = (allSpecs[i]._fieldSrc && allSpecs[i]._fieldSrc[key]) || '';
+        const dDot = dSrc==='pdf'?' <span title="PDF" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#1A8C4E;vertical-align:middle;margin-left:3px"></span>':dSrc==='catalogo'?' <span title="Catálogo" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#0057B8;vertical-align:middle;margin-left:3px"></span>':dSrc==='estimado'?' <span title="Estimado" style="display:inline-block;width:6px;height:6px;border-radius:50%;background:#F5A623;vertical-align:middle;margin-left:3px"></span>':'';
+        return `<td class="${cls}">${val}${dDot}${arrow}</td>`;
       }).join('');
       bodyHTML += `<tr class="cmp-row"><td>${label}</td>${cells}</tr>`;
     });
@@ -34770,6 +34885,11 @@ function cmpBuildTable(products, allSpecs, modal) {
     <div class="cmp-modal-wrap">
       <div class="cmp-modal-head">
         <h2>⚖️ Comparando ${products.length} productos · ${allSpecs.filter(s=>s._source==='sstt_data'||s._source==='pdf'||s._source==='pdf+catalogo').length} con datos verificados</h2>
+        <div style="display:flex;gap:14px;font-size:10px;color:var(--muted);margin-top:4px;flex-wrap:wrap">
+          <span><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#1A8C4E;vertical-align:middle;margin-right:3px"></span>PDF oficial Dahua</span>
+          <span><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#0057B8;vertical-align:middle;margin-right:3px"></span>Catálogo SSTT (por SKU)</span>
+          <span><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#F5A623;vertical-align:middle;margin-right:3px"></span>Estimado</span>
+        </div>
         <div style="display:flex;gap:8px;align-items:center">
           <button class="cmp-modal-export" onclick="cmpExportPDF()" title="Exportar comparación a PDF" style="background:linear-gradient(135deg,#0057B8,#003d80);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-family:var(--font);transition:all .15s" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 4px 12px rgba(0,87,184,.3)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
             <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
@@ -40350,6 +40470,78 @@ var B2B = {
 // Restaurar sesión al cargar
 B2B.restore();
 
+// s98: === Compra por Volumen — descuento escalonado sobre precio de tier ===
+var VOL_DISCOUNT = {
+  tiers: {
+    A: { label: 'Mayorista',    tramos: [{minQty:10, pct:3},{minQty:25, pct:5},{minQty:50, pct:8}], techo: 8 },
+    B: { label: 'Prime',        tramos: [{minQty:10, pct:2},{minQty:25, pct:4},{minQty:50, pct:6}], techo: 6 },
+    C: { label: 'Preferencial', tramos: [{minQty:10, pct:2},{minQty:25, pct:3},{minQty:50, pct:4}], techo: 4 },
+    D: { label: 'General',      tramos: [{minQty:10, pct:1},{minQty:25, pct:2},{minQty:50, pct:3}], techo: 3 }
+  },
+  minNetoOrder: 500000,
+  getPct: function(tc, qty) {
+    var t = VOL_DISCOUNT.tiers[tc]; if (!t) return 0;
+    var p = 0; t.tramos.forEach(function(r) { if (qty >= r.minQty) p = r.pct; });
+    return Math.min(p, t.techo);
+  },
+  calcCartDiscount: function() {
+    if (typeof S === 'undefined' || !S.cart) return { total: 0, items: [] };
+    var tn = 0; S.cart.forEach(function(c) { tn += itemNeto(c) * c.qty; });
+    if (tn < VOL_DISCOUNT.minNetoOrder) return { total: 0, items: [] };
+    var tc = (typeof B2B !== 'undefined' && B2B.userTramo) ? B2B.userTramo : 'D';
+    var tot = 0, items = [];
+    S.cart.forEach(function(c) {
+      var pct = VOL_DISCOUNT.getPct(tc, c.qty);
+      if (pct > 0) { var d = Math.round(itemNeto(c) * pct / 100) * c.qty; tot += d; items.push({codigo:c.codigo,qty:c.qty,pct:pct,desc:d}); }
+    });
+    return { total: tot, items: items, tier: tc };
+  },
+  renderVolTable: function(producto) {
+    var tc = (typeof B2B !== 'undefined' && B2B.userTramo) ? B2B.userTramo : 'D';
+    var tier = VOL_DISCOUNT.tiers[tc]; if (!tier) return '';
+    var neto = itemNeto(producto);
+    var lista = producto.pneto || producto.ptotal; // precio lista (General = ptotal neto)
+    // Para tier D el precio tier = lista, así que "vs lista" solo tiene sentido en A/B/C
+    var showVsLista = (tc !== 'D');
+    var html = '<div class="pm-vol-wrap" style="background:linear-gradient(135deg,#f0fff4,#e8f5ec);border:1px solid rgba(26,127,60,0.15);border-radius:12px;padding:14px 16px;margin:0 0 8px">';
+    html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:16px">\uD83D\uDCE6</span><span style="font-weight:800;font-size:13px;color:#1a7f3c">Compra por volumen</span>';
+    html += '<span style="font-size:10px;color:#666;margin-left:auto">Tier: ' + tier.label + '</span></div>';
+    html += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px;white-space:nowrap">';
+    html += '<tr style="border-bottom:1px solid rgba(26,127,60,0.15)">';
+    html += '<th style="text-align:left;padding:5px 8px;color:#445;font-weight:700">Cantidad</th>';
+    html += '<th style="text-align:right;padding:5px 8px;color:#445;font-weight:700">Dcto. vol.</th>';
+    html += '<th style="text-align:right;padding:5px 8px;color:#445;font-weight:700">Neto/u</th>';
+    html += '<th style="text-align:right;padding:5px 8px;color:#445;font-weight:700">Ahorro vs tier</th>';
+    if (showVsLista) html += '<th style="text-align:right;padding:5px 8px;color:#445;font-weight:700">Ahorro vs lista</th>';
+    html += '</tr>';
+    // Row: 1 unit (tier price)
+    var ahVsLista1 = lista - neto;
+    html += '<tr><td style="padding:5px 8px;color:#666">1 unidad</td>';
+    html += '<td style="text-align:right;padding:5px 8px;color:#666">\u2014</td>';
+    html += '<td style="text-align:right;padding:5px 8px;font-weight:700">$' + neto.toLocaleString('es-CL') + '</td>';
+    html += '<td style="text-align:right;padding:5px 8px;color:#666">\u2014</td>';
+    if (showVsLista) html += '<td style="text-align:right;padding:5px 8px;color:#0057B8;font-weight:700">' + (ahVsLista1 > 0 ? '-$' + ahVsLista1.toLocaleString('es-CL') + '/u' : '\u2014') + '</td>';
+    html += '</tr>';
+    tier.tramos.forEach(function(t) {
+      var nv = Math.round(neto * (1 - t.pct / 100));
+      var ahTier = neto - nv;
+      var ahLista = lista - nv;
+      var pctVsLista = lista > 0 ? Math.round((1 - nv / lista) * 100) : 0;
+      html += '<tr style="background:rgba(26,127,60,0.04)">';
+      html += '<td style="padding:5px 8px;font-weight:700;color:#1a7f3c">' + t.minQty + '+ uds</td>';
+      html += '<td style="text-align:right;padding:5px 8px;color:#1a7f3c;font-weight:700">-' + t.pct + '%</td>';
+      html += '<td style="text-align:right;padding:5px 8px;font-weight:700">$' + nv.toLocaleString('es-CL') + '</td>';
+      html += '<td style="text-align:right;padding:5px 8px;color:#1a7f3c;font-weight:700">-$' + ahTier.toLocaleString('es-CL') + '/u</td>';
+      if (showVsLista) html += '<td style="text-align:right;padding:5px 8px;color:#0057B8;font-weight:700">-$' + ahLista.toLocaleString('es-CL') + '/u (' + pctVsLista + '%)</td>';
+      html += '</tr>';
+    });
+    html += '</table></div>';
+    html += '<div style="font-size:10px;color:#666;margin-top:8px;line-height:1.4">Pedido m\u00ednimo $' + VOL_DISCOUNT.minNetoOrder.toLocaleString('es-CL') + ' neto \u00b7 Descuento por SKU \u00b7 No acumulable con cupones</div>';
+    html += '</div>';
+    return html;
+  }
+};
+window.VOL_DISCOUNT = VOL_DISCOUNT;
 
 // ══ MODAL DECLARAR PROYECTO ════════════════════════════════════
 var _proyectoProducto  = null;   // Producto individual (click "Cotizar" desde card/modal)
