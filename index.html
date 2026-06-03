@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s96 -->
+<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s97 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -6324,11 +6324,8 @@ input[data-validated="1"]::after {
   width: 36px !important;
   height: 36px !important;
   border-radius: 50% !important;
-  /* Fondo titanio oscuro */
-  background: radial-gradient(
-    circle at 42% 36%,
-    #404248 0%, #2c2c32 30%, #1e1e24 65%, #16161b 100%
-  ) !important;
+  /* s97: cuerpo embossed spec (fill #2B2B35); anillo iridiscente se mantiene en ::before */
+  background: #2B2B35 !important;
   border: none !important;
   cursor: pointer;
   display: flex !important;
@@ -6338,8 +6335,15 @@ input[data-validated="1"]::after {
   visibility: visible !important;
   opacity: 1 !important;
   overflow: visible !important;
-  /* Sombra exterior */
-  box-shadow: 0 4px 16px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.35);
+  /* s97: emboss spec (stroke 1px inside + 5 inner shadows) + sombra exterior */
+  box-shadow:
+    inset 0 0 0 1px #3D3D49,
+    inset -3px 0 0 0 #3D3D49,
+    inset 3px 0 0 0 #3D3D49,
+    inset 0 -3px 0 0 #171720,
+    inset 0 2px 0 0 #7E7E8B,
+    inset 0 3px 0 0 #171720,
+    0 4px 16px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.35) !important;
 }
 
 /* Anillo iridiscente: conic-gradient girando DETRÁS del cuerpo titanio */
@@ -6386,18 +6390,8 @@ input[data-validated="1"]::after {
 
 /* Reflejo especular interno — highlight superior izquierdo */
 #aiFab::after {
-  content: '';
-  position: absolute;
-  inset: 3px;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse 56% 42% at 33% 25%,
-    rgba(255,255,255,0.20) 0%,
-    rgba(220,230,255,0.06) 48%,
-    transparent 75%
-  );
-  pointer-events: none;
-  z-index: 1;
+  /* s97: highlight especular desactivado — el brillo superior lo aporta el inner-shadow #7E7E8B del spec */
+  content: none;
 }
 
 @keyframes aiFabSpin {
@@ -6407,7 +6401,15 @@ input[data-validated="1"]::after {
 
 #aiFab:hover {
   transform: scale(1.08) !important;
-  box-shadow: 0 6px 22px rgba(0,0,0,0.65), 0 2px 8px rgba(0,0,0,0.42);
+  /* s97: hover preserva el emboss del spec + sombra exterior reforzada */
+  box-shadow:
+    inset 0 0 0 1px #3D3D49,
+    inset -3px 0 0 0 #3D3D49,
+    inset 3px 0 0 0 #3D3D49,
+    inset 0 -3px 0 0 #171720,
+    inset 0 2px 0 0 #7E7E8B,
+    inset 0 3px 0 0 #171720,
+    0 8px 26px rgba(0,0,0,0.62), 0 2px 8px rgba(0,0,0,0.42) !important;
 }
 #aiFab:hover::before { animation-duration: 2s; }
 @media(max-width:768px) { #aiFab { bottom:20px !important; right:14px !important; width:54px; height:54px; } }
@@ -6441,8 +6443,15 @@ body.cart-open #proyectoListadoBtn {
 
 @keyframes gemSpin { to { transform:rotate(360deg); } }
 @keyframes orbBreathe {
-  0%,100% { box-shadow: 0 4px 16px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.35); }
-  50%      { box-shadow: 0 6px 20px rgba(0,0,0,0.60), 0 2px 6px rgba(0,0,0,0.38); }
+  /* s97: respira solo la sombra exterior; el emboss del spec se preserva en cada keyframe */
+  0%,100% { box-shadow:
+    inset 0 0 0 1px #3D3D49, inset -3px 0 0 0 #3D3D49, inset 3px 0 0 0 #3D3D49,
+    inset 0 -3px 0 0 #171720, inset 0 2px 0 0 #7E7E8B, inset 0 3px 0 0 #171720,
+    0 4px 16px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.35); }
+  50%     { box-shadow:
+    inset 0 0 0 1px #3D3D49, inset -3px 0 0 0 #3D3D49, inset 3px 0 0 0 #3D3D49,
+    inset 0 -3px 0 0 #171720, inset 0 2px 0 0 #7E7E8B, inset 0 3px 0 0 #171720,
+    0 6px 20px rgba(0,0,0,0.60), 0 2px 6px rgba(0,0,0,0.38); }
 }
 #aiFab { animation: orbBreathe 4s ease-in-out infinite; }
 #aiFab:hover { animation: none !important; }
@@ -19856,7 +19865,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s96</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s97</span>
   </div>
 </div>
 
@@ -39315,8 +39324,11 @@ function aiMicStop() {
   var micBtn = document.getElementById('aiMicBtn');
   if (micBtn) { micBtn.style.background = '#1a1a1a'; micBtn.style.borderColor = 'rgba(232,0,28,.3)'; }
   var fab = document.getElementById('aiFab');
-  // Restaurar halo azul cian del orb (matching style.cssText original)
-  if (fab) { fab.style.borderColor = ''; fab.style.boxShadow = '0 0 0 1px rgba(0,217,255,0.35) inset,0 0 14px rgba(0,93,255,0.55),0 0 28px rgba(0,217,255,0.35),0 8px 24px rgba(0,0,0,0.45),0 2px 8px rgba(0,0,0,0.35)'; }
+  // s97: restaurar el cuerpo embossed del spec (variante B) tras salir de modo voz
+  if (fab) { fab.style.borderColor = ''; fab.style.setProperty('box-shadow',
+    'inset 0 0 0 1px #3D3D49,inset -3px 0 0 0 #3D3D49,inset 3px 0 0 0 #3D3D49,' +
+    'inset 0 -3px 0 0 #171720,inset 0 2px 0 0 #7E7E8B,inset 0 3px 0 0 #171720,' +
+    '0 4px 16px rgba(0,0,0,0.55),0 2px 6px rgba(0,0,0,0.35)'); }
 }
 
 // Pre-inicializar SR al cargar (solicita permiso una sola vez)
@@ -39371,7 +39383,7 @@ document.addEventListener('click', function(e) {
       '@keyframes ssttBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-4px)}}' +
       '@keyframes ssttBar{0%,100%{transform:scaleY(.3)}50%{transform:scaleY(1)}}' +
       '@keyframes ssttFadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}' +
-      '#aiFab:hover{transform:scale(1.1)!important;box-shadow:0 12px 40px rgba(0,0,0,0.22),inset 0 1.5px 0 rgba(255,255,255,1)!important}' +
+      '#aiFab:hover{transform:scale(1.08)!important;box-shadow:inset 0 0 0 1px #3D3D49,inset -3px 0 0 0 #3D3D49,inset 3px 0 0 0 #3D3D49,inset 0 -3px 0 0 #171720,inset 0 2px 0 0 #7E7E8B,inset 0 3px 0 0 #171720,0 8px 26px rgba(0,0,0,0.62),0 2px 8px rgba(0,0,0,0.42)!important}' +
       '#aiFab.listening{animation:ssttPulse .6s ease-in-out infinite}' +
       '.sstt-bar{display:inline-block;width:3px;border-radius:3px;margin:0 2px;background:linear-gradient(to top,#e8001c,#ff6b6b);transform-origin:bottom;animation:ssttBar .7s ease-in-out infinite}' +
       '.sstt-bar:nth-child(1){height:8px;animation-delay:0s}' +
@@ -39416,9 +39428,9 @@ document.addEventListener('click', function(e) {
       'width:'+fabSize+'px',
       'height:'+fabSize+'px',
       'border-radius:50%',
-      'background:radial-gradient(circle at 42% 36%, #404248 0%, #2c2c32 30%, #1e1e24 65%, #16161b 100%)',
+      'background:#2B2B35',
       'border:none',
-      'box-shadow:0 4px 16px rgba(0,0,0,0.55),0 2px 6px rgba(0,0,0,0.35)',
+      /* s97: box-shadow emboss se aplica vía setProperty tras appendChild (cssText lo rechazaba) */
       'cursor:pointer',
       'display:flex',
       'align-items:center',
@@ -39431,7 +39443,7 @@ document.addEventListener('click', function(e) {
     // Nota: fabSize varía mobile/desktop (44/50). El SVG usa viewBox 100x100 y se escala al 100%.
     fab.innerHTML =
       '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:2;line-height:1;user-select:none">' +
-        '<span style="font-family:ui-rounded,\'SF Pro Display\',\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.04em;background:linear-gradient(160deg,rgba(255,255,255,0.95) 0%,rgba(200,210,240,0.75) 40%,rgba(160,170,210,0.60) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.5))">IA</span>' +
+        '<span style="font-family:ui-rounded,\'SF Pro Display\',\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.04em;color:#FFFFFF;text-shadow:0 -1px 0 #494955,0 2px 0 #171720">IA</span>' +
       '</div>' +
       // Contenedor interior — mantiene IDs para toggle de voz
       '<div id="aiFabInner" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:relative;z-index:2;pointer-events:none">' +
@@ -41333,7 +41345,7 @@ function waUpdateWaLink(userMsg, reply) {
 // en cada sesión; alimenta #updateTxt (breadcrumb desktop) y #verChip (chip fijo
 // desktop+móvil). El comentario del <head> (L2) se actualiza aparte.
 (function() {
-  var SSTT_VER = 's96';
+  var SSTT_VER = 's97';
   var txt = document.getElementById('updateTxt');
   if (txt) txt.textContent = 'Última actualización: Martes 02 de Junio del 2026 · ' + SSTT_VER;
   var chip = document.getElementById('verChip');
@@ -62552,6 +62564,12 @@ if (document.readyState === 'loading') {
     // Asegurar que el aiFab sea círculo perfecto
     ai.style.borderRadius = '50%';
     ai.style.overflow = 'visible';
+    // s97: re-aplicar el emboss del spec DESPUÉS del wipe de box-shadow de arriba
+    // (la regla CSS #aiFab base no gana dentro de #fabRow). Variante B = anillo (::before) + cuerpo embossed.
+    ai.style.setProperty('box-shadow',
+      'inset 0 0 0 1px #3D3D49,inset -3px 0 0 0 #3D3D49,inset 3px 0 0 0 #3D3D49,' +
+      'inset 0 -3px 0 0 #171720,inset 0 2px 0 0 #7E7E8B,inset 0 3px 0 0 #171720,' +
+      '0 4px 16px rgba(0,0,0,0.55),0 2px 6px rgba(0,0,0,0.35)');
 
   }, 100);
 })();
@@ -86920,6 +86938,6 @@ window.toolOut=(function(){
 <!-- s96: chip de versión chiquitito (desktop + móvil). Hijo directo del body
      para que no lo absorba ningún modal (offsetParent=null). El texto lo fija
      la JS de versión desde una sola constante (SSTT_VER). -->
-<div class="ver-chip" id="verChip">s96</div>
+<div class="ver-chip" id="verChip">s97</div>
 </body>
 </html>
