@@ -5757,7 +5757,12 @@ input[data-validated="1"]::after {
     box-sizing:border-box !important;
     align-items:center !important;
   }
-  .mnav-tab {
+  /* s96 fix: especificidad .module-nav .mnav-tab (0,2,0) para ganarle a la
+     regla global L~17993 (.mnav-tab{height:46px !important}, 0,1,0) que reimponía
+     46px y desbordaba el contenedor de 36px con overflow:hidden → en Safari/iOS
+     (iPhone 11) el nav Catálogo/Mesón/Asesor IA quedaba recortado e invisible.
+     Mantiene la grilla móvil de 36px (header 36 + nav 36). */
+  .module-nav .mnav-tab {
     padding:0 10px !important;
     font-size:11.5px !important;
     white-space:nowrap !important;
@@ -5768,7 +5773,7 @@ input[data-validated="1"]::after {
     overflow:hidden !important;
     box-sizing:border-box !important;
   }
-  .mnav-tab svg { width:12px !important; height:12px !important; }
+  .module-nav .mnav-tab svg { width:12px !important; height:12px !important; }
 
   /* Sidebar oculto, layout 1col */
   .main-wrap { grid-template-columns: 1fr }
@@ -6154,7 +6159,9 @@ input[data-validated="1"]::after {
   header { height:32px !important; max-height:32px !important; overflow:visible !important; position:sticky !important; top:0 !important; z-index:500 !important; }
   .module-nav { top:32px !important; height:32px !important; max-height:32px !important; overflow:hidden !important; }
   .module-nav-inner { height:32px !important; max-height:32px !important; overflow:hidden !important; }
-  .mnav-tab { font-size:10.5px !important; height:32px !important; line-height:32px !important; padding:0 8px !important; }
+  /* s96: especificidad (0,2,0) para alinear con el contenedor de 32px y ganarle
+     tanto a la regla global L~17993 (46px) como al bloque ≤768 de s96 (36px). */
+  .module-nav .mnav-tab { font-size:10.5px !important; height:32px !important; line-height:32px !important; padding:0 8px !important; }
   .mob-search { top:64px !important; height:34px !important; padding:3px 8px !important; }
   .mob-search .search-form { height:28px !important; }
   .mob-search .search-input { height:24px !important; line-height:24px !important; font-size:12px !important; }
