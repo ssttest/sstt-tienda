@@ -20372,11 +20372,17 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
     <div id="compatPanel" style="margin-bottom:4px;border-radius:10px"></div>
     <div id="cartCrossSell"></div>
     <div id="coStickyTotals">
+      <!-- s98: Widget cupón descuento (demo simulado) -->
+      <div id="cuponWidget" style="margin-bottom:6px;padding:8px 10px;background:linear-gradient(135deg,#f0faf4,#e8f5e9);border:1.5px solid #C8E6C9;border-radius:10px"></div>
+      <!-- s98: Widget gift card (demo simulado) -->
+      <div id="giftcardWidget" style="margin-bottom:6px;padding:8px 10px;background:linear-gradient(135deg,#f3e5f5,#ede7f6);border:1.5px solid #CE93D8;border-radius:10px"></div>
       <div class="totals" style="margin-bottom:4px">
         <div class="trow"><span>Subtotal neto</span><span id="tNeto">$0</span></div>
         <div class="trow"><span>IVA (19%)</span><span id="tIva">$0</span></div>
         <div class="trow"><span id="tShipLbl">Despacho</span><span id="tShip">—</span></div>
         <div class="trow" id="tDescCertRow" style="display:none;color:#1A8C4E;font-weight:700"><span>🏅 Desc. instalador cert.</span><span id="tDescCert">—</span></div>
+        <div class="trow" id="tDescCuponRow" style="display:none;color:#1A8C4E;font-weight:700"><span>🏷️ Cupón descuento</span><span id="tDescCupon">—</span></div>
+        <div class="trow" id="tDescGCRow" style="display:none;color:#6A1B9A;font-weight:700"><span>🎁 Gift card</span><span id="tDescGC">—</span></div>
         <div class="trow" id="tDescPtsRow" style="display:none;color:#D4A03C;font-weight:700"><span>⭐ Descuento puntos</span><span id="tDescPts">—</span></div>
         <div class="trow trow-total"><span>Total con IVA</span><span id="tTotal">$0</span></div>
       </div>
@@ -24868,7 +24874,7 @@ let S = {
       return c;
     } catch(e){ return []; }
   })(),
-  shipCost:0, shipCourier:'',
+  shipCost:0, shipCourier:'', cupon:null, cuponDescuento:0, giftcard:null, giftcardDescuento:0,
 };
 
 const fmt = n => '$' + Number(n).toLocaleString('es-CL');
@@ -26648,16 +26654,48 @@ function calcTotals() {
   var descCert = esCert ? Math.round(neto * _pct / 100) : 0;
   var netoConCert = neto - descCert;
   var ivaConCert = Math.round(netoConCert * 0.19);
+  // s98: descuento por cupón (sobre neto con cert, antes de IVA)
+  var descCupon = 0;
+  if (S.cupon) {
+    descCupon = rwCuponCalcDescuento(S.cupon, netoConCert);
+    S.cuponDescuento = descCupon;
+  } else {
+    S.cuponDescuento = 0;
+  }
+  var netoConCupon = netoConCert - descCupon;
+  var ivaConCupon = Math.round(netoConCupon * 0.19);
   // Sprint 2 s74: descuento por canje de puntos
   var canje = puntosCanjeActivo();
   var descuento = 0;
   if (canje && canje.descuento > 0) {
-    descuento = Math.min(canje.descuento, netoConCert + ivaConCert);
+    descuento = Math.min(canje.descuento, netoConCupon + ivaConCupon);
   }
-  var total = netoConCert + ivaConCert + ship - descuento;
+  var totalPreGC = netoConCupon + ivaConCupon + ship - descuento;
+  // s98: redención gift card (sobre total final, es pago no descuento)
+  var descGC = 0;
+  if (S.giftcard) {
+    descGC = rwGiftcardCalcRedencion(S.giftcard, totalPreGC);
+    S.giftcardDescuento = descGC;
+  } else {
+    S.giftcardDescuento = 0;
+  }
+  var total = totalPreGC - descGC;
   var el;
-  if ((el = document.getElementById('tNeto')))  el.textContent = fmt(netoConCert);
-  if ((el = document.getElementById('tIva')))   el.textContent = fmt(ivaConCert);
+  if ((el = document.getElementById('tNeto')))  el.textContent = fmt(netoConCupon);
+  if ((el = document.getElementById('tIva')))   el.textContent = fmt(ivaConCupon);
+  // s98: fila descuento cupón
+  var rowCupon = document.getElementById('tDescCuponRow');
+  if (rowCupon) rowCupon.style.display = descCupon > 0 ? '' : 'none';
+  var elCupon = document.getElementById('tDescCupon');
+  if (elCupon) elCupon.textContent = descCupon > 0 ? '-' + fmt(descCupon) + (S.cupon && S.cupon.tipo==='porcentaje' ? ' (-'+S.cupon.valor+'%)' : '') : '—';
+  // s98: actualizar widget cupón (refresh label)
+  try { rwCuponRenderWidget(); } catch(e){}
+  // s98: fila gift card
+  var rowGC = document.getElementById('tDescGCRow');
+  if (rowGC) rowGC.style.display = descGC > 0 ? '' : 'none';
+  var elGC = document.getElementById('tDescGC');
+  if (elGC) elGC.textContent = descGC > 0 ? '-' + fmt(descGC) : '—';
+  try { rwGiftcardRenderWidget(); } catch(e){}
   if ((el = document.getElementById('tShip')))  el.textContent = ship > 0 ? fmt(ship) : (S.shipCourier || '—');
   if ((el = document.getElementById('tShipLbl'))) el.textContent = S.shipCourier ? 'Despacho ('+S.shipCourier+')' : 'Despacho';
   if ((el = document.getElementById('tTotal'))) el.textContent = fmt(total);
@@ -26994,7 +27032,12 @@ function checkout() {
 
   const metodo = document.querySelector('.pay-opt.on input')?.value||'webpay';
   const neto=S.cart.reduce((a,c)=>a+itemNeto(c)*c.qty,0);
-  const total=neto+Math.round(neto*.19)+S.shipCost;
+  // s98: aplicar descuento cupón al total de checkout
+  var _cuponDesc = (S.cupon && typeof rwCuponCalcDescuento === 'function') ? rwCuponCalcDescuento(S.cupon, neto) : 0;
+  var _netoConCupon = neto - _cuponDesc;
+  var _totalPreGC = _netoConCupon+Math.round(_netoConCupon*.19)+S.shipCost;
+  var _gcDesc = (S.giftcard && typeof rwGiftcardCalcRedencion === 'function') ? rwGiftcardCalcRedencion(S.giftcard, _totalPreGC) : 0;
+  const total = _totalPreGC - _gcDesc;
   const num='SSTT-'+Date.now().toString(36).toUpperCase().slice(-6);
   const docStr = docType==='factura'
     ? `\nFactura a: ${qs('cRazon')?.value} / RUT: ${rutRaw}\nGiro: ${qs('cGiro')?.value}`
@@ -27010,6 +27053,14 @@ function checkout() {
     entregaStr.replace(/^\n/, ''),
     'M\u00E9todo de pago: ' + metodo
   ];
+  // s98: agregar cupón al mensaje si aplica
+  if (S.cupon && _cuponDesc > 0) {
+    _coExtra.push('\u{1F3F7} Cup\u00F3n: ' + S.cupon.code + ' (-' + fmt(_cuponDesc) + ' neto)');
+  }
+  // s98: agregar gift card al mensaje si aplica
+  if (S.giftcard && _gcDesc > 0) {
+    _coExtra.push('\u{1F381} Gift card: ' + S.giftcard.code + ' (-' + fmt(_gcDesc) + ')');
+  }
   try {
     var _cob = _cotizBuild(_coExtra);
     _cotizCountInc();
@@ -27039,6 +27090,10 @@ function checkout() {
     }
   } catch(e) { console.warn('[checkout] puntos error:', e); }
   try { if (typeof rwBundleBonusPendingClear === 'function') rwBundleBonusPendingClear(); } catch(e) {}
+  // s98: registrar uso de cupón y limpiar
+  try { if (S.cupon && typeof rwCuponRegistrarUso === 'function') rwCuponRegistrarUso(S.cupon); S.cupon = null; S.cuponDescuento = 0; } catch(e) {}
+  // s98: redimir gift card y limpiar
+  try { if (S.giftcard && _gcDesc > 0 && typeof rwGiftcardRedimir === 'function') rwGiftcardRedimir(S.giftcard, _gcDesc, 'Pedido ' + num); S.giftcard = null; S.giftcardDescuento = 0; } catch(e) {}
   S.cart=[]; saveCart(); renderCart(); updateBadge(); closeCart();
 }
 
@@ -33293,7 +33348,9 @@ function rwSeedDemoData() {
   _rwSave(SSTT_QA_KEY, qaSeed);
   localStorage.setItem('sstt_reviews_seeded_v1', '1');
 }
-try { rwSeedDemoData(); } catch(e) { console.warn('Seed reviews falló:', e); }
+try { rwCuponSeedDemo(); } catch(e) { console.warn('[s98] cupon seed error:', e); }
+  try { rwGiftcardSeedDemo(); } catch(e) { console.warn('[s98] giftcard seed error:', e); }
+  try { rwSeedDemoData(); } catch(e) { console.warn('Seed reviews falló:', e); }
 
 // ════════════════════════════════════════════════════════════════════
 // ── Service Worker inline (Sprint 2 s74) ──────────────────────────
@@ -33651,6 +33708,327 @@ function rwRefreshQA(codigo) {
 
 // ── Bundle "Cómpralos juntos" (Sprint 3 s74) ──
 // s97: bono bundle proporcional al neto AÑADIDO (sin el ancla). +50% (÷2000), tope 50 pts, solo bundle 3+ productos.
+// ══════════════════════════════════════════════════════════════
+// s98: CUPONES DESCUENTO — estructura backend-ready + demo simulado
+// ══════════════════════════════════════════════════════════════
+// MODELO: {code,tipo('porcentaje'|'monto'),valor,vigencia_desde,vigencia_hasta,
+//          tope_descuento,usos_max,usos_max_usuario,usos_actual,min_compra_neto,activo}
+// Persistencia: localStorage 'sstt_cupones_demo' (Onda 2 → server-side)
+// Estado carro: S.cupon (obj|null), S.cuponDescuento (int)
+
+function rwCuponSeedDemo() {
+  // s98: solo sembrar si no existen; demo etiquetado simulado
+  var _existingCupones = localStorage.getItem('sstt_cupones_demo');
+  if (_existingCupones) { try { var _ec = JSON.parse(_existingCupones); if (_ec.some(function(c){return c.code==='BIENVENIDO3';})) return; } catch(e){} }
+  // s98: re-seed si versión antigua (BIENVENIDO10→BIENVENIDO3)
+  var cupones = [
+    {code:'BIENVENIDO3',tipo:'porcentaje',valor:3,vigencia_desde:'2025-01-01',vigencia_hasta:'2027-12-31',tope_descuento:25000,usos_max:999,usos_max_usuario:1,usos_actual:0,min_compra_neto:150000,activo:true},
+    {code:'VERANO5',tipo:'porcentaje',valor:5,vigencia_desde:'2025-11-01',vigencia_hasta:'2026-03-31',tope_descuento:40000,usos_max:50,usos_max_usuario:1,usos_actual:0,min_compra_neto:300000,activo:true},
+    {code:'DCTO5K',tipo:'monto',valor:5000,vigencia_desde:'2025-01-01',vigencia_hasta:'2027-12-31',tope_descuento:5000,usos_max:200,usos_max_usuario:2,usos_actual:0,min_compra_neto:200000,activo:true},
+    {code:'INSTALADOR7',tipo:'porcentaje',valor:7,vigencia_desde:'2025-01-01',vigencia_hasta:'2027-12-31',tope_descuento:60000,usos_max:100,usos_max_usuario:3,usos_actual:0,min_compra_neto:250000,activo:true},
+    {code:'CADUCADO',tipo:'porcentaje',valor:50,vigencia_desde:'2024-01-01',vigencia_hasta:'2024-12-31',tope_descuento:999999,usos_max:10,usos_max_usuario:1,usos_actual:0,min_compra_neto:0,activo:true}
+  ];
+  localStorage.setItem('sstt_cupones_demo', JSON.stringify(cupones));
+}
+window.rwCuponSeedDemo = rwCuponSeedDemo;
+
+function rwCuponGetAll() {
+  try { return JSON.parse(localStorage.getItem('sstt_cupones_demo') || '[]'); } catch(e) { return []; }
+}
+
+function rwCuponSaveAll(arr) {
+  localStorage.setItem('sstt_cupones_demo', JSON.stringify(arr));
+}
+
+// s98: Validar un código de cupón contra el estado actual del carro
+function rwCuponValidar(code) {
+  if (!code || typeof code !== 'string') return {ok:false, msg:'Ingresa un código de cupón'};
+  code = code.trim().toUpperCase();
+  var cupones = rwCuponGetAll();
+  var cupon = cupones.find(function(c){ return c.code === code; });
+  if (!cupon) return {ok:false, msg:'Código no válido'};
+  if (!cupon.activo) return {ok:false, msg:'Este cupón está desactivado'};
+  // Vigencia
+  var hoy = new Date().toISOString().slice(0,10);
+  if (hoy < cupon.vigencia_desde) return {ok:false, msg:'Este cupón aún no está vigente'};
+  if (hoy > cupon.vigencia_hasta) return {ok:false, msg:'Este cupón expiró el ' + cupon.vigencia_hasta};
+  // Usos globales
+  if (cupon.usos_actual >= cupon.usos_max) return {ok:false, msg:'Este cupón ya alcanzó su límite de usos'};
+  // Usos por usuario (localStorage demo)
+  var userKey = (typeof rwUsuarioRut === 'function' && rwUsuarioRut()) ? rwUsuarioRut() : (USER ? USER.email : '_anon');
+  var usosUser = 0;
+  try { usosUser = parseInt(localStorage.getItem('sstt_cupon_uso_' + code + '_' + userKey) || '0'); } catch(e){}
+  if (usosUser >= cupon.usos_max_usuario) return {ok:false, msg:'Ya usaste este cupón el máximo de veces (' + cupon.usos_max_usuario + ')'};
+  // Mínimo de compra
+  var neto = S.cart.reduce(function(a,c){ var tp = (typeof getTramoPrice==='function') ? getTramoPrice(c) : {neto: (c.pneto||0)}; return a + tp.neto * c.qty; }, 0);
+  if (neto < cupon.min_compra_neto) return {ok:false, msg:'Compra mínima: ' + fmt(cupon.min_compra_neto) + ' neto'};
+  return {ok:true, cupon:cupon};
+}
+window.rwCuponValidar = rwCuponValidar;
+
+// s98: Calcular descuento de un cupón sobre un neto dado
+function rwCuponCalcDescuento(cupon, neto) {
+  if (!cupon || neto <= 0) return 0;
+  var desc = 0;
+  if (cupon.tipo === 'porcentaje') {
+    desc = Math.round(neto * cupon.valor / 100);
+  } else {
+    desc = cupon.valor;
+  }
+  // Tope
+  if (cupon.tope_descuento > 0) desc = Math.min(desc, cupon.tope_descuento);
+  // No más que el neto
+  desc = Math.min(desc, neto);
+  return desc;
+}
+window.rwCuponCalcDescuento = rwCuponCalcDescuento;
+
+// s98: Aplicar cupón al carro
+function rwCuponAplicar(code) {
+  var result = rwCuponValidar(code);
+  if (!result.ok) { showToast(result.msg, 3500); return false; }
+  S.cupon = result.cupon;
+  calcTotals();
+  showToast('✅ Cupón ' + result.cupon.code + ' aplicado', 2500);
+  rwCuponRenderWidget();
+  return true;
+}
+window.rwCuponAplicar = rwCuponAplicar;
+
+// s98: Quitar cupón del carro
+function rwCuponQuitar() {
+  S.cupon = null;
+  S.cuponDescuento = 0;
+  calcTotals();
+  rwCuponRenderWidget();
+  showToast('Cupón eliminado');
+}
+window.rwCuponQuitar = rwCuponQuitar;
+
+// s98: Registrar uso de cupón (llamar en checkout)
+function rwCuponRegistrarUso(cupon) {
+  if (!cupon) return;
+  // Incrementar usos globales
+  var all = rwCuponGetAll();
+  var c = all.find(function(x){ return x.code === cupon.code; });
+  if (c) { c.usos_actual = (c.usos_actual||0) + 1; rwCuponSaveAll(all); }
+  // Incrementar usos por usuario
+  var userKey = (typeof rwUsuarioRut === 'function' && rwUsuarioRut()) ? rwUsuarioRut() : (USER ? USER.email : '_anon');
+  var key = 'sstt_cupon_uso_' + cupon.code + '_' + userKey;
+  try { var prev = parseInt(localStorage.getItem(key) || '0'); localStorage.setItem(key, String(prev+1)); } catch(e){}
+}
+window.rwCuponRegistrarUso = rwCuponRegistrarUso;
+
+// s98: Renderizar widget de cupón en el panel sticky del carro
+function rwCuponRenderWidget() {
+  var container = document.getElementById('cuponWidget');
+  if (!container) return;
+  if (S.cupon) {
+    // Cupón aplicado → mostrar badge
+    var desc = S.cuponDescuento || 0;
+    var label = S.cupon.tipo === 'porcentaje' ? '-' + S.cupon.valor + '%' : '-' + fmt(S.cupon.valor);
+    container.innerHTML = '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
+      '<div style="flex:1;min-width:0">' +
+        '<div style="display:flex;align-items:center;gap:6px">' +
+          '<span style="font-size:14px">🏷️</span>' +
+          '<span style="font-weight:700;color:#1A8C4E;font-size:13px">' + S.cupon.code + '</span>' +
+          '<span style="font-size:11px;background:#1A8C4E;color:#fff;padding:1px 6px;border-radius:4px;font-weight:700">' + label + '</span>' +
+          '<span style="font-size:9px;background:#FFB800;color:#000;padding:1px 5px;border-radius:3px;font-weight:800;letter-spacing:.3px">SIMULADO</span>' +
+        '</div>' +
+        (desc > 0 ? '<div style="font-size:11px;color:#1A8C4E;margin-top:2px">Descuento: -' + fmt(desc) + ' neto</div>' : '') +
+      '</div>' +
+      '<button onclick="rwCuponQuitar()" style="background:none;border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--muted);cursor:pointer;font-family:var(--font)">Quitar</button>' +
+    '</div>';
+  } else {
+    // Sin cupón → input
+    container.innerHTML = '<div style="display:flex;align-items:center;gap:6px">' +
+      '<span style="font-size:13px">🏷️</span>' +
+      '<input type="text" id="cuponInput" placeholder="Código de cupón" maxlength="30" ' +
+        'style="flex:1;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:var(--font);background:var(--bg2,#fff);color:var(--text);text-transform:uppercase;transition:border-color .2s" ' +
+        'oninput="this.style.borderColor=&#39;&#39;;var e=document.getElementById(&#39;cuponError&#39;);if(e)e.style.display=&#39;none&#39;" ' +
+        'onkeydown="if(event.key===&#39;Enter&#39;){event.preventDefault();rwCuponAplicarInput()}">' +
+      '<button onclick="rwCuponAplicarInput()" ' +
+        'style="background:var(--black);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);white-space:nowrap">Aplicar</button>' +
+    '</div>' +
+    '<div id="cuponError" style="display:none;font-size:11px;color:#D32F2F;margin-top:4px;font-weight:600"></div>' +
+    '<div style="font-size:9px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:4px">' +
+      '<span style="background:#FFB800;color:#000;padding:0 4px;border-radius:2px;font-weight:800;letter-spacing:.3px">SIMULADO</span>' +
+      ' Cupones demo — en Onda 2 se validan server-side' +
+    '</div>';
+  }
+}
+window.rwCuponRenderWidget = rwCuponRenderWidget;
+
+function rwCuponAplicarInput() {
+  var inp = document.getElementById('cuponInput');
+  if (!inp) return;
+  var code = inp.value.trim();
+  var errEl = document.getElementById('cuponError');
+  if (!code) { rwCuponShowError('Ingresa un código de cupón'); inp.style.borderColor='#D32F2F'; return; }
+  var result = rwCuponValidar(code);
+  if (!result.ok) { rwCuponShowError(result.msg); inp.style.borderColor='#D32F2F'; return; }
+  if (errEl) errEl.style.display='none';
+  inp.style.borderColor='';
+  rwCuponAplicar(code);
+}
+// s98: mostrar error inline bajo el input de cupón
+function rwCuponShowError(msg) {
+  var el = document.getElementById('cuponError');
+  if (!el) return;
+  el.textContent = '⚠️ ' + msg;
+  el.style.display = 'block';
+}
+window.rwCuponAplicarInput = rwCuponAplicarInput;
+
+// ══════════════════════════════════════════════════════════════
+// s98: GIFT CARDS — estructura backend-ready + demo simulado
+// ══════════════════════════════════════════════════════════════
+// MODELO: {code,saldo_inicial,saldo_actual,fecha_emision,fecha_expiracion,activo,movimientos[]}
+// Persistencia: localStorage 'sstt_giftcards_demo' (Onda 2 → ledger server-side)
+// Estado carro: S.giftcard (obj|null), S.giftcardDescuento (int)
+
+function rwGiftcardSeedDemo() {
+  var _existing = localStorage.getItem('sstt_giftcards_demo');
+  if (_existing) { try { var _e = JSON.parse(_existing); if (_e.some(function(g){return g.code==='GIFT-DEMO-50K';})) return; } catch(e){} }
+  var cards = [
+    {code:'GIFT-DEMO-50K',saldo_inicial:50000,saldo_actual:50000,fecha_emision:'2026-01-01',fecha_expiracion:'2027-12-31',activo:true,movimientos:[{fecha:'2026-01-01',tipo:'emision',monto:50000,ref:'Demo seed'}]},
+    {code:'GIFT-DEMO-20K',saldo_inicial:20000,saldo_actual:20000,fecha_emision:'2026-01-01',fecha_expiracion:'2027-12-31',activo:true,movimientos:[{fecha:'2026-01-01',tipo:'emision',monto:20000,ref:'Demo seed'}]},
+    {code:'GIFT-PARCIAL',saldo_inicial:100000,saldo_actual:35000,fecha_emision:'2025-06-01',fecha_expiracion:'2027-06-01',activo:true,movimientos:[{fecha:'2025-06-01',tipo:'emision',monto:100000,ref:'Demo seed'},{fecha:'2025-09-15',tipo:'redencion',monto:-65000,ref:'Pedido SSTT-ABC123'}]},
+    {code:'GIFT-VENCIDA',saldo_inicial:30000,saldo_actual:30000,fecha_emision:'2024-01-01',fecha_expiracion:'2024-12-31',activo:true,movimientos:[{fecha:'2024-01-01',tipo:'emision',monto:30000,ref:'Demo seed'}]},
+    {code:'GIFT-AGOTADA',saldo_inicial:15000,saldo_actual:0,fecha_emision:'2025-01-01',fecha_expiracion:'2027-12-31',activo:true,movimientos:[{fecha:'2025-01-01',tipo:'emision',monto:15000,ref:'Demo seed'},{fecha:'2025-03-10',tipo:'redencion',monto:-15000,ref:'Pedido SSTT-XYZ789'}]}
+  ];
+  localStorage.setItem('sstt_giftcards_demo', JSON.stringify(cards));
+}
+window.rwGiftcardSeedDemo = rwGiftcardSeedDemo;
+
+function rwGiftcardGetAll() {
+  try { return JSON.parse(localStorage.getItem('sstt_giftcards_demo') || '[]'); } catch(e) { return []; }
+}
+function rwGiftcardSaveAll(arr) {
+  localStorage.setItem('sstt_giftcards_demo', JSON.stringify(arr));
+}
+
+// s98: Validar una gift card
+function rwGiftcardValidar(code) {
+  if (!code || typeof code !== 'string') return {ok:false, msg:'Ingresa el código de la gift card'};
+  code = code.trim().toUpperCase();
+  var cards = rwGiftcardGetAll();
+  var gc = cards.find(function(g){ return g.code === code; });
+  if (!gc) return {ok:false, msg:'Gift card no encontrada'};
+  if (!gc.activo) return {ok:false, msg:'Esta gift card está desactivada'};
+  var hoy = new Date().toISOString().slice(0,10);
+  if (hoy > gc.fecha_expiracion) return {ok:false, msg:'Gift card vencida el ' + gc.fecha_expiracion};
+  if (hoy < gc.fecha_emision) return {ok:false, msg:'Gift card aún no activa'};
+  if (gc.saldo_actual <= 0) return {ok:false, msg:'Gift card sin saldo disponible'};
+  return {ok:true, giftcard:gc};
+}
+window.rwGiftcardValidar = rwGiftcardValidar;
+
+// s98: Calcular redención (sobre total con IVA, post-cupón, post-puntos)
+function rwGiftcardCalcRedencion(gc, totalAPagar) {
+  if (!gc || totalAPagar <= 0 || gc.saldo_actual <= 0) return 0;
+  return Math.min(gc.saldo_actual, totalAPagar);
+}
+window.rwGiftcardCalcRedencion = rwGiftcardCalcRedencion;
+
+// s98: Aplicar gift card al carro
+function rwGiftcardAplicar(code) {
+  var result = rwGiftcardValidar(code);
+  if (!result.ok) { showToast(result.msg, 3500); return false; }
+  S.giftcard = result.giftcard;
+  calcTotals();
+  showToast('✅ Gift card ' + result.giftcard.code + ' aplicada — saldo ' + fmt(result.giftcard.saldo_actual), 3000);
+  rwGiftcardRenderWidget();
+  return true;
+}
+window.rwGiftcardAplicar = rwGiftcardAplicar;
+
+// s98: Quitar gift card del carro
+function rwGiftcardQuitar() {
+  S.giftcard = null;
+  S.giftcardDescuento = 0;
+  calcTotals();
+  rwGiftcardRenderWidget();
+  showToast('Gift card eliminada');
+}
+window.rwGiftcardQuitar = rwGiftcardQuitar;
+
+// s98: Redimir saldo (llamar en checkout) — descuenta del ledger
+function rwGiftcardRedimir(gc, monto, ref) {
+  if (!gc || monto <= 0) return;
+  var all = rwGiftcardGetAll();
+  var card = all.find(function(g){ return g.code === gc.code; });
+  if (!card) return;
+  var redencion = Math.min(monto, card.saldo_actual);
+  card.saldo_actual = Math.max(0, card.saldo_actual - redencion);
+  card.movimientos.push({fecha: new Date().toISOString().slice(0,10), tipo:'redencion', monto: -redencion, ref: ref});
+  rwGiftcardSaveAll(all);
+}
+window.rwGiftcardRedimir = rwGiftcardRedimir;
+
+// s98: Renderizar widget gift card
+function rwGiftcardRenderWidget() {
+  var container = document.getElementById('giftcardWidget');
+  if (!container) return;
+  if (S.giftcard) {
+    var desc = S.giftcardDescuento || 0;
+    var saldoPost = Math.max(0, S.giftcard.saldo_actual - desc);
+    container.innerHTML = '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">' +
+      '<div style="flex:1;min-width:0">' +
+        '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">' +
+          '<span style="font-size:14px">🎁</span>' +
+          '<span style="font-weight:700;color:#6A1B9A;font-size:13px">' + S.giftcard.code + '</span>' +
+          '<span style="font-size:9px;background:#FFB800;color:#000;padding:1px 5px;border-radius:3px;font-weight:800;letter-spacing:.3px">SIMULADO</span>' +
+        '</div>' +
+        '<div style="font-size:11px;color:#6A1B9A;margin-top:2px">' +
+          (desc > 0 ? 'Redime: -' + fmt(desc) + ' · ' : '') +
+          'Saldo disponible: ' + fmt(S.giftcard.saldo_actual) +
+          (desc > 0 ? ' → queda ' + fmt(saldoPost) : '') +
+        '</div>' +
+      '</div>' +
+      '<button onclick="rwGiftcardQuitar()" style="background:none;border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--muted);cursor:pointer;font-family:var(--font)">Quitar</button>' +
+    '</div>';
+  } else {
+    container.innerHTML = '<div style="display:flex;align-items:center;gap:6px">' +
+      '<span style="font-size:13px">🎁</span>' +
+      '<input type="text" id="giftcardInput" placeholder="Código gift card" maxlength="30" ' +
+        'style="flex:1;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;font-family:var(--font);background:var(--bg2,#fff);color:var(--text);text-transform:uppercase;transition:border-color .2s" ' +
+        'oninput="this.style.borderColor=&#39;&#39;;var e=document.getElementById(&#39;giftcardError&#39;);if(e)e.style.display=&#39;none&#39;" ' +
+        'onkeydown="if(event.key===&#39;Enter&#39;){event.preventDefault();rwGiftcardAplicarInput()}">' +
+      '<button onclick="rwGiftcardAplicarInput()" ' +
+        'style="background:var(--black);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);white-space:nowrap">Aplicar</button>' +
+    '</div>' +
+    '<div id="giftcardError" style="display:none;font-size:11px;color:#D32F2F;margin-top:4px;font-weight:600"></div>' +
+    '<div style="font-size:9px;color:var(--muted);margin-top:3px;display:flex;align-items:center;gap:4px">' +
+      '<span style="background:#FFB800;color:#000;padding:0 4px;border-radius:2px;font-weight:800;letter-spacing:.3px">SIMULADO</span>' +
+      ' Gift cards demo — en Onda 2 ledger server-side' +
+    '</div>';
+  }
+}
+window.rwGiftcardRenderWidget = rwGiftcardRenderWidget;
+
+function rwGiftcardAplicarInput() {
+  var inp = document.getElementById('giftcardInput');
+  if (!inp) return;
+  var code = inp.value.trim();
+  var errEl = document.getElementById('giftcardError');
+  if (!code) { rwGiftcardShowError('Ingresa el código de la gift card'); inp.style.borderColor='#D32F2F'; return; }
+  var result = rwGiftcardValidar(code);
+  if (!result.ok) { rwGiftcardShowError(result.msg); inp.style.borderColor='#D32F2F'; return; }
+  if (errEl) errEl.style.display='none';
+  inp.style.borderColor='';
+  rwGiftcardAplicar(code);
+}
+// s98: mostrar error inline bajo el input de gift card
+function rwGiftcardShowError(msg) {
+  var el = document.getElementById('giftcardError');
+  if (!el) return;
+  el.textContent = '⚠️ ' + msg;
+  el.style.display = 'block';
+}
+window.rwGiftcardAplicarInput = rwGiftcardAplicarInput;
+
+
 function rwBundleBonusCalc(netoAnadido, totalProductos) {
   if (totalProductos < 3 || netoAnadido <= 0) return 0;
   return Math.min(50, Math.round(netoAnadido / 2000));
