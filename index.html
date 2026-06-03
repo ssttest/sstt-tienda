@@ -6807,6 +6807,8 @@ body.cart-open #proyectoListadoBtn {
 .b2b-canal.active-smb  { color:#fff !important; border-bottom-color:#E8001C !important; }
 .b2b-canal.active-ent  { color:#fff !important; border-bottom-color:#00B4E6 !important; }
 .b2b-canal.active-all  { color:#fff !important; border-bottom-color:rgba(255,255,255,.4) !important; }
+/* s99: Marketplace */
+.b2b-canal.active-mkt  { color:#fff !important; border-bottom-color:#F59E0B !important; }
 .co-step-line {
   flex: 1; height: 1.5px; background: rgba(0,0,0,.06);
   margin: 0 4px; border-radius: 2px; margin-bottom: 14px;
@@ -7529,6 +7531,7 @@ body.cart-open #proyectoListadoBtn {
 .b2b-canal.active-smb { color: var(--red); border-bottom-color: var(--red); }
 .b2b-canal.active-ent { color: var(--blue); border-bottom-color: var(--blue); }
 .b2b-canal.active-all { color: var(--black); border-bottom-color: var(--black); }
+.b2b-canal.active-mkt { color: #F59E0B; border-bottom-color: #F59E0B; }
 .b2b-canal-icon { font-size: 16px; flex-shrink: 0; }
 .b2b-canal-label { display: flex; flex-direction: column; gap: 1px; }
 .b2b-canal-title { font-size: 12.5px; font-weight: 700; line-height: 1.2; color: var(--black); }
@@ -7560,6 +7563,114 @@ body.cart-open #proyectoListadoBtn {
   border-radius: 4px; padding: 2px 7px;
   font-size: 9px; font-weight: 800; text-transform: uppercase;
   letter-spacing: .5px;
+}
+/* s99: Seller badge — "Vendido por X" en pcard */
+.seller-badge {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 10px; color: var(--g3); margin-top: 3px;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.seller-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #F59E0B; flex-shrink: 0;
+}
+/* s99: Marketplace landing */
+.mkt-landing {
+  padding: 24px 16px 40px;
+  max-width: 1100px; margin: 0 auto;
+}
+.mkt-landing-hero {
+  background: linear-gradient(135deg, #1A0A00 0%, #3D1A00 50%, #1A0A00 100%);
+  border: 1px solid rgba(245,158,11,.2);
+  border-radius: 16px; padding: 32px 28px;
+  margin-bottom: 28px; position: relative; overflow: hidden;
+}
+.mkt-landing-hero::before {
+  content: '🏪'; position: absolute; right: 24px; top: 50%;
+  transform: translateY(-50%); font-size: 72px; opacity: .12;
+  pointer-events: none;
+}
+.mkt-landing-hero h2 {
+  color: #F59E0B; font-size: 22px; font-weight: 800;
+  margin: 0 0 8px; letter-spacing: -.3px;
+}
+.mkt-landing-hero p {
+  color: rgba(255,255,255,.7); font-size: 13.5px;
+  margin: 0 0 20px; max-width: 560px; line-height: 1.55;
+}
+.mkt-landing-hero .mkt-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(245,158,11,.15); border: 1px solid rgba(245,158,11,.35);
+  border-radius: 20px; padding: 4px 12px;
+  font-size: 11px; font-weight: 700; color: #F59E0B;
+  margin-bottom: 18px;
+}
+.mkt-ctas { display: flex; gap: 10px; flex-wrap: wrap; }
+.mkt-btn-primary {
+  background: #F59E0B; color: #1A0A00; border: none;
+  border-radius: 10px; padding: 10px 20px;
+  font-size: 13px; font-weight: 800; cursor: pointer;
+  font-family: var(--font); transition: all .15s;
+}
+.mkt-btn-primary:hover { background: #FBBF24; transform: translateY(-1px); }
+.mkt-btn-secondary {
+  background: rgba(245,158,11,.12); color: #F59E0B;
+  border: 1px solid rgba(245,158,11,.35);
+  border-radius: 10px; padding: 10px 20px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  font-family: var(--font); transition: all .15s;
+}
+.mkt-btn-secondary:hover { background: rgba(245,158,11,.2); }
+/* Sellers grid */
+.mkt-sellers-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px; margin-bottom: 28px;
+}
+.mkt-seller-card {
+  background: #fff; border-radius: 12px;
+  border: 1.5px solid var(--g6); padding: 16px;
+  cursor: pointer; transition: all .18s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+.mkt-seller-card:hover {
+  border-color: #F59E0B; box-shadow: 0 4px 16px rgba(245,158,11,.12);
+  transform: translateY(-2px);
+}
+.mkt-seller-avatar {
+  width: 44px; height: 44px; border-radius: 10px;
+  background: linear-gradient(135deg, #F59E0B, #D97706);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; margin-bottom: 10px; flex-shrink: 0;
+}
+.mkt-seller-name { font-weight: 800; font-size: 13.5px; color: var(--black); margin-bottom: 2px; }
+.mkt-seller-sub { font-size: 11px; color: var(--g3); margin-bottom: 8px; }
+.mkt-seller-stats { display: flex; gap: 8px; flex-wrap: wrap; }
+.mkt-stat-pill {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 10px; font-weight: 600; color: var(--g2);
+  background: var(--g6); border-radius: 6px; padding: 2px 7px;
+}
+.mkt-seller-badge-verified {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 9px; font-weight: 700; color: #16A34A;
+  background: rgba(22,163,74,.08); border: 1px solid rgba(22,163,74,.25);
+  border-radius: 4px; padding: 1px 5px; margin-bottom: 6px;
+}
+/* How it works */
+.mkt-steps { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 28px; }
+.mkt-step {
+  flex: 1; min-width: 160px; background: var(--g7);
+  border-radius: 12px; padding: 16px;
+  border: 1px solid var(--g6);
+}
+.mkt-step-icon { font-size: 24px; margin-bottom: 8px; }
+.mkt-step-title { font-size: 13px; font-weight: 800; color: var(--black); margin-bottom: 4px; }
+.mkt-step-desc { font-size: 11.5px; color: var(--g3); line-height: 1.5; }
+@media (max-width: 600px) {
+  .mkt-landing { padding: 16px 12px 32px; }
+  .mkt-landing-hero { padding: 20px 16px; }
+  .mkt-landing-hero h2 { font-size: 18px; }
+  .mkt-steps { gap: 10px; }
 }
 /* Botón "Solicitar Cotización" */
 .btn-cotizar-proyecto {
@@ -18091,10 +18202,12 @@ header .logo img{ filter: saturate(1.05) contrast(1.02); }
 }
 .b2b-canal.active-smb{ color: var(--red) !important; border-bottom-color: var(--red) !important; background: transparent !important; box-shadow: none !important; }
 .b2b-canal.active-ent{ color: var(--blue) !important; border-bottom-color: var(--blue) !important; background: transparent !important; box-shadow: none !important; }
+.b2b-canal.active-mkt{ color: #F59E0B !important; border-bottom-color: #F59E0B !important; background: transparent !important; box-shadow: none !important; }
 .b2b-canal.active .b2b-canal-sub,
 .b2b-canal.active-all .b2b-canal-sub,
 .b2b-canal.active-smb .b2b-canal-sub,
 .b2b-canal.active-ent .b2b-canal-sub,
+.b2b-canal.active-mkt .b2b-canal-sub,
 .b2b-nav-btn.active .b2b-canal-sub{ color: var(--g3) !important; }
 
 /* hero */
@@ -19895,6 +20008,17 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
 
     <div class="b2b-divider"></div>
 
+    <!-- s99: Canal Marketplace -->
+    <div class="b2b-canal b2b-nav-btn" data-view="marketplace" onclick="B2B.setView('marketplace')" title="Marketplace — Vendedores verificados SSTT">
+      <span class="b2b-canal-icon">🏪</span>
+      <div class="b2b-canal-label">
+        <span class="b2b-canal-title">Marketplace</span>
+        <span class="b2b-canal-sub">Vendedores verificados · Más opciones</span>
+      </div>
+    </div>
+
+    <div class="b2b-divider"></div>
+
     <!-- Canal Todo -->
     <div class="b2b-canal b2b-nav-btn active-all" data-view="all" onclick="B2B.setView('all')" style="flex:0;padding:0 16px">
       <span style="font-size:11px;font-weight:700;color:#fff">Ver todo</span>
@@ -20535,6 +20659,74 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
 
 
 <!-- FOOTER -->
+
+<!-- s99: Marketplace landing (hidden by default, shown when B2B.activeView==='marketplace') -->
+<div id="mktLandingWrap" style="display:none">
+<div class="mkt-landing">
+  <!-- Hero -->
+  <div class="mkt-landing-hero">
+    <div class="mkt-badge">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L15.09 8.26L23 9.27L17.5 14.14L18.18 22.02L12 18.77L5.82 22.02L6.5 14.14L1 9.27L8.91 8.26L12 1Z"/></svg>
+      Próximamente · Onda 2
+    </div>
+    <h2>Marketplace SSTT</h2>
+    <p>Conectamos integradores verificados del ecosistema SSTT. Vende tus equipos usados, sobrantes de proyecto o productos especiales directamente a otros profesionales de seguridad.</p>
+    <div class="mkt-ctas">
+      <button class="mkt-btn-primary" onclick="mktShowInterest('vender')">🏪 Quiero vender aquí</button>
+      <button class="mkt-btn-secondary" onclick="mktShowInterest('comprar')">🔍 Quiero comprar de terceros</button>
+    </div>
+  </div>
+
+  <!-- Sellers destacados (demo) -->
+  <div style="margin-bottom:18px">
+    <h3 style="font-size:15px;font-weight:800;color:var(--black);margin:0 0 14px;display:flex;align-items:center;gap:8px">
+      <span>Vendedores Destacados</span>
+      <span style="font-size:11px;font-weight:600;color:var(--g3);background:var(--g6);border-radius:6px;padding:2px 8px">Demo</span>
+    </h3>
+    <div class="mkt-sellers-grid" id="mktSellersGrid">
+      <!-- Poblado por JS -->
+    </div>
+  </div>
+
+  <!-- Cómo funciona -->
+  <div>
+    <h3 style="font-size:15px;font-weight:800;color:var(--black);margin:0 0 14px">¿Cómo funciona?</h3>
+    <div class="mkt-steps">
+      <div class="mkt-step">
+        <div class="mkt-step-icon">✅</div>
+        <div class="mkt-step-title">1. Sé verificado</div>
+        <div class="mkt-step-desc">Solo integradores con cuenta SSTT activa pueden vender. Tu reputación como instalador te respalda.</div>
+      </div>
+      <div class="mkt-step">
+        <div class="mkt-step-icon">📦</div>
+        <div class="mkt-step-title">2. Publica tu stock</div>
+        <div class="mkt-step-desc">Equipos usados, sobrantes de proyecto o productos de difícil acceso. Con ficha técnica automática del catálogo SSTT.</div>
+      </div>
+      <div class="mkt-step">
+        <div class="mkt-step-icon">💬</div>
+        <div class="mkt-step-title">3. Conecta con el comprador</div>
+        <div class="mkt-step-desc">Chat interno o WhatsApp directo. SSTT verifica al comprador antes de mostrar tu contacto.</div>
+      </div>
+      <div class="mkt-step">
+        <div class="mkt-step-icon">⭐</div>
+        <div class="mkt-step-title">4. Acumula reputación</div>
+        <div class="mkt-step-desc">Cada transacción suma a tu rating de vendedor y sube tu tier de fidelidad SSTT.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA formulario interés -->
+  <div id="mktInterestForm" style="display:none;background:var(--g7);border:1.5px solid #F59E0B;border-radius:14px;padding:20px;margin-top:20px">
+    <h4 style="font-size:14px;font-weight:800;color:var(--black);margin:0 0 12px" id="mktInterestTitle">Registrar interés</h4>
+    <p style="font-size:12.5px;color:var(--g2);margin:0 0 14px">Deja tu email y te avisamos cuando el Marketplace abra. Será el primer acceso para cuentas SSTT verificadas.</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <input id="mktEmail" type="email" placeholder="tu@empresa.cl" style="flex:1;min-width:200px;border:1.5px solid var(--g5);border-radius:9px;padding:9px 13px;font-size:13px;font-family:var(--font);outline:none">
+      <button onclick="mktSubmitInterest()" class="mkt-btn-primary" style="white-space:nowrap">Notificarme</button>
+    </div>
+    <div id="mktInterestOk" style="display:none;color:#16A34A;font-size:13px;font-weight:700;margin-top:10px">✓ Registrado. Te avisaremos al lanzar.</div>
+  </div>
+</div>
+</div>
 
 </div><!-- FIX s39: missing close for inner wrapper that leaked secFov/secAsistente inside secCatalogo -->
 </div><!-- /secCatalogo -->
@@ -25618,6 +25810,7 @@ function render() {
           </button>
         </div>
         <div class="pcard-name" onclick="openProdModal(${p.id})" style="cursor:pointer">${p.nombre}</div>
+        ${(()=>{ if (!p.sellerId) return ''; var s = MKT_SELLERS_DEMO.find(function(x){ return x.id === p.sellerId; }); if (!s) return ''; return '<div class="seller-badge"><span class="seller-badge-dot"></span>Vendido por <strong style="color:var(--g2)">' + s.nombre + '</strong></div>'; })()}
         ${(()=>{ var st = rwReviewsStats(p.codigo); if(!st.count) return ''; return '<div class="pcard-rating">' + rwStarsHTML(st.avg, 11) + ' <span style="font-weight:700;color:var(--g2)">' + st.avg + '</span> <span class="pcard-rating-count">(' + st.count + ')</span></div>'; })()}
         <div class="pcard-tags">${tags.map(t => {
           let cls = 'ptag ';
@@ -40442,25 +40635,41 @@ var B2B = {
     } catch(e){}
   },
 
-  // Vista activa: 'smb' | 'enterprise' | 'all'
+  // Vista activa: 'smb' | 'enterprise' | 'all' | 'marketplace'
   activeView: 'all',
   setView: function(view) {
     B2B.activeView = view;
     // Actualizar nav header — limpiar todos y poner el correcto
     document.querySelectorAll('.b2b-nav-btn').forEach(function(btn){
-      btn.classList.remove('active-smb','active-ent','active-all');
+      btn.classList.remove('active-smb','active-ent','active-all','active-mkt');
     });
-    var activeClass = view==='smb' ? 'active-smb' : view==='enterprise' ? 'active-ent' : 'active-all';
+    var activeClass = view==='smb' ? 'active-smb' : view==='enterprise' ? 'active-ent' : view==='marketplace' ? 'active-mkt' : 'active-all';
     var activeBtn = document.querySelector('.b2b-nav-btn[data-view="'+view+'"]');
     if (activeBtn) activeBtn.classList.add(activeClass);
-    // Renderizar y navegar al catálogo
-    if (typeof render === 'function') { S.page=1; render(); }
-    if (typeof showSection === 'function') showSection('catalogo');
+    // s99: Marketplace — mostrar landing, ocultar catálogo normal
+    var mktWrap = document.getElementById('mktLandingWrap');
+    // Área de catálogo: sidebar + catalog-area (dentro de .cat-layout o similar)
+    var catalogArea  = document.querySelector('#secCatalogo .catalog-area');
+    var sidebarArea  = document.querySelector('#secCatalogo .sidebar');
+    if (view === 'marketplace') {
+      if (mktWrap)     { mktWrap.style.display = 'block'; mktRenderSellers(); }
+      if (catalogArea) catalogArea.style.display = 'none';
+      if (sidebarArea) sidebarArea.style.display = 'none';
+      if (typeof showSection === 'function') showSection('catalogo');
+    } else {
+      if (mktWrap)     mktWrap.style.display = 'none';
+      if (catalogArea) catalogArea.style.display = '';
+      if (sidebarArea) sidebarArea.style.display = '';
+      // Renderizar y navegar al catálogo
+      if (typeof render === 'function') { S.page=1; render(); }
+      if (typeof showSection === 'function') showSection('catalogo');
+    }
   },
 
   // Filtrar productos por vista
   filterByView: function(products) {
     if (B2B.activeView === 'all') return products;
+    if (B2B.activeView === 'marketplace') return products; // landing propia, no filtro
     return products.filter(function(p){
       return B2B.classify(p) === B2B.activeView;
     });
@@ -40469,6 +40678,129 @@ var B2B = {
 
 // Restaurar sesión al cargar
 B2B.restore();
+
+// s99: === Marketplace scaffold — sellers demo + helpers ===
+var MKT_SELLERS_DEMO = [
+  {
+    id: 'seller-001',
+    nombre: 'TecnoSegur SpA',
+    emoji: '🔒',
+    ubicacion: 'Santiago, RM',
+    productos: 23,
+    ventas: 47,
+    rating: 4.9,
+    verificado: true,
+    especialidad: 'Cámaras IP · NVR · Control acceso'
+  },
+  {
+    id: 'seller-002',
+    nombre: 'Alarmas del Sur Ltda.',
+    emoji: '📡',
+    ubicacion: 'Concepción, VIII',
+    productos: 11,
+    ventas: 29,
+    rating: 4.7,
+    verificado: true,
+    especialidad: 'Videoporteros · CCTV · Sobrantes proyecto'
+  },
+  {
+    id: 'seller-003',
+    nombre: 'IntegraSec',
+    emoji: '🛡️',
+    ubicacion: 'Valparaíso, V',
+    productos: 8,
+    ventas: 15,
+    rating: 4.8,
+    verificado: true,
+    especialidad: 'PTZ · Equipos usados certificados'
+  },
+  {
+    id: 'seller-004',
+    nombre: 'NorteSeguridad E.I.R.L.',
+    emoji: '🏔️',
+    ubicacion: 'Antofagasta, II',
+    productos: 17,
+    ventas: 38,
+    rating: 5.0,
+    verificado: true,
+    especialidad: 'Sistemas mineros · NDAA · Acceso'
+  }
+];
+
+window.mktRenderSellers = function() {
+  var grid = document.getElementById('mktSellersGrid');
+  if (!grid) return;
+  grid.innerHTML = MKT_SELLERS_DEMO.map(function(s) {
+    var stars = '★'.repeat(Math.floor(s.rating)) + (s.rating % 1 >= 0.5 ? '½' : '');
+    return '<div class="mkt-seller-card" onclick="mktViewSeller(\'' + s.id + '\')" title="Ver vendedor">' +
+      '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">' +
+        '<div class="mkt-seller-avatar">' + s.emoji + '</div>' +
+        '<div style="min-width:0">' +
+          (s.verificado ? '<div class="mkt-seller-badge-verified">✓ Verificado SSTT</div>' : '') +
+          '<div class="mkt-seller-name">' + s.nombre + '</div>' +
+          '<div class="mkt-seller-sub">📍 ' + s.ubicacion + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="font-size:10.5px;color:var(--g3);margin-bottom:8px;line-height:1.4">' + s.especialidad + '</div>' +
+      '<div class="mkt-seller-stats">' +
+        '<div class="mkt-stat-pill">📦 ' + s.productos + ' SKU</div>' +
+        '<div class="mkt-stat-pill">✅ ' + s.ventas + ' ventas</div>' +
+        '<div class="mkt-stat-pill" style="color:#F59E0B">' + s.rating + ' ★</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+};
+
+window.mktViewSeller = function(sellerId) {
+  // Placeholder — Onda 2: navegará a página de seller
+  var s = MKT_SELLERS_DEMO.find(function(x){ return x.id === sellerId; });
+  if (!s) return;
+  showToast('🏪 ' + s.nombre + ' — Perfil completo disponible en Onda 2');
+};
+
+window.mktShowInterest = function(tipo) {
+  var form = document.getElementById('mktInterestForm');
+  var title = document.getElementById('mktInterestTitle');
+  if (!form) return;
+  form.style.display = 'block';
+  form.dataset.tipo = tipo;
+  if (title) title.textContent = tipo === 'vender' ? '🏪 Registrar interés como vendedor' : '🔍 Registrar interés como comprador';
+  form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+};
+
+window.mktSubmitInterest = function() {
+  var email = (document.getElementById('mktEmail') || {}).value || '';
+  var tipo  = (document.getElementById('mktInterestForm') || {}).dataset.tipo || '';
+  if (!email || !email.includes('@')) {
+    showToast('⚠️ Ingresa un email válido');
+    return;
+  }
+  // Demo: guardar en localStorage
+  try {
+    var registro = safeParseLS('sstt_mkt_interest','array') || [];
+    registro.push({ email: email, tipo: tipo, ts: Date.now() });
+    localStorage.setItem('sstt_mkt_interest', JSON.stringify(registro));
+  } catch(e) {}
+  var okDiv = document.getElementById('mktInterestOk');
+  if (okDiv) { okDiv.style.display = 'block'; }
+  showToast('✓ Registrado — te avisamos al lanzar el Marketplace');
+};
+
+// s99: Helpers para catCore/catToolbar — wrappear el área central del catálogo
+// para poder ocultarlo al ir a marketplace
+(function() {
+  // Aplazado al DOMContentLoaded para que los elementos existan
+  document.addEventListener('DOMContentLoaded', function() {
+    // catCore = contenedor del grid + sidebar (qs('grid').parentElement aprox)
+    // En vez de manipular el DOM existente, usamos el mktLandingWrap posicionado
+    // antes del cierre de secCatalogo. El catCore/catToolbar no existe como ID;
+    // manejamos la visibilidad del contenido visible del catálogo directamente.
+    // No se requiere wrapping adicional — setView ya oculta/muestra mktLandingWrap
+    // y oculta qs('grid'), qs('pag') y la barra de filtros cuando aplica.
+  }, { once: true });
+})();
+
+// s99: === fin Marketplace scaffold ===
 
 // s98: === Compra por Volumen — descuento escalonado sobre precio de tier ===
 var VOL_DISCOUNT = {
