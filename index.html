@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Miércoles 03 de Junio del 2026 · s100 -->
+<!-- SSTT Tienda · Generado: Miércoles 03 de Junio del 2026 · s101 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -19978,7 +19978,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 03 de Junio del 2026 · s100</span>
+    <span class="update-txt" id="updateTxt"></span>
   </div>
 </div>
 
@@ -42473,17 +42473,22 @@ function waUpdateWaLink(userMsg, reply) {
 // waBtn onclick directo en HTML — no necesita DOMContentLoaded
 
 
-// ── Fecha de actualización dinámica + chip de versión ──
-// s96: SSTT_VER es la ÚNICA fuente de verdad de la versión. Cambiar SOLO aquí
-// en cada sesión; alimenta #updateTxt (breadcrumb desktop) y #verChip (chip fijo
-// desktop+móvil). El comentario del <head> (L2) se actualiza aparte.
-(function() {
-  var SSTT_VER = 's100';
-  var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Miércoles 03 de Junio del 2026 · ' + SSTT_VER;
+// ── Versión/fecha centralizada · s101 ──────────────────────────────
+// s101: OBJETO único. Cambiar SOLO ver+fecha aquí; el JS rellena todos
+// los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
+// Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
+window.SSTT_VER = {
+  ver:   's101',
+  fecha: 'Miércoles 03 de Junio del 2026'
+};
+// s101: DOM update en DOMContentLoaded (verChip está al final del body)
+document.addEventListener('DOMContentLoaded', function() {
+  var v = window.SSTT_VER;
+  var txt  = document.getElementById('updateTxt');
   var chip = document.getElementById('verChip');
-  if (chip) chip.textContent = SSTT_VER;
-})();
+  if (txt)  txt.textContent  = 'Última actualización: ' + v.fecha + ' · ' + v.ver;
+  if (chip) chip.textContent = v.ver;
+});
 
 
 // ══ SEGUIMIENTO DE PEDIDO ════════════════════════════════════
@@ -88071,7 +88076,77 @@ window.toolOut=(function(){
 <!-- s96: chip de versión chiquitito (desktop + móvil). Hijo directo del body
      para que no lo absorba ningún modal (offsetParent=null). El texto lo fija
      la JS de versión desde una sola constante (SSTT_VER). -->
-<div class="ver-chip" id="verChip">s100</div>
+<div class="ver-chip" id="verChip"></div>
+
+<!-- ════════ s101: Versión centralizada + Google Shopping Feed ════════ -->
+<script>
+// s101: generateShoppingFeed() descarga google-shopping-feed.xml desde el browser.
+// Subir el archivo generado al repo junto a index.html para que Google lo indexe.
+window.generateShoppingFeed = function() {
+  if (typeof PRODUCTS === 'undefined') { alert('PRODUCTS no cargado'); return; }
+  var BASE = 'https://sstt.cl';
+  var CAT_G = {
+    'camaras-ip':    'Electronics &gt; Video &gt; Surveillance Cameras',
+    'camaras-hdcvi': 'Electronics &gt; Video &gt; Surveillance Cameras',
+    'camaras-ptz':   'Electronics &gt; Video &gt; Surveillance Cameras',
+    'nvr':           'Electronics &gt; Video &gt; Surveillance DVRs &amp; NVRs',
+    'alarmas':       'Electronics &gt; Networking &gt; Home Automation',
+    'switches':      'Electronics &gt; Networking &gt; Network Switches',
+    'acceso':        'Electronics &gt; Security Systems &gt; Access Control Systems',
+    'licencias':     'Software',
+    'videoporteros': 'Electronics &gt; Security Systems &gt; Video Door Phones',
+    'especiales':    'Electronics &gt; Video &gt; Surveillance Cameras',
+    'redes':         'Electronics &gt; Networking',
+    'accesorios':    'Electronics &gt; Accessories'
+  };
+  var esc = function(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  };
+  var items = [];
+  PRODUCTS.forEach(function(p) {
+    if (!p.ptotal || p.ptotal <= 0) return;
+    var d = (typeof SSTT_DATA !== 'undefined' && SSTT_DATA[p.codigo]) || {};
+    var desc = '';
+    if (d.s && d.s.length) desc = d.s.filter(function(x){ return !/^Producto Agotado/i.test(x); }).slice(0,5).join('. ');
+    if (desc.length < 10) desc = p.nombre;
+    var img = (p.img && p.img.indexOf('http') === 0) ? p.img : 'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_'+p.codigo+'.webp';
+    var avail = p.stock === 'agotado' ? 'out_of_stock' : 'in_stock';
+    var gcat = CAT_G[p.cat] || 'Electronics';
+    items.push('    <item>\n'
+      +'      <g:id>'+esc(p.codigo)+'</g:id>\n'
+      +'      <g:title>'+esc(p.nombre)+'</g:title>\n'
+      +'      <g:description>'+esc(desc.substring(0,4990))+'</g:description>\n'
+      +'      <g:link>'+BASE+'/index.html#p-'+esc(p.codigo)+'</g:link>\n'
+      +'      <g:image_link>'+esc(img)+'</g:image_link>\n'
+      +'      <g:price>'+p.ptotal+' CLP</g:price>\n'
+      +'      <g:availability>'+avail+'</g:availability>\n'
+      +'      <g:condition>new</g:condition>\n'
+      +'      <g:brand>Dahua</g:brand>\n'
+      +'      <g:mpn>'+esc(p.codigo)+'</g:mpn>\n'
+      +'      <g:identifier_exists>yes</g:identifier_exists>\n'
+      +'      <g:google_product_category>'+gcat+'</g:google_product_category>\n'
+      +'      <g:product_type>'+esc(d.c||p.cat)+'</g:product_type>\n'
+      +'      <g:shipping><g:country>CL</g:country><g:service>Starken / Chilexpress</g:service><g:price>0 CLP</g:price></g:shipping>\n'
+      +'    </item>');
+  });
+  var ver = (window.SSTT_VER && window.SSTT_VER.ver) || 's101';
+  var xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
+    +'<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">\n'
+    +'  <channel>\n'
+    +'    <title>SSTT SpA - Distribuidor Oficial Dahua Chile</title>\n'
+    +'    <link>'+BASE+'</link>\n'
+    +'    <description>Catalogo Dahua: camaras IP, NVR, accesorios, alarmas.</description>\n'
+    +items.join('\n')
+    +'\n  </channel>\n</rss>';
+  var blob = new Blob([xml], { type: 'application/xml' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'google-shopping-feed.xml';
+  a.click();
+  console.log('[s101] Feed: '+items.length+' productos');
+  return items.length;
+};
+</script>
 
 <!-- ════════ s100: Conversion + SEO booster pack ════════ -->
 <style id="s100-css">
