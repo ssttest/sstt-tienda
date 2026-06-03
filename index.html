@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Martes 02 de Junio del 2026 · s97 -->
+<!-- SSTT Tienda · Generado: Miércoles 03 de Junio del 2026 · s100 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -19978,7 +19978,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <a href="#">SSTT®</a><span>›</span>
       <span id="breadCur">Todos los productos</span>
     </nav>
-    <span class="update-txt" id="updateTxt">Última actualización: Martes 02 de Junio del 2026 · s97</span>
+    <span class="update-txt" id="updateTxt">Última actualización: Miércoles 03 de Junio del 2026 · s100</span>
   </div>
 </div>
 
@@ -20495,6 +20495,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
     <!-- Validador de Compatibilidad -->
     <div id="compatPanel" style="margin-bottom:4px;border-radius:10px"></div>
     <div id="cartCrossSell"></div>
+    <div id="cartShipBar"></div><!-- s100 -->
     <div id="coStickyTotals">
       <!-- s98: Widget cupón descuento (demo simulado) -->
       <div id="cuponWidget" style="margin-bottom:6px;padding:8px 10px;background:linear-gradient(135deg,#f0faf4,#e8f5e9);border:1.5px solid #C8E6C9;border-radius:10px"></div>
@@ -20515,6 +20516,9 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <div id="puntosCanjeWidget" style="display:none;background:linear-gradient(135deg,#fffbf0,#fff8e1);border:1.5px solid #D4A03C;border-radius:10px;padding:10px 12px;margin:6px 0;font-size:12.5px"></div>
     </div>
     <!-- csCrossSell movido a cartCrossSell -->
+    <!-- s100: trust strip + captura email (carro abandonado) -->
+    <div id="cartTrustStrip"></div>
+    <div id="cartEmailCapture"></div>
     <!-- P1 s87: cierre PRIMARIO por WhatsApp (visible en paso 0) -->
     <button id="cotizaWaBtn" onclick="event.stopPropagation();cotizarWhatsApp()"
       style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;
@@ -26901,6 +26905,9 @@ function calcTotals() {
   if ((el = document.getElementById('tShip')))  el.textContent = ship > 0 ? fmt(ship) : (S.shipCourier || '—');
   if ((el = document.getElementById('tShipLbl'))) el.textContent = S.shipCourier ? 'Despacho ('+S.shipCourier+')' : 'Despacho';
   if ((el = document.getElementById('tTotal'))) el.textContent = fmt(total);
+  // s100: booster pack — barra despacho + trust + email
+  try { if (typeof s100ShipBar==='function') s100ShipBar(neto + iva); } catch(e){}
+  try { if (typeof s100CartEnhance==='function') s100CartEnhance(); } catch(e){}
   // Fila descuento cert
   var rowCert = document.getElementById('tDescCertRow');
   if (rowCert) rowCert.style.display = esCert ? '' : 'none';
@@ -31303,6 +31310,7 @@ function _pmBuildModal(id) {
             if (_tramoP) {
               return `<div class="pm-price-card">
               <div class="pm-price-main">${fmt(_tramoP)}</div>
+              ${typeof pmCuotasHTML==='function'?pmCuotasHTML(_tramoP):''}
               <div class="pm-price-sub">
                 Neto ${fmt(Math.round(_tramoP/1.19))} &nbsp;+&nbsp; IVA ${fmt(_tramoP - Math.round(_tramoP/1.19))} &nbsp;·&nbsp;
                 <strong>Precio final con IVA incluido</strong>
@@ -31312,6 +31320,7 @@ function _pmBuildModal(id) {
             }
             return `<div class="pm-price-card">
               <div class="pm-price-main">${fmt(p.ptotal)}</div>
+              ${typeof pmCuotasHTML==='function'?pmCuotasHTML(p.ptotal):''}
               <div class="pm-price-sub">
                 Neto ${fmt(itemNeto(p))} &nbsp;+&nbsp; IVA ${fmt(p.piva)} &nbsp;·&nbsp;
                 <strong>Precio final con IVA incluido</strong>
@@ -31441,6 +31450,7 @@ function _pmBuildModal(id) {
 function closeProdModal() {
   const m = document.getElementById('prodModal');
   if (m) { m.style.display='none'; document.body.style.overflow=''; }
+  try { if (typeof clearProductSchema==='function') clearProductSchema(); } catch(e){} // s100
 }
 
 function pmTab(name, btn) {
@@ -34651,6 +34661,7 @@ function rwFechaRel(ts) {
 async function openProdModal(id) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p) return;
+  try { if (typeof injectProductSchema==='function') injectProductSchema(p); } catch(e){} // s100
 
   // Track product view for BOM suggestions
   try {
@@ -42467,9 +42478,9 @@ function waUpdateWaLink(userMsg, reply) {
 // en cada sesión; alimenta #updateTxt (breadcrumb desktop) y #verChip (chip fijo
 // desktop+móvil). El comentario del <head> (L2) se actualiza aparte.
 (function() {
-  var SSTT_VER = 's97';
+  var SSTT_VER = 's100';
   var txt = document.getElementById('updateTxt');
-  if (txt) txt.textContent = 'Última actualización: Martes 02 de Junio del 2026 · ' + SSTT_VER;
+  if (txt) txt.textContent = 'Última actualización: Miércoles 03 de Junio del 2026 · ' + SSTT_VER;
   var chip = document.getElementById('verChip');
   if (chip) chip.textContent = SSTT_VER;
 })();
@@ -88060,6 +88071,159 @@ window.toolOut=(function(){
 <!-- s96: chip de versión chiquitito (desktop + móvil). Hijo directo del body
      para que no lo absorba ningún modal (offsetParent=null). El texto lo fija
      la JS de versión desde una sola constante (SSTT_VER). -->
-<div class="ver-chip" id="verChip">s97</div>
+<div class="ver-chip" id="verChip">s100</div>
+
+<!-- ════════ s100: Conversion + SEO booster pack ════════ -->
+<style id="s100-css">
+.pm-cuotas{display:flex;align-items:center;gap:7px;margin-top:7px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.pm-cuotas b{color:var(--navy);font-weight:800}
+.pm-cuotas svg{flex-shrink:0;color:var(--muted)}
+.pm-cuotas .pm-cuotas-info{font-size:10px;opacity:.65;cursor:help}
+#cartShipBar:empty{display:none}
+.cart-shipbar{margin:6px 0;padding:9px 11px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg2);font-size:12px}
+.cart-shipbar .csb-row{display:flex;align-items:center;gap:7px;color:var(--navy);font-weight:700}
+.cart-shipbar .csb-track{height:6px;border-radius:3px;background:var(--border);overflow:hidden;margin-top:7px}
+.cart-shipbar .csb-fill{height:100%;border-radius:3px;background:var(--green)}
+.cart-retiro{display:flex;align-items:center;gap:8px;margin:6px 0;padding:8px 11px;border:1.5px solid var(--green);border-radius:10px;background:var(--green-p);font-size:12px;color:var(--green);font-weight:700}
+.cart-retiro svg{flex-shrink:0}
+.cart-trust{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+.cart-trust .ct-item{display:flex;align-items:center;gap:7px;padding:7px 9px;border:1px solid var(--border);border-radius:9px;background:var(--bg2);font-size:11px;color:var(--navy);font-weight:700;line-height:1.2}
+.cart-trust .ct-item svg{flex-shrink:0}
+.cart-email{margin:8px 0;padding:9px 11px;border:1.5px dashed var(--border);border-radius:10px;background:var(--bg2)}
+.cart-email .ce-lbl{font-size:11.5px;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.cart-email .ce-row{display:flex;gap:6px}
+.cart-email input{flex:1;min-width:0;border:1px solid var(--border);border-radius:8px;padding:7px 9px;font-size:12.5px;background:var(--bg);color:var(--text)}
+.cart-email button{border:none;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:800;background:var(--navy);color:#fff;cursor:pointer;white-space:nowrap}
+.cart-email .ce-ok{font-size:11.5px;color:var(--green);font-weight:700;display:flex;align-items:center;gap:6px}
+</style>
+<script>
+/* s100: Conversion + SEO booster pack — todo en window, no rompe single-file */
+(function(){
+  'use strict';
+  function f(n){ return '$' + Number(Math.round(n)||0).toLocaleString('es-CL'); }
+
+  // ── Config despacho gratis: OFF por defecto. Activar con política REAL: ──
+  //    window.SHIP_FREE = { enabled:true, threshold:150000 };
+  window.SHIP_FREE = window.SHIP_FREE || { enabled:false, threshold:0 };
+
+  // ── Cuotas referenciales (display, no es financiamiento real) ──
+  window.pmCuotasHTML = function(precio){
+    precio = Number(precio)||0;
+    if (precio < 30000) return '';
+    var c3=Math.round(precio/3), c6=Math.round(precio/6), c12=Math.round(precio/12);
+    return '<div class="pm-cuotas">'
+      + '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>'
+      + '<span>Págalo en <b>3 de '+f(c3)+'</b>, 6 de '+f(c6)+' o 12 de '+f(c12)+'</span>'
+      + '<span class="pm-cuotas-info" title="Valor referencial estimado. El detalle de cuotas e intereses depende de tu tarjeta y banco.">&#9432; ref.</span>'
+      + '</div>';
+  };
+
+  // ── Product JSON-LD dinámico (SEO rich snippets) ──
+  function _schemaTag(){
+    var t=document.getElementById('prodSchemaLD');
+    if(!t){ t=document.createElement('script'); t.type='application/ld+json'; t.id='prodSchemaLD'; document.head.appendChild(t); }
+    return t;
+  }
+  window.injectProductSchema = function(p){
+    if(!p) return;
+    var ptotal = p.ptotal || 0;
+    try { if (typeof B2B!=='undefined' && B2B.getPrecioTramo){ var t=B2B.getPrecioTramo(p); if(t) ptotal=t; } } catch(e){}
+    var avail = (p.stock==='agotado') ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock';
+    var data = {
+      "@context":"https://schema.org","@type":"Product",
+      "name": p.nombre, "sku": p.codigo, "mpn": p.codigo,
+      "image": p.img || ('https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_'+p.codigo+'.webp'),
+      "brand": {"@type":"Brand","name":"Dahua Technology"},
+      "category": (p.cat||'').replace(/-/g,' '),
+      "offers": {
+        "@type":"Offer",
+        "url":"https://www.sstt.cl/index.php#"+p.codigo,
+        "priceCurrency":"CLP","price": ptotal,
+        "availability": avail,
+        "itemCondition":"https://schema.org/NewCondition",
+        "seller":{"@type":"Organization","name":"SSTT SpA"}
+      }
+    };
+    try {
+      if (typeof rwReviewsStats==='function'){
+        var st=rwReviewsStats(p.codigo);
+        if(st && st.count>0){
+          data.aggregateRating={"@type":"AggregateRating","ratingValue":st.avg,"reviewCount":st.count,"bestRating":5,"worstRating":1};
+        }
+      }
+    } catch(e){}
+    try { _schemaTag().textContent = JSON.stringify(data); } catch(e){}
+  };
+  window.clearProductSchema = function(){
+    var t=document.getElementById('prodSchemaLD'); if(t) t.textContent='';
+  };
+
+  // ── Carro: barra despacho gratis (si activada) + retiro gratis (real) ──
+  window.s100ShipBar = function(grossTotal){
+    var el=document.getElementById('cartShipBar'); if(!el) return;
+    var html='';
+    if (window.SHIP_FREE && window.SHIP_FREE.enabled && window.SHIP_FREE.threshold>0){
+      var th=window.SHIP_FREE.threshold, falta=th-(grossTotal||0);
+      if (falta>0){
+        var pct=Math.max(4,Math.min(100,Math.round((grossTotal/th)*100)));
+        html+='<div class="cart-shipbar"><div class="csb-row"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Te faltan <b>'+f(falta)+'</b> para despacho gratis</div><div class="csb-track"><div class="csb-fill" style="width:'+pct+'%"></div></div></div>';
+      } else {
+        html+='<div class="cart-shipbar"><div class="csb-row" style="color:var(--green)">&#10003; &iexcl;Tienes despacho gratis!</div></div>';
+      }
+    }
+    html+='<div class="cart-retiro"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l1-5h16l1 5"/><path d="M4 9v11h16V9"/><path d="M9 13h6"/></svg><span>Retiro gratis en tienda &mdash; Santiago Centro</span></div>';
+    el.innerHTML=html;
+  };
+
+  // ── Carro: trust strip ──
+  window.s100CartTrust = function(){
+    var el=document.getElementById('cartTrustStrip'); if(!el) return;
+    el.innerHTML='<div class="cart-trust">'
+      +'<div class="ct-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Compra segura &middot; SSL</div>'
+      +'<div class="ct-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0057B8" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Garant&iacute;a oficial Dahua</div>'
+      +'<div class="ct-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Distribuidor oficial</div>'
+      +'<div class="ct-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--navy)" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>Despacho a todo Chile</div>'
+      +'</div>';
+  };
+
+  // ── Carro: captura email (carro abandonado, listo para Onda 2) ──
+  window.s100CartEmail = function(){
+    var el=document.getElementById('cartEmailCapture'); if(!el) return;
+    var saved='';
+    try { saved=localStorage.getItem('sstt_cart_email')||''; } catch(e){}
+    var esc = (typeof escapeHtml==='function') ? escapeHtml : function(x){return String(x);};
+    if (saved){
+      el.innerHTML='<div class="cart-email"><div class="ce-ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Te avisaremos sobre tu carro a <b>'+esc(saved)+'</b></div></div>';
+      return;
+    }
+    el.innerHTML='<div class="cart-email">'
+      +'<div class="ce-lbl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>&iquest;Sin tiempo ahora? Te guardamos el carro</div>'
+      +'<div class="ce-row"><input type="email" id="cartEmailInput" placeholder="tu@correo.cl" autocomplete="email">'
+      +'<button onclick="s100SaveCartEmail()">Guardar</button></div></div>';
+  };
+
+  window.s100SaveCartEmail = function(){
+    var inp=document.getElementById('cartEmailInput'); if(!inp) return;
+    var v=(inp.value||'').trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){
+      if(typeof toast==='function') toast('Ingresa un correo v\u00e1lido'); inp.focus(); return;
+    }
+    try {
+      localStorage.setItem('sstt_cart_email', v);
+      var cart=(typeof S!=='undefined' && S.cart)?S.cart:[];
+      localStorage.setItem('sstt_abandoned_cart', JSON.stringify({ email:v, items:cart, ts:Date.now() }));
+    } catch(e){}
+    if(typeof toast==='function') toast('\u00a1Listo! Te avisaremos sobre tu carro');
+    window.s100CartEmail();
+  };
+
+  // ── Orquestador (trust + email) llamado desde calcTotals ──
+  window.s100CartEnhance = function(){
+    try { window.s100CartTrust(); } catch(e){}
+    try { window.s100CartEmail(); } catch(e){}
+  };
+})();
+</script>
+
 </body>
 </html>
