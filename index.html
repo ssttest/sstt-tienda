@@ -27030,8 +27030,15 @@ function checkout() {
         var _motivoCo = _multiplier > 1 ? 'Compra ' + num + ' (x' + _multiplier.toFixed(1) + ' cert.)' : 'Compra ' + num;
         rwPuntosAdd(_ptsFinales, _motivoCo);
       }
+      // s97: acreditar bono bundle pendiente (tope 50; cap suave por neto del carro = anti-farmeo)
+      var _bbPend = (typeof rwBundleBonusPendingGet === 'function') ? rwBundleBonusPendingGet() : 0;
+      if (_bbPend > 0) {
+        var _bbGrant = Math.min(_bbPend, 50, Math.max(0, Math.round(neto / 2000)));
+        if (_bbGrant > 0) rwPuntosAdd(_bbGrant, 'Bono bundle ' + num);
+      }
     }
   } catch(e) { console.warn('[checkout] puntos error:', e); }
+  try { if (typeof rwBundleBonusPendingClear === 'function') rwBundleBonusPendingClear(); } catch(e) {}
   S.cart=[]; saveCart(); renderCart(); updateBadge(); closeCart();
 }
 
@@ -33643,6 +33650,27 @@ function rwRefreshQA(codigo) {
 }
 
 // ── Bundle "Cómpralos juntos" (Sprint 3 s74) ──
+// s97: bono bundle proporcional al neto AÑADIDO (sin el ancla). +50% (÷2000), tope 50 pts, solo bundle 3+ productos.
+function rwBundleBonusCalc(netoAnadido, totalProductos) {
+  if (totalProductos < 3 || netoAnadido <= 0) return 0;
+  return Math.min(50, Math.round(netoAnadido / 2000));
+}
+function rwBundleBonusLabel(bonus) {
+  return bonus > 0
+    ? ('+ ' + bonus + ' pts bonus al comprar este bundle')
+    : 'Suma 2+ accesorios para ganar puntos bonus';
+}
+// s97: el bono se ACREDITA en el checkout (no al agregar al carro) para no permitir farmeo. Pendiente en su propia clave.
+function rwBundleBonusPendingGet() {
+  try { return parseInt(localStorage.getItem('sstt_bundle_bonus_pending') || '0', 10) || 0; } catch(e) { return 0; }
+}
+function rwBundleBonusPendingAdd(pts) {
+  try { localStorage.setItem('sstt_bundle_bonus_pending', String(rwBundleBonusPendingGet() + pts)); } catch(e) {}
+}
+function rwBundleBonusPendingClear() {
+  try { localStorage.removeItem('sstt_bundle_bonus_pending'); } catch(e) {}
+}
+
 function rwBundleRender(producto, related) {
   if (!related || related.length < 1) {
     return '<div class="rw-empty">No hay productos sugeridos para armar un bundle con este equipo.</div>';
@@ -33654,6 +33682,9 @@ function rwBundleRender(producto, related) {
   bundleItems.forEach(function(it) {
     sumBundle += (typeof itemNeto === 'function') ? itemNeto(it) : it.ptotal;
   });
+  // s97: bono inicial (todos los accesorios marcados por defecto)
+  var netoAnadidoInit = sumBundle - totalNeto;
+  var bonusInit = rwBundleBonusCalc(netoAnadidoInit, 1 + bundleItems.length);
 
   var html = '<div style="background:linear-gradient(135deg,#f0f7ff,#e8f0fe);border:1px solid rgba(0,87,184,0.12);border-radius:12px;padding:16px 18px;margin-bottom:16px">';
   html += '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="font-size:20px">📦</span><div style="font-weight:800;font-size:14px;color:#0057B8">Cómpralos juntos</div></div>';
@@ -33688,7 +33719,7 @@ function rwBundleRender(producto, related) {
   html += '<div>';
   html += '<div style="font-size:11px;color:#666;text-transform:uppercase;font-weight:700;letter-spacing:.06em">Total bundle</div>';
   html += '<div id="rwBundleTotal_' + producto.id + '" style="font-size:22px;font-weight:900;color:#0057B8;line-height:1.1">$' + sumBundle.toLocaleString('es-CL') + '</div>';
-  html += '<div style="font-size:11px;color:#1a7f3c;font-weight:700;margin-top:2px">+ 30 pts bonus al armar bundle de 3+</div>';
+  html += '<div id="rwBundleBonus_' + producto.id + '" style="font-size:11px;color:#1a7f3c;font-weight:700;margin-top:2px">' + rwBundleBonusLabel(bonusInit) + '</div>';
   html += '</div>';
   html += '<button onclick="rwBundleAddToCart(' + producto.id + ')" style="background:linear-gradient(135deg,#0057B8,#003d80);color:#fff;border:none;padding:12px 22px;border-radius:10px;font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:8px;box-shadow:0 4px 14px rgba(0,87,184,0.3)">';
   html += '<svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>';
@@ -33708,11 +33739,15 @@ function rwBundleUpdate(mainId) {
   var pMain = PRODUCTS.find(function(p){ return p.id == mainId; });
   if (!pMain) return;
   var total = (typeof itemNeto === 'function') ? itemNeto(pMain) : pMain.ptotal;
+  var netoAnadido = 0, checked = 0;
   var checkboxes = document.querySelectorAll('.rw-bundle-chk');
   checkboxes.forEach(function(c) {
-    if (c.checked) total += parseFloat(c.dataset.precio || 0);
+    if (c.checked) { var v = parseFloat(c.dataset.precio || 0); total += v; netoAnadido += v; checked++; }
   });
   totEl.textContent = '$' + total.toLocaleString('es-CL');
+  // s97: bono bundle recalculado en vivo (sobre el neto añadido, no el ancla)
+  var bonusEl = document.getElementById('rwBundleBonus_' + mainId);
+  if (bonusEl) bonusEl.textContent = rwBundleBonusLabel(rwBundleBonusCalc(netoAnadido, 1 + checked));
 }
 
 // Agregar bundle al carro
@@ -33720,6 +33755,7 @@ function rwBundleAddToCart(mainId) {
   var pMain = PRODUCTS.find(function(p){ return p.id == mainId; });
   if (!pMain) return;
   var added = 0;
+  var netoAnadido = 0;
   // Producto principal
   if (typeof addCart === 'function') { addCart(pMain); added++; }
   // Items seleccionados
@@ -33727,14 +33763,18 @@ function rwBundleAddToCart(mainId) {
   checkboxes.forEach(function(c) {
     if (c.checked) {
       var it = PRODUCTS.find(function(p){ return p.id == c.dataset.id; });
-      if (it) { addCart(it); added++; }
+      if (it) { addCart(it); added++; netoAnadido += parseFloat(c.dataset.precio || 0); }
     }
   });
-  if (added >= 3) {
-    // Onda 2: puntos por bundle eliminados
-  }
+  // s97: bono bundle proporcional → queda pendiente y se acredita en el checkout (anti-farmeo)
+  var _bonus = rwBundleBonusCalc(netoAnadido, added);
+  if (_bonus > 0) rwBundleBonusPendingAdd(_bonus);
   if (typeof closeProdModal === 'function') closeProdModal();
-  if (typeof showToast === 'function') showToast('✅ ' + added + ' productos agregados al carro');
+  if (typeof showToast === 'function') {
+    showToast(_bonus > 0
+      ? ('\u2705 ' + added + ' productos agregados \u00B7 +' + _bonus + ' pts al confirmar la compra')
+      : ('\u2705 ' + added + ' productos agregados al carro'));
+  }
 }
 
 // ── Helpers menores ──
