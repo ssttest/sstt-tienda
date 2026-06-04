@@ -41008,25 +41008,30 @@ document.addEventListener('click', function(e) {
         '.ai-mic--active{background:#e8001c;color:#fff;border:1.5px solid #e8001c;animation:aiMicGlow 2s ease-in-out infinite}' +
         /* puntito "live" en estados activos */
         '.ai-mic--listening::after,.ai-mic--active::after{content:"";position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #e8001c}' +
-        /* ── s108: MODO CONVERSACIÓN POR VOZ — cinematográfico, viewport completo (desktop alto total, móvil full-screen) ── */
-        '#aiVoiceStage{position:fixed;inset:0;display:none;flex-direction:column;z-index:2147483647;overflow:hidden;-webkit-tap-highlight-color:transparent;background:radial-gradient(circle at 22% 18%,rgba(232,0,28,.16),transparent 26%),radial-gradient(circle at 80% 14%,rgba(255,255,255,.85),transparent 24%),radial-gradient(circle at 50% 96%,rgba(160,60,50,.10),transparent 34%),linear-gradient(150deg,#fff7f4 0%,#f4e7e1 46%,#fdf6f3 100%)}' +
-        '#aiVoiceStage::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 46%,rgba(70,30,24,.10) 100%)}' +
-        '.ai-vs-head{position:relative;z-index:4;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;flex-shrink:0;width:min(960px,100%);margin:0 auto}' +
-        '.ai-vs-id{display:flex;align-items:center;gap:12px}' +
+        /* ── s108: MODO VOZ — desktop: sidebar derecho (~¼ ancho, alto total) · móvil: sheet redondeado · liquid glass ── */
+        '#aiVoiceStage{position:fixed;inset:0;display:none;z-index:2147483647;-webkit-tap-highlight-color:transparent;justify-content:flex-end;align-items:stretch;background:rgba(44,22,16,.30);backdrop-filter:blur(7px) saturate(115%);-webkit-backdrop-filter:blur(7px) saturate(115%)}' +
+        '.ai-vs-panel{position:relative;display:flex;flex-direction:column;width:clamp(370px,26vw,470px);height:100%;overflow:hidden;border-radius:30px 0 0 30px;border:1px solid rgba(255,255,255,.45);box-shadow:-34px 0 90px rgba(70,30,24,.26),inset 0 1px 0 rgba(255,255,255,.6);background:radial-gradient(circle at 50% 14%,rgba(232,0,28,.13),transparent 42%),linear-gradient(160deg,rgba(255,247,244,.86) 0%,rgba(244,231,225,.88) 48%,rgba(253,246,243,.90) 100%);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%)}' +
+        '.ai-vs-panel::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(115deg,rgba(255,255,255,.5),transparent 36%),radial-gradient(circle at 28% 0%,rgba(255,255,255,.55),transparent 24%);z-index:1}' +
+        '.ai-vs-panel::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(ellipse at center,transparent 48%,rgba(70,30,24,.10) 100%);z-index:1}' +
+        '.ai-vs-glass{position:absolute;border-radius:50%;pointer-events:none;filter:blur(1px);z-index:0}' +
+        '.ai-vs-glass.a{width:170px;height:170px;top:-46px;right:-46px;background:radial-gradient(circle at 36% 34%,rgba(255,255,255,.5),rgba(255,200,188,.15) 60%,transparent 72%);border:1px solid rgba(255,255,255,.35)}' +
+        '.ai-vs-glass.b{width:124px;height:124px;bottom:128px;left:-42px;background:radial-gradient(circle at 40% 36%,rgba(255,255,255,.42),rgba(232,0,28,.07) 58%,transparent 72%);border:1px solid rgba(255,255,255,.28)}' +
+        '.ai-vs-head{position:relative;z-index:4;display:flex;align-items:center;justify-content:space-between;padding:18px 20px;flex-shrink:0}' +
+        '.ai-vs-id{display:flex;align-items:center;gap:11px}' +
         '.ai-vs-spark{width:16px;height:16px;flex:0 0 auto;background:linear-gradient(135deg,#e8001c,#ff7a6a);clip-path:polygon(50% 0,62% 36%,100% 50%,62% 64%,50% 100%,38% 64%,0 50%,38% 36%);filter:drop-shadow(0 6px 12px rgba(232,0,28,.28))}' +
-        '.ai-vs-title{font-size:17px;font-weight:800;letter-spacing:-.03em;color:#2a1c17}' +
+        '.ai-vs-title{font-size:16px;font-weight:800;letter-spacing:-.03em;color:#2a1c17}' +
         '.ai-vs-sub{font-size:11px;font-weight:700;color:#59c58c;margin-top:1px}' +
         '.ai-vs-ctrls{display:flex;gap:10px}' +
-        '.ai-vs-x{width:38px;height:38px;border-radius:50%;border:0;background:rgba(83,52,38,.05);color:#9a8377;font-size:18px;cursor:pointer;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}' +
+        '.ai-vs-x{width:38px;height:38px;border-radius:50%;border:0;background:rgba(83,52,38,.06);color:#9a8377;font-size:18px;cursor:pointer;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}' +
         '.ai-vs-x:hover{background:rgba(232,0,28,.08);color:#e8001c}' +
-        '.ai-vs-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 24px;position:relative;z-index:3;min-height:0}' +
-        '.ai-vs-wave{position:absolute;left:0;right:0;top:42%;height:54px;opacity:.4;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}' +
+        '.ai-vs-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 22px;position:relative;z-index:3;min-height:0}' +
+        '.ai-vs-wave{position:absolute;left:0;right:0;top:42%;height:50px;opacity:.4;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}' +
         '.ai-vs-wave::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 10px,rgba(232,0,28,.26) 10px 12px,transparent 12px 22px);animation:aiVsWave 4.6s linear infinite}' +
-        '.ai-vs-wave::after{content:"";position:absolute;inset:14px 0;opacity:.5;background:repeating-linear-gradient(90deg,transparent 0 20px,rgba(232,0,28,.16) 20px 22px,transparent 22px 38px);animation:aiVsWave 7.6s linear reverse infinite}' +
+        '.ai-vs-wave::after{content:"";position:absolute;inset:13px 0;opacity:.5;background:repeating-linear-gradient(90deg,transparent 0 20px,rgba(232,0,28,.16) 20px 22px,transparent 22px 38px);animation:aiVsWave 7.6s linear reverse infinite}' +
         '@keyframes aiVsWave{to{transform:translateX(38px)}}' +
-        '.ai-vs-orb{width:clamp(128px,16vh,168px);height:clamp(128px,16vh,168px);border-radius:50%;position:relative;margin-bottom:20px;cursor:pointer;flex:0 0 auto;background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.96),transparent 8%),radial-gradient(circle at 50% 50%,#e8001c 0 26%,#ff8a72 47%,rgba(232,0,28,.14) 66%,transparent 68%);box-shadow:0 0 0 10px rgba(232,0,28,.06),0 0 0 26px rgba(232,0,28,.03),0 30px 90px rgba(222,40,40,.28);animation:aiVsBreathe 3.2s cubic-bezier(.2,.8,.2,1) infinite;z-index:2}' +
-        '.ai-vs-orb::before{content:"";position:absolute;inset:18px;border-radius:50%;background-image:radial-gradient(rgba(255,255,255,.42) 1px,transparent 1px);background-size:13px 13px;opacity:.44;animation:aiVsStars 12s linear infinite}' +
-        '.ai-vs-orb::after{content:"";position:absolute;inset:-16px;border-radius:50%;border:1px solid rgba(232,0,28,.14);animation:aiVsRing 3.2s cubic-bezier(.2,.8,.2,1) infinite}' +
+        '.ai-vs-orb{width:clamp(120px,15vh,160px);height:clamp(120px,15vh,160px);border-radius:50%;position:relative;margin-bottom:18px;cursor:pointer;flex:0 0 auto;background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.96),transparent 8%),radial-gradient(circle at 50% 50%,#e8001c 0 26%,#ff8a72 47%,rgba(232,0,28,.14) 66%,transparent 68%);box-shadow:0 0 0 9px rgba(232,0,28,.06),0 0 0 22px rgba(232,0,28,.03),0 26px 70px rgba(222,40,40,.28);animation:aiVsBreathe 3.2s cubic-bezier(.2,.8,.2,1) infinite;z-index:2}' +
+        '.ai-vs-orb::before{content:"";position:absolute;inset:16px;border-radius:50%;background-image:radial-gradient(rgba(255,255,255,.42) 1px,transparent 1px);background-size:12px 12px;opacity:.44;animation:aiVsStars 12s linear infinite}' +
+        '.ai-vs-orb::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(232,0,28,.14);animation:aiVsRing 3.2s cubic-bezier(.2,.8,.2,1) infinite}' +
         '@keyframes aiVsBreathe{0%,100%{transform:scale(.965)}50%{transform:scale(1.04)}}' +
         '@keyframes aiVsStars{to{transform:rotate(54deg)}}' +
         '@keyframes aiVsRing{0%,100%{opacity:.25;transform:scale(.96)}50%{opacity:.7;transform:scale(1.08)}}' +
@@ -41034,21 +41039,21 @@ document.addEventListener('click', function(e) {
         '#aiVoiceStage[data-state="speaking"] .ai-vs-orb{animation-duration:1.05s}' +
         '#aiVoiceStage[data-state="thinking"] .ai-vs-wave{opacity:.16}' +
         '.ai-vs-mode{color:#b06a58;text-transform:uppercase;letter-spacing:.22em;font-size:12px;font-weight:800}' +
-        '.ai-vs-spoken{width:min(560px,92%);margin:12px auto 0;font-family:ui-serif,Georgia,"Times New Roman",serif;color:#2a1c17;font-size:clamp(24px,3.2vh,33px);line-height:1.1;letter-spacing:-.04em;font-weight:400;text-wrap:balance}' +
-        '.ai-vs-hint{width:min(360px,90%);margin:14px auto 0;color:#8d766a;font-size:13px;line-height:1.55;font-weight:500}' +
-        '.ai-vs-dots{display:flex;justify-content:center;gap:11px;margin-top:22px}' +
+        '.ai-vs-spoken{width:min(440px,92%);margin:12px auto 0;font-family:ui-serif,Georgia,"Times New Roman",serif;color:#2a1c17;font-size:clamp(22px,2.8vh,30px);line-height:1.12;letter-spacing:-.04em;font-weight:400;text-wrap:balance}' +
+        '.ai-vs-hint{width:min(340px,92%);margin:13px auto 0;color:#8d766a;font-size:13px;line-height:1.5;font-weight:500}' +
+        '.ai-vs-dots{display:flex;justify-content:center;gap:11px;margin-top:20px}' +
         '.ai-vs-dots i{width:6px;height:6px;border-radius:50%;background:#e8cfc6;transition:.35s}' +
         '#aiVoiceStage[data-state="listening"] .ai-vs-dots i:nth-child(1),#aiVoiceStage[data-state="thinking"] .ai-vs-dots i:nth-child(2),#aiVoiceStage[data-state="speaking"] .ai-vs-dots i:nth-child(3){background:#e8001c;transform:scale(1.25)}' +
-        '.ai-vs-dock{position:relative;z-index:4;width:min(520px,calc(100% - 32px));margin:0 auto 22px;min-height:74px;display:grid;grid-template-columns:46px 1fr 54px;align-items:center;gap:10px;padding:11px 13px;border-radius:999px;background:rgba(255,253,250,.86);border:1px solid rgba(232,0,28,.16);box-shadow:0 0 0 10px rgba(232,0,28,.04),0 16px 44px rgba(71,39,25,.12);overflow:hidden;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}' +
-        '.ai-vs-dock::after{content:"";position:absolute;left:74px;right:84px;bottom:6px;height:20px;background:repeating-linear-gradient(90deg,rgba(232,0,28,.24) 0 2px,transparent 2px 8px);opacity:.7;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);animation:aiVsWave 2.6s linear infinite}' +
+        '.ai-vs-dock{position:relative;z-index:4;width:calc(100% - 28px);margin:0 auto 18px;min-height:70px;display:grid;grid-template-columns:44px 1fr 50px;align-items:center;gap:9px;padding:10px 12px;border-radius:999px;background:rgba(255,253,250,.78);border:1px solid rgba(255,255,255,.5);box-shadow:0 0 0 9px rgba(232,0,28,.04),0 16px 40px rgba(71,39,25,.14),inset 0 1px 0 rgba(255,255,255,.7);overflow:hidden;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}' +
+        '.ai-vs-dock::after{content:"";position:absolute;left:66px;right:74px;bottom:6px;height:18px;background:repeating-linear-gradient(90deg,rgba(232,0,28,.24) 0 2px,transparent 2px 8px);opacity:.7;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);animation:aiVsWave 2.6s linear infinite}' +
         '#aiVoiceStage[data-state="thinking"] .ai-vs-dock::after{opacity:.14}' +
-        '.ai-vs-kb{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(105,72,55,.1);background:rgba(255,255,255,.85);color:#917b6f;cursor:pointer;font-size:16px;z-index:1;-webkit-tap-highlight-color:transparent}' +
+        '.ai-vs-kb{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(105,72,55,.12);background:rgba(255,255,255,.8);color:#917b6f;cursor:pointer;font-size:15px;z-index:1;-webkit-tap-highlight-color:transparent}' +
         '.ai-vs-kb:hover{color:#e8001c;border-color:rgba(232,0,28,.35)}' +
-        '.ai-vs-docktext{text-align:center;color:#bf4b3a;font-size:15px;font-weight:700;letter-spacing:-.02em;z-index:1}' +
+        '.ai-vs-docktext{text-align:center;color:#bf4b3a;font-size:14px;font-weight:700;letter-spacing:-.02em;z-index:1}' +
         '.ai-vs-docktext small{display:block;margin-top:3px;color:#8d766b;font-size:11px;font-weight:500;letter-spacing:0}' +
-        '.ai-vs-stop{width:52px;height:52px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;background:linear-gradient(135deg,#e8001c,#ff6a49);box-shadow:0 14px 32px rgba(232,0,28,.28);z-index:1;-webkit-tap-highlight-color:transparent}' +
-        '.ai-vs-stop::before{content:"";width:15px;height:15px;border-radius:4px;background:#fff}' +
-        '@media (max-width:640px){.ai-vs-spoken{font-size:26px}.ai-vs-dock{width:calc(100% - 24px)}.ai-vs-head{padding:16px 18px}}';
+        '.ai-vs-stop{width:48px;height:48px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;background:linear-gradient(135deg,#e8001c,#ff6a49);box-shadow:0 12px 28px rgba(232,0,28,.28);z-index:1;-webkit-tap-highlight-color:transparent}' +
+        '.ai-vs-stop::before{content:"";width:14px;height:14px;border-radius:4px;background:#fff}' +
+        '@media (max-width:640px){#aiVoiceStage{justify-content:center;align-items:center;padding:9px;background:rgba(44,22,16,.22)}.ai-vs-panel{width:100%;height:100%;border-radius:26px;box-shadow:0 28px 80px rgba(70,30,24,.30),inset 0 1px 0 rgba(255,255,255,.6)}.ai-vs-spoken{font-size:25px}.ai-vs-head{padding:16px 18px}}';
       document.head.appendChild(_ms);
     }
 
@@ -41058,22 +41063,25 @@ document.addEventListener('click', function(e) {
       vs.id = 'aiVoiceStage';
       vs.setAttribute('data-state', 'listening');
       vs.innerHTML =
-        '<div class="ai-vs-head">' +
-          '<div class="ai-vs-id"><span class="ai-vs-spark"></span><div><div class="ai-vs-title">Asesor SSTT®</div><div class="ai-vs-sub">● Conversando por voz</div></div></div>' +
-          '<div class="ai-vs-ctrls"><button class="ai-vs-x" title="Cerrar" onclick="aiVsClose()">×</button></div>' +
-        '</div>' +
-        '<div class="ai-vs-body">' +
-          '<div class="ai-vs-wave"></div>' +
-          '<div class="ai-vs-orb" id="aiVsOrb" title="Tocar para interrumpir" onclick="aiVsOrbTap()"></div>' +
-          '<div class="ai-vs-mode" id="aiVsMode">Escuchando</div>' +
-          '<div class="ai-vs-spoken" id="aiVsSpoken">Te escucho.</div>' +
-          '<div class="ai-vs-hint" id="aiVsHint">Habla con naturalidad — puedes interrumpirme cuando quieras.</div>' +
-          '<div class="ai-vs-dots"><i></i><i></i><i></i></div>' +
-        '</div>' +
-        '<div class="ai-vs-dock">' +
-          '<button class="ai-vs-kb" title="Escribir" onclick="aiVsKb()">⌨</button>' +
-          '<div class="ai-vs-docktext" id="aiVsDock">Escuchando…<small>Habla ahora.</small></div>' +
-          '<button class="ai-vs-stop" title="Terminar conversación" onclick="aiVsDockStop()"></button>' +
+        '<div class="ai-vs-panel">' +
+          '<div class="ai-vs-glass a"></div><div class="ai-vs-glass b"></div>' +
+          '<div class="ai-vs-head">' +
+            '<div class="ai-vs-id"><span class="ai-vs-spark"></span><div><div class="ai-vs-title">Asesor SSTT®</div><div class="ai-vs-sub">● Conversando por voz</div></div></div>' +
+            '<div class="ai-vs-ctrls"><button class="ai-vs-x" title="Cerrar" onclick="aiVsClose()">×</button></div>' +
+          '</div>' +
+          '<div class="ai-vs-body">' +
+            '<div class="ai-vs-wave"></div>' +
+            '<div class="ai-vs-orb" id="aiVsOrb" title="Tocar para interrumpir" onclick="aiVsOrbTap()"></div>' +
+            '<div class="ai-vs-mode" id="aiVsMode">Escuchando</div>' +
+            '<div class="ai-vs-spoken" id="aiVsSpoken">Te escucho.</div>' +
+            '<div class="ai-vs-hint" id="aiVsHint">Habla con naturalidad — puedes interrumpirme cuando quieras.</div>' +
+            '<div class="ai-vs-dots"><i></i><i></i><i></i></div>' +
+          '</div>' +
+          '<div class="ai-vs-dock">' +
+            '<button class="ai-vs-kb" title="Escribir" onclick="aiVsKb()">⌨</button>' +
+            '<div class="ai-vs-docktext" id="aiVsDock">Escuchando…<small>Habla ahora.</small></div>' +
+            '<button class="ai-vs-stop" title="Terminar conversación" onclick="aiVsDockStop()"></button>' +
+          '</div>' +
         '</div>';
       document.body.appendChild(vs);
     }
