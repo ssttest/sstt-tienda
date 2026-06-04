@@ -40087,25 +40087,13 @@ var aiLastProds = [];   // últimos productos sugeridos
 var aiSpeaking = false; // TTS activo
 var aiAutoMic = false;  // modo voz conversacional continuo
 
-// s107: ════════ Motor TTS unificado (Asesor IA + orb) ════════
-// Una sola voz para todo el sitio: ElevenLabs vía Worker /tts, con fallback a la voz
-// del navegador. Cambia SSTT_TTS.mode a 'browser' para desactivar ElevenLabs en TODO el sitio.
+// s108: ════════ Motor de voz ÚNICO: ElevenLabs (sin voz del navegador) ════════
+// Toda la voz del sitio sale por ElevenLabs vía Worker /tts. NO hay fallback a la voz de
+// Chrome/Windows/Mac. Si /tts falla, se REINTENTA; si aun así falla, esa frase queda en
+// silencio (la conversación NO se corta), pero nunca se usa la voz del navegador.
 window.SSTT_TTS = (function(){
-  var synth = window.speechSynthesis;
-  // s108: estado del "circuit breaker" para evitar el flip-flop Eleven<->navegador.
-  //  _cooldownUntil: hasta este timestamp se usa SOLO navegador (no se toca /tts).
-  //  _ttsTimeoutMs : si /tts no responde a tiempo, se aborta y cae a navegador.
-  //  _cache        : Map(texto -> Blob) para frases repetidas (wizard) — ahorra créditos y latencia.
-  var T = { mode:'eleven', _audio:null, _speaking:false, voice:null,
-            _cooldownUntil:0, _cooldownMs:30000, _ttsTimeoutMs:6000, _cache:new Map(), _cacheMax:24 };
-  function pickVoice(){
-    if(!synth) return;
-    var vs = synth.getVoices()||[];
-    T.voice = vs.find(function(v){return /es[-_]CL/i.test(v.lang);})
-           || vs.find(function(v){return /es[-_](419|MX|US|AR)/i.test(v.lang);})
-           || vs.find(function(v){return /^es/i.test(v.lang);}) || null;
-  }
-  if(synth){ pickVoice(); try{ synth.onvoiceschanged = pickVoice; }catch(e){} }
+  var T = { mode:'eleven', _audio:null, _speaking:false,
+            _ttsTimeoutMs:7000, _retries:2, _retryMs:500, _cache:new Map(), _cacheMax:24 };
   function clean(t){
     return String(t||'')
       .replace(/<[^>]+>/g,' ')
@@ -40115,56 +40103,49 @@ window.SSTT_TTS = (function(){
       .replace(/^#{1,3}\s/gm,'').replace(/https?:\/\/\S+/g,'')
       .replace(/[•·]/g,', ').replace(/\s+/g,' ').trim().slice(0,700);
   }
-  function browser(txt, done){
-    if(!synth){ T._speaking=false; if(done)done(); return; }
-    try{ synth.cancel(); }catch(e){}
-    var u=new SpeechSynthesisUtterance(txt);
-    u.lang='es-CL'; if(T.voice) u.voice=T.voice; u.rate=1.0; u.pitch=1.0;
-    u.onend=function(){ T._speaking=false; if(done)done(); };
-    u.onerror=function(){ T._speaking=false; if(done)done(); };
-    T._speaking=true; try{ synth.resume(); }catch(e){}
-    synth.speak(u);
-  }
-  // s108: helpers del circuit breaker
   function cachePut(txt, blob){
     try{ if(T._cache.size>=T._cacheMax){ var k=T._cache.keys().next().value; T._cache.delete(k); } T._cache.set(txt, blob); }catch(e){}
   }
-  function failToBrowser(txt, done){
-    // una falla de ElevenLabs fija el navegador por el cooldown -> evita alternar frase a frase
-    T._cooldownUntil = Date.now() + T._cooldownMs;
-    browser(txt, done);
-  }
-  function playBlob(blob, txt, done){
+  function finish(done){ T._speaking=false; if(done) done(); } // termina SIN voz de navegador; el loop continúa
+  function playBlob(blob, retry, done){
+    if(!T._speaking) return;                              // cancelado mientras se resolvía
     try{
       var url=URL.createObjectURL(blob);
       var a=new Audio(url); T._audio=a;
       a.onended=function(){ try{URL.revokeObjectURL(url);}catch(_){} T._speaking=false; if(done)done(); };
-      a.onerror=function(){ try{URL.revokeObjectURL(url);}catch(_){} failToBrowser(txt,done); };
-      a.play().catch(function(){ try{URL.revokeObjectURL(url);}catch(_){} failToBrowser(txt,done); });
-    }catch(e){ failToBrowser(txt,done); }
+      a.onerror=function(){ try{URL.revokeObjectURL(url);}catch(_){} retry(); };
+      a.play().catch(function(){ try{URL.revokeObjectURL(url);}catch(_){} retry(); });
+    }catch(e){ retry(); }
   }
   T.speak = function(text, done){
     var txt=clean(text);
-    if(!txt){ T._speaking=false; if(done)done(); return; }
+    if(!txt){ finish(done); return; }
     T.cancel(); T._speaking=true;
-    var useEleven = (T.mode==='eleven') && (typeof PROXY_URL!=='undefined') && (Date.now() >= T._cooldownUntil);
-    if(!useEleven){ browser(txt, done); return; }            // navegador estable durante el cooldown
-    if(T._cache.has(txt)){ playBlob(T._cache.get(txt), txt, done); return; } // frase repetida (wizard)
-    var ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
-    var to = setTimeout(function(){ try{ if(ctrl) ctrl.abort(); }catch(e){} }, T._ttsTimeoutMs);
-    fetch(PROXY_URL+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:txt}), signal: ctrl?ctrl.signal:undefined})
-      .then(function(res){ if(!res.ok) throw new Error('tts '+res.status); return res.blob(); })
-      .then(function(blob){ clearTimeout(to); cachePut(txt, blob); playBlob(blob, txt, done); })
-      .catch(function(){ clearTimeout(to); failToBrowser(txt, done); });
+    if(T.mode!=='eleven' || typeof PROXY_URL==='undefined'){ finish(done); return; } // sin ElevenLabs => silencio (jamás navegador)
+    var attempt=0;
+    function onFail(){
+      attempt++;
+      if(T._speaking && attempt<=T._retries){ setTimeout(tryOnce, T._retryMs*attempt); } // reintenta ElevenLabs
+      else { finish(done); }                                                            // silencio; la conversación sigue
+    }
+    function tryOnce(){
+      if(!T._speaking) return;                            // cancelado
+      if(T._cache.has(txt)){ playBlob(T._cache.get(txt), onFail, done); return; }
+      var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
+      var to=setTimeout(function(){ try{ if(ctrl) ctrl.abort(); }catch(e){} }, T._ttsTimeoutMs);
+      fetch(PROXY_URL+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:txt}), signal:ctrl?ctrl.signal:undefined})
+        .then(function(res){ if(!res.ok) throw new Error('tts '+res.status); return res.blob(); })
+        .then(function(blob){ clearTimeout(to); if(!T._speaking) return; cachePut(txt,blob); playBlob(blob, onFail, done); })
+        .catch(function(){ clearTimeout(to); onFail(); });
+    }
+    tryOnce();
   };
   T.cancel = function(){
     T._speaking=false;
-    try{ if(synth) synth.cancel(); }catch(e){}
     try{ if(T._audio){ T._audio.pause(); T._audio.src=''; T._audio=null; } }catch(e){}
   };
   T.isSpeaking = function(){
     if(T._audio && !T._audio.paused && !T._audio.ended) return true;
-    if(synth && synth.speaking) return true;
     return T._speaking;
   };
   return T;
@@ -40576,6 +40557,8 @@ function aiOpenCart() {
 // ── Reconocimiento de voz ──────────────────────────────────────
 // Instancia única de SpeechRecognition — el browser solo pide permiso una vez
 var aiSR = null;
+var aiSRGotResult = false; // s108: ¿la última escucha produjo texto? (para el loop manos libres)
+var aiSRArming = false;     // s108: hay un start() de STT en curso (evita churn del re-arm)
 function aiInitSR() {
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SR) return null;
@@ -40587,6 +40570,8 @@ function aiInitSR() {
   aiSR.maxAlternatives = 1;
   aiSR.onstart = function() {
     aiRecording = true;
+    aiSRGotResult = false; // s108
+    aiSRArming = false;    // s108: ya arrancó
     aiStopSpeech();
     // Mostrar sonograma en FAB y panel
     var star = document.getElementById('aiFabStar');
@@ -40604,16 +40589,38 @@ function aiInitSR() {
     if (!aiPanelOpen) aiToggle();
   };
   aiSR.onresult = function(e) {
+    aiSRGotResult = true; // s108
     var t = e.results[0][0].transcript;
     document.getElementById('aiInp').value = t;
     aiMicStop();
     aiSend();
   };
   aiSR.onerror = function(e) {
-    if (e.error !== 'aborted') aiAddMsg('bot', '⚠️ No te escuché bien. Intenta de nuevo.');
+    // s108: permiso denegado → terminar el modo voz (no tiene sentido reintentar)
+    if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+      aiAutoMic = false;
+      aiMicStop();
+      try { aiVoiceUI('off'); } catch(_){}
+      if (typeof showToast === 'function') showToast('🎤 Permiso de micrófono denegado');
+      return;
+    }
+    // no-speech / audio-capture / network / aborted: en modo voz NO molestamos con mensaje;
+    // el onend re-arma la escucha (loop manos libres). Fuera de modo voz, avisamos.
+    if (!aiAutoMic && e.error !== 'aborted') aiAddMsg('bot', '⚠️ No te escuché bien. Intenta de nuevo.');
     aiMicStop();
   };
-  aiSR.onend = function() { aiMicStop(); };
+  aiSR.onend = function() {
+    aiMicStop();
+    // s108: si seguimos en conversación por voz y la escucha terminó SIN texto (silencio),
+    // volvemos a escuchar — la sesión no se sale sola, solo se cierra a voluntad.
+    if (aiAutoMic && aiPanelOpen && !aiSRGotResult && !aiRecording && !aiSRArming &&
+        !(window.SSTT_TTS && window.SSTT_TTS.isSpeaking())) {
+      setTimeout(function(){
+        if (aiAutoMic && aiPanelOpen && !aiRecording && !aiSRArming &&
+            !(window.SSTT_TTS && window.SSTT_TTS.isSpeaking())) aiMic();
+      }, 500);
+    }
+  };
   return aiSR;
 }
 
@@ -40625,14 +40632,15 @@ function aiMic() {
     aiMicStop();
     return;
   }
+  aiSRArming = true; // s108: evita que el onend del abort dispare un re-arm en paralelo
   try {
     // Reiniciar estado sin destruir la instancia (mantiene el permiso)
     sr.abort();
     setTimeout(function() {
-      try { sr.start(); } catch(e) { aiAddMsg('bot', '⚠️ Error al iniciar micrófono: ' + e.message); }
+      try { sr.start(); } catch(e) { aiSRArming = false; aiAddMsg('bot', '⚠️ Error al iniciar micrófono: ' + e.message); }
     }, 100);
   } catch(e) {
-    try { sr.start(); } catch(e2) { aiAddMsg('bot', '⚠️ Error de micrófono: ' + e2.message); }
+    try { sr.start(); } catch(e2) { aiSRArming = false; aiAddMsg('bot', '⚠️ Error de micrófono: ' + e2.message); }
   }
 }
 
@@ -40701,6 +40709,7 @@ function aiVoiceTap() {
   // off → iniciar conversación manos-libres, mostrar stage y escuchar de inmediato
   if (!aiPanelOpen) aiToggle();
   aiAutoMic = true;
+  aiVoiceOwner = null; // s108: el orb toma el stage
   if (typeof showToast === 'function') showToast('🎤 Conversación por voz — toca ■ para terminar');
   aiVoiceUI('listening');            // s108: mostrar el stage elegante
   aiMic();                           // arranca la escucha (control crudo)
@@ -40770,6 +40779,18 @@ function aiVoiceOrbTap(){
   if (aiAutoMic) aiMic();
 }
 window.aiVoiceOrbTap = aiVoiceOrbTap;
+
+// s108: DESPACHADOR del stage de voz — el mismo overlay cinematográfico lo usan el orb y el
+// Asesor IA. aiVoiceOwner define quién recibe los botones (■ stop, ⌨ teclado, ×, tocar orb).
+// null = orb (por defecto). El Asesor IA lo setea a sus handlers mientras su sesión está activa.
+var aiVoiceOwner = null;
+function _aiVoiceOrbOwner(){ return { stop:aiVoiceTap, kb:aiVoiceEndToText, close:aiVoiceCloseAll, orb:aiVoiceOrbTap }; }
+function aiVsDockStop(){ try{ (aiVoiceOwner||_aiVoiceOrbOwner()).stop(); }catch(e){} }
+function aiVsKb(){       try{ (aiVoiceOwner||_aiVoiceOrbOwner()).kb();   }catch(e){} }
+function aiVsClose(){    try{ (aiVoiceOwner||_aiVoiceOrbOwner()).close();}catch(e){} }
+function aiVsOrbTap(){   try{ (aiVoiceOwner||_aiVoiceOrbOwner()).orb();  }catch(e){} }
+window.aiVsDockStop=aiVsDockStop; window.aiVsKb=aiVsKb; window.aiVsClose=aiVsClose; window.aiVsOrbTap=aiVsOrbTap;
+window.aiVoiceSetOwner = function(o){ aiVoiceOwner = o; };
 
 // s108: shim de compatibilidad — antes era el 🎙️ del header (ya eliminado). Delega al control único.
 function aiToggleVoiceMode() { aiVoiceTap(); }
@@ -41039,20 +41060,20 @@ document.addEventListener('click', function(e) {
       vs.innerHTML =
         '<div class="ai-vs-head">' +
           '<div class="ai-vs-id"><span class="ai-vs-spark"></span><div><div class="ai-vs-title">Asesor SSTT®</div><div class="ai-vs-sub">● Conversando por voz</div></div></div>' +
-          '<div class="ai-vs-ctrls"><button class="ai-vs-x" title="Cerrar" onclick="aiVoiceCloseAll()">×</button></div>' +
+          '<div class="ai-vs-ctrls"><button class="ai-vs-x" title="Cerrar" onclick="aiVsClose()">×</button></div>' +
         '</div>' +
         '<div class="ai-vs-body">' +
           '<div class="ai-vs-wave"></div>' +
-          '<div class="ai-vs-orb" id="aiVsOrb" title="Tocar para interrumpir" onclick="aiVoiceOrbTap()"></div>' +
+          '<div class="ai-vs-orb" id="aiVsOrb" title="Tocar para interrumpir" onclick="aiVsOrbTap()"></div>' +
           '<div class="ai-vs-mode" id="aiVsMode">Escuchando</div>' +
           '<div class="ai-vs-spoken" id="aiVsSpoken">Te escucho.</div>' +
           '<div class="ai-vs-hint" id="aiVsHint">Habla con naturalidad — puedes interrumpirme cuando quieras.</div>' +
           '<div class="ai-vs-dots"><i></i><i></i><i></i></div>' +
         '</div>' +
         '<div class="ai-vs-dock">' +
-          '<button class="ai-vs-kb" title="Escribir" onclick="aiVoiceEndToText()">⌨</button>' +
+          '<button class="ai-vs-kb" title="Escribir" onclick="aiVsKb()">⌨</button>' +
           '<div class="ai-vs-docktext" id="aiVsDock">Escuchando…<small>Habla ahora.</small></div>' +
-          '<button class="ai-vs-stop" title="Terminar conversación" onclick="aiVoiceTap()"></button>' +
+          '<button class="ai-vs-stop" title="Terminar conversación" onclick="aiVsDockStop()"></button>' +
         '</div>';
       document.body.appendChild(vs);
     }
@@ -41627,11 +41648,11 @@ window.mktSubmitInterest = function() {
 })();
 // s107: ════════ fin Marketplace helpers ════════
 
-// s107: ════════ Modo Conversación por voz — Asesor IA ════════
-// STT (Web Speech, es-CL) -> sendAIMessage() (Claude + tu catálogo/KB vía Worker) -> TTS.
-// TTS por defecto = voz del navegador (speechSynthesis, gratis). Para voz natural tipo
-// ElevenLabs: poner V.ttsMode='eleven' y exponer POST /tts en el Worker (devuelve audio/mpeg).
-// Interrupción: tocar el pill mientras habla. Loop continuo hasta apagar el 🎤.
+// s108: ════════ Modo Conversación por voz — Asesor IA (stage cinematográfico) ════════
+// STT (Web Speech, es-CL) -> sendAIMessage() (Claude + catálogo/KB/tools vía Worker) -> ElevenLabs.
+// Voz ÚNICA: ElevenLabs vía SSTT_TTS (sin voz de navegador). UI = el MISMO stage cinematográfico
+// del orb (aiVoiceUI), con subtítulos en serif. Interrumpe tocando el orb. Loop continuo:
+// hablas -> escucha; callas -> piensa (en pantalla) -> responde por voz con subtítulos -> reanuda.
 (function(){
   var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   var synth = window.speechSynthesis;
@@ -41666,24 +41687,14 @@ window.mktSubmitInterest = function() {
 
   function setStatus(s){
     V.state = s;
-    var pill = ensurePill();
-    var labels = {
-      listening:'<span style="width:9px;height:9px;border-radius:50%;background:#22c55e;display:inline-block;animation:voicePulse 1s infinite"></span> Escuchando… <span style="opacity:.7;font-weight:600">(toca para terminar)</span>',
-      thinking :'<span>💭</span> Pensando…',
-      speaking :'<span>🔊</span> Hablando… <span style="opacity:.7;font-weight:600">(toca para interrumpir)</span>',
-      idle:''
-    };
-    pill.innerHTML = labels[s] || '';
-    pill.style.display = (s && s!=='idle') ? 'flex' : 'none';
+    // s108: el Asesor IA usa el MISMO stage cinematográfico del orb (no el pill)
+    var map = { listening:'listening', thinking:'thinking', speaking:'speaking', idle:'off' };
+    try { if (window.aiVoiceUI) window.aiVoiceUI(map[s] || 'off'); } catch(e){}
+    var pill = document.getElementById('voicePill'); if (pill) pill.style.display = 'none'; // pill retirado
     var btn = document.getElementById('voiceBtn');
     if(btn){
       if(V.active){ btn.style.background='#E8001C'; btn.style.color='#fff'; btn.style.borderColor='#E8001C'; }
       else { btn.style.background=''; btn.style.color=''; btn.style.borderColor=''; }
-    }
-    if(!document.getElementById('voicePulseKf')){
-      var st=document.createElement('style'); st.id='voicePulseKf';
-      st.textContent='@keyframes voicePulse{0%,100%{opacity:1}50%{opacity:.3}}';
-      document.head.appendChild(st);
     }
   }
 
@@ -41717,6 +41728,8 @@ window.mktSubmitInterest = function() {
       }
       var inp=document.getElementById('chatInput');
       if(inp){ inp.value=(fin||interim); if(typeof autoResizeTA==='function'){ try{autoResizeTA(inp);}catch(_){} } }
+      // s108: subtítulo en vivo en el stage mientras hablas
+      try { if(window.aiVoiceUI && (fin||interim)) window.aiVoiceUI('listening', (fin||interim)); } catch(_){}
       if(fin.trim()) finalTxt=fin.trim();
     };
     r.onerror = function(ev){
@@ -41746,6 +41759,8 @@ window.mktSubmitInterest = function() {
     try{ if(V._audio){ V._audio.pause(); V._audio.src=''; V._audio=null; } }catch(e){}
   };
 
+  // s108: CÓDIGO MUERTO — voz del navegador ELIMINADA en todo el sitio. V.speak delega en
+  // SSTT_TTS (ElevenLabs únicamente). Se deja como tombstone; no se invoca desde ningún lado.
   function browserSpeak(clean, done){
     if(!synth){ V.speaking=false; if(done)done(); return; }
     try{ synth.cancel(); }catch(e){}
@@ -41762,7 +41777,8 @@ window.mktSubmitInterest = function() {
     var c=cleanForTTS(text);
     if(!c){ V.speaking=false; if(done)done(); return; }
     V.speaking=true; setStatus('speaking'); V._guard=Date.now()+700;
-    window.SSTT_TTS.speak(text, function(){ V.speaking=false; if(done)done(); }); // s107: motor TTS unificado
+    try { if(window.aiVoiceUI) window.aiVoiceUI('speaking', c); } catch(e){} // s108: subtítulos de la respuesta
+    window.SSTT_TTS.speak(text, function(){ V.speaking=false; if(done)done(); }); // ElevenLabs únicamente
   };
 
   V.onAIResponse = function(text){
@@ -41784,7 +41800,15 @@ window.mktSubmitInterest = function() {
     }
     if(V.active){ V.stop(); return; }
     V.active=true;
-    if(typeof showToast==='function') showToast('🎙️ Modo conversación activado — habla cuando quieras');
+    // s108: el Asesor IA toma el stage cinematográfico; sus botones (■/⌨/×/orb) van a estos handlers
+    try { if(window.aiVoiceSetOwner) window.aiVoiceSetOwner({
+      stop:  function(){ V.stop(); },
+      kb:    function(){ V.stop(); var i=document.getElementById('chatInput'); if(i){ try{i.focus();}catch(e){} } },
+      close: function(){ V.stop(); },
+      orb:   function(){ if(V.speaking) V.interrupt(); }
+    }); } catch(e){}
+    try { if(window.aiVoiceUI) window.aiVoiceUI('listening'); } catch(e){}
+    if(typeof showToast==='function') showToast('🎙️ Conversación por voz — toca ■ para terminar');
     try{ if(synth){ synth.resume(); } }catch(e){}  // desbloquear audio con el gesto del usuario
     V.startListen();
   };
@@ -41794,8 +41818,9 @@ window.mktSubmitInterest = function() {
     clearTimeout(V._t);
     try{ if(V.rec) V.rec.abort(); }catch(e){}
     V.stopSpeak();
-    setStatus('idle');
-    if(typeof showToast==='function') showToast('🎙️ Modo conversación desactivado');
+    setStatus('idle');                       // s108: → aiVoiceUI('off') oculta el stage
+    try { if(window.aiVoiceSetOwner) window.aiVoiceSetOwner(null); } catch(e){} // libera el stage (vuelve al orb por defecto)
+    if(typeof showToast==='function') showToast('🎙️ Conversación por voz desactivada');
   };
 
   window.VOICE = V;
