@@ -18406,7 +18406,7 @@ label{ color: #24405f; }
 }
 .pcard-price{
   border-top: 1px solid rgba(221,229,241,.72);
-  margin-top: 10px;
+  margin-top: auto; /* s109: era 10px — roto, desalineaba precios. auto los ancla al fondo de la card */
   padding-top: 10px !important;
 }
 .price-neto,.price-sub{ color: #69778c !important; }
@@ -40461,8 +40461,13 @@ function aiSend() {
     '</div>';
 
     aiAddMsg('bot', respText + actionBtns, aiLastProds);
-    aiSpeak(respText);
-    aiVoiceAfterSpeak(respText); // s108: en modo voz, sigue el loop manos libres también en respuestas locales
+    // s109: en modo voz, resumen corto + "revísalos en el chat"
+    var speakLocal = respText;
+    if (aiAutoMic) {
+      speakLocal = 'Encontré ' + localResult.totalFound + ' opciones. Te muestro las mejores en el chat. Revísalas y me dices cuál te interesa.';
+    }
+    aiSpeak(speakLocal);
+    aiVoiceAfterSpeak(speakLocal); // s108: en modo voz, sigue el loop manos libres también en respuestas locales
 
     // Filtrar catálogo visible también
     if (localResult.params && localResult.params.cat) {
@@ -40577,8 +40582,16 @@ function aiSend() {
 
     aiAddMsg('bot', cleanHtml, prods);
 
-    // Hablar la respuesta (versión corta)
+    // s109: Hablar la respuesta — en modo voz con productos, decir resumen corto y dirigir al chat
     var speakText = raw.replace(/PRODUCTOS:\s*\[[^\]]+\]/g,'').replace(/FILTRAR:[^\n\r]+/g,'').trim();
+    if (aiAutoMic && prods.length > 0) {
+      // Extraer la primera oración del response como contexto (antes del primer punto o salto)
+      var firstSentence = speakText.replace(/<[^>]+>/g,'').split(/[.\n]/)[0].trim();
+      if (firstSentence.length > 120) firstSentence = firstSentence.slice(0,120);
+      speakText = (firstSentence || 'Encontré opciones para ti') +
+        '. Te muestro ' + prods.length + (prods.length === 1 ? ' modelo' : ' modelos') +
+        ' en el chat. Revísalos y me cuentas cuál te interesa.';
+    }
     aiSpeak(speakText);
 
     // s108: modo voz → stage "hablando" y, al terminar el TTS, vuelve a escuchar (loop manos libres)
