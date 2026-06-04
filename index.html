@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Jueves 04 de Junio del 2026 · s106 -->
+<!-- SSTT Tienda · Generado: Jueves 04 de Junio del 2026 · s107 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -20697,6 +20697,16 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
     </div>
   </div>
 
+  <!-- s107: Productos Marketplace (demo) -->
+  <div style="margin-bottom:18px">
+    <h3 style="font-size:15px;font-weight:800;color:var(--black);margin:0 0 6px;display:flex;align-items:center;gap:8px">
+      <span>Productos en el Marketplace</span>
+      <span style="font-size:11px;font-weight:600;color:var(--g3);background:var(--g6);border-radius:6px;padding:2px 8px">Demo · 50 artículos</span>
+    </h3>
+    <p style="font-size:12px;color:var(--g3);margin:0 0 6px">Artículos complementarios que no compiten con Dahua: energía, racks, redes, almacenamiento, soportes, herramientas, eléctrico y señalética. Cada uno con su vendedor verificado.</p>
+    <div id="mktProductsGrid"></div>
+  </div>
+
   <!-- Cómo funciona -->
   <div>
     <h3 style="font-size:15px;font-weight:800;color:var(--black);margin:0 0 14px">¿Cómo funciona?</h3>
@@ -23677,6 +23687,57 @@ const PRODUCTS = [
   {id:1077,codigo:'XVR5104HS-4KL-I3',nombre:'XVR Dahua 4K WizSense  4CH HDCVI +4IP 1HDD IVS 1U H.265+',cat:'nvr',pneto:92353,piva:17547,ptotal:109900,stock:'normal',nuevo:0,peso:1.5,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_XVR5104HS-4KL-I3.webp'},
   {id:1078,codigo:'XVR5108HS-4KL-I3',nombre:'XVR Dahua 4K WizSense 8CH HDCVI +8IP 1HDD IVS 1U H.265+',cat:'nvr',pneto:146975,piva:27925,ptotal:174900,stock:'normal',nuevo:0,peso:1.5,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_XVR5108HS-4KL-I3.webp'},
   {id:1079,codigo:'XVR7108H-4K-I3',nombre:'XVR Dahua 4K WizSense 8CH HDCVI +8IP 1HDD IVS 1U H.265+',cat:'nvr',pneto:235210,piva:44690,ptotal:279900,stock:'normal',nuevo:0,peso:1.5,img:'https://camaras-de-seguridad-dahua.sstt.cl/thumb/thumb_XVR7108H-4K-I3.webp'},
+  // s107: === Marketplace demo (50 SKUs, no compiten con Dahua) ===
+  {id:1080,codigo:'APC-BX1500M-LM',nombre:'UPS APC Back-UPS 1500VA 900W 10 tomas con regulador AVR',cat:'mkt-energia',pneto:109160,piva:20740,ptotal:129900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'APC',sellerId:'seller-005'},
+  {id:1081,codigo:'FORZA-NT-1011',nombre:'UPS Forza NT-1011 1000VA 600W línea interactiva',cat:'mkt-energia',pneto:62941,piva:11959,ptotal:74900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Forza',sellerId:'seller-005'},
+  {id:1082,codigo:'VERTIV-PSA1500',nombre:'UPS Vertiv Liebert PSA5 1500VA 900W interactiva',cat:'mkt-energia',pneto:134370,piva:25530,ptotal:159900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Vertiv',sellerId:'seller-005'},
+  {id:1083,codigo:'TRIPP-SMART1000',nombre:'UPS Tripp-Lite SmartPro 1000VA 500W interactiva torre',cat:'mkt-energia',pneto:121765,piva:23135,ptotal:144900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Tripp-Lite',sellerId:'seller-005'},
+  {id:1084,codigo:'ENERSAFE-ENR1500',nombre:'UPS Enersafe ENR-1500 1500VA interactiva (marca chilena)',cat:'mkt-energia',pneto:100756,piva:19144,ptotal:119900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Enersafe',sellerId:'seller-005'},
+  {id:1085,codigo:'BAT-AGM-12V9',nombre:'Batería sellada AGM 12V 9Ah ciclo profundo (CCTV/UPS/alarma)',cat:'mkt-energia',pneto:15882,piva:3018,ptotal:18900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Ritar',sellerId:'seller-005'},
+  {id:1086,codigo:'BAT-CP-12V18',nombre:'Batería ciclo profundo 12V 18Ah AGM para respaldo extendido',cat:'mkt-energia',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'CSB',sellerId:'seller-005'},
+  {id:1087,codigo:'SOLAR-KIT-CAM30',nombre:'Kit solar para cámara: panel 30W + controlador + batería litio 12V',cat:'mkt-energia',pneto:151176,piva:28724,ptotal:179900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'GreenCell',sellerId:'seller-005'},
+  {id:1088,codigo:'AVR-1200-REG',nombre:'Regulador de voltaje 1200VA 4 tomas protección sobretensión',cat:'mkt-energia',pneto:29328,piva:5572,ptotal:34900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Forza',sellerId:'seller-005'},
+  {id:1089,codigo:'RACK-MURAL-9U',nombre:'Rack mural 19" 9U fondo 450mm puerta vidrio templado',cat:'mkt-rack',pneto:75546,piva:14354,ptotal:89900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'BeauCoup',sellerId:'seller-006'},
+  {id:1090,codigo:'RACK-PIE-27U',nombre:'Rack de pie 19" 27U fondo 600mm con puerta perforada',cat:'mkt-rack',pneto:201597,piva:38303,ptotal:239900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'BeauCoup',sellerId:'seller-006'},
+  {id:1091,codigo:'GAB-EXT-12U-IP55',nombre:'Gabinete exterior 12U IP55 metálico con chapa y ventilación',cat:'mkt-rack',pneto:277227,piva:52673,ptotal:329900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'BeauCoup',sellerId:'seller-006'},
+  {id:1092,codigo:'PDU-8T-PROT',nombre:'PDU rack 19" 8 tomas con protección sobretensión e interruptor',cat:'mkt-rack',pneto:25126,piva:4774,ptotal:29900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'RackZone',sellerId:'seller-006'},
+  {id:1093,codigo:'ORG-CABLE-1U',nombre:'Organizador de cables 19" 1U con anillas y bandeja fija',cat:'mkt-rack',pneto:12521,piva:2379,ptotal:14900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'RackZone',sellerId:'seller-006'},
+  {id:1094,codigo:'FAN-RACK-2X',nombre:'Kit 2 ventiladores de rack con termostato 220V',cat:'mkt-rack',pneto:20924,piva:3976,ptotal:24900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'RackZone',sellerId:'seller-006'},
+  {id:1095,codigo:'UBNT-LBE-5AC-G2',nombre:'Ubiquiti airMAX LiteBeam 5AC Gen2 enlace PtP 5GHz 23dBi',cat:'mkt-red',pneto:54538,piva:10362,ptotal:64900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Ubiquiti',sellerId:'seller-007'},
+  {id:1096,codigo:'MKT-HAPAC2',nombre:'MikroTik hAP ac² router dual-band RouterOS 5xGbE',cat:'mkt-red',pneto:58739,piva:11161,ptotal:69900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'MikroTik',sellerId:'seller-007'},
+  {id:1097,codigo:'MIMOSA-C5X',nombre:'Mimosa C5x enlace PtP/PtMP 5GHz modular IP67',cat:'mkt-red',pneto:109160,piva:20740,ptotal:129900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Mimosa',sellerId:'seller-007'},
+  {id:1098,codigo:'TPL-CPE610',nombre:'TP-Link CPE610 enlace exterior 5GHz 23dBi 300Mbps',cat:'mkt-red',pneto:29328,piva:5572,ptotal:34900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'TP-Link',sellerId:'seller-007'},
+  {id:1099,codigo:'MC-FIBRA-GB',nombre:'Conversor de medios fibra a Gigabit Ethernet (par) SC monomodo',cat:'mkt-red',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Nexxt',sellerId:'seller-007'},
+  {id:1100,codigo:'PP-CAT6-24',nombre:'Patch panel 24 puertos Cat6 19" 1U con peine de cableado',cat:'mkt-red',pneto:37731,piva:7169,ptotal:44900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Panduit',sellerId:'seller-007'},
+  {id:1101,codigo:'SFP-1G-LC',nombre:'Módulo SFP 1.25G monomodo LC 20km para switch gestionado',cat:'mkt-red',pneto:14202,piva:2698,ptotal:16900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Nexxt',sellerId:'seller-007'},
+  {id:1102,codigo:'WD42PURZ',nombre:'Disco WD Purple 4TB 3.5" SATA videovigilancia 24/7',cat:'mkt-almacenamiento',pneto:67143,piva:12757,ptotal:79900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Western Digital',sellerId:'seller-008'},
+  {id:1103,codigo:'WD84PURZ',nombre:'Disco WD Purple 8TB 3.5" SATA videovigilancia 24/7',cat:'mkt-almacenamiento',pneto:121765,piva:23135,ptotal:144900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Western Digital',sellerId:'seller-008'},
+  {id:1104,codigo:'ST6000VX',nombre:'Disco Seagate SkyHawk 6TB 3.5" SATA videovigilancia',cat:'mkt-almacenamiento',pneto:96555,piva:18345,ptotal:114900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Seagate',sellerId:'seller-008'},
+  {id:1105,codigo:'WDSD-PUR-256',nombre:'MicroSD WD Purple 256GB para grabación en cámara (edge)',cat:'mkt-almacenamiento',pneto:25126,piva:4774,ptotal:29900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Western Digital',sellerId:'seller-008'},
+  {id:1106,codigo:'SYN-DS224',nombre:'NAS Synology DS224+ 2 bahías para respaldo de grabaciones',cat:'mkt-almacenamiento',pneto:319244,piva:60656,ptotal:379900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Synology',sellerId:'seller-008'},
+  {id:1107,codigo:'VW-PULLOUT-55',nombre:'Soporte video wall pull-out 46-55" con microajuste y pop-out',cat:'mkt-soportes',pneto:100756,piva:19144,ptotal:119900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Brateck',sellerId:'seller-009'},
+  {id:1108,codigo:'SOP-ART-3255',nombre:'Soporte de pared articulado para monitor 32-55" doble brazo',cat:'mkt-soportes',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'StarTech',sellerId:'seller-009'},
+  {id:1109,codigo:'SOP-TECHO-42',nombre:'Soporte de techo para monitor 14-42" altura regulable',cat:'mkt-soportes',pneto:27647,piva:5253,ptotal:32900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'ATC',sellerId:'seller-009'},
+  {id:1110,codigo:'MASTIL-3M-GALV',nombre:'Mástil galvanizado 3m Ø50mm para cámara/antena con base',cat:'mkt-soportes',pneto:41933,piva:7967,ptotal:49900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'MontajePro',sellerId:'seller-009'},
+  {id:1111,codigo:'GAB-INTEMP-CAM',nombre:'Gabinete metálico intemperie IP66 para cámara/NVR con cerradura',cat:'mkt-soportes',pneto:29328,piva:5572,ptotal:34900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'MontajePro',sellerId:'seller-009'},
+  {id:1112,codigo:'FLUKE-D914S',nombre:'Fluke Networks ponchadora de impacto D914S con hoja 110',cat:'mkt-herramientas',pneto:54538,piva:10362,ptotal:64900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Fluke Networks',sellerId:'seller-010'},
+  {id:1113,codigo:'CRIMP-RJ45-PRO',nombre:'Crimpadora RJ45/RJ11 profesional con trinquete + pelacable',cat:'mkt-herramientas',pneto:16723,piva:3177,ptotal:19900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'ToolBox',sellerId:'seller-010'},
+  {id:1114,codigo:'TESTER-RED-POE',nombre:'Tester de red multifunción con prueba PoE y trazador de cable',cat:'mkt-herramientas',pneto:37731,piva:7169,ptotal:44900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'ToolBox',sellerId:'seller-010'},
+  {id:1115,codigo:'TESTER-CCTV-4K',nombre:'Tester CCTV multifunción 4K con monitor, ONVIF y PoE out',cat:'mkt-herramientas',pneto:159580,piva:30320,ptotal:189900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'ToolBox',sellerId:'seller-010'},
+  {id:1116,codigo:'KIT-FIBRA-BAS',nombre:'Kit fibra básico: cleaver + peladora + estuche',cat:'mkt-herramientas',pneto:67143,piva:12757,ptotal:79900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'ToolBox',sellerId:'seller-010'},
+  {id:1117,codigo:'FLUKE-117',nombre:'Multímetro digital Fluke 117 True-RMS para electricista',cat:'mkt-herramientas',pneto:193193,piva:36707,ptotal:229900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Fluke',sellerId:'seller-010'},
+  {id:1118,codigo:'TALADRO-PERC-SET',nombre:'Taladro percutor 13mm + set de brocas concreto/metal',cat:'mkt-herramientas',pneto:75546,piva:14354,ptotal:89900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Bosch',sellerId:'seller-010'},
+  {id:1119,codigo:'DPS-DIN-2P',nombre:'Protector de sobretensión DPS riel DIN 2P 40kA clase II',cat:'mkt-electrico',pneto:33529,piva:6371,ptotal:39900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Schneider',sellerId:'seller-011'},
+  {id:1120,codigo:'CAN-40X25-2M',nombre:'Canaleta plástica 40x25mm 2m con adhesivo (pack 5)',cat:'mkt-electrico',pneto:15882,piva:3018,ptotal:18900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Legrand',sellerId:'seller-011'},
+  {id:1121,codigo:'CAJA-PASO-IP65',nombre:'Caja de paso intemperie IP65 100x100 con prensaestopas',cat:'mkt-electrico',pneto:7479,piva:1421,ptotal:8900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Legrand',sellerId:'seller-011'},
+  {id:1122,codigo:'AUTOM-2P16A',nombre:'Automático riel DIN 2P 16A curva C para tablero CCTV',cat:'mkt-electrico',pneto:10840,piva:2060,ptotal:12900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Schneider',sellerId:'seller-011'},
+  {id:1123,codigo:'UTP-EXT-CAT6-305',nombre:'Cable UTP exterior Cat6 305m doble cubierta negro (caja)',cat:'mkt-electrico',pneto:100756,piva:19144,ptotal:119900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'Panduit',sellerId:'seller-011'},
+  {id:1124,codigo:'PRENSA-PG-PACK',nombre:'Pack 20 prensaestopas PG9/PG11 con tuerca para gabinete',cat:'mkt-electrico',pneto:8319,piva:1581,ptotal:9900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'ElectroMat',sellerId:'seller-011'},
+  {id:1125,codigo:'SEN-VV-ALU',nombre:'Cartel "Zona bajo videovigilancia" aluminio 30x20cm',cat:'mkt-senaletica',pneto:8319,piva:1581,ptotal:9900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'SeñalizaLegal',sellerId:'seller-012'},
+  {id:1126,codigo:'SEN-VV-ADH5',nombre:'Pack 5 adhesivos "Grabación de video activa" 15x10cm',cat:'mkt-senaletica',pneto:4958,piva:942,ptotal:5900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'SeñalizaLegal',sellerId:'seller-012'},
+  {id:1127,codigo:'SEN-LEY21719',nombre:'Aviso informativo tratamiento de datos Ley 21.719 (placa A4)',cat:'mkt-senaletica',pneto:10840,piva:2060,ptotal:12900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'SeñalizaLegal',sellerId:'seller-012'},
+  {id:1128,codigo:'SEN-EVAC-FOTO',nombre:'Señalética de evacuación fotoluminiscente (set 4 piezas)',cat:'mkt-senaletica',pneto:12521,piva:2379,ptotal:14900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'SeñalizaLegal',sellerId:'seller-012'},
+  {id:1129,codigo:'SEN-DISUA-PACK',nombre:'Pack 10 stickers disuasivos "Cámara de seguridad 24h"',cat:'mkt-senaletica',pneto:4118,piva:782,ptotal:4900,stock:'normal',nuevo:0,peso:0.5,img:'',mkt:1,marca:'SeñalizaLegal',sellerId:'seller-012'},
 ];
 
 /* FIX s24a · SSTT enrichment dataset (426 productos scrapeados de sstt.cl)
@@ -24871,6 +24932,58 @@ const SSTT_DATA = {
 "LLT-201C": {"s":["Transmisor pasivo de video por cable UTP (par trenzado).","Compatible con cámaras HDCVI, HDTVI, AHD y analógicas.","No requiere alimentación eléctrica.","Distancia efectiva hasta 300m a 720P.","Conector BNC estándar."],"u":"Balun pasivo para instalaciones donde se reemplaza cable coaxial por UTP. Ideal para reutilizar cableado existente de red en instalaciones de CCTV.","p":"","c":"Accesorios CCTV Dahua","k":"normal"}
 ,
 "FWC10-imou": {"s":["Cable a prueba de agua para cámara Cell Pro Imou.","Protección IP65 para uso en instalaciones de exterior.","Protege el conector de carga de la cámara frente a lluvia y humedad.","Longitud estándar para conexión a panel solar o cargador.","Material resistente a rayos UV y variaciones de temperatura."],"u":"Cable sellado para conectar el panel solar o cargador a la cámara Cell Pro Imou en instalaciones de exterior. Mantiene la conexión estanca frente a lluvia y garantiza la carga continua de la cámara.","p":"","c":"Accesorios Imou","k":"normal"}
+  ,
+  // s107: === Marketplace demo — fichas de vendedor ===
+  "APC-BX1500M-LM":{"s": ["UPS interactiva 1500VA / 900W.", "10 tomas (respaldo + supresión).", "Regulación automática de voltaje (AVR).", "Respaldo típico 10–20 min para NVR + 4 cámaras.", "Software de apagado seguro PowerChute.", "Batería reemplazable por el usuario.", "Garantía 2 años (vendedor)."], "u": "Respaldo de energía para NVR/XVR y switch PoE chico ante cortes breves, evitando corrupción de grabación. Ideal recepción, oficina o kiosco.", "c": "APC · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "FORZA-NT-1011":{"s": ["1000VA / 600W interactiva.", "6 tomas con respaldo.", "Puerto USB para monitoreo.", "LED de estado y alarma sonora.", "Respaldo típico 8–15 min carga liviana.", "Garantía 2 años (vendedor)."], "u": "Respaldo económico para grabador compacto + router. Buena relación precio/autonomía en instalaciones residenciales y pyme.", "c": "Forza · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "VERTIV-PSA1500":{"s": ["1500VA / 900W con AVR.", "Pantalla LCD de estado.", "Tomas con respaldo + solo supresión.", "USB + software de gestión.", "Reemplazo de batería en caliente.", "Garantía 2 años (vendedor)."], "u": "Respaldo confiable de grado profesional para sala técnica chica o rack de acceso con NVR y switch.", "c": "Vertiv · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "TRIPP-SMART1000":{"s": ["1000VA / 500W línea interactiva.", "8 tomas NEMA con respaldo.", "AVR de amplio rango.", "Puerto USB/serial.", "Indicadores LED y autodiagnóstico.", "Garantía 2 años (vendedor)."], "u": "Respaldo para equipo de red y grabación en entornos con voltaje inestable; el AVR de rango amplio corrige bajadas/subidas sin gastar batería.", "c": "Tripp-Lite · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "ENERSAFE-ENR1500":{"s": ["1500VA interactiva.", "Soporte y stock local en Chile.", "Tomas con respaldo.", "AVR incorporado.", "Batería sellada de plomo-ácido.", "Garantía local (vendedor)."], "u": "Alternativa nacional con repuesto de batería disponible localmente; reduce tiempos de RMA frente a marcas importadas.", "c": "Enersafe · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "BAT-AGM-12V9":{"s": ["12V 9Ah AGM sellada.", "Libre de mantención.", "Para UPS, alarmas y respaldo DC 12V.", "Terminal Faston F2.", "Vida útil 3–5 años en flotación.", "Garantía 1 año (vendedor)."], "u": "Repuesto estándar para UPS DC de cámaras, paneles de alarma y respaldo de fuentes 12V. Compatible con la mayoría de gabinetes de fuente.", "c": "Ritar · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "BAT-CP-12V18":{"s": ["12V 18Ah AGM ciclo profundo.", "Para respaldo prolongado 12V.", "Tolerante a descargas profundas.", "Sellada, libre de mantención.", "Terminal de tornillo.", "Garantía 1 año (vendedor)."], "u": "Para fuentes UPS-DC de 12V que requieren más autonomía (portones, perímetros, sitios remotos sin energía estable).", "c": "CSB · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "SOLAR-KIT-CAM30":{"s": ["Panel solar 30W policristalino.", "Controlador de carga PWM 12V.", "Batería litio 12V incluida.", "Para 1 cámara IP/4G de bajo consumo.", "Montaje a mástil incluido.", "Garantía 1 año (vendedor)."], "u": "Energiza una cámara en sitio sin red eléctrica (campo, bodega, faena). Combina bien con cámara 4G para vigilancia perimetral aislada.", "c": "GreenCell · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "AVR-1200-REG":{"s": ["Estabiliza salida ante variaciones de red.", "1200VA / 4 tomas.", "Protección contra sobretensión.", "No entrega respaldo (sin batería).", "LED de estado.", "Garantía 1 año (vendedor)."], "u": "Estabiliza y protege equipos sensibles donde el problema es la calidad de voltaje y no el corte (zonas rurales con red fluctuante).", "c": "Forza · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "RACK-MURAL-9U":{"s": ["Gabinete mural 19\" 9U.", "Fondo 450mm, puerta de vidrio.", "Capacidad ~60kg.", "Ventilación superior.", "Llave de seguridad.", "Color negro.", "Garantía 1 año (vendedor)."], "u": "Aloja NVR, switch PoE y patch panel en pared de sala técnica o bodega. Puerta con llave protege el equipo de grabación.", "c": "BeauCoup · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "RACK-PIE-27U":{"s": ["Gabinete de pie 19\" 27U.", "Fondo 600mm, puerta perforada.", "Ruedas + patas niveladoras.", "Capacidad ~150kg.", "Paneles laterales removibles.", "Garantía 1 año (vendedor)."], "u": "Para proyectos medianos: VMS, varios NVR, switches y UPS en una sala de servidores o data closet.", "c": "BeauCoup · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "GAB-EXT-12U-IP55":{"s": ["Gabinete exterior 12U IP55.", "Protección polvo/lluvia.", "Ventilación con filtro.", "Chapa de seguridad.", "Montaje mural o poste.", "Garantía 1 año (vendedor)."], "u": "Aloja grabador y fuente a la intemperie en accesos, estacionamientos o postes; evita caseta dedicada en sitios sin sala técnica.", "c": "BeauCoup · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "PDU-8T-PROT":{"s": ["Regleta de rack 19\" 1U.", "8 tomas + interruptor iluminado.", "Protección contra sobretensión.", "Cable 1.8m.", "Montaje en rack.", "Garantía 1 año (vendedor)."], "u": "Distribuye y protege la alimentación dentro del rack; concentra el corte de energía del equipo en un solo interruptor.", "c": "RackZone · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "ORG-CABLE-1U":{"s": ["Organizador horizontal 1U.", "Anillas plásticas guía.", "Incluye bandeja fija.", "Montaje 19\".", "Color negro.", "Garantía 1 año (vendedor)."], "u": "Ordena patch cords y mantiene el rack prolijo y ventilado; facilita mantención y reduce errores de cableado.", "c": "RackZone · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "FAN-RACK-2X":{"s": ["2 ventiladores axiales.", "Termostato regulable.", "Montaje en techo de rack.", "220V.", "Reduce temperatura interna.", "Garantía 1 año (vendedor)."], "u": "Disipa el calor de NVR/switch en gabinetes cerrados o sitios calurosos, alargando la vida útil del equipo de grabación.", "c": "RackZone · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "UBNT-LBE-5AC-G2":{"s": ["Antena PtP 5GHz, 23dBi.", "airMAX ac, hasta ~450Mbps reales.", "Alcance varios km en línea de vista.", "PoE 24V incluido.", "Liviana, baja carga al mástil.", "Garantía 1 año (vendedor)."], "u": "Lleva el video de cámaras a un sitio sin cable (entre edificios o predios) por radioenlace dedicado. Requiere línea de vista despejada.", "c": "Ubiquiti · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "MKT-HAPAC2":{"s": ["Router RouterOS dual-band.", "5 puertos Gigabit.", "WiFi 2.4 + 5GHz.", "Firewall, VLAN, VPN.", "Gestión avanzada (WinBox/WebFig).", "Garantía 1 año (vendedor)."], "u": "Segmenta la red de cámaras del resto del tráfico con VLAN y firewall; útil para aislar el CCTV y publicar acceso remoto seguro.", "c": "MikroTik · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "MIMOSA-C5X":{"s": ["Radio modular 5GHz IP67.", "PtP o PtMP.", "Conector para antena externa.", "GPS sync para coexistencia.", "Alta densidad espectral.", "Garantía 1 año (vendedor)."], "u": "Radioenlace de mayor desempeño para troncales de video o sitios con interferencia; la antena modular permite ajustar ganancia al vano.", "c": "Mimosa · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "TPL-CPE610":{"s": ["CPE exterior 5GHz, 23dBi.", "Hasta 300Mbps.", "PoE pasivo incluido.", "Software Pharos.", "Económico para vanos cortos.", "Garantía 1 año (vendedor)."], "u": "Enlace punto a punto económico para distancias cortas/medias entre una cámara o caseta y el grabador principal.", "c": "TP-Link · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "MC-FIBRA-GB":{"s": ["Par de conversores fibra↔RJ45 Gigabit.", "SC monomodo hasta 20km.", "Plug & play.", "Fuente incluida.", "Para troncal de larga distancia.", "Garantía 1 año (vendedor)."], "u": "Extiende la red de cámaras por fibra donde el cobre no alcanza (>100m) o donde se requiere aislamiento eléctrico entre edificios.", "c": "Nexxt · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "PP-CAT6-24":{"s": ["Patch panel Cat6 24p, 19\" 1U.", "Conexión IDC 110.", "Peine trasero de ordenamiento.", "Etiquetado por puerto.", "Para rack de NVR/switch.", "Garantía 1 año (vendedor)."], "u": "Centraliza y ordena las bajadas de cámaras en el rack; facilita parchado, pruebas y mantención del cableado estructurado.", "c": "Panduit · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "SFP-1G-LC":{"s": ["SFP 1.25G monomodo.", "Conector LC, 20km.", "Compatible switches gestionados.", "Hot-swap.", "Para uplink de fibra.", "Garantía 1 año (vendedor)."], "u": "Habilita un uplink de fibra en switches con slot SFP para troncales largos entre racks o edificios.", "c": "Nexxt · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "WD42PURZ":{"s": ["4TB SATA 6Gb/s, 3.5\".", "Optimizado grabación 24/7.", "Tecnología AllFrame contra pérdida de cuadros.", "Soporta múltiples cámaras HD.", "Bajo consumo y temperatura.", "Garantía 3 años (vendedor)."], "u": "Almacenamiento confiable para NVR/XVR con grabación continua; diseñado para cargas de escritura permanente que matarían un disco de PC.", "c": "Western Digital · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "WD84PURZ":{"s": ["8TB SATA 6Gb/s, 3.5\".", "Grabación ininterrumpida 24/7.", "AllFrame para fluidez de video.", "Soporta gran cantidad de canales.", "Caché amplia.", "Garantía 3 años (vendedor)."], "u": "Mayor retención de días para proyectos con muchas cámaras o alta resolución; alternativa de marca al disco Seagate de fábrica.", "c": "Western Digital · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "ST6000VX":{"s": ["6TB SATA 6Gb/s, 3.5\".", "Firmware ImagePerfect.", "Diseñado para grabar ~90% del tiempo.", "Soporta hasta 64 cámaras HD.", "Carga de trabajo 180TB/año.", "Garantía 3 años (vendedor)."], "u": "Alternativa SkyHawk de gran capacidad; misma familia que viene de fábrica en kits, útil como repuesto o ampliación.", "c": "Seagate · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "WDSD-PUR-256":{"s": ["MicroSD 256GB clase alta resistencia.", "Para grabación en el borde (edge).", "Soporta escritura continua.", "Compatible cámaras con slot SD.", "Respaldo ante caída de red.", "Garantía (vendedor)."], "u": "Graba localmente en la cámara como respaldo si se cae el enlace al NVR; clave en cámaras remotas o por radioenlace.", "c": "Western Digital · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "SYN-DS224":{"s": ["NAS 2 bahías (discos no incluidos).", "Respaldo y archivo de video.", "Soporta cámaras vía app de vigilancia.", "RAID 1 espejo.", "Gestión web.", "Garantía 2 años (vendedor)."], "u": "Respaldo/archivo de grabaciones fuera del NVR (regla 3-2-1). Complemento, no reemplazo del grabador. Pensar discos aparte.", "c": "Synology · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "VW-PULLOUT-55":{"s": ["Para paneles 46–55\".", "Mecanismo pull-out de mantención.", "Microajuste 6 ejes para cuadrar biseles.", "Carga ~50kg por unidad.", "Modular para muro de varias pantallas.", "Garantía 1 año (vendedor)."], "u": "Arma muros de monitores en salas de control alineando biseles al milímetro; el pop-out permite mantención sin desmontar todo.", "c": "Brateck · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "SOP-ART-3255":{"s": ["Para monitores 32–55\".", "Doble brazo articulado.", "Inclinación y giro.", "Carga ~35kg.", "VESA hasta 400x400.", "Garantía 1 año (vendedor)."], "u": "Monta el monitor de visualización del NVR con ángulo ajustable en recepción o sala de guardia.", "c": "StarTech · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "SOP-TECHO-42":{"s": ["Para monitores 14–42\".", "Montaje a cielo, altura regulable.", "Giro 360°.", "Carga ~25kg.", "Tubo telescópico.", "Garantía 1 año (vendedor)."], "u": "Cuelga la pantalla de monitoreo desde el techo donde no hay muro libre (bodegas, naves industriales, locales).", "c": "ATC · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "MASTIL-3M-GALV":{"s": ["Mástil galvanizado 3m, Ø50mm.", "Base y tensores incluidos.", "Para cámara PTZ, domo o antena PtP.", "Resistente a intemperie.", "Tornillería inox.", "Garantía 1 año (vendedor)."], "u": "Eleva una cámara o antena de radioenlace para ganar línea de vista o cobertura; base reforzada para viento.", "c": "MontajePro · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "GAB-INTEMP-CAM":{"s": ["Gabinete metálico IP66.", "Para grabador o fuente exterior.", "Cerradura de seguridad.", "Prensaestopas incluidos.", "Montaje mural o poste.", "Garantía 1 año (vendedor)."], "u": "Protege grabador o fuente a la intemperie en accesos vehiculares o perímetros sin sala técnica.", "c": "MontajePro · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "FLUKE-D914S":{"s": ["Ponchadora de impacto profesional.", "Hoja 110 con corte.", "Torsión + impacto regulable.", "Gancho y perforador en mango.", "Terminaciones de calidad consistente.", "Garantía (vendedor)."], "u": "Termina jacks y patch panels de cámaras con calidad repetible; reduce reprocesos por contactos mal ponchados.", "c": "Fluke Networks · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "CRIMP-RJ45-PRO":{"s": ["Crimpadora con trinquete.", "RJ45 y RJ11.", "Pela y corta cable.", "Mango ergonómico.", "Para Cat5e/Cat6.", "Garantía (vendedor)."], "u": "Arma conectores RJ45 de cámaras y patch cords en terreno; el trinquete asegura el ponchado completo.", "c": "ToolBox · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "TESTER-RED-POE":{"s": ["Prueba continuidad y mapa de cableado.", "Detecta PoE y voltaje.", "Trazador de cable (tono).", "Mide longitud aproximada.", "Pantalla y batería recargable.", "Garantía (vendedor)."], "u": "Diagnostica cableado de cámaras en terreno: verifica el par, confirma PoE y ubica el cable correcto en el patch panel.", "c": "ToolBox · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "TESTER-CCTV-4K":{"s": ["Monitor para IP/HDCVI/TVI/AHD.", "Soporta 4K y ONVIF.", "PoE out para alimentar cámara.", "Prueba UTP, multímetro, PTZ.", "Batería de larga duración.", "Garantía 1 año (vendedor)."], "u": "La navaja suiza del instalador: enfoca y configura la cámara en el poste sin bajar al NVR, alimentándola desde el propio tester.", "c": "ToolBox · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "KIT-FIBRA-BAS":{"s": ["Cleaver de precisión.", "Peladora de fibra (3 niveles).", "Tijera de kevlar y accesorios.", "Estuche rígido.", "Para conectorización en terreno.", "Garantía (vendedor)."], "u": "Prepara y conectoriza fibra para troncales de video; el cleaver de buen corte es clave para baja pérdida en empalmes/conectores.", "c": "ToolBox · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "FLUKE-117":{"s": ["True-RMS, detección de tensión sin contacto.", "Mide V, A, Ω, continuidad.", "Diseño para electricistas.", "Pantalla con retroiluminación.", "Robusto.", "Garantía (vendedor)."], "u": "Verifica alimentación de fuentes, PoE y tableros; la medición True-RMS evita errores en cargas no lineales (fuentes conmutadas).", "c": "Fluke · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "TALADRO-PERC-SET":{"s": ["Taladro percutor 13mm.", "Velocidad variable y reversa.", "Set de brocas concreto y metal.", "Empuñadura auxiliar.", "Maletín incluido.", "Garantía (vendedor)."], "u": "Instala cámaras y gabinetes sobre muro de concreto o metal; el set de brocas cubre los anclajes típicos de soporte.", "c": "Bosch · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "DPS-DIN-2P":{"s": ["DPS clase II, 2P.", "Capacidad 40kA.", "Montaje riel DIN.", "Indicador de fin de vida.", "Protege equipos ante transientes.", "Garantía 1 año (vendedor)."], "u": "Protege NVR y cámaras de daños por transientes y descargas atmosféricas inducidas; crítico en zonas con tormentas o red sucia.", "c": "Schneider · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "CAN-40X25-2M":{"s": ["Pack 5 tramos de 2m.", "40x25mm con tapa.", "Base autoadhesiva.", "PVC retardante de llama.", "Para cableado a la vista.", "Garantía (vendedor)."], "u": "Conduce y oculta el cableado de cámaras a la vista de forma prolija y segura en oficinas y locales.", "c": "Legrand · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "CAJA-PASO-IP65":{"s": ["Caja IP65 100x100mm.", "Tapa con tornillos.", "Prensaestopas incluidos.", "Para empalmes exteriores.", "Resistente UV.", "Garantía (vendedor)."], "u": "Aloja y protege empalmes de cámaras a la intemperie en postes y muros exteriores, manteniendo la garantía del cableado.", "c": "Legrand · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "AUTOM-2P16A":{"s": ["Interruptor automático 2P 16A.", "Curva C.", "Montaje riel DIN.", "Protección cortocircuito/sobrecarga.", "Para subtablero de CCTV.", "Garantía 1 año (vendedor)."], "u": "Da un circuito protegido y dedicado al sistema de cámaras, separándolo del resto de la instalación eléctrica.", "c": "Schneider · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "UTP-EXT-CAT6-305":{"s": ["Cable UTP Cat6 exterior 305m.", "Doble cubierta resistente UV.", "Cobre puro (no CCA).", "Para tendido a la intemperie.", "Caja dispensadora.", "Garantía (vendedor)."], "u": "Tendido de cámaras IP en exteriores con cobre real para asegurar PoE estable a distancia; la doble cubierta resiste sol y humedad.", "c": "Panduit · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "PRENSA-PG-PACK":{"s": ["Pack 20 prensaestopas.", "Medidas PG9 y PG11.", "Sello de goma + tuerca.", "Mantiene grado IP del gabinete.", "Plástico resistente.", "Garantía (vendedor)."], "u": "Sella la entrada de cables a gabinetes y cajas exteriores conservando la protección contra polvo y agua.", "c": "ElectroMat · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "SEN-VV-ALU":{"s": ["Cartel de aluminio 30x20cm.", "Texto \"Zona bajo videovigilancia\".", "Resistente a intemperie.", "Perforaciones para fijar.", "Tinta UV duradera.", "Garantía (vendedor)."], "u": "Informa el monitoreo en accesos y perímetros; el aviso visible es parte del cumplimiento de tratamiento de datos personales.", "c": "SeñalizaLegal · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "SEN-VV-ADH5":{"s": ["Pack 5 stickers 15x10cm.", "Adhesivo resistente.", "Bilingüe ES/EN.", "Para puertas y vitrinas.", "Material laminado.", "Garantía (vendedor)."], "u": "Señaliza puntos interiores (puertas, cajas, vitrinas) donde se graba; refuerza el efecto disuasivo y la transparencia con el público.", "c": "SeñalizaLegal · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "SEN-LEY21719":{"s": ["Placa informativa tamaño A4.", "Texto base referido a Ley 21.719.", "Datos del responsable editables.", "Material rígido.", "Para recepción o acceso.", "Garantía (vendedor)."], "u": "Apoya el cumplimiento de la ley chilena de protección de datos exhibiendo el aviso de tratamiento. Revisar texto final con asesor legal.", "c": "SeñalizaLegal · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "SEN-EVAC-FOTO":{"s": ["Set 4 señales fotoluminiscentes.", "Brillan ante corte de energía.", "Flechas y salida.", "Cumple uso en vías de evacuación.", "Adhesivo + perforación.", "Garantía (vendedor)."], "u": "Complemento de seguridad para el mismo cliente de CCTV; se vende junto al proyecto en locales y oficinas que deben señalizar evacuación.", "c": "SeñalizaLegal · Marketplace SSTT", "k": "normal", "mkt": 1},
+  "SEN-DISUA-PACK":{"s": ["Pack 10 stickers disuasivos.", "Texto \"Vigilado 24h\".", "Resistente sol/lluvia.", "Tamaño 10x10cm.", "Alta visibilidad.", "Garantía (vendedor)."], "u": "Refuerzo disuasivo económico para repartir en el sitio; complementa la señalética obligatoria con efecto preventivo extra.", "c": "SeñalizaLegal · Marketplace SSTT", "k": "normal", "mkt": 1},
 };
 
 /* FIX s24a · Helper para resolver match SSTT desde un producto.
@@ -24944,6 +25057,11 @@ const CATS = {
   'accesorios':    'Accesorios',
   'licencias':     'Licencias',
   'especiales':    'Especiales',
+  // s107: categorías Marketplace (items no-Dahua, fuera del catálogo)
+  'mkt-energia':'Marketplace · Energía y Respaldo','mkt-rack':'Marketplace · Racks y Gabinetes',
+  'mkt-red':'Marketplace · Redes y Enlaces','mkt-almacenamiento':'Marketplace · Almacenamiento',
+  'mkt-soportes':'Marketplace · Soportes y Video Wall','mkt-herramientas':'Marketplace · Herramientas',
+  'mkt-electrico':'Marketplace · Material Eléctrico','mkt-senaletica':'Marketplace · Señalética y Cumplimiento',
 };
 
 // ── Estado ───────────────────────────────────────────────────
@@ -25271,6 +25389,7 @@ function matchScore(p, rawQ) {
 
 function getFiltered() {
   let list = [...PRODUCTS];
+  list = list.filter(function(p){ return !p.mkt; }); // s107: Marketplace fuera del catálogo Dahua
 
   // ── Filtro B2B por vista (SMB / Enterprise / All) ──
   if (typeof B2B !== 'undefined' && B2B.activeView !== 'all') {
@@ -25613,6 +25732,16 @@ const IMG_BASE   = IMG_ORIGIN;
 
 // URL directa. imgProxyFallback() se llama desde onerror como segundo intento.
 function imgProxyUrl(codigo) {
+  // s107: items Marketplace usan fotito SVG ligera (sin CDN Dahua)
+  try {
+    if (!window.__mktImg) {
+      window.__mktImg = {};
+      if (typeof PRODUCTS !== 'undefined' && typeof window.mktThumbSVG === 'function') {
+        PRODUCTS.forEach(function(p){ if (p.mkt) window.__mktImg[p.codigo] = window.mktThumbSVG(p); });
+      }
+    }
+    if (window.__mktImg[codigo]) return window.__mktImg[codigo];
+  } catch(e){}
   return IMG_ORIGIN + codigo + '.webp';
 }
 function imgProxyFallback(img, codigo) {
@@ -25710,43 +25839,8 @@ const CAT_ICONS = {
   'alarmas':'🚨','videoporteros':'🔔','acceso':'🔑','especiales':'⚡'
 };
 function catIcon(cat) { return CAT_ICONS[cat] || '📷'; }
-function render() {
-  var _camCatsR = ['camaras-ip','camaras-hdcvi','camaras-ptz','_camaras'];
-  var _recCatsR = ['nvr','_grabadores','_nvr_nvr','_nvr_xvr','_nvr_ent'];
-  if (S.advFiltersOpen && _camCatsR.indexOf(S.cat)>=0 && window._cfState) {
-    S.sort = window._cfState.sort || 'destacados';
-  } else if (S.advFiltersOpen && _recCatsR.indexOf(S.cat)>=0 && window._rfState) {
-    S.sort = window._rfState.sort || 'destacados';
-  } else if (S.q) {
-    // Búsqueda activa: respetar sort actual o usar relevancia
-    if (!S.sort || S.sort==='destacados') S.sort = 'rel';
-  } else {
-    // Categoría genérica: destacados por defecto
-    if (!S.sort || S.sort==='rel') S.sort = 'destacados';
-  }
-  _renderSortBar();
-  _updateCatSheetLabel();
-  const filtered = getFiltered();
-  const total    = filtered.length;
-  const pages    = Math.max(1, Math.ceil(total / S.perPage));
-  S.page = Math.min(S.page, pages);
-  const slice = filtered.slice((S.page-1)*S.perPage, S.page*S.perPage);
-
-  var _sortLabel = {'destacados':'','rel':'','precio_asc':'· Menor precio','precio_desc':'· Mayor precio',
-    'nuevo_desc':'· Más nuevos','vendidos':'· Más vendidos','mp_desc':'· Mayor resolución',
-    'ch_desc':'· Más canales','name':'· A–Z'};
-  var _sl = _sortLabel[S.sort] || '';
-  qs('resCount').textContent = total.toLocaleString('es-CL') + ' producto' + (total!==1?'s':'') + (_sl?' '+_sl:'');
-  qs('pageTitle').textContent = CATS[S.cat] || 'Todos los productos';
-  qs('breadCur').textContent  = qs('pageTitle').textContent + (S.q ? ` — "${S.q}"` : '');
-
-  if (!slice.length) {
-    qs('grid').innerHTML = '<div class="no-results"><h3>Sin resultados</h3><p>Prueba con otro término o categoría</p></div>';
-    qs('pag').innerHTML = '';
-    return;
-  }
-
-  qs('grid').innerHTML = slice.map(p => {
+// s107: tarjeta de producto reutilizable (catálogo + Marketplace usan el MISMO formato)
+window.renderProductCard = function(p) {
     const [lbl, cls] = p.nuevo ? ['Nuevo', 'pb-new'] : (BADGE_MAP[p.stock] || BADGE_MAP.normal);
     const tags = getTags(p.nombre, p.codigo);
     return `
@@ -25898,7 +25992,45 @@ function render() {
         </div>
       </div>
     </div>`;
-  }).join('');
+};
+
+function render() {
+  var _camCatsR = ['camaras-ip','camaras-hdcvi','camaras-ptz','_camaras'];
+  var _recCatsR = ['nvr','_grabadores','_nvr_nvr','_nvr_xvr','_nvr_ent'];
+  if (S.advFiltersOpen && _camCatsR.indexOf(S.cat)>=0 && window._cfState) {
+    S.sort = window._cfState.sort || 'destacados';
+  } else if (S.advFiltersOpen && _recCatsR.indexOf(S.cat)>=0 && window._rfState) {
+    S.sort = window._rfState.sort || 'destacados';
+  } else if (S.q) {
+    // Búsqueda activa: respetar sort actual o usar relevancia
+    if (!S.sort || S.sort==='destacados') S.sort = 'rel';
+  } else {
+    // Categoría genérica: destacados por defecto
+    if (!S.sort || S.sort==='rel') S.sort = 'destacados';
+  }
+  _renderSortBar();
+  _updateCatSheetLabel();
+  const filtered = getFiltered();
+  const total    = filtered.length;
+  const pages    = Math.max(1, Math.ceil(total / S.perPage));
+  S.page = Math.min(S.page, pages);
+  const slice = filtered.slice((S.page-1)*S.perPage, S.page*S.perPage);
+
+  var _sortLabel = {'destacados':'','rel':'','precio_asc':'· Menor precio','precio_desc':'· Mayor precio',
+    'nuevo_desc':'· Más nuevos','vendidos':'· Más vendidos','mp_desc':'· Mayor resolución',
+    'ch_desc':'· Más canales','name':'· A–Z'};
+  var _sl = _sortLabel[S.sort] || '';
+  qs('resCount').textContent = total.toLocaleString('es-CL') + ' producto' + (total!==1?'s':'') + (_sl?' '+_sl:'');
+  qs('pageTitle').textContent = CATS[S.cat] || 'Todos los productos';
+  qs('breadCur').textContent  = qs('pageTitle').textContent + (S.q ? ` — "${S.q}"` : '');
+
+  if (!slice.length) {
+    qs('grid').innerHTML = '<div class="no-results"><h3>Sin resultados</h3><p>Prueba con otro término o categoría</p></div>';
+    qs('pag').innerHTML = '';
+    return;
+  }
+
+  qs('grid').innerHTML = slice.map(p => window.renderProductCard(p)).join('');
 
   // Paginación
   if (pages <= 1) { qs('pag').innerHTML=''; return; }
@@ -30757,6 +30889,7 @@ let pickupType = 'personal';
 // ── Determina la serie y badge color ─────────────────────────────
 function pmSeries(p) {
   const n = p.nombre.toLowerCase(), s = p.codigo.toLowerCase();
+  if (p.mkt) return {name:(p.marca||'Marketplace'), bg:'#F59E0B', icon:'🏪'}; // s107
   if (/wizsense/.test(n))            return {name:'WizSense Series',   bg:'#003d99', icon:'🧠'};
   if (/wizmind/.test(n))             return {name:'WizMind Series',    bg:'#5b21b6', icon:'🤖'};
   if (/tioc|disuasion activa/.test(n)) return {name:'TiOC 2.0',       bg:'#b91c1c', icon:'🚨'};
@@ -31072,7 +31205,7 @@ function _pmBuildModal(id) {
   }
 
   // URLs
-  const pdfUrl  = 'https://cdn1.dori.cl/fichatecnica/' + p.codigo + '.pdf';
+  const pdfUrl  = p.mkt ? '' : 'https://cdn1.dori.cl/fichatecnica/' + p.codigo + '.pdf'; // s107
   const dahuaES = 'https://www.dahuasecurity.com/es/search?keyword=' + encodeURIComponent(p.codigo);
   const dahuaEN = 'https://www.dahuasecurity.com/search?keyword='    + encodeURIComponent(p.codigo);
   const supportUrl = 'https://www.dahuasecurity.com/support/download-center/search?keyword=' + encodeURIComponent(p.codigo);
@@ -31119,8 +31252,7 @@ function _pmBuildModal(id) {
   const catLabel = CATS[p.cat]||'Producto';
   const descHTML = `
     <p class="pm-desc-lead">
-      El <strong>${p.codigo}</strong> es ${p.nombre.toLowerCase()}, distribuido oficialmente
-      en Chile por <strong>SSTT SpA</strong> — Distribuidor Regional Dahua.
+      El <strong>${p.codigo}</strong> es ${p.nombre.toLowerCase()}, ${p.mkt ? ('ofrecido en el <strong>Marketplace SSTT</strong> por un vendedor verificado del ecosistema (marca '+(p.marca||'')+').') : 'distribuido oficialmente en Chile por <strong>SSTT SpA</strong> — Distribuidor Regional Dahua.'}
       ${series.name!=='Dahua Technology'?`Pertenece a la línea <strong>${series.name}</strong>.`:''}
     </p>
     <div class="pm-desc-section">
@@ -31152,7 +31284,7 @@ function _pmBuildModal(id) {
       Especificaciones y distancias DORI son referenciales. Descarga la ficha técnica oficial PDF para confirmación exacta de todos los parámetros.
     </div>`;
 
-  const dlHTML = `
+  const dlHTML = p.mkt ? window.mktDownloadsHTML(p) : `
     <div class="pm-dl-grid">
       <div class="pm-dl-item" style="cursor:default">
         <div class="pm-dl-ico pdf">📄</div>
@@ -31230,7 +31362,7 @@ function _pmBuildModal(id) {
         ${bullets ? `<ul class="pm-sstt-bullets">${bullets}</ul>` : ''}
         ${uso}
         ${pdf}
-        <span class="pm-sstt-source">Fuente: distribuidor oficial Dahua Chile · sstt.cl</span>
+        <span class="pm-sstt-source">${p.mkt ? 'Fuente: ficha del vendedor · Marketplace SSTT' : 'Fuente: distribuidor oficial Dahua Chile · sstt.cl'}</span>
       </div>
     </details>`;
   })() : '';
@@ -31318,6 +31450,7 @@ function _pmBuildModal(id) {
             <div class="pm-code">${p.codigo}</div>
             <div class="pm-name">${p.nombre}</div>
           </div>
+          ${p.mkt ? window.mktBadgeHTML(p) : ''}
 
           ${(()=>{
             const _b2bType = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
@@ -31370,7 +31503,7 @@ function _pmBuildModal(id) {
           })()}
 
           <!-- Sprint 5 s74: Garantía + Distribuidor Oficial -->
-          <div class="pm-trust" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0">
+          <div class="pm-trust" style="${p.mkt?'display:none':'display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:14px 0'}">
             <div class="pm-trust-item" style="background:linear-gradient(135deg,#f0f7ff,#e8f0fe);border:1px solid rgba(0,87,184,0.18);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:9px">
               <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="#0057B8" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               <div style="line-height:1.25;min-width:0">
@@ -34879,6 +35012,7 @@ async function openProdModal(id) {
 
   // Mostrar ficha inmediatamente con datos del nombre (rápido)
   _pmBuildModal(id);
+  if (p.mkt) return; // s107: items Marketplace no tienen PDF Dahua
 
   // Luego enriquecer con PDF de forma asíncrona
   const specsEl = document.getElementById('pmP-specs');
@@ -40794,6 +40928,7 @@ var B2B = {
   // Clasificar un producto como 'smb' o 'enterprise'
   classify: function(p) {
     if (!p) return 'smb';
+    if (p.mkt) return 'smb'; // s107: items Marketplace nunca son enterprise
     var cod = (p.codigo||'').toUpperCase();
     var nom = (p.nombre||'').toLowerCase();
     var cat = (p.cat||'');
@@ -40866,13 +41001,17 @@ var B2B = {
     // Área de catálogo: sidebar + catalog-area (dentro de .cat-layout o similar)
     var catalogArea  = document.querySelector('#secCatalogo .catalog-area');
     var sidebarArea  = document.querySelector('#secCatalogo .sidebar');
+    var mainWrap     = document.querySelector('#secCatalogo .main-wrap'); // s107: contenedor con min-height:100vh que dejaba el hueco blanco
     if (view === 'marketplace') {
-      if (mktWrap)     { mktWrap.style.display = 'block'; mktRenderSellers(); }
+      if (mktWrap)     { mktWrap.style.display = 'block'; mktRenderSellers(); if (typeof mktRenderProducts==='function') mktRenderProducts(); } // s107
+      if (mainWrap)    mainWrap.style.display = 'none';    // s107: colapsar el área del catálogo (evita el espacio en blanco)
       if (catalogArea) catalogArea.style.display = 'none';
       if (sidebarArea) sidebarArea.style.display = 'none';
       if (typeof showSection === 'function') showSection('catalogo');
+      try { var _sc = document.getElementById('secCatalogo'); if (_sc) _sc.scrollTop = 0; window.scrollTo(0,0); } catch(e){} // s107: subir al tope
     } else {
       if (mktWrap)     mktWrap.style.display = 'none';
+      if (mainWrap)    mainWrap.style.display = '';        // s107: restaurar catálogo
       if (catalogArea) catalogArea.style.display = '';
       if (sidebarArea) sidebarArea.style.display = '';
       // Renderizar y navegar al catálogo
@@ -40939,6 +41078,55 @@ var MKT_SELLERS_DEMO = [
     rating: 5.0,
     verificado: true,
     especialidad: 'Sistemas mineros · NDAA · Acceso'
+  }
+  // s107: sellers marketplace demo + reviews de seller
+  ,{
+    id:"seller-005", nombre:"EnergyPro Chile", emoji:"🔋", ubicacion:"Santiago, RM",
+    productos:9, ventas:41, rating:4.8, verificado:true,
+    especialidad:"UPS · Baterías · Energía solar", marca:"APC · Forza · Vertiv · Enersafe",
+    reviews:[{a:"Patricio M.",r:5,f:"May 2026",t:"Llegó la UPS APC al día siguiente y el respaldo dimensionado fue exacto para mi NVR de 16 canales."},{a:"Cecilia R.",r:5,f:"Abr 2026",t:"Buena asesoría para elegir batería de ciclo profundo, me evitaron comprar de más."},{a:"Jorge T.",r:4,f:"Abr 2026",t:"Producto ok, el despacho a región tardó un par de días más de lo esperado."}]
+  }
+  ,{
+    id:"seller-006", nombre:"RackZone SpA", emoji:"🗄️", ubicacion:"Santiago, RM",
+    productos:6, ventas:23, rating:4.7, verificado:true,
+    especialidad:"Racks · Gabinetes · PDU · Climatización", marca:"BeauCoup · RackZone",
+    reviews:[{a:"Andrés V.",r:5,f:"May 2026",t:"El rack mural 9U venía bien embalado y con toda la tornillería. Calidad sólida."},{a:"Marcela P.",r:4,f:"Mar 2026",t:"Buen gabinete exterior, el filtro de ventilación cumple. Recomendado."}]
+  }
+  ,{
+    id:"seller-007", nombre:"WirelessLink Distribución", emoji:"📶", ubicacion:"Valparaíso, V",
+    productos:7, ventas:52, rating:4.9, verificado:true,
+    especialidad:"Enlaces PtP/PtMP · Routers · Fibra", marca:"Ubiquiti · MikroTik · Mimosa · TP-Link",
+    reviews:[{a:"Felipe C.",r:5,f:"May 2026",t:"Configuraron el enlace LiteBeam antes de enviarlo, llegó listo para apuntar. Excelente."},{a:"Rodrigo S.",r:5,f:"Abr 2026",t:"Saben de redes en serio, me ayudaron con el VLAN del MikroTik para aislar las cámaras."},{a:"Nicolás H.",r:4,f:"Mar 2026",t:"Buen stock y precios. El Mimosa requiere antena aparte, conviene preguntar antes."}]
+  }
+  ,{
+    id:"seller-008", nombre:"DataStore Chile", emoji:"💾", ubicacion:"Santiago, RM",
+    productos:5, ventas:47, rating:4.8, verificado:true,
+    especialidad:"Discos vigilancia · NAS · MicroSD", marca:"Western Digital · Seagate · Synology",
+    reviews:[{a:"Verónica L.",r:5,f:"May 2026",t:"Discos WD Purple originales con boleta y garantía. Cero problemas en el NVR."},{a:"Tomás A.",r:5,f:"Abr 2026",t:"El NAS para respaldo me cambió la vida, ahora cumplo la regla 3-2-1."}]
+  }
+  ,{
+    id:"seller-009", nombre:"MontajePro", emoji:"🔩", ubicacion:"Concepción, VIII",
+    productos:5, ventas:19, rating:4.6, verificado:true,
+    especialidad:"Soportes · Video wall · Mástiles · Gabinetes", marca:"Brateck · StarTech · ATC · MontajePro",
+    reviews:[{a:"Daniel F.",r:5,f:"Abr 2026",t:"El soporte video wall con microajuste dejó el muro perfecto, sin desniveles de bisel."},{a:"Camila O.",r:4,f:"Mar 2026",t:"Mástil robusto, buena base. El despacho del de 3m a domicilio fue lo más lento."}]
+  }
+  ,{
+    id:"seller-010", nombre:"ToolBox Instaladores", emoji:"🧰", ubicacion:"Santiago, RM",
+    productos:7, ventas:63, rating:4.9, verificado:true,
+    especialidad:"Herramientas · Testers CCTV · Fibra", marca:"Fluke · Bosch · ToolBox",
+    reviews:[{a:"Esteban G.",r:5,f:"May 2026",t:"El tester CCTV 4K con PoE out me ahorra subir y bajar del andamio. Indispensable."},{a:"Pía M.",r:5,f:"Abr 2026",t:"Ponchadora Fluke original, se nota la diferencia en las terminaciones."},{a:"Luis B.",r:5,f:"Mar 2026",t:"Atención técnica muy buena, me orientaron en el kit de fibra correcto."}]
+  }
+  ,{
+    id:"seller-011", nombre:"ElectroMat SpA", emoji:"⚡", ubicacion:"Santiago, RM",
+    productos:6, ventas:38, rating:4.7, verificado:true,
+    especialidad:"Protección · Canalización · Tableros · Cable", marca:"Schneider · Legrand · Panduit",
+    reviews:[{a:"Gonzalo P.",r:5,f:"Abr 2026",t:"El DPS DIN llegó rápido y con ficha. Buen surtido eléctrico para el tablero de CCTV."},{a:"Fernanda R.",r:4,f:"Mar 2026",t:"Cable UTP exterior de cobre real, no CCA como otros. Se nota en el PoE a distancia."}]
+  }
+  ,{
+    id:"seller-012", nombre:"Señaliza Legal", emoji:"🪧", ubicacion:"Santiago, RM",
+    productos:5, ventas:29, rating:4.8, verificado:true,
+    especialidad:"Señalética videovigilancia · Cumplimiento Ley 21.719", marca:"SeñalizaLegal",
+    reviews:[{a:"Claudia N.",r:5,f:"May 2026",t:"Los carteles de aluminio aguantan el sol perfecto. Justo para cumplir con la nueva ley."},{a:"Marco T.",r:4,f:"Abr 2026",t:"Buen material. Pedí personalizar el responsable de datos y lo hicieron sin drama."}]
   }
 ];
 
@@ -41016,6 +41204,186 @@ window.mktSubmitInterest = function() {
 })();
 
 // s99: === fin Marketplace scaffold ===
+
+// s107: ════════ Marketplace — helpers de catálogo, ficha y perfil de vendedor ════════
+// Estos artículos NO compiten con Dahua (UPS, racks, redes, almacenamiento, soportes,
+// herramientas, eléctrico, señalética). Viven fuera del catálogo Dahua (ver getFiltered)
+// y se muestran en la pestaña Marketplace. Borrar: quitar productos mkt:1 de PRODUCTS,
+// sus entradas en SSTT_DATA, los sellers 005-012 y este bloque.
+(function(){
+  var MKT_CAT_META = {
+    'mkt-energia':        {t:'Energía y Respaldo',      ic:'🔋', c1:'#f59e0b', c2:'#b45309'},
+    'mkt-rack':           {t:'Racks y Gabinetes',       ic:'🗄️', c1:'#64748b', c2:'#334155'},
+    'mkt-red':            {t:'Redes y Enlaces',         ic:'📶', c1:'#0ea5e9', c2:'#0369a1'},
+    'mkt-almacenamiento': {t:'Almacenamiento',          ic:'💾', c1:'#8b5cf6', c2:'#6d28d9'},
+    'mkt-soportes':       {t:'Soportes y Video Wall',   ic:'🔩', c1:'#14b8a6', c2:'#0f766e'},
+    'mkt-herramientas':   {t:'Herramientas',            ic:'🧰', c1:'#ef4444', c2:'#b91c1c'},
+    'mkt-electrico':      {t:'Material Eléctrico',      ic:'⚡', c1:'#eab308', c2:'#a16207'},
+    'mkt-senaletica':     {t:'Señalética y Cumplimiento',ic:'🪧', c1:'#22c55e', c2:'#15803d'}
+  };
+  window.MKT_CAT_META = MKT_CAT_META;
+
+  // Fotito ligera: SVG generado al vuelo (no pesa en el HTML)
+  window.mktThumbSVG = function(p){
+    var m = MKT_CAT_META[p.cat] || {ic:'🏪', c1:'#F59E0B', c2:'#b45309', t:'Marketplace'};
+    var marca = (p.marca||'').split('·')[0].trim();
+    if (marca.length > 18) marca = marca.slice(0,18);
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240">'
+      + '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
+      + '<stop offset="0" stop-color="'+m.c1+'"/><stop offset="1" stop-color="'+m.c2+'"/></linearGradient></defs>'
+      + '<rect width="320" height="240" fill="#f8fafc"/>'
+      + '<rect x="14" y="14" width="292" height="212" rx="16" fill="url(#g)" opacity="0.10"/>'
+      + '<text x="160" y="120" font-size="78" text-anchor="middle" dominant-baseline="central">'+m.ic+'</text>'
+      + '<text x="160" y="186" font-size="20" font-family="Arial,Helvetica,sans-serif" font-weight="bold" text-anchor="middle" fill="'+m.c2+'">'+marca.replace(/&/g,'&amp;')+'</text>'
+      + '<rect x="0" y="0" width="320" height="30" fill="'+m.c1+'"/>'
+      + '<text x="160" y="20" font-size="14" font-family="Arial,Helvetica,sans-serif" font-weight="bold" text-anchor="middle" fill="#fff">MARKETPLACE</text>'
+      + '</svg>';
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+  };
+
+  // Banner dentro de la ficha (modal): aclara que es Marketplace + nota de envío + sellos del vendedor
+  window.mktBadgeHTML = function(p){
+    var s = (typeof MKT_SELLERS_DEMO!=='undefined') ? MKT_SELLERS_DEMO.find(function(x){return x.id===p.sellerId;}) : null;
+    var nombre = s ? s.nombre : 'Vendedor verificado';
+    var rating = s ? s.rating : '';
+    var verif  = s && s.verificado;
+    var safeN = (typeof escapeHtml==='function') ? escapeHtml(nombre) : nombre;
+    return ''
+    + '<div style="margin:8px 0 4px;border:1.5px solid #F59E0B;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#fffbeb,#fff7ed)">'
+      + '<div style="display:flex;align-items:center;gap:8px;background:#F59E0B;color:#fff;padding:7px 12px;font-weight:800;font-size:12px;letter-spacing:.03em">'
+        + '<span>🏪 ARTÍCULO DE MARKETPLACE</span>'
+        + '<span style="margin-left:auto;font-weight:700;font-size:11px;opacity:.95">Vendido por terceros</span>'
+      + '</div>'
+      + '<div style="padding:11px 13px">'
+        + '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px">'
+          + '<span style="font-size:13px;color:#7c2d12">Vendido y despachado por <strong style="color:#9a3412">'+safeN+'</strong></span>'
+          + (verif?'<span style="font-size:10.5px;font-weight:800;color:#15803d;background:#dcfce7;border-radius:20px;padding:2px 8px">✓ Verificado SSTT</span>':'')
+          + (rating?'<span style="font-size:11px;font-weight:800;color:#b45309">★ '+rating+'</span>':'')
+        + '</div>'
+        + '<div style="display:flex;align-items:flex-start;gap:7px;font-size:11.5px;color:#92400e;line-height:1.4;background:#fef3c7;border-radius:8px;padding:8px 10px">'
+          + '<span style="font-size:14px;line-height:1">🚚</span>'
+          + '<span>El despacho de este artículo lo gestiona el vendedor. Si lo combinas en un mismo pedido con productos SSTT, <strong>el envío puede tardar más</strong> porque se despacha por separado.</span>'
+        + '</div>'
+        + '<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:8px;font-size:10.5px;color:#78716c">'
+          + '<span>🛡️ Garantía del vendedor</span>'
+          + '<span>↩️ Devolución según vendedor</span>'
+          + '<span>💬 Soporte vía Marketplace</span>'
+        + '</div>'
+      + '</div>'
+    + '</div>';
+  };
+
+  // Sellos del modal para items mkt (reemplaza el trust-grid Dahua, que se oculta)
+  window.pmMktTrustGrid = function(p){ return ''; };
+
+  // Descargas (tab) para items mkt: sin PDF/links Dahua
+  window.mktDownloadsHTML = function(p){
+    var s = (typeof MKT_SELLERS_DEMO!=='undefined') ? MKT_SELLERS_DEMO.find(function(x){return x.id===p.sellerId;}) : null;
+    var nombre = s ? ((typeof escapeHtml==='function')?escapeHtml(s.nombre):s.nombre) : 'el vendedor';
+    return '<div class="pm-dl-grid">'
+      + '<div class="pm-dl-item" style="cursor:default"><div class="pm-dl-ico web">🏪</div>'
+        + '<div style="flex:1;min-width:0"><div class="pm-dl-name">Producto de Marketplace — '+ (p.marca?((typeof escapeHtml==="function")?escapeHtml(p.marca):p.marca):"tercero") +'</div>'
+        + '<div class="pm-dl-desc">Ficha provista por '+nombre+'. La documentación oficial la entrega el fabricante de la marca.</div></div></div>'
+      + (s?('<div class="pm-dl-item" style="cursor:pointer" onclick="mktViewSeller(\''+s.id+'\')"><div class="pm-dl-ico calc">👤</div>'
+        + '<div><div class="pm-dl-name">Ver perfil del vendedor — '+nombre+'</div>'
+        + '<div class="pm-dl-desc">Reputación, reseñas y otros productos del vendedor</div></div><div class="pm-dl-arr">↗</div></div>'):'')
+      + '</div>';
+  };
+
+  // ── Grilla de productos en la landing del Marketplace ──
+  window.mktRenderProducts = function(){
+    var grid = document.getElementById('mktProductsGrid');
+    if (!grid || typeof PRODUCTS==='undefined') return;
+    var items = PRODUCTS.filter(function(p){return p.mkt;});
+    var byCat = {};
+    items.forEach(function(p){ (byCat[p.cat]=byCat[p.cat]||[]).push(p); });
+    var order = ['mkt-energia','mkt-rack','mkt-red','mkt-almacenamiento','mkt-soportes','mkt-herramientas','mkt-electrico','mkt-senaletica'];
+    var html = '';
+    order.forEach(function(cat){
+      var arr = byCat[cat]; if(!arr||!arr.length) return;
+      var m = MKT_CAT_META[cat]||{t:cat,ic:'\uD83C\uDFEA',c1:'#F59E0B'};
+      html += '<div style="margin:22px 0 12px;display:flex;align-items:center;gap:9px">'
+        + '<span style="font-size:18px">'+m.ic+'</span>'
+        + '<h4 style="margin:0;font-size:15px;font-weight:800;color:var(--black)">'+m.t+'</h4>'
+        + '<span style="font-size:11px;font-weight:700;color:#fff;background:'+m.c1+';border-radius:20px;padding:2px 9px">'+arr.length+'</span>'
+        + '</div>';
+      // s107: MISMO formato del catálogo — pcard real dentro de .products-grid
+      html += '<div class="products-grid prox-grid">'
+        + arr.map(function(p){ return (typeof window.renderProductCard==='function') ? window.renderProductCard(p) : ''; }).join('')
+        + '</div>';
+    });
+    grid.innerHTML = html;
+  };
+
+  // ── Perfil de vendedor (modal): info + reviews de seller + sus productos ──
+  window.mktViewSeller = function(sellerId){
+    var s = MKT_SELLERS_DEMO.find(function(x){return x.id===sellerId;});
+    if (!s) return;
+    var esc = (typeof escapeHtml==='function')?escapeHtml:function(x){return x;};
+    var prods = (typeof PRODUCTS!=='undefined') ? PRODUCTS.filter(function(p){return p.mkt && p.sellerId===s.id;}) : [];
+    var revs = s.reviews || [];
+    var stars = function(r){var n=Math.round(r);return '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);};
+
+    var revHTML = revs.length ? revs.map(function(r){
+      return '<div style="border-top:1px solid #eee;padding:11px 0">'
+        + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">'
+          + '<strong style="font-size:12.5px;color:#111">'+esc(r.a)+'</strong>'
+          + '<span style="color:#F59E0B;font-size:12px">'+stars(r.r)+'</span>'
+          + '<span style="margin-left:auto;font-size:10.5px;color:#999">'+esc(r.f)+'</span>'
+        + '</div>'
+        + '<div style="font-size:12px;color:#444;line-height:1.45">'+esc(r.t)+'</div>'
+      + '</div>';
+    }).join('') : '<div style="font-size:12px;color:#999;padding:10px 0">Aún sin reseñas.</div>';
+
+    var prodHTML = prods.map(function(p){
+      var img=(typeof imgProxyUrl==='function')?imgProxyUrl(p.codigo):'';
+      var precio=(typeof fmtP==='function')?fmtP(p):('$'+p.ptotal.toLocaleString('es-CL'));
+      return '<div style="display:flex;align-items:center;gap:10px;border-top:1px solid #f0f0f0;padding:8px 0;cursor:pointer" onclick="mktSellerCloseModal();setTimeout(function(){openProdModal('+p.id+')},150)">'
+        + '<img src="'+img+'" style="width:48px;height:48px;border-radius:8px;object-fit:cover;background:#f8fafc;flex-shrink:0">'
+        + '<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(p.nombre)+'</div>'
+        + '<div style="font-size:11px;color:#666">'+esc(p.marca||'')+'</div></div>'
+        + '<div style="font-size:13px;font-weight:800;color:#111;white-space:nowrap">'+precio+'</div></div>';
+    }).join('');
+
+    var avgRev = revs.length ? (revs.reduce(function(a,r){return a+r.r;},0)/revs.length).toFixed(1) : s.rating;
+
+    var modal = document.getElementById('mktSellerModal');
+    if (!modal){ modal=document.createElement('div'); modal.id='mktSellerModal'; document.body.appendChild(modal); }
+    modal.style.cssText='position:fixed;inset:0;z-index:3000;background:rgba(15,23,42,.55);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:24px 14px';
+    modal.onclick=function(e){ if(e.target===modal) window.mktSellerCloseModal(); };
+    modal.innerHTML =
+      '<div style="background:#fff;border-radius:18px;max-width:560px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.3);overflow:hidden">'
+      + '<div style="background:linear-gradient(135deg,#F59E0B,#b45309);color:#fff;padding:18px 20px;display:flex;align-items:center;gap:14px;position:relative">'
+        + '<div style="width:54px;height:54px;border-radius:14px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:30px">'+s.emoji+'</div>'
+        + '<div style="min-width:0">'
+          + (s.verificado?'<div style="font-size:10.5px;font-weight:800;background:rgba(255,255,255,.25);border-radius:20px;padding:2px 9px;display:inline-block;margin-bottom:3px">✓ Verificado SSTT</div>':'')
+          + '<div style="font-size:18px;font-weight:900;line-height:1.1">'+esc(s.nombre)+'</div>'
+          + '<div style="font-size:12px;opacity:.95;margin-top:2px">📍 '+esc(s.ubicacion)+'</div>'
+        + '</div>'
+        + '<button onclick="mktSellerCloseModal()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer">✕</button>'
+      + '</div>'
+      + '<div style="display:flex;gap:0;border-bottom:1px solid #eee;text-align:center">'
+        + '<div style="flex:1;padding:13px"><div style="font-size:19px;font-weight:900;color:#111">'+s.productos+'</div><div style="font-size:10.5px;color:#888">Productos</div></div>'
+        + '<div style="flex:1;padding:13px;border-left:1px solid #eee"><div style="font-size:19px;font-weight:900;color:#111">'+s.ventas+'</div><div style="font-size:10.5px;color:#888">Ventas</div></div>'
+        + '<div style="flex:1;padding:13px;border-left:1px solid #eee"><div style="font-size:19px;font-weight:900;color:#F59E0B">'+avgRev+' ★</div><div style="font-size:10.5px;color:#888">'+revs.length+' reseñas</div></div>'
+      + '</div>'
+      + '<div style="padding:16px 20px">'
+        + '<div style="font-size:11.5px;color:#666;margin-bottom:4px">Especialidad</div>'
+        + '<div style="font-size:13px;font-weight:600;color:#111;margin-bottom:3px">'+esc(s.especialidad)+'</div>'
+        + '<div style="font-size:11.5px;color:#9a3412;font-weight:700;margin-bottom:14px">'+esc(s.marca||'')+'</div>'
+        + '<div style="font-size:13.5px;font-weight:800;color:#111;margin:0 0 2px">⭐ Reseñas del vendedor</div>'
+        + revHTML
+        + (prodHTML?('<div style="font-size:13.5px;font-weight:800;color:#111;margin:16px 0 2px">📦 Productos de '+esc(s.nombre)+'</div>'+prodHTML):'')
+      + '</div>'
+      + '</div>';
+    modal.style.display='flex';
+  };
+  window.mktSellerCloseModal = function(){
+    var m=document.getElementById('mktSellerModal'); if(m){ m.style.display='none'; m.innerHTML=''; }
+  };
+})();
+// s107: ════════ fin Marketplace helpers ════════
+
 
 // s98: === Compra por Volumen — descuento escalonado sobre precio de tier ===
 var VOL_DISCOUNT = {
@@ -42682,7 +43050,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's106',
+  ver:   's107',
   fecha: 'Jueves 04 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
