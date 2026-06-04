@@ -40478,7 +40478,11 @@ function aiSend() {
 
   // ── PASO 2: Consulta conversacional → API con catálogo filtrado ──
   aiTypingStart();
-  if (aiAutoMic) aiVoiceUI('thinking'); // s108: stage → pensando
+  if (aiAutoMic) { // s109: preserva el transcript del usuario como subtítulo mientras piensa
+    var _lastUserText = '';
+    for (var _hi = aiHistory.length - 1; _hi >= 0; _hi--) { if (aiHistory[_hi].role === 'user') { _lastUserText = aiHistory[_hi].content; break; } }
+    aiVoiceUI('thinking', _lastUserText ? '«' + _lastUserText.slice(0,80) + '»' : '');
+  }
   try { // s108: guarda anti-cuelgue — un throw síncrono limpia el "pensando" y avisa, nunca se queda pegado
 
   // Pasar los resultados locales como contexto pre-filtrado (limita tokens)
@@ -40678,7 +40682,7 @@ function aiInitSR() {
   if (aiSR) return aiSR;
   aiSR = new SR();
   aiSR.lang = 'es-CL';
-  aiSR.interimResults = false;
+  aiSR.interimResults = true;  // s109: interim para subtítulos en vivo (era false)
   aiSR.continuous = false;
   aiSR.maxAlternatives = 1;
   aiSR.onstart = function() {
@@ -40702,11 +40706,25 @@ function aiInitSR() {
     if (!aiPanelOpen) aiToggle();
   };
   aiSR.onresult = function(e) {
-    aiSRGotResult = true; // s108
-    var t = e.results[0][0].transcript;
-    document.getElementById('aiInp').value = t;
-    aiMicStop();
-    aiSend();
+    // s109: subtítulos en vivo (interim + final)
+    var interim = '', final_txt = '';
+    for (var i = 0; i < e.results.length; i++) {
+      var tr = e.results[i][0].transcript;
+      if (e.results[i].isFinal) final_txt += tr; else interim += tr;
+    }
+    // Subtítulo en vivo mientras habla
+    if (aiAutoMic && (final_txt || interim)) {
+      aiVoiceUI('listening', final_txt || interim);
+    }
+    // Solo procesar cuando hay resultado final
+    if (final_txt) {
+      aiSRGotResult = true; // s108
+      document.getElementById('aiInp').value = final_txt;
+      aiMicStop();
+      // s109: transición a "thinking" ANTES de enviar — el usuario ve que se está procesando
+      if (aiAutoMic) aiVoiceUI('thinking', final_txt);
+      aiSend();
+    }
   };
   aiSR.onerror = function(e) {
     // s108: permiso denegado → terminar el modo voz (no tiene sentido reintentar)
