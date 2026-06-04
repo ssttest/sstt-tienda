@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Jueves 04 de Junio del 2026 · s107 -->
+<!-- SSTT Tienda · Generado: Jueves 04 de Junio del 2026 · s108 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -40233,6 +40233,72 @@ function aiChip(el) {
   aiSend();
 }
 
+// s108: FIX — estas 3 funciones estaban anidadas DENTRO del .then() de aiSend
+//       (copy/paste s84). Por hoisting quedaban invisibles para aiSend (l.~) y
+//       aiAskAPI, que llaman _sanitizeMessages() → ReferenceError en PASO 2
+//       (consultas conversacionales/voz) → fetch nunca arrancaba y el typing
+//       indicator quedaba pegado. Movidas al scope correcto (column 0).
+// ── s84: PROMPT INJECTION DEFENSE ────────────────────────────
+// Sanitiza strings de contexto antes de enviarlos al Worker
+// Elimina patrones de inyección de prompt conocidos
+function _sanitizeCtxStr(s) {
+  if (typeof s !== 'string') return s;
+  return s
+    // Eliminar delimitadores de sistema comunes en inyecciones
+    .replace(/<\/?(?:system|SYSTEM|instruction|INSTRUCTION|prompt|PROMPT|context|CONTEXT|override|OVERRIDE)[^>]*>/gi, '[FILTRADO]')
+    // Eliminar patrones de jailbreak directos
+    .replace(/ignore\s+(all\s+)?(previous|prior|above|your)\s+(instructions?|prompts?|rules?|constraints?)/gi, '[FILTRADO]')
+    .replace(/forget\s+(everything|all|your)\s*(you|previous|prior)?/gi, '[FILTRADO]')
+    .replace(/you\s+are\s+now\s+(a\s+)?(different|new|another|an?\s+AI|GPT|Claude|DAN)/gi, '[FILTRADO]')
+    .replace(/new\s+(role|persona|identity|instructions?|system\s+prompt)/gi, '[FILTRADO]')
+    .replace(/disregard\s+(your|all|previous|prior)/gi, '[FILTRADO]')
+    .replace(/act\s+as\s+(if\s+you\s+)?(are\s+)?(a\s+)?(different|another|an?\s+AI|unrestricted)/gi, '[FILTRADO]')
+    .replace(/pretend\s+(you\s+)?(are|have\s+no)/gi, '[FILTRADO]')
+    .replace(/reveal\s+(your|the)\s+(system\s+)?prompt/gi, '[FILTRADO]')
+    .replace(/print\s+(your|the)\s+(system\s+)?prompt/gi, '[FILTRADO]')
+    .replace(/show\s+(me\s+)?(your|the)\s+(system\s+)?prompt/gi, '[FILTRADO]')
+    .replace(/what\s+(are|is)\s+your\s+(system\s+)?prompt/gi, '[FILTRADO]')
+    // Eliminar secuencias de escape y control
+    .replace(/\u[0-9a-fA-F]{4}/g, '')
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+    // Limitar longitud por campo (evitar context stuffing)
+    .substring(0, 12000);
+}
+
+// Sanitiza un objeto de contexto completo recursivamente
+function _sanitizeContext(ctx) {
+  if (!ctx || typeof ctx !== 'object') return ctx;
+  var out = {};
+  Object.keys(ctx).forEach(function(k) {
+    var v = ctx[k];
+    if (typeof v === 'string') out[k] = _sanitizeCtxStr(v);
+    else if (Array.isArray(v)) out[k] = v.map(function(item) {
+      return typeof item === 'string' ? _sanitizeCtxStr(item) : item;
+    });
+    else out[k] = v;
+  });
+  return out;
+}
+
+// Sanitiza el array de messages antes de enviarlo
+function _sanitizeMessages(msgs) {
+  if (!Array.isArray(msgs)) return msgs;
+  return msgs.map(function(m) {
+    if (!m || typeof m !== 'object') return m;
+    var content = m.content;
+    if (typeof content === 'string') {
+      return Object.assign({}, m, { content: _sanitizeCtxStr(content) });
+    }
+    if (Array.isArray(content)) {
+      return Object.assign({}, m, { content: content.map(function(block) {
+        if (block && block.type === 'text') return Object.assign({}, block, { text: _sanitizeCtxStr(block.text) });
+        return block;
+      })});
+    }
+    return m;
+  });
+}
+
 function aiSend() {
   var inp = document.getElementById('aiInp');
   var q = (inp.value || '').trim();
@@ -40360,66 +40426,6 @@ function aiSend() {
       setTimeout(function(){ render(); showSection('catalogo'); }, 400);
     }
 
-    // ── s84: PROMPT INJECTION DEFENSE ────────────────────────────
-// Sanitiza strings de contexto antes de enviarlos al Worker
-// Elimina patrones de inyección de prompt conocidos
-function _sanitizeCtxStr(s) {
-  if (typeof s !== 'string') return s;
-  return s
-    // Eliminar delimitadores de sistema comunes en inyecciones
-    .replace(/<\/?(?:system|SYSTEM|instruction|INSTRUCTION|prompt|PROMPT|context|CONTEXT|override|OVERRIDE)[^>]*>/gi, '[FILTRADO]')
-    // Eliminar patrones de jailbreak directos
-    .replace(/ignore\s+(all\s+)?(previous|prior|above|your)\s+(instructions?|prompts?|rules?|constraints?)/gi, '[FILTRADO]')
-    .replace(/forget\s+(everything|all|your)\s*(you|previous|prior)?/gi, '[FILTRADO]')
-    .replace(/you\s+are\s+now\s+(a\s+)?(different|new|another|an?\s+AI|GPT|Claude|DAN)/gi, '[FILTRADO]')
-    .replace(/new\s+(role|persona|identity|instructions?|system\s+prompt)/gi, '[FILTRADO]')
-    .replace(/disregard\s+(your|all|previous|prior)/gi, '[FILTRADO]')
-    .replace(/act\s+as\s+(if\s+you\s+)?(are\s+)?(a\s+)?(different|another|an?\s+AI|unrestricted)/gi, '[FILTRADO]')
-    .replace(/pretend\s+(you\s+)?(are|have\s+no)/gi, '[FILTRADO]')
-    .replace(/reveal\s+(your|the)\s+(system\s+)?prompt/gi, '[FILTRADO]')
-    .replace(/print\s+(your|the)\s+(system\s+)?prompt/gi, '[FILTRADO]')
-    .replace(/show\s+(me\s+)?(your|the)\s+(system\s+)?prompt/gi, '[FILTRADO]')
-    .replace(/what\s+(are|is)\s+your\s+(system\s+)?prompt/gi, '[FILTRADO]')
-    // Eliminar secuencias de escape y control
-    .replace(/\u[0-9a-fA-F]{4}/g, '')
-    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
-    // Limitar longitud por campo (evitar context stuffing)
-    .substring(0, 12000);
-}
-
-// Sanitiza un objeto de contexto completo recursivamente
-function _sanitizeContext(ctx) {
-  if (!ctx || typeof ctx !== 'object') return ctx;
-  var out = {};
-  Object.keys(ctx).forEach(function(k) {
-    var v = ctx[k];
-    if (typeof v === 'string') out[k] = _sanitizeCtxStr(v);
-    else if (Array.isArray(v)) out[k] = v.map(function(item) {
-      return typeof item === 'string' ? _sanitizeCtxStr(item) : item;
-    });
-    else out[k] = v;
-  });
-  return out;
-}
-
-// Sanitiza el array de messages antes de enviarlo
-function _sanitizeMessages(msgs) {
-  if (!Array.isArray(msgs)) return msgs;
-  return msgs.map(function(m) {
-    if (!m || typeof m !== 'object') return m;
-    var content = m.content;
-    if (typeof content === 'string') {
-      return Object.assign({}, m, { content: _sanitizeCtxStr(content) });
-    }
-    if (Array.isArray(content)) {
-      return Object.assign({}, m, { content: content.map(function(block) {
-        if (block && block.type === 'text') return Object.assign({}, block, { text: _sanitizeCtxStr(block.text) });
-        return block;
-      })});
-    }
-    return m;
-  });
-}
 // s47a: SECURITY — escape HTML before markdown conversion (audit C1)
     raw = escapeHtml(raw);
     var cleanHtml = raw
@@ -43252,7 +43258,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's107',
+  ver:   's108',
   fecha: 'Jueves 04 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
