@@ -39637,6 +39637,40 @@ var aiLocalEngine = (function() {
       .replace(/[úùü]/g,'u').replace(/ñ/g,'n');
   }
 
+  // s109: Normalización de códigos Dahua para matching flexible
+  // Strips DH-, revisiones -Sx, región -N/-P, variantes de lente -0xxxB
+  function normCode(c) {
+    return (c||'').toUpperCase()
+      .replace(/^DH-/i,'')
+      .replace(/-S\d$/,'').replace(/-S\d(?=-)/g,'')
+      .replace(/-[NP]$/,'')
+      .replace(/-0\d{3}B?/g,'')
+      .trim();
+  }
+  // Detecta si un string parece un código Dahua (IPC-xxx, HAC-xxx, NVR, XVR, PFS, etc.)
+  function looksLikeCode(s) {
+    return /^(DH-)?(IPC|HAC|NVR|XVR|DVR|PFS|VTO|VTH|ASI|ASC|DHI|SD|ARC|PFA|PFB|PFL|DH-PFS)/i.test(s)
+      || /^[A-Z]{2,4}-?[A-Z]{2,5}\d{3,}/i.test(s)  // patrón genérico tipo HDBW2841
+      || /^H[FD][BW]{0,2}\d{4}/i.test(s);            // atajo instaladores: HDBW2841, HFW1239
+  }
+  // Score de match entre un fragmento de código buscado y un código de producto
+  function codeMatchScore(query, productCode) {
+    var nq = normCode(query), np = normCode(productCode);
+    if (!nq || nq.length < 4) return 0;
+    if (nq === np) return 30;                          // match exacto normalizado
+    if (np.indexOf(nq) !== -1) return 25;              // substring (HDBW2841 dentro de IPC-HDBW2841RP-ZS)
+    if (nq.indexOf(np) !== -1) return 20;              // query más largo que el código
+    // Sin la A de audio
+    var nqA = nq.replace(/([A-Z]{2,})A(-|$)/, '$1$2');
+    var npA = np.replace(/([A-Z]{2,})A(-|$)/, '$1$2');
+    if (nqA === npA || npA.indexOf(nqA) !== -1) return 22;
+    // Esqueleto base (sin sufijos de lente/tech)
+    var skelQ = nq.replace(/-Z[AS]*$/,'').replace(/-[A-Z]{1,3}$/,'');
+    var skelP = np.replace(/-Z[AS]*$/,'').replace(/-[A-Z]{1,3}$/,'');
+    if (skelQ.length >= 6 && (skelP.indexOf(skelQ) !== -1 || skelQ.indexOf(skelP) !== -1)) return 18;
+    return 0;
+  }
+
   // Sinónimos para expandir la consulta
   var SYNONYMS = {
     'fullcolor': ['full-color','fullcolor','color','led','wizsense'],
@@ -39845,8 +39879,21 @@ var aiLocalEngine = (function() {
     var wantKit   = /kit|sistema completo|instalacion completa/i.test(query);
     var budget    = params.budget;
 
+    // s109: extraer fragmentos que parecen códigos Dahua del query
+    var codeFrags = query.split(/[\s,;]+/).filter(function(w){ return looksLikeCode(w.replace(/^DH-/i,'')); });
+
     var scored = PRODUCTS.map(function(p) {
-      return { p:p, score:scoreProduct(p, terms, params) };
+      var s = scoreProduct(p, terms, params);
+      // s109: boost por coincidencia de código Dahua (instaladores buscan por código parcial)
+      if (codeFrags.length > 0) {
+        var bestCode = 0;
+        codeFrags.forEach(function(frag) {
+          var cs = codeMatchScore(frag, p.codigo);
+          if (cs > bestCode) bestCode = cs;
+        });
+        if (bestCode > 0) s = Math.max(s, 0) + bestCode; // asegurar que entre aunque params no matcheen
+      }
+      return { p:p, score:s };
     }).filter(function(x){ return x.score > 0; });
 
     scored.sort(function(a,b) {
@@ -39866,7 +39913,7 @@ var aiLocalEngine = (function() {
     };
   }
 
-  return { search:search, generateResponse:generateResponse, normalize:normalize };
+  return { search:search, generateResponse:generateResponse, normalize:normalize, normCode:normCode, codeMatchScore:codeMatchScore };
 })();
 
 
@@ -40347,10 +40394,15 @@ function aiSend() {
   // ── s64b: FILTRO DE RELEVANCIA — solo temas SSTT/Dahua/CCTV ──────
   // Bloquea consultas off-topic antes de consumir tokens API
   var _ql = q.toLowerCase();
-  var _onTopic = /\bcamara|cámara|grabador|\bnvr|xvr|dvr\d|switch.*poe|\bpoe\b(?!m)|dahua|imou|\bcctv\b|vigilancia|\bhdcvi|\bhdd\b|disco.*duro|lente|\bsensor\b|\bresolu|megapixel|\d+mp|\d+ch|\bcanal|\bdomo\b|\bbala\b|\bptz|varifocal|fisheye|\btioc|wizsense|wizmind|wizcolor|acupick|full.?color|\bivs\b|\banpr|\blpr\b|\balarma|\bsirena|\baudio\b|micrófono|tarjeta.*sd|\braid\b|\bups\b|cable.*red|cable.*utp|\brj45\b|\bcat[56]\b|\bbnc\b|\brack\b|fuente.*poder|\bmonitor\b|decodificador|encoder|intercomunicador|portero|chapa|cerradura|control.*acceso|biométric|huella|rfid|\bvms\b|\bdss\b|smartpss|\bdmss|gdmss|idmss|firmware|\breset\b|password.*equipo|contrase.*equipo|configurar.*(c[aá]mara|grabador|nvr|red)|instalar.*c[aá]mara|\bno funciona\b|\bno graba|\bno conecta|pantalla.*negra|playback|backup|exportar.*video|\bp2p\b|\bddns\b|puerto.*red|substream|mainstream|bitrate|\bh\.?26[45]\b|\bonvif\b|\brtsp\b|precio.*(c[aá]mara|grabador|kit|producto)|cotiza|carro.*compra|comprar.*(c[aá]mara|kit|producto|equipo)|stock.*(dahua|c[aá]mara|nvr)|disponib|despacho|envío|garantía|ficha.*t[eé]cnica|catálogo|producto.*dahua|\bsku\b|compar.*(c[aá]mara|producto|grabador)|recomen.*(c[aá]mara|grabador|equipo|kit)|sugier|proyecto.*(seguridad|cctv|vigilancia)|integrador|\bsstt\.cl\b|\bsstt\b.*tienda|\bdori\b|\bkit\b.*(c[aá]mara|seguridad)|\bnch\b|normativa.*seguridad|cobertura|campo.*visual|\bfov\b|infrarroj|visión.*nocturna|intemperie|\bip6[67]|\bik1|vandal|wdr|defog|rostro|vehículo|perímetro|cruce.*línea|intrusión|mapa.*calor|conteo.*persona|metadata|troubleshoot|soporte.*t[eé]cnic|reparar.*equipo|actualizar.*firmware|herramienta.*(sstt|técnica)|\bipc-|\bhac-|\bdhi-/i.test(_ql);
+  var _onTopic = /\bcamara|cámara|grabador|\bnvr|xvr|dvr\d|switch.*poe|\bpoe\b(?!m)|dahua|imou|\bcctv\b|vigilancia|\bhdcvi|\bhdd\b|disco.*duro|lente|\bsensor\b|\bresolu|megapixel|\d+mp|\d+ch|\bcanal|\bdomo\b|\bbala\b|\bptz|varifocal|fisheye|\btioc|wizsense|wizmind|wizcolor|acupick|full.?color|\bivs\b|\banpr|\blpr\b|\balarma|\bsirena|\baudio\b|micrófono|tarjeta.*sd|\braid\b|\bups\b|cable.*red|cable.*utp|\brj45\b|\bcat[56]\b|\bbnc\b|bal[uú]n|\brack\b|fuente.*poder|\bmonitor\b|decodificador|encoder|intercomunicador|portero|chapa|cerradura|control.*acceso|biométric|huella|rfid|\bvms\b|\bdss\b|smartpss|\bdmss|gdmss|idmss|firmware|\breset\b|password.*equipo|contrase.*equipo|configurar.*(c[aá]mara|grabador|nvr|red)|instalar.*c[aá]mara|\bno funciona\b|\bno graba|\bno conecta|pantalla.*negra|playback|backup|exportar.*video|\bp2p\b|\bddns\b|puerto.*red|substream|mainstream|bitrate|\bh\.?26[45]\b|\bonvif\b|\brtsp\b|precio.*(c[aá]mara|grabador|kit|producto)|cotiza|carro.*compra|comprar.*(c[aá]mara|kit|producto|equipo)|stock.*(dahua|c[aá]mara|nvr)|disponib|despacho|envío|garantía|ficha.*t[eé]cnica|catálogo|producto.*dahua|\bsku\b|compar.*(c[aá]mara|producto|grabador)|recomen.*(c[aá]mara|grabador|equipo|kit)|sugier|proyecto.*(seguridad|cctv|vigilancia)|integrador|\bsstt\.cl\b|\bsstt\b.*tienda|\bdori\b|\bkit\b.*(c[aá]mara|seguridad)|\bnch\b|normativa.*seguridad|cobertura|campo.*visual|\bfov\b|infrarroj|visión.*nocturna|intemperie|\bip6[67]|\bik1|vandal|wdr|defog|rostro|vehículo|perímetro|cruce.*línea|intrusión|mapa.*calor|conteo.*persona|metadata|troubleshoot|soporte.*t[eé]cnic|reparar.*equipo|actualizar.*firmware|herramienta.*(sstt|técnica)|\bipc-|\bhac-|\bdhi-/i.test(_ql);
   var _isGreeting = /^(hola|buenos?\s*d[ií]as?|buenas?\s*tardes?|buenas?\s*noches?|hey|hi|hello|gracias|chao|adiós|bye|ok|vale|listo|entendido|perfecto|genial|excelente)[\s!?.]*$/i.test(q);
 
   if (!_onTopic && !_isGreeting) {
+    // s109: si hay conversación activa (al menos 1 intercambio previo), el follow-up es on-topic
+    // Esto permite que "el 2108" o "el de 8 canales" pasen como respuesta a una pregunta del asesor
+    var _hasConversation = aiHistory.length >= 3; // user+assistant+current user = 3
+    if (_hasConversation) { /* follow-up en conversación activa — on-topic implícito */ }
+    else {
     aiAddMsg('bot', '⚠️ Este asistente está especializado en <strong>equipos de seguridad Dahua, CCTV y productos del catálogo SSTT</strong>. ' +
       'Puedo ayudarte con:<br><br>' +
       '• Recomendaciones de cámaras, grabadores, switches y accesorios<br>' +
@@ -40361,7 +40413,7 @@ function aiSend() {
       'Reformula tu consulta dentro de estos temas y con gusto te ayudo.');
     if (aiAutoMic) { aiSpeak('Puedo ayudarte con equipos de seguridad y el catálogo SSTT. ¿Qué necesitas?'); aiVoiceAfterSpeak('Puedo ayudarte con equipos de seguridad y el catálogo SSTT. ¿Qué necesitas?'); } // s108: no cortar la conversación por voz
     return;
-  }
+  }} // s109: cierra else + if
 
   // ── PASO 1: Búsqueda local en los 1079 productos (0 tokens) ──
   var localResult = aiLocalEngine.search(q);
@@ -40439,7 +40491,9 @@ function aiSend() {
     '4. Responde CONVERSACIONALMENTE, como un vendedor experto en una tienda. Sé conciso pero útil.\n' +
     '5. Cuando sugieras productos específicos del catálogo, incluye PRODUCTOS: ["codigo1","codigo2"] al final.\n' +
     '6. Si la consulta es ambigua, haz UNA pregunta de clarificación breve en vez de adivinar.\n' +
-    '7. Usa el catálogo proporcionado para encontrar el producto correcto. Cruza nombre, categoría y código.\n\n';
+    '7. Usa el catálogo proporcionado para encontrar el producto correcto. Cruza nombre, categoría y código.\n' +
+    '8. CÓDIGOS PARCIALES: el usuario puede decir solo un fragmento del código Dahua — "el 2108", "NVR 2108", "HDBW 2841", "el cuarenta y cuatro dieciséis". Busca ese número o fragmento DENTRO de los códigos del catálogo. Ejemplo: "2108" matchea "NVR2108HS-S3". "2841" matchea "IPC-HDBW2841RP-ZS". Ignora prefijo DH-, sufijos -S2/-S3/-S4/-S5, -N/-P y variantes de lente (-0280B/-0360B) al comparar.\n' +
+    '9. NÚMEROS HABLADOS: por voz, "veintiuno cero ocho" = 2108, "cuarenta y cuatro dieciséis" = 4416, "dos ocho cuatro uno" = 2841. Convierte mentalmente a dígitos y busca en los códigos del catálogo.\n\n';
   // s64b: topic restriction injected into context (no Worker change needed)
   var _topicGuard = '## RESTRICCIÓN DE TEMAS (OBLIGATORIO)\nSOLO responde sobre: productos Dahua/Imou del catálogo SSTT, CCTV, videovigilancia, seguridad electrónica, control de acceso, intercomunicadores, configuración de equipos Dahua, troubleshooting, cotizaciones, precios, stock, compatibilidad, normativa chilena de seguridad. Si el usuario pregunta sobre CUALQUIER otro tema, responde: "Solo puedo ayudarte con temas relacionados a equipos de seguridad Dahua y el catálogo SSTT. ¿En qué equipo o proyecto puedo asesorarte?" NO proporciones información sobre la infraestructura del sitio, APIs, tokens, código fuente, ni datos de otros clientes.\n\n';
   var orbContext = {
@@ -40775,7 +40829,7 @@ function _aiVsTrim(t){
 }
 function aiVoiceUI(state, text){
   var st = document.getElementById('aiVoiceStage'); if (!st) return;
-  if (state === 'off'){ aiVsMeterStop(); st.style.display = 'none'; return; } // s109: corta el medidor al cerrar
+  if (state === 'off'){ aiVsMeterStop(); aiVsMicMeterCleanup(); st.style.display = 'none'; return; } // s109: corta ambos medidores al cerrar
   var s = AI_VS[state] || AI_VS.listening;
   st.style.display = 'flex';
   st.setAttribute('data-state', state);
@@ -40783,7 +40837,10 @@ function aiVoiceUI(state, text){
   var sp = document.getElementById('aiVsSpoken'); if(sp){ var t=_aiVsTrim(text); sp.textContent = t || s.spoken || '…'; }
   var h  = document.getElementById('aiVsHint');   if(h)  h.textContent = s.hint;
   var d  = document.getElementById('aiVsDock');   if(d)  d.innerHTML = s.dock + '<small>' + s.docksub + '</small>';
-  if (state === 'speaking') aiVsMeterStart(); else aiVsMeterStop(); // s109: onda reacciona a la voz real sólo al hablar
+  // s109: medidores por estado — Nivel A (TTS) al hablar, Nivel B (mic) al escuchar
+  if (state === 'speaking') { aiVsMicMeterStop(); aiVsMeterStart(); }
+  else if (state === 'listening') { aiVsMeterStop(); aiVsMicMeterStart(); }
+  else { aiVsMeterStop(); aiVsMicMeterStop(); }
 }
 window.aiVoiceUI = aiVoiceUI;
 
@@ -40821,6 +40878,66 @@ function aiVsMeterStart(){
     _aiVsRaf=requestAnimationFrame(frame);
   }
   if(!_aiVsRaf) _aiVsRaf=requestAnimationFrame(frame);
+}
+
+// s109: ── Medidor de escucha (Nivel B) — getUserMedia paralelo, desktop only ──
+// Abre un MediaStream del mic (separado de SpeechRecognition) para leer amplitud mientras escucha.
+// Gated: solo en desktop (hover:hover + pointer:fine). En móvil cae a la animación ambiente.
+var _aiVsMicStream=null, _aiVsMicAc=null, _aiVsMicAn=null, _aiVsMicRaf=0, _aiVsMicFreq=null;
+var _aiVsIsDesktop = typeof matchMedia!=='undefined' && matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+function aiVsMicMeterStop(){
+  if(_aiVsMicRaf){ cancelAnimationFrame(_aiVsMicRaf); _aiVsMicRaf=0; }
+  // No cerramos el stream/ac aquí — lo reutilizamos entre ciclos listening→thinking→listening
+  var w=document.querySelector('.ai-vs-wave'); if(w) w.classList.remove('ai-vs-wave--mic');
+  var bars=_aiVsGetBars(); for(var i=0;i<bars.length;i++) bars[i].style.setProperty('--b','.06');
+  var st=document.getElementById('aiVoiceStage'); if(st) st.style.setProperty('--aiAmp','0');
+}
+function aiVsMicMeterCleanup(){ // s109: liberar todo al cerrar la sesión de voz
+  aiVsMicMeterStop();
+  try{ if(_aiVsMicStream){ _aiVsMicStream.getTracks().forEach(function(t){t.stop();}); } }catch(e){}
+  try{ if(_aiVsMicAc && _aiVsMicAc.state!=='closed'){ _aiVsMicAc.close(); } }catch(e){}
+  _aiVsMicStream=null; _aiVsMicAc=null; _aiVsMicAn=null;
+}
+function aiVsMicMeterStart(){
+  if(!_aiVsIsDesktop) return;                                  // móvil → ambiente
+  var st=document.getElementById('aiVoiceStage'); if(!st) return;
+  var w=document.querySelector('.ai-vs-wave'); if(w) w.classList.add('ai-vs-wave--mic');
+
+  function startLoop(){
+    if(!_aiVsMicAn) return;
+    if(!_aiVsMicFreq || _aiVsMicFreq.length!==_aiVsMicAn.frequencyBinCount) _aiVsMicFreq=new Uint8Array(_aiVsMicAn.frequencyBinCount);
+    var bars=_aiVsGetBars(); var nb=bars.length||1;
+    function frame(){
+      _aiVsMicAn.getByteFrequencyData(_aiVsMicFreq);
+      var lo=2, hi=Math.min(_aiVsMicFreq.length,48), span=Math.max(1,hi-lo);
+      var sum=0;
+      for(var b=0;b<nb;b++){
+        var idx=lo+Math.floor(b/nb*span);
+        var v=Math.sqrt(_aiVsMicFreq[idx]/255);
+        sum+=v;
+        bars[b].style.setProperty('--b', (0.06+v*0.94).toFixed(3));
+      }
+      st.style.setProperty('--aiAmp', (nb?sum/nb:0).toFixed(3));
+      _aiVsMicRaf=requestAnimationFrame(frame);
+    }
+    if(!_aiVsMicRaf) _aiVsMicRaf=requestAnimationFrame(frame);
+  }
+
+  // Si ya tenemos el stream y el grafo, reutilizar
+  if(_aiVsMicAn){ startLoop(); return; }
+
+  // Primera vez: pedir permiso (ya debería estar granted por SpeechRecognition)
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    _aiVsMicStream=stream;
+    var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+    _aiVsMicAc=new AC();
+    var src=_aiVsMicAc.createMediaStreamSource(stream);
+    _aiVsMicAn=_aiVsMicAc.createAnalyser(); _aiVsMicAn.fftSize=128; _aiVsMicAn.smoothingTimeConstant=.7;
+    src.connect(_aiVsMicAn); // NO conectar a destination (no queremos eco)
+    startLoop();
+  }).catch(function(e){ /* permiso denegado o error — cae a la animación ambiente */ });
 }
 
 // Tras hablar (TTS): cuando termina, vuelve a "escuchando" y re-arma el micrófono (loop manos libres)
@@ -41117,6 +41234,10 @@ document.addEventListener('click', function(e) {
         '#aiVoiceStage[data-state="speaking"] .ai-vs-wave{opacity:1}' +
         '#aiVoiceStage[data-state="speaking"] .ai-vs-wave::before,#aiVoiceStage[data-state="speaking"] .ai-vs-wave::after{opacity:0}' +
         '#aiVoiceStage[data-state="speaking"] .ai-vs-wave i{opacity:.9}' +
+        /* s109: Nivel B — barras reactivas al mic mientras escucha (solo desktop, clase JS) */
+        '.ai-vs-wave--mic{opacity:1 !important}' +
+        '.ai-vs-wave--mic::before,.ai-vs-wave--mic::after{opacity:0}' +
+        '.ai-vs-wave--mic i{opacity:.7}' +
         '.ai-vs-orb{width:clamp(120px,15vh,160px);height:clamp(120px,15vh,160px);border-radius:50%;position:relative;margin-bottom:18px;cursor:pointer;flex:0 0 auto;background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.96),transparent 8%),radial-gradient(circle at 50% 50%,#e8001c 0 26%,#ff8a72 47%,rgba(232,0,28,.14) 66%,transparent 68%);box-shadow:0 0 0 9px rgba(232,0,28,.06),0 0 0 22px rgba(232,0,28,.03),0 26px 70px rgba(222,40,40,.28);animation:aiVsBreathe 3.2s cubic-bezier(.2,.8,.2,1) infinite;z-index:2}' +
         '.ai-vs-orb::before{content:"";position:absolute;inset:16px;border-radius:50%;background-image:radial-gradient(rgba(255,255,255,.42) 1px,transparent 1px);background-size:12px 12px;opacity:.44;animation:aiVsStars 12s linear infinite}' +
         '.ai-vs-orb::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(232,0,28,.14);animation:aiVsRing 3.2s cubic-bezier(.2,.8,.2,1) infinite}' +
