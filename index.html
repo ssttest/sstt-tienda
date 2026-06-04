@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <meta name="referrer" content="no-referrer-when-downgrade">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://camaras-de-seguridad-dahua.sstt.cl https://*.cloudflare.com https://*.workers.dev https://maps.googleapis.com https://maps.gstatic.com https://*.ggpht.com https://streetviewpixels-pa.googleapis.com https://*.google.com; connect-src 'self' https://sstt-proxy.ryanodina.workers.dev https://maps.googleapis.com https://*.dahuasecurity.com https://cdn1.dori.cl; worker-src 'self' blob: https://cdnjs.cloudflare.com; frame-src https://docs.google.com; object-src 'none'; base-uri 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://camaras-de-seguridad-dahua.sstt.cl https://*.cloudflare.com https://*.workers.dev https://maps.googleapis.com https://maps.gstatic.com https://*.ggpht.com https://streetviewpixels-pa.googleapis.com https://*.google.com; connect-src 'self' https://sstt-proxy.ryanodina.workers.dev https://maps.googleapis.com https://*.dahuasecurity.com https://cdn1.dori.cl; worker-src 'self' blob: https://cdnjs.cloudflare.com; media-src 'self' blob: https://sstt-proxy.ryanodina.workers.dev; frame-src https://docs.google.com; object-src 'none'; base-uri 'self';">
 <link rel="preconnect" href="https://camaras-de-seguridad-dahua.sstt.cl">
 <link rel="dns-prefetch" href="https://camaras-de-seguridad-dahua.sstt.cl">
 <title>SSTT® — Cámaras de Seguridad Dahua Chile | Distribuidor Oficial · Precios y Stock</title>
@@ -21043,6 +21043,10 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             </svg>
             <span>Analizar escena</span>
           </button>
+          <button class="cam-scene-btn" id="voiceBtn" onclick="VOICE.toggle()" title="Modo conversación por voz" style="transition:all .15s">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+            <span>Hablar</span>
+          </button>
           <button class="send-b" id="sendBtn" onclick="sendAIMessage()">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
@@ -30764,6 +30768,7 @@ async function sendAIMessage() {
     hideAITyping();
     addAIMsg('ai', content, prods);
     if (prods.length) updateAIRecSidebar(prods);
+    try { if (window.VOICE && VOICE.active) VOICE.onAIResponse(content); } catch(e){} // s107: leer respuesta en modo voz
   } catch(e) {
     hideAITyping();
     console.error('[sendAIMessage]', e.name, e.message, e.stack); // s34: telemetría mínima (patrón s33 §5.1)
@@ -41383,6 +41388,194 @@ window.mktSubmitInterest = function() {
   };
 })();
 // s107: ════════ fin Marketplace helpers ════════
+
+// s107: ════════ Modo Conversación por voz — Asesor IA ════════
+// STT (Web Speech, es-CL) -> sendAIMessage() (Claude + tu catálogo/KB vía Worker) -> TTS.
+// TTS por defecto = voz del navegador (speechSynthesis, gratis). Para voz natural tipo
+// ElevenLabs: poner V.ttsMode='eleven' y exponer POST /tts en el Worker (devuelve audio/mpeg).
+// Interrupción: tocar el pill mientras habla. Loop continuo hasta apagar el 🎤.
+(function(){
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var synth = window.speechSynthesis;
+  var supported = !!SR && !!synth;
+
+  var V = {
+    active:false, state:'idle', rec:null, speaking:false,
+    ttsMode:'eleven',    // s107: ElevenLabs vía Worker /tts. Si falla, cae solo a la voz del navegador. Vuelve a 'browser' para desactivar.
+    voice:null, _guard:0, _audio:null, _t:null
+  };
+
+  function pickVoice(){
+    if(!synth) return;
+    var vs = synth.getVoices() || [];
+    V.voice = vs.find(function(v){return /es[-_]CL/i.test(v.lang);})
+           || vs.find(function(v){return /es[-_](419|MX|US|AR)/i.test(v.lang);})
+           || vs.find(function(v){return /^es/i.test(v.lang);})
+           || null;
+  }
+  if(synth){ pickVoice(); try{ synth.onvoiceschanged = pickVoice; }catch(e){} }
+
+  function ensurePill(){
+    var pill = document.getElementById('voicePill');
+    if(pill) return pill;
+    pill = document.createElement('div');
+    pill.id = 'voicePill';
+    pill.style.cssText = 'position:fixed;left:50%;bottom:96px;transform:translateX(-50%);z-index:4000;display:none;align-items:center;gap:9px;background:#0f172a;color:#fff;padding:11px 18px;border-radius:30px;font-size:13px;font-weight:700;font-family:var(--font,sans-serif);box-shadow:0 10px 34px rgba(0,0,0,.34);cursor:pointer;user-select:none;max-width:90vw';
+    pill.onclick = function(){ if(V.speaking) V.interrupt(); else V.stop(); };
+    document.body.appendChild(pill);
+    return pill;
+  }
+
+  function setStatus(s){
+    V.state = s;
+    var pill = ensurePill();
+    var labels = {
+      listening:'<span style="width:9px;height:9px;border-radius:50%;background:#22c55e;display:inline-block;animation:voicePulse 1s infinite"></span> Escuchando… <span style="opacity:.7;font-weight:600">(toca para terminar)</span>',
+      thinking :'<span>💭</span> Pensando…',
+      speaking :'<span>🔊</span> Hablando… <span style="opacity:.7;font-weight:600">(toca para interrumpir)</span>',
+      idle:''
+    };
+    pill.innerHTML = labels[s] || '';
+    pill.style.display = (s && s!=='idle') ? 'flex' : 'none';
+    var btn = document.getElementById('voiceBtn');
+    if(btn){
+      if(V.active){ btn.style.background='#E8001C'; btn.style.color='#fff'; btn.style.borderColor='#E8001C'; }
+      else { btn.style.background=''; btn.style.color=''; btn.style.borderColor=''; }
+    }
+    if(!document.getElementById('voicePulseKf')){
+      var st=document.createElement('style'); st.id='voicePulseKf';
+      st.textContent='@keyframes voicePulse{0%,100%{opacity:1}50%{opacity:.3}}';
+      document.head.appendChild(st);
+    }
+  }
+
+  function cleanForTTS(t){
+    return String(t||'')
+      .replace(/\[PRODS:[^\]]+\]/g,'')
+      .replace(/```[\s\S]*?```/g,' ')
+      .replace(/`([^`]+)`/g,'$1')
+      .replace(/\*\*([^*]+)\*\*/g,'$1').replace(/\*([^*]+)\*/g,'$1')
+      .replace(/^#{1,3}\s/gm,'')
+      .replace(/https?:\/\/\S+/g,'')
+      .replace(/[•·]/g,', ')
+      .replace(/\s+/g,' ').trim()
+      .slice(0,700);
+  }
+
+  V.startListen = function(){
+    if(!V.active || !SR || V.speaking) return;
+    try { if(V.rec){ try{ V.rec.abort(); }catch(e){} } } catch(e){}
+    var r;
+    try { r = new SR(); } catch(e){ return; }
+    r.lang='es-CL'; r.continuous=false; r.interimResults=true; r.maxAlternatives=1;
+    V.rec = r;
+    var finalTxt='';
+    r.onstart = function(){ setStatus('listening'); };
+    r.onresult = function(e){
+      var interim='', fin='';
+      for(var i=e.resultIndex;i<e.results.length;i++){
+        var tr=e.results[i][0].transcript;
+        if(e.results[i].isFinal) fin+=tr; else interim+=tr;
+      }
+      var inp=document.getElementById('chatInput');
+      if(inp){ inp.value=(fin||interim); if(typeof autoResizeTA==='function'){ try{autoResizeTA(inp);}catch(_){} } }
+      if(fin.trim()) finalTxt=fin.trim();
+    };
+    r.onerror = function(ev){
+      if(ev && (ev.error==='not-allowed' || ev.error==='service-not-allowed')){
+        V.active=false; setStatus('idle');
+        if(typeof showToast==='function') showToast('🎤 Permiso de micrófono denegado');
+      }
+    };
+    r.onend = function(){
+      if(!V.active){ setStatus('idle'); return; }
+      if(finalTxt){
+        setStatus('thinking');
+        var inp=document.getElementById('chatInput');
+        if(inp) inp.value=finalTxt;
+        if(typeof sendAIMessage==='function') sendAIMessage();   // onAIResponse hablará y reanudará escucha
+      } else {
+        V._t=setTimeout(function(){ if(V.active && !V.speaking) V.startListen(); }, 250);
+      }
+    };
+    try { r.start(); } catch(e){ /* ya iniciado */ }
+  };
+
+  V.stopSpeak = function(){
+    V.speaking=false;
+    try{ if(synth) synth.cancel(); }catch(e){}
+    try{ if(V._audio){ V._audio.pause(); V._audio.src=''; V._audio=null; } }catch(e){}
+  };
+
+  function browserSpeak(clean, done){
+    if(!synth){ V.speaking=false; if(done)done(); return; }
+    try{ synth.cancel(); }catch(e){}
+    var u=new SpeechSynthesisUtterance(clean);
+    u.lang='es-CL'; if(V.voice) u.voice=V.voice; u.rate=1.04; u.pitch=1.0;
+    u.onend=function(){ V.speaking=false; if(done)done(); };
+    u.onerror=function(){ V.speaking=false; if(done)done(); };
+    V.speaking=true;
+    try{ synth.resume(); }catch(e){}
+    synth.speak(u);
+  }
+
+  V.speak = function(text, done){
+    var clean=cleanForTTS(text);
+    if(!clean){ V.speaking=false; if(done)done(); return; }
+    V.speaking=true; setStatus('speaking'); V._guard=Date.now()+700;
+    if(V.ttsMode==='eleven'){
+      fetch(PROXY_URL+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:clean})})
+        .then(function(res){ if(!res.ok) throw new Error('tts '+res.status); return res.blob(); })
+        .then(function(blob){
+          var url=URL.createObjectURL(blob);
+          var a=new Audio(url); V._audio=a;
+          a.onended=function(){ try{URL.revokeObjectURL(url);}catch(_){} V.speaking=false; if(done)done(); };
+          a.onerror=function(){ try{URL.revokeObjectURL(url);}catch(_){} browserSpeak(clean,done); };
+          a.play().catch(function(){ browserSpeak(clean,done); });
+        })
+        .catch(function(){ browserSpeak(clean,done); });
+    } else {
+      browserSpeak(clean, done);
+    }
+  };
+
+  V.onAIResponse = function(text){
+    if(!V.active) return;
+    V.speak(text, function(){
+      if(V.active){ V._t=setTimeout(function(){ if(V.active && !V.speaking) V.startListen(); }, 200); }
+      else setStatus('idle');
+    });
+  };
+
+  V.interrupt = function(){
+    if(V.speaking){ V.stopSpeak(); setStatus('idle'); V.startListen(); }
+  };
+
+  V.toggle = function(){
+    if(!supported){
+      if(typeof showToast==='function') showToast('🎤 Tu navegador no soporta voz nativa. Usa Chrome o Edge.');
+      return;
+    }
+    if(V.active){ V.stop(); return; }
+    V.active=true;
+    if(typeof showToast==='function') showToast('🎙️ Modo conversación activado — habla cuando quieras');
+    try{ if(synth){ synth.resume(); } }catch(e){}  // desbloquear audio con el gesto del usuario
+    V.startListen();
+  };
+
+  V.stop = function(){
+    V.active=false;
+    clearTimeout(V._t);
+    try{ if(V.rec) V.rec.abort(); }catch(e){}
+    V.stopSpeak();
+    setStatus('idle');
+    if(typeof showToast==='function') showToast('🎙️ Modo conversación desactivado');
+  };
+
+  window.VOICE = V;
+})();
+// s107: ════════ fin Modo Conversación por voz ════════
+
 
 
 // s98: === Compra por Volumen — descuento escalonado sobre precio de tier ===
