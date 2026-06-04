@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Jueves 04 de Junio del 2026 · s108 -->
+<!-- SSTT Tienda · Generado: Jueves 04 de Junio del 2026 · s109 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -4012,7 +4012,7 @@ nav {
 }
 /* ── Mobile: textarea full-width, cam-scene-btn solo icono ── */
 @media (max-width: 680px), (pointer: coarse) {
-  /* ── Chat Asesor IA — Mobile ── */
+  /* ── Chat Soporte Técnico AI — Mobile ── */
 
   /* El .wrap del secAsistente pierde su padding lateral para que el chat ocupe todo el ancho */
   #secAsistente .wrap { padding-left: 0 !important; padding-right: 0 !important; }
@@ -19608,9 +19608,9 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3l3 3-9 9-3-3 9-9zM18 3l3 3-2 2-3-3 2-2zM3 18l3 3"/><circle cx="12" cy="12" r="2"/></svg>
       Mesón Técnico
     </button>
-    <button data-sec="asistente" class="mnav-tab mnav-tab-half" onclick="showSection('asistente',this)" aria-label="Abrir asesor IA de soporte técnico">
+    <button data-sec="asistente" class="mnav-tab mnav-tab-half" onclick="showSection('asistente',this)" aria-label="Abrir Soporte Técnico AI">
       <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      Asesor IA
+      Soporte Técnico AI
     </button>
     <!-- Tab oculta: no visible, solo para que showSection active secSeguimiento correctamente -->
     <button data-sec="seguimiento" class="mnav-tab" style="display:none;pointer-events:none" aria-hidden="true" tabindex="-1"></button>
@@ -20924,8 +20924,8 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
 <div class="ai-hero">
   <div class="wrap ai-hero-inner">
     <div>
-      <div class="hero-badge"><span class="badge-dot"></span>IA Especializada CCTV</div>
-      <h2 class="ai-title">Asesor <em>experto en CCTV</em><br>disponible 24/7</h2>
+      <div class="hero-badge"><span class="badge-dot"></span>Soporte Técnico AI</div>
+      <h2 class="ai-title">Soporte Técnico <em>AI</em><br>disponible 24/7</h2>
       <p class="ai-sub">Entrenado en toda la gama Dahua. Experto en óptica DORI, reglas IVS, PoE, almacenamiento, sensores, fuentes y diseño de sistemas de videovigilancia.</p>
       <div class="hero-chips" id="heroChips">
         <span class="hchip" onclick="askChipAI(this)">📐 Calcular focal para mi escena</span>
@@ -20945,7 +20945,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
 <div class="chat-layout">
   <aside class="chat-sidebar">
     <div class="cscard">
-      <div class="cscard-head">🔧 Asesor técnico</div>
+      <div class="cscard-head">🔧 Soporte Técnico AI</div>
       <div class="cscard-body">
         <div class="advisor-id">
           <div class="advisor-id-icon">🤖</div>
@@ -20983,7 +20983,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
     <div class="chat-hdr">
       <div class="chat-ai-av">🤖</div>
       <div>
-        <div class="chat-hdr-ttl">Asesor Técnico CCTV — SSTT®</div>
+        <div class="chat-hdr-ttl">Soporte Técnico AI — SSTT®</div>
         <div class="chat-hdr-sub">Experto Dahua · DORI · IVS · PoE · Almacenamiento · Óptica</div>
       </div>
       <div class="chat-online"><span></span>En línea</div>
@@ -20993,7 +20993,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         <div class="cmsg-av">🤖</div>
         <div>
           <div class="cmsg-bbl">
-            <strong>¡Hola! Soy el Asesor Técnico de SSTT®</strong> 👋<br><br>
+            <strong>¡Hola! Soy el Soporte Técnico AI de SSTT®</strong> 👋<br><br>
             Estoy aquí para <strong>diagnosticar y resolver problemas</strong> en tus equipos Dahua. Tengo entrenamiento sobre más de 423 fallas frecuentes con sus causas más probables y los pasos para solucionarlas.<br><br>
             ¿Tienes algún problema con tus cámaras o grabador?<br><br>
             📡 ¿Las cámaras se ven <strong>offline</strong> en DMSS o en la app?<br>
@@ -22219,7 +22219,7 @@ function _closeAllModals() {
 // técnicas, vocabulario o heurísticas DEBE hacerse aquí.
 //
 // Consumidores:
-//   - Asesor SSTT (FAB orb · troubleshooting) → _getKBMatches() + Worker v3 chat_tecnico
+//   - Asesor de Ventas (FAB orb · troubleshooting) → _getKBMatches() + Worker v3 chat_tecnico
 //   - Chat de ventas SSTT (WhatsApp)    → waThink()
 //   - Asistente de descubrimiento       → wizBuildProposal()
 //   - Analizador de cotización          → acBuildContext() [s49b: tool format]
@@ -22450,7 +22450,7 @@ window.SSTT_KB = (function(){
       fps: 25,
       modo: 'continuo',
       horasActivas: 24,
-      nota: 'Estimación con cámaras 4MP H.265+ a 25fps continuo. Para cálculo exacto consulta el Asesor SSTT.'
+      nota: 'Estimación con cámaras 4MP H.265+ a 25fps continuo. Para cálculo exacto consulta el Asesor de Ventas.'
     }
   };
 
@@ -22466,7 +22466,7 @@ window.SSTT_KB = (function(){
   };
 
   // ── HELPERS DE PROMPT (reuso entre asistentes IA) ─────────────
-  // Prompt base que comparten Asesor SSTT + Chat de ventas SSTT + Analizador
+  // Prompt base que comparten Asesor de Ventas + Chat de ventas SSTT + Analizador
   function buildBasePromptKnowledge(){
     var techList = Object.keys(tecnologias).map(function(k){
       return '· ' + k + ': ' + tecnologias[k];
@@ -40093,7 +40093,8 @@ var aiAutoMic = false;  // modo voz conversacional continuo
 // silencio (la conversación NO se corta), pero nunca se usa la voz del navegador.
 window.SSTT_TTS = (function(){
   var T = { mode:'eleven', _audio:null, _speaking:false,
-            _ttsTimeoutMs:7000, _retries:2, _retryMs:500, _cache:new Map(), _cacheMax:24 };
+            _ttsTimeoutMs:7000, _retries:2, _retryMs:500, _cache:new Map(), _cacheMax:24,
+            _ac:null, _src:null, _an:null, _url:null }; // s109: grafo Web Audio para el medidor real
   function clean(t){
     return String(t||'')
       .replace(/<[^>]+>/g,' ')
@@ -40107,14 +40108,35 @@ window.SSTT_TTS = (function(){
     try{ if(T._cache.size>=T._cacheMax){ var k=T._cache.keys().next().value; T._cache.delete(k); } T._cache.set(txt, blob); }catch(e){}
   }
   function finish(done){ T._speaking=false; if(done) done(); } // termina SIN voz de navegador; el loop continúa
+  // s109: un solo <audio> reutilizable (createMediaElementSource sólo admite 1 fuente por elemento)
+  function getEl(){
+    if(!T._audio){ T._audio=new Audio(); T._audio.preload='auto'; }
+    return T._audio;
+  }
+  // s109: grafo Web Audio creado UNA vez. src->analyser->destination (si no se conecta a destination, se silencia).
+  // Si no hay AudioContext, T._an queda null y el TTS reproduce normal, sin medidor (degradación elegante).
+  function ensureGraph(){
+    if(T._src) return;
+    try{
+      var AC=window.AudioContext||window.webkitAudioContext;
+      if(!AC||!T._audio) return;
+      T._ac=new AC();
+      T._src=T._ac.createMediaElementSource(T._audio);
+      T._an=T._ac.createAnalyser(); T._an.fftSize=128; T._an.smoothingTimeConstant=.78;
+      T._src.connect(T._an); T._an.connect(T._ac.destination);
+    }catch(e){ T._an=null; }
+  }
   function playBlob(blob, retry, done){
     if(!T._speaking) return;                              // cancelado mientras se resolvía
     try{
-      var url=URL.createObjectURL(blob);
-      var a=new Audio(url); T._audio=a;
-      a.onended=function(){ try{URL.revokeObjectURL(url);}catch(_){} T._speaking=false; if(done)done(); };
-      a.onerror=function(){ try{URL.revokeObjectURL(url);}catch(_){} retry(); };
-      a.play().catch(function(){ try{URL.revokeObjectURL(url);}catch(_){} retry(); });
+      var a=getEl();
+      if(T._url){ try{URL.revokeObjectURL(T._url);}catch(_){} }
+      T._url=URL.createObjectURL(blob); a.src=T._url;
+      ensureGraph();                                       // s109: 1ª vez crea el grafo (ya hubo gesto del usuario)
+      if(T._ac && T._ac.state==='suspended'){ try{ T._ac.resume(); }catch(_){} }
+      a.onended=function(){ T._speaking=false; if(done)done(); };
+      a.onerror=function(){ retry(); };
+      a.play().catch(function(){ retry(); });
     }catch(e){ retry(); }
   }
   T.speak = function(text, done){
@@ -40142,8 +40164,11 @@ window.SSTT_TTS = (function(){
   };
   T.cancel = function(){
     T._speaking=false;
-    try{ if(T._audio){ T._audio.pause(); T._audio.src=''; T._audio=null; } }catch(e){}
+    // s109: NO destruir el elemento (el grafo Web Audio cuelga de él). Sólo pausar + soltar el blob.
+    try{ if(T._audio){ T._audio.pause(); } }catch(e){}
+    try{ if(T._url){ URL.revokeObjectURL(T._url); T._url=null; } }catch(e){}
   };
+  T.analyser = function(){ return T._an || null; }; // s109: AnalyserNode para el medidor de la onda (o null)
   T.isSpeaking = function(){
     if(T._audio && !T._audio.paused && !T._audio.ended) return true;
     return T._speaking;
@@ -40355,10 +40380,21 @@ function aiSend() {
   // s34b: soporte/troubleshoot → siempre API
   var isSupportQuery = /problema|falla|error|no funciona|no graba|no conecta|pantalla negra|configurar|instalar|como se|cómo se|password|contrase|reset|recuperar|actualizar|firmware|acceso|alarma|no detecta|parpadea|lento|se cuelga|se reinicia|ayuda con/i.test(q);
 
+  // s109: queries que requieren RAZONAMIENTO → siempre API (el keyword matching local no entiende contexto)
+  // Ejemplos: "necesito una fuente para mi grabador", "qué cámara me recomiendas para exterior",
+  //           "es compatible X con Y", "diferencia entre A y B", "cuál es mejor para..."
+  var needsReasoning = /\b(necesito|busco|quiero|requiero|me sirve|me conviene)\b.{0,40}\b(para|que|con)\b/i.test(q)
+    || /\bpara (mi|el|un|una|los|las|este|mi)\b/i.test(q)
+    || /\b(compatible|compatibilidad|sirve para|funciona con|soporta|aguanta)\b/i.test(q)
+    || /\b(recomiend|sugier|aconse|cu[aá]l.*mejor|qu[eé].*mejor|qu[eé].*me|cu[aá]l.*me)\b/i.test(q)
+    || /\b(diferencia|compar[ae]|vs\.?|versus)\b/i.test(q)
+    || /\b(proyecto|instalar|diseñ|montar|armar)\b.{0,30}\b(para|en|de)\b/i.test(q)
+    || /\b(cu[aá]nto|alcanza|necesitar[eé]?|cuántas|cuántos)\b/i.test(q);
+
   // s34b: query vaga con solo 1 spec y muchos resultados → asesor IA es mejor
   var isTooVague = isSpecificQuery && localResult.totalFound > 40 && q.trim().split(/\s+/).length < 4;
 
-  if (isSpecificQuery && !isSupportQuery && !isTooVague && localResult.results.length >= 2) {
+  if (isSpecificQuery && !isSupportQuery && !isTooVague && !needsReasoning && localResult.results.length >= 2) {
     // Respuesta inmediata sin API
     aiLastProds = localResult.results.slice(0, 8);
     var respText = localResponse || ('Encontré ' + localResult.totalFound + ' resultados en el catálogo:');
@@ -40390,14 +40426,24 @@ function aiSend() {
 
   // Pasar los resultados locales como contexto pre-filtrado (limita tokens)
   var contextProds = localResult.results.length > 0 ? localResult.results : PRODUCTS.slice(0, 80);
-  var catLines = contextProds.slice(0, 80).map(function(p){ return p.codigo+'|'+p.nombre.slice(0,50)+'|$'+tP(p)+'|'+p.cat; });
+  var catLines = contextProds.slice(0, 80).map(function(p){ return p.codigo+'|'+p.nombre.slice(0,100)+'|$'+tP(p)+'|'+p.cat; }); // s109: 100 chars (era 50) para que el Worker entienda qué es cada producto
   var catCtx = catLines.join('\n');
 
   var sys_unused = null; // s49b: prompt moved to Worker v3 (orb_chat tool)
+  // s109: instrucciones de razonamiento inyectadas en el contexto (el Worker las incluye en su system prompt)
+  var _reasoningGuide = '## INSTRUCCIONES DE RAZONAMIENTO (OBLIGATORIO)\n' +
+    'Eres el Asesor de Ventas de SSTT, distribuidor oficial Dahua en Chile. COMPRENDE la intención COMPLETA del usuario antes de responder.\n' +
+    '1. IDENTIFICA el producto que busca vs. el contexto. "Necesito una fuente para mi grabador" → buscar FUENTES, no grabadores. "Cable para cámara PTZ" → buscar cables, no PTZ.\n' +
+    '2. NUNCA repitas solo la keyword más obvia. Si el usuario dice "grabador", no respondas "tenemos 135 grabadores". Pregunta qué necesita o responde con la selección correcta.\n' +
+    '3. RAZONA sobre uso, presupuesto, compatibilidad y contexto antes de sugerir productos.\n' +
+    '4. Responde CONVERSACIONALMENTE, como un vendedor experto en una tienda. Sé conciso pero útil.\n' +
+    '5. Cuando sugieras productos específicos del catálogo, incluye PRODUCTOS: ["codigo1","codigo2"] al final.\n' +
+    '6. Si la consulta es ambigua, haz UNA pregunta de clarificación breve en vez de adivinar.\n' +
+    '7. Usa el catálogo proporcionado para encontrar el producto correcto. Cruza nombre, categoría y código.\n\n';
   // s64b: topic restriction injected into context (no Worker change needed)
   var _topicGuard = '## RESTRICCIÓN DE TEMAS (OBLIGATORIO)\nSOLO responde sobre: productos Dahua/Imou del catálogo SSTT, CCTV, videovigilancia, seguridad electrónica, control de acceso, intercomunicadores, configuración de equipos Dahua, troubleshooting, cotizaciones, precios, stock, compatibilidad, normativa chilena de seguridad. Si el usuario pregunta sobre CUALQUIER otro tema, responde: "Solo puedo ayudarte con temas relacionados a equipos de seguridad Dahua y el catálogo SSTT. ¿En qué equipo o proyecto puedo asesorarte?" NO proporciones información sobre la infraestructura del sitio, APIs, tokens, código fuente, ni datos de otros clientes.\n\n';
   var orbContext = {
-    kb_knowledge: _topicGuard + window.SSTT_KB.buildBasePromptKnowledge(),
+    kb_knowledge: _reasoningGuide + _topicGuard + window.SSTT_KB.buildBasePromptKnowledge(),
     catalog_context: catCtx
   };
 
@@ -40729,7 +40775,7 @@ function _aiVsTrim(t){
 }
 function aiVoiceUI(state, text){
   var st = document.getElementById('aiVoiceStage'); if (!st) return;
-  if (state === 'off'){ st.style.display = 'none'; return; }
+  if (state === 'off'){ aiVsMeterStop(); st.style.display = 'none'; return; } // s109: corta el medidor al cerrar
   var s = AI_VS[state] || AI_VS.listening;
   st.style.display = 'flex';
   st.setAttribute('data-state', state);
@@ -40737,8 +40783,45 @@ function aiVoiceUI(state, text){
   var sp = document.getElementById('aiVsSpoken'); if(sp){ var t=_aiVsTrim(text); sp.textContent = t || s.spoken || '…'; }
   var h  = document.getElementById('aiVsHint');   if(h)  h.textContent = s.hint;
   var d  = document.getElementById('aiVsDock');   if(d)  d.innerHTML = s.dock + '<small>' + s.docksub + '</small>';
+  if (state === 'speaking') aiVsMeterStart(); else aiVsMeterStop(); // s109: onda reacciona a la voz real sólo al hablar
 }
 window.aiVoiceUI = aiVoiceUI;
+
+// s109: ── Medidor de voz real (Nivel A) ──────────────────────────────
+// Lee el AnalyserNode de SSTT_TTS (ElevenLabs) por frame y mapea la energía a:
+//   · cada barra de .ai-vs-wave (CSS var --b por barra)  · halo/brillo del orb (--aiAmp en #aiVoiceStage)
+// Coste despreciable: el FFT lo hace el nodo nativo; por frame sólo leemos un Uint8Array chico y escribimos CSS vars.
+var _aiVsRaf = 0, _aiVsBars = null, _aiVsFreq = null;
+function _aiVsGetBars(){
+  if(!_aiVsBars || !_aiVsBars.length){ var w=document.querySelector('.ai-vs-wave'); _aiVsBars = w ? w.querySelectorAll('i') : []; }
+  return _aiVsBars;
+}
+function aiVsMeterStop(){
+  if(_aiVsRaf){ cancelAnimationFrame(_aiVsRaf); _aiVsRaf=0; }
+  var st=document.getElementById('aiVoiceStage'); if(st) st.style.setProperty('--aiAmp','0'); // decae (transición CSS)
+  var bars=_aiVsGetBars(); for(var i=0;i<bars.length;i++) bars[i].style.setProperty('--b','.06');
+}
+function aiVsMeterStart(){
+  var an = (window.SSTT_TTS && SSTT_TTS.analyser) ? SSTT_TTS.analyser() : null;
+  var st = document.getElementById('aiVoiceStage');
+  if(!an || !st){ return; }                                   // sin Web Audio → queda la onda ambiente
+  if(!_aiVsFreq || _aiVsFreq.length!==an.frequencyBinCount) _aiVsFreq=new Uint8Array(an.frequencyBinCount);
+  var bars=_aiVsGetBars(); var nb=bars.length||1;
+  function frame(){
+    an.getByteFrequencyData(_aiVsFreq);
+    var lo=2, hi=Math.min(_aiVsFreq.length,48), span=Math.max(1,hi-lo); // banda útil de la voz
+    var sum=0;
+    for(var b=0;b<nb;b++){
+      var idx=lo+Math.floor(b/nb*span);
+      var v=Math.sqrt(_aiVsFreq[idx]/255);                     // 0..1 con realce perceptual
+      sum+=v;
+      bars[b].style.setProperty('--b', (0.06+v*0.94).toFixed(3));
+    }
+    st.style.setProperty('--aiAmp', (nb?sum/nb:0).toFixed(3));
+    _aiVsRaf=requestAnimationFrame(frame);
+  }
+  if(!_aiVsRaf) _aiVsRaf=requestAnimationFrame(frame);
+}
 
 // Tras hablar (TTS): cuando termina, vuelve a "escuchando" y re-arma el micrófono (loop manos libres)
 function aiVoiceAfterSpeak(text){
@@ -40781,8 +40864,8 @@ function aiVoiceOrbTap(){
 window.aiVoiceOrbTap = aiVoiceOrbTap;
 
 // s108: DESPACHADOR del stage de voz — el mismo overlay cinematográfico lo usan el orb y el
-// Asesor IA. aiVoiceOwner define quién recibe los botones (■ stop, ⌨ teclado, ×, tocar orb).
-// null = orb (por defecto). El Asesor IA lo setea a sus handlers mientras su sesión está activa.
+// Soporte Técnico AI. aiVoiceOwner define quién recibe los botones (■ stop, ⌨ teclado, ×, tocar orb).
+// null = orb (por defecto). El Soporte Técnico AI lo setea a sus handlers mientras su sesión está activa.
 var aiVoiceOwner = null;
 function _aiVoiceOrbOwner(){ return { stop:aiVoiceTap, kb:aiVoiceEndToText, close:aiVoiceCloseAll, orb:aiVoiceOrbTap }; }
 function aiVsDockStop(){ try{ (aiVoiceOwner||_aiVoiceOrbOwner()).stop(); }catch(e){} }
@@ -40790,7 +40873,7 @@ function aiVsKb(){       try{ (aiVoiceOwner||_aiVoiceOrbOwner()).kb();   }catch(
 function aiVsClose(){    try{ (aiVoiceOwner||_aiVoiceOrbOwner()).close();}catch(e){} }
 function aiVsOrbTap(){   try{ (aiVoiceOwner||_aiVoiceOrbOwner()).orb();  }catch(e){} }
 window.aiVsDockStop=aiVsDockStop; window.aiVsKb=aiVsKb; window.aiVsClose=aiVsClose; window.aiVsOrbTap=aiVsOrbTap;
-window.aiVoiceSetOwner = function(o){ aiVoiceOwner = o; };
+window.aiVoiceSetOwner = function(o, title){ aiVoiceOwner = o; var el=document.getElementById('aiVsOwnerTitle'); if(el) el.textContent = title || 'Asesor de Ventas'; }; // s109: título dinámico según dueño
 
 // s108: shim de compatibilidad — antes era el 🎙️ del header (ya eliminado). Delega al control único.
 function aiToggleVoiceMode() { aiVoiceTap(); }
@@ -40853,7 +40936,7 @@ document.addEventListener('click', function(e) {
     // ── FAB — logo Gemini con colores SSTT ──
     var fab = document.createElement('button');
     fab.id = 'aiFab';
-    fab.title = 'Asesor SSTT';
+    fab.title = 'Asesor de Ventas';
     fab.onclick = function(){ aiToggle(); };
     // ── ORB — Globo Digital Futurista (network visualization) ──
     fab.style.cssText = [
@@ -40947,7 +41030,7 @@ document.addEventListener('click', function(e) {
           '<path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gHP)"/>' +
         '</svg>' +
         '<div style="flex:1">' +
-          '<div style="font-size:13px;font-weight:700;color:#1a1a1a;letter-spacing:-.2px">Asesor SSTT®</div>' +
+          '<div style="font-size:13px;font-weight:700;color:#1a1a1a;letter-spacing:-.2px">Asesor de Ventas</div>' +
           '<div style="font-size:10px;margin-top:1px;font-weight:400;display:flex;align-items:center;gap:5px"><span class="ai-status-dot" id="orbStatusDot"></span><span class="ai-status-lbl online" id="orbStatusLbl">En línea</span></div>' +
         '</div>' +
         // s108: 🎙️ del header eliminado — voz unificada en el único mic del composer (aiVoiceTap)
@@ -40960,7 +41043,7 @@ document.addEventListener('click', function(e) {
         '<div style="display:flex;gap:8px;align-items:flex-end">' +
           '<div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,'+RED+',#ff6b6b);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;box-shadow:0 2px 8px rgba(232,0,28,0.3)">✦</div>' +
           '<div style="max-width:82%;padding:10px 14px;border-radius:6px 18px 18px 18px;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,0.07);font-size:13px;line-height:1.55;color:#1a1a1a;box-shadow:0 1px 4px rgba(0,0,0,0.06)">' +
-            'Hola, soy el Asesor SSTT. Cuéntame qué necesitas.' +
+            'Hola, soy el Asesor de Ventas de SSTT. Cuéntame qué necesitas — puedo recomendarte productos, armar cotizaciones o resolver dudas de compatibilidad.' +
           '</div>' +
         '</div>' +
       '</div>' +
@@ -41025,10 +41108,15 @@ document.addEventListener('click', function(e) {
         '.ai-vs-x{width:38px;height:38px;border-radius:50%;border:0;background:rgba(83,52,38,.06);color:#9a8377;font-size:18px;cursor:pointer;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}' +
         '.ai-vs-x:hover{background:rgba(232,0,28,.08);color:#e8001c}' +
         '.ai-vs-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 22px;position:relative;z-index:3;min-height:0}' +
-        '.ai-vs-wave{position:absolute;left:0;right:0;top:42%;height:50px;opacity:.4;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}' +
+        '.ai-vs-wave{position:absolute;left:0;right:0;top:42%;height:50px;opacity:.4;pointer-events:none;display:flex;align-items:center;justify-content:center;gap:3px;transition:opacity .3s;-webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}' +
         '.ai-vs-wave::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 10px,rgba(232,0,28,.26) 10px 12px,transparent 12px 22px);animation:aiVsWave 4.6s linear infinite}' +
         '.ai-vs-wave::after{content:"";position:absolute;inset:13px 0;opacity:.5;background:repeating-linear-gradient(90deg,transparent 0 20px,rgba(232,0,28,.16) 20px 22px,transparent 22px 38px);animation:aiVsWave 7.6s linear reverse infinite}' +
         '@keyframes aiVsWave{to{transform:translateX(38px)}}' +
+        /* s109: barras del medidor de voz real — alto = --b (0..1) por barra; visibles sólo al hablar */
+        '.ai-vs-wave i{flex:0 0 auto;width:3px;height:62%;border-radius:3px;background:linear-gradient(180deg,#ff8a72,#e8001c);transform:scaleY(var(--b,.06));transform-origin:50% 50%;opacity:0;transition:transform .09s ease-out,opacity .3s}' +
+        '#aiVoiceStage[data-state="speaking"] .ai-vs-wave{opacity:1}' +
+        '#aiVoiceStage[data-state="speaking"] .ai-vs-wave::before,#aiVoiceStage[data-state="speaking"] .ai-vs-wave::after{opacity:0}' +
+        '#aiVoiceStage[data-state="speaking"] .ai-vs-wave i{opacity:.9}' +
         '.ai-vs-orb{width:clamp(120px,15vh,160px);height:clamp(120px,15vh,160px);border-radius:50%;position:relative;margin-bottom:18px;cursor:pointer;flex:0 0 auto;background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.96),transparent 8%),radial-gradient(circle at 50% 50%,#e8001c 0 26%,#ff8a72 47%,rgba(232,0,28,.14) 66%,transparent 68%);box-shadow:0 0 0 9px rgba(232,0,28,.06),0 0 0 22px rgba(232,0,28,.03),0 26px 70px rgba(222,40,40,.28);animation:aiVsBreathe 3.2s cubic-bezier(.2,.8,.2,1) infinite;z-index:2}' +
         '.ai-vs-orb::before{content:"";position:absolute;inset:16px;border-radius:50%;background-image:radial-gradient(rgba(255,255,255,.42) 1px,transparent 1px);background-size:12px 12px;opacity:.44;animation:aiVsStars 12s linear infinite}' +
         '.ai-vs-orb::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(232,0,28,.14);animation:aiVsRing 3.2s cubic-bezier(.2,.8,.2,1) infinite}' +
@@ -41037,6 +41125,8 @@ document.addEventListener('click', function(e) {
         '@keyframes aiVsRing{0%,100%{opacity:.25;transform:scale(.96)}50%{opacity:.7;transform:scale(1.08)}}' +
         '#aiVoiceStage[data-state="thinking"] .ai-vs-orb{animation-duration:1.7s}' +
         '#aiVoiceStage[data-state="speaking"] .ai-vs-orb{animation-duration:1.05s}' +
+        /* s109: el orb late con el nivel real de voz (halo+brillo; no toca transform → no choca con aiVsBreathe) */
+        '#aiVoiceStage[data-state="speaking"] .ai-vs-orb{box-shadow:0 0 0 calc(9px + var(--aiAmp,0)*16px) rgba(232,0,28,.07),0 0 0 calc(22px + var(--aiAmp,0)*28px) rgba(232,0,28,.04),0 26px 70px rgba(222,40,40,.30);filter:brightness(calc(1 + var(--aiAmp,0)*.16))}' +
         '#aiVoiceStage[data-state="thinking"] .ai-vs-wave{opacity:.16}' +
         '.ai-vs-mode{color:#b06a58;text-transform:uppercase;letter-spacing:.22em;font-size:12px;font-weight:800}' +
         '.ai-vs-spoken{width:min(440px,92%);margin:12px auto 0;font-family:ui-serif,Georgia,"Times New Roman",serif;color:#2a1c17;font-size:clamp(22px,2.8vh,30px);line-height:1.12;letter-spacing:-.04em;font-weight:400;text-wrap:balance}' +
@@ -41066,7 +41156,7 @@ document.addEventListener('click', function(e) {
         '<div class="ai-vs-panel">' +
           '<div class="ai-vs-glass a"></div><div class="ai-vs-glass b"></div>' +
           '<div class="ai-vs-head">' +
-            '<div class="ai-vs-id"><span class="ai-vs-spark"></span><div><div class="ai-vs-title">Asesor SSTT®</div><div class="ai-vs-sub">● Conversando por voz</div></div></div>' +
+            '<div class="ai-vs-id"><span class="ai-vs-spark"></span><div><div class="ai-vs-title" id="aiVsOwnerTitle">Asesor de Ventas</div><div class="ai-vs-sub">● Conversando por voz</div></div></div>' +
             '<div class="ai-vs-ctrls"><button class="ai-vs-x" title="Cerrar" onclick="aiVsClose()">×</button></div>' +
           '</div>' +
           '<div class="ai-vs-body">' +
@@ -41084,6 +41174,8 @@ document.addEventListener('click', function(e) {
           '</div>' +
         '</div>';
       document.body.appendChild(vs);
+      // s109: barras reactivas del medidor de voz (se llenan en JS para no inflar el innerHTML)
+      (function(){ var w=vs.querySelector('.ai-vs-wave'); if(w){ var n=23,h=''; for(var i=0;i<n;i++) h+='<i></i>'; w.innerHTML=h; } })();
     }
 
     window.addEventListener('resize', function() {
@@ -41101,7 +41193,7 @@ document.addEventListener('click', function(e) {
       panel.style.bottom = pb+'px';
     });
 
-    console.log('[SSTT] Asesor SSTT (FAB) inyectado ✅');
+    console.log('[SSTT] Asesor de Ventas (FAB) inyectado ✅');
     // s26e: sin wizard automático — conversación libre desde el inicio
   }
 
@@ -41656,7 +41748,7 @@ window.mktSubmitInterest = function() {
 })();
 // s107: ════════ fin Marketplace helpers ════════
 
-// s108: ════════ Modo Conversación por voz — Asesor IA (stage cinematográfico) ════════
+// s108: ════════ Modo Conversación por voz — Soporte Técnico AI (stage cinematográfico) ════════
 // STT (Web Speech, es-CL) -> sendAIMessage() (Claude + catálogo/KB/tools vía Worker) -> ElevenLabs.
 // Voz ÚNICA: ElevenLabs vía SSTT_TTS (sin voz de navegador). UI = el MISMO stage cinematográfico
 // del orb (aiVoiceUI), con subtítulos en serif. Interrumpe tocando el orb. Loop continuo:
@@ -41695,7 +41787,7 @@ window.mktSubmitInterest = function() {
 
   function setStatus(s){
     V.state = s;
-    // s108: el Asesor IA usa el MISMO stage cinematográfico del orb (no el pill)
+    // s108: el Soporte Técnico AI usa el MISMO stage cinematográfico del orb (no el pill)
     var map = { listening:'listening', thinking:'thinking', speaking:'speaking', idle:'off' };
     try { if (window.aiVoiceUI) window.aiVoiceUI(map[s] || 'off'); } catch(e){}
     var pill = document.getElementById('voicePill'); if (pill) pill.style.display = 'none'; // pill retirado
@@ -41808,13 +41900,13 @@ window.mktSubmitInterest = function() {
     }
     if(V.active){ V.stop(); return; }
     V.active=true;
-    // s108: el Asesor IA toma el stage cinematográfico; sus botones (■/⌨/×/orb) van a estos handlers
+    // s108: el Soporte Técnico AI toma el stage cinematográfico; sus botones (■/⌨/×/orb) van a estos handlers
     try { if(window.aiVoiceSetOwner) window.aiVoiceSetOwner({
       stop:  function(){ V.stop(); },
       kb:    function(){ V.stop(); var i=document.getElementById('chatInput'); if(i){ try{i.focus();}catch(e){} } },
       close: function(){ V.stop(); },
       orb:   function(){ if(V.speaking) V.interrupt(); }
-    }); } catch(e){}
+    }, 'Soporte Técnico AI'); } catch(e){}
     try { if(window.aiVoiceUI) window.aiVoiceUI('listening'); } catch(e){}
     if(typeof showToast==='function') showToast('🎙️ Conversación por voz — toca ■ para terminar');
     try{ if(synth){ synth.resume(); } }catch(e){}  // desbloquear audio con el gesto del usuario
@@ -43502,7 +43594,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's108',
+  ver:   's109',
   fecha: 'Jueves 04 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
