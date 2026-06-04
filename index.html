@@ -40092,7 +40092,12 @@ var aiAutoMic = false;  // modo voz conversacional continuo
 // del navegador. Cambia SSTT_TTS.mode a 'browser' para desactivar ElevenLabs en TODO el sitio.
 window.SSTT_TTS = (function(){
   var synth = window.speechSynthesis;
-  var T = { mode:'eleven', _audio:null, _speaking:false, voice:null };
+  // s108: estado del "circuit breaker" para evitar el flip-flop Eleven<->navegador.
+  //  _cooldownUntil: hasta este timestamp se usa SOLO navegador (no se toca /tts).
+  //  _ttsTimeoutMs : si /tts no responde a tiempo, se aborta y cae a navegador.
+  //  _cache        : Map(texto -> Blob) para frases repetidas (wizard) — ahorra créditos y latencia.
+  var T = { mode:'eleven', _audio:null, _speaking:false, voice:null,
+            _cooldownUntil:0, _cooldownMs:30000, _ttsTimeoutMs:6000, _cache:new Map(), _cacheMax:24 };
   function pickVoice(){
     if(!synth) return;
     var vs = synth.getVoices()||[];
@@ -40120,22 +40125,37 @@ window.SSTT_TTS = (function(){
     T._speaking=true; try{ synth.resume(); }catch(e){}
     synth.speak(u);
   }
+  // s108: helpers del circuit breaker
+  function cachePut(txt, blob){
+    try{ if(T._cache.size>=T._cacheMax){ var k=T._cache.keys().next().value; T._cache.delete(k); } T._cache.set(txt, blob); }catch(e){}
+  }
+  function failToBrowser(txt, done){
+    // una falla de ElevenLabs fija el navegador por el cooldown -> evita alternar frase a frase
+    T._cooldownUntil = Date.now() + T._cooldownMs;
+    browser(txt, done);
+  }
+  function playBlob(blob, txt, done){
+    try{
+      var url=URL.createObjectURL(blob);
+      var a=new Audio(url); T._audio=a;
+      a.onended=function(){ try{URL.revokeObjectURL(url);}catch(_){} T._speaking=false; if(done)done(); };
+      a.onerror=function(){ try{URL.revokeObjectURL(url);}catch(_){} failToBrowser(txt,done); };
+      a.play().catch(function(){ try{URL.revokeObjectURL(url);}catch(_){} failToBrowser(txt,done); });
+    }catch(e){ failToBrowser(txt,done); }
+  }
   T.speak = function(text, done){
     var txt=clean(text);
     if(!txt){ T._speaking=false; if(done)done(); return; }
     T.cancel(); T._speaking=true;
-    if(T.mode==='eleven' && typeof PROXY_URL!=='undefined'){
-      fetch(PROXY_URL+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:txt})})
-        .then(function(res){ if(!res.ok) throw new Error('tts '+res.status); return res.blob(); })
-        .then(function(blob){
-          var url=URL.createObjectURL(blob);
-          var a=new Audio(url); T._audio=a;
-          a.onended=function(){ try{URL.revokeObjectURL(url);}catch(_){} T._speaking=false; if(done)done(); };
-          a.onerror=function(){ try{URL.revokeObjectURL(url);}catch(_){} browser(txt,done); };
-          a.play().catch(function(){ browser(txt,done); });
-        })
-        .catch(function(){ browser(txt,done); });
-    } else { browser(txt, done); }
+    var useEleven = (T.mode==='eleven') && (typeof PROXY_URL!=='undefined') && (Date.now() >= T._cooldownUntil);
+    if(!useEleven){ browser(txt, done); return; }            // navegador estable durante el cooldown
+    if(T._cache.has(txt)){ playBlob(T._cache.get(txt), txt, done); return; } // frase repetida (wizard)
+    var ctrl = (typeof AbortController!=='undefined') ? new AbortController() : null;
+    var to = setTimeout(function(){ try{ if(ctrl) ctrl.abort(); }catch(e){} }, T._ttsTimeoutMs);
+    fetch(PROXY_URL+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:txt}), signal: ctrl?ctrl.signal:undefined})
+      .then(function(res){ if(!res.ok) throw new Error('tts '+res.status); return res.blob(); })
+      .then(function(blob){ clearTimeout(to); cachePut(txt, blob); playBlob(blob, txt, done); })
+      .catch(function(){ clearTimeout(to); failToBrowser(txt, done); });
   };
   T.cancel = function(){
     T._speaking=false;
@@ -40182,6 +40202,13 @@ function aiToggle() {
 }
 function aiClose() {
   aiPanelOpen = false;
+  // s108: cerrar el orb también termina la conversación por voz
+  if (typeof aiAutoMic !== 'undefined' && aiAutoMic) {
+    aiAutoMic = false;
+    try { if (aiSR) aiSR.abort(); } catch(e){}
+    try { aiStopSpeech(); } catch(e){}
+  }
+  try { aiVoiceUI('off'); } catch(e){}
   var p = document.getElementById('aiPanel');
   p.style.display = 'none';
   p.classList.remove('open');
@@ -40326,6 +40353,7 @@ function aiSend() {
       '• Comparación de productos y compatibilidad<br>' +
       '• Calculadoras técnicas (FoV, ancho de banda, UPS, cableado, etc.)<br><br>' +
       'Reformula tu consulta dentro de estos temas y con gusto te ayudo.');
+    if (aiAutoMic) { aiSpeak('Puedo ayudarte con equipos de seguridad y el catálogo SSTT. ¿Qué necesitas?'); aiVoiceAfterSpeak('Puedo ayudarte con equipos de seguridad y el catálogo SSTT. ¿Qué necesitas?'); } // s108: no cortar la conversación por voz
     return;
   }
 
@@ -40365,6 +40393,7 @@ function aiSend() {
 
     aiAddMsg('bot', respText + actionBtns, aiLastProds);
     aiSpeak(respText);
+    aiVoiceAfterSpeak(respText); // s108: en modo voz, sigue el loop manos libres también en respuestas locales
 
     // Filtrar catálogo visible también
     if (localResult.params && localResult.params.cat) {
@@ -40375,6 +40404,8 @@ function aiSend() {
 
   // ── PASO 2: Consulta conversacional → API con catálogo filtrado ──
   aiTypingStart();
+  if (aiAutoMic) aiVoiceUI('thinking'); // s108: stage → pensando
+  try { // s108: guarda anti-cuelgue — un throw síncrono limpia el "pensando" y avisa, nunca se queda pegado
 
   // Pasar los resultados locales como contexto pre-filtrado (limita tokens)
   var contextProds = localResult.results.length > 0 ? localResult.results : PRODUCTS.slice(0, 80);
@@ -40469,17 +40500,20 @@ function aiSend() {
     var speakText = raw.replace(/PRODUCTOS:\s*\[[^\]]+\]/g,'').replace(/FILTRAR:[^\n\r]+/g,'').trim();
     aiSpeak(speakText);
 
-    // Si modo voz activo → rearmar micrófono automáticamente después de que TTS termine
-    if (aiAutoMic) {
-      var checkTTS = setInterval(function(){
-        if (!window.SSTT_TTS || !window.SSTT_TTS.isSpeaking()) { // s107: motor TTS unificado
-          clearInterval(checkTTS);
-          setTimeout(function(){ if (aiAutoMic && aiPanelOpen) aiMic(); }, 600);
-        }
-      }, 300);
-    }
+    // s108: modo voz → stage "hablando" y, al terminar el TTS, vuelve a escuchar (loop manos libres)
+    aiVoiceAfterSpeak(speakText);
   })
-  .catch(function(e){ aiTypingStop(); aiAddMsg('bot', 'Error de conexión: ' + e.message); });
+  .catch(function(e){
+    aiTypingStop();
+    if (aiAutoMic) { aiVoiceUI('listening'); setTimeout(function(){ if (aiAutoMic && aiPanelOpen) aiMic(); }, 900); } // s108: en voz, reintenta escuchar (no congelar el orb)
+    else aiAddMsg('bot', 'Error de conexión: ' + e.message);
+  });
+  } catch(err) { // s108: red de seguridad — si algo falla antes del fetch, no dejar el typing pegado
+    aiTypingStop();
+    if (aiAutoMic) { aiVoiceUI('listening'); setTimeout(function(){ if (aiAutoMic && aiPanelOpen) aiMic(); }, 900); }
+    else aiAddMsg('bot', '⚠️ Ups, algo falló al procesar tu consulta. Intenta de nuevo.');
+    try { console.error('[SSTT] aiSend:', err); } catch(_){}
+  }
 }
 
 function aiAskAPI() {
@@ -40563,8 +40597,8 @@ function aiInitSR() {
     if (sono) sono.style.display = 'flex';
     if (sonoH) sonoH.style.display = 'flex';
     if (wave) { wave.style.display = 'flex'; }
-    var micBtn = document.getElementById('aiMicBtn');
-    if (micBtn) { micBtn.style.background = '#e8001c'; micBtn.style.borderColor = '#e8001c'; }
+    aiMicSetState('listening'); // s108: estado visual por clase
+    if (aiAutoMic) aiVoiceUI('listening'); // s108: stage de voz
     var fab = document.getElementById('aiFab');
     if (fab) { fab.style.borderColor = '#e8001c'; fab.style.boxShadow = '0 0 0 3px rgba(232,0,28,.25),0 4px 20px rgba(232,0,28,.4)'; }
     if (!aiPanelOpen) aiToggle();
@@ -40613,8 +40647,8 @@ function aiMicStop() {
   if (sono) sono.style.display = 'none';
   if (sonoH) sonoH.style.display = 'none';
   if (wave) wave.style.display = 'none';
-  var micBtn = document.getElementById('aiMicBtn');
-  if (micBtn) { micBtn.style.background = '#1a1a1a'; micBtn.style.borderColor = 'rgba(232,0,28,.3)'; }
+  // s108: reposo refleja si la conversación por voz sigue activa (manos libres) o está apagada
+  aiMicSetState(aiAutoMic ? 'active' : 'off');
   var fab = document.getElementById('aiFab');
   // s97: restaurar el cuerpo embossed del spec (variante B) tras salir de modo voz
   if (fab) { fab.style.borderColor = ''; fab.style.setProperty('box-shadow',
@@ -40632,28 +40666,117 @@ document.addEventListener('DOMContentLoaded', function() {
   }, 2000);
 });
 
-function aiToggleVoiceMode() {
-  aiAutoMic = !aiAutoMic;
-  var btn = document.getElementById('aiVoiceMode');
-  if (btn) {
-    btn.style.background = aiAutoMic ? 'linear-gradient(135deg,#1a73e8,#8b5cf6)' : '#f5f5f7';
-    btn.style.color = aiAutoMic ? '#fff' : '#666';
-    btn.style.border = aiAutoMic ? 'none' : '1.5px solid #e5e5e7';
-    btn.title = aiAutoMic ? 'Modo voz activo — click para desactivar' : 'Activar modo conversación voz';
-  }
-  if (aiAutoMic) {
-    if (!aiPanelOpen) aiToggle();
-    aiAddMsg('bot', '🎙️ <strong>Modo conversación activado.</strong> Hablaré la respuesta y esperaré tu siguiente pregunta. Toca el botón de voz para comenzar.');
-    aiSpeak('Modo conversación activado. Toca el micrófono para comenzar.');
-  } else {
-    aiStopSpeech();
-    aiAddMsg('bot', '⏹️ Modo conversación desactivado.');
-  }
+// s108: estado visual del micrófono (clases definidas en #aiMicStyles): off | listening | active
+function aiMicSetState(s){
+  var b=document.getElementById('aiMicBtn'); if(!b) return;
+  b.className='ai-mic ai-mic--'+s;
+  b.title = s==='listening' ? 'Escuchando — toca para terminar'
+          : s==='active'    ? 'Conversación por voz activa — toca para terminar'
+          : 'Hablar';
+  b.setAttribute('aria-pressed', s==='off' ? 'false' : 'true');
 }
+window.aiMicSetState = aiMicSetState;
+
+// s108: VOZ UNIFICADA — un único control (el mic del composer). El 🎙️ del header se eliminó.
+// aiVoiceTap = toggle maestro de la conversación por voz del orb:
+//   off            → tap: inicia sesión manos-libres y escucha de inmediato
+//   escuchando     → tap: cancela y termina la sesión
+//   sesión activa  → tap: termina (corta el habla y el loop de re-escucha)
+// El loop de re-escucha (en aiSend) sigue llamando a aiMic() crudo mientras aiAutoMic siga true.
+function aiVoiceTap() {
+  if (aiRecording) {                 // tap mientras escucha → cancelar + terminar
+    aiAutoMic = false;
+    try { if (aiSR) aiSR.abort(); } catch(e){}
+    aiMicStop();
+    aiVoiceUI('off');                // s108: ocultar stage
+    return;
+  }
+  if (aiAutoMic) {                   // sesión activa (pensando/hablando) → terminar
+    aiAutoMic = false;
+    aiStopSpeech();
+    aiMicStop();                     // repinta el mic chico a "off"
+    aiVoiceUI('off');                // s108: ocultar stage
+    return;
+  }
+  // off → iniciar conversación manos-libres, mostrar stage y escuchar de inmediato
+  if (!aiPanelOpen) aiToggle();
+  aiAutoMic = true;
+  if (typeof showToast === 'function') showToast('🎤 Conversación por voz — toca ■ para terminar');
+  aiVoiceUI('listening');            // s108: mostrar el stage elegante
+  aiMic();                           // arranca la escucha (control crudo)
+}
+window.aiVoiceTap = aiVoiceTap;
+
+// s108: ════════ Modo conversación por voz — STAGE (orb que respira + estados) ════════
+// Estados: 'listening' | 'thinking' | 'speaking' | 'off'. Cableado a la máquina real:
+//   onstart SR → listening · aiSend PASO1/2 → thinking · al hablar → speaking · TTS done → listening.
+var AI_VS = {
+  listening:{mode:'Escuchando', spoken:'Te escucho.',  hint:'Habla con naturalidad — puedes interrumpirme cuando quieras.', dock:'Escuchando…',   docksub:'Habla ahora.'},
+  thinking :{mode:'Pensando',   spoken:'Un momento…',   hint:'Buscando la mejor opción en el catálogo SSTT.',               dock:'Analizando…',   docksub:'Cruzo uso, stock y presupuesto.'},
+  speaking :{mode:'Hablando',   spoken:'',              hint:'Toca el orb para interrumpir.',                                dock:'Respondiendo…', docksub:'Habla encima para corregir.'}
+};
+function _aiVsTrim(t){
+  return String(t||'').replace(/<[^>]+>/g,' ').replace(/PRODUCTOS:\s*\[[^\]]+\]/g,'').replace(/FILTRAR:[^\n\r]+/gi,'').replace(/\s+/g,' ').trim().slice(0,150);
+}
+function aiVoiceUI(state, text){
+  var st = document.getElementById('aiVoiceStage'); if (!st) return;
+  if (state === 'off'){ st.style.display = 'none'; return; }
+  var s = AI_VS[state] || AI_VS.listening;
+  st.style.display = 'flex';
+  st.setAttribute('data-state', state);
+  var m  = document.getElementById('aiVsMode');   if(m)  m.textContent = s.mode;
+  var sp = document.getElementById('aiVsSpoken'); if(sp){ var t=_aiVsTrim(text); sp.textContent = t || s.spoken || '…'; }
+  var h  = document.getElementById('aiVsHint');   if(h)  h.textContent = s.hint;
+  var d  = document.getElementById('aiVsDock');   if(d)  d.innerHTML = s.dock + '<small>' + s.docksub + '</small>';
+}
+window.aiVoiceUI = aiVoiceUI;
+
+// Tras hablar (TTS): cuando termina, vuelve a "escuchando" y re-arma el micrófono (loop manos libres)
+function aiVoiceAfterSpeak(text){
+  if (!aiAutoMic) return;
+  aiVoiceUI('speaking', text);
+  var ck = setInterval(function(){
+    if (!window.SSTT_TTS || !window.SSTT_TTS.isSpeaking()){
+      clearInterval(ck);
+      if (aiAutoMic){ aiVoiceUI('listening'); setTimeout(function(){ if (aiAutoMic && aiPanelOpen) aiMic(); }, 500); }
+    }
+  }, 300);
+}
+window.aiVoiceAfterSpeak = aiVoiceAfterSpeak;
+
+// Salir de voz → volver al chat de texto (sin cerrar el orb)
+function aiVoiceEndToText(){
+  aiAutoMic = false;
+  try { if (aiSR) aiSR.abort(); } catch(e){}
+  aiStopSpeech();
+  aiMicStop();
+  aiVoiceUI('off');
+  var inp=document.getElementById('aiInp'); if(inp){ try{ inp.focus(); }catch(e){} }
+}
+window.aiVoiceEndToText = aiVoiceEndToText;
+
+// × del stage → terminar voz y cerrar el orb
+function aiVoiceCloseAll(){ aiVoiceEndToText(); if (typeof aiClose==='function') aiClose(); }
+window.aiVoiceCloseAll = aiVoiceCloseAll;
+
+// Tocar el orb = interrupción por toque (barge-in): si habla, corta y vuelve a escuchar
+function aiVoiceOrbTap(){
+  if (window.SSTT_TTS && window.SSTT_TTS.isSpeaking()){
+    aiStopSpeech();
+    if (aiAutoMic){ aiVoiceUI('listening'); setTimeout(function(){ if (aiAutoMic && aiPanelOpen) aiMic(); }, 150); }
+    return;
+  }
+  if (aiRecording){ try { if (aiSR) aiSR.stop(); } catch(e){} return; }
+  if (aiAutoMic) aiMic();
+}
+window.aiVoiceOrbTap = aiVoiceOrbTap;
+
+// s108: shim de compatibilidad — antes era el 🎙️ del header (ya eliminado). Delega al control único.
+function aiToggleVoiceMode() { aiVoiceTap(); }
 
 // Cerrar al hacer click fuera
 document.addEventListener('click', function(e) {
-  if (aiPanelOpen && !e.target.closest('#aiPanel') && !e.target.closest('#aiFab')) aiClose();
+  if (aiPanelOpen && !e.target.closest('#aiPanel') && !e.target.closest('#aiFab') && !e.target.closest('#aiVoiceStage')) aiClose(); // s108: no cerrar al tocar el overlay de voz
 });
 
 </script>
@@ -40806,7 +40929,7 @@ document.addEventListener('click', function(e) {
           '<div style="font-size:13px;font-weight:700;color:#1a1a1a;letter-spacing:-.2px">Asesor SSTT®</div>' +
           '<div style="font-size:10px;margin-top:1px;font-weight:400;display:flex;align-items:center;gap:5px"><span class="ai-status-dot" id="orbStatusDot"></span><span class="ai-status-lbl online" id="orbStatusLbl">En línea</span></div>' +
         '</div>' +
-        '<button onclick="aiToggleVoiceMode()" id="aiVoiceMode" title="Modo voz" style="background:rgba(0,0,0,0.05);color:rgba(0,0,0,0.45);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .15s">🎙️</button>' +
+        // s108: 🎙️ del header eliminado — voz unificada en el único mic del composer (aiVoiceTap)
         '<button onclick="aiClose()" style="background:rgba(0,0,0,0.06);color:rgba(0,0,0,0.4);border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;margin-left:4px">×</button>' +
       '</div>' +
       // Sonograma header
@@ -40834,7 +40957,7 @@ document.addEventListener('click', function(e) {
       '<div id="aiInputRow" style="padding:10px 12px;border-top:1px solid rgba(0,0,0,0.06);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;background:rgba(255,255,255,0.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)">' +
         '<textarea id="aiInp" rows="1" placeholder="Escríbeme lo que necesitas…" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();aiSend();}" oninput="this.style.height=\'auto\';this.style.height=Math.min(this.scrollHeight,140)+\'px\'" style="flex:1;border:1px solid rgba(0,0,0,0.1);border-radius:16px;padding:11px 14px;font-size:14px;outline:none;background:rgba(255,255,255,0.85);font-family:inherit;color:#1a1a1a;resize:none;overflow-y:auto;line-height:1.45;min-height:44px;max-height:140px;display:block;width:0;box-sizing:border-box"></textarea>' +
         '<div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">' +
-          '<button onclick="aiMic()" id="aiMicBtn" title="Hablar" style="width:40px;height:40px;border-radius:50%;border:none;background:rgba(0,0,0,0.08);color:rgba(0,0,0,0.55);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s">' +
+          '<button onclick="aiVoiceTap()" id="aiMicBtn" class="ai-mic ai-mic--off" title="Hablar" aria-pressed="false">' + // s108: único control de voz (estado por clase)
             '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 19v3M8 22h8"/></svg>' +
           '</button>' +
           '<button onclick="aiSend()" title="Enviar" style="width:40px;height:40px;border-radius:50%;border:none;background:'+RED+';color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 10px rgba(232,0,28,0.35)">' +
@@ -40845,7 +40968,95 @@ document.addEventListener('click', function(e) {
 
     document.body.appendChild(panel);
 
-    // Actualizar posición en resize
+    // s108: estilos del micrófono unificado — estado inequívoco apagado/escuchando/activo
+    if (!document.getElementById('aiMicStyles')) {
+      var _ms = document.createElement('style');
+      _ms.id = 'aiMicStyles';
+      _ms.textContent =
+        '@keyframes aiMicPulse{0%{box-shadow:0 0 0 0 rgba(232,0,28,.45)}70%{box-shadow:0 0 0 13px rgba(232,0,28,0)}100%{box-shadow:0 0 0 0 rgba(232,0,28,0)}}' +
+        '@keyframes aiMicGlow{0%,100%{box-shadow:0 0 0 0 rgba(232,0,28,.30),0 3px 12px rgba(232,0,28,.40)}50%{box-shadow:0 0 0 5px rgba(232,0,28,.14),0 3px 16px rgba(232,0,28,.50)}}' +
+        '.ai-mic{width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;-webkit-tap-highlight-color:transparent;transition:background .2s,border-color .2s,color .2s,transform .12s}' +
+        '.ai-mic:active{transform:scale(.92)}' +
+        '.ai-mic svg{width:18px;height:18px}' +
+        /* APAGADO — contorno, claramente "toca para hablar" */
+        '.ai-mic--off{background:#fff;color:#e8001c;border:1.5px solid rgba(232,0,28,.30);box-shadow:0 1px 4px rgba(0,0,0,.08)}' +
+        '.ai-mic--off:hover{background:rgba(232,0,28,.06);border-color:rgba(232,0,28,.55)}' +
+        /* ESCUCHANDO — rojo lleno + halo pulsante */
+        '.ai-mic--listening{background:#e8001c;color:#fff;border:1.5px solid #e8001c;animation:aiMicPulse 1.35s ease-out infinite}' +
+        /* SESIÓN ACTIVA (manos libres, entre turnos) — rojo lleno + glow suave */
+        '.ai-mic--active{background:#e8001c;color:#fff;border:1.5px solid #e8001c;animation:aiMicGlow 2s ease-in-out infinite}' +
+        /* puntito "live" en estados activos */
+        '.ai-mic--listening::after,.ai-mic--active::after{content:"";position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #e8001c}' +
+        /* ── s108: MODO CONVERSACIÓN POR VOZ — cinematográfico, viewport completo (desktop alto total, móvil full-screen) ── */
+        '#aiVoiceStage{position:fixed;inset:0;display:none;flex-direction:column;z-index:2147483647;overflow:hidden;-webkit-tap-highlight-color:transparent;background:radial-gradient(circle at 22% 18%,rgba(232,0,28,.16),transparent 26%),radial-gradient(circle at 80% 14%,rgba(255,255,255,.85),transparent 24%),radial-gradient(circle at 50% 96%,rgba(160,60,50,.10),transparent 34%),linear-gradient(150deg,#fff7f4 0%,#f4e7e1 46%,#fdf6f3 100%)}' +
+        '#aiVoiceStage::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 46%,rgba(70,30,24,.10) 100%)}' +
+        '.ai-vs-head{position:relative;z-index:4;display:flex;align-items:center;justify-content:space-between;padding:18px 22px;flex-shrink:0;width:min(960px,100%);margin:0 auto}' +
+        '.ai-vs-id{display:flex;align-items:center;gap:12px}' +
+        '.ai-vs-spark{width:16px;height:16px;flex:0 0 auto;background:linear-gradient(135deg,#e8001c,#ff7a6a);clip-path:polygon(50% 0,62% 36%,100% 50%,62% 64%,50% 100%,38% 64%,0 50%,38% 36%);filter:drop-shadow(0 6px 12px rgba(232,0,28,.28))}' +
+        '.ai-vs-title{font-size:17px;font-weight:800;letter-spacing:-.03em;color:#2a1c17}' +
+        '.ai-vs-sub{font-size:11px;font-weight:700;color:#59c58c;margin-top:1px}' +
+        '.ai-vs-ctrls{display:flex;gap:10px}' +
+        '.ai-vs-x{width:38px;height:38px;border-radius:50%;border:0;background:rgba(83,52,38,.05);color:#9a8377;font-size:18px;cursor:pointer;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}' +
+        '.ai-vs-x:hover{background:rgba(232,0,28,.08);color:#e8001c}' +
+        '.ai-vs-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 24px;position:relative;z-index:3;min-height:0}' +
+        '.ai-vs-wave{position:absolute;left:0;right:0;top:42%;height:54px;opacity:.4;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}' +
+        '.ai-vs-wave::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 10px,rgba(232,0,28,.26) 10px 12px,transparent 12px 22px);animation:aiVsWave 4.6s linear infinite}' +
+        '.ai-vs-wave::after{content:"";position:absolute;inset:14px 0;opacity:.5;background:repeating-linear-gradient(90deg,transparent 0 20px,rgba(232,0,28,.16) 20px 22px,transparent 22px 38px);animation:aiVsWave 7.6s linear reverse infinite}' +
+        '@keyframes aiVsWave{to{transform:translateX(38px)}}' +
+        '.ai-vs-orb{width:clamp(128px,16vh,168px);height:clamp(128px,16vh,168px);border-radius:50%;position:relative;margin-bottom:20px;cursor:pointer;flex:0 0 auto;background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.96),transparent 8%),radial-gradient(circle at 50% 50%,#e8001c 0 26%,#ff8a72 47%,rgba(232,0,28,.14) 66%,transparent 68%);box-shadow:0 0 0 10px rgba(232,0,28,.06),0 0 0 26px rgba(232,0,28,.03),0 30px 90px rgba(222,40,40,.28);animation:aiVsBreathe 3.2s cubic-bezier(.2,.8,.2,1) infinite;z-index:2}' +
+        '.ai-vs-orb::before{content:"";position:absolute;inset:18px;border-radius:50%;background-image:radial-gradient(rgba(255,255,255,.42) 1px,transparent 1px);background-size:13px 13px;opacity:.44;animation:aiVsStars 12s linear infinite}' +
+        '.ai-vs-orb::after{content:"";position:absolute;inset:-16px;border-radius:50%;border:1px solid rgba(232,0,28,.14);animation:aiVsRing 3.2s cubic-bezier(.2,.8,.2,1) infinite}' +
+        '@keyframes aiVsBreathe{0%,100%{transform:scale(.965)}50%{transform:scale(1.04)}}' +
+        '@keyframes aiVsStars{to{transform:rotate(54deg)}}' +
+        '@keyframes aiVsRing{0%,100%{opacity:.25;transform:scale(.96)}50%{opacity:.7;transform:scale(1.08)}}' +
+        '#aiVoiceStage[data-state="thinking"] .ai-vs-orb{animation-duration:1.7s}' +
+        '#aiVoiceStage[data-state="speaking"] .ai-vs-orb{animation-duration:1.05s}' +
+        '#aiVoiceStage[data-state="thinking"] .ai-vs-wave{opacity:.16}' +
+        '.ai-vs-mode{color:#b06a58;text-transform:uppercase;letter-spacing:.22em;font-size:12px;font-weight:800}' +
+        '.ai-vs-spoken{width:min(560px,92%);margin:12px auto 0;font-family:ui-serif,Georgia,"Times New Roman",serif;color:#2a1c17;font-size:clamp(24px,3.2vh,33px);line-height:1.1;letter-spacing:-.04em;font-weight:400;text-wrap:balance}' +
+        '.ai-vs-hint{width:min(360px,90%);margin:14px auto 0;color:#8d766a;font-size:13px;line-height:1.55;font-weight:500}' +
+        '.ai-vs-dots{display:flex;justify-content:center;gap:11px;margin-top:22px}' +
+        '.ai-vs-dots i{width:6px;height:6px;border-radius:50%;background:#e8cfc6;transition:.35s}' +
+        '#aiVoiceStage[data-state="listening"] .ai-vs-dots i:nth-child(1),#aiVoiceStage[data-state="thinking"] .ai-vs-dots i:nth-child(2),#aiVoiceStage[data-state="speaking"] .ai-vs-dots i:nth-child(3){background:#e8001c;transform:scale(1.25)}' +
+        '.ai-vs-dock{position:relative;z-index:4;width:min(520px,calc(100% - 32px));margin:0 auto 22px;min-height:74px;display:grid;grid-template-columns:46px 1fr 54px;align-items:center;gap:10px;padding:11px 13px;border-radius:999px;background:rgba(255,253,250,.86);border:1px solid rgba(232,0,28,.16);box-shadow:0 0 0 10px rgba(232,0,28,.04),0 16px 44px rgba(71,39,25,.12);overflow:hidden;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}' +
+        '.ai-vs-dock::after{content:"";position:absolute;left:74px;right:84px;bottom:6px;height:20px;background:repeating-linear-gradient(90deg,rgba(232,0,28,.24) 0 2px,transparent 2px 8px);opacity:.7;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);animation:aiVsWave 2.6s linear infinite}' +
+        '#aiVoiceStage[data-state="thinking"] .ai-vs-dock::after{opacity:.14}' +
+        '.ai-vs-kb{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(105,72,55,.1);background:rgba(255,255,255,.85);color:#917b6f;cursor:pointer;font-size:16px;z-index:1;-webkit-tap-highlight-color:transparent}' +
+        '.ai-vs-kb:hover{color:#e8001c;border-color:rgba(232,0,28,.35)}' +
+        '.ai-vs-docktext{text-align:center;color:#bf4b3a;font-size:15px;font-weight:700;letter-spacing:-.02em;z-index:1}' +
+        '.ai-vs-docktext small{display:block;margin-top:3px;color:#8d766b;font-size:11px;font-weight:500;letter-spacing:0}' +
+        '.ai-vs-stop{width:52px;height:52px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;background:linear-gradient(135deg,#e8001c,#ff6a49);box-shadow:0 14px 32px rgba(232,0,28,.28);z-index:1;-webkit-tap-highlight-color:transparent}' +
+        '.ai-vs-stop::before{content:"";width:15px;height:15px;border-radius:4px;background:#fff}' +
+        '@media (max-width:640px){.ai-vs-spoken{font-size:26px}.ai-vs-dock{width:calc(100% - 24px)}.ai-vs-head{padding:16px 18px}}';
+      document.head.appendChild(_ms);
+    }
+
+    // s108: stage del modo conversación por voz — cinematográfico, viewport completo (en body, no en el panel)
+    if (!document.getElementById('aiVoiceStage')) {
+      var vs = document.createElement('div');
+      vs.id = 'aiVoiceStage';
+      vs.setAttribute('data-state', 'listening');
+      vs.innerHTML =
+        '<div class="ai-vs-head">' +
+          '<div class="ai-vs-id"><span class="ai-vs-spark"></span><div><div class="ai-vs-title">Asesor SSTT®</div><div class="ai-vs-sub">● Conversando por voz</div></div></div>' +
+          '<div class="ai-vs-ctrls"><button class="ai-vs-x" title="Cerrar" onclick="aiVoiceCloseAll()">×</button></div>' +
+        '</div>' +
+        '<div class="ai-vs-body">' +
+          '<div class="ai-vs-wave"></div>' +
+          '<div class="ai-vs-orb" id="aiVsOrb" title="Tocar para interrumpir" onclick="aiVoiceOrbTap()"></div>' +
+          '<div class="ai-vs-mode" id="aiVsMode">Escuchando</div>' +
+          '<div class="ai-vs-spoken" id="aiVsSpoken">Te escucho.</div>' +
+          '<div class="ai-vs-hint" id="aiVsHint">Habla con naturalidad — puedes interrumpirme cuando quieras.</div>' +
+          '<div class="ai-vs-dots"><i></i><i></i><i></i></div>' +
+        '</div>' +
+        '<div class="ai-vs-dock">' +
+          '<button class="ai-vs-kb" title="Escribir" onclick="aiVoiceEndToText()">⌨</button>' +
+          '<div class="ai-vs-docktext" id="aiVsDock">Escuchando…<small>Habla ahora.</small></div>' +
+          '<button class="ai-vs-stop" title="Terminar conversación" onclick="aiVoiceTap()"></button>' +
+        '</div>';
+      document.body.appendChild(vs);
+    }
+
     window.addEventListener('resize', function() {
       var mob = window.innerWidth < 700 || matchMedia('(pointer: coarse)').matches; /* FIX s23a: foldables/touch */
       var fs = mob ? 52 : 60;
