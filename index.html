@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s114 -->
+<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s115 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -40149,7 +40149,18 @@ var aiAutoMic = false;  // modo voz conversacional continuo
 window.SSTT_TTS = (function(){
   var T = { mode:'eleven', _audio:null, _speaking:false,
             _ttsTimeoutMs:7000, _retries:2, _retryMs:500, _cache:new Map(), _cacheMax:24,
-            _ac:null, _src:null, _an:null, _url:null }; // s109: grafo Web Audio para el medidor real
+            _ac:null, _src:null, _an:null, _url:null, _lastSkipT:0 }; // s109: grafo Web Audio para el medidor real · s115: _lastSkipT = throttle del aviso "voz omitida"
+  // s115: el TTS degradaba a SILENCIO sin avisar (texto visible, sin audio) → el usuario no sabía
+  // si estaba roto o simplemente sin voz (tu síntoma del asistente técnico). Avisar en pantalla
+  // (throttled ~8s para no spamear) + log claro para diagnosticar en prod la causa real.
+  function _ttsSkip(reason, status){
+    try{ console.warn('[SSTT_TTS] voz omitida ('+reason+(status?' '+status:'')+') — respuesta visible en texto.'); }catch(_){}
+    var now=Date.now();
+    if(now - T._lastSkipT > 8000){
+      T._lastSkipT = now;
+      try{ if(typeof showToast==='function') showToast('🔇 Voz no disponible ('+reason+') — respuesta en texto'); }catch(_){}
+    }
+  }
   // s109: ── Humanizador TTS — convierte precios y códigos a formato hablable ──
   // Precios chilenos: "$180.588" → "180 mil 588 pesos" (ElevenLabs lee el punto como decimal)
   // Códigos Dahua: "IPC-HDBW2841RP-ZS" → "modelo 2841" (impronunciables por TTS)
@@ -40220,6 +40231,17 @@ window.SSTT_TTS = (function(){
   }
   function playBlob(blob, retry, done){
     if(!T._speaking) return;                              // cancelado mientras se resolvía
+    // s115: si el AudioContext quedó 'closed', el grafo (createMediaElementSource→destination) está
+    // MUERTO: a.play() resuelve pero NO sale sonido (texto visible, sin audio). El <audio> no se puede
+    // reusar (1 MediaElementSource de por vida), así que se reconstruye TODO desde cero. Defensivo:
+    // solo dispara en el estado roto; en operación normal no se ejecuta.
+    try{
+      if(T._ac && T._ac.state==='closed'){
+        try{ console.warn('[SSTT_TTS] AudioContext closed — reconstruyendo grafo de audio.'); }catch(_){}
+        try{ if(T._audio){ T._audio.pause(); T._audio.src=''; } }catch(_){}
+        T._audio=null; T._src=null; T._an=null; T._ac=null;
+      }
+    }catch(_){}
     try{
       var a=getEl();
       if(T._url){ try{URL.revokeObjectURL(T._url);}catch(_){} }
@@ -40231,12 +40253,19 @@ window.SSTT_TTS = (function(){
       // Si está 'suspended' o 'interrupted', play() resuelve pero NO sale sonido (síntoma: "a la
       // tercera solo aparece el texto"). resume() es async → hay que ESPERAR el promise antes de
       // play(), y cubrir cualquier estado ≠ 'running' (no solo 'suspended').
+      // s115: window.SSTT_TTS_DEBUG=true → loguea estado del contexto y resultado de resume() para
+      //       diagnosticar en prod por qué no suena (off por defecto, cero coste).
+      var _dbg = (function(){ try{ return !!window.SSTT_TTS_DEBUG; }catch(_){ return false; } })();
       var start=function(){ if(!T._speaking) return; a.play().catch(function(){ retry(); }); };
       if(T._ac && T._ac.state!=='running'){
+        if(_dbg){ try{ console.warn('[SSTT_TTS] AudioContext '+T._ac.state+' → resume() antes de play().'); }catch(_){} }
         var r; try{ r=T._ac.resume(); }catch(_){}
-        if(r && typeof r.then==='function'){ r.then(start, start); } // resume OK o falla → intentar igual
-        else { start(); }
+        if(r && typeof r.then==='function'){
+          r.then(function(){ if(_dbg){ try{ console.warn('[SSTT_TTS] resume OK → '+(T._ac&&T._ac.state)); }catch(_){} } start(); },
+                 function(){ if(_dbg){ try{ console.warn('[SSTT_TTS] resume FALLÓ (state='+(T._ac&&T._ac.state)+') — reproduciendo igual.'); }catch(_){} } start(); });
+        } else { start(); }
       } else {
+        if(_dbg){ try{ console.warn('[SSTT_TTS] AudioContext '+(T._ac?T._ac.state:'(sin AC)')+' → play() directo.'); }catch(_){} }
         start();                                           // sin AudioContext (degradación) o ya 'running'
       }
     }catch(e){ retry(); }
@@ -40252,12 +40281,12 @@ window.SSTT_TTS = (function(){
       // Calla de inmediato y deja traza en consola para diagnosticar (la conversación sigue).
       var st = err && err.status;
       if(st===429 || st===402 || st===403){
-        try{ console.warn('[SSTT_TTS] ElevenLabs '+st+(st===429?' (rate limit)':st===402?' (sin cuota)':' (auth)')+' — voz omitida, texto visible en chat.'); }catch(_){}
+        _ttsSkip(st===429?'límite de uso':st===402?'sin cuota':'autenticación', st); // s115: ahora también avisa en pantalla
         finish(done); return;
       }
       attempt++;
       if(T._speaking && attempt<=T._retries){ setTimeout(tryOnce, T._retryMs*attempt); } // reintenta sólo errores transitorios (red/timeout)
-      else { finish(done); }                                                            // silencio; la conversación sigue
+      else { _ttsSkip('red o tiempo de espera', st||0); finish(done); }                  // s115: silencio → avisar; la conversación sigue
     }
     function tryOnce(){
       if(!T._speaking) return;                            // cancelado
@@ -40904,6 +40933,8 @@ function aiVoiceTap() {
     return;
   }
   // off → iniciar conversación manos-libres, mostrar stage y escuchar de inmediato
+  // s115: exclusión mutua — soltar el Soporte Técnico AI si quedó activo (su V.rec mantiene el mic).
+  try { if (window.VOICE && window.VOICE.active) window.VOICE.stop(); } catch(e){}
   if (!aiPanelOpen) aiToggle();
   aiAutoMic = true;
   aiVoiceOwner = null; // s108: el orb toma el stage
@@ -41177,14 +41208,23 @@ document.addEventListener('click', function(e) {
 // que tiene su PROPIO SpeechRecognition V.rec). Sus botones ■/× ya limpian,
 // pero "cerrar" navegando de sección u ocultando la pestaña dejaba a V.rec
 // (y a veces a aiSR) vivo → mic encendido. Esta función corta a todos.
-function aiReleaseAllMic(){
+// s115: soltar SOLO los consumidores de mic del ORBE (Asesor de Ventas), sin tocar el Soporte
+// Técnico AI (window.VOICE). Lo usa V.toggle() para EXCLUSIÓN MUTUA al arrancar: el orbe y el
+// técnico comparten stage + motor TTS pero tienen consumidores de mic distintos; si uno arranca
+// con el otro aún vivo quedan DOS → indicador de mic encendido. Reutilizado por aiReleaseAllMic.
+function aiReleaseOrbMic(){
   try { aiAutoMic = false; } catch(e){}                                   // orb: salir de manos-libres
   try { aiVsBargeStop(); } catch(e){}                                     // s113: corta el watcher de barge-in por voz
   try { if (aiSR) aiSR.abort(); } catch(e){}                              // orb: abortar su SpeechRecognition
   try { aiStopSpeech(); } catch(e){}                                      // orb: cortar TTS
   try { aiMicStop(); } catch(e){}                                         // orb: repintar mic chico a off
-  try { if (window.VOICE && window.VOICE.active) window.VOICE.stop(); } catch(e){} // Soporte Técnico AI: corta V.rec
   try { aiVoiceUI('off'); } catch(e){}                                    // stage + medidor → libera _aiVsMicStream y cierra AudioContext
+}
+window.aiReleaseOrbMic = aiReleaseOrbMic;
+
+function aiReleaseAllMic(){
+  aiReleaseOrbMic();                                                      // s115: orbe (aiSR + medidor + barge + TTS + stage)
+  try { if (window.VOICE && window.VOICE.active) window.VOICE.stop(); } catch(e){} // Soporte Técnico AI: corta V.rec
 }
 window.aiReleaseAllMic = aiReleaseAllMic;
 
@@ -42259,6 +42299,10 @@ window.mktSubmitInterest = function() {
     }
     if(V.active){ V.stop(); return; }
     V.active=true;
+    // s115: exclusión mutua — soltar el ORBE (Asesor de Ventas) ANTES de tomar el stage. Comparten
+    // stage + motor TTS pero el orbe tiene su PROPIO mic (aiSR + medidor + barge); si quedó vivo,
+    // arrancar aquí dejaba dos consumidores → mic encendido. (V aún no escucha → no se auto-corta.)
+    try { if(window.aiReleaseOrbMic) window.aiReleaseOrbMic(); } catch(e){}
     // s108: el Soporte Técnico AI toma el stage cinematográfico; sus botones (■/⌨/×/orb) van a estos handlers
     try { if(window.aiVoiceSetOwner) window.aiVoiceSetOwner({
       stop:  function(){ V.stop(); },
@@ -43953,7 +43997,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's114',
+  ver:   's115',
   fecha: 'Viernes 05 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
