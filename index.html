@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Jueves 04 de Junio del 2026 · s109 -->
+<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s110 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -40146,6 +40146,11 @@ window.SSTT_TTS = (function(){
   // Precios chilenos: "$180.588" → "180 mil 588 pesos" (ElevenLabs lee el punto como decimal)
   // Códigos Dahua: "IPC-HDBW2841RP-ZS" → "modelo 2841" (impronunciables por TTS)
   function ttsHumanize(t) {
+    // s110: 0) Nombres propios — pronunciación correcta en ElevenLabs (voz español)
+    //    "SSTT" lo leía como palabra ("ssddt") → deletrear con nombres de letra: ese ese te te
+    //    "Dahua" tiene la h muda en español ("da-ua") → escribir "Dajua" para que suene con jota
+    t = t.replace(/\bSSTT\b(?!\.\w)/gi, 'ese ese te te'); // marca/tienda, no tocar dominios tipo sstt.cl
+    t = t.replace(/\bDahua\b/gi, 'Dajua');                // marca representada → suena "dájua"
     // 1) Precios: "$180.588" → "180588 pesos" (sin puntos, ElevenLabs lee "ciento ochenta mil quinientos ochenta y ocho pesos")
     t = t.replace(/\$\s?([\d.]+)/g, function(_, num) {
       return num.replace(/\./g, '') + ' pesos';
@@ -40212,10 +40217,20 @@ window.SSTT_TTS = (function(){
       if(T._url){ try{URL.revokeObjectURL(T._url);}catch(_){} }
       T._url=URL.createObjectURL(blob); a.src=T._url;
       ensureGraph();                                       // s109: 1ª vez crea el grafo (ya hubo gesto del usuario)
-      if(T._ac && T._ac.state==='suspended'){ try{ T._ac.resume(); }catch(_){} }
       a.onended=function(){ T._speaking=false; if(done)done(); };
       a.onerror=function(){ retry(); };
-      a.play().catch(function(){ retry(); });
+      // s110: el grafo (createMediaElementSource) rutea TODO el audio por el AudioContext.
+      // Si está 'suspended' o 'interrupted', play() resuelve pero NO sale sonido (síntoma: "a la
+      // tercera solo aparece el texto"). resume() es async → hay que ESPERAR el promise antes de
+      // play(), y cubrir cualquier estado ≠ 'running' (no solo 'suspended').
+      var start=function(){ if(!T._speaking) return; a.play().catch(function(){ retry(); }); };
+      if(T._ac && T._ac.state!=='running'){
+        var r; try{ r=T._ac.resume(); }catch(_){}
+        if(r && typeof r.then==='function'){ r.then(start, start); } // resume OK o falla → intentar igual
+        else { start(); }
+      } else {
+        start();                                           // sin AudioContext (degradación) o ya 'running'
+      }
     }catch(e){ retry(); }
   }
   T.speak = function(text, done){
@@ -43777,8 +43792,8 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's109',
-  fecha: 'Jueves 04 de Junio del 2026'
+  ver:   's110',
+  fecha: 'Viernes 05 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
