@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s113 -->
+<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s114 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -41071,8 +41071,17 @@ function aiVsMicMeterStart(){
 // umbral de forma SOSTENIDA, cortamos el TTS y volvemos a escuchar (idéntico a
 // tocar el orbe). Desktop-only (igual que el medidor de mic) y SOLO para el orbe
 // (aiVoiceOwner==null); en móvil y en el Soporte Técnico AI el barge sigue por toque.
-var _aiBargeRaf=0, _aiBargeHits=0, _aiBargeFreq=null;
+var _aiBargeRaf=0, _aiBargeHits=0, _aiBargeFreq=null, _aiBargeLogT=0; // s114: _aiBargeLogT = throttle del log de calibración
 var AI_BARGE_THRESH=0.30, AI_BARGE_FRAMES=8; // s113: knobs — energía 0..1 sostenida N frames (~130ms). Subir THRESH/FRAMES = menos sensible.
+// s114: calibración EN VIVO sin redeploy. El watcher lee estos valores desde window cada frame,
+// así Jorge ajusta en la consola del navegador mientras prueba con audio real:
+//   AI_BARGE_THRESH = 0.25    → más sensible (interrumpe con menos voz)
+//   AI_BARGE_FRAMES = 6       → reacciona más rápido (menos ms sostenidos)
+//   AI_BARGE_DEBUG  = true    → loguea {e,hits,thresh,frames} ~cada 150ms mientras el asistente HABLA.
+//     Con eso ves dónde cae TU voz vs el residuo del AEC del parlante y eliges el umbral con datos, no a ciegas.
+window.AI_BARGE_THRESH = AI_BARGE_THRESH;
+window.AI_BARGE_FRAMES = AI_BARGE_FRAMES;
+window.AI_BARGE_DEBUG  = false;
 function aiVsBargeStop(){ if(_aiBargeRaf){ cancelAnimationFrame(_aiBargeRaf); _aiBargeRaf=0; } _aiBargeHits=0; }
 function aiVsBargeStart(){
   if(!_aiVsIsDesktop) return;                  // móvil → barge por toque
@@ -41087,7 +41096,10 @@ function aiVsBargeStart(){
     var lo=2, hi=Math.min(_aiBargeFreq.length,48), n=Math.max(1,hi-lo), sum=0;
     for(var i=lo;i<hi;i++) sum+=Math.sqrt(_aiBargeFreq[i]/255);
     var e=sum/n;
-    if(e>AI_BARGE_THRESH){ if(++_aiBargeHits>=AI_BARGE_FRAMES){ _aiBargeRaf=0; _aiBargeHits=0; aiVoiceBargeIn(); return; } }
+    var TH=(typeof window.AI_BARGE_THRESH==='number')?window.AI_BARGE_THRESH:AI_BARGE_THRESH; // s114: knobs en vivo (consola)
+    var FR=(typeof window.AI_BARGE_FRAMES==='number')?window.AI_BARGE_FRAMES:AI_BARGE_FRAMES;
+    if(window.AI_BARGE_DEBUG){ var _t=(window.performance&&performance.now)?performance.now():Date.now(); if(_t-_aiBargeLogT>150){ _aiBargeLogT=_t; try{ console.log('[barge] e='+e.toFixed(3)+' hits='+_aiBargeHits+' thresh='+TH+' frames='+FR); }catch(_e){} } } // s114: calibración con datos reales
+    if(e>TH){ if(++_aiBargeHits>=FR){ _aiBargeRaf=0; _aiBargeHits=0; aiVoiceBargeIn(); return; } }
     else if(_aiBargeHits>0){ _aiBargeHits--; } // exige energía SOSTENIDA; un pico aislado decae y no interrumpe
     _aiBargeRaf=requestAnimationFrame(frame);
   }
@@ -41430,14 +41442,14 @@ window.addEventListener('pagehide', aiReleaseAllMic);
         '.ai-vs-wave--mic i{opacity:.7}' +
         /* s110: ── orb glossy 3D dentro de shell de vidrio + anillos + arco/track (estética referencia) ── */
         '.ai-vs-orbzone{position:relative;width:100%;display:grid;place-items:center;margin:0 0 8px;min-height:clamp(230px,38vh,300px)}' +
-        '.ai-vs-aura{position:absolute;width:min(236px,64vw);height:min(236px,64vw);border-radius:50%;background:radial-gradient(circle,var(--vsCbd,rgba(255,64,48,.34)) 0%,var(--vsCbg,rgba(255,64,48,.12)) 38%,transparent 66%);filter:blur(24px);z-index:0;pointer-events:none;transform:scale(calc(1 + var(--aiAmp,0)*.10));opacity:calc(.88 + var(--aiAmp,0)*.12);transition:background .4s,transform .12s ease-out,opacity .12s ease-out}' + /* s113: el aura respira con la voz (--aiAmp) igual que la corona; en amp 0 = scale(1)/op .88 ≈ reposo, position:absolute → sin impacto de layout */
+        '.ai-vs-aura{position:absolute;width:min(236px,64vw);height:min(236px,64vw);border-radius:50%;background:radial-gradient(circle,var(--vsCbd,rgba(255,64,48,.34)) 0%,var(--vsCbg,rgba(255,64,48,.12)) 38%,transparent 66%);filter:blur(24px);z-index:0;pointer-events:none;transform:scale(calc(1 + var(--aiAmp,0)*.20));opacity:calc(.86 + var(--aiAmp,0)*.20);transition:background .4s,transform .12s ease-out,opacity .12s ease-out}' + /* s113: el aura respira con la voz (--aiAmp) igual que la corona; position:absolute → sin impacto de layout. s114: factores subidos (scale .10→.20, op .12→.20) para reacción más notoria; en amp 0 sigue ≈ reposo (scale 1 / op .86) */
         '.ai-vs-ring{position:absolute;border-radius:50%;pointer-events:none;z-index:0;border:1px solid rgba(255,255,255,.7)}' +
         '.ai-vs-ring.r1{width:min(214px,58vw);height:min(214px,58vw);border-color:rgba(255,255,255,.7)}' +
         '.ai-vs-ring.r2{width:min(250px,68vw);height:min(250px,68vw);border-width:1.5px;border-color:var(--vsC,rgba(255,255,255,.25));opacity:.55}' +
         '.ai-vs-ring.r3{width:min(290px,78vw);height:min(290px,78vw);border-color:rgba(255,255,255,.22);opacity:.5}' +
         '.ai-vs-shell{position:relative;width:min(192px,52vw);height:min(192px,52vw);border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.72);box-shadow:inset 10px 14px 22px rgba(255,255,255,.6),inset -10px -14px 26px rgba(255,80,55,.18),0 18px 50px var(--vsCbd,rgba(255,48,36,.3));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:3;transition:box-shadow .4s}' +
         '.ai-vs-shell::after{content:"";position:absolute;width:60px;height:60px;border-radius:50%;top:14px;left:26px;background:radial-gradient(circle,rgba(255,255,255,.4),transparent 64%);filter:blur(8px);pointer-events:none}' +
-        '.ai-vs-orb{position:relative;width:min(128px,36vw);height:min(128px,36vw);border-radius:50%;cursor:pointer;overflow:hidden;flex:0 0 auto;background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.72),transparent 24%),radial-gradient(circle at 50% 52%,#ff5a50 0 26%,#f01d2c 62%,#c2001a 100%);box-shadow:0 0 0 calc(9px + var(--aiAmp,0)*16px) var(--vsCbd,rgba(255,120,122,.30)),0 0 0 calc(19px + var(--aiAmp,0)*26px) var(--vsCbg,rgba(240,28,35,.10)),0 20px 56px var(--vsCbd,rgba(240,28,35,.30)),inset 0 -12px 22px rgba(150,0,15,.20),inset 6px 7px 16px rgba(255,255,255,.28);animation:aiVsBreathe 3s cubic-bezier(.2,.8,.2,1) infinite;filter:brightness(calc(1 + var(--aiAmp,0)*.14));transition:box-shadow .1s ease-out,filter .1s ease-out;z-index:4}' + /* s113: corona suavizada — la transición glissa el halo con --aiAmp (sin strobe por frame) */
+        '.ai-vs-orb{position:relative;width:min(128px,36vw);height:min(128px,36vw);border-radius:50%;cursor:pointer;overflow:hidden;flex:0 0 auto;background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.72),transparent 24%),radial-gradient(circle at 50% 52%,#ff5a50 0 26%,#f01d2c 62%,#c2001a 100%);box-shadow:0 0 0 calc(9px + var(--aiAmp,0)*20px) var(--vsCbd,rgba(255,120,122,.30)),0 0 0 calc(19px + var(--aiAmp,0)*32px) var(--vsCbg,rgba(240,28,35,.10)),0 20px 56px var(--vsCbd,rgba(240,28,35,.30)),inset 0 -12px 22px rgba(150,0,15,.20),inset 6px 7px 16px rgba(255,255,255,.28);animation:aiVsBreathe 3s cubic-bezier(.2,.8,.2,1) infinite;filter:brightness(calc(1 + var(--aiAmp,0)*.22));transition:box-shadow .1s ease-out,filter .1s ease-out;z-index:4}' + /* s113: corona suavizada — la transición glissa el halo con --aiAmp (sin strobe por frame). s114: corona 16→20/26→32px y brillo .14→.22 para que reaccione más notorio; offsets base (9/19px, brillo 1) intactos → reposo igual */
         '.ai-vs-orb::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 68% 80%,rgba(255,0,51,.12),transparent 30%),radial-gradient(circle at 50% 100%,rgba(135,0,14,.2),transparent 34%);pointer-events:none}' +
         '.ai-vs-orb::after{content:"";position:absolute;right:17px;bottom:19px;width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.6);filter:blur(2.4px);pointer-events:none}' +
         '.ai-vs-gloss{position:absolute;left:15%;top:11%;width:54%;height:26%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.72),rgba(255,255,255,.22) 50%,transparent 76%);transform:rotate(-16deg);filter:blur(3px);pointer-events:none;z-index:1}' +
@@ -41457,7 +41469,7 @@ window.addEventListener('pagehide', aiReleaseAllMic);
         '#aiVoiceStage[data-state="thinking"] .ai-vs-orb{animation-duration:1.7s}' +
         '#aiVoiceStage[data-state="speaking"] .ai-vs-orb{animation-duration:1.05s}' +
         /* s109: el orb late con el nivel real de voz (halo+brillo; no toca transform → no choca con aiVsBreathe) */
-        '#aiVoiceStage[data-state="speaking"] .ai-vs-orb{box-shadow:0 0 0 calc(11px + var(--aiAmp,0)*18px) rgba(232,0,28,.08),0 0 0 calc(22px + var(--aiAmp,0)*30px) rgba(232,0,28,.04),0 22px 64px rgba(222,40,40,.30),inset 0 -12px 22px rgba(150,0,15,.18)}' +
+        '#aiVoiceStage[data-state="speaking"] .ai-vs-orb{box-shadow:0 0 0 calc(11px + var(--aiAmp,0)*26px) rgba(232,0,28,.08),0 0 0 calc(22px + var(--aiAmp,0)*40px) rgba(232,0,28,.04),0 22px 64px rgba(222,40,40,.30),inset 0 -12px 22px rgba(150,0,15,.18)}' + /* s114: corona del responding más notoria (18→26 / 30→40px); offsets base 11/22px intactos */
         '#aiVoiceStage[data-state="thinking"] .ai-vs-wave{opacity:.16}' +
         /* s110: ── color por estado — Escuchando(verde) · Procesando(ámbar) · Respondiendo(rojo) ── */
         /* Vars CSS por data-state; las heredan badge, puntos y dock. Sin color-mix (compat total). */
@@ -43941,7 +43953,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's113',
+  ver:   's114',
   fecha: 'Viernes 05 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
