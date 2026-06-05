@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s112 -->
+<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s113 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -40926,8 +40926,25 @@ function _aiVsTrim(t){
 }
 function aiVoiceUI(state, text){
   var st = document.getElementById('aiVoiceStage'); if (!st) return;
-  if (state === 'off'){ aiVsMeterStop(); aiVsMicMeterCleanup(); st.style.display = 'none'; return; } // s109: corta ambos medidores al cerrar
+  if (state === 'off'){
+    // s113: fade-out de salida. CLAVE: el mic se suelta YA (no se demora) — mantiene
+    // intacto el fix anti-leak de s112. Solo el display:none se difiere ~260ms para
+    // animar (.ai-vs-closing → CSS). Un token de generación evita que un timer viejo
+    // oculte el stage si se reabrió en el intervalo. prefers-reduced-motion → oculta seco.
+    try { aiVsBargeStop(); } catch(e){}                  // s113: corta el watcher de barge por voz
+    aiVsMeterStop(); aiVsMicMeterCleanup();              // s109: corta medidores + libera _aiVsMicStream YA
+    if (st.style.display !== 'none'){
+      var _redm = (typeof matchMedia!=='undefined' && matchMedia('(prefers-reduced-motion:reduce)').matches);
+      if (_redm){ st.classList.remove('ai-vs-closing'); st.style.display='none'; return; }
+      st.classList.add('ai-vs-closing');
+      var _cg = (st._aiVsCloseGen = (st._aiVsCloseGen||0) + 1);
+      setTimeout(function(){ if (st._aiVsCloseGen === _cg){ st.style.display='none'; st.classList.remove('ai-vs-closing'); } }, 260);
+    }
+    return;
+  }
   var s = AI_VS[state] || AI_VS.listening;
+  st.classList.remove('ai-vs-closing');                 // s113: cancela un fade-out en curso al reabrir
+  st._aiVsCloseGen = (st._aiVsCloseGen||0) + 1;         // s113: invalida cualquier timer de ocultado pendiente
   st.style.display = 'flex';
   st.setAttribute('data-state', state);
   var m  = document.getElementById('aiVsMode');   if(m)  m.textContent = s.mode;
@@ -40935,9 +40952,9 @@ function aiVoiceUI(state, text){
   var h  = document.getElementById('aiVsHint');   if(h)  h.textContent = s.hint;
   var d  = document.getElementById('aiVsDock');   if(d)  d.innerHTML = s.dock + '<small>' + s.docksub + '</small>';
   // s109: medidores por estado — Nivel A (TTS) al hablar, Nivel B (mic) al escuchar
-  if (state === 'speaking') { aiVsMicMeterStop(); aiVsMeterStart(); }
-  else if (state === 'listening') { aiVsMeterStop(); aiVsMicMeterStart(); }
-  else { aiVsMeterStop(); aiVsMicMeterStop(); }
+  if (state === 'speaking') { aiVsMicMeterStop(); aiVsMeterStart(); aiVsBargeStart(); } // s113: + vigila barge-in por voz mientras responde
+  else if (state === 'listening') { aiVsBargeStop(); aiVsMeterStop(); aiVsMicMeterStart(); }
+  else { aiVsBargeStop(); aiVsMeterStop(); aiVsMicMeterStop(); }
 }
 window.aiVoiceUI = aiVoiceUI;
 
@@ -41028,7 +41045,7 @@ function aiVsMicMeterStart(){
   // Primera vez: pedir permiso (ya debería estar granted por SpeechRecognition)
   if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
   var gen=_aiVsMicGen;                                          // s110: token de generación
-  navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+  navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true}}).then(function(stream){ // s113: AEC resta el TTS del parlante → el barge-in por voz lee casi solo al usuario
     // s110: si se cerró/limpió mientras se pedía permiso, NO adoptar el stream — detenerlo ya
     // (si no, queda un MediaStream vivo huérfano y Chrome muestra el mic activo).
     if(gen!==_aiVsMicGen || !aiPanelOpen){
@@ -41044,6 +41061,42 @@ function aiVsMicMeterStart(){
     startLoop();
   }).catch(function(e){ /* permiso denegado o error — cae a la animación ambiente */ });
 }
+
+// s113: ── Barge-in por VOZ (hablar encima para interrumpir) ─────────────────
+// El dock ya prometía «Habla encima para corregir», pero la interrupción era solo
+// por TOQUE del orbe. Aquí la hacemos real: mientras el asistente HABLA (TTS),
+// vigilamos la energía del mic con el MISMO analizador del medidor de escucha
+// (_aiVsMicAn). El stream se pide con echoCancellation, así el AEC del navegador
+// resta el audio del parlante y deja casi solo la voz del usuario; si supera el
+// umbral de forma SOSTENIDA, cortamos el TTS y volvemos a escuchar (idéntico a
+// tocar el orbe). Desktop-only (igual que el medidor de mic) y SOLO para el orbe
+// (aiVoiceOwner==null); en móvil y en el Soporte Técnico AI el barge sigue por toque.
+var _aiBargeRaf=0, _aiBargeHits=0, _aiBargeFreq=null;
+var AI_BARGE_THRESH=0.30, AI_BARGE_FRAMES=8; // s113: knobs — energía 0..1 sostenida N frames (~130ms). Subir THRESH/FRAMES = menos sensible.
+function aiVsBargeStop(){ if(_aiBargeRaf){ cancelAnimationFrame(_aiBargeRaf); _aiBargeRaf=0; } _aiBargeHits=0; }
+function aiVsBargeStart(){
+  if(!_aiVsIsDesktop) return;                  // móvil → barge por toque
+  if(!aiAutoMic || aiVoiceOwner) return;       // solo la sesión manos-libres del ORB (no Soporte Técnico AI)
+  if(!_aiVsMicAn) return;                       // sin grafo de mic (permiso/contexto) → sin barge por voz
+  if(!_aiBargeFreq || _aiBargeFreq.length!==_aiVsMicAn.frequencyBinCount) _aiBargeFreq=new Uint8Array(_aiVsMicAn.frequencyBinCount);
+  _aiBargeHits=0;
+  function frame(){
+    // se autodetiene si terminó de hablar o se salió de manos-libres
+    if(!aiAutoMic || !(window.SSTT_TTS && window.SSTT_TTS.isSpeaking())){ _aiBargeRaf=0; _aiBargeHits=0; return; }
+    _aiVsMicAn.getByteFrequencyData(_aiBargeFreq);
+    var lo=2, hi=Math.min(_aiBargeFreq.length,48), n=Math.max(1,hi-lo), sum=0;
+    for(var i=lo;i<hi;i++) sum+=Math.sqrt(_aiBargeFreq[i]/255);
+    var e=sum/n;
+    if(e>AI_BARGE_THRESH){ if(++_aiBargeHits>=AI_BARGE_FRAMES){ _aiBargeRaf=0; _aiBargeHits=0; aiVoiceBargeIn(); return; } }
+    else if(_aiBargeHits>0){ _aiBargeHits--; } // exige energía SOSTENIDA; un pico aislado decae y no interrumpe
+    _aiBargeRaf=requestAnimationFrame(frame);
+  }
+  if(!_aiBargeRaf) _aiBargeRaf=requestAnimationFrame(frame);
+}
+function aiVoiceBargeIn(){ // mismo efecto que tocar el orbe mientras habla: corta TTS + re-escucha
+  try { if (typeof aiVoiceOrbTap==='function') aiVoiceOrbTap(); } catch(e){}
+}
+window.aiVoiceBargeIn = aiVoiceBargeIn;
 
 // Tras hablar (TTS): cuando termina, vuelve a "escuchando" y re-arma el micrófono (loop manos libres)
 function aiVoiceAfterSpeak(text){
@@ -41114,6 +41167,7 @@ document.addEventListener('click', function(e) {
 // (y a veces a aiSR) vivo → mic encendido. Esta función corta a todos.
 function aiReleaseAllMic(){
   try { aiAutoMic = false; } catch(e){}                                   // orb: salir de manos-libres
+  try { aiVsBargeStop(); } catch(e){}                                     // s113: corta el watcher de barge-in por voz
   try { if (aiSR) aiSR.abort(); } catch(e){}                              // orb: abortar su SpeechRecognition
   try { aiStopSpeech(); } catch(e){}                                      // orb: cortar TTS
   try { aiMicStop(); } catch(e){}                                         // orb: repintar mic chico a off
@@ -41360,6 +41414,11 @@ window.addEventListener('pagehide', aiReleaseAllMic);
         '@keyframes aiVsStageIn{from{opacity:0}to{opacity:1}}' +
         '@keyframes aiVsPanelIn{from{opacity:0;transform:translateX(30px) scale(.985)}to{opacity:1;transform:translateX(0) scale(1)}}' +
         '@media (prefers-reduced-motion:reduce){#aiVoiceStage,#aiVoiceStage .ai-vs-panel{animation:none!important}}' +
+        /* s113: salida del overlay — backdrop hace fade-out y el panel sale deslizando hacia la derecha (simétrico a la entrada). Lo dispara la clase .ai-vs-closing que añade aiVoiceUI(off); el JS suelta el mic AL TIRO y solo difiere el display:none ~260ms. */
+        '#aiVoiceStage.ai-vs-closing{animation:aiVsStageOut .24s ease both}' +
+        '#aiVoiceStage.ai-vs-closing .ai-vs-panel{animation:aiVsPanelOut .26s cubic-bezier(.32,.72,0,1) both}' +
+        '@keyframes aiVsStageOut{from{opacity:1}to{opacity:0}}' +
+        '@keyframes aiVsPanelOut{from{opacity:1;transform:translateX(0) scale(1)}to{opacity:0;transform:translateX(30px) scale(.985)}}' +
         /* s109: barras del medidor de voz real — alto = --b (0..1) por barra; visibles sólo al hablar */
         '.ai-vs-wave i{flex:0 0 auto;width:3px;height:62%;border-radius:3px;background:var(--vsC,#e8001c);transform:scaleY(var(--b,.06));transform-origin:50% 50%;opacity:0;transition:transform .09s ease-out,opacity .3s;filter:drop-shadow(0 0 5px var(--vsCbd,rgba(232,0,28,.3)))}' +
         '#aiVoiceStage[data-state="speaking"] .ai-vs-wave{opacity:0}' +
@@ -41371,14 +41430,14 @@ window.addEventListener('pagehide', aiReleaseAllMic);
         '.ai-vs-wave--mic i{opacity:.7}' +
         /* s110: ── orb glossy 3D dentro de shell de vidrio + anillos + arco/track (estética referencia) ── */
         '.ai-vs-orbzone{position:relative;width:100%;display:grid;place-items:center;margin:0 0 8px;min-height:clamp(230px,38vh,300px)}' +
-        '.ai-vs-aura{position:absolute;width:min(236px,64vw);height:min(236px,64vw);border-radius:50%;background:radial-gradient(circle,var(--vsCbd,rgba(255,64,48,.34)) 0%,var(--vsCbg,rgba(255,64,48,.12)) 38%,transparent 66%);filter:blur(24px);z-index:0;pointer-events:none;transition:background .4s}' +
+        '.ai-vs-aura{position:absolute;width:min(236px,64vw);height:min(236px,64vw);border-radius:50%;background:radial-gradient(circle,var(--vsCbd,rgba(255,64,48,.34)) 0%,var(--vsCbg,rgba(255,64,48,.12)) 38%,transparent 66%);filter:blur(24px);z-index:0;pointer-events:none;transform:scale(calc(1 + var(--aiAmp,0)*.10));opacity:calc(.88 + var(--aiAmp,0)*.12);transition:background .4s,transform .12s ease-out,opacity .12s ease-out}' + /* s113: el aura respira con la voz (--aiAmp) igual que la corona; en amp 0 = scale(1)/op .88 ≈ reposo, position:absolute → sin impacto de layout */
         '.ai-vs-ring{position:absolute;border-radius:50%;pointer-events:none;z-index:0;border:1px solid rgba(255,255,255,.7)}' +
         '.ai-vs-ring.r1{width:min(214px,58vw);height:min(214px,58vw);border-color:rgba(255,255,255,.7)}' +
         '.ai-vs-ring.r2{width:min(250px,68vw);height:min(250px,68vw);border-width:1.5px;border-color:var(--vsC,rgba(255,255,255,.25));opacity:.55}' +
         '.ai-vs-ring.r3{width:min(290px,78vw);height:min(290px,78vw);border-color:rgba(255,255,255,.22);opacity:.5}' +
         '.ai-vs-shell{position:relative;width:min(192px,52vw);height:min(192px,52vw);border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.72);box-shadow:inset 10px 14px 22px rgba(255,255,255,.6),inset -10px -14px 26px rgba(255,80,55,.18),0 18px 50px var(--vsCbd,rgba(255,48,36,.3));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:3;transition:box-shadow .4s}' +
         '.ai-vs-shell::after{content:"";position:absolute;width:60px;height:60px;border-radius:50%;top:14px;left:26px;background:radial-gradient(circle,rgba(255,255,255,.4),transparent 64%);filter:blur(8px);pointer-events:none}' +
-        '.ai-vs-orb{position:relative;width:min(128px,36vw);height:min(128px,36vw);border-radius:50%;cursor:pointer;overflow:hidden;flex:0 0 auto;background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.72),transparent 24%),radial-gradient(circle at 50% 52%,#ff5a50 0 26%,#f01d2c 62%,#c2001a 100%);box-shadow:0 0 0 calc(9px + var(--aiAmp,0)*16px) var(--vsCbd,rgba(255,120,122,.30)),0 0 0 calc(19px + var(--aiAmp,0)*26px) var(--vsCbg,rgba(240,28,35,.10)),0 20px 56px var(--vsCbd,rgba(240,28,35,.30)),inset 0 -12px 22px rgba(150,0,15,.20),inset 6px 7px 16px rgba(255,255,255,.28);animation:aiVsBreathe 3s cubic-bezier(.2,.8,.2,1) infinite;filter:brightness(calc(1 + var(--aiAmp,0)*.14));z-index:4}' +
+        '.ai-vs-orb{position:relative;width:min(128px,36vw);height:min(128px,36vw);border-radius:50%;cursor:pointer;overflow:hidden;flex:0 0 auto;background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.72),transparent 24%),radial-gradient(circle at 50% 52%,#ff5a50 0 26%,#f01d2c 62%,#c2001a 100%);box-shadow:0 0 0 calc(9px + var(--aiAmp,0)*16px) var(--vsCbd,rgba(255,120,122,.30)),0 0 0 calc(19px + var(--aiAmp,0)*26px) var(--vsCbg,rgba(240,28,35,.10)),0 20px 56px var(--vsCbd,rgba(240,28,35,.30)),inset 0 -12px 22px rgba(150,0,15,.20),inset 6px 7px 16px rgba(255,255,255,.28);animation:aiVsBreathe 3s cubic-bezier(.2,.8,.2,1) infinite;filter:brightness(calc(1 + var(--aiAmp,0)*.14));transition:box-shadow .1s ease-out,filter .1s ease-out;z-index:4}' + /* s113: corona suavizada — la transición glissa el halo con --aiAmp (sin strobe por frame) */
         '.ai-vs-orb::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 68% 80%,rgba(255,0,51,.12),transparent 30%),radial-gradient(circle at 50% 100%,rgba(135,0,14,.2),transparent 34%);pointer-events:none}' +
         '.ai-vs-orb::after{content:"";position:absolute;right:17px;bottom:19px;width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.6);filter:blur(2.4px);pointer-events:none}' +
         '.ai-vs-gloss{position:absolute;left:15%;top:11%;width:54%;height:26%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.72),rgba(255,255,255,.22) 50%,transparent 76%);transform:rotate(-16deg);filter:blur(3px);pointer-events:none;z-index:1}' +
@@ -43882,7 +43941,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's112',
+  ver:   's113',
   fecha: 'Viernes 05 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
