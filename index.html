@@ -40239,9 +40239,16 @@ window.SSTT_TTS = (function(){
     T.cancel(); T._speaking=true;
     if(T.mode!=='eleven' || typeof PROXY_URL==='undefined'){ finish(done); return; } // sin ElevenLabs => silencio (jamás navegador)
     var attempt=0;
-    function onFail(){
+    function onFail(err){
+      // s110: 429 (rate limit) / 402 (sin cuota) / 403 (auth) → reintentar NO ayuda y gasta requests.
+      // Calla de inmediato y deja traza en consola para diagnosticar (la conversación sigue).
+      var st = err && err.status;
+      if(st===429 || st===402 || st===403){
+        try{ console.warn('[SSTT_TTS] ElevenLabs '+st+(st===429?' (rate limit)':st===402?' (sin cuota)':' (auth)')+' — voz omitida, texto visible en chat.'); }catch(_){}
+        finish(done); return;
+      }
       attempt++;
-      if(T._speaking && attempt<=T._retries){ setTimeout(tryOnce, T._retryMs*attempt); } // reintenta ElevenLabs
+      if(T._speaking && attempt<=T._retries){ setTimeout(tryOnce, T._retryMs*attempt); } // reintenta sólo errores transitorios (red/timeout)
       else { finish(done); }                                                            // silencio; la conversación sigue
     }
     function tryOnce(){
@@ -40250,9 +40257,9 @@ window.SSTT_TTS = (function(){
       var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
       var to=setTimeout(function(){ try{ if(ctrl) ctrl.abort(); }catch(e){} }, T._ttsTimeoutMs);
       fetch(PROXY_URL+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:txt}), signal:ctrl?ctrl.signal:undefined})
-        .then(function(res){ if(!res.ok) throw new Error('tts '+res.status); return res.blob(); })
+        .then(function(res){ if(!res.ok){ var e=new Error('tts '+res.status); e.status=res.status; throw e; } return res.blob(); }) // s110: status en el error
         .then(function(blob){ clearTimeout(to); if(!T._speaking) return; cachePut(txt,blob); playBlob(blob, onFail, done); })
-        .catch(function(){ clearTimeout(to); onFail(); });
+        .catch(function(e){ clearTimeout(to); onFail(e); }); // s110: pasa el error a onFail para discriminar 429
     }
     tryOnce();
   };
@@ -40301,13 +40308,12 @@ function aiToggle() {
 }
 function aiClose() {
   aiPanelOpen = false;
-  // s108: cerrar el orb también termina la conversación por voz
-  if (typeof aiAutoMic !== 'undefined' && aiAutoMic) {
-    aiAutoMic = false;
-    try { if (aiSR) aiSR.abort(); } catch(e){}
-    try { aiStopSpeech(); } catch(e){}
-  }
-  try { aiVoiceUI('off'); } catch(e){}
+  // s110: liberar SIEMPRE (no solo en modo voz continuo). Antes estaba gated en `if (aiAutoMic)`,
+  // así que cerrar tras un dictado por toque (press-to-talk) dejaba aiSR vivo → mic activo en Chrome.
+  aiAutoMic = false;
+  try { if (aiSR) aiSR.abort(); } catch(e){}   // s110: abortar SpeechRecognition siempre
+  try { aiStopSpeech(); } catch(e){}           // s110: cortar TTS siempre
+  try { aiVoiceUI('off'); } catch(e){}          // → aiVsMicMeterCleanup() libera _aiVsMicStream
   var p = document.getElementById('aiPanel');
   p.style.display = 'none';
   p.classList.remove('open');
@@ -40897,9 +40903,9 @@ window.aiVoiceTap = aiVoiceTap;
 // Estados: 'listening' | 'thinking' | 'speaking' | 'off'. Cableado a la máquina real:
 //   onstart SR → listening · aiSend PASO1/2 → thinking · al hablar → speaking · TTS done → listening.
 var AI_VS = {
-  listening:{mode:'Escuchando', spoken:'Te escucho.',  hint:'Habla con naturalidad — puedes interrumpirme cuando quieras.', dock:'Escuchando…',   docksub:'Habla ahora.'},
-  thinking :{mode:'Pensando',   spoken:'Un momento…',   hint:'Buscando la mejor opción en el catálogo SSTT.',               dock:'Analizando…',   docksub:'Cruzo uso, stock y presupuesto.'},
-  speaking :{mode:'Hablando',   spoken:'',              hint:'Toca el orb para interrumpir.',                                dock:'Respondiendo…', docksub:'Habla encima para corregir.'}
+  listening:{mode:'Escuchando',   spoken:'Te escucho.',  hint:'Habla con naturalidad — te escucho.',     dock:'Escuchando…',   docksub:'Habla ahora.'},
+  thinking :{mode:'Procesando',   spoken:'Un momento…',  hint:'Estoy procesando lo que me dijiste.',      dock:'Procesando…',   docksub:'Cruzo uso, stock y presupuesto.'},
+  speaking :{mode:'Respondiendo', spoken:'',             hint:'Toca el orb para interrumpir.',            dock:'Respondiendo…', docksub:'Habla encima para corregir.'}
 };
 function _aiVsTrim(t){
   return String(t||'').replace(/<[^>]+>/g,' ').replace(/PRODUCTOS:\s*\[[^\]]+\]/g,'').replace(/FILTRAR:[^\n\r]+/gi,'').replace(/\s+/g,' ').trim().slice(0,150);
@@ -40960,7 +40966,7 @@ function aiVsMeterStart(){
 // s109: ── Medidor de escucha (Nivel B) — getUserMedia paralelo, desktop only ──
 // Abre un MediaStream del mic (separado de SpeechRecognition) para leer amplitud mientras escucha.
 // Gated: solo en desktop (hover:hover + pointer:fine). En móvil cae a la animación ambiente.
-var _aiVsMicStream=null, _aiVsMicAc=null, _aiVsMicAn=null, _aiVsMicRaf=0, _aiVsMicFreq=null;
+var _aiVsMicStream=null, _aiVsMicAc=null, _aiVsMicAn=null, _aiVsMicRaf=0, _aiVsMicFreq=null, _aiVsMicGen=0; // s110: _aiVsMicGen invalida getUserMedia en vuelo si se cierra antes de resolver
 var _aiVsIsDesktop = typeof matchMedia!=='undefined' && matchMedia('(hover:hover) and (pointer:fine)').matches;
 
 function aiVsMicMeterStop(){
@@ -40971,6 +40977,7 @@ function aiVsMicMeterStop(){
   var st=document.getElementById('aiVoiceStage'); if(st) st.style.setProperty('--aiAmp','0');
 }
 function aiVsMicMeterCleanup(){ // s109: liberar todo al cerrar la sesión de voz
+  _aiVsMicGen++;                 // s110: invalida cualquier getUserMedia que aún no resuelve
   aiVsMicMeterStop();
   try{ if(_aiVsMicStream){ _aiVsMicStream.getTracks().forEach(function(t){t.stop();}); } }catch(e){}
   try{ if(_aiVsMicAc && _aiVsMicAc.state!=='closed'){ _aiVsMicAc.close(); } }catch(e){}
@@ -41006,9 +41013,16 @@ function aiVsMicMeterStart(){
 
   // Primera vez: pedir permiso (ya debería estar granted por SpeechRecognition)
   if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+  var gen=_aiVsMicGen;                                          // s110: token de generación
   navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){
+    // s110: si se cerró/limpió mientras se pedía permiso, NO adoptar el stream — detenerlo ya
+    // (si no, queda un MediaStream vivo huérfano y Chrome muestra el mic activo).
+    if(gen!==_aiVsMicGen || !aiPanelOpen){
+      try{ stream.getTracks().forEach(function(t){t.stop();}); }catch(e){}
+      return;
+    }
     _aiVsMicStream=stream;
-    var AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+    var AC=window.AudioContext||window.webkitAudioContext; if(!AC){ try{ stream.getTracks().forEach(function(t){t.stop();}); }catch(e){} return; }
     _aiVsMicAc=new AC();
     var src=_aiVsMicAc.createMediaStreamSource(stream);
     _aiVsMicAn=_aiVsMicAc.createAnalyser(); _aiVsMicAn.fftSize=128; _aiVsMicAn.smoothingTimeConstant=.7;
@@ -41287,7 +41301,7 @@ document.addEventListener('click', function(e) {
         '.ai-mic--listening::after,.ai-mic--active::after{content:"";position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #e8001c}' +
         /* ── s108: MODO VOZ — desktop: sidebar derecho (~¼ ancho, alto total) · móvil: sheet redondeado · liquid glass ── */
         '#aiVoiceStage{position:fixed;inset:0;display:none;z-index:2147483647;-webkit-tap-highlight-color:transparent;justify-content:flex-end;align-items:stretch;background:rgba(44,22,16,.30);backdrop-filter:blur(7px) saturate(115%);-webkit-backdrop-filter:blur(7px) saturate(115%)}' +
-        '.ai-vs-panel{position:relative;display:flex;flex-direction:column;width:clamp(370px,26vw,470px);height:100%;overflow:hidden;border-radius:30px 0 0 30px;border:1px solid rgba(255,255,255,.45);box-shadow:-34px 0 90px rgba(70,30,24,.26),inset 0 1px 0 rgba(255,255,255,.6);background:radial-gradient(circle at 50% 14%,rgba(232,0,28,.13),transparent 42%),linear-gradient(160deg,rgba(255,247,244,.86) 0%,rgba(244,231,225,.88) 48%,rgba(253,246,243,.90) 100%);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%)}' +
+        '.ai-vs-panel{position:relative;display:flex;flex-direction:column;width:clamp(370px,26vw,470px);height:100%;overflow:hidden;border-radius:30px 0 0 30px;border:1px solid rgba(255,255,255,.5);box-shadow:-34px 0 90px rgba(70,30,24,.26),inset 0 1px 0 rgba(255,255,255,.8),inset 0 0 0 1px rgba(255,255,255,.14);background:radial-gradient(circle at 18% 0%,rgba(255,255,255,.55),transparent 22%),radial-gradient(ellipse at 50% 118%,var(--vsCbg,rgba(232,0,28,.1)),transparent 48%),linear-gradient(160deg,rgba(255,248,245,.9) 0%,rgba(245,233,227,.9) 48%,rgba(253,247,244,.92) 100%);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);transition:background .45s ease}' +
         '.ai-vs-panel::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(115deg,rgba(255,255,255,.5),transparent 36%),radial-gradient(circle at 28% 0%,rgba(255,255,255,.55),transparent 24%);z-index:1}' +
         '.ai-vs-panel::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(ellipse at center,transparent 48%,rgba(70,30,24,.10) 100%);z-index:1}' +
         '.ai-vs-glass{position:absolute;border-radius:50%;pointer-events:none;filter:blur(1px);z-index:0}' +
@@ -41302,42 +41316,71 @@ document.addEventListener('click', function(e) {
         '.ai-vs-x{width:38px;height:38px;border-radius:50%;border:0;background:rgba(83,52,38,.06);color:#9a8377;font-size:18px;cursor:pointer;display:grid;place-items:center;-webkit-tap-highlight-color:transparent}' +
         '.ai-vs-x:hover{background:rgba(232,0,28,.08);color:#e8001c}' +
         '.ai-vs-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:10px 22px;position:relative;z-index:3;min-height:0}' +
-        '.ai-vs-wave{position:absolute;left:0;right:0;top:42%;height:50px;opacity:.4;pointer-events:none;display:flex;align-items:center;justify-content:center;gap:3px;transition:opacity .3s;-webkit-mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}' +
+        '.ai-vs-wave{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:128%;height:54px;opacity:.4;pointer-events:none;display:flex;align-items:center;justify-content:center;gap:3px;transition:opacity .3s;z-index:1;-webkit-mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent);mask-image:linear-gradient(90deg,transparent,#000 16%,#000 84%,transparent)}' +
         '.ai-vs-wave::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 10px,rgba(232,0,28,.26) 10px 12px,transparent 12px 22px);animation:aiVsWave 4.6s linear infinite}' +
         '.ai-vs-wave::after{content:"";position:absolute;inset:13px 0;opacity:.5;background:repeating-linear-gradient(90deg,transparent 0 20px,rgba(232,0,28,.16) 20px 22px,transparent 22px 38px);animation:aiVsWave 7.6s linear reverse infinite}' +
         '@keyframes aiVsWave{to{transform:translateX(38px)}}' +
         /* s109: barras del medidor de voz real — alto = --b (0..1) por barra; visibles sólo al hablar */
-        '.ai-vs-wave i{flex:0 0 auto;width:3px;height:62%;border-radius:3px;background:linear-gradient(180deg,#ff8a72,#e8001c);transform:scaleY(var(--b,.06));transform-origin:50% 50%;opacity:0;transition:transform .09s ease-out,opacity .3s}' +
-        '#aiVoiceStage[data-state="speaking"] .ai-vs-wave{opacity:1}' +
+        '.ai-vs-wave i{flex:0 0 auto;width:3px;height:62%;border-radius:3px;background:var(--vsC,#e8001c);transform:scaleY(var(--b,.06));transform-origin:50% 50%;opacity:0;transition:transform .09s ease-out,opacity .3s;filter:drop-shadow(0 0 5px var(--vsCbd,rgba(232,0,28,.3)))}' +
+        '#aiVoiceStage[data-state="speaking"] .ai-vs-wave{opacity:0}' +
         '#aiVoiceStage[data-state="speaking"] .ai-vs-wave::before,#aiVoiceStage[data-state="speaking"] .ai-vs-wave::after{opacity:0}' +
         '#aiVoiceStage[data-state="speaking"] .ai-vs-wave i{opacity:.9}' +
         /* s109: Nivel B — barras reactivas al mic mientras escucha (solo desktop, clase JS) */
         '.ai-vs-wave--mic{opacity:1 !important}' +
         '.ai-vs-wave--mic::before,.ai-vs-wave--mic::after{opacity:0}' +
         '.ai-vs-wave--mic i{opacity:.7}' +
-        '.ai-vs-orb{width:clamp(120px,15vh,160px);height:clamp(120px,15vh,160px);border-radius:50%;position:relative;margin-bottom:18px;cursor:pointer;flex:0 0 auto;background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.96),transparent 8%),radial-gradient(circle at 50% 50%,#e8001c 0 26%,#ff8a72 47%,rgba(232,0,28,.14) 66%,transparent 68%);box-shadow:0 0 0 9px rgba(232,0,28,.06),0 0 0 22px rgba(232,0,28,.03),0 26px 70px rgba(222,40,40,.28);animation:aiVsBreathe 3.2s cubic-bezier(.2,.8,.2,1) infinite;z-index:2}' +
-        '.ai-vs-orb::before{content:"";position:absolute;inset:16px;border-radius:50%;background-image:radial-gradient(rgba(255,255,255,.42) 1px,transparent 1px);background-size:12px 12px;opacity:.44;animation:aiVsStars 12s linear infinite}' +
-        '.ai-vs-orb::after{content:"";position:absolute;inset:-14px;border-radius:50%;border:1px solid rgba(232,0,28,.14);animation:aiVsRing 3.2s cubic-bezier(.2,.8,.2,1) infinite}' +
+        /* s110: ── orb glossy 3D dentro de shell de vidrio + anillos + arco/track (estética referencia) ── */
+        '.ai-vs-orbzone{position:relative;width:100%;display:grid;place-items:center;margin:0 0 8px;min-height:clamp(230px,38vh,300px)}' +
+        '.ai-vs-aura{position:absolute;width:min(220px,60vw);height:min(220px,60vw);border-radius:50%;background:radial-gradient(circle,var(--vsCbd,rgba(255,64,48,.34)),transparent 62%);filter:blur(22px);z-index:0;pointer-events:none;transition:background .4s}' +
+        '.ai-vs-ring{position:absolute;border-radius:50%;pointer-events:none;z-index:0;border:1px solid rgba(255,255,255,.7)}' +
+        '.ai-vs-ring.r1{width:min(214px,58vw);height:min(214px,58vw);border-color:rgba(255,255,255,.7)}' +
+        '.ai-vs-ring.r2{width:min(250px,68vw);height:min(250px,68vw);border-color:var(--vsCbd,rgba(255,255,255,.25));opacity:.8}' +
+        '.ai-vs-ring.r3{width:min(290px,78vw);height:min(290px,78vw);border-color:rgba(255,255,255,.22);opacity:.5}' +
+        '.ai-vs-shell{position:relative;width:min(192px,52vw);height:min(192px,52vw);border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.72);box-shadow:inset 10px 14px 22px rgba(255,255,255,.6),inset -10px -14px 26px rgba(255,80,55,.18),0 18px 50px var(--vsCbd,rgba(255,48,36,.3));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:3;transition:box-shadow .4s}' +
+        '.ai-vs-shell::after{content:"";position:absolute;width:60px;height:60px;border-radius:50%;top:14px;left:26px;background:radial-gradient(circle,rgba(255,255,255,.4),transparent 64%);filter:blur(8px);pointer-events:none}' +
+        '.ai-vs-orb{position:relative;width:min(128px,36vw);height:min(128px,36vw);border-radius:50%;cursor:pointer;overflow:hidden;flex:0 0 auto;background:radial-gradient(circle at 35% 28%,rgba(255,255,255,.9),transparent 12%),radial-gradient(circle at 50% 52%,#ff4d43 0 30%,#f51d2d 60%,#c8001d 100%);box-shadow:0 0 0 calc(10px + var(--aiAmp,0)*14px) rgba(255,120,122,.08),0 0 0 calc(20px + var(--aiAmp,0)*24px) rgba(240,28,35,.04),0 20px 56px rgba(240,28,35,.26),inset 0 -12px 22px rgba(150,0,15,.18);animation:aiVsBreathe 3s cubic-bezier(.2,.8,.2,1) infinite;filter:brightness(calc(1 + var(--aiAmp,0)*.14));z-index:4}' +
+        '.ai-vs-orb::before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 68% 80%,rgba(255,0,51,.12),transparent 30%),radial-gradient(circle at 50% 100%,rgba(135,0,14,.2),transparent 34%);pointer-events:none}' +
+        '.ai-vs-orb::after{content:"";position:absolute;right:17px;bottom:19px;width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.6);filter:blur(2.4px);pointer-events:none}' +
+        '.ai-vs-gloss{position:absolute;left:17%;top:13%;width:46%;height:21%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.88),rgba(255,255,255,.3) 46%,transparent 72%);transform:rotate(-18deg);filter:blur(1.4px);pointer-events:none;z-index:1}' +
+        '.ai-vs-arc{position:absolute;width:min(202px,55vw);height:min(202px,55vw);border-radius:50%;border:13px solid transparent;border-top-color:var(--vsC,#df8a12);border-right-color:var(--vsCbd,rgba(223,138,18,.7));filter:drop-shadow(0 0 12px var(--vsCbg,rgba(223,138,18,.25)));opacity:0;transition:opacity .35s;z-index:2}' +
+        '.ai-vs-track{position:absolute;width:min(238px,64vw);height:min(238px,64vw);border-radius:50%;border:2px dotted var(--vsCbd,rgba(255,233,203,.7));opacity:0;transition:opacity .35s;z-index:1}' +
+        '#aiVoiceStage[data-state="thinking"] .ai-vs-arc{opacity:.92;animation:aiVsSpinArc 1.9s linear infinite}' +
+        '#aiVoiceStage[data-state="thinking"] .ai-vs-track{opacity:.9;animation:aiVsSpinSlow 4.2s linear infinite}' +
+        '.ai-vs-flow{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:152%;height:96px;opacity:0;transition:opacity .4s;z-index:1;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%270 0 300 100%27 preserveAspectRatio=%27none%27%3E%3Cpath d=%27M0,50 C25,16 50,16 75,50 C100,84 125,84 150,50 C175,16 200,16 225,50 C250,84 275,84 300,50%27 fill=%27none%27 stroke=%27rgba(255,92,72,0.55)%27 stroke-width=%272%27/%3E%3Cpath d=%27M0,52 C25,80 50,80 75,52 C100,24 125,24 150,52 C175,80 200,80 225,52 C250,24 275,24 300,52%27 fill=%27none%27 stroke=%27rgba(255,206,197,0.5)%27 stroke-width=%271.3%27/%3E%3C/svg%3E");background-repeat:repeat-x;background-size:300px 100%;background-position:0 50%;-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}' +
+        '#aiVoiceStage[data-state="speaking"] .ai-vs-flow{opacity:.85;animation:aiVsFlow 3.2s linear infinite}' +
+        '@keyframes aiVsSpinArc{from{transform:rotate(0)}to{transform:rotate(360deg)}}' +
+        '@keyframes aiVsSpinSlow{from{transform:rotate(0)}to{transform:rotate(360deg)}}' +
+        '@keyframes aiVsFlow{from{background-position:0 50%}to{background-position:300px 50%}}' +
+        '@media (prefers-reduced-motion:reduce){.ai-vs-orb,.ai-vs-arc,.ai-vs-track,.ai-vs-flow,.ai-vs-mode::before{animation:none!important}}' +
         '@keyframes aiVsBreathe{0%,100%{transform:scale(.965)}50%{transform:scale(1.04)}}' +
         '@keyframes aiVsStars{to{transform:rotate(54deg)}}' +
         '@keyframes aiVsRing{0%,100%{opacity:.25;transform:scale(.96)}50%{opacity:.7;transform:scale(1.08)}}' +
         '#aiVoiceStage[data-state="thinking"] .ai-vs-orb{animation-duration:1.7s}' +
         '#aiVoiceStage[data-state="speaking"] .ai-vs-orb{animation-duration:1.05s}' +
         /* s109: el orb late con el nivel real de voz (halo+brillo; no toca transform → no choca con aiVsBreathe) */
-        '#aiVoiceStage[data-state="speaking"] .ai-vs-orb{box-shadow:0 0 0 calc(9px + var(--aiAmp,0)*16px) rgba(232,0,28,.07),0 0 0 calc(22px + var(--aiAmp,0)*28px) rgba(232,0,28,.04),0 26px 70px rgba(222,40,40,.30);filter:brightness(calc(1 + var(--aiAmp,0)*.16))}' +
+        '#aiVoiceStage[data-state="speaking"] .ai-vs-orb{box-shadow:0 0 0 calc(11px + var(--aiAmp,0)*18px) rgba(232,0,28,.08),0 0 0 calc(22px + var(--aiAmp,0)*30px) rgba(232,0,28,.04),0 22px 64px rgba(222,40,40,.30),inset 0 -12px 22px rgba(150,0,15,.18)}' +
         '#aiVoiceStage[data-state="thinking"] .ai-vs-wave{opacity:.16}' +
-        '.ai-vs-mode{color:#b06a58;text-transform:uppercase;letter-spacing:.22em;font-size:12px;font-weight:800}' +
+        /* s110: ── color por estado — Escuchando(verde) · Procesando(ámbar) · Respondiendo(rojo) ── */
+        /* Vars CSS por data-state; las heredan badge, puntos y dock. Sin color-mix (compat total). */
+        '#aiVoiceStage[data-state="listening"]{--vsC:#15a85a;--vsCbg:rgba(21,168,90,.12);--vsCbd:rgba(21,168,90,.34)}' +
+        '#aiVoiceStage[data-state="thinking"]{--vsC:#df8a12;--vsCbg:rgba(223,138,18,.14);--vsCbd:rgba(223,138,18,.36)}' +
+        '#aiVoiceStage[data-state="speaking"]{--vsC:#e8001c;--vsCbg:rgba(232,0,28,.10);--vsCbd:rgba(232,0,28,.32)}' +
+        '.ai-vs-mode{display:inline-flex;align-items:center;gap:10px;color:var(--vsC,#b06a58);text-transform:uppercase;letter-spacing:.2em;font-size:13px;font-weight:800;padding:8px 18px 8px 14px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.4),var(--vsCbg,rgba(176,106,88,.1)));border:1px solid var(--vsCbd,rgba(176,106,88,.28));box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 8px 20px rgba(120,87,67,.06);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:color .3s,background .3s,border-color .3s}' +
+        '.ai-vs-mode::before{content:"";width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.95),transparent 32%),var(--vsC,#b06a58);flex:0 0 auto;transition:background .3s}' +
+        /* punto que late en estados "vivos" (escuchando/procesando); fijo al responder */
+        '#aiVoiceStage[data-state="listening"] .ai-vs-mode::before,#aiVoiceStage[data-state="thinking"] .ai-vs-mode::before{animation:aiVsLive 1.25s ease-in-out infinite}' +
+        '@keyframes aiVsLive{0%,100%{box-shadow:0 0 0 0 var(--vsCbd)}50%{box-shadow:0 0 0 6px transparent}}' +
         '.ai-vs-spoken{width:min(440px,92%);margin:12px auto 0;font-family:ui-serif,Georgia,"Times New Roman",serif;color:#2a1c17;font-size:clamp(22px,2.8vh,30px);line-height:1.12;letter-spacing:-.04em;font-weight:400;text-wrap:balance}' +
         '.ai-vs-hint{width:min(340px,92%);margin:13px auto 0;color:#8d766a;font-size:13px;line-height:1.5;font-weight:500}' +
         '.ai-vs-dots{display:flex;justify-content:center;gap:11px;margin-top:20px}' +
         '.ai-vs-dots i{width:6px;height:6px;border-radius:50%;background:#e8cfc6;transition:.35s}' +
-        '#aiVoiceStage[data-state="listening"] .ai-vs-dots i:nth-child(1),#aiVoiceStage[data-state="thinking"] .ai-vs-dots i:nth-child(2),#aiVoiceStage[data-state="speaking"] .ai-vs-dots i:nth-child(3){background:#e8001c;transform:scale(1.25)}' +
+        '#aiVoiceStage[data-state="listening"] .ai-vs-dots i:nth-child(1),#aiVoiceStage[data-state="thinking"] .ai-vs-dots i:nth-child(2),#aiVoiceStage[data-state="speaking"] .ai-vs-dots i:nth-child(3){background:var(--vsC,#e8001c);transform:scale(1.25)}' +
         '.ai-vs-dock{position:relative;z-index:4;width:calc(100% - 28px);margin:0 auto 18px;min-height:70px;display:grid;grid-template-columns:44px 1fr 50px;align-items:center;gap:9px;padding:10px 12px;border-radius:999px;background:rgba(255,253,250,.78);border:1px solid rgba(255,255,255,.5);box-shadow:0 0 0 9px rgba(232,0,28,.04),0 16px 40px rgba(71,39,25,.14),inset 0 1px 0 rgba(255,255,255,.7);overflow:hidden;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}' +
         '.ai-vs-dock::after{content:"";position:absolute;left:66px;right:74px;bottom:6px;height:18px;background:repeating-linear-gradient(90deg,rgba(232,0,28,.24) 0 2px,transparent 2px 8px);opacity:.7;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);animation:aiVsWave 2.6s linear infinite}' +
         '#aiVoiceStage[data-state="thinking"] .ai-vs-dock::after{opacity:.14}' +
         '.ai-vs-kb{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(105,72,55,.12);background:rgba(255,255,255,.8);color:#917b6f;cursor:pointer;font-size:15px;z-index:1;-webkit-tap-highlight-color:transparent}' +
         '.ai-vs-kb:hover{color:#e8001c;border-color:rgba(232,0,28,.35)}' +
-        '.ai-vs-docktext{text-align:center;color:#bf4b3a;font-size:14px;font-weight:700;letter-spacing:-.02em;z-index:1}' +
+        '.ai-vs-docktext{text-align:center;color:var(--vsC,#bf4b3a);font-size:14px;font-weight:700;letter-spacing:-.02em;z-index:1;transition:color .3s}' +
         '.ai-vs-docktext small{display:block;margin-top:3px;color:#8d766b;font-size:11px;font-weight:500;letter-spacing:0}' +
         '.ai-vs-stop{width:48px;height:48px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;background:linear-gradient(135deg,#e8001c,#ff6a49);box-shadow:0 12px 28px rgba(232,0,28,.28);z-index:1;-webkit-tap-highlight-color:transparent}' +
         '.ai-vs-stop::before{content:"";width:14px;height:14px;border-radius:4px;background:#fff}' +
@@ -41358,11 +41401,18 @@ document.addEventListener('click', function(e) {
             '<div class="ai-vs-ctrls"><button class="ai-vs-x" title="Cerrar" onclick="aiVsClose()">×</button></div>' +
           '</div>' +
           '<div class="ai-vs-body">' +
-            '<div class="ai-vs-wave"></div>' +
-            '<div class="ai-vs-orb" id="aiVsOrb" title="Tocar para interrumpir" onclick="aiVsOrbTap()"></div>' +
+            '<div class="ai-vs-orbzone">' +                       // s110: zona orb high-tech (shell + aura + anillos + arco/track + waveform/ondas)
+              '<span class="ai-vs-aura"></span>' +                // bloom difuso teñido por estado, detrás del orb
+              '<span class="ai-vs-ring r1"></span><span class="ai-vs-ring r2"></span><span class="ai-vs-ring r3"></span>' +
+              '<div class="ai-vs-wave"></div>' +                  // medidor real (barras) — escuchando
+              '<div class="ai-vs-flow"></div>' +                  // ondas sinusoidales sedosas — respondiendo
+              '<span class="ai-vs-track"></span>' +               // track punteado giratorio — procesando
+              '<span class="ai-vs-arc"></span>' +                 // arco giratorio — procesando
+              '<div class="ai-vs-shell"><div class="ai-vs-orb" id="aiVsOrb" title="Tocar para interrumpir" onclick="aiVsOrbTap()"><span class="ai-vs-gloss"></span></div></div>' +
+            '</div>' +
             '<div class="ai-vs-mode" id="aiVsMode">Escuchando</div>' +
             '<div class="ai-vs-spoken" id="aiVsSpoken">Te escucho.</div>' +
-            '<div class="ai-vs-hint" id="aiVsHint">Habla con naturalidad — puedes interrumpirme cuando quieras.</div>' +
+            '<div class="ai-vs-hint" id="aiVsHint">Habla con naturalidad — te escucho.</div>' +
             '<div class="ai-vs-dots"><i></i><i></i><i></i></div>' +
           '</div>' +
           '<div class="ai-vs-dock">' +
