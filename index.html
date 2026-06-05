@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s111 -->
+<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s112 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -30634,6 +30634,10 @@ function hideSeguimiento() {
 function showSection(id, btn, _fromPop) {
   // Close any open modals so they don't block the new section
   _closeAllModals();
+  // s112: navegar de sección = "cerrar el chat" → soltar el mic. Si no, el
+  // SpeechRecognition del Soporte Técnico AI/orb queda vivo y Chrome sigue
+  // mostrando el micrófono en uso. (no-op si no hay voz activa)
+  try { if (window.aiReleaseAllMic) window.aiReleaseAllMic(); } catch(e){}
 
   document.body.style.overflow = '';
   // Also force-close by class in case function not yet defined
@@ -30719,7 +30723,11 @@ function soporteRemoveImg() {
   if (input) input.value = '';
 }
 
-async function sendAIMessage() {
+async function sendAIMessage(fromVoice) {
+  // s112: BLINDAJE TOKENS — envío originado por VOZ (loop del Soporte Técnico AI)
+  // que llega cuando la sesión de voz ya cerró (window.VOICE.active=false) NO debe
+  // gastar tokens. Los envíos por texto/botón/chip no pasan fromVoice → nunca se bloquean.
+  if (fromVoice && !(window.VOICE && window.VOICE.active)) return;
   const inp  = qs('chatInput');
   const text = inp?.value.trim();
   // s47b: rate limit guard
@@ -40431,7 +40439,13 @@ function _sanitizeMessages(msgs) {
   });
 }
 
-function aiSend() {
+function aiSend(fromVoice) {
+  // s112: BLINDAJE TOKENS — un envío originado por VOZ (transcripción del loop
+  // manos-libres) que llega cuando la sesión ya se cerró (aiAutoMic=false) NO
+  // debe gastar tokens de Claude. Los envíos por TEXTO no pasan fromVoice, así
+  // que nunca se bloquean. aiReleaseAllMic() ya aborta aiSR; esto cubre el caso
+  // de un resultado que quedó en cola justo antes del abort.
+  if (fromVoice && !aiAutoMic) return;
   var inp = document.getElementById('aiInp');
   var q = (inp.value || '').trim();
   if (!q) return;
@@ -40775,7 +40789,7 @@ function aiInitSR() {
       aiMicStop();
       // s109: transición a "thinking" ANTES de enviar — el usuario ve que se está procesando
       if (aiAutoMic) aiVoiceUI('thinking', final_txt);
-      aiSend();
+      aiSend(true); // s112: marcar como envío por voz (lo descarta el guard si la sesión cerró)
     }
   };
   aiSR.onerror = function(e) {
@@ -41091,6 +41105,28 @@ document.addEventListener('click', function(e) {
   if (aiPanelOpen && !e.target.closest('#aiPanel') && !e.target.closest('#aiFab') && !e.target.closest('#aiVoiceStage')) aiClose(); // s108: no cerrar al tocar el overlay de voz
 });
 
+// s112: ── Liberar TODO consumidor de micrófono ───────────────────────────
+// Chrome mantiene el indicador "micrófono en uso" mientras viva CUALQUIER
+// SpeechRecognition o MediaStream. Hay DOS consumidores: el orb (aiSR + el
+// medidor getUserMedia _aiVsMicStream) y el Soporte Técnico AI (window.VOICE,
+// que tiene su PROPIO SpeechRecognition V.rec). Sus botones ■/× ya limpian,
+// pero "cerrar" navegando de sección u ocultando la pestaña dejaba a V.rec
+// (y a veces a aiSR) vivo → mic encendido. Esta función corta a todos.
+function aiReleaseAllMic(){
+  try { aiAutoMic = false; } catch(e){}                                   // orb: salir de manos-libres
+  try { if (aiSR) aiSR.abort(); } catch(e){}                              // orb: abortar su SpeechRecognition
+  try { aiStopSpeech(); } catch(e){}                                      // orb: cortar TTS
+  try { aiMicStop(); } catch(e){}                                         // orb: repintar mic chico a off
+  try { if (window.VOICE && window.VOICE.active) window.VOICE.stop(); } catch(e){} // Soporte Técnico AI: corta V.rec
+  try { aiVoiceUI('off'); } catch(e){}                                    // stage + medidor → libera _aiVsMicStream y cierra AudioContext
+}
+window.aiReleaseAllMic = aiReleaseAllMic;
+
+// s112: al ocultar la pestaña o descargar la página, soltar el mic SIEMPRE —
+// cierra el indicador de Chrome aunque el usuario salga sin tocar ■/×.
+document.addEventListener('visibilitychange', function(){ if (document.hidden) aiReleaseAllMic(); });
+window.addEventListener('pagehide', aiReleaseAllMic);
+
 </script>
 
 
@@ -41300,8 +41336,8 @@ document.addEventListener('click', function(e) {
         /* puntito "live" en estados activos */
         '.ai-mic--listening::after,.ai-mic--active::after{content:"";position:absolute;top:3px;right:3px;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #e8001c}' +
         /* ── s108: MODO VOZ — desktop: sidebar derecho (~¼ ancho, alto total) · móvil: sheet redondeado · liquid glass ── */
-        '#aiVoiceStage{position:fixed;inset:0;display:none;z-index:2147483647;-webkit-tap-highlight-color:transparent;justify-content:flex-end;align-items:stretch;background:rgba(44,22,16,.30);backdrop-filter:blur(7px) saturate(115%);-webkit-backdrop-filter:blur(7px) saturate(115%)}' +
-        '.ai-vs-panel{position:relative;display:flex;flex-direction:column;width:clamp(370px,26vw,470px);height:100%;overflow:hidden;border-radius:30px 0 0 30px;border:1px solid rgba(255,255,255,.5);box-shadow:-34px 0 90px rgba(70,30,24,.26),inset 0 1px 0 rgba(255,255,255,.8),inset 0 0 0 1px rgba(255,255,255,.14);background:radial-gradient(circle at 18% 0%,rgba(255,255,255,.55),transparent 22%),radial-gradient(ellipse at 50% 118%,var(--vsCbg,rgba(232,0,28,.1)),transparent 48%),linear-gradient(160deg,rgba(255,248,245,.9) 0%,rgba(245,233,227,.9) 48%,rgba(253,247,244,.92) 100%);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);transition:background .45s ease}' +
+        '#aiVoiceStage{position:fixed;inset:0;display:none;z-index:2147483647;-webkit-tap-highlight-color:transparent;justify-content:flex-end;align-items:stretch;background:rgba(44,22,16,.30);backdrop-filter:blur(7px) saturate(115%);-webkit-backdrop-filter:blur(7px) saturate(115%);animation:aiVsStageIn .24s ease both}' + /* s112: fade de entrada */
+        '.ai-vs-panel{position:relative;display:flex;flex-direction:column;width:clamp(370px,26vw,470px);height:100%;overflow:hidden;border-radius:30px 0 0 30px;border:1px solid rgba(255,255,255,.5);box-shadow:-34px 0 90px rgba(70,30,24,.26),inset 0 1px 0 rgba(255,255,255,.8),inset 0 0 0 1px rgba(255,255,255,.14);background:radial-gradient(circle at 18% 0%,rgba(255,255,255,.55),transparent 22%),radial-gradient(ellipse at 50% 118%,var(--vsCbg,rgba(232,0,28,.1)),transparent 48%),linear-gradient(160deg,rgba(255,248,245,.9) 0%,rgba(245,233,227,.9) 48%,rgba(253,247,244,.92) 100%);backdrop-filter:blur(34px) saturate(180%);-webkit-backdrop-filter:blur(34px) saturate(180%);transition:background .45s ease;animation:aiVsPanelIn .36s cubic-bezier(.32,.72,0,1) both}' + /* s112: slide+scale de entrada */
         '.ai-vs-panel::before{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:linear-gradient(115deg,rgba(255,255,255,.5),transparent 36%),radial-gradient(circle at 28% 0%,rgba(255,255,255,.55),transparent 24%);z-index:1}' +
         '.ai-vs-panel::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;background:radial-gradient(ellipse at center,transparent 48%,rgba(70,30,24,.10) 100%);z-index:1}' +
         '.ai-vs-glass{position:absolute;border-radius:50%;pointer-events:none;filter:blur(1px);z-index:0}' +
@@ -41320,6 +41356,10 @@ document.addEventListener('click', function(e) {
         '.ai-vs-wave::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 10px,rgba(232,0,28,.26) 10px 12px,transparent 12px 22px);animation:aiVsWave 4.6s linear infinite}' +
         '.ai-vs-wave::after{content:"";position:absolute;inset:13px 0;opacity:.5;background:repeating-linear-gradient(90deg,transparent 0 20px,rgba(232,0,28,.16) 20px 22px,transparent 22px 38px);animation:aiVsWave 7.6s linear reverse infinite}' +
         '@keyframes aiVsWave{to{transform:translateX(38px)}}' +
+        /* s112: entrada del overlay de voz — backdrop hace fade; el panel entra desde la derecha con leve escala. Solo corre al pasar de display:none a flex (apertura real), no entre estados. */
+        '@keyframes aiVsStageIn{from{opacity:0}to{opacity:1}}' +
+        '@keyframes aiVsPanelIn{from{opacity:0;transform:translateX(30px) scale(.985)}to{opacity:1;transform:translateX(0) scale(1)}}' +
+        '@media (prefers-reduced-motion:reduce){#aiVoiceStage,#aiVoiceStage .ai-vs-panel{animation:none!important}}' +
         /* s109: barras del medidor de voz real — alto = --b (0..1) por barra; visibles sólo al hablar */
         '.ai-vs-wave i{flex:0 0 auto;width:3px;height:62%;border-radius:3px;background:var(--vsC,#e8001c);transform:scaleY(var(--b,.06));transform-origin:50% 50%;opacity:0;transition:transform .09s ease-out,opacity .3s;filter:drop-shadow(0 0 5px var(--vsCbd,rgba(232,0,28,.3)))}' +
         '#aiVoiceStage[data-state="speaking"] .ai-vs-wave{opacity:0}' +
@@ -42092,7 +42132,7 @@ window.mktSubmitInterest = function() {
         setStatus('thinking');
         var inp=document.getElementById('chatInput');
         if(inp) inp.value=finalTxt;
-        if(typeof sendAIMessage==='function') sendAIMessage();   // onAIResponse hablará y reanudará escucha
+        if(typeof sendAIMessage==='function') sendAIMessage(true);   // s112: envío por voz — el guard lo descarta si la sesión cerró
       } else {
         V._t=setTimeout(function(){ if(V.active && !V.speaking) V.startListen(); }, 250);
       }
@@ -43842,7 +43882,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's111',
+  ver:   's112',
   fecha: 'Viernes 05 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
