@@ -40184,7 +40184,7 @@ var aiAutoMic = false;  // modo voz conversacional continuo
 window.SSTT_TTS = (function(){
   var T = { mode:'eleven', _audio:null, _speaking:false,
             _ttsTimeoutMs:7000, _retries:2, _retryMs:500, _cache:new Map(), _cacheMax:24,
-            _ac:null, _src:null, _an:null, _url:null, _lastSkipT:0, _lastUpsellT:0 }; // s109: grafo Web Audio para el medidor real · s115: _lastSkipT = throttle del aviso "voz omitida" · s117: _lastUpsellT = throttle del aviso "voz es beneficio preferencial"
+            _ac:null, _src:null, _an:null, _url:null, _lastSkipT:0, _lastUpsellT:0, _engine:null }; // s109: grafo Web Audio para el medidor real · s115: _lastSkipT = throttle del aviso "voz omitida" · s117: _lastUpsellT = throttle upsell · _engine = motor activo (eleven|browser) para el barge-in
   // s115: el TTS degradaba a SILENCIO sin avisar (texto visible, sin audio) → el usuario no sabía
   // si estaba roto o simplemente sin voz (tu síntoma del asistente técnico). Avisar en pantalla
   // (throttled ~8s para no spamear) + log claro para diagnosticar en prod la causa real.
@@ -40361,8 +40361,9 @@ window.SSTT_TTS = (function(){
     var txt=clean(text);
     if(!txt){ finish(done); return; }
     T.cancel(); T._speaking=true;
-    if(typeof window.sstt_voiceTierAllowed==='function' && !window.sstt_voiceTierAllowed()){ _ttsUpsell(); _speakBrowser(txt, done); return; }
+    if(typeof window.sstt_voiceTierAllowed==='function' && !window.sstt_voiceTierAllowed()){ T._engine='browser'; _ttsUpsell(); _speakBrowser(txt, done); return; }
     if(T.mode!=='eleven' || typeof PROXY_URL==='undefined'){ finish(done); return; } // sin ElevenLabs => silencio
+    T._engine='eleven'; // s117: motor activo → el barge-in por energía solo aplica con ElevenLabs (lo cancela el AEC); la voz del navegador no
     var attempt=0;
     function onFail(err){
       // s110: 429 (rate limit) / 402 (sin cuota) / 403 (auth) → reintentar NO ayuda y gasta requests.
@@ -40410,6 +40411,7 @@ window.SSTT_TTS = (function(){
     }catch(_){}
   };
   T.analyser = function(){ return T._an || null; }; // s109: AnalyserNode para el medidor de la onda (o null)
+  T.engine = function(){ return T._engine || null; }; // s117: 'eleven' | 'browser' — qué motor está hablando (para el barge-in)
   T.isSpeaking = function(){
     if(T._audio && !T._audio.paused && !T._audio.ended) return true;
     try{ if(window.speechSynthesis && window.speechSynthesis.speaking) return true; }catch(_){} // s117: voz de navegador en curso
@@ -41438,6 +41440,10 @@ function aiVsBargeStart(){
   if(!_aiVsIsDesktop) return;                  // móvil → barge por toque
   if(!aiAutoMic || aiVoiceOwner) return;       // solo la sesión manos-libres del ORB (no Soporte Técnico AI)
   if(!_aiVsMicAn) return;                       // sin grafo de mic (permiso/contexto) → sin barge por voz
+  // s117: la voz del NAVEGADOR (tarifa general) no la cancela el AEC del micrófono → el mic se oiría a
+  // sí mismo y dispararía un barge-in falso (se interrumpía sola al ~1s). Solo corremos barge por
+  // energía con ElevenLabs (sí lo cancela el AEC). La interrupción por TOQUE del orbe sigue activa siempre.
+  if(window.SSTT_TTS && typeof SSTT_TTS.engine==='function' && SSTT_TTS.engine()==='browser') return;
   if(!_aiBargeFreq || _aiBargeFreq.length!==_aiVsMicAn.frequencyBinCount) _aiBargeFreq=new Uint8Array(_aiVsMicAn.frequencyBinCount);
   _aiBargeHits=0;
   function frame(){
