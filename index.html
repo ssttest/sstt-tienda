@@ -40512,7 +40512,9 @@ function _sanitizeMessages(msgs) {
 // amistoso. Se apaga solo al gastar los off-topic, o de inmediato con "modo normal".
 window.SSTT_PAPACITO = (function(){
   var st = { active:false, offTopicLeft:0 };
-  var TRIGGER = /\bmodo\s+papacito\b/i;
+  // s116: la transcripción de voz suele escribir "papasito" (con s) en vez de "papacito" — aceptar
+  // c/s/z, con o sin tilde y con espacio opcional ("modo papá sito", "modo papasito", etc.)
+  var TRIGGER = /\bmodo\s+pap[aá]\s?[csz]ito\b/i;
   var OFF     = /\bmodo\s+(normal|profesional|serio|formal)\b/i;
   var GUIDE =
     '## MODO PAPACITO (EASTER EGG — TONO ESPECIAL, OBLIGATORIO)\n' +
