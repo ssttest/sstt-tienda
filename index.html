@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s115 -->
+<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s116 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -30741,6 +30741,20 @@ async function sendAIMessage(fromVoice) {
   qs('sendBtn').disabled = true;
   addAIMsg('user', displayText);
 
+  // s116: Easter egg — activar/desactivar "modo papacito" también desde el Soporte Técnico AI
+  try {
+    var _papaT = (typeof text === 'string') && window.SSTT_PAPACITO && SSTT_PAPACITO.detect(text);
+    if (_papaT === 'on' || _papaT === 'off') {
+      var _msgT = (_papaT === 'on')
+        ? '¡Eyyy, de una pues, parce! 🎩 Activaste el <strong>modo papacito</strong>. Le hablo bien cariñoso y a lo paisa, mijo. Pregúnteme lo que necesite de sus equipos —o écheme cuento un ratico, que tiene un par de oportunidades. ¡Hágale!'
+        : 'Listo pues, mijo —volvemos al modo formal. ¿En qué equipo le puedo colaborar?';
+      addAIMsg('ai', _msgT);
+      try { if (window.VOICE && VOICE.active) VOICE.onAIResponse(_msgT.replace(/<[^>]+>/g,'')); } catch(e){}
+      qs('sendBtn').disabled = false; inp?.focus();
+      return;
+    }
+  } catch(e){}
+
   // Construir contenido del mensaje
   var userContent;
   if (aiMode === 'soporte' && _soporteImgB64) {
@@ -30766,7 +30780,7 @@ async function sendAIMessage(fromVoice) {
       body: JSON.stringify({
         tool:'chat_tecnico',
         messages: aiChatHistory.slice(-12),
-        context: { kb_matches: _getKBMatches(aiChatHistory) }
+        context: { kb_matches: _getKBMatches(aiChatHistory) + ((window.SSTT_PAPACITO && SSTT_PAPACITO.guide()) || '') } // s116: modo papacito (best-effort; prompt chat_tecnico vive en el Worker)
       }),
     });
     const data    = await resp.json();
@@ -36734,7 +36748,7 @@ ${a.resumen_instalacion || ''}
       body: JSON.stringify({
         tool:'chat_tecnico',
         messages: aiChatHistory.slice(-12),
-        context: { kb_matches: _getKBMatches(aiChatHistory) }
+        context: { kb_matches: _getKBMatches(aiChatHistory) + ((window.SSTT_PAPACITO && SSTT_PAPACITO.guide()) || '') } // s116: modo papacito (best-effort; prompt chat_tecnico vive en el Worker)
       }),
     }).then(r=>r.json()).then(data=>{
       const content = data.content?.[0]?.text || '';
@@ -40261,8 +40275,16 @@ window.SSTT_TTS = (function(){
         if(_dbg){ try{ console.warn('[SSTT_TTS] AudioContext '+T._ac.state+' → resume() antes de play().'); }catch(_){} }
         var r; try{ r=T._ac.resume(); }catch(_){}
         if(r && typeof r.then==='function'){
-          r.then(function(){ if(_dbg){ try{ console.warn('[SSTT_TTS] resume OK → '+(T._ac&&T._ac.state)); }catch(_){} } start(); },
-                 function(){ if(_dbg){ try{ console.warn('[SSTT_TTS] resume FALLÓ (state='+(T._ac&&T._ac.state)+') — reproduciendo igual.'); }catch(_){} } start(); });
+          r.then(function(){
+                   if(_dbg){ try{ console.warn('[SSTT_TTS] resume OK → '+(T._ac&&T._ac.state)); }catch(_){} }
+                   if(T._ac && T._ac.state!=='running'){ _ttsSkip('audio suspendido', 0); } // s116: resume resolvió pero el contexto NO quedó 'running' → visible sin abrir consola
+                   start();
+                 },
+                 function(){
+                   if(_dbg){ try{ console.warn('[SSTT_TTS] resume FALLÓ (state='+(T._ac&&T._ac.state)+') — reproduciendo igual.'); }catch(_){} }
+                   _ttsSkip('no se pudo activar el audio', 0); // s116: resume rechazado → avisar en pantalla
+                   start();
+                 });
         } else { start(); }
       } else {
         if(_dbg){ try{ console.warn('[SSTT_TTS] AudioContext '+(T._ac?T._ac.state:'(sin AC)')+' → play() directo.'); }catch(_){} }
@@ -40305,6 +40327,19 @@ window.SSTT_TTS = (function(){
     // s109: NO destruir el elemento (el grafo Web Audio cuelga de él). Sólo pausar + soltar el blob.
     try{ if(T._audio){ T._audio.pause(); } }catch(e){}
     try{ if(T._url){ URL.revokeObjectURL(T._url); T._url=null; } }catch(e){}
+  };
+  // s116: "primer" del AudioContext DENTRO del gesto del usuario. Chrome sólo revive/crea el
+  // contexto de forma fiable dentro de un gesto; el resume() de playBlob corre TRAS el round-trip
+  // de red (fuera del gesto) y en algunos estados resuelve SIN revivir el contexto → texto sin
+  // audio. Es el síntoma del Soporte Técnico AI tras cerrar el Asesor de Ventas: hereda el
+  // contexto ya creado por el orbe y NADA lo re-arranca dentro de un gesto. Lo invocan
+  // aiVoiceTap (orbe) y V.toggle (técnico) al arrancar, dejando el contexto 'running' antes de hablar.
+  T.prime = function(){
+    try{
+      if(T._ac && T._ac.state==='closed') return;          // muerto: playBlob lo reconstruye al hablar
+      getEl(); ensureGraph();                               // crea contexto+grafo si falta (reusa el único; ensureGraph corta si ya existe)
+      if(T._ac && T._ac.state!=='running'){ try{ T._ac.resume(); }catch(_){} } // revive dentro del gesto
+    }catch(_){}
   };
   T.analyser = function(){ return T._an || null; }; // s109: AnalyserNode para el medidor de la onda (o null)
   T.isSpeaking = function(){
@@ -40468,6 +40503,42 @@ function _sanitizeMessages(msgs) {
   });
 }
 
+// s116: ── Easter egg "modo papacito" — tono paisa cálido + un par de off-topic ───────────
+// Lo activa el usuario escribiendo/diciendo "modo papacito" en cualquiera de los asistentes.
+// Inyecta una guía de TONO (paisa cariñoso, FAMILIAR y apto para todo público — NADA romántico,
+// sexual ni de coqueteo: es ternura de parcero, no galantería) en el system prompt del Worker
+// vía context.kb_knowledge (mismo canal que _topicGuard, SIN tocar el Worker) y relaja el filtro
+// off-topic por un par de turnos. La tienda es pública, por eso el tono queda blindado a lo
+// amistoso. Se apaga solo al gastar los off-topic, o de inmediato con "modo normal".
+window.SSTT_PAPACITO = (function(){
+  var st = { active:false, offTopicLeft:0 };
+  var TRIGGER = /\bmodo\s+papacito\b/i;
+  var OFF     = /\bmodo\s+(normal|profesional|serio|formal)\b/i;
+  var GUIDE =
+    '## MODO PAPACITO (EASTER EGG — TONO ESPECIAL, OBLIGATORIO)\n' +
+    'El usuario activó un modo divertido. Responde con acento y expresiones PAISA (Medellín, Colombia): ' +
+    '\"parce\", \"mijo/mija\", \"pues\", \"hágale\", \"de una\", \"con mucho gusto pues\", \"bien o no?\", \"¡qué nota!\". ' +
+    'Tono CÁLIDO, cariñoso y cercano, como un parcero querido de barrio — SIEMPRE respetuoso, familiar y APTO ' +
+    'PARA TODO PÚBLICO. NADA romántico, sexual ni de coqueteo: es ternura amistosa, jamás galantería. ' +
+    'Puedes charlar brevemente temas fuera del catálogo de forma amable (máximo un par de líneas) y luego, con ' +
+    'cariño, devuelve la conversación a cómo ayudar con la seguridad/CCTV de la persona. Mantén las ' +
+    'recomendaciones de productos TAN precisas como siempre. Si detectas a un menor o cualquier intención ' +
+    'subida de tono, vuelve al instante a un trato formal y respetuoso.\n\n';
+  return {
+    active:          function(){ return st.active; },
+    offTopicAllowed: function(){ return st.active && st.offTopicLeft > 0; },
+    consumeOffTopic: function(){ if(st.active && st.offTopicLeft>0){ st.offTopicLeft--; if(st.offTopicLeft<=0) st.active=false; } },
+    guide:           function(){ return st.active ? GUIDE : ''; },
+    // Detecta activación/desactivación en el texto del usuario. Devuelve 'on' | 'off' | null.
+    detect: function(text){
+      var t = String(text||'');
+      if(OFF.test(t)){ st.active=false; st.offTopicLeft=0; return 'off'; }
+      if(TRIGGER.test(t)){ st.active=true; st.offTopicLeft=2; return 'on'; } // \"un par\" = 2 off-topic
+      return null;
+    }
+  };
+})();
+
 function aiSend(fromVoice) {
   // s112: BLINDAJE TOKENS — un envío originado por VOZ (transcripción del loop
   // manos-libres) que llega cuando la sesión ya se cerró (aiAutoMic=false) NO
@@ -40486,13 +40557,34 @@ function aiSend(fromVoice) {
   aiAddMsg('user', q);
   aiHistory.push({role:'user', content: q});
 
+  // s116: Easter egg — activar/desactivar "modo papacito" (consume el turno, no llama a la API)
+  try {
+    var _papa = window.SSTT_PAPACITO && SSTT_PAPACITO.detect(q);
+    if (_papa === 'on') {
+      var _pon = '¡Eyyy, de una pues, parce! 🎩 Activaste el <strong>modo papacito</strong>. De aquí en adelante le hablo bien cariñoso y a lo paisa, ¿bien o no, mijo? Pregúnteme lo que quiera —de cámaras o de la vida— que con mucho gusto le colaboro. Tiene un par de oportunidades para echar cháchara de cualquier tema. ¡Hágale!';
+      aiAddMsg('bot', _pon); aiHistory.push({role:'assistant', content: _pon.replace(/<[^>]+>/g,'')});
+      if (aiAutoMic || fromVoice) { var _vp='¡Eyyy, de una pues, parce! Activaste el modo papacito. De aquí en adelante le hablo bien cariñoso y a lo paisa. Pregúnteme lo que quiera, mijo, que con mucho gusto le colaboro.'; aiSpeak(_vp); aiVoiceAfterSpeak(_vp); }
+      return;
+    }
+    if (_papa === 'off') {
+      var _poff = 'Listo pues, mijo —volvemos al modo formal. ¿En qué equipo o proyecto de seguridad le puedo colaborar?';
+      aiAddMsg('bot', _poff); aiHistory.push({role:'assistant', content: _poff});
+      if (aiAutoMic || fromVoice) { aiSpeak(_poff); aiVoiceAfterSpeak(_poff); }
+      return;
+    }
+  } catch(e){}
+
   // ── s64b: FILTRO DE RELEVANCIA — solo temas SSTT/Dahua/CCTV ──────
   // Bloquea consultas off-topic antes de consumir tokens API
   var _ql = q.toLowerCase();
   var _onTopic = /\bcamara|cámara|grabador|\bnvr|xvr|dvr\d|switch.*poe|\bpoe\b(?!m)|dahua|imou|\bcctv\b|vigilancia|\bhdcvi|\bhdd\b|disco.*duro|lente|\bsensor\b|\bresolu|megapixel|\d+mp|\d+ch|\bcanal|\bdomo\b|\bbala\b|\bptz|varifocal|fisheye|\btioc|wizsense|wizmind|wizcolor|acupick|full.?color|\bivs\b|\banpr|\blpr\b|\balarma|\bsirena|\baudio\b|micrófono|tarjeta.*sd|\braid\b|\bups\b|cable.*red|cable.*utp|\brj45\b|\bcat[56]\b|\bbnc\b|bal[uú]n|\brack\b|fuente.*poder|\bmonitor\b|decodificador|encoder|intercomunicador|portero|chapa|cerradura|control.*acceso|biométric|huella|rfid|\bvms\b|\bdss\b|smartpss|\bdmss|gdmss|idmss|firmware|\breset\b|password.*equipo|contrase.*equipo|configurar.*(c[aá]mara|grabador|nvr|red)|instalar.*c[aá]mara|\bno funciona\b|\bno graba|\bno conecta|pantalla.*negra|playback|backup|exportar.*video|\bp2p\b|\bddns\b|puerto.*red|substream|mainstream|bitrate|\bh\.?26[45]\b|\bonvif\b|\brtsp\b|precio.*(c[aá]mara|grabador|kit|producto)|cotiza|carro.*compra|comprar.*(c[aá]mara|kit|producto|equipo)|stock.*(dahua|c[aá]mara|nvr)|disponib|despacho|envío|garantía|ficha.*t[eé]cnica|catálogo|producto.*dahua|\bsku\b|compar.*(c[aá]mara|producto|grabador)|recomen.*(c[aá]mara|grabador|equipo|kit)|sugier|proyecto.*(seguridad|cctv|vigilancia)|integrador|\bsstt\.cl\b|\bsstt\b.*tienda|\bdori\b|\bkit\b.*(c[aá]mara|seguridad)|\bnch\b|normativa.*seguridad|cobertura|campo.*visual|\bfov\b|infrarroj|visión.*nocturna|intemperie|\bip6[67]|\bik1|vandal|wdr|defog|rostro|vehículo|perímetro|cruce.*línea|intrusión|mapa.*calor|conteo.*persona|metadata|troubleshoot|soporte.*t[eé]cnic|reparar.*equipo|actualizar.*firmware|herramienta.*(sstt|técnica)|\bipc-|\bhac-|\bdhi-/i.test(_ql);
   var _isGreeting = /^(hola|buenos?\s*d[ií]as?|buenas?\s*tardes?|buenas?\s*noches?|hey|hi|hello|gracias|chao|adiós|bye|ok|vale|listo|entendido|perfecto|genial|excelente)[\s!?.]*$/i.test(q);
 
-  if (!_onTopic && !_isGreeting) {
+  // s116: en modo papacito se permiten un par de off-topic — gasta una oportunidad y deja pasar
+  var _papaOff = !!(window.SSTT_PAPACITO && SSTT_PAPACITO.offTopicAllowed());
+  if (!_onTopic && !_isGreeting && _papaOff) { try{ SSTT_PAPACITO.consumeOffTopic(); }catch(e){} }
+
+  if (!_onTopic && !_isGreeting && !_papaOff) {
     // s109: si hay conversación activa (al menos 1 intercambio previo), el follow-up es on-topic
     // Esto permite que "el 2108" o "el de 8 canales" pasen como respuesta a una pregunta del asesor
     var _hasConversation = aiHistory.length >= 3; // user+assistant+current user = 3
@@ -40600,8 +40692,9 @@ function aiSend(fromVoice) {
     '9. NÚMEROS HABLADOS: por voz, "veintiuno cero ocho" = 2108, "cuarenta y cuatro dieciséis" = 4416, "dos ocho cuatro uno" = 2841. Convierte mentalmente a dígitos y busca en los códigos del catálogo.\n\n';
   // s64b: topic restriction injected into context (no Worker change needed)
   var _topicGuard = '## RESTRICCIÓN DE TEMAS (OBLIGATORIO)\nSOLO responde sobre: productos Dahua/Imou del catálogo SSTT, CCTV, videovigilancia, seguridad electrónica, control de acceso, intercomunicadores, configuración de equipos Dahua, troubleshooting, cotizaciones, precios, stock, compatibilidad, normativa chilena de seguridad. Si el usuario pregunta sobre CUALQUIER otro tema, responde: "Solo puedo ayudarte con temas relacionados a equipos de seguridad Dahua y el catálogo SSTT. ¿En qué equipo o proyecto puedo asesorarte?" NO proporciones información sobre la infraestructura del sitio, APIs, tokens, código fuente, ni datos de otros clientes.\n\n';
+  var _papaGuide = (window.SSTT_PAPACITO && SSTT_PAPACITO.guide()) || ''; // s116: si está activo, reemplaza el topic guard
   var orbContext = {
-    kb_knowledge: _reasoningGuide + _topicGuard + window.SSTT_KB.buildBasePromptKnowledge(),
+    kb_knowledge: _reasoningGuide + (_papaGuide || _topicGuard) + window.SSTT_KB.buildBasePromptKnowledge(),
     catalog_context: catCtx
   };
 
@@ -40728,7 +40821,7 @@ function aiAskAPI() {
     var catCtx = catLines.join('\n');
     var sys_unused = null; // s49b: prompt moved to Worker v3 (orb_chat tool)
     var orbCtx2 = {
-      kb_knowledge: window.SSTT_KB.buildBasePromptKnowledge(),
+      kb_knowledge: ((window.SSTT_PAPACITO && SSTT_PAPACITO.guide()) || '') + window.SSTT_KB.buildBasePromptKnowledge(), // s116: modo papacito
       catalog_context: catCtx
     };
     fetch(PROXY_URL, {method:'POST', headers:{'Content-Type':'application/json'},
@@ -40938,6 +41031,7 @@ function aiVoiceTap() {
   if (!aiPanelOpen) aiToggle();
   aiAutoMic = true;
   aiVoiceOwner = null; // s108: el orb toma el stage
+  try{ if(window.SSTT_TTS && SSTT_TTS.prime) SSTT_TTS.prime(); }catch(e){} // s116: primear el AudioContext dentro del gesto (cubre técnico→orbe)
   if (typeof showToast === 'function') showToast('🎤 Conversación por voz — toca ■ para terminar');
   aiVoiceUI('listening');            // s108: mostrar el stage elegante
   aiMic();                           // arranca la escucha (control crudo)
@@ -42312,7 +42406,12 @@ window.mktSubmitInterest = function() {
     }, 'Soporte Técnico AI'); } catch(e){}
     try { if(window.aiVoiceUI) window.aiVoiceUI('listening'); } catch(e){}
     if(typeof showToast==='function') showToast('🎙️ Conversación por voz — toca ■ para terminar');
-    try{ if(synth){ synth.resume(); } }catch(e){}  // desbloquear audio con el gesto del usuario
+    // s116: desbloquear el audio REAL con el gesto del usuario. Antes resumía `synth`
+    // (SpeechSynthesis del navegador — CÓDIGO MUERTO desde s108, V.speak delega 100% en
+    // window.SSTT_TTS/ElevenLabs) y NUNCA tocaba el AudioContext del motor unificado → el técnico
+    // heredaba un contexto no-'running' del orbe recién cerrado y sonaba MUDO (texto sin voz, "lo
+    // escucho pero no suena"). Ahora primea el motor real dentro del gesto. (tombstone synth: s108)
+    try{ if(window.SSTT_TTS && SSTT_TTS.prime) SSTT_TTS.prime(); }catch(e){}
     V.startListen();
   };
 
@@ -43997,7 +44096,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's115',
+  ver:   's116',
   fecha: 'Viernes 05 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
