@@ -30746,10 +30746,10 @@ async function sendAIMessage(fromVoice) {
     var _papaT = (typeof text === 'string') && window.SSTT_PAPACITO && SSTT_PAPACITO.detect(text);
     if (_papaT === 'on' || _papaT === 'off') {
       var _msgT = (_papaT === 'on')
-        ? '¡Ayyy, mi amorcito, de una pues! 🎩 Activaste el <strong>modo papacito</strong>, ¡qué alegría atenderlo, mi cielo! Le hablo bien melcochudito y a lo paisa, mijito lindo. Cuénteme pues despacito, corazón hermoso, qué necesita de sus equipos —o écheme cuento un ratico, que tiene un par de oportunidades, tesoro. ¡Hágale, mi reinita!'
+        ? SSTT_PAPACITO.welcome()
         : 'Listo pues, mijo —volvemos al modo formal. ¿En qué equipo le puedo colaborar?';
       addAIMsg('ai', _msgT);
-      try { if (window.VOICE && VOICE.active) VOICE.onAIResponse(_msgT.replace(/<[^>]+>/g,'')); } catch(e){}
+      try { if (window.VOICE && VOICE.active) VOICE.onAIResponse(SSTT_PAPACITO.toVoice(_msgT)); } catch(e){}
       qs('sendBtn').disabled = false; inp?.focus();
       return;
     }
@@ -40516,6 +40516,22 @@ window.SSTT_PAPACITO = (function(){
   // c/s/z, con o sin tilde y con espacio opcional ("modo papá sito", "modo papasito", etc.)
   var TRIGGER = /\bmodo\s+pap[aá]\s?[csz]ito\b/i;
   var OFF     = /\bmodo\s+(normal|profesional|serio|formal)\b/i;
+  // s116: 12 bienvenidas paisas melcochudas — se elige una al azar en cada activación para no aburrir.
+  // Todas familiares/aptas para todo público (cariño de la casa, nada romántico). Para voz se quita el HTML/emoji.
+  var WELCOMES = [
+    '¡Ave María pues, mi amorcito! 🎩 Activaste el <strong>modo papacito</strong>. De aquí en adelante le hablo bien melcochudito y a lo paisa, mijito lindo. Cuénteme pues despacito, corazón hermoso, ¿en qué le colaboro hoy?',
+    '¡Quiubo pues, mi cielo! 🎩 Llegó el <strong>modo papacito</strong> y vengo con todo el cariño del mundo. Dígame qué necesita, tesoro, que para eso estoy yo, mi reinita.',
+    '¡Epa, mi rey! 🎩 Se prendió el <strong>modo papacito</strong>, ¡qué dicha tan grande atenderlo! Échese pa acá, corazón, y cuénteme en qué anda, mijito.',
+    '¡Uy, qué alegría, mi vida linda! 🎩 Activado el <strong>modo papacito</strong>. Le voy a consentir bien rico, mi amor. ¿Qué se le antoja saber hoy, sumercé?',
+    '¡Hágale pues, mi solecito! 🎩 Encendido el <strong>modo papacito</strong>. Aquí su servidor más consentidor, corazón. Pregúnteme lo que quiera, que yo le resuelvo con muchísimo gusto, mijo.',
+    '¡Ayyy, mi amor, qué chévere verlo por acá! 🎩 Se activó el <strong>modo papacito</strong>. De una le digo: tiene un par de momenticos para echarme cuento de lo que sea, tesoro. ¡Hágale!',
+    '¡Eo, mi llave querida! 🎩 <strong>Modo papacito</strong> a la orden, todo melcochudo. Cuénteme pues, corazón hermoso, ¿bien o qué? ¿En qué andamos hoy, mijito?',
+    '¡Bacano, mi reina! 🎩 Prendido el <strong>modo papacito</strong> con toda la ternura. Venga le ayudo, mi cielo, dígame no más qué necesita, que yo feliz, mi amorcito.',
+    '¡Ave María, qué belleza tenerlo aquí, mi vida! 🎩 Activado el <strong>modo papacito</strong>. Yo soy puro cariño, corazón. ¿Qué le resuelvo hoy, mi tesoro lindo?',
+    '¡Listo el pollo, mi amorcito! 🎩 <strong>Modo papacito</strong> encendido y derretido de cariño. Écheme el cuento despacito, mi cielo, que tiene un parcito de oportunidades pa hablar de lo que quiera, mijo.',
+    '¡Qué nota verlo, mi rey hermoso! 🎩 Se prendió el <strong>modo papacito</strong>. Aquí estoy yo pa consentirlo, corazón. Pregúnteme con confianza, mi vida, que con todo el amor le colaboro.',
+    '¡Mor, qué más pues! 🎩 Activaste el <strong>modo papacito</strong>, ¡me alegró el día, mi cielo! Cuénteme tranquilo, tesoro, ¿en qué andamos, mijito lindo?'
+  ];
   var GUIDE =
     '## MODO PAPACITO (EASTER EGG — TONO ESPECIAL, OBLIGATORIO)\n' +
     'El usuario activó un modo divertido y SUPER MELOSO. Responde con acento y expresiones PAISA (Medellín, ' +
@@ -40538,6 +40554,8 @@ window.SSTT_PAPACITO = (function(){
     offTopicAllowed: function(){ return st.active && st.offTopicLeft > 0; },
     consumeOffTopic: function(){ if(st.active && st.offTopicLeft>0){ st.offTopicLeft--; if(st.offTopicLeft<=0) st.active=false; } },
     guide:           function(){ return st.active ? GUIDE : ''; },
+    welcome:         function(){ return WELCOMES[Math.floor(Math.random()*WELCOMES.length)]; }, // s116: bienvenida al azar
+    toVoice:         function(s){ return String(s||'').replace(/<[^>]+>/g,'').replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}]/gu,'').replace(/\s+/g,' ').trim(); }, // s116: limpia HTML + emoji para TTS
     // Detecta activación/desactivación en el texto del usuario. Devuelve 'on' | 'off' | null.
     detect: function(text){
       var t = String(text||'');
@@ -40570,9 +40588,9 @@ function aiSend(fromVoice) {
   try {
     var _papa = window.SSTT_PAPACITO && SSTT_PAPACITO.detect(q);
     if (_papa === 'on') {
-      var _pon = '¡Ayyy, mi amorcito, de una pues! 🎩 Activaste el <strong>modo papacito</strong>, ¡qué alegría tan grande atenderlo, mi cielo! De aquí en adelante le hablo bien melcochudito y a lo paisa, mijito lindo. Cuénteme pues despacito, corazón hermoso —de cámaras o de la vida— que con todo el amor del mundo le colaboro. Tiene un par de oportunidades para echarme cuento de lo que quiera, tesoro. ¡Hágale, mi reinita!';
-      aiAddMsg('bot', _pon); aiHistory.push({role:'assistant', content: _pon.replace(/<[^>]+>/g,'')});
-      if (aiAutoMic || fromVoice) { var _vp='¡Ayyy, mi amorcito, de una pues! Activaste el modo papacito, ¡qué alegría atenderlo, mi cielo! De aquí en adelante le hablo bien melcochudito y a lo paisa, mijito lindo. Cuénteme pues despacito, corazón hermoso, que con todo el amor del mundo le colaboro.'; aiSpeak(_vp); aiVoiceAfterSpeak(_vp); }
+      var _pon = SSTT_PAPACITO.welcome();
+      aiAddMsg('bot', _pon); aiHistory.push({role:'assistant', content: SSTT_PAPACITO.toVoice(_pon)});
+      if (aiAutoMic || fromVoice) { var _vp = SSTT_PAPACITO.toVoice(_pon); aiSpeak(_vp); aiVoiceAfterSpeak(_vp); }
       return;
     }
     if (_papa === 'off') {
