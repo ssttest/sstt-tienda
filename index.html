@@ -40445,12 +40445,13 @@ window.SSTT_COST = (function(){
     if(!_enabled()){ if(el) el.style.display='none'; return; }
     if(!el){
       el=document.createElement('div'); el.id='ssttCostHud';
-      el.style.cssText='position:fixed;left:12px;bottom:12px;z-index:2147483000;background:rgba(10,22,40,.92);color:#fff;font:600 11px/1.35 system-ui,sans-serif;padding:9px 11px;border-radius:12px;box-shadow:0 6px 22px rgba(0,0,0,.4);backdrop-filter:blur(6px);max-width:230px;cursor:default';
+      el.style.cssText='position:fixed;left:12px;bottom:12px;z-index:2147483647;background:rgba(10,22,40,.92);color:#fff;font:600 11px/1.35 system-ui,sans-serif;padding:9px 11px;border-radius:12px;box-shadow:0 6px 22px rgba(0,0,0,.4);backdrop-filter:blur(6px);max-width:240px;cursor:default;pointer-events:auto';
       document.body.appendChild(el);
     }
     el.style.display='block';
     var v=clp();
-    el.innerHTML='<div style="font-weight:800;letter-spacing:.3px;margin-bottom:5px;opacity:.85">💵 GASTO SESIÓN (CLP)</div>'+
+    var _s=Math.max(0,Math.floor((Date.now()-C.since)/1000)), _mm=Math.floor(_s/60), _ss=_s%60, _clock=_mm+':'+(_ss<10?'0':'')+_ss;
+    el.innerHTML='<div style="font-weight:800;letter-spacing:.3px;margin-bottom:5px;opacity:.85">💵 GASTO SESIÓN (CLP) · ⏱ '+_clock+'</div>'+
       '<div style="display:flex;justify-content:space-between;gap:10px"><span>🤖 Claude <span style="opacity:.5">~est</span></span><b>'+_fmt(v.claude)+'</b></div>'+
       '<div style="display:flex;justify-content:space-between;gap:10px"><span>🔊 ElevenLabs</span><b>'+_fmt(v.eleven)+'</b></div>'+
       '<div style="display:flex;justify-content:space-between;gap:10px;border-top:1px solid rgba(255,255,255,.18);margin-top:4px;padding-top:4px"><span>Σ Total</span><b>'+_fmt(v.total)+'</b></div>'+
@@ -40459,7 +40460,7 @@ window.SSTT_COST = (function(){
     var r=document.getElementById('ssttCostReset'); if(r) r.onclick=function(){ C.reset(); };
     var h=document.getElementById('ssttCostHide'); if(h) h.onclick=function(){ C.toggle(false); };
   }
-  function _enabled(){ try{ return localStorage.getItem(LSH)==='1'; }catch(_){ return false; } }
+  function _enabled(){ try{ return localStorage.getItem(LSH)!=='0'; }catch(_){ return true; } } // s117: build de PRUEBA → visible por defecto (ocultar = '0'). Para la versión final, eliminar este módulo.
   C.addClaudeChars=function(inChars, outChars){ C.claudeInTok+=_estTok(inChars); C.claudeOutTok+=_estTok(outChars); C.claudeCalls++; _save(); _hud(); };
   C.addEleven=function(chars){ C.elevenChars+=(chars||0); C.elevenCalls++; _save(); _hud(); };
   C.clp=clp;
@@ -40486,6 +40487,7 @@ window.SSTT_COST = (function(){
     }
   }catch(_){}
   try{ if(document.readyState!=='loading') setTimeout(_hud,0); else document.addEventListener('DOMContentLoaded', function(){ setTimeout(_hud,0); }); }catch(_){}
+  try{ setInterval(_hud, 1000); }catch(_){} // s117: refresco dinámico al segundo (cronómetro + se repinta sobre el stage de voz de cualquiera de los dos asistentes)
   return C;
 })();
 // s117: ════════ fin Contador de gasto ════════
