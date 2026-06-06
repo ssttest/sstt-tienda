@@ -29805,6 +29805,18 @@ function _getTierInfo() {
   return tier;
 }
 
+// s117: ¿La tarifa del cliente tiene derecho a VOZ (TTS ElevenLabs)? Solo tarifa preferencial:
+// Mayorista (A), Prime (B) y Preferencial (C). General (D), BIP (Z) e invitados NO hablan.
+// Es el ÚNICO criterio del gate de voz (en SSTT_TTS.speak). FAIL-CLOSED: ante cualquier duda,
+// devuelve false → no se gasta ni un crédito de ElevenLabs en tarifa general.
+window.sstt_voiceTierAllowed = function(){
+  try {
+    var t = (typeof _getTierInfo === 'function') ? _getTierInfo() : null;
+    var code = t && t.tramo;
+    return code === 'A' || code === 'B' || code === 'C';
+  } catch(e){ return false; }
+};
+
 
 function renderPerfilPuntos() {
   var el = document.getElementById('perfilTabPuntos');
@@ -30076,9 +30088,9 @@ function renderPerfilFidelidad() {
   var beneficios = {
     'BIP':          ['Acceso al baño (preguntar llave)', 'WiFi de la tienda de al lado', 'Cotización a mano en servilleta'],
     'General':      ['Acceso al catálogo completo', 'Soporte técnico por chat', 'Cotizaciones online'],
-    'Preferencial': ['Lista de precios preferencial', 'Prioridad en despacho', 'Soporte técnico prioritario', 'Cotizaciones con validez extendida'],
-    'Prime':        ['Lista de precios Prime', 'Despacho express gratuito > $500K', 'Soporte técnico dedicado', 'Crédito a 30 días disponible', 'Acceso anticipado a nuevos productos'],
-    'Mayorista':    ['Precio distribuidor (máximo desc.)', 'Despacho gratuito todo Chile', 'Ejecutivo de cuenta dedicado', 'Crédito a 60 días', 'Capacitaciones gratuitas', 'Preventa de productos nuevos']
+    'Preferencial': ['Lista de precios preferencial', 'Prioridad en despacho', 'Soporte técnico prioritario', 'Voz premium con IA (Asesor + Soporte)', 'Cotizaciones con validez extendida'],
+    'Prime':        ['Lista de precios Prime', 'Despacho express gratuito > $500K', 'Soporte técnico dedicado', 'Voz premium con IA (Asesor + Soporte)', 'Crédito a 30 días disponible', 'Acceso anticipado a nuevos productos'],
+    'Mayorista':    ['Precio distribuidor (máximo desc.)', 'Despacho gratuito todo Chile', 'Ejecutivo de cuenta dedicado', 'Voz premium con IA (Asesor + Soporte)', 'Crédito a 60 días', 'Capacitaciones gratuitas', 'Preventa de productos nuevos']
   };
   html += '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--g3);margin-bottom:8px">Beneficios de tu categoría</div>';
   html += '<div style="background:var(--g6);border:1px solid var(--g5);border-radius:14px;padding:14px 16px">';
@@ -40163,7 +40175,7 @@ var aiAutoMic = false;  // modo voz conversacional continuo
 window.SSTT_TTS = (function(){
   var T = { mode:'eleven', _audio:null, _speaking:false,
             _ttsTimeoutMs:7000, _retries:2, _retryMs:500, _cache:new Map(), _cacheMax:24,
-            _ac:null, _src:null, _an:null, _url:null, _lastSkipT:0 }; // s109: grafo Web Audio para el medidor real · s115: _lastSkipT = throttle del aviso "voz omitida"
+            _ac:null, _src:null, _an:null, _url:null, _lastSkipT:0, _lastUpsellT:0 }; // s109: grafo Web Audio para el medidor real · s115: _lastSkipT = throttle del aviso "voz omitida" · s117: _lastUpsellT = throttle del aviso "voz es beneficio preferencial"
   // s115: el TTS degradaba a SILENCIO sin avisar (texto visible, sin audio) → el usuario no sabía
   // si estaba roto o simplemente sin voz (tu síntoma del asistente técnico). Avisar en pantalla
   // (throttled ~8s para no spamear) + log claro para diagnosticar en prod la causa real.
@@ -40174,6 +40186,43 @@ window.SSTT_TTS = (function(){
       T._lastSkipT = now;
       try{ if(typeof showToast==='function') showToast('🔇 Voz no disponible ('+reason+') — respuesta en texto'); }catch(_){}
     }
+  }
+  // s117: la VOZ es un beneficio de tarifa preferencial. Cuando un cliente de tarifa general (o
+  // invitado) intenta usar el modo hablar, se calla (gate en T.speak) y se le explica el porqué —
+  // throttled ~30s para no spamear. Convierte el límite en un gancho de upsell, no en un error.
+  function _ttsUpsell(){
+    var now=Date.now();
+    if(now - (T._lastUpsellT||0) > 30000){
+      T._lastUpsellT = now;
+      try{ if(typeof showToast==='function') showToast('🔊 Voz estándar del navegador. La voz premium con IA es un beneficio de tarifa Preferencial, Prime o Mayorista'); }catch(_){}
+    }
+  }
+  // s117: ── VOZ DEL NAVEGADOR (Web Speech API) — tarifa general, CERO créditos ElevenLabs ──
+  // Mantiene T._speaking en sync para que el loop de voz (aiVoiceAfterSpeak → isSpeaking) vuelva a
+  // escuchar al terminar. _pickEsVoice elige una voz en español si el navegador la tiene. Watchdog:
+  // Chrome a veces no dispara onend → fuerza el fin para que el orbe no quede atascado en "hablando".
+  function _pickEsVoice(){
+    try{
+      var vs=(window.speechSynthesis&&window.speechSynthesis.getVoices())||[];
+      var pref=['es-cl','es-419','es-mx','es-us','es-es','es'];
+      for(var i=0;i<pref.length;i++){ for(var j=0;j<vs.length;j++){ if(vs[j].lang && vs[j].lang.toLowerCase().indexOf(pref[i])===0) return vs[j]; } }
+    }catch(_){}
+    return null;
+  }
+  function _ssClearWatch(){ try{ if(T._ssWatch){ clearTimeout(T._ssWatch); T._ssWatch=null; } }catch(_){} }
+  function _speakBrowser(txt, done){
+    try{
+      var ss=window.speechSynthesis;
+      if(!ss || typeof SpeechSynthesisUtterance==='undefined'){ finish(done); return; } // sin soporte → termina, el loop sigue
+      try{ ss.cancel(); }catch(_){}                          // limpia locución pendiente
+      var u=new SpeechSynthesisUtterance(txt);
+      u.lang='es-ES'; var v=_pickEsVoice(); if(v) u.voice=v; u.rate=1.05; u.pitch=1.0;
+      var fin=function(){ _ssClearWatch(); T._speaking=false; if(done){ var d=done; done=null; d(); } }; // guard doble llamada
+      u.onend=fin; u.onerror=fin;
+      _ssClearWatch();
+      T._ssWatch=setTimeout(fin, Math.min(60000, 2500 + txt.length*80)); // anti-cuelgue: ~80ms/char + colchón
+      ss.speak(u);
+    }catch(e){ finish(done); }
   }
   // s109: ── Humanizador TTS — convierte precios y códigos a formato hablable ──
   // Precios chilenos: "$180.588" → "180 mil 588 pesos" (ElevenLabs lee el punto como decimal)
@@ -40293,10 +40342,18 @@ window.SSTT_TTS = (function(){
     }catch(e){ retry(); }
   }
   T.speak = function(text, done){
+    // s117: ── VOZ POR TARIFA — premium (ElevenLabs) vs estándar (navegador) ──
+    // La VOZ PREMIUM (ElevenLabs) es beneficio de Mayorista/Prime/Preferencial. La tarifa General, BIP
+    // e invitados NO se quedan mudos: hablan con el motor de voz del NAVEGADOR (speechSynthesis), gratis
+    // y SIN consumir créditos de ElevenLabs. El reconocimiento de voz (entrada) es del navegador para
+    // todos. Único punto de decisión, atravesado por AMBOS asistentes (orbe vía aiSpeak y Soporte
+    // Técnico vía V.speak → ambos llegan a T.speak): ningún texto de tarifa general llega a ElevenLabs.
+    // Fail-closed: si la tarifa no se puede determinar → voz de navegador (nunca ElevenLabs).
     var txt=clean(text);
     if(!txt){ finish(done); return; }
     T.cancel(); T._speaking=true;
-    if(T.mode!=='eleven' || typeof PROXY_URL==='undefined'){ finish(done); return; } // sin ElevenLabs => silencio (jamás navegador)
+    if(typeof window.sstt_voiceTierAllowed==='function' && !window.sstt_voiceTierAllowed()){ _ttsUpsell(); _speakBrowser(txt, done); return; }
+    if(T.mode!=='eleven' || typeof PROXY_URL==='undefined'){ finish(done); return; } // sin ElevenLabs => silencio
     var attempt=0;
     function onFail(err){
       // s110: 429 (rate limit) / 402 (sin cuota) / 403 (auth) → reintentar NO ayuda y gasta requests.
@@ -40317,7 +40374,7 @@ window.SSTT_TTS = (function(){
       var to=setTimeout(function(){ try{ if(ctrl) ctrl.abort(); }catch(e){} }, T._ttsTimeoutMs);
       fetch(PROXY_URL+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:txt}), signal:ctrl?ctrl.signal:undefined})
         .then(function(res){ if(!res.ok){ var e=new Error('tts '+res.status); e.status=res.status; throw e; } return res.blob(); }) // s110: status en el error
-        .then(function(blob){ clearTimeout(to); if(!T._speaking) return; cachePut(txt,blob); playBlob(blob, onFail, done); })
+        .then(function(blob){ clearTimeout(to); if(!T._speaking) return; try{ if(window.SSTT_COST) SSTT_COST.addEleven(txt.length); }catch(_){} /* s117: contar caracteres facturados a ElevenLabs (solo en éxito; 1 char = 1 crédito) */ cachePut(txt,blob); playBlob(blob, onFail, done); })
         .catch(function(e){ clearTimeout(to); onFail(e); }); // s110: pasa el error a onFail para discriminar 429
     }
     tryOnce();
@@ -40327,6 +40384,8 @@ window.SSTT_TTS = (function(){
     // s109: NO destruir el elemento (el grafo Web Audio cuelga de él). Sólo pausar + soltar el blob.
     try{ if(T._audio){ T._audio.pause(); } }catch(e){}
     try{ if(T._url){ URL.revokeObjectURL(T._url); T._url=null; } }catch(e){}
+    try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){} // s117: corta también la voz del navegador (tarifa general)
+    _ssClearWatch();
   };
   // s116: "primer" del AudioContext DENTRO del gesto del usuario. Chrome sólo revive/crea el
   // contexto de forma fiable dentro de un gesto; el resume() de playBlob corre TRAS el round-trip
@@ -40344,15 +40403,101 @@ window.SSTT_TTS = (function(){
   T.analyser = function(){ return T._an || null; }; // s109: AnalyserNode para el medidor de la onda (o null)
   T.isSpeaking = function(){
     if(T._audio && !T._audio.paused && !T._audio.ended) return true;
+    try{ if(window.speechSynthesis && window.speechSynthesis.speaking) return true; }catch(_){} // s117: voz de navegador en curso
     return T._speaking;
   };
+  // s117: precarga la lista de voces del navegador (getVoices() suele venir vacía en la 1ª llamada;
+  // se rellena async y dispara onvoiceschanged) para que _pickEsVoice encuentre una voz en español.
+  try{ if(window.speechSynthesis){ window.speechSynthesis.getVoices(); window.speechSynthesis.addEventListener('voiceschanged', function(){ try{ window.speechSynthesis.getVoices(); }catch(_){} }); } }catch(_){}
   return T;
 })();
 // s107: ════════ fin Motor TTS unificado ════════
 
+// s117: ════════ Contador de gasto en vivo (CLP) — Claude vs ElevenLabs ════════
+// Herramienta de dueño para "ir tanteando" el costo. OCULTO por defecto (el cliente nunca lo ve);
+// se enciende con SSTT_COST.toggle() en consola y persiste en localStorage. Dos fuentes:
+//  · ElevenLabs: EXACTO — caracteres facturados (1 char = 1 crédito Multilingual v2), contados en
+//    el éxito de T.speak. Solo cuenta la voz premium (tarifa preferencial); la voz de navegador es $0.
+//  · Claude: ESTIMADO — token ≈ chars/4 sobre el body enviado y la respuesta recibida del Worker
+//    (no incluye el system prompt que arma el Worker → subestima la entrada). Se vuelve EXACTO si el
+//    Worker reenvía usage.input_tokens/output_tokens (cambio pendiente en worker.js).
+window.SSTT_COST = (function(){
+  var LS='sstt_cost_v1', LSH='sstt_cost_hud';
+  var C = {
+    // Tarifas editables (USD). Ajusta USD_CLP al cambio del día.
+    SONNET_IN: 3, SONNET_OUT: 15,           // USD por millón de tokens (Claude Sonnet 4.6)
+    ELEVEN_USD_PER_CHAR: 5/30000,           // Starter: $5 / 30.000 créditos · 1 crédito = 1 char
+    USD_CLP: 900,                           // ~jun 2026 (USD→CLP). Editable: SSTT_COST.USD_CLP = 910
+    claudeInTok:0, claudeOutTok:0, claudeCalls:0, elevenChars:0, elevenCalls:0, since:Date.now()
+  };
+  try{ var s=JSON.parse(localStorage.getItem(LS)||'null'); if(s){ ['claudeInTok','claudeOutTok','claudeCalls','elevenChars','elevenCalls','since','USD_CLP'].forEach(function(k){ if(typeof s[k]==='number') C[k]=s[k]; }); } }catch(_){}
+  function _save(){ try{ localStorage.setItem(LS, JSON.stringify({claudeInTok:C.claudeInTok,claudeOutTok:C.claudeOutTok,claudeCalls:C.claudeCalls,elevenChars:C.elevenChars,elevenCalls:C.elevenCalls,since:C.since,USD_CLP:C.USD_CLP})); }catch(_){}
+  }
+  function _estTok(chars){ return Math.ceil((chars||0)/4); } // heurística estándar ~4 chars/token
+  function clp(){
+    var cUsd = C.claudeInTok/1e6*C.SONNET_IN + C.claudeOutTok/1e6*C.SONNET_OUT;
+    var eUsd = C.elevenChars * C.ELEVEN_USD_PER_CHAR;
+    return { claude: cUsd*C.USD_CLP, eleven: eUsd*C.USD_CLP, total:(cUsd+eUsd)*C.USD_CLP };
+  }
+  function _fmt(n){ try{ return '$'+Math.round(n).toLocaleString('es-CL'); }catch(_){ return '$'+Math.round(n); } }
+  function _hud(){
+    var el=document.getElementById('ssttCostHud');
+    if(!_enabled()){ if(el) el.style.display='none'; return; }
+    if(!el){
+      el=document.createElement('div'); el.id='ssttCostHud';
+      el.style.cssText='position:fixed;left:12px;bottom:12px;z-index:2147483000;background:rgba(10,22,40,.92);color:#fff;font:600 11px/1.35 system-ui,sans-serif;padding:9px 11px;border-radius:12px;box-shadow:0 6px 22px rgba(0,0,0,.4);backdrop-filter:blur(6px);max-width:230px;cursor:default';
+      document.body.appendChild(el);
+    }
+    el.style.display='block';
+    var v=clp();
+    el.innerHTML='<div style="font-weight:800;letter-spacing:.3px;margin-bottom:5px;opacity:.85">💵 GASTO SESIÓN (CLP)</div>'+
+      '<div style="display:flex;justify-content:space-between;gap:10px"><span>🤖 Claude <span style="opacity:.5">~est</span></span><b>'+_fmt(v.claude)+'</b></div>'+
+      '<div style="display:flex;justify-content:space-between;gap:10px"><span>🔊 ElevenLabs</span><b>'+_fmt(v.eleven)+'</b></div>'+
+      '<div style="display:flex;justify-content:space-between;gap:10px;border-top:1px solid rgba(255,255,255,.18);margin-top:4px;padding-top:4px"><span>Σ Total</span><b>'+_fmt(v.total)+'</b></div>'+
+      '<div style="opacity:.5;font-weight:500;margin-top:5px;font-size:10px">'+C.claudeCalls+' llamadas Claude · '+C.elevenChars.toLocaleString('es-CL')+' chars 11L</div>'+
+      '<div style="margin-top:6px;display:flex;gap:6px"><span id="ssttCostReset" style="cursor:pointer;text-decoration:underline;opacity:.7">reiniciar</span><span id="ssttCostHide" style="cursor:pointer;text-decoration:underline;opacity:.7;margin-left:auto">ocultar</span></div>';
+    var r=document.getElementById('ssttCostReset'); if(r) r.onclick=function(){ C.reset(); };
+    var h=document.getElementById('ssttCostHide'); if(h) h.onclick=function(){ C.toggle(false); };
+  }
+  function _enabled(){ try{ return localStorage.getItem(LSH)==='1'; }catch(_){ return false; } }
+  C.addClaudeChars=function(inChars, outChars){ C.claudeInTok+=_estTok(inChars); C.claudeOutTok+=_estTok(outChars); C.claudeCalls++; _save(); _hud(); };
+  C.addEleven=function(chars){ C.elevenChars+=(chars||0); C.elevenCalls++; _save(); _hud(); };
+  C.clp=clp;
+  C.reset=function(){ C.claudeInTok=C.claudeOutTok=C.claudeCalls=C.elevenChars=C.elevenCalls=0; C.since=Date.now(); _save(); _hud(); };
+  C.toggle=function(on){ try{ localStorage.setItem(LSH, (on===undefined? (_enabled()?'0':'1') : (on?'1':'0'))); }catch(_){} _hud(); };
+  C.show=function(){ C.toggle(true); }; C.hide=function(){ C.toggle(false); };
+  // Envoltura de fetch: captura SOLO las llamadas de chat al Worker (Claude). /tts, gmaps, img e
+  // imágenes quedan fuera (ElevenLabs se mide aparte; el resto no es Claude). Clona la respuesta para
+  // medir su tamaño sin consumir el stream del consumidor real.
+  try{
+    if(!window._ssttFetchWrapped){
+      window._ssttFetchWrapped=true;
+      var _of=window.fetch.bind(window);
+      var BASE=(typeof PROXY_URL!=='undefined')?PROXY_URL:'';
+      window.fetch=function(input, init){
+        var url=(typeof input==='string')?input:((input&&input.url)||'');
+        var isClaude = BASE && (url===BASE || url===BASE+'/');   // el endpoint de chat es exactamente PROXY_URL
+        var inChars=0;
+        if(isClaude){ try{ var b=(init&&init.body)||''; inChars=(typeof b==='string')?b.length:0; }catch(_){} }
+        var p=_of(input, init);
+        if(isClaude){ return p.then(function(res){ try{ res.clone().text().then(function(t){ C.addClaudeChars(inChars, (t||'').length); }).catch(function(){}); }catch(_){} return res; }); }
+        return p;
+      };
+    }
+  }catch(_){}
+  try{ if(document.readyState!=='loading') setTimeout(_hud,0); else document.addEventListener('DOMContentLoaded', function(){ setTimeout(_hud,0); }); }catch(_){}
+  return C;
+})();
+// s117: ════════ fin Contador de gasto ════════
+
 // ── Text-to-Speech ────────────────────────────────────────────
 function aiSpeak(text) {
   // s107: unificado en SSTT_TTS (ElevenLabs -> navegador). Mantiene aiSpeaking en sync.
+  // s117: AHORRO DE CRÉDITOS ElevenLabs — el TTS solo corre en modo voz (orbe manos-libres,
+  // aiAutoMic=true). Antes hablaba también en el chat ESCRITO, gastando créditos sin que nadie
+  // pidiera audio. Alineado con el blindaje de tokens de s112 (no gastar en interacciones no-voz).
+  // Revert: borrar la línea `if (!aiAutoMic) return;`.
+  if (!aiAutoMic) return;
   var clean = (text || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
   if (!clean) return;
   aiSpeaking = true;
