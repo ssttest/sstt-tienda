@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 05 de Junio del 2026 · s116 -->
+<!-- SSTT Tienda · Generado: Sábado 06 de Junio del 2026 · s116 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -30747,7 +30747,7 @@ async function sendAIMessage(fromVoice) {
     if (_papaT === 'on' || _papaT === 'off') {
       var _msgT = (_papaT === 'on')
         ? SSTT_PAPACITO.welcome()
-        : 'Listo pues, mijo —volvemos al modo formal. ¿En qué equipo le puedo colaborar?';
+        : SSTT_PAPACITO.farewell();
       addAIMsg('ai', _msgT);
       try { if (window.VOICE && VOICE.active) VOICE.onAIResponse(SSTT_PAPACITO.toVoice(_msgT)); } catch(e){}
       qs('sendBtn').disabled = false; inp?.focus();
@@ -40530,7 +40530,28 @@ window.SSTT_PAPACITO = (function(){
     '¡Ave María, qué belleza tenerlo aquí, mi vida! 🎩 Activado el <strong>modo papacito</strong>. Yo soy puro cariño, corazón. ¿Qué le resuelvo hoy, mi tesoro lindo?',
     '¡Listo el pollo, mi amorcito! 🎩 <strong>Modo papacito</strong> encendido y derretido de cariño. Écheme el cuento despacito, mi cielo, que tiene un parcito de oportunidades pa hablar de lo que quiera, mijo.',
     '¡Qué nota verlo, mi rey hermoso! 🎩 Se prendió el <strong>modo papacito</strong>. Aquí estoy yo pa consentirlo, corazón. Pregúnteme con confianza, mi vida, que con todo el amor le colaboro.',
-    '¡Mor, qué más pues! 🎩 Activaste el <strong>modo papacito</strong>, ¡me alegró el día, mi cielo! Cuénteme tranquilo, tesoro, ¿en qué andamos, mijito lindo?'
+    '¡Mor, qué más pues! 🎩 Activaste el <strong>modo papacito</strong>, ¡me alegró el día, mi cielo! Cuénteme tranquilo, tesoro, ¿en qué andamos, mijito lindo?',
+    '¡Ole pues, mi consentido! 🎩 Arrancó el <strong>modo papacito</strong>. Venga le doy gusto, mi amor: cuénteme qué anda buscando, corazón, que yo le tengo todo organizadito.',
+    '¡Huy, mi vida, qué bueno tenerlo por acá! 🎩 <strong>Modo papacito</strong> activado. Aquí pendientico de usted, mi cielo. ¿Le busco una camarita o charlamos un ratico, tesoro?',
+    '¡Mor, llegó por quien lloraban! 🎩 Encendí el <strong>modo papacito</strong> con todito el amor. Dígame no más, mijito lindo, que para servirle estoy, mi reinita.',
+    '¡Quihúbole pues, mi solecito hermoso! 🎩 Se prendió el <strong>modo papacito</strong>. Póngase cómodo, corazón, que aquí lo atiendo con cariñito y paciencia, mi amorcito.',
+    '¡Ave María, mijo, qué alegría! 🎩 <strong>Modo papacito</strong> a millón. Le confieso que me encanta consentir a mis clientecitos. ¿En qué le ayudo hoy, mi cielo lindo?',
+    '¡Epa, mi rey precioso! 🎩 Activaste el <strong>modo papacito</strong>. Vengo dulce como un manjar blanco, corazón. Cuénteme despacito qué necesita, tesoro, que yo le resuelvo.',
+    '¡Hágale pues que pa eso estamos, mi amor! 🎩 Prendido el <strong>modo papacito</strong>. Aquí su asesor más melcochudo, mijito. Pregúnteme con toda confianza, mi vida linda.',
+    '¡Uy, mi cielo, bienvenidísimo! 🎩 Se activó el <strong>modo papacito</strong> y vengo con el corazón abierto. Échese pa acá, mi tesoro, y dígame en qué andamos, corazón.'
+  ];
+  // s116: despedidas variadas al volver a "modo normal" — cálidas pero ya bajando el meloso. Sin HTML/emoji (texto plano).
+  var FAREWELLS = [
+    'Listo pues, mi amor —volvemos al modo formal. Cualquier cosita me avisa sin pena. ¿En qué equipo o proyecto le colaboro?',
+    'De una, mijito —apago el modo papacito y seguimos en lo serio. Aquí sigo pendiente de usted, corazón. ¿Qué necesita?',
+    'Bueno pues, mi cielo, volvemos a lo formal —pero el cariño queda. ¿En qué le ayudo con sus equipos?',
+    'Hágale, mi reina —de vuelta al modo normal. Fue un gusto consentirlo un ratico. ¿Seguimos con su proyecto de seguridad?',
+    'Listo el pollo, mijo —modo formal otra vez. Cuente conmigo para lo que necesite de cámaras y grabadores.',
+    'Como mande, mi amor —apago el meloso y nos ponemos serios. ¿En qué equipo le colaboro ahora?',
+    'Va pues, mi tesoro —volvemos a lo profesional. Aquí estaré para ayudarle con todo lo de CCTV. ¿Qué busca?',
+    'Entendido, mi vida —modo normal activado. Sin perder el cariño, dígame en qué le sirvo con el catálogo.',
+    'Listo, mi cielo lindo —volvemos a lo formal, pero con el mismo gusto de siempre. ¿En qué le ayudo?',
+    'Dale pues, mijito —de vuelta al modo serio. Cualquier duda con sus equipos, aquí estoy. ¿Qué necesita?'
   ];
   var GUIDE =
     '## MODO PAPACITO (EASTER EGG — TONO ESPECIAL, OBLIGATORIO)\n' +
@@ -40555,6 +40576,7 @@ window.SSTT_PAPACITO = (function(){
     consumeOffTopic: function(){ if(st.active && st.offTopicLeft>0){ st.offTopicLeft--; if(st.offTopicLeft<=0) st.active=false; } },
     guide:           function(){ return st.active ? GUIDE : ''; },
     welcome:         function(){ return WELCOMES[Math.floor(Math.random()*WELCOMES.length)]; }, // s116: bienvenida al azar
+    farewell:        function(){ return FAREWELLS[Math.floor(Math.random()*FAREWELLS.length)]; }, // s116: despedida al azar
     toVoice:         function(s){ return String(s||'').replace(/<[^>]+>/g,'').replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{FE0F}]/gu,'').replace(/\s+/g,' ').trim(); }, // s116: limpia HTML + emoji para TTS
     // Detecta activación/desactivación en el texto del usuario. Devuelve 'on' | 'off' | null.
     detect: function(text){
@@ -40594,9 +40616,9 @@ function aiSend(fromVoice) {
       return;
     }
     if (_papa === 'off') {
-      var _poff = 'Listo pues, mijo —volvemos al modo formal. ¿En qué equipo o proyecto de seguridad le puedo colaborar?';
-      aiAddMsg('bot', _poff); aiHistory.push({role:'assistant', content: _poff});
-      if (aiAutoMic || fromVoice) { aiSpeak(_poff); aiVoiceAfterSpeak(_poff); }
+      var _poff = SSTT_PAPACITO.farewell();
+      aiAddMsg('bot', _poff); aiHistory.push({role:'assistant', content: SSTT_PAPACITO.toVoice(_poff)});
+      if (aiAutoMic || fromVoice) { var _vf = SSTT_PAPACITO.toVoice(_poff); aiSpeak(_vf); aiVoiceAfterSpeak(_vf); }
       return;
     }
   } catch(e){}
@@ -44124,7 +44146,7 @@ function waUpdateWaLink(userMsg, reply) {
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
   ver:   's116',
-  fecha: 'Viernes 05 de Junio del 2026'
+  fecha: 'Sábado 06 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
