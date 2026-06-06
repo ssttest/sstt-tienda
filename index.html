@@ -30746,7 +30746,7 @@ async function sendAIMessage(fromVoice) {
     var _papaT = (typeof text === 'string') && window.SSTT_PAPACITO && SSTT_PAPACITO.detect(text);
     if (_papaT === 'on' || _papaT === 'off') {
       var _msgT = (_papaT === 'on')
-        ? '¡Eyyy, de una pues, parce! 🎩 Activaste el <strong>modo papacito</strong>. Le hablo bien cariñoso y a lo paisa, mijo. Pregúnteme lo que necesite de sus equipos —o écheme cuento un ratico, que tiene un par de oportunidades. ¡Hágale!'
+        ? '¡Ayyy, mi amorcito, de una pues! 🎩 Activaste el <strong>modo papacito</strong>, ¡qué alegría atenderlo, mi cielo! Le hablo bien melcochudito y a lo paisa, mijito lindo. Cuénteme pues despacito, corazón hermoso, qué necesita de sus equipos —o écheme cuento un ratico, que tiene un par de oportunidades, tesoro. ¡Hágale, mi reinita!'
         : 'Listo pues, mijo —volvemos al modo formal. ¿En qué equipo le puedo colaborar?';
       addAIMsg('ai', _msgT);
       try { if (window.VOICE && VOICE.active) VOICE.onAIResponse(_msgT.replace(/<[^>]+>/g,'')); } catch(e){}
@@ -40518,14 +40518,21 @@ window.SSTT_PAPACITO = (function(){
   var OFF     = /\bmodo\s+(normal|profesional|serio|formal)\b/i;
   var GUIDE =
     '## MODO PAPACITO (EASTER EGG — TONO ESPECIAL, OBLIGATORIO)\n' +
-    'El usuario activó un modo divertido. Responde con acento y expresiones PAISA (Medellín, Colombia): ' +
-    '\"parce\", \"mijo/mija\", \"pues\", \"hágale\", \"de una\", \"con mucho gusto pues\", \"bien o no?\", \"¡qué nota!\". ' +
-    'Tono CÁLIDO, cariñoso y cercano, como un parcero querido de barrio — SIEMPRE respetuoso, familiar y APTO ' +
-    'PARA TODO PÚBLICO. NADA romántico, sexual ni de coqueteo: es ternura amistosa, jamás galantería. ' +
-    'Puedes charlar brevemente temas fuera del catálogo de forma amable (máximo un par de líneas) y luego, con ' +
-    'cariño, devuelve la conversación a cómo ayudar con la seguridad/CCTV de la persona. Mantén las ' +
-    'recomendaciones de productos TAN precisas como siempre. Si detectas a un menor o cualquier intención ' +
-    'subida de tono, vuelve al instante a un trato formal y respetuoso.\n\n';
+    'El usuario activó un modo divertido y SUPER MELOSO. Responde con acento y expresiones PAISA (Medellín, ' +
+    'Colombia): \"parce\", \"mijo/mija\", \"pues\", \"hágale\", \"de una\", \"con muchísimo gusto pues\", \"bien o qué\", \"¡qué nota!\". ' +
+    'Trato EMPALAGOSO de puro cariño, derretido y consentidor, como la abuelita o el tendero paisa que lo adora a uno: ' +
+    'llena las frases de DIMINUTIVOS (cafecito, momentico, ratico, preguntica, cositas, despacito) y de apodos ' +
+    'tiernísimos —\"mi amorcito\", \"corazón hermoso\", \"mijito lindo\", \"mi cielo\", \"mi vida linda\", \"sumercé\", ' +
+    '\"reinita/mi rey\", \"mi solecito\", \"tesoro\". Arranca consintiendo (\"¡ayyy, pero qué alegría atenderlo, mi amor!\", ' +
+    '\"cuénteme pues, corazón hermoso\"), suelta cariñitos a cada rato, celebra con ternura cada decisión (\"¡uy, qué ' +
+    'buena elección, mijito, me enorgullece!\", \"usted sí sabe, mi cielo\") y despídase derretido (\"cualquier cosita ' +
+    'me avisa sin pena, que para eso estoy, mi amorcito\"). Sé efusivo, dulce y consentidor al máximo. PERO: SIEMPRE ' +
+    'respetuoso, familiar y APTO PARA TODO PÚBLICO — el cariño es de cercanía paisa/familiar (afecto de la casa, de ' +
+    'abuelita o tendero), NUNCA romántico, sexual ni de coqueteo, jamás sobre el físico ni galantería. Puedes charlar ' +
+    'brevemente temas fuera del catálogo de forma amable (máximo un par de líneas) y luego, con todo el amor, devuelve ' +
+    'la conversación a cómo ayudar con la seguridad/CCTV de la persona. Mantén las recomendaciones de productos TAN ' +
+    'precisas como siempre. Si detectas a un menor o cualquier intención subida de tono, vuelve al instante a un trato ' +
+    'formal y respetuoso.\n\n';
   return {
     active:          function(){ return st.active; },
     offTopicAllowed: function(){ return st.active && st.offTopicLeft > 0; },
@@ -40563,9 +40570,9 @@ function aiSend(fromVoice) {
   try {
     var _papa = window.SSTT_PAPACITO && SSTT_PAPACITO.detect(q);
     if (_papa === 'on') {
-      var _pon = '¡Eyyy, de una pues, parce! 🎩 Activaste el <strong>modo papacito</strong>. De aquí en adelante le hablo bien cariñoso y a lo paisa, ¿bien o no, mijo? Pregúnteme lo que quiera —de cámaras o de la vida— que con mucho gusto le colaboro. Tiene un par de oportunidades para echar cháchara de cualquier tema. ¡Hágale!';
+      var _pon = '¡Ayyy, mi amorcito, de una pues! 🎩 Activaste el <strong>modo papacito</strong>, ¡qué alegría tan grande atenderlo, mi cielo! De aquí en adelante le hablo bien melcochudito y a lo paisa, mijito lindo. Cuénteme pues despacito, corazón hermoso —de cámaras o de la vida— que con todo el amor del mundo le colaboro. Tiene un par de oportunidades para echarme cuento de lo que quiera, tesoro. ¡Hágale, mi reinita!';
       aiAddMsg('bot', _pon); aiHistory.push({role:'assistant', content: _pon.replace(/<[^>]+>/g,'')});
-      if (aiAutoMic || fromVoice) { var _vp='¡Eyyy, de una pues, parce! Activaste el modo papacito. De aquí en adelante le hablo bien cariñoso y a lo paisa. Pregúnteme lo que quiera, mijo, que con mucho gusto le colaboro.'; aiSpeak(_vp); aiVoiceAfterSpeak(_vp); }
+      if (aiAutoMic || fromVoice) { var _vp='¡Ayyy, mi amorcito, de una pues! Activaste el modo papacito, ¡qué alegría atenderlo, mi cielo! De aquí en adelante le hablo bien melcochudito y a lo paisa, mijito lindo. Cuénteme pues despacito, corazón hermoso, que con todo el amor del mundo le colaboro.'; aiSpeak(_vp); aiVoiceAfterSpeak(_vp); }
       return;
     }
     if (_papa === 'off') {
