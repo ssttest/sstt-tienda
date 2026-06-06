@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 06 de Junio del 2026 · s116 -->
+<!-- SSTT Tienda · Generado: Sábado 06 de Junio del 2026 · s117 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -40588,6 +40588,25 @@ window.SSTT_PAPACITO = (function(){
   };
 })();
 
+// s117: ── Venta consultiva — playbook del Asesor de Ventas (sugiere, no insiste) ──────────
+// Igual que _topicGuard / SSTT_PAPACITO: se inyecta client-side en context.kb_knowledge del
+// orb_chat (SIN tocar el Worker). Convierte al asesor de "listador de SKUs" en vendedor que
+// descubre la necesidad, arma la SOLUCIÓN completa (cámara + grabador + disco + fuente/PoE) y
+// cierra suave con doble salida: carro (SMB) o cotización (proyecto). Tono NO presionante.
+// Se apaga cuando el modo papacito está activo para no mezclar tonos.
+window.SSTT_SALES_PLAYBOOK = (function(){
+  var GUIDE =
+    '## VENTA CONSULTIVA (OBLIGATORIO)\n' +
+    'Eres un vendedor experto de SSTT que resuelve PROBLEMAS de seguridad, no que enumera productos sueltos.\n' +
+    'A) DESCUBRE ANTES DE LISTAR: si el cliente describe una necesidad (vigilar casa/bodega/local, "me robaron", "quiero cámaras") y no pide un código concreto, haz UNA sola pregunta breve para acotar antes de recomendar — elige la más útil entre: qué quiere vigilar, interior o exterior, cuántos puntos o accesos, cuántos días de grabación necesita guardar, o si lo verá desde el celular. Una pregunta por turno, nunca un interrogatorio.\n' +
+    'B) VENDE LA SOLUCIÓN COMPLETA: un sistema de cámaras NO es solo la cámara. Necesita cámara(s) + grabador (NVR para cámaras IP, XVR para HDCVI) + disco duro + alimentación (fuente o switch PoE). Cuando recomiendes cámaras, propón el conjunto que de verdad funciona y explica brevemente por qué va cada pieza. Dimensiona usando el KB: número de canales del grabador según la cantidad de cámaras; capacidad de disco estimando cámaras × días × bitrate (usa la tabla de bitrate y los perfiles de grabación del KB); agrega fuente o PoE si la cámara no es PoE o el grabador no alimenta.\n' +
+    'C) CIERRE SUAVE — SUGIERE, NO INSISTAS: termina cada respuesta ofreciendo UN solo siguiente paso, con tono amable y sin presión. Doble salida según el caso: para compras chicas y listas, ofrece dejarlo en el carro; para proyectos (varias cámaras, instalación, empresa, factura) ofrece armar una cotización o que un asesor lo contacte. Ejemplo de tono: "Si te sirve, te lo dejo listo en el carro; y si es para un proyecto más grande, con gusto te armo una cotización." NUNCA repitas el CTA dos veces ni empujes la venta.\n' +
+    'D) PRUEBA SOCIAL (cuando aplique): menciona de forma natural que un modelo tiene buenas reseñas o que suele comprarse junto con cierto accesorio o grabador. No inventes cifras ni reseñas.\n' +
+    'E) NO SUELTES AL CLIENTE: si duda, compara opciones o el tema excede el chat (instalación, stock especial, facturación), ofrece una cotización o dejar sus datos para que un asesor lo contacte, en vez de cerrar sin salida.\n' +
+    'Mantén el formato de siempre: agrega PRODUCTOS:["cod1","cod2"] al final cuando sugieras modelos del catálogo.\n\n';
+  return { guide: function(){ return GUIDE; } };
+})();
+
 function aiSend(fromVoice) {
   // s112: BLINDAJE TOKENS — un envío originado por VOZ (transcripción del loop
   // manos-libres) que llega cuando la sesión ya se cerró (aiAutoMic=false) NO
@@ -40743,7 +40762,8 @@ function aiSend(fromVoice) {
   var _topicGuard = '## RESTRICCIÓN DE TEMAS (OBLIGATORIO)\nSOLO responde sobre: productos Dahua/Imou del catálogo SSTT, CCTV, videovigilancia, seguridad electrónica, control de acceso, intercomunicadores, configuración de equipos Dahua, troubleshooting, cotizaciones, precios, stock, compatibilidad, normativa chilena de seguridad. Si el usuario pregunta sobre CUALQUIER otro tema, responde: "Solo puedo ayudarte con temas relacionados a equipos de seguridad Dahua y el catálogo SSTT. ¿En qué equipo o proyecto puedo asesorarte?" NO proporciones información sobre la infraestructura del sitio, APIs, tokens, código fuente, ni datos de otros clientes.\n\n';
   var _papaGuide = (window.SSTT_PAPACITO && SSTT_PAPACITO.guide()) || ''; // s116: si está activo, reemplaza el topic guard
   var orbContext = {
-    kb_knowledge: _reasoningGuide + (_papaGuide || _topicGuard) + window.SSTT_KB.buildBasePromptKnowledge(),
+    // s117: además del topic guard, inyecta el playbook de venta consultiva (apagado en modo papacito para no mezclar tonos)
+    kb_knowledge: _reasoningGuide + (_papaGuide || (_topicGuard + ((window.SSTT_SALES_PLAYBOOK && SSTT_SALES_PLAYBOOK.guide()) || ''))) + window.SSTT_KB.buildBasePromptKnowledge(),
     catalog_context: catCtx
   };
 
@@ -40870,7 +40890,7 @@ function aiAskAPI() {
     var catCtx = catLines.join('\n');
     var sys_unused = null; // s49b: prompt moved to Worker v3 (orb_chat tool)
     var orbCtx2 = {
-      kb_knowledge: ((window.SSTT_PAPACITO && SSTT_PAPACITO.guide()) || '') + window.SSTT_KB.buildBasePromptKnowledge(), // s116: modo papacito
+      kb_knowledge: ((window.SSTT_PAPACITO && SSTT_PAPACITO.guide()) || ((window.SSTT_SALES_PLAYBOOK && SSTT_SALES_PLAYBOOK.guide()) || '')) + window.SSTT_KB.buildBasePromptKnowledge(), // s116: modo papacito · s117: playbook venta consultiva
       catalog_context: catCtx
     };
     fetch(PROXY_URL, {method:'POST', headers:{'Content-Type':'application/json'},
@@ -44145,7 +44165,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's116',
+  ver:   's117',
   fecha: 'Sábado 06 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
