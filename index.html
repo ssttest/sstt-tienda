@@ -27599,6 +27599,11 @@ document.addEventListener('click', e => {
 
 function logout() {
   clearUser();
+  // s117: al cerrar sesión, volver a tarifa General → la voz premium se apaga y vuelve sola al motor
+  // del navegador (antes el tramo quedaba pegado y ElevenLabs seguía gastando deslogueado).
+  try { if (typeof B2B !== 'undefined') { B2B.userTramo = null; B2B.userProfile = null; B2B.userEmpresa = null; } } catch(e){}
+  try { if (window.SSTT_PAPACITO) SSTT_PAPACITO.set(false); } catch(e){} // s117: apagar easter egg papacito
+  try { if (window.SSTT_TTS) SSTT_TTS.cancel(); } catch(e){}            // s117: cortar locución premium en curso
   updateAuthUI();
   closeUserMenu();
   showToast('Sesión cerrada');
@@ -29811,6 +29816,10 @@ function _getTierInfo() {
 // devuelve false → no se gasta ni un crédito de ElevenLabs en tarifa general.
 window.sstt_voiceTierAllowed = function(){
   try {
+    // s117: DEBE haber sesión iniciada. Deslogueado = invitado = General → voz de navegador, nunca
+    // ElevenLabs (aunque haya quedado un tramo viejo en B2B.userTramo o en sstt_client_stats). Esto
+    // cierra la fuga: al cerrar sesión, la voz vuelve sola al motor del navegador.
+    if (typeof USER === 'undefined' || !USER) return false;
     var t = (typeof _getTierInfo === 'function') ? _getTierInfo() : null;
     var code = t && t.tramo;
     return code === 'A' || code === 'B' || code === 'C';
@@ -40719,6 +40728,7 @@ window.SSTT_PAPACITO = (function(){
     'formal y respetuoso.\n\n';
   return {
     active:          function(){ return st.active; },
+    set:             function(on){ st.active = !!on; if(!on) st.offTopicLeft = 0; }, // s117: apagar/encender desde fuera (p.ej. al cerrar sesión)
     offTopicAllowed: function(){ return st.active && st.offTopicLeft > 0; },
     consumeOffTopic: function(){ if(st.active && st.offTopicLeft>0){ st.offTopicLeft--; if(st.offTopicLeft<=0) st.active=false; } },
     guide:           function(){ return st.active ? GUIDE : ''; },
