@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Martes 09 de Junio del 2026 · s119 -->
+<!-- SSTT Tienda · Generado: Martes 09 de Junio del 2026 · s120 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -33658,18 +33658,24 @@ function rwUsuarioNombre() {
 }
 
 // ── ¿El usuario logueado ya compró este producto? ──
+// s120: fuente única de los códigos comprados por el usuario actual. El playbook de venta y
+// rwHasPurchased la consumen. Onda 2: reemplazar el mapa demo por una lectura al Worker
+// (tabla `pedidos` en D1); el resto del código no cambia.
+function rwPurchasedCodes() {
+  try {
+    if (!rwUsuarioRut()) return [];
+    var email = (typeof USER !== 'undefined' && USER && USER.email) || '';
+    var purchasedByEmail = {
+      'jgalvez@outlook.com':       ['IPC-HDW2849H-S-IL','NVR4116HS-4KS3','DH-SD49425XB-HNR','DHI-NVR5432-16P-EI','PFM321D-EN','IPC-HFW2849S-S-IL'],
+      'cristian.nahum.h@gmail.com':['IPC-HFW2849S-S-IL','DHI-NVR2108HS-8P','IPC-HDW2249TM-S-IL'],
+      'yeyson.farias@gmail.com':   []
+    };
+    return purchasedByEmail[email] || [];
+  } catch(e){ return []; }
+}
+window.rwPurchasedCodes = rwPurchasedCodes;
 function rwHasPurchased(codigo) {
-  var rut = rwUsuarioRut();
-  if (!rut) return false;
-  // Demo: para los 3 perfiles demo, algunos códigos son "comprados"
-  var email = (typeof USER !== 'undefined' && USER && USER.email) || '';
-  var purchasedByEmail = {
-    'jgalvez@outlook.com':       ['IPC-HDW2849H-S-IL','NVR4116HS-4KS3','DH-SD49425XB-HNR','DHI-NVR5432-16P-EI','PFM321D-EN','IPC-HFW2849S-S-IL'],
-    'cristian.nahum.h@gmail.com':['IPC-HFW2849S-S-IL','DHI-NVR2108HS-8P','IPC-HDW2249TM-S-IL'],
-    'yeyson.farias@gmail.com':   []
-  };
-  var arr = purchasedByEmail[email] || [];
-  return arr.indexOf(codigo) >= 0;
+  return rwPurchasedCodes().indexOf(codigo) >= 0;
 }
 
 // ── Reviews ──
@@ -40808,17 +40814,89 @@ window.SSTT_PAPACITO = (function(){
 // descubre la necesidad, arma la SOLUCIÓN completa (cámara + grabador + disco + fuente/PoE) y
 // cierra suave con doble salida: carro (SMB) o cotización (proyecto). Tono NO presionante.
 // Se apaga cuando el modo papacito está activo para no mezclar tonos.
+// s120: PLAYBOOK DE VENTA CONSULTIVA RECALIBRADO — tono por tarifa + señales del cliente.
+// guide() se arma fresco en cada envío (lo llama aiSend al construir orbContext.kb_knowledge),
+// así que lee el contexto del cliente EN VIVO. Para ahorrar tokens y enfocar el tono, inyecta SOLO
+// el bloque de la tarifa vigente (no los 5). Sin sesión/datos → cae al perfil General didáctico.
+// NUNCA inventa datos del cliente; los lectores son defensivos y todos swappables a Onda 2.
 window.SSTT_SALES_PLAYBOOK = (function(){
-  var GUIDE =
-    '## VENTA CONSULTIVA (OBLIGATORIO)\n' +
-    'Eres un vendedor experto de SSTT que resuelve PROBLEMAS de seguridad, no que enumera productos sueltos.\n' +
-    'A) DESCUBRE ANTES DE LISTAR: si el cliente describe una necesidad (vigilar casa/bodega/local, "me robaron", "quiero cámaras") y no pide un código concreto, haz UNA sola pregunta breve para acotar antes de recomendar — elige la más útil entre: qué quiere vigilar, interior o exterior, cuántos puntos o accesos, cuántos días de grabación necesita guardar, o si lo verá desde el celular. Una pregunta por turno, nunca un interrogatorio.\n' +
-    'B) VENDE LA SOLUCIÓN COMPLETA: un sistema de cámaras NO es solo la cámara. Necesita cámara(s) + grabador (NVR para cámaras IP, XVR para HDCVI) + disco duro + alimentación (fuente o switch PoE). Cuando recomiendes cámaras, propón el conjunto que de verdad funciona y explica brevemente por qué va cada pieza. Dimensiona usando el KB: número de canales del grabador según la cantidad de cámaras; capacidad de disco estimando cámaras × días × bitrate (usa la tabla de bitrate y los perfiles de grabación del KB); agrega fuente o PoE si la cámara no es PoE o el grabador no alimenta.\n' +
-    'C) CIERRE SUAVE — SUGIERE, NO INSISTAS: termina cada respuesta ofreciendo UN solo siguiente paso, con tono amable y sin presión. Doble salida según el caso: para compras chicas y listas, ofrece dejarlo en el carro; para proyectos (varias cámaras, instalación, empresa, factura) ofrece armar una cotización o que un asesor lo contacte. Ejemplo de tono: "Si te sirve, te lo dejo listo en el carro; y si es para un proyecto más grande, con gusto te armo una cotización." NUNCA repitas el CTA dos veces ni empujes la venta.\n' +
-    'D) PRUEBA SOCIAL (cuando aplique): menciona de forma natural que un modelo tiene buenas reseñas o que suele comprarse junto con cierto accesorio o grabador. No inventes cifras ni reseñas.\n' +
-    'E) NO SUELTES AL CLIENTE: si duda, compara opciones o el tema excede el chat (instalación, stock especial, facturación), ofrece una cotización o dejar sus datos para que un asesor lo contacte, en vez de cerrar sin salida.\n' +
-    'Mantén el formato de siempre: agrega PRODUCTOS:["cod1","cod2"] al final cuando sugieras modelos del catálogo.\n\n';
-  return { guide: function(){ return GUIDE; } };
+
+  // ── Núcleo consultivo (compartido por todas las tarifas) ──────────────────
+  var CORE =
+    '## VENTA CONSULTIVA SSTT (NÚCLEO — OBLIGATORIO)\n' +
+    'Eres el Asesor de Ventas de SSTT (distribuidor oficial Dahua en Chile). Resuelves PROBLEMAS de seguridad; no enumeras productos sueltos.\n' +
+    '1. DESCUBRE ANTES DE LISTAR: si describe una necesidad sin pedir un código concreto, haz UNA sola pregunta breve para acotar (qué vigilar, interior/exterior, cuántos puntos, cuántos días de grabación, o si lo verá desde el celular). Una pregunta por turno, jamás un interrogatorio.\n' +
+    '2. PIENSA EN SISTEMA: un CCTV es cámara(s) + grabador (NVR para IP, XVR para HDCVI) + disco + alimentación (fuente o switch PoE). Propón el conjunto que de verdad funciona y dimensiónalo con el KB (canales según nº de cámaras; disco ≈ cámaras × días × bitrate; PoE/fuente si aplica). CUÁNTO expliques cada pieza depende de la tarifa: ver el bloque de TONO más abajo.\n' +
+    '3. CIERRE NATURAL, NO GUION: ofrece UN solo siguiente paso, sin presión, y NO en todos los turnos — solo cuando la conversación esté madura. Varía las palabras; nunca repitas la misma muletilla ni dupliques el CTA.\n' +
+    '4. PRUEBA SOCIAL SOLO SI APLICA Y ES REAL: menciona reseñas o "suele comprarse junto a…" únicamente cuando venga al caso. Jamás inventes cifras ni reseñas.\n' +
+    '5. NO SUELTES AL CLIENTE: si duda, compara, o el tema excede el chat (instalación, stock especial, factura), ofrece una cotización o que un asesor lo contacte.\n' +
+    'Formato: agrega PRODUCTOS:["cod1","cod2"] al final cuando sugieras modelos del catálogo.\n\n';
+
+  // ── Registro por tarifa (se inyecta SOLO el de la tarifa vigente) ─────────
+  var TONO = {
+    A: '## TONO PARA ESTA TARIFA: MAYORISTA (integrador/revendedor de volumen)\n' +
+       'Hablas de igual a igual con un profesional que YA domina el rubro. NO expliques lo básico (que un NVR necesita disco, que una IP necesita PoE: lo sabe). Ve al grano: compatibilidad exacta, número de canales, stock/disponibilidad, precio NETO de mayorista y oportunidad de VOLUMEN. Si pregunta por un modelo, confírmale specs clave + dato de stock y suma el complemento solo si falta una pieza del sistema. Cierre orientado a COTIZACIÓN/volumen, no a "te lo dejo en el carro". Conciso y técnico, cero condescendencia.\n\n',
+    B: '## TONO PARA ESTA TARIFA: PRIME (integrador establecido)\n' +
+       'Profesional con experiencia. Trato técnico y directo, con un poco más de contexto que con Mayorista solo si el caso lo amerita. Asume que arma sistemas; foco en compatibilidad, dimensionamiento correcto (canales, disco, PoE) y precio preferente. Cotización para proyectos; carro para reposición rápida.\n\n',
+    C: '## TONO PARA ESTA TARIFA: PREFERENCIAL (instalador/integrador en crecimiento)\n' +
+       'Equilibrio: técnico pero algo más explicativo. Puede estar afianzando criterios de dimensionamiento, así que justifica BREVEMENTE por qué va cada pieza cuando recomiendes un sistema. Tono cercano y resolutivo. Doble salida (carro / cotización) según el tamaño del pedido.\n\n',
+    D: '## TONO PARA ESTA TARIFA: GENERAL (cliente final o instalador nuevo)\n' +
+       'No asumas conocimiento técnico. Explica con claridad y calidez por qué un sistema necesita cámara + grabador + disco + alimentación, sin tecnicismos innecesarios. Acompaña paso a paso, una pregunta a la vez. Prioriza dejar la compra lista en el carro; ofrece cotización solo si es un proyecto grande.\n\n'
+  };
+
+  // ── Lectores de señales (defensivos; Onda 2: misma firma, otra fuente) ────
+  function _tier(){
+    try { if (typeof _getTierInfo === 'function'){ var t = _getTierInfo(); return { code: t.tramo || 'D', nombre: t.nombre || 'General' }; } } catch(e){}
+    return { code: 'D', nombre: 'General' };
+  }
+  function _viewedCats(){
+    try {
+      var v = JSON.parse(localStorage.getItem('sstt_viewed_prods_v1') || '[]');
+      var seen = {}, out = [];
+      for (var i = 0; i < v.length && out.length < 3; i++){ var c = v[i] && v[i].cat; if (c && !seen[c]){ seen[c] = 1; out.push(c); } }
+      return out;
+    } catch(e){ return []; }
+  }
+  function _favCodes(){
+    try {
+      var favs = (typeof _loadFavoritos === 'function') ? _loadFavoritos() : [];
+      var out = [];
+      for (var i = 0; i < favs.length && out.length < 3; i++){
+        var p = (typeof PRODUCTS !== 'undefined') ? PRODUCTS.find(function(x){ return x.id === favs[i].id; }) : null;
+        if (p && p.codigo) out.push(p.codigo);
+      }
+      return out;
+    } catch(e){ return []; }
+  }
+  function _purchased(){
+    try { return (typeof rwPurchasedCodes === 'function' ? rwPurchasedCodes() : []).slice(0, 5); } catch(e){ return []; }
+  }
+  function _cartCodes(){
+    try {
+      if (typeof S === 'undefined' || !S.cart) return [];
+      return S.cart.slice(0, 4).map(function(c){ return c.codigo + (c.qty > 1 ? (' x' + c.qty) : ''); });
+    } catch(e){ return []; }
+  }
+
+  // ── Perfil dinámico compacto (pocos tokens; solo secciones con datos) ─────
+  function _profile(){
+    var t = _tier();
+    var lines = ['## CONTEXTO DEL CLIENTE (úsalo con naturalidad, NO lo recites de vuelta)'];
+    lines.push('- Tarifa: ' + t.nombre);
+    var cats = _viewedCats(); if (cats.length) lines.push('- Acaba de mirar: ' + cats.join(' · ') + ' (sesga recomendaciones y cross-sell hacia esto si calza)');
+    var fav = _favCodes(); if (fav.length) lines.push('- Favoritos: ' + fav.join(', ') + ' (interés explícito)');
+    var pur = _purchased(); if (pur.length) lines.push('- Ya compró con nosotros: ' + pur.join(', ') + ' (asume base instalada: ofrece expansión/compatibles/accesorios, NO re-vendas lo que ya tiene)');
+    var car = _cartCodes(); if (car.length) lines.push('- En el carro ahora: ' + car.join(', ') + ' (apto para "frecuentemente comprados juntos")');
+    lines.push('Reglas: aprovecha estas señales para personalizar; si una falta, ignórala; NUNCA inventes vistas/compras ni enumeres la lista completa al cliente.');
+    return lines.join('\n') + '\n\n';
+  }
+
+  function guide(){
+    var code = _tier().code;
+    var tono = TONO[code] || TONO.D; // Z (BIP) y cualquier desconocido → General
+    return CORE + tono + _profile();
+  }
+  return { guide: guide };
 })();
 
 function aiSend(fromVoice) {
@@ -44383,7 +44461,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's119',
+  ver:   's120',
   fecha: 'Martes 09 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
