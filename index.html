@@ -19972,6 +19972,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
     <span class="nav-link" data-cat="accesorios">Accesorios</span>
     <span class="nav-link" data-cat="licencias">Licencias</span>
     <span class="nav-link" data-cat="especiales">Especiales</span>
+    <span class="nav-link" onclick="window.SSTT_openKits&&SSTT_openKits()" style="cursor:pointer">🧰 Kits</span>
     <span class="nav-link nav-ofertas" data-cat="todas" data-sort="precio_asc">🔥 Ofertas</span>
   </div>
 </nav>
@@ -29836,6 +29837,8 @@ function _getTierInfo() {
   if (typeof USER !== 'undefined' && USER && USER.email && USER.email.toLowerCase() === 'yeyson.farias@gmail.com') tramo = 'Z';
   // s118: override de tarifa por cliente (panel admin) — gana sobre el cálculo anterior
   try { if (window.SSTT_ADMIN && SSTT_ADMIN.tierOverrideFor){ var _ovT = SSTT_ADMIN.tierOverrideFor(); if (_ovT) tramo = _ovT; } } catch(e){}
+  // s119: vista previa "ver como tarifa" del panel admin (efímera) — gana sobre todo
+  try { if (window.SSTT_ADMIN && SSTT_ADMIN.previewTramo){ var _pvT = SSTT_ADMIN.previewTramo(); if (_pvT) tramo = _pvT; } } catch(e){}
   var tiers = {
     Z: { nombre: 'BIP',          color: '#8B7355', colorBg: '#E8DCC8', min: 0,        max: 0,        siguiente: 'General',      sigMin: 1 },
     D: { nombre: 'General',      color: '#8E8E93', colorBg: '#F5F5F5', min: 0,        max: 999999,   siguiente: 'Preferencial', sigMin: 1000000 },
@@ -33672,7 +33675,8 @@ function rwHasPurchased(codigo) {
 // ── Reviews ──
 function rwReviewsGet(codigo) {
   var all = _rwRead(SSTT_REVIEWS_KEY, {});
-  return all[codigo] || [];
+  var arr = all[codigo] || [];
+  return arr.filter(function(r){ return !r.oculto; }); // s119: moderación — ocultar saca la reseña de fichas y promedio
 }
 function rwReviewsAdd(codigo, review) {
   var all = _rwRead(SSTT_REVIEWS_KEY, {});
@@ -33698,7 +33702,8 @@ function rwReviewsStats(codigo) {
 // ── Q&A ──
 function rwQAGet(codigo) {
   var all = _rwRead(SSTT_QA_KEY, {});
-  return all[codigo] || [];
+  var arr = all[codigo] || [];
+  return arr.filter(function(q){ return !q.oculto; }); // s119: moderación
 }
 function rwQAAdd(codigo, item) {
   var all = _rwRead(SSTT_QA_KEY, {});
@@ -90282,6 +90287,8 @@ window.generateShoppingFeed = function() {
   var K_TIERS  = 'sstt_tier_overrides_v1';
   var K_IA     = 'sstt_ia_policy_v1';     // s119: gobernanza de IA/costo
   var K_MERCH  = 'sstt_merch_v1';         // s119: merchandising (ocultar/fijar/agotado/badges)
+  var K_BANNER = 'sstt_banner_v1';        // s119: banner global + modo mantención
+  var K_KITS   = 'sstt_kits_v1';          // s119: kits estructurados (Onda 1)
 
   var CODE2NAME = { A:'Mayorista', B:'Prime', C:'Preferencial', D:'General', Z:'BIP' };
   var TARIFA_CODES = ['A','B','C','D','Z'];
@@ -90327,7 +90334,11 @@ window.generateShoppingFeed = function() {
     });
   }
   function seedMerch(){ if (STORE.get(K_MERCH) != null) return; STORE.set(K_MERCH, { hidden:[], pinned:[], stockOut:[], badges:{} }); }
-  function seedAll(){ try { seedPromos(); seedReglas(); seedTiers(); seedIA(); seedMerch(); } catch(e){} }
+  function seedBanner(){ if (STORE.get(K_BANNER) != null) return; STORE.set(K_BANNER, { banner:{on:false,text:'',color:'#1B2CC1'}, maint:{on:false,msg:'Estamos en mantención. Volvemos pronto.'} }); }
+  function seedKits(){ if (STORE.get(K_KITS) != null) return; STORE.set(K_KITS, [
+    { id:'KIT-DEMO4CAM', nombre:'Kit 4 cámaras IP + NVR', descripcion:'Solución básica de videovigilancia para hogar o pyme.', items:[{codigo:'IPC-HFW2849S-S-IL',qty:4},{codigo:'DHI-NVR2108HS-8P',qty:1}], pricing:'descuento', descuento:8, precioFijo:0, activo:false }
+  ]); }
+  function seedAll(){ try { seedPromos(); seedReglas(); seedTiers(); seedIA(); seedMerch(); seedBanner(); seedKits(); } catch(e){} }
 
   // ── Getters/Setters ──
   function getPromos(){ return STORE.get(K_PROMOS, []) || []; }
@@ -90377,6 +90388,127 @@ window.generateShoppingFeed = function() {
   function merchBadge(codigo){ try { var m=getMerch(), u=_U(codigo); var k=Object.keys(m.badges).filter(function(x){return _U(x)===u;})[0]; return k?m.badges[k]:null; } catch(e){ return null; } }
   function _catalogRefresh(){ try { if (typeof render==='function') render(); } catch(e){} }
   function _prodExists(code){ try { return (typeof PRODUCTS!=='undefined') && PRODUCTS.some(function(x){return _U(x.codigo)===_U(code);}); } catch(e){ return true; } }
+
+  // ── Ver como tarifa (preview efímero, no se persiste) ──
+  var _previewTramo = null;
+  function previewTramo(){ return _previewTramo; }
+  function setPreviewTramo(code){
+    _previewTramo = code || null;
+    _previewBar();
+    try { if (typeof updateAuthUI==='function') updateAuthUI(); } catch(e){}
+    _catalogRefresh(); calcSafe();
+  }
+  function _previewBar(){
+    var b = document.getElementById('sadmPreviewBar');
+    if (!_previewTramo){ if(b) b.parentNode && b.parentNode.removeChild(b); return; }
+    if (!b){
+      b = document.createElement('div'); b.id='sadmPreviewBar';
+      b.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:120px;z-index:99992;background:#1B2CC1;color:#fff;border-radius:30px;padding:9px 14px;font:800 12px/1 system-ui,sans-serif;box-shadow:0 8px 22px rgba(0,0,0,.35);white-space:nowrap';
+      document.body.appendChild(b);
+    }
+    b.innerHTML = '👁️ Viendo como '+CODE2NAME[_previewTramo]+' &nbsp;<span id="sadmPreviewExit" style="cursor:pointer;text-decoration:underline;opacity:.85">salir</span>';
+    var ex=document.getElementById('sadmPreviewExit'); if(ex) ex.onclick=function(){ setPreviewTramo(null); renderBody(); };
+  }
+
+  // ── Banner / mantención (se aplican a TODOS los visitantes; mantención exime al admin) ──
+  function getBanner(){ var b=STORE.get(K_BANNER,{})||{}; if(!b.banner)b.banner={on:false,text:'',color:'#1B2CC1'}; if(!b.maint)b.maint={on:false,msg:''}; return b; }
+  function saveBanner(b){ STORE.set(K_BANNER, b); }
+  function applyBannerMaintenance(){
+    try {
+      var cfg=getBanner();
+      var bar=document.getElementById('sadmBanner');
+      if (cfg.banner && cfg.banner.on && cfg.banner.text){
+        if(!bar){ bar=document.createElement('div'); bar.id='sadmBanner'; document.body.appendChild(bar); }
+        bar.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99988;background:'+(cfg.banner.color||'#1B2CC1')+';color:#fff;text-align:center;font:700 13px/1.3 system-ui,sans-serif;padding:9px 14px;box-shadow:0 2px 10px rgba(0,0,0,.2)';
+        bar.textContent=cfg.banner.text;
+      } else if (bar){ bar.parentNode && bar.parentNode.removeChild(bar); }
+      var ov=document.getElementById('sadmMaint');
+      if (cfg.maint && cfg.maint.on && !isAdmin()){
+        if(!ov){ ov=document.createElement('div'); ov.id='sadmMaint'; document.body.appendChild(ov); }
+        ov.style.cssText='position:fixed;inset:0;z-index:2147482600;background:#0A1628;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;font-family:system-ui,sans-serif';
+        ov.innerHTML='<div style="font-size:46px;margin-bottom:14px">🛠️</div><div style="font-size:20px;font-weight:800;margin-bottom:8px">En mantención</div><div style="font-size:14px;opacity:.85;max-width:420px">'+esc(cfg.maint.msg||'')+'</div>';
+      } else if (ov){ ov.parentNode && ov.parentNode.removeChild(ov); }
+    } catch(e){}
+  }
+
+  // ── Moderación (lee/escribe directo las llaves de reviews/Q&A) ──
+  function _modRecent(key, n){
+    var all = STORE.get(key, {}) || {}; var out=[];
+    Object.keys(all).forEach(function(cod){ (all[cod]||[]).forEach(function(it){ out.push({cod:cod, it:it}); }); });
+    out.sort(function(a,b){ return (b.it.ts||0)-(a.it.ts||0); });
+    return out.slice(0, n||30);
+  }
+  function _modToggle(key, cod, id){
+    var all=STORE.get(key,{})||{}; var arr=all[cod]||[];
+    var it=arr.filter(function(x){return x.id===id;})[0]; if(it){ it.oculto=!it.oculto; STORE.set(key, all); }
+  }
+  function _modDel(key, cod, id){
+    var all=STORE.get(key,{})||{}; if(all[cod]){ all[cod]=all[cod].filter(function(x){return x.id!==id;}); STORE.set(key, all); }
+  }
+
+  // ── Kits estructurados (Onda 1) ──
+  function getKits(){ return STORE.get(K_KITS, []) || []; }
+  function saveKits(a){ STORE.set(K_KITS, a); }
+  function kitsAll(){ return getKits(); }
+  function kitsActivos(){ return getKits().filter(function(k){ return k.activo; }); }
+  function _unitPrice(prod){
+    try { if (typeof B2B!=='undefined' && B2B.getPrecioTramo){ var t=B2B.getPrecioTramo(prod); if(t) return t; } } catch(e){}
+    return prod.ptotal || 0;
+  }
+  function kitPrecio(kit){
+    var base=0;
+    (kit.items||[]).forEach(function(it){
+      var p=(typeof PRODUCTS!=='undefined') ? PRODUCTS.filter(function(x){return _U(x.codigo)===_U(it.codigo);})[0] : null;
+      if(p) base += _unitPrice(p)*(it.qty||1);
+    });
+    var total=base;
+    if (kit.pricing==='descuento') total = base*(1-(kit.descuento||0)/100);
+    else if (kit.pricing==='fijo') total = kit.precioFijo||base;
+    total=Math.round(total);
+    return { base:Math.round(base), total:total, neto:Math.round(total/1.19), ahorro:Math.max(0, Math.round(base-total)) };
+  }
+  function kitAddToCart(id){
+    try {
+      var k=getKits().filter(function(x){return x.id===id;})[0]; if(!k) return;
+      if (typeof PRODUCTS==='undefined' || typeof S==='undefined') return;
+      var added=0, skipped=0;
+      (k.items||[]).forEach(function(it){
+        var p=PRODUCTS.filter(function(x){return _U(x.codigo)===_U(it.codigo);})[0]; if(!p){ skipped++; return; }
+        if (typeof B2B!=='undefined' && B2B.classify && B2B.classify(p)==='enterprise'){ skipped++; return; }
+        var q=Math.max(1, it.qty||1);
+        var ex=S.cart.filter(function(c){return c.id===p.id;})[0];
+        if (ex) ex.qty+=q; else S.cart.push(Object.assign({}, p, {qty:q}));
+        added++;
+      });
+      try { if (typeof saveCart==='function') saveCart(); if (typeof renderCart==='function') renderCart(); if (typeof updateBadge==='function') updateBadge(); } catch(e){}
+      try { if (typeof showToast==='function') showToast(added ? ('Kit "'+k.nombre+'" agregado'+(skipped?' ('+skipped+' ítem(s) omitidos)':'')) : 'No se pudo agregar (sin ítems válidos)'); } catch(e){}
+      closeKits();
+      try { if (typeof openCart==='function') openCart(); } catch(e){}
+    } catch(e){}
+  }
+  function closeKits(){ var ov=document.getElementById('sttKitsOverlay'); if(ov) ov.parentNode && ov.parentNode.removeChild(ov); }
+  function openKits(){
+    var kits=kitsActivos();
+    var ov=document.getElementById('sttKitsOverlay');
+    if(!ov){ ov=document.createElement('div'); ov.id='sttKitsOverlay'; document.body.appendChild(ov); ov.addEventListener('click', function(e){ if(e.target===ov) closeKits(); }); }
+    ov.style.cssText='position:fixed;inset:0;z-index:2147481000;background:rgba(8,12,22,.55);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);display:flex;align-items:flex-start;justify-content:center;padding:24px 14px;overflow:auto';
+    var body = (!kits.length)
+      ? '<div style="padding:30px;text-align:center;color:#667;font-size:14px">No hay kits disponibles por ahora.</div>'
+      : kits.map(function(k){ var pr=kitPrecio(k); return '<div style="border:1px solid #e3e5ea;border-radius:14px;padding:14px 16px;margin-bottom:12px">'+
+          '<div style="font-weight:800;font-size:15px;color:#0A1628">🧰 '+esc(k.nombre)+'</div>'+
+          (k.descripcion?'<div style="font-size:12.5px;color:#667;margin-top:3px">'+esc(k.descripcion)+'</div>':'')+
+          '<div style="font-size:12px;color:#445;margin-top:8px">'+(k.items||[]).map(function(it){return (it.qty||1)+'× '+esc(it.codigo);}).join('  ·  ')+'</div>'+
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:10px;flex-wrap:wrap">'+
+            '<div><div style="font-size:20px;font-weight:900;color:#0A1628">'+fmt(pr.total)+'</div>'+(pr.ahorro>0?'<div style="font-size:11px;color:#1A8C4E;font-weight:700">Ahorras '+fmt(pr.ahorro)+' vs comprar suelto</div>':'<div style="font-size:11px;color:#889">Neto '+fmt(pr.neto)+' + IVA</div>')+'</div>'+
+            '<button onclick="SSTT_kitAdd(&#39;'+esc(k.id)+'&#39;)" style="background:#C2410C;color:#fff;border:none;border-radius:10px;padding:11px 16px;font-weight:800;font-size:13px;cursor:pointer">Agregar kit al carro</button>'+
+          '</div></div>'; }).join('');
+    ov.innerHTML='<div style="width:100%;max-width:640px;background:#fff;border-radius:18px;overflow:hidden;margin:auto 0;font-family:system-ui,sans-serif;box-shadow:0 24px 70px rgba(0,0,0,.4)">'+
+      '<div style="display:flex;align-items:center;gap:10px;padding:15px 18px;background:linear-gradient(135deg,#0A1628,#15294a);color:#fff"><span style="font-size:17px;font-weight:800;flex:1">🧰 Kits SSTT</span><button onclick="SSTT_closeKits()" style="background:rgba(255,255,255,.15);color:#fff;border:none;width:30px;height:30px;border-radius:8px;font-size:17px;cursor:pointer;line-height:1">✕</button></div>'+
+      '<div style="padding:16px 18px;max-height:74vh;overflow:auto">'+body+'</div>'+
+      '<div style="padding:10px 18px;border-top:1px solid #eee;font-size:11px;color:#889">El precio de kit es referencial; el descuento de kit se aplica en el checkout (Onda 2). Los ítems se agregan a su precio actual.</div>'+
+    '</div>';
+  }
+  try { window.SSTT_openKits = openKits; window.SSTT_closeKits = closeKits; window.SSTT_kitAdd = kitAddToCart; } catch(e){}
 
   // ── Engine: contexto del carro ──
   function cartCtx(){
@@ -90528,6 +90660,7 @@ window.generateShoppingFeed = function() {
         '<div class="sadm-tabs" id="sadmTabs">' +
           tabBtn('dash','📊 Resumen') + tabBtn('cup','🏷️ Cupones') + tabBtn('gc','🎁 Gift cards') +
           tabBtn('promo','🎯 Promos') + tabBtn('reglas','💳 Reglas') + tabBtn('tier','👤 Tarifas') + tabBtn('ia','🤖 IA') + tabBtn('merch','🛍️ Merch') +
+          tabBtn('ver','👁️ Ver como') + tabBtn('mod','💬 Moderación') + tabBtn('banner','📣 Banner') + tabBtn('ana','📈 Analítica') + tabBtn('kits','🧰 Kits') +
         '</div>' +
         '<div id="sadmBody"></div>' +
       '</div>';
@@ -90556,6 +90689,11 @@ window.generateShoppingFeed = function() {
     else if (_tab==='tier')   b.innerHTML = viewTiers();
     else if (_tab==='ia')     b.innerHTML = viewIA();
     else if (_tab==='merch')  b.innerHTML = viewMerch();
+    else if (_tab==='ver')    b.innerHTML = viewVer();
+    else if (_tab==='mod')    b.innerHTML = viewModeracion();
+    else if (_tab==='banner') b.innerHTML = viewBanner();
+    else if (_tab==='ana')    b.innerHTML = viewAnalytics();
+    else if (_tab==='kits')   b.innerHTML = viewKits();
     b.scrollTop = 0;
   }
 
@@ -90897,6 +91035,113 @@ window.generateShoppingFeed = function() {
     return h;
   }
 
+  // ── VIEW: Ver como tarifa ──
+  function viewVer(){
+    var cur=_previewTramo;
+    var h='<div class="sadm-sec-title">Ver el sitio como una tarifa</div>'+
+      '<div class="sadm-note" style="margin-bottom:8px">Previsualiza precios, beneficios y voz tal como los ve cada grupo, sin cerrar tu sesión. Es <b>efímero</b> (se borra al recargar) y solo afecta tu pantalla.</div>'+
+      '<div class="sadm-card"><div class="sadm-row" style="gap:7px;flex-wrap:wrap">'+
+        TARIFA_CODES.map(function(c){ var on=cur===c; return '<button data-act="ver-set" data-t="'+c+'" style="'+BTN+';background:'+(on?'#1B2CC1':'#eef')+';color:'+(on?'#fff':'#333')+'">'+CODE2NAME[c]+' ('+c+')</button>'; }).join('')+
+      '</div>'+
+      '<div style="margin-top:10px">'+(cur?('<button data-act="ver-exit" style="'+BTN+';background:#B91C1C;color:#fff">Salir de vista previa ('+CODE2NAME[cur]+')</button>'):'<span class="sadm-mini">Vista previa inactiva — ves el sitio con tu tarifa real.</span>')+'</div>'+
+      '</div>';
+    return h;
+  }
+
+  // ── VIEW: Banner / mantención ──
+  function viewBanner(){
+    var cfg=getBanner(); var b=cfg.banner, mt=cfg.maint;
+    var COLORS=[['#1B2CC1','Azul'],['#C2410C','Naranja'],['#1A8C4E','Verde'],['#B91C1C','Rojo'],['#0A1628','Navy']];
+    var h='<div class="sadm-sec-title">Banner global</div>'+
+      '<div class="sadm-card">'+
+        '<div class="sadm-row" style="gap:10px;flex-wrap:wrap"><button data-act="ban-tog" style="'+BTN+';background:'+(b.on?'#1A8C4E':'#eef')+';color:'+(b.on?'#fff':'#333')+'">'+(b.on?'✅ Banner ACTIVO':'Banner apagado')+'</button><span class="sadm-mini" style="flex:1">Barra fija arriba, visible para todos.</span></div>'+
+        '<div class="sadm-grid" style="margin-top:9px">'+
+          fld('Texto', '<input data-kind="ban-text" value="'+esc(b.text)+'" placeholder="🚚 Envío gratis sobre $150.000" style="'+INP+'">')+
+          fld('Color', '<select data-kind="ban-color" style="'+INP+'">'+COLORS.map(function(o){return '<option value="'+o[0]+'"'+(b.color===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>')+
+        '</div></div>'+
+      '<div class="sadm-sec-title" style="margin-top:14px">Modo mantención</div>'+
+      '<div class="sadm-card">'+
+        '<div class="sadm-row" style="gap:10px;flex-wrap:wrap"><button data-act="maint-tog" style="'+BTN+';background:'+(mt.on?'#B91C1C':'#eef')+';color:'+(mt.on?'#fff':'#333')+'">'+(mt.on?'🛠️ MANTENCIÓN ACTIVA':'Mantención apagada')+'</button><span class="sadm-mini" style="flex:1">Bloquea el sitio a los visitantes. <b>Tú (admin) lo sigues viendo</b>.</span></div>'+
+        '<div style="margin-top:9px">'+fld('Mensaje', '<input data-kind="maint-msg" value="'+esc(mt.msg)+'" style="'+INP+'">')+'</div>'+
+      '</div>';
+    return h;
+  }
+
+  // ── VIEW: Moderación ──
+  function viewModeracion(){
+    var revs=_modRecent('sstt_reviews_v1',30), qas=_modRecent('sstt_qa_v1',20);
+    var h='<div class="sadm-sec-title">Moderación · reseñas recientes</div>'+
+      '<div class="sadm-note" style="margin-bottom:8px">Ocultar saca la reseña/pregunta de las fichas y del promedio, sin borrarla. Eliminar es permanente.</div>';
+    if(!revs.length) h+='<div class="sadm-card sadm-mini">Sin reseñas.</div>';
+    h+=revs.map(function(r){ var it=r.it; return '<div class="sadm-card" style="'+(it.oculto?'opacity:.55':'')+'">'+
+      '<div class="sadm-row" style="justify-content:space-between;gap:8px"><div style="font-size:12px"><b style="color:#D4A03C">'+('★'.repeat(Math.max(0,it.rating||0)))+'</b> <b>'+esc(it.autor||'?')+'</b> <span class="sadm-mini">'+esc(r.cod)+(it.oculto?' · OCULTA':'')+'</span></div>'+
+        '<div class="sadm-row" style="gap:6px"><button data-act="mod-rev-tog" data-cod="'+esc(r.cod)+'" data-id="'+esc(it.id)+'" style="'+BTN+';background:#eef">'+(it.oculto?'Mostrar':'Ocultar')+'</button><button data-act="mod-rev-del" data-cod="'+esc(r.cod)+'" data-id="'+esc(it.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button></div></div>'+
+      (it.titulo?'<div style="font-size:12px;font-weight:700;margin-top:5px">'+esc(it.titulo)+'</div>':'')+
+      '<div class="sadm-mini" style="margin-top:3px">'+esc(String(it.texto||'').slice(0,160))+'</div></div>';
+    }).join('');
+    h+='<div class="sadm-sec-title" style="margin-top:14px">Preguntas (Q&amp;A) recientes</div>';
+    if(!qas.length) h+='<div class="sadm-card sadm-mini">Sin preguntas.</div>';
+    h+=qas.map(function(q){ var it=q.it; return '<div class="sadm-card" style="'+(it.oculto?'opacity:.55':'')+'">'+
+      '<div class="sadm-row" style="justify-content:space-between;gap:8px"><div style="font-size:12px"><b>'+esc(it.autor||'?')+'</b> <span class="sadm-mini">'+esc(q.cod)+(it.oculto?' · OCULTA':'')+'</span></div>'+
+        '<div class="sadm-row" style="gap:6px"><button data-act="mod-qa-tog" data-cod="'+esc(q.cod)+'" data-id="'+esc(it.id)+'" style="'+BTN+';background:#eef">'+(it.oculto?'Mostrar':'Ocultar')+'</button><button data-act="mod-qa-del" data-cod="'+esc(q.cod)+'" data-id="'+esc(it.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button></div></div>'+
+      '<div class="sadm-mini" style="margin-top:3px">'+esc(String(it.pregunta||it.texto||'').slice(0,160))+'</div></div>';
+    }).join('');
+    return h;
+  }
+
+  // ── VIEW: Analítica (read-only) ──
+  function viewAnalytics(){
+    var cost = (window.SSTT_COST && SSTT_COST.clp) ? SSTT_COST.clp() : {claude:0,eleven:0,total:0};
+    var cc = (window.SSTT_COST && SSTT_COST.claudeCalls)||0;
+    var ec = (window.SSTT_COST && SSTT_COST.elevenChars)||0;
+    var ia = getIA(); var cap=(ia.quota&&ia.quota.ttsCharMes)||0;
+    var cup=(typeof rwCuponGetAll==='function')?rwCuponGetAll():[];
+    var gc=(typeof rwGiftcardGetAll==='function')?rwGiftcardGetAll():[];
+    var pr=getPromos(); var ti=getTiers(); var m=getMerch();
+    var nProd=(typeof PRODUCTS!=='undefined')?PRODUCTS.length:0;
+    function card(label,val,color){ return '<div class="sadm-card" style="text-align:center"><div style="font-size:22px;font-weight:900;color:'+(color||'#0A1628')+'">'+val+'</div><div class="sadm-mini" style="margin-top:2px">'+label+'</div></div>'; }
+    var h='<div class="sadm-sec-title">Gasto IA de la sesión (CLP)</div>'+
+      '<div class="sadm-grid">'+card('🤖 Claude',fmt(cost.claude),'#1B2CC1')+card('🔊 ElevenLabs',fmt(cost.eleven),'#6A1B9A')+card('Σ Total',fmt(cost.total),'#B91C1C')+'</div>'+
+      '<div class="sadm-grid" style="margin-top:8px">'+card('Llamadas Claude',cc.toLocaleString('es-CL'))+card('Chars 11Labs',ec.toLocaleString('es-CL'),'#6A1B9A')+card('Tope mes',(cap?cap.toLocaleString('es-CL'):'∞'))+'</div>'+
+      (cap?('<div class="sadm-mini" style="margin-top:6px">Consumo ElevenLabs sesión: '+Math.min(100,Math.round(ec/cap*100))+'% del tope mensual configurado.</div>'):'')+
+      '<div class="sadm-sec-title" style="margin-top:14px">Catálogo y promociones</div>'+
+      '<div class="sadm-grid">'+card('Productos',nProd.toLocaleString('es-CL'))+card('Cupones',cup.filter(function(c){return c.activo;}).length+'/'+cup.length,'#1A8C4E')+card('Promos',pr.filter(function(p){return p.activo;}).length+'/'+pr.length,'#C2410C')+card('Gift cards',gc.length,'#6A1B9A')+'</div>'+
+      '<div class="sadm-grid" style="margin-top:8px">'+card('Tarifas forzadas',Object.keys(ti).length,'#1B2CC1')+card('Ocultos',(m.hidden||[]).length,'#444')+card('Destacados',(m.pinned||[]).length,'#C2410C')+card('Sin stock',(m.stockOut||[]).length,'#B91C1C')+'</div>'+
+      '<div style="margin-top:12px"><button data-act="ana-refresh" style="'+BTN+';background:#1B2CC1;color:#fff">↻ Actualizar</button></div>'+
+      '<div class="sadm-note" style="margin-top:8px">El gasto es de la sesión actual (módulo <code>SSTT_COST</code>). Conversión y tráfico real llegan con backend (Onda 2).</div>';
+    return h;
+  }
+
+  // ── VIEW: Kits ──
+  function viewKits(){
+    var ks=getKits();
+    var h='<div class="sadm-sec-title">Kits estructurados</div>'+
+      '<div class="sadm-note" style="margin-bottom:8px">Arma kits (varios productos + cantidades) con precio de kit. Los <b>activos</b> aparecen en la vitrina 🧰 Kits del sitio con &quot;agregar todo al carro&quot;.</div>';
+    h+=ks.map(function(k){
+      var pr=kitPrecio(k);
+      return '<div class="sadm-card">'+
+        '<div class="sadm-row" style="justify-content:space-between"><div class="sadm-row" style="gap:7px"><b style="font-size:13.5px">🧰 '+esc(k.nombre)+'</b><span class="sadm-tag '+(k.activo?'sadm-on':'sadm-off')+'">'+(k.activo?'ACTIVO':'OFF')+'</span></div>'+
+          '<div class="sadm-row" style="gap:6px"><button data-act="kit-tog" data-id="'+esc(k.id)+'" style="'+BTN+';background:'+(k.activo?'#fff3e0':'#eef')+';color:#333">'+(k.activo?'Desactivar':'Activar')+'</button><button data-act="kit-del" data-id="'+esc(k.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button></div></div>'+
+        '<div class="sadm-grid" style="margin-top:9px">'+
+          fld('Nombre','<input data-kind="kit" data-id="'+esc(k.id)+'" data-field="nombre" value="'+esc(k.nombre)+'" style="'+INP+'">')+
+          fld('Descripción','<input data-kind="kit" data-id="'+esc(k.id)+'" data-field="descripcion" value="'+esc(k.descripcion||'')+'" style="'+INP+'">')+
+        '</div>'+
+        '<div style="margin-top:9px"><span class="sadm-lbl">Productos del kit</span>'+
+          ((k.items&&k.items.length)?('<div class="sadm-row" style="flex-wrap:wrap;gap:6px;margin-top:5px">'+k.items.map(function(it){return '<span style="display:inline-flex;align-items:center;gap:5px;background:var(--bg2,#f1f2f5);border:1px solid var(--border,#ddd);border-radius:16px;padding:3px 6px 3px 10px;font-size:11.5px;font-weight:700">'+(it.qty||1)+'× '+esc(it.codigo)+'<button data-act="kit-item-del" data-id="'+esc(k.id)+'" data-cod="'+esc(it.codigo)+'" title="Quitar" style="border:none;background:#e2e3e7;border-radius:50%;width:17px;height:17px;cursor:pointer;font-size:11px;line-height:1">✕</button></span>';}).join('')+'</div>'):'<div class="sadm-mini">Sin productos.</div>')+
+          '<div class="sadm-row" style="gap:6px;margin-top:6px"><input id="kitItemCode_'+esc(k.id)+'" placeholder="Código producto" style="'+INP+'"><input id="kitItemQty_'+esc(k.id)+'" type="number" value="1" min="1" style="'+INP+';max-width:74px"><button data-act="kit-item-add" data-id="'+esc(k.id)+'" style="'+BTN+';background:#1B2CC1;color:#fff;white-space:nowrap">+ Ítem</button></div>'+
+        '</div>'+
+        '<div class="sadm-grid" style="margin-top:9px">'+
+          fld('Precio del kit','<select data-kind="kit" data-id="'+esc(k.id)+'" data-field="pricing" style="'+INP+'">'+[['suma','Suma de ítems'],['descuento','% descuento sobre suma'],['fijo','Precio fijo (con IVA)']].map(function(o){return '<option value="'+o[0]+'"'+(k.pricing===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>')+
+          fld('% descuento','<input type="number" data-kind="kit" data-id="'+esc(k.id)+'" data-field="descuento" value="'+(k.descuento||0)+'" style="'+INP+'">')+
+          fld('Precio fijo','<input type="number" data-kind="kit" data-id="'+esc(k.id)+'" data-field="precioFijo" value="'+(k.precioFijo||0)+'" style="'+INP+'">')+
+        '</div>'+
+        '<div class="sadm-mini" style="margin-top:7px">Precio kit: <b>'+fmt(pr.total)+'</b>'+(pr.ahorro>0?(' · ahorro '+fmt(pr.ahorro)+' vs '+fmt(pr.base)):'')+' <span style="opacity:.6">(se recalcula al reabrir la tab)</span></div>'+
+      '</div>';
+    }).join('');
+    h+='<div class="sadm-card" style="border-style:dashed"><div class="sadm-sec-title">➕ Nuevo kit</div><div class="sadm-row" style="gap:6px"><input id="kitNewNombre" placeholder="Ej: Kit 4 cámaras IP + NVR" style="'+INP+'"><button data-act="kit-add" style="'+BTN+';background:#C2410C;color:#fff;white-space:nowrap">Crear kit</button></div></div>';
+    return h;
+  }
+
   // ── Helpers de campos ──
   function fld(label, inner){ return '<div><span class="sadm-lbl">'+label+'</span>'+inner+'</div>'; }
   function num(kind, id, field, val){ return '<input type="number" data-kind="'+kind+'" data-id="'+esc(id)+'" data-field="'+field+'" value="'+(val!=null?val:'')+'" style="'+INP+'">'; }
@@ -90971,6 +91216,41 @@ window.generateShoppingFeed = function() {
     if (act==='merch-pin-del'){ merchListDel('pinned', el.getAttribute('data-id')); return; }
     if (act==='merch-badge-add'){ merchBadgeAdd(); return; }
     if (act==='merch-badge-del'){ var mb=getMerch(); delete mb.badges[el.getAttribute('data-id')]; saveMerch(mb); renderBody(); _catalogRefresh(); return; }
+    // VER COMO TARIFA
+    if (act==='ver-set'){ setPreviewTramo(el.getAttribute('data-t')); renderBody(); return; }
+    if (act==='ver-exit'){ setPreviewTramo(null); renderBody(); return; }
+    // BANNER / MANTENCIÓN
+    if (act==='ban-tog'){ var cb=getBanner(); cb.banner.on=!cb.banner.on; saveBanner(cb); applyBannerMaintenance(); renderBody(); return; }
+    if (act==='maint-tog'){ var cm=getBanner(); cm.maint.on=!cm.maint.on; saveBanner(cm); applyBannerMaintenance(); renderBody(); toast(cm.maint.on?'Mantención ACTIVA (tú la sigues viendo)':'Mantención apagada'); return; }
+    // MODERACIÓN
+    if (act==='mod-rev-tog'){ _modToggle('sstt_reviews_v1', el.getAttribute('data-cod'), el.getAttribute('data-id')); renderBody(); _catalogRefresh(); return; }
+    if (act==='mod-rev-del'){ if(!confirm('¿Eliminar esta reseña? Es permanente.')) return; _modDel('sstt_reviews_v1', el.getAttribute('data-cod'), el.getAttribute('data-id')); renderBody(); _catalogRefresh(); return; }
+    if (act==='mod-qa-tog'){ _modToggle('sstt_qa_v1', el.getAttribute('data-cod'), el.getAttribute('data-id')); renderBody(); return; }
+    if (act==='mod-qa-del'){ if(!confirm('¿Eliminar esta pregunta? Es permanente.')) return; _modDel('sstt_qa_v1', el.getAttribute('data-cod'), el.getAttribute('data-id')); renderBody(); return; }
+    // ANALÍTICA
+    if (act==='ana-refresh'){ renderBody(); return; }
+    // KITS
+    if (act==='kit-tog'){ var ka=getKits(); var k3=ka.filter(function(x){return x.id===el.getAttribute('data-id');})[0]; if(k3){ k3.activo=!k3.activo; saveKits(ka); renderBody(); } return; }
+    if (act==='kit-del'){ if(!confirm('¿Eliminar kit?')) return; var kk=getKits().filter(function(x){return x.id!==el.getAttribute('data-id');}); saveKits(kk); renderBody(); return; }
+    if (act==='kit-add'){ kitAdd(); return; }
+    if (act==='kit-item-add'){
+      var kid=el.getAttribute('data-id');
+      var code=((document.getElementById('kitItemCode_'+kid)||{}).value||'').trim().toUpperCase();
+      var qty=parseInt((document.getElementById('kitItemQty_'+kid)||{}).value,10)||1;
+      if(!code){ toast('Ingresa un código'); return; }
+      var ks=getKits(); var k=ks.filter(function(x){return x.id===kid;})[0]; if(!k) return;
+      if(!k.items) k.items=[];
+      var ex=k.items.filter(function(x){return _U(x.codigo)===_U(code);})[0];
+      if(ex) ex.qty=(ex.qty||1)+qty; else k.items.push({codigo:code, qty:qty});
+      saveKits(ks); renderBody();
+      toast(_prodExists(code) ? (code+' agregado al kit') : ('⚠️ '+code+' no existe (agregado igual)'));
+      return;
+    }
+    if (act==='kit-item-del'){
+      var ks2=getKits(); var k2=ks2.filter(function(x){return x.id===el.getAttribute('data-id');})[0]; if(!k2) return;
+      k2.items=(k2.items||[]).filter(function(x){return _U(x.codigo)!==_U(el.getAttribute('data-cod'));});
+      saveKits(ks2); renderBody(); return;
+    }
   }
 
   // ── Eventos: change delegation (inputs inline) ──
@@ -91014,6 +91294,10 @@ window.generateShoppingFeed = function() {
     if (kind==='ia-quota-msg'){ var piq=getIA(); if(!piq.quota.msgDia) piq.quota.msgDia={}; piq.quota.msgDia[field]=parseInt(val,10)||0; saveIA(piq); return; }
     if (kind==='ia-quota-tts'){ var pit=getIA(); if(!pit.quota) pit.quota={}; pit.quota.ttsCharMes=parseInt(val,10)||0; saveIA(pit); return;
     }
+    if (kind==='ban-text'){ var bt=getBanner(); bt.banner.text=val; saveBanner(bt); applyBannerMaintenance(); return; }
+    if (kind==='ban-color'){ var bc=getBanner(); bc.banner.color=val; saveBanner(bc); applyBannerMaintenance(); return; }
+    if (kind==='maint-msg'){ var mm2=getBanner(); mm2.maint.msg=val; saveBanner(mm2); applyBannerMaintenance(); return; }
+    if (kind==='kit'){ var ksc=getKits(); var kc=ksc.filter(function(x){return x.id===id;})[0]; if(!kc) return; kc[field]=(field==='descuento'||field==='precioFijo')?(parseInt(val,10)||0):val; saveKits(ksc); if(field==='pricing') renderBody(); return; }
   }
 
   function calcSafe(){ try { if (typeof calcTotals==='function') calcTotals(); } catch(e){} }
@@ -91094,6 +91378,12 @@ window.generateShoppingFeed = function() {
     var m=getMerch(); m.badges[code]={text:text, color:color}; saveMerch(m); renderBody(); _catalogRefresh();
     toast(_prodExists(code) ? ('Badge agregado a '+code) : ('⚠️ '+code+' no existe (badge guardado igual)'));
   }
+  function kitAdd(){
+    var nombre=((document.getElementById('kitNewNombre')||{}).value||'').trim();
+    if(!nombre){ toast('Ingresa un nombre'); return; }
+    var ks=getKits(); ks.push({ id:'KIT-'+Date.now().toString(36).toUpperCase(), nombre:nombre, descripcion:'', items:[], pricing:'suma', descuento:0, precioFijo:0, activo:false });
+    saveKits(ks); renderBody(); toast('Kit "'+nombre+'" creado (inactivo)');
+  }
 
   // ── Open / Close / Launcher ──
   function open(){ if(!isAdmin()){ toast('Solo administradores'); return; } mount(); seedAll(); renderTabs(); renderBody(); var ov=document.getElementById('sadmOverlay'); if(ov){ ov.classList.add('on'); } }
@@ -91109,7 +91399,7 @@ window.generateShoppingFeed = function() {
     }
     b.classList.toggle('on', isAdmin());
   }
-  function refresh(){ try { launcher(); } catch(e){} }
+  function refresh(){ try { launcher(); applyBannerMaintenance(); } catch(e){} }
 
   // ── API pública ──
   window.SSTT_ADMIN = {
@@ -91129,11 +91419,12 @@ window.generateShoppingFeed = function() {
     merchPinnedOrder: merchPinnedOrder,
     merchForcedStock: merchForcedStock,
     merchBadge: merchBadge,
+    previewTramo: previewTramo,
     isAdmin: isAdmin
   };
 
   // ── Init ──
-  function init(){ seedAll(); launcher(); }
+  function init(){ seedAll(); launcher(); try { applyBannerMaintenance(); } catch(e){} }
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
