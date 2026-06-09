@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Lunes 08 de Junio del 2026 · s118 -->
+<!-- SSTT Tienda · Generado: Martes 09 de Junio del 2026 · s119 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -25846,7 +25846,12 @@ const CAT_ICONS = {
 function catIcon(cat) { return CAT_ICONS[cat] || '📷'; }
 // s107: tarjeta de producto reutilizable (catálogo + Marketplace usan el MISMO formato)
 window.renderProductCard = function(p) {
-    const [lbl, cls] = p.nuevo ? ['Nuevo', 'pb-new'] : (BADGE_MAP[p.stock] || BADGE_MAP.normal);
+    var _bm = p.nuevo ? ['Nuevo', 'pb-new'] : (BADGE_MAP[p.stock] || BADGE_MAP.normal);
+    // s119: merchandising — forzar "Sin stock" y badge custom desde panel admin (defensivo)
+    try { if (window.SSTT_ADMIN && SSTT_ADMIN.merchForcedStock && SSTT_ADMIN.merchForcedStock(p.codigo)) _bm = BADGE_MAP.sin_stock; } catch(e){}
+    var lbl = _bm[0], cls = _bm[1];
+    var _merchBadge = '';
+    try { if (window.SSTT_ADMIN && SSTT_ADMIN.merchBadge){ var _mb = SSTT_ADMIN.merchBadge(p.codigo); if(_mb) _merchBadge = '<span class="pbadge" style="background:'+(_mb.color||'#C2410C')+';color:#fff;left:6px;top:34px">'+escapeHtml(_mb.text)+'</span>'; } } catch(e){}
     const tags = getTags(p.nombre, p.codigo);
     return `
     <div class="pcard">
@@ -25860,6 +25865,7 @@ window.renderProductCard = function(p) {
              onload="this.classList.remove('loading');this.previousElementSibling.style.display='none'"
              onerror="imgFallback(this,'${p.codigo}','${p.cat}')">
         <span class="pbadge ${cls}">${lbl}</span>
+        ${_merchBadge}
         ${(typeof window._camFeatured==='function' && window._camFeatured(p)) ? '<span class="pcard-feat-star" title="Tecnologia destacada">&#9733;</span>' : ''}
         ${(window.SSTT_TOPVENTAS && window.SSTT_TOPVENTAS[(p.codigo||'').toString().toUpperCase()]) ? '<span class="pcard-top-badge" title="Entre los mas vendidos">&#128293; Top ventas</span>' : ''}
         ${(()=>{
@@ -25999,6 +26005,23 @@ window.renderProductCard = function(p) {
     </div>`;
 };
 
+// s119: merchandising — aplica ocultar + fijar (destacar) sobre la lista filtrada. Defensivo: sin el panel, devuelve la lista intacta.
+function applyMerch(arr) {
+  try {
+    if (!window.SSTT_ADMIN || !arr || !arr.length) return arr;
+    var out = arr;
+    if (SSTT_ADMIN.merchIsHidden) out = out.filter(function(p){ return !SSTT_ADMIN.merchIsHidden(p.codigo); });
+    if (SSTT_ADMIN.merchPinnedOrder) {
+      var pin = SSTT_ADMIN.merchPinnedOrder().map(function(s){ return String(s||'').trim().toUpperCase(); });
+      if (pin.length) {
+        var rank = function(p){ var i = pin.indexOf(String(p.codigo||'').trim().toUpperCase()); return i<0 ? 9999 : i; };
+        out = out.slice().sort(function(a,b){ return rank(a)-rank(b); });
+      }
+    }
+    return out;
+  } catch(e){ return arr; }
+}
+
 function render() {
   var _camCatsR = ['camaras-ip','camaras-hdcvi','camaras-ptz','_camaras'];
   var _recCatsR = ['nvr','_grabadores','_nvr_nvr','_nvr_xvr','_nvr_ent'];
@@ -26015,7 +26038,7 @@ function render() {
   }
   _renderSortBar();
   _updateCatSheetLabel();
-  const filtered = getFiltered();
+  const filtered = applyMerch(getFiltered());
   const total    = filtered.length;
   const pages    = Math.max(1, Math.ceil(total / S.perPage));
   S.page = Math.min(S.page, pages);
@@ -29837,6 +29860,9 @@ window.sstt_voiceTierAllowed = function(){
     if (typeof USER === 'undefined' || !USER) return false;
     var t = (typeof _getTierInfo === 'function') ? _getTierInfo() : null;
     var code = t && t.tramo;
+    // s119: la política IA del panel admin es la fuente de verdad de la voz premium (puede restringir
+    // o ampliar el gate por tarifa). Fail-closed: si algo falla, cae al criterio A/B/C de abajo.
+    try { if (window.SSTT_ADMIN && SSTT_ADMIN.iaVozAllowed) return !!SSTT_ADMIN.iaVozAllowed(code); } catch(e){}
     return code === 'A' || code === 'B' || code === 'C';
   } catch(e){ return false; }
 };
@@ -40378,6 +40404,8 @@ window.SSTT_TTS = (function(){
     if(!txt){ finish(done); return; }
     T.cancel(); T._speaking=true;
     if(typeof window.sstt_voiceTierAllowed==='function' && !window.sstt_voiceTierAllowed()){ T._engine='browser'; _ttsUpsell(); _speakBrowser(txt, done); return; }
+    // s119: motor de voz seleccionado en el panel admin — si NO es ElevenLabs (navegador/Azure/Local o TTS pausado), voz de navegador, sin gastar créditos.
+    try { if(window.SSTT_ADMIN && SSTT_ADMIN.iaTTSEngine && SSTT_ADMIN.iaTTSEngine()!=='eleven'){ T._engine='browser'; _speakBrowser(txt, done); return; } } catch(_){}
     if(T.mode!=='eleven' || typeof PROXY_URL==='undefined'){ finish(done); return; } // sin ElevenLabs => silencio
     T._engine='eleven'; // s117: motor activo → el barge-in por energía solo aplica con ElevenLabs (lo cancela el AEC); la voz del navegador no
     var attempt=0;
@@ -40538,6 +40566,12 @@ function aiStopSpeech() {
 }
 
 function aiToggle() {
+  // s119: respeta la política de acceso del panel admin — si "Asesor de Ventas" no está permitido
+  // para esta tarifa (o la IA está en pausa global), no abre y avisa. Defensivo: si el módulo no está, abre normal.
+  if (!aiPanelOpen && window.SSTT_ADMIN && SSTT_ADMIN.iaToolAllowed && !SSTT_ADMIN.iaToolAllowed('asesor')) {
+    try { showToast((SSTT_ADMIN.iaKilled && SSTT_ADMIN.iaKilled()) ? 'Asistente IA en pausa temporal.' : 'El asesor IA no está disponible para tu plan.'); } catch(e){}
+    return;
+  }
   aiPanelOpen = !aiPanelOpen;
   var p = document.getElementById('aiPanel');
   if (aiPanelOpen) {
@@ -44344,8 +44378,8 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's118',
-  fecha: 'Lunes 08 de Junio del 2026'
+  ver:   's119',
+  fecha: 'Martes 09 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
@@ -90246,6 +90280,8 @@ window.generateShoppingFeed = function() {
   var K_PROMOS = 'sstt_promos_v1';
   var K_REGLAS = 'sstt_reglas_v1';
   var K_TIERS  = 'sstt_tier_overrides_v1';
+  var K_IA     = 'sstt_ia_policy_v1';     // s119: gobernanza de IA/costo
+  var K_MERCH  = 'sstt_merch_v1';         // s119: merchandising (ocultar/fijar/agotado/badges)
 
   var CODE2NAME = { A:'Mayorista', B:'Prime', C:'Preferencial', D:'General', Z:'BIP' };
   var TARIFA_CODES = ['A','B','C','D','Z'];
@@ -90279,7 +90315,19 @@ window.generateShoppingFeed = function() {
     });
   }
   function seedTiers(){ if (STORE.get(K_TIERS) != null) return; STORE.set(K_TIERS, {}); }
-  function seedAll(){ try { seedPromos(); seedReglas(); seedTiers(); } catch(e){} }
+  function seedIA(){
+    if (STORE.get(K_IA) != null) return;
+    STORE.set(K_IA, {
+      killAll:false, killTTS:false, ttsEngine:'eleven',
+      access:{ asesor:['A','B','C','D'], soporte:['A','B','C','D','Z'], semantica:['A','B','C','D','Z'], lpr:['A','B','C'], planner:['A','B','C'], voz:['A','B','C'] },
+      model:{ asesor:'sonnet', soporte:'sonnet', lpr:'haiku', planner:'sonnet', semantica:'haiku' },
+      budget:{ A:80000, B:40000, C:20000, D:0, Z:0 },
+      onOver:'degradar',
+      quota:{ msgDia:{A:0,B:0,C:0,D:30,Z:10}, ttsCharMes:30000 }
+    });
+  }
+  function seedMerch(){ if (STORE.get(K_MERCH) != null) return; STORE.set(K_MERCH, { hidden:[], pinned:[], stockOut:[], badges:{} }); }
+  function seedAll(){ try { seedPromos(); seedReglas(); seedTiers(); seedIA(); seedMerch(); } catch(e){} }
 
   // ── Getters/Setters ──
   function getPromos(){ return STORE.get(K_PROMOS, []) || []; }
@@ -90288,6 +90336,47 @@ window.generateShoppingFeed = function() {
   function saveReglas(r){ STORE.set(K_REGLAS, r); }
   function getTiers(){ return STORE.get(K_TIERS, {}) || {}; }
   function saveTiers(t){ STORE.set(K_TIERS, t); }
+  function getIA(){
+    var p = STORE.get(K_IA, {}) || {};
+    if(!p.access) p.access={}; if(!p.model) p.model={}; if(!p.budget) p.budget={};
+    if(!p.quota) p.quota={msgDia:{},ttsCharMes:30000}; if(!p.quota.msgDia) p.quota.msgDia={};
+    if(!p.ttsEngine) p.ttsEngine='eleven'; if(!p.onOver) p.onOver='degradar';
+    return p;
+  }
+  function saveIA(p){ STORE.set(K_IA, p); }
+
+  // ── Engines IA (consumidos por la capa viva: voz, TTS, asistentes) ──
+  function _curTramo(){ try { return (typeof _getTierInfo==='function') ? (_getTierInfo().tramo||'D') : 'D'; } catch(e){ return 'D'; } }
+  function iaKilled(){ try { return !!getIA().killAll; } catch(e){ return false; } }
+  function iaToolAllowed(tool, tarifa){
+    try {
+      var p = getIA(); if (p.killAll) return false;
+      var code = tarifa || _curTramo();
+      var list = p.access[tool]; if (!list) return true;   // herramienta sin política = permitida
+      return list.indexOf(code) >= 0;
+    } catch(e){ return true; }
+  }
+  function iaVozAllowed(tarifa){
+    // s119: fuente de verdad del gate de voz premium. killTTS o killAll → false.
+    try { var p = getIA(); if (p.killAll || p.killTTS) return false; return iaToolAllowed('voz', tarifa); } catch(e){ return false; }
+  }
+  function iaTTSEngine(){
+    try { var p = getIA(); if (p.killAll || p.killTTS) return 'browser'; return p.ttsEngine || 'eleven'; } catch(e){ return 'eleven'; }
+  }
+  function iaModelFor(tool){
+    try { var p = getIA(); if (p.killAll) return 'off'; return (p.model && p.model[tool]) || 'sonnet'; } catch(e){ return 'sonnet'; }
+  }
+
+  // ── Merchandising (consumido por render()/renderProductCard) ──
+  function _U(s){ return String(s==null?'':s).trim().toUpperCase(); }
+  function getMerch(){ var m = STORE.get(K_MERCH, {}) || {}; if(!m.hidden)m.hidden=[]; if(!m.pinned)m.pinned=[]; if(!m.stockOut)m.stockOut=[]; if(!m.badges)m.badges={}; return m; }
+  function saveMerch(m){ STORE.set(K_MERCH, m); }
+  function merchIsHidden(codigo){ try { var u=_U(codigo); return getMerch().hidden.some(function(x){return _U(x)===u;}); } catch(e){ return false; } }
+  function merchPinnedOrder(){ try { return (getMerch().pinned||[]).slice(); } catch(e){ return []; } }
+  function merchForcedStock(codigo){ try { var u=_U(codigo); return getMerch().stockOut.some(function(x){return _U(x)===u;}); } catch(e){ return false; } }
+  function merchBadge(codigo){ try { var m=getMerch(), u=_U(codigo); var k=Object.keys(m.badges).filter(function(x){return _U(x)===u;})[0]; return k?m.badges[k]:null; } catch(e){ return null; } }
+  function _catalogRefresh(){ try { if (typeof render==='function') render(); } catch(e){} }
+  function _prodExists(code){ try { return (typeof PRODUCTS!=='undefined') && PRODUCTS.some(function(x){return _U(x.codigo)===_U(code);}); } catch(e){ return true; } }
 
   // ── Engine: contexto del carro ──
   function cartCtx(){
@@ -90417,7 +90506,8 @@ window.generateShoppingFeed = function() {
       '.sadm-sec-title{font-size:13px;font-weight:800;margin:2px 0 8px;color:var(--text,#0A1628)}' +
       '.sadm-note{font-size:11px;color:var(--muted,#778);line-height:1.5}' +
       '.sadm-mini{font-size:11px;color:var(--muted,#778)}' +
-      '#sadmLauncher{position:fixed;right:16px;bottom:16px;z-index:99990;background:linear-gradient(135deg,#0A1628,#15294a);color:#fff;border:none;border-radius:30px;padding:11px 16px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.3);font-family:var(--font,system-ui);display:none;align-items:center;gap:7px}' +
+      /* s119: subido sobre #fabRow (antes right:16/bottom:16/z99990 = misma esquina que la fila de FABs → quedaba detrás del orbe IA) */
+      '#sadmLauncher{position:fixed;right:16px;bottom:72px;z-index:99991;background:linear-gradient(135deg,#0A1628,#15294a);color:#fff;border:none;border-radius:30px;padding:11px 16px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.3);font-family:var(--font,system-ui);display:none;align-items:center;gap:7px}' +
       '#sadmLauncher.on{display:inline-flex}' +
       '@media(max-width:600px){#sadmPanel{max-width:100%}#sadmBody{max-height:70vh}}';
     document.head.appendChild(st);
@@ -90437,7 +90527,7 @@ window.generateShoppingFeed = function() {
         '</div>' +
         '<div class="sadm-tabs" id="sadmTabs">' +
           tabBtn('dash','📊 Resumen') + tabBtn('cup','🏷️ Cupones') + tabBtn('gc','🎁 Gift cards') +
-          tabBtn('promo','🎯 Promos') + tabBtn('reglas','💳 Reglas') + tabBtn('tier','👤 Tarifas') +
+          tabBtn('promo','🎯 Promos') + tabBtn('reglas','💳 Reglas') + tabBtn('tier','👤 Tarifas') + tabBtn('ia','🤖 IA') + tabBtn('merch','🛍️ Merch') +
         '</div>' +
         '<div id="sadmBody"></div>' +
       '</div>';
@@ -90464,6 +90554,8 @@ window.generateShoppingFeed = function() {
     else if (_tab==='promo')  b.innerHTML = viewPromos();
     else if (_tab==='reglas') b.innerHTML = viewReglas();
     else if (_tab==='tier')   b.innerHTML = viewTiers();
+    else if (_tab==='ia')     b.innerHTML = viewIA();
+    else if (_tab==='merch')  b.innerHTML = viewMerch();
     b.scrollTop = 0;
   }
 
@@ -90701,6 +90793,110 @@ window.generateShoppingFeed = function() {
     return h;
   }
 
+  // ── VIEW: IA (gobernanza de acceso y costo) ──
+  function viewIA(){
+    var p = getIA();
+    var TOOLS = [ ['asesor','Asesor de Ventas','💬',true], ['soporte','Soporte Técnico AI','🛟',true], ['semantica','Búsqueda semántica','🔎',true], ['lpr','Auto-config LPR','🚗',true], ['planner','Sugerencias Planner','📐',true], ['voz','Voz (TTS premium)','🔊',false] ];
+    var on = function(b){ return b ? '#1A8C4E' : '#999'; };
+    // Kill switches
+    var h = '<div class="sadm-sec-title">Interruptores globales</div>' +
+      '<div class="sadm-card"><div class="sadm-row" style="gap:10px;flex-wrap:wrap">' +
+        '<button data-act="ia-kill" style="'+BTN+';background:'+(p.killAll?'#fdecec':'#eef')+';color:'+(p.killAll?'#B91C1C':'#333')+'">'+(p.killAll?'⏸️ IA PAUSADA — reactivar':'⏸️ Pausar toda IA')+'</button>' +
+        '<button data-act="ia-killtts" style="'+BTN+';background:'+(p.killTTS?'#fdecec':'#eef')+';color:'+(p.killTTS?'#B91C1C':'#333')+'">'+(p.killTTS?'🔇 TTS PAUSADO — reactivar':'🔇 Pausar TTS')+'</button>' +
+        '<span class="sadm-mini" style="flex:1">Botón de pánico para ElevenLabs. Pausar = todo cae a voz de navegador (costo $0).</span>' +
+      '</div></div>';
+    // Motor TTS
+    var ENG = [['eleven','ElevenLabs'],['browser','Navegador'],['azure','Azure es-CL'],['local','Local GPU']];
+    h += '<div class="sadm-sec-title" style="margin-top:14px">Motor de voz (TTS)</div>' +
+      '<div class="sadm-card"><div class="sadm-row" style="gap:6px;flex-wrap:wrap">' +
+        ENG.map(function(e){ var sel=(p.ttsEngine===e[0]); return '<button data-act="ia-tts-eng" data-v="'+e[0]+'" style="'+BTN+';background:'+(sel?'#1B2CC1':'#eef')+';color:'+(sel?'#fff':'#333')+'">'+e[1]+'</button>'; }).join('') +
+      '</div><div class="sadm-mini" style="margin-top:7px">Hoy en la demo solo <b>ElevenLabs</b> y <b>Navegador</b> son efectivos client-side; Azure/Local se habilitan en el Worker (Onda 2). Cualquier opción ≠ ElevenLabs = voz de navegador.</div></div>';
+    // Matriz acceso
+    h += '<div class="sadm-sec-title" style="margin-top:14px">Acceso a herramientas IA por tarifa</div>' +
+      '<div class="sadm-note" style="margin-bottom:8px">Sin acceso a una herramienta con costo, ese grupo cae al fallback por reglas (costo $0). <b>Activar Voz para General/BIP gasta ElevenLabs</b> — úsalo a conciencia.</div>' +
+      '<div class="sadm-card"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr><th style="text-align:left;padding:4px">Herramienta</th>' +
+        TARIFA_CODES.map(function(c){ return '<th style="padding:4px">'+c+'<div class="sadm-mini">'+CODE2NAME[c]+'</div></th>'; }).join('') + '</tr>';
+    TOOLS.forEach(function(t){
+      var allowed = (p.access && p.access[t[0]]) || [];
+      h += '<tr><td style="padding:6px 4px;font-weight:700">'+t[2]+' '+t[1]+'</td>' +
+        TARIFA_CODES.map(function(c){ var ck=allowed.indexOf(c)>=0; return '<td style="text-align:center;padding:6px 4px"><input type="checkbox" data-act="ia-acc-tog" data-tool="'+t[0]+'" data-t="'+c+'"'+(ck?' checked':'')+' style="width:17px;height:17px;cursor:pointer"></td>'; }).join('') + '</tr>';
+    });
+    h += '</table></div>';
+    // Modelo por herramienta
+    h += '<div class="sadm-sec-title" style="margin-top:14px">Modelo por herramienta</div>' +
+      '<div class="sadm-card"><div class="sadm-grid">' +
+        TOOLS.filter(function(t){return t[3];}).map(function(t){
+          var mv = (p.model&&p.model[t[0]])||'sonnet';
+          return fld(t[2]+' '+t[1], '<select data-kind="ia-model" data-id="'+t[0]+'" style="'+INP+'">' +
+            ['sonnet','haiku','off'].map(function(o){ return '<option value="'+o+'"'+(mv===o?' selected':'')+'>'+(o==='sonnet'?'Sonnet (razonamiento)':o==='haiku'?'Haiku (barato)':'Off (sin IA)')+'</option>'; }).join('') + '</select>');
+        }).join('') +
+      '</div><div class="sadm-mini" style="margin-top:6px">Sonnet para venta/soporte (revenue-critical); Haiku para extracción estructurada.</div></div>';
+    // Presupuesto + degradación
+    h += '<div class="sadm-sec-title" style="margin-top:14px">Presupuesto mensual de IA por tarifa (CLP)</div>' +
+      '<div class="sadm-card"><div class="sadm-grid">' +
+        TARIFA_CODES.map(function(c){ var v=(p.budget&&p.budget[c]!=null)?p.budget[c]:0; return fld(CODE2NAME[c]+' ('+c+')', '<input type="number" data-kind="ia-budget" data-field="'+c+'" value="'+v+'" style="'+INP+'">'); }).join('') +
+      '</div>' +
+      '<div class="sadm-row" style="margin-top:10px;gap:8px;align-items:center"><span class="sadm-lbl" style="margin:0">Al superar el tope:</span>' +
+        '<select data-kind="ia-over" style="'+INP+';width:auto">' +
+          [['degradar','Degradar (Sonnet→Haiku, TTS→navegador)'],['cortar','Cortar IA (fallback reglas)'],['avisar','Solo avisar']].map(function(o){ return '<option value="'+o[0]+'"'+(p.onOver===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('') +
+        '</select></div>' +
+      '<div class="sadm-mini" style="margin-top:6px">Atado a <code>SSTT_COST</code>. Enforcement real (anti-bypass) = server-side en el Worker.</div></div>';
+    // Cuotas
+    h += '<div class="sadm-sec-title" style="margin-top:14px">Cuotas por usuario</div>' +
+      '<div class="sadm-card"><span class="sadm-lbl">Mensajes IA / día por tarifa (0 = ilimitado)</span><div class="sadm-grid">' +
+        TARIFA_CODES.map(function(c){ var v=(p.quota&&p.quota.msgDia&&p.quota.msgDia[c]!=null)?p.quota.msgDia[c]:0; return fld(CODE2NAME[c]+' ('+c+')', '<input type="number" data-kind="ia-quota-msg" data-field="'+c+'" value="'+v+'" style="'+INP+'">'); }).join('') +
+      '</div>' +
+      '<div style="margin-top:10px">' + fld('Tope ElevenLabs (chars / mes)', '<input type="number" data-kind="ia-quota-tts" value="'+((p.quota&&p.quota.ttsCharMes)||30000)+'" style="'+INP+'">') + '</div>' +
+      '<div class="sadm-mini" style="margin-top:6px">Las cuotas se hacen cumplir de verdad en el Worker; client-side son best-effort.</div></div>';
+    return h;
+  }
+
+  // ── VIEW: Merchandising ──
+  function viewMerch(){
+    var m = getMerch();
+    function chips(arr, act){
+      if(!arr || !arr.length) return '<div class="sadm-mini">Vacío.</div>';
+      return '<div class="sadm-row" style="flex-wrap:wrap;gap:6px;margin-top:6px">' + arr.map(function(c){
+        return '<span style="display:inline-flex;align-items:center;gap:5px;background:var(--bg2,#f1f2f5);border:1px solid var(--border,#ddd);border-radius:16px;padding:3px 6px 3px 10px;font-size:11.5px;font-weight:700">'+esc(c)+
+          '<button data-act="'+act+'" data-id="'+esc(c)+'" title="Quitar" style="border:none;background:#e2e3e7;border-radius:50%;width:17px;height:17px;cursor:pointer;font-size:11px;line-height:1">✕</button></span>';
+      }).join('') + '</div>';
+    }
+    var addRow = function(ph, btnId, act, color){ return '<div class="sadm-row" style="gap:6px;margin-top:6px"><input id="'+btnId+'" placeholder="'+ph+'" style="'+INP+'"><button data-act="'+act+'" style="'+BTN+';background:'+(color||'#1B2CC1')+';color:#fff;white-space:nowrap">Agregar</button></div>'; };
+
+    var h = '<div class="sadm-sec-title">Merchandising del catálogo</div>' +
+      '<div class="sadm-note" style="margin-bottom:8px">Overrides por <b>código</b> de producto. El catálogo (<code>PRODUCTS</code>) es inmutable: estos cambios viven aparte y se aplican al renderizar. Afectan a todos los visitantes <b>en este navegador</b> hasta el server-side (Onda 2).</div>';
+
+    // Ocultar
+    h += '<div class="sadm-card"><div class="sadm-sec-title">🙈 Ocultar productos</div>' +
+      '<div class="sadm-mini">No aparecen en el catálogo ni en búsquedas.</div>' +
+      chips(m.hidden, 'merch-hide-del') + addRow('Código a ocultar (ej: DH-IPC-...)', 'mNewHide', 'merch-hide-add', '#444') + '</div>';
+    // Agotado
+    h += '<div class="sadm-card"><div class="sadm-sec-title">📦 Forzar &quot;Sin stock&quot;</div>' +
+      '<div class="sadm-mini">Se muestran pero con badge Sin stock (útil mientras Bsale no manda el inventario real).</div>' +
+      chips(m.stockOut, 'merch-out-del') + addRow('Código a marcar sin stock', 'mNewOut', 'merch-out-add', '#B91C1C') + '</div>';
+    // Destacar / fijar
+    h += '<div class="sadm-card"><div class="sadm-sec-title">⭐ Destacar (fijar arriba)</div>' +
+      '<div class="sadm-mini">Suben al inicio del listado, en el orden que los agregas.</div>' +
+      chips(m.pinned, 'merch-pin-del') + addRow('Código a fijar arriba', 'mNewPin', 'merch-pin-add', '#C2410C') + '</div>';
+    // Badge personalizado
+    h += '<div class="sadm-card"><div class="sadm-sec-title">🏷️ Badge personalizado</div>' +
+      '<div class="sadm-mini">Etiqueta extra sobre la tarjeta (ej: &quot;Oferta&quot;, &quot;Liquidación&quot;).</div>';
+    var badgeKeys = Object.keys(m.badges||{});
+    if (badgeKeys.length){
+      h += '<div style="margin-top:6px;display:flex;flex-direction:column;gap:5px">' + badgeKeys.map(function(c){
+        var b=m.badges[c];
+        return '<div class="sadm-row" style="justify-content:space-between"><span style="font-size:12px"><b>'+esc(c)+'</b> → <span style="background:'+(b.color||'#C2410C')+';color:#fff;border-radius:5px;padding:1px 7px;font-size:11px;font-weight:700">'+esc(b.text)+'</span></span>' +
+          '<button data-act="merch-badge-del" data-id="'+esc(c)+'" class="sadm-del" style="'+BTN+'">Quitar</button></div>';
+      }).join('') + '</div>';
+    } else { h += '<div class="sadm-mini">Sin badges.</div>'; }
+    h += '<div class="sadm-grid" style="margin-top:6px">' +
+        fld('Código', '<input id="mNewBadgeCode" placeholder="DH-..." style="'+INP+'">') +
+        fld('Texto', '<input id="mNewBadgeText" placeholder="Oferta" style="'+INP+'">') +
+        fld('Color', '<select id="mNewBadgeColor" style="'+INP+'"><option value="#C2410C">Naranja</option><option value="#B91C1C">Rojo</option><option value="#1A8C4E">Verde</option><option value="#1B2CC1">Azul</option><option value="#6A1B9A">Morado</option></select>') +
+      '</div><div style="margin-top:8px"><button data-act="merch-badge-add" style="'+BTN+';background:#C2410C;color:#fff">Agregar badge</button></div></div>';
+    return h;
+  }
+
   // ── Helpers de campos ──
   function fld(label, inner){ return '<div><span class="sadm-lbl">'+label+'</span>'+inner+'</div>'; }
   function num(kind, id, field, val){ return '<input type="number" data-kind="'+kind+'" data-id="'+esc(id)+'" data-field="'+field+'" value="'+(val!=null?val:'')+'" style="'+INP+'">'; }
@@ -90752,6 +90948,29 @@ window.generateShoppingFeed = function() {
     // TIERS
     if (act==='tier-del'){ var t=getTiers(); delete t[el.getAttribute('data-id')]; saveTiers(t); renderBody(); calcSafe(); return; }
     if (act==='tier-add'){ tierAdd(); return; }
+    // IA — gobernanza
+    if (act==='ia-kill'){ var pk=getIA(); pk.killAll=!pk.killAll; saveIA(pk); try{ if(window.SSTT_TTS) SSTT_TTS.cancel(); }catch(_){} renderBody(); toast(pk.killAll?'IA pausada globalmente':'IA reactivada'); return; }
+    if (act==='ia-killtts'){ var pt=getIA(); pt.killTTS=!pt.killTTS; saveIA(pt); try{ if(window.SSTT_TTS) SSTT_TTS.cancel(); }catch(_){} renderBody(); toast(pt.killTTS?'TTS pausado — voz de navegador':'TTS reactivado'); return; }
+    if (act==='ia-tts-eng'){ var pe=getIA(); pe.ttsEngine=el.getAttribute('data-v'); saveIA(pe); try{ if(window.SSTT_TTS) SSTT_TTS.cancel(); }catch(_){} renderBody(); toast('Motor TTS: '+pe.ttsEngine); return; }
+    if (act==='ia-acc-tog'){
+      var pa2=getIA(); var tool=el.getAttribute('data-tool'); var code=el.getAttribute('data-t');
+      if(!pa2.access[tool]) pa2.access[tool]=[];
+      var ix=pa2.access[tool].indexOf(code);
+      if (el.checked && ix<0) pa2.access[tool].push(code);
+      if (!el.checked && ix>=0) pa2.access[tool].splice(ix,1);
+      saveIA(pa2);
+      if (tool==='voz'){ try{ if(window.SSTT_TTS) SSTT_TTS.cancel(); }catch(_){} }
+      return;
+    }
+    // MERCHANDISING
+    if (act==='merch-hide-add'){ merchListAdd('hidden','mNewHide','oculto'); return; }
+    if (act==='merch-hide-del'){ merchListDel('hidden', el.getAttribute('data-id')); return; }
+    if (act==='merch-out-add'){ merchListAdd('stockOut','mNewOut','sin stock'); return; }
+    if (act==='merch-out-del'){ merchListDel('stockOut', el.getAttribute('data-id')); return; }
+    if (act==='merch-pin-add'){ merchListAdd('pinned','mNewPin','destacado'); return; }
+    if (act==='merch-pin-del'){ merchListDel('pinned', el.getAttribute('data-id')); return; }
+    if (act==='merch-badge-add'){ merchBadgeAdd(); return; }
+    if (act==='merch-badge-del'){ var mb=getMerch(); delete mb.badges[el.getAttribute('data-id')]; saveMerch(mb); renderBody(); _catalogRefresh(); return; }
   }
 
   // ── Eventos: change delegation (inputs inline) ──
@@ -90788,6 +91007,12 @@ window.generateShoppingFeed = function() {
     }
     if (kind==='desp-zonas'){
       var r2=getReglas(); r2.despacho.zonasGratis = val.split(',').map(function(s){return s.trim();}).filter(Boolean); saveReglas(r2); return;
+    }
+    if (kind==='ia-model'){ var pim=getIA(); pim.model[id]=val; saveIA(pim); return; }
+    if (kind==='ia-budget'){ var pib=getIA(); pib.budget[field]=parseInt(val,10)||0; saveIA(pib); return; }
+    if (kind==='ia-over'){ var pio=getIA(); pio.onOver=val; saveIA(pio); return; }
+    if (kind==='ia-quota-msg'){ var piq=getIA(); if(!piq.quota.msgDia) piq.quota.msgDia={}; piq.quota.msgDia[field]=parseInt(val,10)||0; saveIA(piq); return; }
+    if (kind==='ia-quota-tts'){ var pit=getIA(); if(!pit.quota) pit.quota={}; pit.quota.ttsCharMes=parseInt(val,10)||0; saveIA(pit); return;
     }
   }
 
@@ -90848,6 +91073,27 @@ window.generateShoppingFeed = function() {
     var val=(document.getElementById('tierNewVal')||{}).value || 'D';
     var t=getTiers(); t[key]=val; saveTiers(t); renderBody(); calcSafe(); toast('Tarifa '+CODE2NAME[val]+' forzada a '+key);
   }
+  function merchListAdd(listName, inputId, etiqueta){
+    var code=((document.getElementById(inputId)||{}).value||'').trim().toUpperCase();
+    if(!code){ toast('Ingresa un código'); return; }
+    var m=getMerch(); if(!m[listName]) m[listName]=[];
+    if(m[listName].some(function(x){return _U(x)===_U(code);})){ toast('Ya está en la lista'); return; }
+    m[listName].push(code); saveMerch(m); renderBody(); _catalogRefresh();
+    toast(_prodExists(code) ? (code+' → '+etiqueta) : ('⚠️ '+code+' no existe en el catálogo (guardado igual)'));
+  }
+  function merchListDel(listName, code){
+    var m=getMerch(); if(!m[listName]) return;
+    m[listName]=m[listName].filter(function(x){return _U(x)!==_U(code);});
+    saveMerch(m); renderBody(); _catalogRefresh();
+  }
+  function merchBadgeAdd(){
+    var code=((document.getElementById('mNewBadgeCode')||{}).value||'').trim().toUpperCase();
+    var text=((document.getElementById('mNewBadgeText')||{}).value||'').trim();
+    var color=(document.getElementById('mNewBadgeColor')||{}).value || '#C2410C';
+    if(!code || !text){ toast('Código y texto son obligatorios'); return; }
+    var m=getMerch(); m.badges[code]={text:text, color:color}; saveMerch(m); renderBody(); _catalogRefresh();
+    toast(_prodExists(code) ? ('Badge agregado a '+code) : ('⚠️ '+code+' no existe (badge guardado igual)'));
+  }
 
   // ── Open / Close / Launcher ──
   function open(){ if(!isAdmin()){ toast('Solo administradores'); return; } mount(); seedAll(); renderTabs(); renderBody(); var ov=document.getElementById('sadmOverlay'); if(ov){ ov.classList.add('on'); } }
@@ -90874,6 +91120,15 @@ window.generateShoppingFeed = function() {
     pagoPermitido: pagoPermitido,
     applyPayRules: applyPayRules,
     despachoRules: despachoRules,
+    iaKilled: iaKilled,
+    iaToolAllowed: iaToolAllowed,
+    iaVozAllowed: iaVozAllowed,
+    iaTTSEngine: iaTTSEngine,
+    iaModelFor: iaModelFor,
+    merchIsHidden: merchIsHidden,
+    merchPinnedOrder: merchPinnedOrder,
+    merchForcedStock: merchForcedStock,
+    merchBadge: merchBadge,
     isAdmin: isAdmin
   };
 
