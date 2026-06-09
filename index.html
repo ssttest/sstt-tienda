@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 06 de Junio del 2026 · s117 -->
+<!-- SSTT Tienda · Generado: Lunes 08 de Junio del 2026 · s118 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -20513,6 +20513,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         <div class="trow" id="tDescCertRow" style="display:none;color:#1A8C4E;font-weight:700"><span>🏅 Desc. instalador cert.</span><span id="tDescCert">—</span></div>
         <div class="trow" id="tDescVolRow" style="display:none;color:#1A8C4E;font-weight:700"><span>📦 Dcto. volumen</span><span id="tDescVol">—</span></div>
         <div class="trow" id="tDescCuponRow" style="display:none;color:#1A8C4E;font-weight:700"><span>🏷️ Cupón descuento</span><span id="tDescCupon">—</span></div>
+        <div class="trow" id="tDescPromoRow" style="display:none;color:#C2410C;font-weight:700"><span>🎯 Promoción</span><span id="tDescPromo">—</span></div>
         <div class="trow" id="tDescGCRow" style="display:none;color:#6A1B9A;font-weight:700"><span>🎁 Gift card</span><span id="tDescGC">—</span></div>
         <div class="trow" id="tDescPtsRow" style="display:none;color:#D4A03C;font-weight:700"><span>⭐ Descuento puntos</span><span id="tDescPts">—</span></div>
         <div class="trow trow-total"><span>Total con IVA</span><span id="tTotal">$0</span></div>
@@ -27022,7 +27023,11 @@ function calcTotals() {
   }
   // Volumen y cupón no acumulables — cupón tiene prioridad
   if (descCupon > 0) descVol = 0;
-  var netoConCupon = netoConCert - descCupon - descVol;
+  // s118: descuento por promo/campaña automática (panel admin)
+  var _promoRes = (window.SSTT_ADMIN && SSTT_ADMIN.promosCalc) ? SSTT_ADMIN.promosCalc(netoConCert) : {descuento:0, envioGratis:false, nombres:''};
+  var descPromo = Math.max(0, Math.min(_promoRes.descuento||0, netoConCert - descCupon - descVol));
+  if (_promoRes.envioGratis) ship = 0;
+  var netoConCupon = netoConCert - descCupon - descVol - descPromo;
   var ivaConCupon = Math.round(netoConCupon * 0.19);
   // Sprint 2 s74: descuento por canje de puntos
   var canje = puntosCanjeActivo();
@@ -27053,13 +27058,18 @@ function calcTotals() {
   if (elCupon) elCupon.textContent = descCupon > 0 ? '-' + fmt(descCupon) + (S.cupon && S.cupon.tipo==='porcentaje' ? ' (-'+S.cupon.valor+'%)' : '') : '—';
   // s98: actualizar widget cupón (refresh label)
   try { rwCuponRenderWidget(); } catch(e){}
+  // s118: fila descuento promo/campaña
+  var rowPromo = document.getElementById('tDescPromoRow');
+  if (rowPromo) rowPromo.style.display = descPromo > 0 ? '' : 'none';
+  var elPromo = document.getElementById('tDescPromo');
+  if (elPromo) elPromo.textContent = descPromo > 0 ? '-' + fmt(descPromo) + (_promoRes.nombres ? ' (' + _promoRes.nombres + ')' : '') : '—';
   // s98: fila gift card
   var rowGC = document.getElementById('tDescGCRow');
   if (rowGC) rowGC.style.display = descGC > 0 ? '' : 'none';
   var elGC = document.getElementById('tDescGC');
   if (elGC) elGC.textContent = descGC > 0 ? '-' + fmt(descGC) : '—';
   try { rwGiftcardRenderWidget(); } catch(e){}
-  if ((el = document.getElementById('tShip')))  el.textContent = (_eg && _eg.aplica) ? 'Gratis' : (ship > 0 ? fmt(ship) : (S.shipCourier || '—'));
+  if ((el = document.getElementById('tShip')))  el.textContent = ((_eg && _eg.aplica) || (_promoRes && _promoRes.envioGratis)) ? 'Gratis' : (ship > 0 ? fmt(ship) : (S.shipCourier || '—'));
   if ((el = document.getElementById('tShipLbl'))) el.textContent = S.shipCourier ? 'Despacho ('+S.shipCourier+')' : 'Despacho';
   if ((el = document.getElementById('tTotal'))) el.textContent = fmt(total);
   // s100: booster pack — barra despacho + trust + email
@@ -27074,6 +27084,8 @@ function calcTotals() {
   if ((el = document.getElementById('tDescPts'))) el.textContent = descuento > 0 ? '-' + fmt(descuento) : '—';
   var rowEl = document.getElementById('tDescPtsRow');
   if (rowEl) rowEl.style.display = descuento > 0 ? '' : 'none';
+  // s118: aplicar reglas de método de pago por tarifa (panel admin)
+  try { if (window.SSTT_ADMIN && SSTT_ADMIN.applyPayRules) SSTT_ADMIN.applyPayRules(); } catch(e){}
 }
 
 function addCart(p) {
@@ -27605,6 +27617,7 @@ function logout() {
   try { if (window.SSTT_PAPACITO) SSTT_PAPACITO.set(false); } catch(e){} // s117: apagar easter egg papacito
   try { if (window.SSTT_TTS) SSTT_TTS.cancel(); } catch(e){}            // s117: cortar locución premium en curso
   updateAuthUI();
+  try { if (window.SSTT_ADMIN) SSTT_ADMIN.refresh(); } catch(e){} // s118: ocultar launcher admin al cerrar sesión
   closeUserMenu();
   showToast('Sesión cerrada');
 }
@@ -29798,6 +29811,8 @@ function _getTierInfo() {
   if (!tramo) { try { var _cs = JSON.parse(localStorage.getItem('sstt_client_stats')||'null'); if (_cs && _cs.tramo) tramo = _cs.tramo; } catch(e){} }
   // Easter egg: Yeyson Farias → tramo Z (BIP)
   if (typeof USER !== 'undefined' && USER && USER.email && USER.email.toLowerCase() === 'yeyson.farias@gmail.com') tramo = 'Z';
+  // s118: override de tarifa por cliente (panel admin) — gana sobre el cálculo anterior
+  try { if (window.SSTT_ADMIN && SSTT_ADMIN.tierOverrideFor){ var _ovT = SSTT_ADMIN.tierOverrideFor(); if (_ovT) tramo = _ovT; } } catch(e){}
   var tiers = {
     Z: { nombre: 'BIP',          color: '#8B7355', colorBg: '#E8DCC8', min: 0,        max: 0,        siguiente: 'General',      sigMin: 1 },
     D: { nombre: 'General',      color: '#8E8E93', colorBg: '#F5F5F5', min: 0,        max: 999999,   siguiente: 'Preferencial', sigMin: 1000000 },
@@ -30596,6 +30611,7 @@ function submitLogin() {
         closeModal();
         setTimeout(function(){ openModal('perfil'); }, 80);
         showToast('Bienvenido, ' + ap.nombre);
+        try { if (window.SSTT_ADMIN) SSTT_ADMIN.refresh(); } catch(e){} // s118: mostrar launcher del panel admin
         return;
       }
       // s68: BIP Easter egg
@@ -44328,8 +44344,8 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's117',
-  fecha: 'Sábado 06 de Junio del 2026'
+  ver:   's118',
+  fecha: 'Lunes 08 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
@@ -90057,11 +90073,20 @@ window.generateShoppingFeed = function() {
   window.envioGratisCalc = function(neto, metodo){
     neto = Number(neto) || 0;
     var tarifa  = _envioTarifaCliente();
-    var umbral  = ENVIO_TARIFAS_RELACIONALES.indexOf(tarifa) >= 0
-                  ? ENVIO_UMBRAL_GENERAL * ENVIO_FACTOR_RELACIONAL
-                  : ENVIO_UMBRAL_GENERAL;
+    // s118: overrides desde el panel admin (umbral por tarifa, exigencia de Khipu, métodos que liberan flete)
+    var _ar = (window.SSTT_ADMIN && SSTT_ADMIN.despachoRules) ? SSTT_ADMIN.despachoRules() : null;
+    var reqKhipu = (_ar && typeof _ar.requiereKhipu === 'boolean') ? _ar.requiereKhipu : ENVIO_REQUIERE_KHIPU;
+    var metodosGratis = (_ar && _ar.metodosGratis && _ar.metodosGratis.length) ? _ar.metodosGratis : ENVIO_METODOS_GRATIS;
+    var umbral;
+    if (_ar && _ar.umbral && _ar.umbral[tarifa] != null) {
+      umbral = _ar.umbral[tarifa];
+    } else {
+      umbral = ENVIO_TARIFAS_RELACIONALES.indexOf(tarifa) >= 0
+               ? ENVIO_UMBRAL_GENERAL * ENVIO_FACTOR_RELACIONAL
+               : ENVIO_UMBRAL_GENERAL;
+    }
     var califica = neto >= umbral;                                        // alcanza el monto (sin importar pago)
-    var metodoOk = !ENVIO_REQUIERE_KHIPU || (metodo != null && ENVIO_METODOS_GRATIS.indexOf(metodo) >= 0);
+    var metodoOk = !reqKhipu || (metodo != null && metodosGratis.indexOf(metodo) >= 0);
     return {
       tarifa: tarifa,
       umbral: umbral,
@@ -90069,7 +90094,7 @@ window.generateShoppingFeed = function() {
       metodoOk: metodoOk,                                                 // método habilita gratis
       aplica: califica && metodoOk,                                       // flete $0 efectivo
       faltante: Math.max(0, umbral - neto),
-      requiereKhipu: ENVIO_REQUIERE_KHIPU,
+      requiereKhipu: reqKhipu,
       courier: ENVIO_COURIER
     };
   };
@@ -90190,6 +90215,672 @@ window.generateShoppingFeed = function() {
     try { window.s100CartTrust(); } catch(e){}
     try { window.s100CartEmail(); } catch(e){}
   };
+})();
+</script>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════════════
+   s118: SSTT_ADMIN — Centro de Administración (DEMO single-file, localStorage).
+   ──────────────────────────────────────────────────────────────────────────
+   Gestiona: cupones, gift cards, promos/campañas, reglas de pago/despacho y
+   override de tarifa por cliente. Todo cableado a la capa viva (calcTotals,
+   _getTierInfo, envioGratisCalc, #payOpts).
+   MIGRACIÓN ONDA 2 (server-side): basta reemplazar SSTT_STORE.get/set/del por
+   fetch() autenticado al Worker. La UI y los engines NO cambian. Las 5 llaves
+   (sstt_cupones_demo, sstt_giftcards_demo, sstt_promos_v1, sstt_reglas_v1,
+   sstt_tier_overrides_v1) migran juntas.
+   QUITAR (si se descarta): borrar este <script> + los hooks // s118: en
+   calcTotals, _getTierInfo, envioGratisCalc, openCart y el login admin.
+   ══════════════════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  if (window.SSTT_ADMIN) return;
+
+  // ── Storage adapter (ÚNICO punto a cambiar para server-side) ──
+  var STORE = window.SSTT_STORE || (window.SSTT_STORE = {
+    get: function(k, def){ try { var v = localStorage.getItem(k); return (v==null) ? (def===undefined?null:def) : JSON.parse(v); } catch(e){ return (def===undefined?null:def); } },
+    set: function(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; } },
+    del: function(k){ try { localStorage.removeItem(k); } catch(e){} }
+  });
+
+  var K_PROMOS = 'sstt_promos_v1';
+  var K_REGLAS = 'sstt_reglas_v1';
+  var K_TIERS  = 'sstt_tier_overrides_v1';
+
+  var CODE2NAME = { A:'Mayorista', B:'Prime', C:'Preferencial', D:'General', Z:'BIP' };
+  var TARIFA_CODES = ['A','B','C','D','Z'];
+  var METODOS = [ ['webpay','WebPay Plus'], ['transferencia','Transferencia'], ['khipu','Khipu'] ];
+  var TARIFA_NAMES = ['general','preferencial','prime','mayorista'];
+
+  function fmt(n){ try { return (typeof window.fmt==='function') ? window.fmt(n) : ('$'+Number(Math.round(n)||0).toLocaleString('es-CL')); } catch(e){ return '$'+n; } }
+  function toast(m, ms){ try { if (typeof showToast==='function') showToast(m, ms||2600); } catch(e){} }
+  function hoyISO(){ return new Date().toISOString().slice(0,10); }
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function isAdmin(){
+    try {
+      var ADM = ['jgalvez@outlook.com','cristian.nahum.h@gmail.com'];
+      return !!(typeof USER!=='undefined' && USER && USER.email && ADM.indexOf(String(USER.email).toLowerCase())>=0);
+    } catch(e){ return false; }
+  }
+
+  // ── Seeds (idempotentes) ──
+  function seedPromos(){
+    if (STORE.get(K_PROMOS) != null) return;
+    STORE.set(K_PROMOS, [
+      {id:'PR-CAMARAS10', nombre:'Cámaras Dahua -10%', tipo:'porcentaje', valor:10, scope:'categoria', scopeVal:'camaras', min_compra_neto:100000, vigencia_desde:'2026-01-01', vigencia_hasta:'2026-12-31', activo:false, banner:true, bannerText:'🔥 -10% en cámaras Dahua'},
+      {id:'PR-ENVIOGRATIS', nombre:'Envío gratis sobre $150k', tipo:'envio_gratis', valor:0, scope:'todo', scopeVal:'', min_compra_neto:150000, vigencia_desde:'2026-01-01', vigencia_hasta:'2026-12-31', activo:false, banner:false, bannerText:''}
+    ]);
+  }
+  function seedReglas(){
+    if (STORE.get(K_REGLAS) != null) return;
+    STORE.set(K_REGLAS, {
+      pago: { A:['webpay','transferencia','khipu'], B:['webpay','transferencia','khipu'], C:['webpay','transferencia','khipu'], D:['webpay','khipu'], Z:['webpay','khipu'] },
+      despacho: { umbral: { general:200000, preferencial:100000, prime:100000, mayorista:100000 }, requiereKhipu:true, metodosGratis:['khipu'], zonasGratis:[] }
+    });
+  }
+  function seedTiers(){ if (STORE.get(K_TIERS) != null) return; STORE.set(K_TIERS, {}); }
+  function seedAll(){ try { seedPromos(); seedReglas(); seedTiers(); } catch(e){} }
+
+  // ── Getters/Setters ──
+  function getPromos(){ return STORE.get(K_PROMOS, []) || []; }
+  function savePromos(a){ STORE.set(K_PROMOS, a); }
+  function getReglas(){ var r = STORE.get(K_REGLAS, {}) || {}; if(!r.pago) r.pago={}; if(!r.despacho) r.despacho={umbral:{},metodosGratis:[],requiereKhipu:true,zonasGratis:[]}; return r; }
+  function saveReglas(r){ STORE.set(K_REGLAS, r); }
+  function getTiers(){ return STORE.get(K_TIERS, {}) || {}; }
+  function saveTiers(t){ STORE.set(K_TIERS, t); }
+
+  // ── Engine: contexto del carro ──
+  function cartCtx(){
+    var ctx = { neto:0, cats:{}, skus:{}, tarifa:'D' };
+    try {
+      if (typeof S!=='undefined' && S.cart){
+        S.cart.forEach(function(c){
+          var tp = (typeof getTramoPrice==='function') ? getTramoPrice(c) : {neto:(c.pneto||0)};
+          ctx.neto += (tp.neto||0) * (c.qty||1);
+          if (c.cat) ctx.cats[String(c.cat).toLowerCase()] = true;
+          if (c.codigo) ctx.skus[String(c.codigo).toUpperCase()] = true;
+        });
+      }
+      if (typeof _getTierInfo==='function') ctx.tarifa = _getTierInfo().tramo || 'D';
+    } catch(e){}
+    return ctx;
+  }
+  function promoAplica(p, ctx){
+    if (!p || !p.activo) return false;
+    var h = hoyISO();
+    if (p.vigencia_desde && h < p.vigencia_desde) return false;
+    if (p.vigencia_hasta && h > p.vigencia_hasta) return false;
+    if ((ctx.neto||0) < (p.min_compra_neto||0)) return false;
+    if (p.scope==='categoria') return !!ctx.cats[String(p.scopeVal||'').toLowerCase()];
+    if (p.scope==='sku'){
+      var list = String(p.scopeVal||'').split(',').map(function(s){ return s.trim().toUpperCase(); }).filter(Boolean);
+      return list.some(function(s){ return ctx.skus[s]; });
+    }
+    if (p.scope==='tarifa') return (ctx.tarifa === p.scopeVal);
+    return true; // 'todo'
+  }
+  // Usado por calcTotals. Devuelve {descuento, envioGratis, aplicadas[], nombres}
+  function promosCalc(neto){
+    var ctx = cartCtx();
+    if (neto != null) ctx.neto = Number(neto)||0;
+    var res = { descuento:0, envioGratis:false, aplicadas:[], nombres:'' };
+    try {
+      getPromos().forEach(function(p){
+        if (!promoAplica(p, ctx)) return;
+        if (p.tipo==='porcentaje'){ res.descuento += Math.round(ctx.neto * (p.valor||0)/100); res.aplicadas.push(p); }
+        else if (p.tipo==='monto'){ res.descuento += (p.valor||0); res.aplicadas.push(p); }
+        else if (p.tipo==='envio_gratis'){ res.envioGratis = true; res.aplicadas.push(p); }
+      });
+      res.descuento = Math.max(0, Math.min(res.descuento, ctx.neto));
+      res.nombres = res.aplicadas.map(function(p){ return p.nombre; }).join(', ');
+    } catch(e){}
+    return res;
+  }
+
+  // ── Engine: override de tarifa (usado por _getTierInfo) ──
+  function tierOverrideFor(){
+    try {
+      if (typeof USER==='undefined' || !USER) return null;
+      var t = getTiers();
+      var email = String(USER.email||'').toLowerCase();
+      if (email && t[email]) return t[email];
+      var rut = '';
+      try { rut = (typeof rwUsuarioRut==='function' && rwUsuarioRut()) ? rwUsuarioRut() : (USER.rut||''); } catch(e){}
+      if (rut && t[rut]) return t[rut];
+    } catch(e){}
+    return null;
+  }
+
+  // ── Engine: reglas de pago (usado por applyPayRules) ──
+  function pagoPermitido(metodo, tarifa){
+    try {
+      var r = getReglas(); if (!r.pago) return true;
+      var allowed = r.pago[tarifa]; if (!allowed) return true;
+      return allowed.indexOf(metodo) >= 0;
+    } catch(e){ return true; }
+  }
+  function applyPayRules(){
+    try {
+      var tarifa = (typeof _getTierInfo==='function') ? (_getTierInfo().tramo||'D') : 'D';
+      var opts = document.querySelectorAll('#payOpts .pay-opt');
+      if (!opts.length) return;
+      var firstVisible = null;
+      opts.forEach(function(o){
+        var inp = o.querySelector('input'); if (!inp) return;
+        var ok = pagoPermitido(inp.value, tarifa);
+        o.style.display = ok ? '' : 'none';
+        if (ok && !firstVisible) firstVisible = o;
+      });
+      var sel = document.querySelector('#payOpts .pay-opt.on');
+      if (sel && sel.style.display==='none' && firstVisible){
+        opts.forEach(function(o){ o.classList.remove('on'); });
+        firstVisible.classList.add('on');
+        var fi = firstVisible.querySelector('input'); if (fi) fi.checked = true;
+        try { calcTotals(); } catch(e){}
+      }
+    } catch(e){}
+  }
+
+  // ── Engine: reglas de despacho (usado por envioGratisCalc) ──
+  function despachoRules(){ try { var r = getReglas(); return r.despacho || null; } catch(e){ return null; } }
+
+  // ════════════════════════════════════════════════════════════
+  //  PANEL UI
+  // ════════════════════════════════════════════════════════════
+  var _tab = 'dash';
+  var _mounted = false;
+  var INP = 'width:100%;padding:6px 8px;border:1.5px solid var(--border,#ddd);border-radius:7px;font-size:12px;font-family:var(--font,system-ui);background:var(--bg,#fff);color:var(--text,#111);box-sizing:border-box';
+  var BTN = 'border:none;border-radius:7px;padding:6px 11px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font,system-ui)';
+
+  function injectCSS(){
+    if (document.getElementById('sadm-css')) return;
+    var st = document.createElement('style'); st.id = 'sadm-css';
+    st.textContent =
+      '#sadmOverlay{position:fixed;inset:0;z-index:2147482000;background:rgba(8,12,22,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:24px 14px;overflow:auto}' +
+      '#sadmOverlay.on{display:flex}' +
+      '#sadmPanel{width:100%;max-width:920px;background:var(--bg,#fff);color:var(--text,#0A1628);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;font-family:var(--font,system-ui);margin:auto 0}' +
+      '.sadm-head{display:flex;align-items:center;gap:10px;padding:14px 18px;background:linear-gradient(135deg,#0A1628,#15294a);color:#fff}' +
+      '.sadm-head h3{margin:0;font-size:16px;font-weight:800;flex:1}' +
+      '.sadm-badge{font-size:9px;background:#FFB800;color:#000;padding:2px 7px;border-radius:4px;font-weight:800;letter-spacing:.4px}' +
+      '.sadm-x{background:rgba(255,255,255,.14);color:#fff;border:none;width:30px;height:30px;border-radius:8px;font-size:17px;cursor:pointer;line-height:1}' +
+      '.sadm-tabs{display:flex;gap:4px;flex-wrap:wrap;padding:10px 14px 0;background:var(--bg2,#f6f7f9)}' +
+      '.sadm-tab{border:none;background:transparent;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;border-radius:9px 9px 0 0;color:var(--muted,#667);font-family:var(--font,system-ui)}' +
+      '.sadm-tab.on{background:var(--bg,#fff);color:var(--text,#0A1628);box-shadow:0 -2px 0 #1B2CC1 inset}' +
+      '#sadmBody{padding:16px 18px;max-height:64vh;overflow:auto}' +
+      '.sadm-card{border:1px solid var(--border,#e5e7eb);border-radius:11px;padding:12px;margin-bottom:10px;background:var(--bg,#fff)}' +
+      '.sadm-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}' +
+      '.sadm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px}' +
+      '.sadm-lbl{font-size:10px;font-weight:700;color:var(--muted,#778);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;display:block}' +
+      '.sadm-tag{font-size:10px;padding:2px 7px;border-radius:5px;font-weight:800}' +
+      '.sadm-on{background:#1A8C4E;color:#fff}.sadm-off{background:#e5e7eb;color:#667}' +
+      '.sadm-del{background:#fde8e8;color:#C62828}' +
+      '.sadm-sec-title{font-size:13px;font-weight:800;margin:2px 0 8px;color:var(--text,#0A1628)}' +
+      '.sadm-note{font-size:11px;color:var(--muted,#778);line-height:1.5}' +
+      '.sadm-mini{font-size:11px;color:var(--muted,#778)}' +
+      '#sadmLauncher{position:fixed;right:16px;bottom:16px;z-index:99990;background:linear-gradient(135deg,#0A1628,#15294a);color:#fff;border:none;border-radius:30px;padding:11px 16px;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.3);font-family:var(--font,system-ui);display:none;align-items:center;gap:7px}' +
+      '#sadmLauncher.on{display:inline-flex}' +
+      '@media(max-width:600px){#sadmPanel{max-width:100%}#sadmBody{max-height:70vh}}';
+    document.head.appendChild(st);
+  }
+
+  function mount(){
+    if (_mounted) return;
+    injectCSS();
+    var ov = document.createElement('div'); ov.id = 'sadmOverlay';
+    ov.innerHTML =
+      '<div id="sadmPanel" role="dialog" aria-label="Centro de administración">' +
+        '<div class="sadm-head">' +
+          '<span style="font-size:18px">🛠️</span>' +
+          '<h3>Centro de Administración</h3>' +
+          '<span class="sadm-badge">DEMO</span>' +
+          '<button class="sadm-x" data-act="close" title="Cerrar">×</button>' +
+        '</div>' +
+        '<div class="sadm-tabs" id="sadmTabs">' +
+          tabBtn('dash','📊 Resumen') + tabBtn('cup','🏷️ Cupones') + tabBtn('gc','🎁 Gift cards') +
+          tabBtn('promo','🎯 Promos') + tabBtn('reglas','💳 Reglas') + tabBtn('tier','👤 Tarifas') +
+        '</div>' +
+        '<div id="sadmBody"></div>' +
+      '</div>';
+    document.body.appendChild(ov);
+    // Cerrar al click en backdrop
+    ov.addEventListener('click', function(e){ if (e.target === ov) close(); });
+    // Delegación de clicks
+    ov.addEventListener('click', onClick);
+    // Delegación de cambios (inputs)
+    ov.addEventListener('change', onChange);
+    _mounted = true;
+  }
+  function tabBtn(id, label){ return '<button class="sadm-tab'+(_tab===id?' on':'')+'" data-act="tab" data-tab="'+id+'">'+label+'</button>'; }
+
+  function renderTabs(){
+    var t = document.getElementById('sadmTabs'); if (!t) return;
+    [].forEach.call(t.querySelectorAll('.sadm-tab'), function(b){ b.classList.toggle('on', b.getAttribute('data-tab')===_tab); });
+  }
+  function renderBody(){
+    var b = document.getElementById('sadmBody'); if (!b) return;
+    if (_tab==='dash')   b.innerHTML = viewDash();
+    else if (_tab==='cup')    b.innerHTML = viewCupones();
+    else if (_tab==='gc')     b.innerHTML = viewGiftcards();
+    else if (_tab==='promo')  b.innerHTML = viewPromos();
+    else if (_tab==='reglas') b.innerHTML = viewReglas();
+    else if (_tab==='tier')   b.innerHTML = viewTiers();
+    b.scrollTop = 0;
+  }
+
+  // ── VIEW: Dashboard ──
+  function viewDash(){
+    var cup = (typeof rwCuponGetAll==='function') ? rwCuponGetAll() : [];
+    var gc  = (typeof rwGiftcardGetAll==='function') ? rwGiftcardGetAll() : [];
+    var pr  = getPromos();
+    var ti  = getTiers();
+    var cupAct = cup.filter(function(c){return c.activo;}).length;
+    var prAct  = pr.filter(function(p){return p.activo;}).length;
+    var gcSaldo = gc.reduce(function(a,g){ return a + (g.saldo_actual||0); }, 0);
+    function stat(n, l, c){ return '<div class="sadm-card" style="text-align:center"><div style="font-size:26px;font-weight:900;color:'+c+'">'+n+'</div><div class="sadm-mini" style="margin-top:2px">'+l+'</div></div>'; }
+    return '<div class="sadm-grid" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr))">' +
+        stat(cupAct+'/'+cup.length,'Cupones activos','#1A8C4E') +
+        stat(prAct+'/'+pr.length,'Promos activas','#C2410C') +
+        stat(gc.length,'Gift cards','#6A1B9A') +
+        stat(fmt(gcSaldo),'Saldo gift cards','#6A1B9A') +
+        stat(Object.keys(ti).length,'Tarifas forzadas','#1B2CC1') +
+      '</div>' +
+      '<div class="sadm-card" style="margin-top:6px">' +
+        '<div class="sadm-note">Todos los cambios se aplican <b>de inmediato</b> al checkout de este equipo (cálculo de totales, métodos de pago visibles, envío gratis y tarifa del cliente). ' +
+        'Es una <b>demo single-file</b>: vive en este navegador. Para que tus clientes lo vean en sus dispositivos y no se pueda saltar, migra a server-side (Onda 2) — el código del panel no cambia, solo el adaptador de datos.</div>' +
+        '<div style="margin-top:10px" class="sadm-row">' +
+          '<button data-act="reseed" style="'+BTN+';background:#fff3e0;color:#C2410C;border:1px solid #ffcc80">↺ Restaurar datos demo</button>' +
+        '</div>' +
+      '</div>';
+  }
+
+  // ── VIEW: Cupones (reusa rwCupon*) ──
+  function viewCupones(){
+    var arr = (typeof rwCuponGetAll==='function') ? rwCuponGetAll() : [];
+    var h = '<div class="sadm-sec-title">Cupones de descuento</div>';
+    h += arr.map(function(c){
+      return '<div class="sadm-card" data-kind="cup" data-id="'+esc(c.code)+'">' +
+        '<div class="sadm-row" style="justify-content:space-between">' +
+          '<div class="sadm-row" style="gap:7px"><b style="font-size:14px">'+esc(c.code)+'</b>' +
+            '<span class="sadm-tag '+(c.activo?'sadm-on':'sadm-off')+'">'+(c.activo?'ACTIVO':'OFF')+'</span></div>' +
+          '<div class="sadm-row" style="gap:6px">' +
+            '<button data-act="cup-tog" data-id="'+esc(c.code)+'" style="'+BTN+';background:'+(c.activo?'#e8f5e9':'#eef')+';color:#333">'+(c.activo?'Desactivar':'Activar')+'</button>' +
+            '<button data-act="cup-del" data-id="'+esc(c.code)+'" class="sadm-del" style="'+BTN+'">Eliminar</button>' +
+          '</div></div>' +
+        '<div class="sadm-grid" style="margin-top:9px">' +
+          fld('Tipo', selTipoCupon(c.tipo, c.code)) +
+          fld('Valor'+(c.tipo==='porcentaje'?' (%)':' ($)'), num('cup', c.code, 'valor', c.valor)) +
+          fld('Tope desc. ($)', num('cup', c.code, 'tope_descuento', c.tope_descuento)) +
+          fld('Mín. compra neto ($)', num('cup', c.code, 'min_compra_neto', c.min_compra_neto)) +
+          fld('Usos máx.', num('cup', c.code, 'usos_max', c.usos_max)) +
+          fld('Usos/usuario', num('cup', c.code, 'usos_max_usuario', c.usos_max_usuario)) +
+          fld('Vigente desde', date('cup', c.code, 'vigencia_desde', c.vigencia_desde)) +
+          fld('Vigente hasta', date('cup', c.code, 'vigencia_hasta', c.vigencia_hasta)) +
+        '</div>' +
+        '<div class="sadm-mini" style="margin-top:6px">Usos: '+(c.usos_actual||0)+' / '+(c.usos_max||0)+'</div>' +
+      '</div>';
+    }).join('');
+    // Form alta
+    h += '<div class="sadm-card" style="border-style:dashed">' +
+      '<div class="sadm-sec-title">➕ Nuevo cupón</div>' +
+      '<div class="sadm-grid">' +
+        fld('Código', '<input id="cupNewCode" placeholder="EJ: PROMO15" style="'+INP+';text-transform:uppercase">') +
+        fld('Tipo', '<select id="cupNewTipo" style="'+INP+'"><option value="porcentaje">Porcentaje (%)</option><option value="monto">Monto fijo ($)</option></select>') +
+        fld('Valor', '<input id="cupNewValor" type="number" value="5" style="'+INP+'">') +
+        fld('Mín. compra neto', '<input id="cupNewMin" type="number" value="0" style="'+INP+'">') +
+        fld('Tope desc.', '<input id="cupNewTope" type="number" value="0" style="'+INP+'">') +
+        fld('Usos/usuario', '<input id="cupNewUsosU" type="number" value="1" style="'+INP+'">') +
+      '</div>' +
+      '<div style="margin-top:9px"><button data-act="cup-add" style="'+BTN+';background:var(--black,#111);color:#fff">Agregar cupón</button></div>' +
+    '</div>';
+    return h;
+  }
+  function selTipoCupon(v, code){
+    return '<select data-kind="cup" data-id="'+esc(code)+'" data-field="tipo" style="'+INP+'">' +
+      '<option value="porcentaje"'+(v==='porcentaje'?' selected':'')+'>Porcentaje (%)</option>' +
+      '<option value="monto"'+(v==='monto'?' selected':'')+'>Monto fijo ($)</option></select>';
+  }
+
+  // ── VIEW: Gift cards (reusa rwGiftcard*) ──
+  function viewGiftcards(){
+    var arr = (typeof rwGiftcardGetAll==='function') ? rwGiftcardGetAll() : [];
+    var h = '<div class="sadm-sec-title">Gift cards</div>';
+    h += arr.map(function(g){
+      return '<div class="sadm-card">' +
+        '<div class="sadm-row" style="justify-content:space-between">' +
+          '<div class="sadm-row" style="gap:7px"><b style="font-size:14px">'+esc(g.code)+'</b>' +
+            '<span class="sadm-tag '+(g.activo?'sadm-on':'sadm-off')+'">'+(g.activo?'ACTIVA':'OFF')+'</span></div>' +
+          '<div class="sadm-row" style="gap:6px">' +
+            '<button data-act="gc-tog" data-id="'+esc(g.code)+'" style="'+BTN+';background:'+(g.activo?'#f3e5f5':'#eef')+';color:#333">'+(g.activo?'Desactivar':'Activar')+'</button>' +
+            '<button data-act="gc-del" data-id="'+esc(g.code)+'" class="sadm-del" style="'+BTN+'">Eliminar</button>' +
+          '</div></div>' +
+        '<div class="sadm-grid" style="margin-top:9px">' +
+          fld('Saldo actual ($)', num('gc', g.code, 'saldo_actual', g.saldo_actual)) +
+          fld('Saldo inicial ($)', '<input value="'+esc(g.saldo_inicial)+'" disabled style="'+INP+';opacity:.6">') +
+          fld('Expira', date('gc', g.code, 'fecha_expiracion', g.fecha_expiracion)) +
+        '</div>' +
+        '<div class="sadm-mini" style="margin-top:6px">Movimientos: '+((g.movimientos||[]).length)+'</div>' +
+      '</div>';
+    }).join('');
+    h += '<div class="sadm-card" style="border-style:dashed">' +
+      '<div class="sadm-sec-title">➕ Emitir gift card</div>' +
+      '<div class="sadm-grid">' +
+        fld('Código (vacío = auto)', '<input id="gcNewCode" placeholder="GIFT-XXXX" style="'+INP+';text-transform:uppercase">') +
+        fld('Saldo ($)', '<input id="gcNewSaldo" type="number" value="50000" style="'+INP+'">') +
+        fld('Expira', '<input id="gcNewExp" type="date" value="2027-12-31" style="'+INP+'">') +
+      '</div>' +
+      '<div style="margin-top:9px"><button data-act="gc-add" style="'+BTN+';background:#6A1B9A;color:#fff">Emitir gift card</button></div>' +
+    '</div>';
+    return h;
+  }
+
+  // ── VIEW: Promos / Campañas ──
+  function viewPromos(){
+    var arr = getPromos();
+    var h = '<div class="sadm-sec-title">Promociones y campañas</div>' +
+      '<div class="sadm-note" style="margin-bottom:8px">Las promos activas se aplican <b>automáticas</b> en el carro (sin código). Se acumulan sobre el cupón manual; el descuento total nunca supera el neto.</div>';
+    h += arr.map(function(p){
+      return '<div class="sadm-card">' +
+        '<div class="sadm-row" style="justify-content:space-between">' +
+          '<div class="sadm-row" style="gap:7px"><b style="font-size:13.5px">'+esc(p.nombre)+'</b>' +
+            '<span class="sadm-tag '+(p.activo?'sadm-on':'sadm-off')+'">'+(p.activo?'ACTIVA':'OFF')+'</span></div>' +
+          '<div class="sadm-row" style="gap:6px">' +
+            '<button data-act="promo-tog" data-id="'+esc(p.id)+'" style="'+BTN+';background:'+(p.activo?'#fff3e0':'#eef')+';color:#333">'+(p.activo?'Desactivar':'Activar')+'</button>' +
+            '<button data-act="promo-del" data-id="'+esc(p.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button>' +
+          '</div></div>' +
+        '<div class="sadm-grid" style="margin-top:9px">' +
+          fld('Nombre', '<input data-kind="promo" data-id="'+esc(p.id)+'" data-field="nombre" value="'+esc(p.nombre)+'" style="'+INP+'">') +
+          fld('Tipo', selTipoPromo(p.tipo, p.id)) +
+          fld('Valor', num('promo', p.id, 'valor', p.valor)) +
+          fld('Alcance', selScope(p.scope, p.id)) +
+          fld('Valor alcance (cat/sku/tarifa)', '<input data-kind="promo" data-id="'+esc(p.id)+'" data-field="scopeVal" value="'+esc(p.scopeVal)+'" placeholder="camaras / SKU1,SKU2 / A" style="'+INP+'">') +
+          fld('Mín. compra neto', num('promo', p.id, 'min_compra_neto', p.min_compra_neto)) +
+          fld('Desde', date('promo', p.id, 'vigencia_desde', p.vigencia_desde)) +
+          fld('Hasta', date('promo', p.id, 'vigencia_hasta', p.vigencia_hasta)) +
+        '</div>' +
+        '<div class="sadm-mini" style="margin-top:6px">Tipos: <b>porcentaje</b>=% off · <b>monto</b>=$ off · <b>envío gratis</b>=flete $0. Alcance <b>tarifa</b> usa código A/B/C/D/Z.</div>' +
+      '</div>';
+    }).join('');
+    h += '<div class="sadm-card" style="border-style:dashed">' +
+      '<div class="sadm-sec-title">➕ Nueva promo / campaña</div>' +
+      '<div class="sadm-grid">' +
+        fld('Nombre', '<input id="prNewNombre" placeholder="Ej: Cyber Dahua" style="'+INP+'">') +
+        fld('Tipo', '<select id="prNewTipo" style="'+INP+'"><option value="porcentaje">Porcentaje (%)</option><option value="monto">Monto ($)</option><option value="envio_gratis">Envío gratis</option></select>') +
+        fld('Valor', '<input id="prNewValor" type="number" value="10" style="'+INP+'">') +
+        fld('Alcance', '<select id="prNewScope" style="'+INP+'"><option value="todo">Todo el carro</option><option value="categoria">Categoría</option><option value="sku">SKU(s)</option><option value="tarifa">Tarifa</option></select>') +
+        fld('Valor alcance', '<input id="prNewScopeVal" placeholder="camaras / A / SKU1,SKU2" style="'+INP+'">') +
+        fld('Mín. compra neto', '<input id="prNewMin" type="number" value="0" style="'+INP+'">') +
+      '</div>' +
+      '<div style="margin-top:9px"><button data-act="promo-add" style="'+BTN+';background:#C2410C;color:#fff">Crear promo</button></div>' +
+    '</div>';
+    return h;
+  }
+  function selTipoPromo(v, id){
+    return '<select data-kind="promo" data-id="'+esc(id)+'" data-field="tipo" style="'+INP+'">' +
+      '<option value="porcentaje"'+(v==='porcentaje'?' selected':'')+'>Porcentaje (%)</option>' +
+      '<option value="monto"'+(v==='monto'?' selected':'')+'>Monto ($)</option>' +
+      '<option value="envio_gratis"'+(v==='envio_gratis'?' selected':'')+'>Envío gratis</option></select>';
+  }
+  function selScope(v, id){
+    var opts = [['todo','Todo el carro'],['categoria','Categoría'],['sku','SKU(s)'],['tarifa','Tarifa']];
+    return '<select data-kind="promo" data-id="'+esc(id)+'" data-field="scope" style="'+INP+'">' +
+      opts.map(function(o){ return '<option value="'+o[0]+'"'+(v===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('') + '</select>';
+  }
+
+  // ── VIEW: Reglas (pago + despacho) ──
+  function viewReglas(){
+    var r = getReglas();
+    var h = '<div class="sadm-sec-title">Métodos de pago por tarifa</div>' +
+      '<div class="sadm-note" style="margin-bottom:8px">Marca qué métodos puede usar cada tarifa en el checkout. Los no marcados se ocultan a ese cliente.</div>' +
+      '<div class="sadm-card"><table style="width:100%;border-collapse:collapse;font-size:12px"><tr><th style="text-align:left;padding:4px">Tarifa</th>' +
+        METODOS.map(function(m){ return '<th style="padding:4px">'+m[1]+'</th>'; }).join('') + '</tr>';
+    TARIFA_CODES.forEach(function(code){
+      var allowed = (r.pago && r.pago[code]) || [];
+      h += '<tr><td style="padding:5px 4px;font-weight:700">'+CODE2NAME[code]+' <span class="sadm-mini">('+code+')</span></td>' +
+        METODOS.map(function(m){
+          var on = allowed.indexOf(m[0])>=0;
+          return '<td style="text-align:center;padding:5px 4px"><input type="checkbox" data-act="pago-tog" data-t="'+code+'" data-m="'+m[0]+'"'+(on?' checked':'')+' style="width:17px;height:17px;cursor:pointer"></td>';
+        }).join('') + '</tr>';
+    });
+    h += '</table></div>';
+
+    // Despacho
+    var d = r.despacho || {};
+    var um = d.umbral || {};
+    h += '<div class="sadm-sec-title" style="margin-top:14px">Envío gratis · umbral por tarifa (neto, sin IVA)</div>' +
+      '<div class="sadm-card"><div class="sadm-grid">' +
+        TARIFA_NAMES.map(function(n){
+          return fld(n.charAt(0).toUpperCase()+n.slice(1), '<input type="number" data-kind="desp-umbral" data-field="'+n+'" value="'+(um[n]!=null?um[n]:'')+'" style="'+INP+'">');
+        }).join('') +
+      '</div>' +
+      '<div class="sadm-row" style="margin-top:10px;gap:16px">' +
+        '<label class="sadm-row" style="gap:6px;cursor:pointer"><input type="checkbox" data-act="khipu-tog"'+(d.requiereKhipu?' checked':'')+' style="width:17px;height:17px"> <span style="font-size:12px;font-weight:700">Exigir Khipu para envío gratis</span></label>' +
+      '</div>' +
+      '<div style="margin-top:10px">' +
+        '<span class="sadm-lbl">Métodos que habilitan envío gratis</span>' +
+        '<div class="sadm-row" style="gap:14px">' +
+          METODOS.map(function(m){
+            var on = (d.metodosGratis||[]).indexOf(m[0])>=0;
+            return '<label class="sadm-row" style="gap:6px;cursor:pointer"><input type="checkbox" data-act="metgratis-tog" data-m="'+m[0]+'"'+(on?' checked':'')+' style="width:16px;height:16px"> <span style="font-size:12px">'+m[1]+'</span></label>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+      '<div style="margin-top:10px">' +
+        fld('Zonas/regiones con envío gratis (coma) — informativo', '<input data-kind="desp-zonas" value="'+esc((d.zonasGratis||[]).join(', '))+'" placeholder="Metropolitana, Valparaíso" style="'+INP+'">') +
+      '</div>' +
+      '</div>' +
+      '<div class="sadm-note">Estas reglas alimentan la fuente única <code>envioGratisCalc()</code> del checkout. (Las zonas son referenciales en la demo; el cálculo por región real es de Onda 2.)</div>';
+    return h;
+  }
+
+  // ── VIEW: Override de tarifa por cliente ──
+  function viewTiers(){
+    var t = getTiers();
+    var keys = Object.keys(t);
+    var h = '<div class="sadm-sec-title">Forzar tarifa a un cliente</div>' +
+      '<div class="sadm-note" style="margin-bottom:8px">Asocia un email o RUT a una tarifa. Cuando ese cliente inicia sesión, su tarifa (precios, voz, envío) se fuerza a la indicada. ' +
+      '<b>Hoy el login es solo-demo</b>: aplica a los correos demo o cuando exista login real (Onda 2).</div>';
+    if (!keys.length) h += '<div class="sadm-card sadm-mini">Sin overrides. Agrega uno abajo.</div>';
+    h += keys.map(function(k){
+      return '<div class="sadm-card"><div class="sadm-row" style="justify-content:space-between">' +
+        '<div><b style="font-size:13px">'+esc(k)+'</b><div class="sadm-mini" style="margin-top:2px">Tarifa: '+CODE2NAME[t[k]]+' ('+t[k]+')</div></div>' +
+        '<div class="sadm-row" style="gap:6px">' +
+          '<select data-kind="tier" data-id="'+esc(k)+'" data-field="tarifa" style="'+INP+';width:auto">' +
+            TARIFA_CODES.map(function(c){ return '<option value="'+c+'"'+(t[k]===c?' selected':'')+'>'+CODE2NAME[c]+' ('+c+')</option>'; }).join('') +
+          '</select>' +
+          '<button data-act="tier-del" data-id="'+esc(k)+'" class="sadm-del" style="'+BTN+'">Quitar</button>' +
+        '</div></div></div>';
+    }).join('');
+    h += '<div class="sadm-card" style="border-style:dashed">' +
+      '<div class="sadm-sec-title">➕ Nuevo override</div>' +
+      '<div class="sadm-grid">' +
+        fld('Email o RUT', '<input id="tierNewKey" placeholder="cliente@correo.cl o 12.345.678-9" style="'+INP+'">') +
+        fld('Tarifa', '<select id="tierNewVal" style="'+INP+'">' + TARIFA_CODES.map(function(c){ return '<option value="'+c+'">'+CODE2NAME[c]+' ('+c+')</option>'; }).join('') + '</select>') +
+      '</div>' +
+      '<div style="margin-top:9px"><button data-act="tier-add" style="'+BTN+';background:#1B2CC1;color:#fff">Agregar override</button></div>' +
+    '</div>';
+    return h;
+  }
+
+  // ── Helpers de campos ──
+  function fld(label, inner){ return '<div><span class="sadm-lbl">'+label+'</span>'+inner+'</div>'; }
+  function num(kind, id, field, val){ return '<input type="number" data-kind="'+kind+'" data-id="'+esc(id)+'" data-field="'+field+'" value="'+(val!=null?val:'')+'" style="'+INP+'">'; }
+  function date(kind, id, field, val){ return '<input type="date" data-kind="'+kind+'" data-id="'+esc(id)+'" data-field="'+field+'" value="'+esc(val)+'" style="'+INP+'">'; }
+
+  // ── Eventos: click delegation ──
+  function onClick(e){
+    var el = e.target.closest('[data-act]'); if (!el) return;
+    var act = el.getAttribute('data-act');
+    if (act==='close'){ close(); return; }
+    if (act==='tab'){ _tab = el.getAttribute('data-tab'); renderTabs(); renderBody(); return; }
+    if (act==='reseed'){
+      if (!confirm('¿Restaurar TODOS los datos demo (cupones, gift cards, promos, reglas, tarifas)? Se perderán tus cambios en este navegador.')) return;
+      STORE.del(K_PROMOS); STORE.del(K_REGLAS); STORE.del(K_TIERS);
+      try { localStorage.removeItem('sstt_cupones_demo'); localStorage.removeItem('sstt_giftcards_demo'); } catch(_){}
+      try { if (typeof rwCuponSeedDemo==='function') rwCuponSeedDemo(); if (typeof rwGiftcardSeedDemo==='function') rwGiftcardSeedDemo(); } catch(_){}
+      seedAll(); renderBody(); toast('Datos demo restaurados'); try { calcTotals(); } catch(_){}
+      return;
+    }
+    // CUPONES
+    if (act==='cup-tog'){ var arr=rwCuponGetAll(); var c=arr.find(function(x){return x.code===el.getAttribute('data-id');}); if(c){c.activo=!c.activo; rwCuponSaveAll(arr); renderBody(); calcSafe();} return; }
+    if (act==='cup-del'){ if(!confirm('¿Eliminar cupón '+el.getAttribute('data-id')+'?')) return; var a=rwCuponGetAll().filter(function(x){return x.code!==el.getAttribute('data-id');}); rwCuponSaveAll(a); renderBody(); calcSafe(); return; }
+    if (act==='cup-add'){ cupAdd(); return; }
+    // GIFT CARDS
+    if (act==='gc-tog'){ var ga=rwGiftcardGetAll(); var g=ga.find(function(x){return x.code===el.getAttribute('data-id');}); if(g){g.activo=!g.activo; rwGiftcardSaveAll(ga); renderBody(); calcSafe();} return; }
+    if (act==='gc-del'){ if(!confirm('¿Eliminar gift card '+el.getAttribute('data-id')+'?')) return; var a=rwGiftcardGetAll().filter(function(x){return x.code!==el.getAttribute('data-id');}); rwGiftcardSaveAll(a); renderBody(); calcSafe(); return; }
+    if (act==='gc-add'){ gcAdd(); return; }
+    // PROMOS
+    if (act==='promo-tog'){ var pa=getPromos(); var p=pa.find(function(x){return x.id===el.getAttribute('data-id');}); if(p){p.activo=!p.activo; savePromos(pa); renderBody(); calcSafe();} return; }
+    if (act==='promo-del'){ if(!confirm('¿Eliminar promo?')) return; var a=getPromos().filter(function(x){return x.id!==el.getAttribute('data-id');}); savePromos(a); renderBody(); calcSafe(); return; }
+    if (act==='promo-add'){ promoAdd(); return; }
+    // REGLAS pago
+    if (act==='pago-tog'){
+      var r=getReglas(); var code=el.getAttribute('data-t'); var m=el.getAttribute('data-m');
+      if(!r.pago[code]) r.pago[code]=[];
+      var i=r.pago[code].indexOf(m);
+      if (el.checked && i<0) r.pago[code].push(m);
+      if (!el.checked && i>=0) r.pago[code].splice(i,1);
+      saveReglas(r); applyPayRules(); return;
+    }
+    if (act==='khipu-tog'){ var r2=getReglas(); r2.despacho.requiereKhipu=el.checked; saveReglas(r2); calcSafe(); return; }
+    if (act==='metgratis-tog'){
+      var r3=getReglas(); if(!r3.despacho.metodosGratis) r3.despacho.metodosGratis=[];
+      var mm=el.getAttribute('data-m'); var j=r3.despacho.metodosGratis.indexOf(mm);
+      if (el.checked && j<0) r3.despacho.metodosGratis.push(mm);
+      if (!el.checked && j>=0) r3.despacho.metodosGratis.splice(j,1);
+      saveReglas(r3); calcSafe(); return;
+    }
+    // TIERS
+    if (act==='tier-del'){ var t=getTiers(); delete t[el.getAttribute('data-id')]; saveTiers(t); renderBody(); calcSafe(); return; }
+    if (act==='tier-add'){ tierAdd(); return; }
+  }
+
+  // ── Eventos: change delegation (inputs inline) ──
+  function onChange(e){
+    var el = e.target;
+    var kind = el.getAttribute && el.getAttribute('data-kind');
+    if (!kind) return;
+    var field = el.getAttribute('data-field');
+    var id = el.getAttribute('data-id');
+    var val = el.value;
+    var numFields = ['valor','tope_descuento','min_compra_neto','usos_max','usos_max_usuario','saldo_actual'];
+
+    if (kind==='cup'){
+      var a=rwCuponGetAll(); var c=a.find(function(x){return x.code===id;}); if(!c) return;
+      c[field] = (numFields.indexOf(field)>=0) ? (parseInt(val,10)||0) : val;
+      rwCuponSaveAll(a); calcSafe(); return;
+    }
+    if (kind==='gc'){
+      var ga=rwGiftcardGetAll(); var g=ga.find(function(x){return x.code===id;}); if(!g) return;
+      g[field] = (field==='saldo_actual') ? (parseInt(val,10)||0) : val;
+      rwGiftcardSaveAll(ga); calcSafe(); return;
+    }
+    if (kind==='promo'){
+      var pa=getPromos(); var p=pa.find(function(x){return x.id===id;}); if(!p) return;
+      p[field] = (numFields.indexOf(field)>=0) ? (parseInt(val,10)||0) : val;
+      savePromos(pa); calcSafe(); return;
+    }
+    if (kind==='tier'){
+      var t=getTiers(); if(t[id]!=null){ t[id]=val; saveTiers(t); calcSafe(); } return;
+    }
+    if (kind==='desp-umbral'){
+      var r=getReglas(); if(!r.despacho.umbral) r.despacho.umbral={};
+      r.despacho.umbral[field] = parseInt(val,10)||0; saveReglas(r); calcSafe(); return;
+    }
+    if (kind==='desp-zonas'){
+      var r2=getReglas(); r2.despacho.zonasGratis = val.split(',').map(function(s){return s.trim();}).filter(Boolean); saveReglas(r2); return;
+    }
+  }
+
+  function calcSafe(){ try { if (typeof calcTotals==='function') calcTotals(); } catch(e){} }
+
+  // ── Alta de registros ──
+  function cupAdd(){
+    var code=(document.getElementById('cupNewCode')||{}).value || '';
+    code=code.trim().toUpperCase();
+    if(!code){ toast('Ingresa un código'); return; }
+    var arr=rwCuponGetAll();
+    if(arr.some(function(c){return c.code===code;})){ toast('Ese código ya existe'); return; }
+    var tipo=(document.getElementById('cupNewTipo')||{}).value || 'porcentaje';
+    arr.push({
+      code:code, tipo:tipo,
+      valor:parseInt((document.getElementById('cupNewValor')||{}).value,10)||0,
+      vigencia_desde:hoyISO(), vigencia_hasta:'2027-12-31',
+      tope_descuento:parseInt((document.getElementById('cupNewTope')||{}).value,10)||0,
+      usos_max:999, usos_max_usuario:parseInt((document.getElementById('cupNewUsosU')||{}).value,10)||1,
+      usos_actual:0, min_compra_neto:parseInt((document.getElementById('cupNewMin')||{}).value,10)||0,
+      activo:true
+    });
+    rwCuponSaveAll(arr); renderBody(); calcSafe(); toast('Cupón '+code+' creado');
+  }
+  function gcAdd(){
+    var code=(document.getElementById('gcNewCode')||{}).value || '';
+    code=code.trim().toUpperCase();
+    if(!code) code='GIFT-'+Math.random().toString(36).slice(2,7).toUpperCase();
+    var arr=rwGiftcardGetAll();
+    if(arr.some(function(g){return g.code===code;})){ toast('Ese código ya existe'); return; }
+    var saldo=parseInt((document.getElementById('gcNewSaldo')||{}).value,10)||0;
+    var exp=(document.getElementById('gcNewExp')||{}).value || '2027-12-31';
+    arr.push({ code:code, saldo_inicial:saldo, saldo_actual:saldo, fecha_emision:hoyISO(), fecha_expiracion:exp, activo:true, movimientos:[{fecha:hoyISO(), tipo:'emision', monto:saldo, ref:'Emitida desde panel admin'}] });
+    rwGiftcardSaveAll(arr); renderBody(); toast('Gift card '+code+' emitida ('+fmt(saldo)+')');
+  }
+  function promoAdd(){
+    var nombre=(document.getElementById('prNewNombre')||{}).value || '';
+    nombre=nombre.trim();
+    if(!nombre){ toast('Ingresa un nombre'); return; }
+    var arr=getPromos();
+    arr.push({
+      id:'PR-'+Date.now().toString(36).toUpperCase(),
+      nombre:nombre,
+      tipo:(document.getElementById('prNewTipo')||{}).value || 'porcentaje',
+      valor:parseInt((document.getElementById('prNewValor')||{}).value,10)||0,
+      scope:(document.getElementById('prNewScope')||{}).value || 'todo',
+      scopeVal:((document.getElementById('prNewScopeVal')||{}).value||'').trim(),
+      min_compra_neto:parseInt((document.getElementById('prNewMin')||{}).value,10)||0,
+      vigencia_desde:hoyISO(), vigencia_hasta:'2027-12-31',
+      activo:true, banner:false, bannerText:''
+    });
+    savePromos(arr); renderBody(); calcSafe(); toast('Promo "'+nombre+'" creada');
+  }
+  function tierAdd(){
+    var key=(document.getElementById('tierNewKey')||{}).value || '';
+    key=key.trim().toLowerCase();
+    if(!key){ toast('Ingresa email o RUT'); return; }
+    var val=(document.getElementById('tierNewVal')||{}).value || 'D';
+    var t=getTiers(); t[key]=val; saveTiers(t); renderBody(); calcSafe(); toast('Tarifa '+CODE2NAME[val]+' forzada a '+key);
+  }
+
+  // ── Open / Close / Launcher ──
+  function open(){ if(!isAdmin()){ toast('Solo administradores'); return; } mount(); seedAll(); renderTabs(); renderBody(); var ov=document.getElementById('sadmOverlay'); if(ov){ ov.classList.add('on'); } }
+  function close(){ var ov=document.getElementById('sadmOverlay'); if(ov) ov.classList.remove('on'); }
+
+  function launcher(){
+    var b=document.getElementById('sadmLauncher');
+    if(!b){
+      injectCSS();
+      b=document.createElement('button'); b.id='sadmLauncher'; b.innerHTML='🛠️ Admin';
+      b.addEventListener('click', open);
+      document.body.appendChild(b);
+    }
+    b.classList.toggle('on', isAdmin());
+  }
+  function refresh(){ try { launcher(); } catch(e){} }
+
+  // ── API pública ──
+  window.SSTT_ADMIN = {
+    open: open, close: close, refresh: refresh,
+    // engines usados por el código cableado
+    promosCalc: promosCalc,
+    tierOverrideFor: tierOverrideFor,
+    pagoPermitido: pagoPermitido,
+    applyPayRules: applyPayRules,
+    despachoRules: despachoRules,
+    isAdmin: isAdmin
+  };
+
+  // ── Init ──
+  function init(){ seedAll(); launcher(); }
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
 </script>
 
