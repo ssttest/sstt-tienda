@@ -1894,16 +1894,12 @@ nav {
 /* Big red pill button */
 .pay-now-btn {
   width: 100%;
-  background: linear-gradient(135deg, #E8001C 0%, #c40018 100%);
+  background: var(--red); /* s121: señal plano */
   color: #fff; border: none;
   border-radius: 50px; padding: 16px; font-size: 16px; font-weight: 700;
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  cursor: pointer; transition: all .22s cubic-bezier(.32,.72,0,1);
-  box-shadow:
-    0 6px 24px rgba(232,0,28,0.38),
-    0 2px 8px rgba(232,0,28,0.22),
-    inset 0 1px 0 rgba(255,255,255,0.25),
-    inset 0 -1px 0 rgba(0,0,0,0.15);
+  cursor: pointer; transition: all .16s ease;
+  box-shadow: 0 8px 24px rgba(217,15,35,.30);
   font-family: var(--font); margin-bottom: 0; letter-spacing: .1px;
   position: relative; overflow: hidden;
 }
@@ -1914,9 +1910,9 @@ nav {
   border-radius: inherit; pointer-events: none;
 }
 .pay-now-btn:hover {
-  background: linear-gradient(135deg, #ff1a33 0%, #d4001e 100%);
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 10px 32px rgba(232,0,28,0.46), 0 4px 12px rgba(232,0,28,0.28), inset 0 1px 0 rgba(255,255,255,0.3);
+  background: var(--red2); /* s121 */
+  transform: translateY(-1px);
+  box-shadow: 0 10px 28px rgba(217,15,35,.36);
 }
 .pay-now-btn:active { transform: scale(0.97); }
 
@@ -1926,10 +1922,8 @@ nav {
   font-size: 10px; font-weight: 700; padding: 3px 10px;
   background: rgba(0,0,0,.06); color: var(--g3); border-radius: 20px;
 }
-.pb2-wp  { background: #1e8f4e; color: #fff }
-.pb2-tr  { background: #0057B8; color: #fff }
-.pb2-kh  { background: #6B21A8; color: #fff }
-.pb2-bs  { background: rgba(0,87,184,.1); color: var(--blue) }
+/* s121: badges de pago neutrales — unidad porcelana */
+.pb2-wp, .pb2-tr, .pb2-kh, .pb2-bs { background: var(--g6); color: var(--g2) }
 
 /* Cart count on header button */
 .cart-cnt {
@@ -18559,6 +18553,36 @@ textarea:focus-visible,
 .pm-sstt-section[open] > .pm-sstt-summary{ border-bottom:1px solid var(--border); }
 .pm-sstt-summary{ color:var(--black); }
 
+/* ── Perfil del cliente (Mi cuenta): dashboard en gramática tinta ── */
+.um-avatar-lg{ background:var(--black); box-shadow:none; }
+.db-card{ border-radius:var(--r); box-shadow:var(--shadow-xs); }
+.db-card:hover{ border-color:var(--g3); box-shadow:var(--shadow); }
+.db-card-val{ font-family:var(--font-m); font-weight:600; font-size:26px; letter-spacing:-.6px; }
+.db-tier{ border-radius:var(--r-lg); }
+.db-ticket{ border-radius:var(--r); }
+.db-ticket:hover{ border-color:var(--g4); }
+.db-ticket-id{ color:var(--g1); }
+.db-btn{ border-radius:var(--r); }
+.db-btn:hover{ border-color:var(--g3); background:var(--g7); }
+.db-btn svg{ color:var(--g2); opacity:1; }
+.db-details{ border-radius:var(--r); }
+@media(max-width:400px){
+  .db-card{ border-radius:var(--r); }
+  .db-btn{ border-radius:var(--r); }
+  .db-ticket{ border-radius:var(--r); }
+  .db-tier{ border-radius:var(--r-lg); }
+}
+
+/* ── Carro / checkout: stepper, cross-sell y totales en gramática tinta ── */
+.co-step.active .co-step-num{ background:var(--black); color:#fff; box-shadow:none; }
+.co-step.active .co-step-lbl{ color:var(--black); }
+.ccs-pill-label{ color:var(--black); }
+.ccs-pill-count{ background:var(--black); }
+.ccs-pill-chevron{ color:var(--g3); }
+/* montos del resumen en mono — mismo idioma que la grilla */
+.trow span:last-child{ font-family:var(--font-m); font-weight:600; letter-spacing:-.2px; }
+.trow-total span:last-child{ font-weight:600; letter-spacing:-.6px; }
+
 /* ── Responsive ── */
 @media (max-width:980px){
   header{ margin:0; border-radius:0; }
@@ -20559,23 +20583,23 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
     <div id="cartShipBar"></div><!-- s100 -->
     <div id="coStickyTotals">
       <!-- s98: Widget cupón descuento (demo simulado) -->
-      <div id="cuponWidget" style="margin-bottom:6px;padding:8px 10px;background:linear-gradient(135deg,#f0faf4,#e8f5e9);border:1.5px solid #C8E6C9;border-radius:10px"></div>
+      <div id="cuponWidget" style="margin-bottom:6px;padding:8px 10px;background:var(--g7);border:1px solid var(--border);border-radius:10px"></div>
       <!-- s98: Widget gift card (demo simulado) -->
-      <div id="giftcardWidget" style="margin-bottom:6px;padding:8px 10px;background:linear-gradient(135deg,#f3e5f5,#ede7f6);border:1.5px solid #CE93D8;border-radius:10px"></div>
+      <div id="giftcardWidget" style="margin-bottom:6px;padding:8px 10px;background:var(--g7);border:1px solid var(--border);border-radius:10px"></div>
       <div class="totals" style="margin-bottom:4px">
         <div class="trow"><span>Subtotal neto</span><span id="tNeto">$0</span></div>
         <div class="trow"><span>IVA (19%)</span><span id="tIva">$0</span></div>
         <div class="trow"><span id="tShipLbl">Despacho</span><span id="tShip">—</span></div>
-        <div class="trow" id="tDescCertRow" style="display:none;color:#1A8C4E;font-weight:700"><span>🏅 Desc. instalador cert.</span><span id="tDescCert">—</span></div>
-        <div class="trow" id="tDescVolRow" style="display:none;color:#1A8C4E;font-weight:700"><span>📦 Dcto. volumen</span><span id="tDescVol">—</span></div>
-        <div class="trow" id="tDescCuponRow" style="display:none;color:#1A8C4E;font-weight:700"><span>🏷️ Cupón descuento</span><span id="tDescCupon">—</span></div>
-        <div class="trow" id="tDescPromoRow" style="display:none;color:#C2410C;font-weight:700"><span>🎯 Promoción</span><span id="tDescPromo">—</span></div>
-        <div class="trow" id="tDescGCRow" style="display:none;color:#6A1B9A;font-weight:700"><span>🎁 Gift card</span><span id="tDescGC">—</span></div>
-        <div class="trow" id="tDescPtsRow" style="display:none;color:#D4A03C;font-weight:700"><span>⭐ Descuento puntos</span><span id="tDescPts">—</span></div>
+        <div class="trow" id="tDescCertRow" style="display:none;color:var(--green);font-weight:700"><span>🏅 Desc. instalador cert.</span><span id="tDescCert">—</span></div>
+        <div class="trow" id="tDescVolRow" style="display:none;color:var(--green);font-weight:700"><span>📦 Dcto. volumen</span><span id="tDescVol">—</span></div>
+        <div class="trow" id="tDescCuponRow" style="display:none;color:var(--green);font-weight:700"><span>🏷️ Cupón descuento</span><span id="tDescCupon">—</span></div>
+        <div class="trow" id="tDescPromoRow" style="display:none;color:var(--green);font-weight:700"><span>🎯 Promoción</span><span id="tDescPromo">—</span></div>
+        <div class="trow" id="tDescGCRow" style="display:none;color:var(--green);font-weight:700"><span>🎁 Gift card</span><span id="tDescGC">—</span></div>
+        <div class="trow" id="tDescPtsRow" style="display:none;color:var(--green);font-weight:700"><span>⭐ Descuento puntos</span><span id="tDescPts">—</span></div>
         <div class="trow trow-total"><span>Total con IVA</span><span id="tTotal">$0</span></div>
       </div>
       <!-- ── Widget canje de puntos ── -->
-      <div id="puntosCanjeWidget" style="display:none;background:linear-gradient(135deg,#fffbf0,#fff8e1);border:1.5px solid #D4A03C;border-radius:10px;padding:10px 12px;margin:6px 0;font-size:12.5px"></div>
+      <div id="puntosCanjeWidget" style="display:none;background:var(--g7);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin:6px 0;font-size:12.5px"></div>
     </div>
     <!-- csCrossSell movido a cartCrossSell -->
     <!-- s100: trust strip + captura email (carro abandonado) -->
@@ -20594,7 +20618,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
     <!-- Fallback: cotización por email (B2B / orden de compra) -->
     <button id="cotizaEmailBtn" onclick="event.stopPropagation();cotizarEmail()"
       style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;
-             background:transparent;color:#0057B8;border:none;padding:2px 0 8px;
+             background:transparent;color:var(--blue);border:none;padding:2px 0 8px;
              font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font)">
       &#9993; Prefiero cotizar por email
     </button>
@@ -27819,11 +27843,11 @@ function renderPerfil() {
   const initials = (USER.nombre[0]+(USER.apellido?.[0]||'')).toUpperCase();
   qs('perfilContent').innerHTML = `
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border2)">
-      <div style="width:48px;height:48px;background:var(--blue);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex-shrink:0">${initials}</div>
+      <div style="width:48px;height:48px;background:var(--black);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex-shrink:0">${initials}</div>
       <div>
         <div style="font-size:15px;font-weight:700">${USER.nombre} ${USER.apellido||''}</div>
         <div style="font-size:12px;color:var(--light)">${USER.email}</div>
-        ${USER.rut ? `<div style="font-size:11px;color:var(--blue);font-weight:700;margin-top:2px">✅ ${USER.rut}</div>` : ''}
+        ${USER.rut ? `<div style="font-size:11px;color:var(--g1);font-family:var(--font-m);font-weight:600;margin-top:2px">✅ ${USER.rut}</div>` : ''}
       </div>
     </div>
     <div style="display:flex;border-bottom:1px solid var(--border2);margin-bottom:14px;gap:0;overflow-x:auto;scrollbar-width:none" id="perfilTabBar">
@@ -28012,13 +28036,13 @@ function renderPerfilDatos() {
   html += '<div class="db-section">Resumen</div>';
   html += '<div class="db-grid">';
 
-  html += '<div class="db-card" onclick="_dbGoTab(\'cotizaciones\',4)"><div class="db-card-h"><div class="db-card-ico" style="background:rgba(0,122,255,.08);color:rgba(0,122,255,.8)">' + ico.doc + '</div><div class="db-card-lbl">Cotizaciones</div></div>';
+  html += '<div class="db-card" onclick="_dbGoTab(\'cotizaciones\',4)"><div class="db-card-h"><div class="db-card-ico" style="background:var(--g6);color:var(--g1)">' + ico.doc + '</div><div class="db-card-lbl">Cotizaciones</div></div>';
   html += '<div class="db-card-val">' + cots.length + '</div><div class="db-card-sub">guardadas</div></div>';
 
   var credDisp = cr.estado==='activo' ? Math.max(0,cr.limite-cr.usado) : 0;
-  html += '<div class="db-card" onclick="_dbGoTab(\'credito\',5)"><div class="db-card-h"><div class="db-card-ico" style="background:var(--blue-p);color:var(--blue)">' + ico.bank + '</div><div class="db-card-lbl">Crédito</div></div>';
+  html += '<div class="db-card" onclick="_dbGoTab(\'credito\',5)"><div class="db-card-h"><div class="db-card-ico" style="background:var(--g6);color:var(--g1)">' + ico.bank + '</div><div class="db-card-lbl">Crédito</div></div>';
   if (cr.estado==='activo') {
-    html += '<div class="db-card-val" style="color:var(--blue)">$' + (credDisp/1000000).toFixed(1) + 'M</div>';
+    html += '<div class="db-card-val">$' + (credDisp/1000000).toFixed(1) + 'M</div>';
     html += '<div class="db-card-sub">disponible de $' + (cr.limite/1000000).toFixed(0) + 'M</div>';
   } else { html += '<div class="db-card-val" style="font-size:16px;color:' + 'rgba(0,0,0,.2)' + '">—</div><div class="db-card-sub" style="color:var(--blue)">Solicitar</div>'; }
   html += '</div>';
@@ -28026,13 +28050,13 @@ function renderPerfilDatos() {
   html += '<div class="db-card" onclick="_dbGoTab(\'favoritos\',8)"><div class="db-card-h"><div class="db-card-ico" style="background:var(--red-p);color:var(--red)">' + ico.heart + '</div><div class="db-card-lbl">Favoritos</div></div>';
   html += '<div class="db-card-val">' + favs.length + '</div><div class="db-card-sub">productos</div></div>';
 
-  html += '<div class="db-card" onclick="_dbGoTab(\'soporte\',7)"><div class="db-card-h"><div class="db-card-ico" style="background:var(--blue-p);color:var(--blue)">' + ico.ticket + '</div><div class="db-card-lbl">Soporte</div></div>';
+  html += '<div class="db-card" onclick="_dbGoTab(\'soporte\',7)"><div class="db-card-h"><div class="db-card-ico" style="background:var(--g6);color:var(--g1)">' + ico.ticket + '</div><div class="db-card-lbl">Soporte</div></div>';
   html += '<div class="db-card-val">' + ticketsAbiertos.length + '</div><div class="db-card-sub">tickets abiertos</div></div>';
 
   // Sprint 2 s74: Card de Puntos
   try {
     var _puntosActual = rwPuntosGet();
-    html += '<div class="db-card" onclick="_dbGoTab(\'puntos\',11)" style="background:linear-gradient(135deg,#fffbf0,#fff8e1);border-color:rgba(212,160,60,.25)"><div class="db-card-h"><div class="db-card-ico" style="background:rgba(212,160,60,.18);color:#8B6914">⭐</div><div class="db-card-lbl">Puntos SSTT</div></div>';
+    html += '<div class="db-card" onclick="_dbGoTab(\'puntos\',11)"><div class="db-card-h"><div class="db-card-ico" style="background:var(--yellow-p);color:var(--yellow)">⭐</div><div class="db-card-lbl">Puntos SSTT</div></div>';
     html += '<div class="db-card-val" style="color:#8B6914">' + _puntosActual.toLocaleString('es-CL') + '</div><div class="db-card-sub">= $' + (_puntosActual * 10).toLocaleString('es-CL') + ' CLP</div></div>';
   } catch(e) {}
 
@@ -28041,9 +28065,9 @@ function renderPerfilDatos() {
     var _certsActuales = certGetForRut(rwUsuarioRut());
     var _certsVerif = _certsActuales.filter(function(c){ return c.estado === 'verificado'; });
     var _certsPend  = _certsActuales.filter(function(c){ return c.estado === 'pendiente'; });
-    var _certColor  = _certsVerif.length > 0 ? '#0A5C2E' : '#8B6914';
-    var _certBg     = _certsVerif.length > 0 ? 'linear-gradient(135deg,#f0fff4,#e6ffed)' : 'linear-gradient(135deg,#fffbf0,#fff8e1)';
-    var _certBorder = _certsVerif.length > 0 ? 'rgba(10,92,46,.22)' : 'rgba(212,160,60,.25)';
+    var _certColor  = _certsVerif.length > 0 ? 'var(--green)' : 'var(--yellow)';
+    var _certBg     = _certsVerif.length > 0 ? 'var(--green-p)' : 'var(--yellow-p)';
+    var _certBorder = _certsVerif.length > 0 ? 'rgba(26,127,60,.25)' : 'rgba(152,96,0,.25)';
     var _certIco    = _certsVerif.length > 0 ? '🏅' : '📋';
     var _certVal    = _certsVerif.length > 0 ? _certsVerif.length : (_certsPend.length > 0 ? _certsPend.length : 0);
     var _certSub    = _certsVerif.length > 0 ? 'cert. verificadas' : (_certsPend.length > 0 ? 'en revisión' : 'sin certificar');
@@ -28060,9 +28084,9 @@ function renderPerfilDatos() {
   html += '<div class="db-btn" onclick="_dbGoTab(\'facturacion\',2)">' + ico.receipt + ' Facturación <span style="margin-left:auto;opacity:.35;font-size:10px">' + facts.length + '</span></div>';
   html += '<div class="db-btn" onclick="_dbGoTab(\'pagos\',3)">' + ico.card + ' Pagos <span style="margin-left:auto;opacity:.35;font-size:10px">' + pagos.length + '</span></div>';
   html += '<div class="db-btn" onclick="_dbGoTab(\'fidelidad\',6)">' + ico.star + ' Categoría <span style="margin-left:auto;opacity:.35;font-size:10px">' + tier.nombre + '</span></div>';
-  html += '<div class="db-btn" onclick="_dbGoTab(\'newsletter\',14)" style="background:linear-gradient(135deg,#fff0f6,#ffe6f0);border-color:rgba(204,0,102,.15)">📬 Newsletter <span style="margin-left:auto;opacity:.35;font-size:10px">' + (typeof nwsGetForRut==='function'&&nwsGetForRut(rwUsuarioRut())&&nwsGetForRut(rwUsuarioRut()).activo?'activo':'') + '</span></div>';
-  html += '<div class="db-btn" onclick="_dbGoTab(\'referidos\',13)" style="background:linear-gradient(135deg,#f0f4ff,#e6edff);border-color:rgba(0,82,204,.15)">🤝 Referidos <span style="margin-left:auto;opacity:.35;font-size:10px">' + ((typeof refGetForRut==='function'&&refGetForRut(rwUsuarioRut())&&refGetForRut(rwUsuarioRut()).referidos)?refGetForRut(rwUsuarioRut()).referidos.length:0) + ' ref.</span></div>';
-  html += '<div class="db-btn" onclick="_dbGoTab(\'certificaciones\',12)" style="' + (certEsCertificado(rwUsuarioRut()) ? 'background:linear-gradient(135deg,#f0fff4,#e6ffed);border-color:rgba(10,92,46,.2)' : '') + '">🏅 Certificaciones <span style="margin-left:auto;opacity:.35;font-size:10px">' + certGetForRut(rwUsuarioRut()).filter(function(c){return c.estado==="verificado";}).length + ' verif.</span></div>';
+  html += '<div class="db-btn" onclick="_dbGoTab(\'newsletter\',14)">📬 Newsletter <span style="margin-left:auto;opacity:.35;font-size:10px">' + (typeof nwsGetForRut==='function'&&nwsGetForRut(rwUsuarioRut())&&nwsGetForRut(rwUsuarioRut()).activo?'activo':'') + '</span></div>';
+  html += '<div class="db-btn" onclick="_dbGoTab(\'referidos\',13)">🤝 Referidos <span style="margin-left:auto;opacity:.35;font-size:10px">' + ((typeof refGetForRut==='function'&&refGetForRut(rwUsuarioRut())&&refGetForRut(rwUsuarioRut()).referidos)?refGetForRut(rwUsuarioRut()).referidos.length:0) + ' ref.</span></div>';
+  html += '<div class="db-btn" onclick="_dbGoTab(\'certificaciones\',12)" style="' + (certEsCertificado(rwUsuarioRut()) ? 'background:var(--green-p);border-color:rgba(26,127,60,.25)' : '') + '">🏅 Certificaciones <span style="margin-left:auto;opacity:.35;font-size:10px">' + certGetForRut(rwUsuarioRut()).filter(function(c){return c.estado==="verificado";}).length + ' verif.</span></div>';
   html += '</div>';
 
   // ── Órdenes / seguimiento ──
@@ -28077,8 +28101,8 @@ function renderPerfilDatos() {
       html += '<div style="font-size:9px;color:var(--g3);margin-top:3px;font-weight:500">' + o.fecha + '</div></div>';
       html += '</div>';
       if (o.tracking && o.tracking.codigo) {
-        html += '<div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:rgba(0,122,255,.04);border-radius:10px;font-size:11px">';
-        html += '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="rgba(0,122,255,.6)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="16" height="10" rx="2"/><path d="M14 6V4a2 2 0 00-2-2H8a2 2 0 00-2 2v2"/></svg>';
+        html += '<div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--g6);border-radius:8px;font-size:11px">';
+        html += '<svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="var(--g2)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="16" height="10" rx="2"/><path d="M14 6V4a2 2 0 00-2-2H8a2 2 0 00-2 2v2"/></svg>';
         html += '<span style="color:var(--g3)">' + o.tracking.courier + '</span>';
         html += '<a href="' + o.tracking.url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:rgba(0,122,255,.8);font-weight:600;text-decoration:none;margin-left:auto">' + o.tracking.codigo + ' →</a>';
         html += '</div>';
@@ -28112,7 +28136,7 @@ function renderPerfilDatos() {
       if (!prod) return;
       html += '<div class="db-card db-fav-card" onclick="openProdModal(' + prod.id + ')">';
       html += '<div style="font-size:11px;font-weight:600;line-height:1.25;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--black)">' + prod.nombre.substring(0,50) + '</div>';
-      html += '<div style="font-size:10px;color:rgba(0,122,255,.7);font-weight:600">' + prod.codigo + '</div>';
+      html += '<div style="font-size:10px;color:var(--g2);font-family:var(--font-m);font-weight:600">' + prod.codigo + '</div>';
       html += '<div style="font-size:14px;font-weight:800;margin-top:6px;color:var(--black)">$' + (tP(prod)||0).toLocaleString('es-CL') + '</div>';
       html += '</div>';
     });
@@ -28128,7 +28152,7 @@ function renderPerfilDatos() {
   html += '<input class="finput" style="margin:0" placeholder="RUT" value="' + (USER.rut||'') + '" id="pRut">';
   html += '<input class="finput" style="margin:0" placeholder="Teléfono" value="' + (USER.tel||'') + '" id="pTel" type="tel">';
   html += '</div>';
-  html += '<button onclick="guardarDatosPersonales()" style="width:100%;background:rgba(0,122,255,.9);color:#fff;border:none;border-radius:12px;padding:11px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font)">Guardar</button>';
+  html += '<button onclick="guardarDatosPersonales()" style="width:100%;background:var(--black);color:#fff;border:none;border-radius:10px;padding:11px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--font)">Guardar</button>';
   html += '</details>';
 
   html += '<div style="display:flex;gap:8px;margin-top:10px">';
@@ -28237,7 +28261,7 @@ function renderPerfilDatos() {
             '<div style="font-size:13px;font-weight:700;color:#fff">' + pedido.id + '</div>' +
             '<div style="font-size:11px;color:rgba(255,255,255,.4)">' + pedido.items + '</div>' +
           '</div>' +
-          '<div id="docBadge" style="font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.06em;background:rgba(10,132,255,.2);color:#0a84ff;border:1px solid rgba(10,132,255,.35)">FACTURA</div>';
+          '<div id="docBadge" style="font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.06em;background:rgba(217,15,35,.18);color:#FF6B77;border:1px solid rgba(217,15,35,.40)">FACTURA</div>';
         docOv.appendChild(dHead);
         dHead.querySelector('#docBackBtn').onclick = function(){ document.body.removeChild(docOv); };
 
@@ -28255,10 +28279,10 @@ function renderPerfilDatos() {
             var btn = document.createElement('div');
             var isActive = i === erutSelIdx;
             btn.style.cssText = 'flex-shrink:0;scroll-snap-align:start;border-radius:10px;padding:8px 12px;cursor:pointer;transition:all .2s;border:' +
-              (isActive ? '1.5px solid #0a84ff' : '1.5px solid rgba(255,255,255,.1)') +
-              ';background:' + (isActive ? 'rgba(10,132,255,.15)' : 'rgba(255,255,255,.04)');
+              (isActive ? '1.5px solid rgba(255,255,255,.85)' : '1.5px solid rgba(255,255,255,.1)') +
+              ';background:' + (isActive ? 'rgba(255,255,255,.10)' : 'rgba(255,255,255,.04)');
             btn.innerHTML =
-              '<div style="font-size:10px;font-weight:700;color:' + (isActive?'#0a84ff':'rgba(255,255,255,.6)') + ';font-family:monospace">' + e.rut + '</div>' +
+              '<div style="font-size:10px;font-weight:700;color:' + (isActive?'#fff':'rgba(255,255,255,.6)') + ';font-family:monospace">' + e.rut + '</div>' +
               '<div style="font-size:9px;color:rgba(255,255,255,.4);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + e.razon + '</div>' +
               '<div style="font-size:8px;color:' + (isOk?'#34c759':'#ff9500') + ';margin-top:2px">' + (isOk?'✅ Verificado':'⏳ Pendiente') + '</div>';
             btn.addEventListener('click', function() {
@@ -28274,10 +28298,10 @@ function renderPerfilDatos() {
               // Actualizar estilos de botones
               selScroll.querySelectorAll('div').forEach(function(b, bi) {
                 var act = bi === i;
-                b.style.border = act ? '1.5px solid #0a84ff' : '1.5px solid rgba(255,255,255,.1)';
-                b.style.background = act ? 'rgba(10,132,255,.15)' : 'rgba(255,255,255,.04)';
+                b.style.border = act ? '1.5px solid rgba(255,255,255,.85)' : '1.5px solid rgba(255,255,255,.1)';
+                b.style.background = act ? 'rgba(255,255,255,.10)' : 'rgba(255,255,255,.04)';
                 var rutEl = b.querySelector('div');
-                if (rutEl) rutEl.style.color = act ? '#0a84ff' : 'rgba(255,255,255,.6)';
+                if (rutEl) rutEl.style.color = act ? '#fff' : 'rgba(255,255,255,.6)';
               });
               // Re-renderizar vista actual con nuevo e-RUT
               renderVista(vistaActual);
@@ -28296,7 +28320,7 @@ function renderPerfilDatos() {
         var dots = dotLabels.map(function(lbl, i) {
           var d = document.createElement('div');
           d.style.cssText = 'display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 8px;border-radius:20px;transition:background .2s';
-          d.innerHTML = '<div style="width:7px;height:7px;border-radius:50%;background:'+(i===0?'#0a84ff':'rgba(255,255,255,.2)')+';transition:background .3s"></div>' +
+          d.innerHTML = '<div style="width:7px;height:7px;border-radius:50%;background:'+(i===0?'#fff':'rgba(255,255,255,.2)')+';transition:background .3s"></div>' +
             '<span style="font-size:10px;color:'+(i===0?'rgba(255,255,255,.8)':'rgba(255,255,255,.3)')+';font-weight:600;transition:color .3s">' + lbl + '</span>';
           d.onclick = function(){ renderVista(i); };
           return d;
@@ -28322,11 +28346,11 @@ function renderPerfilDatos() {
           dots.forEach(function(d, i){
             var dot = d.querySelector('div');
             var lbl = d.querySelector('span');
-            dot.style.background = i===v ? '#0a84ff' : 'rgba(255,255,255,.2)';
+            dot.style.background = i===v ? '#fff' : 'rgba(255,255,255,.2)';
             lbl.style.color = i===v ? 'rgba(255,255,255,.8)' : 'rgba(255,255,255,.3)';
           });
           var badge = dHead.querySelector('#docBadge');
-          if(v===0){ badge.textContent='FACTURA'; badge.style.background='rgba(10,132,255,.2)'; badge.style.color='#0a84ff'; badge.style.border='1px solid rgba(10,132,255,.35)'; }
+          if(v===0){ badge.textContent='FACTURA'; badge.style.background='rgba(217,15,35,.18)'; badge.style.color='#FF6B77'; badge.style.border='1px solid rgba(217,15,35,.40)'; }
           else if(v===1){ badge.textContent='e-RUT · FRENTE'; badge.style.background='rgba(52,199,89,.18)'; badge.style.color='#34c759'; badge.style.border='1px solid rgba(52,199,89,.3)'; }
           else{ badge.textContent='VERIFICACIÓN'; badge.style.background='rgba(255,214,10,.15)'; badge.style.color='#ffd60a'; badge.style.border='1px solid rgba(255,214,10,.28)'; }
 
@@ -28748,8 +28772,8 @@ function renderPerfilDatos() {
           var table = '<div style="display:flex;flex-direction:column;gap:8px">';
           rows.forEach(function(r) {
             var statusColor = r.estado==='Resuelto'||r.estado==='Entregado'||r.estado==='Aprobada' ? '#34c759'
-              : r.estado==='Abierto'||r.estado==='En curso'||r.estado==='En preparación'||r.estado==='Listo para retiro' ? '#0a84ff'
-              : r.estado==='Pendiente' ? '#ffd60a'
+              : r.estado==='Abierto'||r.estado==='En curso'||r.estado==='En preparación'||r.estado==='Listo para retiro' ? '#9DB8DC'
+              : r.estado==='Pendiente' ? '#E8B34B'
               : '#ff453a';
             var cells = cols.map(function(col) {
               var val = r[col.key] || '';
@@ -28808,7 +28832,7 @@ function renderPerfilDatos() {
           '</div>';
 
           if (!lista.length) {
-            sec.innerHTML = hd + '<div style="font-size:12px;color:rgba(255,255,255,.25);padding:8px 0">Sin e-RUT registrado · <span style="color:#0a84ff;cursor:pointer" onclick="abrirErutModal&&abrirErutModal()">Subir ahora</span></div>';
+            sec.innerHTML = hd + '<div style="font-size:12px;color:rgba(255,255,255,.25);padding:8px 0">Sin e-RUT registrado · <span style="color:rgba(255,255,255,.9);text-decoration:underline;cursor:pointer" onclick="abrirErutModal&&abrirErutModal()">Subir ahora</span></div>';
             back.appendChild(sec);
             return;
           }
@@ -28882,7 +28906,7 @@ function renderPerfilDatos() {
 
           rows.forEach(function(r) {
             var esRetiro = r.estado === 'Listo para retiro';
-            var statusColor = esRetiro ? '#0a84ff' : r.estado==='Entregado' ? '#34c759' : '#ffd60a';
+            var statusColor = esRetiro ? '#9DB8DC' : r.estado==='Entregado' ? '#34c759' : '#E8B34B';
             var row = document.createElement('div');
             row.style.cssText = 'display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border-radius:8px;padding:9px 10px;' + (esRetiro?'cursor:pointer;border:1px solid rgba(10,132,255,0.25)':'cursor:default;border:1px solid transparent');
             row.innerHTML =
@@ -28890,7 +28914,7 @@ function renderPerfilDatos() {
               '<div style="color:' + statusColor + ';font-weight:600;font-size:10.5px;white-space:nowrap">' + r.estado + '</div>' +
               '<div style="font-size:11px;color:rgba(255,255,255,.5);white-space:nowrap">' + r.bodega + '</div>' +
               '<div style="font-size:11px;color:rgba(255,255,255,.75);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + r.items + '</div>' +
-              (esRetiro ? '<div style="font-size:10px;color:#0a84ff;white-space:nowrap;font-weight:600">VER →</div>' : '');
+              (esRetiro ? '<div style="font-size:10px;color:rgba(255,255,255,.85);white-space:nowrap;font-weight:600">VER →</div>' : '');
             if (esRetiro) {
               row.addEventListener('click', function(ev) {
                 ev.stopPropagation();
@@ -33013,11 +33037,11 @@ function cookieConsentApply(consent) {
 
 // Tipos de certificación Dahua disponibles
 var CERT_TIPOS = [
-  { id:'CCTV',    label:'CCTV',            icon:'📹', desc:'Dahua Certified CCTV Professional',          color:'#0052CC', bg:'rgba(0,82,204,.1)' },
-  { id:'ACCESS',  label:'Control Acceso',  icon:'🔐', desc:'Dahua Certified Access Control',             color:'#6B2FBF', bg:'rgba(107,47,191,.1)' },
-  { id:'ALARM',   label:'Alarmas',         icon:'🔔', desc:'Dahua Certified Alarm Systems',              color:'#CC3300', bg:'rgba(204,51,0,.1)' },
-  { id:'NETWORK', label:'Redes IP',        icon:'🌐', desc:'Dahua Certified Network Specialist',         color:'#0A7A3E', bg:'rgba(10,122,62,.1)' },
-  { id:'VDP',     label:'Intercomunic.',   icon:'🚪', desc:'Dahua Certified Video Door Phone',           color:'#8B5914', bg:'rgba(139,89,20,.1)' }
+  { id:'CCTV',    label:'CCTV',            icon:'📹', desc:'Dahua Certified CCTV Professional',          color:'#1E5FA8', bg:'rgba(30,95,168,.08)' },
+  { id:'ACCESS',  label:'Control Acceso',  icon:'🔐', desc:'Dahua Certified Access Control',             color:'#5E4FA2', bg:'rgba(94,79,162,.08)' },
+  { id:'ALARM',   label:'Alarmas',         icon:'🔔', desc:'Dahua Certified Alarm Systems',              color:'#C05000', bg:'rgba(192,80,0,.08)' },
+  { id:'NETWORK', label:'Redes IP',        icon:'🌐', desc:'Dahua Certified Network Specialist',         color:'#1A7F3C', bg:'rgba(26,127,60,.08)' },
+  { id:'VDP',     label:'Intercomunic.',   icon:'🚪', desc:'Dahua Certified Video Door Phone',           color:'#986000', bg:'rgba(152,96,0,.08)' }
 ];
 
 // ── Storage CRUD ──────────────────────────────────────────
@@ -33130,7 +33154,7 @@ function renderPerfilCertificaciones() {
 
   // Banner estado
   if (esCert) {
-    html += '<div style="background:linear-gradient(135deg,#0A5C2E,#1A8C4E);border-radius:16px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px">';
+    html += '<div style="background:linear-gradient(165deg,#14613A,#1A7F3C);border-radius:14px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px">';
     html += '<div style="font-size:32px;line-height:1">🏅</div>';
     html += '<div><div style="color:#fff;font-size:15px;font-weight:700">Instalador Certificado Dahua</div>';
     html += '<div style="color:rgba(255,255,255,.75);font-size:12px;margin-top:2px">' + verificadas.length + ' certificación' + (verificadas.length > 1 ? 'es' : '') + ' verificada' + (verificadas.length > 1 ? 's' : '') + ' · Apareces en el directorio público</div>';
@@ -33191,7 +33215,7 @@ function renderPerfilCertificaciones() {
 
   if (tiposDisponibles.length > 0) {
     html += '<div style="background:#f7f9ff;border:1px solid rgba(0,82,204,.15);border-radius:16px;padding:18px;margin-top:16px">';
-    html += '<div style="font-size:13px;font-weight:700;color:#0052CC;margin-bottom:14px">📤 Solicitar nueva certificación</div>';
+    html += '<div style="font-size:13px;font-weight:700;color:var(--black);margin-bottom:14px">📤 Solicitar nueva certificación</div>';
     html += '<div style="margin-bottom:12px"><label style="font-size:11px;font-weight:600;color:var(--g2);display:block;margin-bottom:6px">Tipo de certificación</label>';
     html += '<select id="certTipoSelect" style="width:100%;padding:10px 12px;border:1px solid var(--border1);border-radius:10px;font-size:13px;background:#fff;color:var(--g1)">';
     html += '<option value="">— Selecciona —</option>';
@@ -33209,7 +33233,7 @@ function renderPerfilCertificaciones() {
     html += '</div>';
     html += '<input type="file" id="certFileInput" accept=".pdf,.jpg,.jpeg,.png" style="display:none" onchange="certHandleFile(this)" />';
     html += '</div>';
-    html += '<button onclick="certSubmit()" style="width:100%;padding:12px;background:linear-gradient(135deg,#0052CC,#0A3D9E);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">Enviar solicitud →</button>';
+    html += '<button onclick="certSubmit()" style="width:100%;padding:12px;background:var(--black);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">Enviar solicitud →</button>';
     html += '</div>';
   } else if (verificadas.length === CERT_TIPOS.length) {
     html += '<div style="text-align:center;padding:16px;font-size:12px;color:var(--g3)">🎖️ Tienes todas las certificaciones Dahua disponibles. ¡Felicitaciones!</div>';
@@ -33280,7 +33304,7 @@ function showDirectorioInstaladores(filtroTipo) {
 
   // Filtros por tipo
   html += '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">';
-  html += '<button onclick="showDirectorioInstaladores()" style="padding:5px 12px;border-radius:20px;border:1px solid ' + (filtroTipo==='' ? '#0052CC' : 'var(--border1)') + ';background:' + (filtroTipo==='' ? '#0052CC' : '#fff') + ';color:' + (filtroTipo==='' ? '#fff' : 'var(--g2)') + ';font-size:11px;font-weight:600;cursor:pointer">Todos</button>';
+  html += '<button onclick="showDirectorioInstaladores()" style="padding:5px 12px;border-radius:20px;border:1px solid ' + (filtroTipo==='' ? 'var(--black)' : 'var(--border1)') + ';background:' + (filtroTipo==='' ? 'var(--black)' : '#fff') + ';color:' + (filtroTipo==='' ? '#fff' : 'var(--g2)') + ';font-size:11px;font-weight:600;cursor:pointer">Todos</button>';
   CERT_TIPOS.forEach(function(t){
     var act = filtroTipo === t.id;
     html += '<button onclick="showDirectorioInstaladores(\''+t.id+'\')" style="padding:5px 12px;border-radius:20px;border:1px solid ' + (act ? t.color : 'var(--border1)') + ';background:' + (act ? t.color : '#fff') + ';color:' + (act ? '#fff' : 'var(--g2)') + ';font-size:11px;font-weight:600;cursor:pointer">' + t.icon + ' ' + t.label + '</button>';
@@ -33309,7 +33333,7 @@ function showDirectorioInstaladores(filtroTipo) {
       html += '</div></div>';
     });
   }
-  html += '<div style="text-align:center;margin-top:8px;font-size:10px;color:var(--g3)">¿Eres instalador? <span onclick="openModal(\'perfil\');setTimeout(function(){switchPerfilTab(\'certificaciones\')},200)" style="color:#0052CC;font-weight:600;cursor:pointer">Certifícate y aparece aquí →</span></div>';
+  html += '<div style="text-align:center;margin-top:8px;font-size:10px;color:var(--g3)">¿Eres instalador? <span onclick="openModal(\'perfil\');setTimeout(function(){switchPerfilTab(\'certificaciones\')},200)" style="color:var(--blue);font-weight:600;cursor:pointer">Certifícate y aparece aquí →</span></div>';
   html += '</div>';
 
   var mo = document.getElementById('modalOverlay');
@@ -33317,7 +33341,7 @@ function showDirectorioInstaladores(filtroTipo) {
   if (!mo || !mb) return;
   mb.innerHTML = '<div style="max-width:520px;margin:0 auto;padding:0 4px">' +
     '<div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">' +
-    '<div style="width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#0052CC,#0A3D9E);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🏅</div>' +
+    '<div style="width:40px;height:40px;border-radius:12px;background:var(--black);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🏅</div>' +
     '<div><div style="font-size:17px;font-weight:700;color:var(--g1)">Directorio de Instaladores</div>' +
     '<div style="font-size:12px;color:var(--g3)">Profesionales certificados por Dahua</div></div>' +
     '<button onclick="closeModal()" style="margin-left:auto;background:var(--bg2);border:none;border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:16px;color:var(--g2);display:flex;align-items:center;justify-content:center">×</button>' +
@@ -33410,7 +33434,7 @@ function renderPerfilReferidos() {
   var all = refGetAll(), miReferidor = null;
   Object.keys(all).forEach(function(r) { if (r !== rut && all[r].referidos && all[r].referidos.some(function(x) { return x.rut === rut; })) miReferidor = r; });
   var html = '';
-  html += '<div style="background:linear-gradient(135deg,#0052CC,#0A3D9E);border-radius:16px;padding:20px;margin-bottom:16px;color:#fff">';
+  html += '<div style="background:linear-gradient(165deg,#101216,#1D2128);border-radius:14px;padding:20px;margin-bottom:16px;color:#fff">';
   html += '<div style="font-size:11px;opacity:.75;margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase">Tu código de referido</div>';
   html += '<div style="font-size:26px;font-weight:800;letter-spacing:2px;font-family:monospace;margin-bottom:14px">' + codigo + '</div>';
   html += '<div style="display:flex;gap:8px">';
@@ -33418,17 +33442,17 @@ function renderPerfilReferidos() {
   html += '<button onclick="refCompartirWhatsApp()" style="flex:1;padding:9px;background:#25D366;color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer">💬 WhatsApp</button>';
   html += '</div></div>';
   html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">';
-  html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;text-align:center"><div style="font-size:24px;font-weight:800;color:#0052CC">' + referidos.length + '</div><div style="font-size:11px;color:var(--g3);margin-top:2px">Referidos activos</div></div>';
-  html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;text-align:center"><div style="font-size:24px;font-weight:800;color:#D4A03C">⭐ ' + ptsGanados + '</div><div style="font-size:11px;color:var(--g3);margin-top:2px">Puntos ganados</div></div>';
+  html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;text-align:center"><div style="font-size:24px;font-weight:800;color:var(--black)">' + referidos.length + '</div><div style="font-size:11px;color:var(--g3);margin-top:2px">Referidos activos</div></div>';
+  html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;text-align:center"><div style="font-size:24px;font-weight:800;color:var(--black)">⭐ ' + ptsGanados + '</div><div style="font-size:11px;color:var(--g3);margin-top:2px">Puntos ganados</div></div>';
   html += '</div>';
-  html += '<div style="background:linear-gradient(135deg,#f0f4ff,#e6edff);border:1px solid rgba(0,82,204,.15);border-radius:12px;padding:14px;margin-bottom:16px">';
-  html += '<div style="font-size:12px;font-weight:700;color:#0052CC;margin-bottom:10px">🎯 ¿Cómo funciona?</div>';
+  html += '<div style="background:var(--g7);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px">';
+  html += '<div style="font-size:12px;font-weight:700;color:var(--black);margin-bottom:10px">🎯 ¿Cómo funciona?</div>';
   html += '<div style="font-size:11px;color:var(--g2);line-height:1.7">1. Comparte tu código con colegas instaladores<br>2. Tu referido ingresa el código en su perfil<br>3. Tú recibes <strong>+200 puntos</strong> · tu referido recibe <strong>+100 puntos</strong><br>4. Sin límite de referidos</div></div>';
   if (!miReferidor) {
     html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:16px">';
     html += '<div style="font-size:12px;font-weight:700;color:var(--g1);margin-bottom:10px">¿Te invitó alguien? Ingresa su código</div>';
     html += '<div style="display:flex;gap:8px"><input id="refCodigoInput" type="text" placeholder="REF-XXXXXXXX" maxlength="12" style="flex:1;padding:10px 12px;border:1.5px solid rgba(0,82,204,.25);border-radius:10px;font-size:13px;font-family:monospace;text-transform:uppercase;outline:none" oninput="this.value=this.value.toUpperCase()">';
-    html += '<button onclick="refEnviarCodigo()" style="padding:10px 16px;background:linear-gradient(135deg,#0052CC,#0A3D9E);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer">Aplicar</button></div></div>';
+    html += '<button onclick="refEnviarCodigo()" style="padding:10px 16px;background:var(--black);color:#fff;border:none;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer">Aplicar</button></div></div>';
   } else {
     html += '<div style="background:linear-gradient(135deg,#f0fff4,#e6ffed);border:1px solid rgba(10,92,46,.2);border-radius:12px;padding:12px;margin-bottom:16px;font-size:12px;color:#0A5C2E;font-weight:600">✅ Fuiste referido por ' + escapeHtml(miReferidor) + '</div>';
   }
@@ -33522,20 +33546,20 @@ function renderPerfilNewsletter() {
   var freqActual = rec ? (rec.frecuencia || 'mensual') : 'mensual';
   var html = '';
   if (activo) {
-    html += '<div style="background:linear-gradient(135deg,#0052CC,#0A3D9E);border-radius:16px;padding:16px 20px;margin-bottom:16px;color:#fff;display:flex;align-items:center;gap:12px"><div style="font-size:28px">📬</div><div><div style="font-size:13px;font-weight:700">Newsletter activo</div><div style="font-size:11px;opacity:.8;margin-top:2px">' + escapeHtml(emailVal) + '</div></div></div>';
+    html += '<div style="background:linear-gradient(165deg,#101216,#1D2128);border-radius:14px;padding:16px 20px;margin-bottom:16px;color:#fff;display:flex;align-items:center;gap:12px"><div style="font-size:28px">📬</div><div><div style="font-size:13px;font-weight:700">Newsletter activo</div><div style="font-size:11px;opacity:.8;margin-top:2px">' + escapeHtml(emailVal) + '</div></div></div>';
   } else {
-    html += '<div style="background:linear-gradient(135deg,#fff0f6,#ffe6f0);border:1.5px solid rgba(204,0,102,.2);border-radius:16px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px"><div style="font-size:28px">📭</div><div><div style="font-size:13px;font-weight:700;color:#CC0066">No suscrito</div><div style="font-size:11px;color:var(--g3);margin-top:2px">Suscríbete y recibe +50 puntos</div></div></div>';
+    html += '<div style="background:var(--g7);border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:12px"><div style="font-size:28px">📭</div><div><div style="font-size:13px;font-weight:700;color:var(--black)">No suscrito</div><div style="font-size:11px;color:var(--g3);margin-top:2px">Suscríbete y recibe +50 puntos</div></div></div>';
   }
   html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">';
   html += '<div><div style="font-size:13px;font-weight:700;color:var(--g1)">Recibir newsletter</div><div style="font-size:11px;color:var(--g3);margin-top:2px">Novedades y lanzamientos Dahua</div></div>';
   html += '<label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer"><input type="checkbox" id="nwsActivo" style="opacity:0;width:0;height:0"' + (activo ? ' checked' : '') + '>';
-  html += '<span style="position:absolute;top:0;left:0;right:0;bottom:0;background:' + (activo ? '#0052CC' : '#ccc') + ';border-radius:24px;transition:.3s"><span style="position:absolute;height:18px;width:18px;left:' + (activo ? '23px' : '3px') + ';bottom:3px;background:#fff;border-radius:50%;transition:.3s"></span></span></label></div>';
+  html += '<span style="position:absolute;top:0;left:0;right:0;bottom:0;background:' + (activo ? 'var(--black)' : '#ccc') + ';border-radius:24px;transition:.3s"><span style="position:absolute;height:18px;width:18px;left:' + (activo ? '23px' : '3px') + ';bottom:3px;background:#fff;border-radius:50%;transition:.3s"></span></span></label></div>';
   html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:var(--g1);margin-bottom:8px">Email</div>';
   html += '<input id="nwsEmail" type="email" value="' + emailVal.replace(/"/g, '&quot;') + '" placeholder="tu@email.com" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid rgba(0,82,204,.2);border-radius:10px;font-size:13px;outline:none"></div>';
   html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:var(--g1);margin-bottom:8px">Frecuencia</div><div style="display:flex;gap:8px">';
   NWS_FRECUENCIAS.forEach(function(f) {
     var sel = freqActual === f.id;
-    html += '<label style="flex:1;display:flex;align-items:center;justify-content:center;padding:9px;border-radius:10px;border:1.5px solid ' + (sel ? '#0052CC' : 'var(--border2)') + ';background:' + (sel ? 'rgba(0,82,204,.06)' : '#fff') + ';cursor:pointer;font-size:12px;font-weight:' + (sel ? '700' : '500') + ';color:' + (sel ? '#0052CC' : 'var(--g2)') + '"><input type="radio" name="nwsFreq" value="' + f.id + '" style="display:none"' + (sel ? ' checked' : '') + '>' + f.label + '</label>';
+    html += '<label style="flex:1;display:flex;align-items:center;justify-content:center;padding:9px;border-radius:10px;border:1.5px solid ' + (sel ? 'var(--black)' : 'var(--border2)') + ';background:' + (sel ? 'var(--g6)' : '#fff') + ';cursor:pointer;font-size:12px;font-weight:' + (sel ? '700' : '500') + ';color:' + (sel ? 'var(--black)' : 'var(--g2)') + '"><input type="radio" name="nwsFreq" value="' + f.id + '" style="display:none"' + (sel ? ' checked' : '') + '>' + f.label + '</label>';
   });
   html += '</div></div>';
   html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:16px">';
@@ -33543,15 +33567,15 @@ function renderPerfilNewsletter() {
   html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">';
   NWS_CATS.forEach(function(c) {
     var sel = catsActivas.indexOf(c.id) >= 0;
-    html += '<label style="display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;border:1.5px solid ' + (sel ? '#0052CC' : 'var(--border2)') + ';background:' + (sel ? 'rgba(0,82,204,.05)' : '#fafafa') + ';cursor:pointer"><input type="checkbox" id="nwsCat_' + c.id + '" style="accent-color:#0052CC;width:14px;height:14px;cursor:pointer"' + (sel ? ' checked' : '') + ' onchange="nwsActualizarContador()"><span style="font-size:14px">' + c.ico + '</span><span style="font-size:11px;font-weight:600;color:var(--g1);line-height:1.2">' + c.label + '</span></label>';
+    html += '<label style="display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:10px;border:1.5px solid ' + (sel ? 'var(--black)' : 'var(--border2)') + ';background:' + (sel ? 'var(--g6)' : '#fafafa') + ';cursor:pointer"><input type="checkbox" id="nwsCat_' + c.id + '" style="accent-color:#15171C;width:14px;height:14px;cursor:pointer"' + (sel ? ' checked' : '') + ' onchange="nwsActualizarContador()"><span style="font-size:14px">' + c.ico + '</span><span style="font-size:11px;font-weight:600;color:var(--g1);line-height:1.2">' + c.label + '</span></label>';
   });
   html += '</div></div>';
-  html += '<button onclick="nwsSubmit()" style="width:100%;padding:13px;background:linear-gradient(135deg,#CC0066,#99004D);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer">Guardar preferencias →</button>';
+  html += '<button onclick="nwsSubmit()" style="width:100%;padding:13px;background:var(--black);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer">Guardar preferencias →</button>';
   el.innerHTML = html;
   var cbActivo = document.getElementById('nwsActivo');
   if (cbActivo) cbActivo.addEventListener('change', function() {
     var s = this.parentNode.querySelector('span'), d = s ? s.querySelector('span') : null;
-    if (s) s.style.background = this.checked ? '#0052CC' : '#ccc';
+    if (s) s.style.background = this.checked ? '#15171C' : '#ccc';
     if (d) d.style.left = this.checked ? '23px' : '3px';
   });
 }
@@ -34920,10 +34944,10 @@ function rwGiftcardRenderWidget() {
       '<div style="flex:1;min-width:0">' +
         '<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">' +
           '<span style="font-size:14px">🎁</span>' +
-          '<span style="font-weight:700;color:#6A1B9A;font-size:13px">' + S.giftcard.code + '</span>' +
+          '<span style="font-weight:600;color:var(--g1);font-family:var(--font-m);font-size:12.5px">' + S.giftcard.code + '</span>' +
           '<span style="font-size:9px;background:#FFB800;color:#000;padding:1px 5px;border-radius:3px;font-weight:800;letter-spacing:.3px">SIMULADO</span>' +
         '</div>' +
-        '<div style="font-size:11px;color:#6A1B9A;margin-top:2px">' +
+        '<div style="font-size:11px;color:var(--g2);margin-top:2px">' +
           (desc > 0 ? 'Redime: -' + fmt(desc) + ' · ' : '') +
           'Saldo disponible: ' + fmt(S.giftcard.saldo_actual) +
           (desc > 0 ? ' → queda ' + fmt(saldoPost) : '') +
