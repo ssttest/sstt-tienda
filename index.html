@@ -18553,6 +18553,46 @@ textarea:focus-visible,
 .pm-sstt-section[open] > .pm-sstt-summary{ border-bottom:1px solid var(--border); }
 .pm-sstt-summary{ color:var(--black); }
 
+/* ── Tarjetas de fidelidad PRO (s121) ─────────────────────────────
+   Lenguaje físico: guilloché de seguridad + chip EMV + emboss +
+   banda holográfica estática (el "movimiento" lo aporta el shine del
+   tilt al barrerla) + sweep de luz al aparecer + flotación ambiental.
+   Disciplina perf: solo transform/opacity, sin animaciones infinitas
+   de filtro; flotación en el WRAP (no pelea con el tilt del card). */
+@keyframes fidFloat{
+  0%,100%{ transform:translateY(0) }
+  50%{ transform:translateY(-5px) }
+}
+@keyframes fidSweep{
+  from{ transform:translateX(-140%) skewX(-18deg); opacity:0 }
+  12%{ opacity:1 }
+  to{ transform:translateX(260%) skewX(-18deg); opacity:0 }
+}
+.fidx-float{ animation:fidFloat 6.5s ease-in-out infinite; will-change:transform; }
+.fidx-float:hover{ animation-play-state:paused; }
+.fidx-sweep{
+  position:absolute; top:-25%; bottom:-25%; left:0; width:42%;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.16) 42%,rgba(255,255,255,.34) 50%,rgba(255,255,255,.16) 58%,transparent);
+  transform:translateX(-140%) skewX(-18deg);
+  animation:fidSweep 1.5s cubic-bezier(.55,.08,.35,1) .45s 1 both;
+  pointer-events:none; z-index:6;
+}
+.fidx-holo{
+  position:absolute; inset:0; pointer-events:none; z-index:3;
+  background:conic-gradient(from 210deg at 82% 12%,
+    rgba(255,80,160,.55), rgba(60,230,200,.55), rgba(90,140,255,.55),
+    rgba(255,210,80,.55), rgba(255,80,160,.55));
+  -webkit-mask:linear-gradient(115deg,transparent 56%,#000 70%,#000 79%,transparent 92%);
+  mask:linear-gradient(115deg,transparent 56%,#000 70%,#000 79%,transparent 92%);
+  mix-blend-mode:soft-light;
+}
+.fidx-guilloche{ position:absolute; inset:0; pointer-events:none; z-index:1; }
+.fidx-grain{ position:absolute; inset:0; pointer-events:none; z-index:1; opacity:.05; }
+@media (prefers-reduced-motion: reduce){
+  .fidx-float{ animation:none !important; }
+  .fidx-sweep{ animation:none !important; display:none !important; }
+}
+
 /* ── Perfil del cliente (Mi cuenta): dashboard en gramática tinta ── */
 .um-avatar-lg{ background:var(--black); box-shadow:none; }
 .db-card{ border-radius:var(--r); box-shadow:var(--shadow-xs); }
@@ -27896,6 +27936,78 @@ function switchPerfilTab(tab, btn) {
   if (tab==='newsletter')      renderPerfilNewsletter();
 }
 
+// ── s121: helpers compartidos de la tarjeta de fidelidad PRO ──────────
+// Guilloché de seguridad (grabado tipo billete — una empresa de seguridad
+// merece una tarjeta con lenguaje de impresión de seguridad), chip EMV
+// realista, emboss tipográfico y últimos-4 estables derivados del RUT.
+window._fidCardFX = function(cd) {
+  if (cd.bip) return ''; // el cartón BIP es sagrado
+  var dark = cd.titanium || (cd.text === '#fff' && !cd.metal) || cd.label === 'BLACK';
+  var ink = cd.goldAccent ? '212,160,60' : (cd.text === '#fff' ? '255,255,255' : '20,22,26');
+  // Tres hebras de guilloché: senos desfasados entrelazados, mitad inferior
+  var paths = '';
+  var strands = [
+    { amp: 16, freq: 0.052, phase: 0,    yBase: 196, op: .10 },
+    { amp: 16, freq: 0.052, phase: 3.14, yBase: 196, op: .10 },
+    { amp: 26, freq: 0.030, phase: 1.2,  yBase: 176, op: .06 },
+    { amp: 26, freq: 0.030, phase: 4.34, yBase: 176, op: .06 },
+    { amp: 9,  freq: 0.085, phase: 0.6,  yBase: 214, op: .08 },
+    { amp: 9,  freq: 0.085, phase: 3.74, yBase: 214, op: .08 }
+  ];
+  strands.forEach(function(s) {
+    var d = 'M-4 ' + (s.yBase + s.amp * Math.sin(s.phase)).toFixed(1);
+    for (var x = 0; x <= 408; x += 8) {
+      d += ' L' + x + ' ' + (s.yBase + s.amp * Math.sin(x * s.freq + s.phase)).toFixed(1);
+    }
+    paths += '<path d="' + d + '" fill="none" stroke="rgba(' + ink + ',' + s.op + ')" stroke-width=".7"/>';
+  });
+  // Roseta de esquina (sello de seguridad) — anillos concéntricos finos
+  var rings = '';
+  for (var r = 6; r <= 30; r += 4) {
+    rings += '<circle cx="368" cy="218" r="' + r + '" fill="none" stroke="rgba(' + ink + ',.05)" stroke-width=".6"/>';
+  }
+  var holoOp = cd.titanium ? '.12' : cd.metal ? '.15' : '.06';
+  var html = '';
+  html += '<svg class="fidx-guilloche" viewBox="0 0 400 252" preserveAspectRatio="none">' + paths + rings + '</svg>';
+  // Grano mate (papel/metal real, no plástico digital)
+  var gid = 'fxg' + Math.floor(Math.random() * 1e6); // s121: id único
+  html += '<svg class="fidx-grain" viewBox="0 0 400 252" preserveAspectRatio="none"><filter id="' + gid + '"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="400" height="252" filter="url(#' + gid + ')" opacity="' + (dark?'.5':'.35') + '"/></svg>';
+  // Banda holográfica estática (el shine del tilt la "activa" al pasar)
+  html += '<div class="fidx-holo" style="opacity:' + holoOp + (dark ? ';mix-blend-mode:screen' : '') + '"></div>'; // s121: screen en dark — soft-light sobre negro es invisible
+  // Sweep de luz una sola vez al render
+  html += '<div class="fidx-sweep"' + (dark ? '' : ' style="mix-blend-mode:overlay"') + '></div>';
+  return html;
+};
+window._fidChip = function(cd, w) {
+  if (cd.bip) return '';
+  w = w || 40;
+  var h = Math.round(w * 0.75);
+  var uid = 'fxc' + Math.floor(Math.random() * 1e6); // s121: id único — defs duplicados en subtrees ocultos rompen url()
+  var gold1 = cd.titanium ? '#C9A14A' : '#E3C16F';
+  var gold2 = cd.titanium ? '#8A6B26' : '#B8923C';
+  var lineOp = cd.text === '#fff' ? '.45' : '.5';
+  return '<svg width="' + w + '" height="' + h + '" viewBox="0 0 40 30" style="display:block;border-radius:5px;box-shadow:0 1px 2px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.35)">' +
+    '<defs><linearGradient id="' + uid + '" x1="0" y1="0" x2="1" y2="1">' +
+    '<stop offset="0" stop-color="' + gold1 + '"/><stop offset=".5" stop-color="' + gold2 + '"/><stop offset="1" stop-color="' + gold1 + '"/></linearGradient></defs>' +
+    '<rect width="40" height="30" rx="5" fill="url(#' + uid + ')"/>' +
+    '<g fill="none" stroke="rgba(60,40,10,' + lineOp + ')" stroke-width=".9">' +
+    '<rect x="12" y="8" width="16" height="14" rx="2.5"/>' +
+    '<path d="M12 12 H4 M12 18 H4 M28 12 H36 M28 18 H36"/>' +
+    '<path d="M20 8 V4 M20 22 V26"/>' +
+    '<path d="M4 12 V5 Q4 3 6 3 H16 M36 12 V5 Q36 3 34 3 H24"/>' +
+    '<path d="M4 18 V25 Q4 27 6 27 H16 M36 18 V25 Q36 27 34 27 H24"/>' +
+    '</g></svg>';
+};
+window._fidEmboss = function(cd) {
+  return cd.text === '#fff'
+    ? ';text-shadow:0 1px 1px rgba(0,0,0,.6),0 -1px 0 rgba(255,255,255,.12)'
+    : ';text-shadow:0 1px 0 rgba(255,255,255,.8),0 -1px 1px rgba(0,0,0,.2)';
+};
+window._fidLast4 = function() {
+  var d = ((USER && USER.rut) || '').replace(/[^0-9]/g, '');
+  return d.length >= 5 ? d.slice(-5, -1) : '2428';
+};
+
 function renderPerfilDatos() {
   const el = document.getElementById('perfilTabDatos');
   if (!el) return;
@@ -27965,10 +28077,11 @@ function renderPerfilDatos() {
   }
   // ── Premium tier card (non-BIP) ──
   if (!_cd.bip) {
-  html += '<div id="dbCardWrap" style="perspective:800px;margin-bottom:14px;cursor:pointer" onclick="_dbGoTab(\'fidelidad\',6)">';
+  html += '<div id="dbCardWrap" style="perspective:800px;margin-bottom:14px;cursor:pointer" onclick="_dbGoTab(\'fidelidad\',6)" class="fidx-float">';
     html += '<div id="dbCard" style="background:' + _cd.bg + ';color:' + _cd.text + ';border:' + _cd.border + ';border-radius:12px;padding:16px 20px;position:relative;overflow:hidden;aspect-ratio:85.6/53.98;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;box-shadow:' + _cd.shadow + (_cd.inset?','+_cd.inset:'') + ';transform-style:preserve-3d;transition:transform .15s ease-out,box-shadow .15s ease-out;will-change:transform">';
   // Shine
-  html += '<div id="dbShine" style="position:absolute;inset:0;background:' + _cd.shine + ';pointer-events:none;opacity:' + _cd.shineOp + ';transition:opacity .2s"></div>';
+  html += '<div id="dbShine" style="position:absolute;inset:0;background:' + _cd.shine + ';pointer-events:none;opacity:' + _cd.shineOp + ';transition:opacity .2s;z-index:4"></div>';
+  html += _fidCardFX(_cd); // s121: guilloché + grano + holo + sweep
   // Metal texture
   if (_cd.metal) {
     html += '<div style="position:absolute;inset:0;pointer-events:none;opacity:.3;background:repeating-linear-gradient(92deg,transparent,transparent 1px,rgba(255,255,255,.06) 1px,rgba(255,255,255,.06) 2px)"></div>';
@@ -27992,18 +28105,14 @@ function renderPerfilDatos() {
   // Chip + NFC
   html += '<div style="position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center">';
   html += '<div style="display:flex;align-items:center;gap:5px;margin-bottom:6px;position:relative">';
-  html += '<div style="width:34px;height:25px;border-radius:5px;background:' + _cd.chipBg + ';border:.5px solid ' + _cd.chipBdr + ';display:inline-flex;align-items:center;justify-content:center;position:relative' + (_cd.metal||_cd.titanium?';box-shadow:inset 0 1px 0 rgba(255,255,255,.15)':'') + '">';
-  html += '<div style="width:22px;height:15px;border-radius:3px;background:rgba(128,128,128,.03);border:.5px solid ' + _cd.chipBdr + ';position:relative">';
-  html += '<div style="position:absolute;left:50%;top:2px;bottom:2px;width:.5px;background:' + _cd.chipLine + '"></div>';
-  html += '<div style="position:absolute;top:50%;left:2px;right:2px;height:.5px;background:' + _cd.chipLine + '"></div>';
-  html += '</div></div>';
+  html += _fidChip(_cd, 34); // s121: chip EMV realista
   html += '<svg style="width:12px;height:12px;position:absolute;left:40px;top:50%;transform:translateY(-50%) rotate(90deg)" viewBox="0 0 24 24" fill="none" stroke="' + _cd.nfcStroke + '" stroke-width="2.5" stroke-linecap="round"><path d="M7 17a8 8 0 0 1 0-10"/><path d="M11 14a3.5 3.5 0 0 1 0-4"/><path d="M3 20a13 13 0 0 1 0-16"/></svg>';
   html += '</div>';
-  html += '<div style="font-size:10px;letter-spacing:3px;font-weight:500;font-family:SFMono-Regular,Consolas,monospace;color:' + _cd.numColor + '">•••• •••• •••• ' + String(Math.floor(Math.random()*9000)+1000) + '</div>';
+  html += '<div style="font-size:10px;letter-spacing:3px;font-weight:500;font-family:SFMono-Regular,Consolas,monospace;color:' + _cd.numColor + _fidEmboss(_cd) + '">•••• •••• •••• ' + _fidLast4() + '</div>';
   html += '</div>';
   // Bottom row
   html += '<div style="display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:2">';
-  html += '<div><div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase">' + escapeHtml((USER.nombre||'') + ' ' + (USER.apellido||'')) + '</div>'  /* s104: escape XSS */;
+  html += '<div><div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase' + _fidEmboss(_cd) + '">' + escapeHtml((USER.nombre||'') + ' ' + (USER.apellido||'')) + '</div>'  /* s104: escape XSS */;
   html += '<div style="font-size:7.5px;color:' + _cd.sub + ';margin-top:2px">' + (USER.rut||'') + '</div></div>';
   html += '<div style="text-align:right"><div style="font-size:5.5px;opacity:.25;letter-spacing:.5px">VÁLIDO HASTA</div>';
   html += '<div style="font-size:8px;font-weight:600;opacity:.35">12/26</div></div>';
@@ -28173,8 +28282,8 @@ function renderPerfilDatos() {
     
     w.addEventListener('mousemove',function(e){
       var r=w.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;
-      c.style.transform='rotateX('+((y-.5)*-34)+'deg) rotateY('+((x-.5)*34)+'deg) scale(1.06)';
-      c.style.boxShadow=(12-((x-.5)*34)*2.5)+'px '+(12+((y-.5)*34)*2.5)+'px 48px rgba(0,0,0,.40), 0 0 20px rgba(0,0,0,.12)';
+      c.style.transform='rotateX('+((y-.5)*-12)+'deg) rotateY('+((x-.5)*12)+'deg) scale(1.03)'; /* s121: tilt pro */
+      c.style.boxShadow=(8-((x-.5)*12)*1.6)+'px '+(8+((y-.5)*12)*1.6)+'px 34px rgba(0,0,0,.28), 0 0 16px rgba(0,0,0,.10)';
       s.style.background='radial-gradient(circle at '+(x*100)+'% '+(y*100)+'%, rgba(255,255,255,'+(cd.titanium?'.12':cd.metal?'.45':'.5')+'), transparent 55%)';
       s.style.opacity='1';
     });
@@ -30114,11 +30223,12 @@ function renderPerfilFidelidad() {
 
   // ── Tarjeta principal con efecto 3D tilt (no-BIP) ──
   if (!cd.bip) {
-  html += '<div id="fidCardWrap" style="perspective:800px;max-width:420px;margin-bottom:18px">';
+  html += '<div id="fidCardWrap" class="fidx-float" style="perspective:800px;max-width:420px;margin-bottom:18px">';
   html += '<div id="fidCard" class="fid-card" style="background:' + cd.bg + ';color:' + cd.text + ';border:' + cd.border + ';border-radius:12px;padding:20px 24px;position:relative;overflow:hidden;aspect-ratio:85.6/53.98;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;box-shadow:' + cd.shadow + (cd.inset?','+cd.inset:'') + ';transform-style:preserve-3d;transition:transform .15s ease-out,box-shadow .15s ease-out;will-change:transform;cursor:default">';
 
   // Shine overlay (moves with tilt)
-  html += '<div id="fidShine" style="position:absolute;inset:0;background:' + cd.shine + ';pointer-events:none;opacity:' + cd.shineOp + ';transition:opacity .2s"></div>';
+  html += '<div id="fidShine" style="position:absolute;inset:0;background:' + cd.shine + ';pointer-events:none;opacity:' + cd.shineOp + ';transition:opacity .2s;z-index:4"></div>';
+  html += _fidCardFX(cd); // s121: guilloché + grano + holo + sweep
 
   // Metal brushed texture (Silver/Gold only)
   if (cd.metal) {
@@ -30149,20 +30259,16 @@ function renderPerfilFidelidad() {
   // Chip + NFC
   html += '<div style="position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center">';
   html += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;position:relative">';
-  html += '<div style="width:40px;height:30px;border-radius:6px;background:' + cd.chipBg + ';border:.5px solid ' + cd.chipBdr + ';display:inline-flex;align-items:center;justify-content:center;position:relative' + (cd.metal||cd.titanium ? ';box-shadow:inset 0 1px 0 rgba(255,255,255,.2)' : '') + '">';
-  html += '<div style="width:26px;height:18px;border-radius:3px;background:' + (cd.metal||cd.titanium ? 'linear-gradient(145deg,rgba(255,255,255,.1),rgba(0,0,0,.02)' : 'rgba(128,128,128,.03)') + ');border:.5px solid ' + cd.chipBdr + ';position:relative">';
-  html += '<div style="position:absolute;left:50%;top:3px;bottom:3px;width:.5px;background:' + cd.chipLine + '"></div>';
-  html += '<div style="position:absolute;top:50%;left:3px;right:3px;height:.5px;background:' + cd.chipLine + '"></div>';
-  html += '</div></div>';
+  html += _fidChip(cd, 40); // s121: chip EMV realista
   html += '<svg style="width:16px;height:16px;position:absolute;left:48px;top:50%;transform:translateY(-50%) rotate(90deg)" viewBox="0 0 24 24" fill="none" stroke="' + cd.nfcStroke + '" stroke-width="2.5" stroke-linecap="round"><path d="M7 17a8 8 0 0 1 0-10"/><path d="M11 14a3.5 3.5 0 0 1 0-4"/><path d="M3 20a13 13 0 0 1 0-16"/></svg>';
   html += '</div>';
   // Card number
-  html += '<div style="font-size:12px;letter-spacing:3.5px;font-weight:500;font-family:SFMono-Regular,Consolas,monospace;color:' + cd.numColor + '">•••• •••• •••• ' + String(Math.floor(Math.random()*9000)+1000) + '</div>';
+  html += '<div style="font-size:12px;letter-spacing:3.5px;font-weight:500;font-family:SFMono-Regular,Consolas,monospace;color:' + cd.numColor + _fidEmboss(cd) + '">•••• •••• •••• ' + _fidLast4() + '</div>';
   html += '</div>';
 
   // Bottom row
   html += '<div style="display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:2">';
-  html += '<div><div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase">' + (USER?.nombre || '') + ' ' + (USER?.apellido || '') + '</div>';
+  html += '<div><div style="font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase' + _fidEmboss(cd) + '">' + (USER?.nombre || '') + ' ' + (USER?.apellido || '') + '</div>';
   html += '<div style="font-size:8.5px;color:' + cd.sub + ';margin-top:2px">' + (USER?.rut || '') + '</div></div>';
   html += '<div style="text-align:right"><div style="font-size:6.5px;opacity:.3;letter-spacing:.5px">VÁLIDO HASTA</div>';
   html += '<div style="font-size:9px;font-weight:600;opacity:.4">12/26</div></div>';
@@ -30325,10 +30431,10 @@ function renderPerfilFidelidad() {
     var r = wrap.getBoundingClientRect();
     var x = (e.clientX - r.left) / r.width;
     var y = (e.clientY - r.top) / r.height;
-    var tiltX = (y - 0.5) * -34;
-    var tiltY = (x - 0.5) * 34;
-    card.style.transform = 'rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) scale(1.06)';
-    card.style.boxShadow = (12 - tiltY*2.5) + 'px ' + (12 + tiltX*2.5) + 'px 48px rgba(0,0,0,.40), 0 0 20px rgba(0,0,0,.12)';
+    var tiltX = (y - 0.5) * -12; /* s121: tilt pro */
+    var tiltY = (x - 0.5) * 12;
+    card.style.transform = 'rotateX(' + tiltX + 'deg) rotateY(' + tiltY + 'deg) scale(1.03)';
+    card.style.boxShadow = (8 - tiltY*1.6) + 'px ' + (8 + tiltX*1.6) + 'px 34px rgba(0,0,0,.28), 0 0 16px rgba(0,0,0,.10)';
     shine.style.background = 'radial-gradient(circle at ' + (x*100) + '% ' + (y*100) + '%, rgba(255,255,255,' + (cd.titanium?'.12':cd.metal?'.45':'.5') + '), transparent 55%)';
     shine.style.opacity = '1';
   });
