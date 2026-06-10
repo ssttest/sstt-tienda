@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Miércoles 10 de Junio del 2026 · s121 -->
+<!-- SSTT Tienda · Generado: Miércoles 10 de Junio del 2026 · s122 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -4256,7 +4256,7 @@ nav {
    PDF VIEWER MODAL — Liquid Glass Tahoe
    ══════════════════════════════════════════════════════════════ */
 #pdfViewer {
-  position: fixed; inset: 0; z-index: 1100;
+  position: fixed; inset: 0; z-index: 10010; /* s122: >#prodModal(10000) — el modal se abre con display:flex (sin clase .open) por lo que su z efectivo es 10000, no el 850 inyectado; la ficha PDF debe quedar por encima */
   display: none; align-items: center; justify-content: center;
   padding: 16px;
   background: rgba(0,0,0,0.35);
@@ -26333,7 +26333,7 @@ function _sbRunAction(el) {
     var m = action.match(/^(_sb[A-Za-z]+)\((.*)\)$/);
     if (!m) { console.error('_sbRunAction: formato no reconocido', action); return; }
     var fn = m[1], rawArgs = m[2].trim();
-    var ALLOW = { _sbToggleArr:1,_sbRfArr:1,_sbRfSet:1,_sbSfToggle:1,_sbAfToggle:1,_sbAcfToggle:1,_sbVfToggle:1,_sbXfSet:1 };
+    var ALLOW = { _sbToggleArr:1,_sbRfArr:1,_sbRfSet:1,_sbSfToggle:1,_sbAfToggle:1,_sbAcfToggle:1,_sbVfToggle:1,_sbXfSet:1,_sbSetSort:1 }; // s122: +_sbSetSort (los chips de orden estaban fuera de la allowlist → no ordenaban)
     if (!ALLOW[fn] || typeof window[fn] !== 'function') { console.error('_sbRunAction: accion no permitida', fn); return; }
     var args = rawArgs === '' ? [] : JSON.parse('[' + rawArgs + ']');
     window[fn].apply(null, args);
@@ -26528,9 +26528,13 @@ function _sbToggleArr(key, val) {
 window._sbToggleArr = _sbToggleArr;
 
 function _sbSetSort(val) {
+  // s122: scope por categoría. Antes el `else` forzaba _rfState aun en categorías
+  // generales (donde render() lee S.sort, no _rfState) → el orden no se aplicaba.
   var _camCats=['camaras-ip','camaras-hdcvi','camaras-ptz','_camaras'];
+  var _recCats=['nvr','_grabadores','_nvr_nvr','_nvr_xvr','_nvr_ent'];
   if(_camCats.indexOf(S.cat)>=0){_cfEnsureState();window._cfState.sort=val;}
-  else{_rfEnsureState();window._rfState.sort=val;}
+  else if(_recCats.indexOf(S.cat)>=0){_rfEnsureState();window._rfState.sort=val;}
+  else{S.sort=val;var sel=document.getElementById('sortSel');if(sel)sel.value=val;}
   render(); renderCatSidebar();
 }
 window._sbSetSort = _sbSetSort;
@@ -26611,7 +26615,7 @@ function _renderSortBar() {
     var curSort=isCamSB?(window._cfState&&window._cfState.sort||'destacados'):(window._rfState&&window._rfState.sort||'destacados');
     items.forEach(function(sv){
       var on=curSort===sv[0];
-      var action=isCamSB?'_cfEnsureState();window._cfState.sort='+JSON.stringify(sv[0])+';render();renderCatSidebar()':'_rfEnsureState();window._rfState.sort='+JSON.stringify(sv[0])+';render();renderCatSidebar()';
+      var action='_sbSetSort('+JSON.stringify(sv[0])+')'; // s122: ruta por dispatcher allowlist (antes string crudo _cf/_rfEnsureState → rechazado por _sbRunAction)
       h+='<span data-sa="'+action.replace(/"/g,'&quot;')+'" onclick="_sbRunAction(this)" style="font-size:11px;padding:4px 10px;border-radius:16px;border:1px solid '+(on?'var(--black)':'var(--border2)')+';background:'+(on?'var(--black)':'#fff')+';color:'+(on?'#fff':'var(--g2)')+';font-weight:'+(on?'700':'500')+';cursor:pointer;white-space:nowrap">'+sv[1]+'</span>';
     });
   } else {
@@ -26619,7 +26623,7 @@ function _renderSortBar() {
     var curGen=S.sort||'destacados';
     genItems.forEach(function(sv){
       var on=curGen===sv[0];
-      var action='S.sort='+JSON.stringify(sv[0])+';var sel=document.getElementById("sortSel");if(sel)sel.value='+JSON.stringify(sv[0])+';render()';
+      var action='_sbSetSort('+JSON.stringify(sv[0])+')'; // s122: ruta por dispatcher allowlist (antes string crudo S.sort=… → rechazado por _sbRunAction)
       h+='<span data-sa="'+action.replace(/"/g,'&quot;')+'" onclick="_sbRunAction(this)" style="font-size:11px;padding:4px 10px;border-radius:16px;border:1px solid '+(on?'var(--black)':'var(--border2)')+';background:'+(on?'var(--black)':'#fff')+';color:'+(on?'#fff':'var(--g2)')+';font-weight:'+(on?'700':'500')+';cursor:pointer;white-space:nowrap">'+sv[1]+'</span>';
     });
   }
@@ -26822,7 +26826,8 @@ function openFilterSheet() {
     html='<div class="sb-fg"><div class="sb-fl">Ordenar</div><div class="sb-chips">';
     [['','Relevancia'],['precio_asc','Precio ↑'],['precio_desc','Precio ↓'],['nuevo','Nuevos']].forEach(function(sv){
       var on=(S.sort||'')===sv[0];
-      html+='<span class="sb-chip'+(on?' on':'')+'" data-sa="S.sort='+JSON.stringify(sv[0])+';render()" onclick="_sbRunAction(this)">'+sv[1]+'</span>';
+      var _fsAct='_sbSetSort('+JSON.stringify(sv[0])+')'; // s122: ruta por dispatcher allowlist
+      html+='<span class="sb-chip'+(on?' on':'')+'" data-sa="'+_fsAct.replace(/"/g,'&quot;')+'" onclick="_sbRunAction(this)">'+sv[1]+'</span>';
     });
     html+='</div></div>';
   }
@@ -44646,7 +44651,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's121',
+  ver:   's122',
   fecha: 'Miércoles 10 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
