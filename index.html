@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s123 -->
+<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s124 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -44651,7 +44651,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's123',
+  ver:   's124',
   fecha: 'Jueves 11 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
@@ -46820,8 +46820,13 @@ function renderSliders() {
     if (curF < minF || curF > maxF) {
       curF = minF;
       if (which === 'A') FOV.focalA = curF; else FOV.focalB = curF;
-      document.getElementById('fovFocal'+which+'Lbl').textContent = curF.toFixed(1)+'mm';
     }
+    // s124: sincronizar SIEMPRE el label con la focal vigente, no solo al clampear.
+    // Antes, al elegir una cámara de lente fijo cuya focal manda el código
+    // (p.ej. -0360B → 3.6mm) y que ya estaba en rango, el label quedaba pegado en
+    // su valor estático "2.8mm" — aunque ángulos/cobertura sí usaban 3.6mm. El
+    // código manda: el label ahora refleja la focal real. (Bug FOV reportado s124)
+    document.getElementById('fovFocal'+which+'Lbl').textContent = curF.toFixed(1)+'mm';
     slider.value = curF;
     var pct = maxF > minF ? ((curF - minF) / (maxF - minF) * 100) : 50;
     var color = which === 'A' ? '#1E5FA8' : '#ff6b35';
