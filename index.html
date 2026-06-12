@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s141 -->
+<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s142 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -22154,7 +22154,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
 
 <footer style="background:#fff;border-top:2px solid #f0f0f0;color:var(--g1);padding:0;margin-top:0">
 
-  <!-- Sprint 5 s74: Banner Distribuidor Oficial Dahua -->
+  <!-- Sprint 5 s74: Banner Distribuidor Oficial Dahua · s142: checks/CTA a blanco (adiós verde Apple y dorado) -->
   <div style="background:#15171C;color:#fff;padding:18px 20px;cursor:pointer;border-bottom:3px solid #D90F23" onclick="showConfianzaModal()">
     <div class="wrap" style="max-width:1200px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center;text-align:center">
       <div style="display:flex;align-items:center;gap:12px">
@@ -22165,52 +22165,53 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         </div>
       </div>
       <div style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;font-size:11.5px">
-        <div style="display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.8)"><span style="color:#34c759">✓</span> Equipos originales</div>
-        <div style="display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.8)"><span style="color:#34c759">✓</span> Soporte técnico</div>
-        <div style="display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.8)"><span style="color:#34c759">✓</span> Factura electrónica</div>
-        <div style="color:#D4A03C;font-weight:700;display:flex;align-items:center;gap:4px">Ver detalles →</div>
+        <div style="display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.8)"><span style="color:rgba(255,255,255,.55)">✓</span> Equipos originales</div>
+        <div style="display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.8)"><span style="color:rgba(255,255,255,.55)">✓</span> Soporte técnico</div>
+        <div style="display:flex;align-items:center;gap:5px;color:rgba(255,255,255,0.8)"><span style="color:rgba(255,255,255,.55)">✓</span> Factura electrónica</div>
+        <div style="color:#fff;font-weight:700;display:flex;align-items:center;gap:4px;border-bottom:1px solid rgba(255,255,255,.4)">Ver detalles →</div>
       </div>
     </div>
   </div>
 
   <!-- ── Barra superior: métricas de confianza ── -->
-  <!-- Sprint 6 s75: Directorio Instaladores banner -->
-  <div style="background:#f0fff4;border-bottom:1px solid rgba(10,92,46,.15);padding:14px 0;text-align:center">
+  <!-- Sprint 6 s75: Directorio Instaladores banner · s142: verde menta → porcelana; emoji → SVG medalla -->
+  <div style="background:var(--g7);border-bottom:1px solid var(--g6);padding:14px 0;text-align:center">
     <div class="wrap" style="display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap">
-      <span style="font-size:14px">🏅</span>
-      <span style="font-size:13px;font-weight:700;color:#0A5C2E">¿Eres instalador Dahua?</span>
-      <span style="font-size:12px;color:#0A5C2E;opacity:.8">Certifícate y accede a precios especiales + directorio público</span>
-      <button onclick="showDirectorioInstaladores()" style="background:#D90F23;color:#fff;border:none;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:700;cursor:pointer">Ver directorio →</button>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--black)" stroke-width="1.8"><circle cx="12" cy="15" r="5"/><path d="M9 10.5 6.5 3h4L12 6.5 13.5 3h4L15 10.5"/></svg>
+      <span style="font-size:13px;font-weight:700;color:var(--black)">¿Eres instalador Dahua?</span>
+      <span style="font-size:12px;color:var(--g2)">Certifícate y accede a precios especiales + directorio público</span>
+      <button onclick="showDirectorioInstaladores()" style="background:#D90F23;color:#fff;border:none;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font)">Ver directorio →</button>
     </div>
   </div>
+  <!-- s142: 4 cards accionables (antes 2 eran inertes); horario/fono duplicados salen — viven en la columna SSTT -->
   <div class="footer-trust-bar" style="background:var(--g7);border-bottom:1px solid var(--g6);padding:16px 0">
     <div class="wrap footer-grid-trust" style="max-width:1200px;gap:0">
       <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid var(--g6);cursor:pointer" onclick="event.preventDefault();showSeguimiento();" title="Ver estado de tu compra">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#D90F23" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
         <div>
           <div style="font-size:12px;font-weight:800;color:var(--black);text-transform:uppercase;letter-spacing:.3px">Estado de compra</div>
-          <div style="font-size:11px;color:#D90F23;margin-top:1px;font-weight:600">Seguimiento online →</div>
+          <div class="ft-sub" style="font-size:11px;color:#D90F23;margin-top:1px;font-weight:600">Seguimiento online →</div>
         </div>
       </div>
-      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid var(--g6)">
+      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid var(--g6);cursor:pointer" onclick="try{waPanelOpen()}catch(_){location.href='mailto:ventas@sstt.cl'}" title="Abrir chat de ventas">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#D90F23" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <div>
           <div style="font-size:12px;font-weight:800;color:var(--black);text-transform:uppercase;letter-spacing:.3px">Contáctanos</div>
-          <div style="font-size:11px;color:var(--g3);margin-top:1px">Escríbenos</div>
+          <div class="ft-sub" style="font-size:11px;color:#D90F23;margin-top:1px;font-weight:600">Chat en línea →</div>
         </div>
       </div>
-      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid var(--g6)">
+      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid var(--g6);cursor:pointer" onclick="location.href='tel:+56222042119'" title="Llamar a ventas">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#D90F23" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         <div>
           <div style="font-size:12px;font-weight:800;color:var(--black);text-transform:uppercase;letter-spacing:.3px">+56 2 2204 2119</div>
-          <div style="font-size:11px;color:var(--g3);margin-top:1px">Lunes a Jueves 8:30–17:15 · Viernes 8:30–17:45 hrs</div>
+          <div class="ft-sub" style="font-size:11px;color:#D90F23;margin-top:1px;font-weight:600">Llamar a ventas →</div>
         </div>
       </div>
-      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px">
-        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#D90F23" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;cursor:pointer" onclick="showSection('asistente',document.querySelector('[data-sec=asistente]'))" title="Abrir Soporte Técnico AI">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#D90F23" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <div>
           <div style="font-size:12px;font-weight:800;color:var(--black);text-transform:uppercase;letter-spacing:.3px">Centro de ayuda</div>
-          <div style="font-size:11px;color:var(--g3);margin-top:1px">Estamos para ayudarte</div>
+          <div class="ft-sub" style="font-size:11px;color:#D90F23;margin-top:1px;font-weight:600">Soporte Técnico AI →</div>
         </div>
       </div>
     </div>
@@ -22220,135 +22221,131 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
   <div class="wrap" style="max-width:1200px;padding:32px 16px 24px">
     <div class="footer-grid-main">
 
-      <!-- Brand -->
+      <!-- Brand · s142: pill "Distribuidor Oficial" eliminado (redundante con barra ink + subtítulo); emojis → SVG hairline -->
       <div>
-        <div style="margin-bottom:14px">
+        <div style="margin-bottom:16px">
           <div style="font-family:var(--font-d);font-size:26px;font-weight:900;color:var(--black);letter-spacing:-.5px">SSTT®</div>
           <div style="font-size:10px;color:var(--g3);margin-top:2px;text-transform:uppercase;letter-spacing:.4px">SpA · Distribuidor Oficial Dahua · Chile</div>
         </div>
-        <div style="display:inline-flex;align-items:center;gap:7px;background:#fff0f0;border:1px solid #fcc;border-radius:6px;padding:4px 10px;margin-bottom:14px">
-          <span style="width:6px;height:6px;border-radius:50%;background:#D90F23;flex-shrink:0"></span>
-          <span style="font-size:10px;font-weight:800;color:#D90F23;text-transform:uppercase;letter-spacing:.5px">Distribuidor Oficial Dahua Technology</span>
-        </div>
 
-        <div style="display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:#555">
-          <span style="display:flex;flex-direction:column;gap:4px">
-            <span style="font-size:12.5px;color:#555">📍 General José Artigas 3028, Ñuñoa · Santiago</span>
-            <span style="display:flex;gap:8px;margin-top:2px">
-              <a href="https://maps.google.com/?q=General+José+Artigas+3028,+Ñuñoa,+Santiago" target="_blank" rel="noopener"
-                style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:#fff;background:#4285F4;border-radius:5px;padding:3px 9px;text-decoration:none">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                Google Maps
-              </a>
-              <a href="https://waze.com/ul?q=General+José+Artigas+3028+Ñuñoa+Santiago&navigate=yes" target="_blank" rel="noopener"
-                style="display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:700;color:#000;background:#05C8F7;border-radius:5px;padding:3px 9px;text-decoration:none">
-                <svg width="13" height="13" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <!-- Wazmo body -->
-                  <ellipse cx="24" cy="26" rx="18" ry="16" fill="#fff"/>
-                  <!-- Eyes -->
-                  <circle cx="17.5" cy="23" r="2.5" fill="#1a1a1a"/>
-                  <circle cx="30.5" cy="23" r="2.5" fill="#1a1a1a"/>
-                  <!-- Smile -->
-                  <path d="M18 29 Q24 34 30 29" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" fill="none"/>
-                  <!-- Antenna -->
-                  <path d="M30 11 Q34 6 38 8" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" fill="none"/>
-                  <circle cx="38.5" cy="7.5" r="2.5" fill="#FF6B35"/>
-                  <!-- Cheeks -->
-                  <ellipse cx="14" cy="26" rx="3" ry="2" fill="#FFB3BA" opacity=".7"/>
-                  <ellipse cx="34" cy="26" rx="3" ry="2" fill="#FFB3BA" opacity=".7"/>
-                </svg>
-                Waze
-              </a>
-            </span>
+        <div style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;color:var(--g2)">
+          <span style="display:flex;align-items:flex-start;gap:7px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--g3)" stroke-width="1.8" style="flex-shrink:0;margin-top:2px"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span>General José Artigas 3028, Ñuñoa · Santiago</span>
           </span>
-          <span>⏰ Lunes a Jueves 8:30–17:15 · Viernes 8:30–17:45 hrs</span>
-          <a href="tel:+56222042119" style="color:#D90F23;text-decoration:none;font-weight:600">📞 +56 2 2204 2119 · Ventas</a>
-          <a href="tel:+56222257011" style="color:#D90F23;text-decoration:none;font-weight:600">📞 +56 2 2225 7011 · Soporte</a>
-          <a href="mailto:ventas@sstt.cl" style="color:#555;text-decoration:none" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#555'">✉️ ventas@sstt.cl</a>
-          <a href="mailto:soporte@sstt.cl" style="color:#555;text-decoration:none" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#555'">✉️ soporte@sstt.cl</a>
+          <span style="display:flex;gap:8px;margin:1px 0 1px 21px">
+            <a href="https://maps.google.com/?q=General+José+Artigas+3028,+Ñuñoa,+Santiago" target="_blank" rel="noopener"
+              style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--g1);background:#fff;border:1px solid var(--g5);border-radius:6px;padding:3px 10px;text-decoration:none;transition:all .15s"
+              onmouseover="this.style.background='var(--g7)';this.style.borderColor='var(--g4)'" onmouseout="this.style.background='#fff';this.style.borderColor='var(--g5)'">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              Google Maps
+            </a>
+            <a href="https://waze.com/ul?q=General+José+Artigas+3028+Ñuñoa+Santiago&navigate=yes" target="_blank" rel="noopener"
+              style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--g1);background:#fff;border:1px solid var(--g5);border-radius:6px;padding:3px 10px;text-decoration:none;transition:all .15s"
+              onmouseover="this.style.background='var(--g7)';this.style.borderColor='var(--g4)'" onmouseout="this.style.background='#fff';this.style.borderColor='var(--g5)'">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>
+              Waze
+            </a>
+          </span>
+          <span style="display:flex;align-items:center;gap:7px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--g3)" stroke-width="1.8" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            <span>Lunes a Jueves 8:30–17:15 · Viernes 8:30–17:45 hrs</span>
+          </span>
+          <a href="tel:+56222042119" style="color:#D90F23;text-decoration:none;font-weight:600;display:flex;align-items:center;gap:7px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +56 2 2204 2119 · Ventas
+          </a>
+          <a href="tel:+56222257011" style="color:#D90F23;text-decoration:none;font-weight:600;display:flex;align-items:center;gap:7px">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex-shrink:0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +56 2 2225 7011 · Soporte
+          </a>
+          <a href="mailto:ventas@sstt.cl" style="color:var(--g2);text-decoration:none;display:flex;align-items:center;gap:7px" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g2)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--g3)" stroke-width="1.8" style="flex-shrink:0"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+            ventas@sstt.cl
+          </a>
+          <a href="mailto:soporte@sstt.cl" style="color:var(--g2);text-decoration:none;display:flex;align-items:center;gap:7px" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g2)'">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--g3)" stroke-width="1.8" style="flex-shrink:0"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+            soporte@sstt.cl
+          </a>
         </div>
                 <!-- RRSS -->
         <div style="display:flex;gap:10px;margin-top:16px;align-items:center">
           <a href="https://instagram.com/ssttcl" target="_blank" rel="noopener"
-            style="display:flex;align-items:center;gap:5px;color:#444;text-decoration:none;font-size:12px;font-weight:600"
-            onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color='#444'">
+            style="display:flex;align-items:center;gap:5px;color:var(--g1);text-decoration:none;font-size:12px;font-weight:600"
+            onmouseover="this.style.color='#E1306C'" onmouseout="this.style.color='var(--g1)'">
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
             Instagram
           </a>
           <a href="https://youtube.com/@ssttcl" target="_blank" rel="noopener"
-            style="display:flex;align-items:center;gap:5px;color:#444;text-decoration:none;font-size:12px;font-weight:600"
-            onmouseover="this.style.color='#FF0000'" onmouseout="this.style.color='#444'">
+            style="display:flex;align-items:center;gap:5px;color:var(--g1);text-decoration:none;font-size:12px;font-weight:600"
+            onmouseover="this.style.color='#FF0000'" onmouseout="this.style.color='var(--g1)'">
             <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             YouTube
           </a>
         </div>
       </div>
 
-      <!-- Sobre SSTT -->
+      <!-- Sobre SSTT · s142: sin emojis; Privacidad sale (vive en bottom bar); ¿Cómo llegar? sale (pills Maps/Waze) -->
       <div>
         <div class="footer-col-title" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--g3);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #D90F23;display:inline-block">Sobre SSTT</div>
         <div class="footer-col-links" style="display:flex;flex-direction:column;gap:10px">
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Acerca de Nosotros <span style="color:var(--g4)">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Política de Privacidad <span style="color:var(--g4)">›</span></a>
-          <a href="#" onclick="event.preventDefault();cookieConsentReopen()" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">🍪 Preferencias de cookies <span style="color:var(--g4)">›</span></a>
-          <a href="#" onclick="event.preventDefault();showDevolucionesModal()" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">↩️ Política de devoluciones <span style="color:var(--g4)">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Garantía Dahua <span style="color:var(--g4)">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Trabaja Con Nosotros <span style="color:var(--g4)">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">¿Cómo llegar? <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:var(--g1);text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g1)'">Acerca de Nosotros <span style="color:var(--g4)">›</span></a>
+          <a href="#" onclick="event.preventDefault();cookieConsentReopen()" style="font-size:13px;color:var(--g1);text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g1)'">Preferencias de cookies <span style="color:var(--g4)">›</span></a>
+          <a href="#" onclick="event.preventDefault();showDevolucionesModal()" style="font-size:13px;color:var(--g1);text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g1)'">Política de devoluciones <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:var(--g1);text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g1)'">Garantía Dahua <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:var(--g1);text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g1)'">Trabaja Con Nosotros <span style="color:var(--g4)">›</span></a>
         </div>
       </div>
 
-      <!-- Servicios -->
+      <!-- Servicios · s142: Estado de tu compra y Soporte Técnico conectados a sus funciones -->
       <div>
         <div class="footer-col-title" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--g3);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #D90F23;display:inline-block">Servicios</div>
         <div class="footer-col-links" style="display:flex;flex-direction:column;gap:10px">
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Estado de tu compra <span style="color:var(--g4)">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Retiros y Despachos <span style="color:var(--g4)">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Formas de Pago <span style="color:var(--g4)">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Facturación Electrónica <span style="color:var(--g4)">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Soporte Técnico <span style="color:var(--g4)">›</span></a>
+          <a href="#" onclick="event.preventDefault();showSeguimiento()" style="font-size:13px;color:var(--g1);text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g1)'">Estado de tu compra <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:var(--g1);text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g1)'">Retiros y Despachos <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:var(--g1);text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g1)'">Formas de Pago <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:var(--g1);text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g1)'">Facturación Electrónica <span style="color:var(--g4)">›</span></a>
+          <a href="#" onclick="event.preventDefault();showSection('asistente',document.querySelector('[data-sec=asistente]'))" style="font-size:13px;color:var(--g1);text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g1)'">Soporte Técnico <span style="color:var(--g4)">›</span></a>
         </div>
       </div>
 
-      <!-- Compra Segura -->
+      <!-- Compra Segura · s142: badges neutros hairline (adiós verde SSL, azul WebPay, couriers multicolor) -->
       <div>
         <div class="footer-col-title" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--g3);margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #D90F23;display:inline-block">Compra Segura</div>
         <p style="font-size:12px;color:var(--g2);margin-bottom:14px;line-height:1.5">Todas tus compras están protegidas con tecnología SSL y pagos certificados.</p>
         <!-- SSL badge -->
-        <div style="display:flex;align-items:center;gap:8px;background:#f8fffe;border:1px solid #d0ead0;border-radius:8px;padding:8px 12px;margin-bottom:10px">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A7F3C" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--g5);border-radius:8px;padding:8px 12px;margin-bottom:10px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--black)" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           <div>
-            <div style="font-size:11px;font-weight:800;color:#1A7F3C">SSL Secure</div>
+            <div style="font-size:11px;font-weight:800;color:var(--black)">SSL Secure</div>
             <div style="font-size:10px;color:var(--g3)">Conexión cifrada 256-bit</div>
           </div>
         </div>
         <!-- WebPay badge -->
-        <div style="display:flex;align-items:center;gap:8px;background:#f5f8ff;border:1px solid #d0d8f0;border-radius:8px;padding:8px 12px;margin-bottom:10px">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1B2CC1" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--g5);border-radius:8px;padding:8px 12px;margin-bottom:10px">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--black)" stroke-width="1.8"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
           <div>
-            <div style="font-size:11px;font-weight:800;color:#1B2CC1">WebPay Plus</div>
+            <div style="font-size:11px;font-weight:800;color:var(--black)">WebPay Plus</div>
             <div style="font-size:10px;color:var(--g3)">Débito · Crédito · RedCompra</div>
           </div>
         </div>
         <!-- Couriers -->
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
-          <span style="background:#fff3e0;border:1px solid #ffd580;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;color:#B45309">Chilexpress</span>
-          <span style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;color:#2E7D32">Starken</span>
-          <span style="background:#e3f2fd;border:1px solid #90caf9;border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;color:#1565C0">Bluexpress</span>
+          <span style="background:var(--g7);border:1px solid var(--g5);border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;color:var(--g2)">Chilexpress</span>
+          <span style="background:var(--g7);border:1px solid var(--g5);border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;color:var(--g2)">Starken</span>
+          <span style="background:var(--g7);border:1px solid var(--g5);border-radius:6px;padding:3px 9px;font-size:10px;font-weight:700;color:var(--g2)">Bluexpress</span>
         </div>
       </div>
 
     </div>
 
-    <!-- ── Bottom bar ── -->
-    <div style="border-top:1px solid #eee;padding-top:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-      <span style="font-size:12px;color:#aaa">SSTT SpA © 2026 | Distribución autorizada Dahua Technology para Chile. Todos los derechos reservados.</span>
+    <!-- ── Bottom bar · s142: tokens; "Garantías" sale (Garantía Dahua vive en la columna) ── -->
+    <div style="border-top:1px solid var(--g6);padding-top:18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <span style="font-size:12px;color:var(--g4)">SSTT SpA © 2026 | Distribución autorizada Dahua Technology para Chile. Todos los derechos reservados.</span>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <a href="#" style="font-size:11px;color:#aaa;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#aaa'">Política de privacidad</a>
+        <a href="#" style="font-size:11px;color:var(--g4);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g4)'">Política de privacidad</a>
         <span style="color:var(--g5)">·</span>
-        <a href="#" style="font-size:11px;color:#aaa;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#aaa'">Términos de uso</a>
-        <span style="color:var(--g5)">·</span>
-        <a href="#" style="font-size:11px;color:#aaa;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#aaa'">Garantías</a>
+        <a href="#" style="font-size:11px;color:var(--g4);text-decoration:none;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='var(--g4)'">Términos de uso</a>
       </div>
     </div>
   </div>
@@ -44762,7 +44759,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s141', fecha:'Viernes 12 de Junio del 2026' };
+window.SSTT_VER = { ver:'s142', fecha:'Viernes 12 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
