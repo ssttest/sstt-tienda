@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s125 -->
+<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s126 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1568,7 +1568,7 @@ nav {
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .um-rut {
-  font-size: 10.5px; color: rgba(52,199,89,.85);
+  font-size: 10.5px; color: var(--g2); /* s126: verde Apple → tinta gris (porcelana) */
   font-weight: 700; margin-top: 2px;
 }
 
@@ -3882,7 +3882,7 @@ nav {
 .cmsg-bbl li { margin-bottom: 3px; }
 .cmsg-bbl code { padding: 1px 5px; border-radius: 3px; font-family: var(--font-m); font-size: .88em; }
 .cmsg.ai .cmsg-bbl code { background: var(--g6); color: var(--blue); }
-.cmsg.user .cmsg-bbl code { background: rgba(255,255,255,.15); color: #9DB8DC; }
+.cmsg.user .cmsg-bbl code { background: rgba(255,255,255,.15); color: var(--blue-p2); } /* s126: #9DB8DC → token */
 .cmsg-bbl table { width: 100%; border-collapse: collapse; font-size: 12px; margin: 6px 0; }
 .cmsg.ai .cmsg-bbl th { background: var(--black); color: var(--white); padding: 6px 10px; font-weight: 700; text-align: left; }
 .cmsg.ai .cmsg-bbl td { padding: 5px 10px; border-bottom: 1px solid var(--g5); color: var(--g1); }
@@ -4668,7 +4668,7 @@ nav {
   box-shadow: 0 2px 8px rgba(0,0,0,.2);
 }
 .chat-msg.user .chat-msg-av {
-  background: linear-gradient(135deg, var(--blue) 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue2) 100%); /* s126: #3b82f6 → token */
   box-shadow: 0 2px 8px rgba(30,95,168,.3);
   color: #fff;
   font-size: 12px;
@@ -19679,14 +19679,14 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
               </div>
             </div>
             <!-- Badge de puntos (Sprint 2 s74) -->
-            <div id="umPuntosBadge" style="display:none;margin-top:10px;background:linear-gradient(135deg,#D4A03C,#C49528);border-radius:10px;padding:10px 12px;cursor:pointer" onclick="closeUserMenu();openModal('perfil');setTimeout(()=>document.querySelector('[data-tab=puntos]')?.click(),300)">
+            <div id="umPuntosBadge" style="display:none;margin-top:10px;background:var(--g7);border:1px solid var(--border);border-radius:10px;padding:10px 12px;cursor:pointer" onclick="closeUserMenu();openModal('perfil');setTimeout(()=>document.querySelector('[data-tab=puntos]')?.click(),300)">
               <div style="display:flex;align-items:center;gap:8px">
                 <div style="font-size:18px">⭐</div>
                 <div style="flex:1;line-height:1.3">
-                  <div style="font-size:10px;font-weight:700;color:#5a3d00;letter-spacing:.08em">PUNTOS DISPONIBLES</div>
-                  <div id="umPuntosTotal" style="font-weight:900;font-size:18px;color:#0A1628">0 pts</div>
+                  <div style="font-size:10px;font-weight:700;color:var(--g2);letter-spacing:.08em">PUNTOS DISPONIBLES</div>
+                  <div id="umPuntosTotal" style="font-weight:900;font-size:18px;color:var(--black)">0 pts</div>
                 </div>
-                <div style="font-size:10px;color:#5a3d00;font-weight:700">VER →</div>
+                <div style="font-size:10px;color:var(--red);font-weight:700">VER →</div>
               </div>
             </div>
           </div>
@@ -20397,9 +20397,9 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
                 </div>
                 <button onclick="abrirErutModal()" style="background:var(--orange);color:#fff;border:none;border-radius:9px;padding:7px 12px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--font)">📤 Subir</button>
               </div>
-              <div id="erutValidado" style="display:none;background:var(--green-p);border:1.5px solid #B8E8CA;border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:10px">
+              <div id="erutValidado" style="display:none;background:var(--green-p);border:1px solid var(--border);border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:10px">
                 <span style="font-size:20px">✅</span>
-                <div style="flex:1"><div style="font-weight:700;font-size:12px;color:var(--green)">e-RUT validado</div><div style="font-size:11px;color:#166534;margin-top:1px" id="erutValidadoInfo">—</div></div>
+                <div style="flex:1"><div style="font-weight:700;font-size:12px;color:var(--green)">e-RUT validado</div><div style="font-size:11px;color:var(--g2);margin-top:1px" id="erutValidadoInfo">—</div></div>
                 <button onclick="abrirErutModal()" style="background:none;color:var(--green);border:1px solid var(--green);border-radius:8px;padding:5px 10px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font)">Actualizar</button>
               </div>
             </div>
@@ -20503,7 +20503,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
 
           <!-- RETIRO -->
           <div id="secRetiro" style="display:none">
-            <div style="background:var(--green-p);border:1px solid #b0dfc0;border-radius:var(--r-sm);padding:10px 12px;font-size:12px;color:var(--green);margin-bottom:10px;display:flex;gap:8px">
+            <div style="background:var(--green-p);border:1px solid var(--border);border-radius:var(--r-sm);padding:10px 12px;font-size:12px;color:var(--green);margin-bottom:10px;display:flex;gap:8px">
               <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
               <div><strong>Retiro gratuito en tienda</strong><br>📍 Santiago · Lunes a Jueves 8:30–17:15 · Viernes 8:30–17:45 hrs<br>⏱️ Listo en 1-2 horas tras confirmación de pago</div>
             </div>
@@ -20627,12 +20627,12 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         <div class="trow"><span>Subtotal neto</span><span id="tNeto">$0</span></div>
         <div class="trow"><span>IVA (19%)</span><span id="tIva">$0</span></div>
         <div class="trow"><span id="tShipLbl">Despacho</span><span id="tShip">—</span></div>
-        <div class="trow" id="tDescCertRow" style="display:none;color:var(--green);font-weight:700"><span>🏅 Desc. instalador cert.</span><span id="tDescCert">—</span></div>
-        <div class="trow" id="tDescVolRow" style="display:none;color:var(--green);font-weight:700"><span>📦 Dcto. volumen</span><span id="tDescVol">—</span></div>
-        <div class="trow" id="tDescCuponRow" style="display:none;color:var(--green);font-weight:700"><span>🏷️ Cupón descuento</span><span id="tDescCupon">—</span></div>
-        <div class="trow" id="tDescPromoRow" style="display:none;color:var(--green);font-weight:700"><span>🎯 Promoción</span><span id="tDescPromo">—</span></div>
-        <div class="trow" id="tDescGCRow" style="display:none;color:var(--green);font-weight:700"><span>🎁 Gift card</span><span id="tDescGC">—</span></div>
-        <div class="trow" id="tDescPtsRow" style="display:none;color:var(--green);font-weight:700"><span>⭐ Descuento puntos</span><span id="tDescPts">—</span></div>
+        <div class="trow" id="tDescCertRow" style="display:none;color:var(--g1);font-weight:700"><span>🏅 Desc. instalador cert.</span><span id="tDescCert">—</span></div>
+        <div class="trow" id="tDescVolRow" style="display:none;color:var(--g1);font-weight:700"><span>📦 Dcto. volumen</span><span id="tDescVol">—</span></div>
+        <div class="trow" id="tDescCuponRow" style="display:none;color:var(--g1);font-weight:700"><span>🏷️ Cupón descuento</span><span id="tDescCupon">—</span></div>
+        <div class="trow" id="tDescPromoRow" style="display:none;color:var(--g1);font-weight:700"><span>🎯 Promoción</span><span id="tDescPromo">—</span></div>
+        <div class="trow" id="tDescGCRow" style="display:none;color:var(--g1);font-weight:700"><span>🎁 Gift card</span><span id="tDescGC">—</span></div>
+        <div class="trow" id="tDescPtsRow" style="display:none;color:var(--g1);font-weight:700"><span>⭐ Descuento puntos</span><span id="tDescPts">—</span></div>
         <div class="trow trow-total"><span>Total con IVA</span><span id="tTotal">$0</span></div>
       </div>
       <!-- ── Widget canje de puntos ── -->
@@ -28395,7 +28395,7 @@ function renderPerfilDatos() {
             btn.innerHTML =
               '<div style="font-size:10px;font-weight:700;color:' + (isActive?'#fff':'rgba(255,255,255,.6)') + ';font-family:monospace">' + e.rut + '</div>' +
               '<div style="font-size:9px;color:rgba(255,255,255,.4);max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + e.razon + '</div>' +
-              '<div style="font-size:8px;color:' + (isOk?'#34c759':'#ff9500') + ';margin-top:2px">' + (isOk?'✅ Verificado':'⏳ Pendiente') + '</div>';
+              '<div style="font-size:8px;color:' + (isOk?'rgba(255,255,255,.72)':'rgba(255,255,255,.5)') + ';margin-top:2px">' + (isOk?'✅ Verificado':'⏳ Pendiente') + '</div>'; /* s126 */
             btn.addEventListener('click', function() {
               erutSelIdx = i;
               erut = erutLista[i];
@@ -28462,8 +28462,8 @@ function renderPerfilDatos() {
           });
           var badge = dHead.querySelector('#docBadge');
           if(v===0){ badge.textContent='FACTURA'; badge.style.background='rgba(217,15,35,.18)'; badge.style.color='#FF6B77'; badge.style.border='1px solid rgba(217,15,35,.40)'; }
-          else if(v===1){ badge.textContent='e-RUT · FRENTE'; badge.style.background='rgba(52,199,89,.18)'; badge.style.color='#34c759'; badge.style.border='1px solid rgba(52,199,89,.3)'; }
-          else{ badge.textContent='VERIFICACIÓN'; badge.style.background='rgba(255,214,10,.15)'; badge.style.color='#ffd60a'; badge.style.border='1px solid rgba(255,214,10,.28)'; }
+          else if(v===1){ badge.textContent='e-RUT · FRENTE'; badge.style.background='rgba(255,255,255,.08)'; badge.style.color='rgba(255,255,255,.75)'; badge.style.border='1px solid rgba(255,255,255,.16)'; } /* s126: verde → neutro porcelana */
+          else{ badge.textContent='VERIFICACIÓN'; badge.style.background='rgba(255,255,255,.08)'; badge.style.color='rgba(255,255,255,.75)'; badge.style.border='1px solid rgba(255,255,255,.16)'; } /* s126: amarillo → neutro porcelana */
 
           if(v===0) renderFactura();
           else if(v===1) renderErutFrente();
@@ -28674,8 +28674,9 @@ function renderPerfilDatos() {
             '@keyframes cardFlipBack{from{transform:rotateY(-180deg)}to{transform:rotateY(0deg)}}',
             '.db-fs-flipper{transform-style:preserve-3d;position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,0,.2,1)}',
             '.db-fs-flipper.flipped{transform:rotateY(180deg)}',
-            '.db-fs-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;overflow:hidden}',
-            '.db-fs-back{transform:rotateY(180deg);display:flex;flex-direction:column;overflow:auto}'
+            /* s126: cara frontal SIN clip — al inclinar la tarjeta, sus bordes se ven sobre el marco oscuro (overlay) que queda DETRÁS, en vez de quedar recortada por un marco en frente con sacado. El reverso conserva su propio clip (overflow:auto + radius). */
+            '.db-fs-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;overflow:visible}',
+            '.db-fs-back{transform:rotateY(180deg);display:flex;flex-direction:column;overflow:auto;border-radius:16px}'
           ].join('');
           document.head.appendChild(st);
         }
@@ -28882,10 +28883,10 @@ function renderPerfilDatos() {
           }
           var table = '<div style="display:flex;flex-direction:column;gap:8px">';
           rows.forEach(function(r) {
-            var statusColor = r.estado==='Resuelto'||r.estado==='Entregado'||r.estado==='Aprobada' ? '#34c759'
-              : r.estado==='Abierto'||r.estado==='En curso'||r.estado==='En preparación'||r.estado==='Listo para retiro' ? '#9DB8DC'
-              : r.estado==='Pendiente' ? '#E8B34B'
-              : '#ff453a';
+            var statusColor = r.estado==='Resuelto'||r.estado==='Entregado'||r.estado==='Aprobada' ? 'rgba(255,255,255,.78)'
+              : r.estado==='Abierto'||r.estado==='En curso'||r.estado==='En preparación'||r.estado==='Listo para retiro' ? 'rgba(255,255,255,.5)'
+              : r.estado==='Pendiente' ? 'rgba(255,255,255,.5)'
+              : '#E0707A'; /* s126: porcelana — neutro gris + rojo de marca solo en negativos */
             var cells = cols.map(function(col) {
               var val = r[col.key] || '';
               var style = col.key==='estado'
@@ -28958,13 +28959,13 @@ function renderPerfilDatos() {
             var vencDate = e.vencimiento ? new Date(e.vencimiento).toLocaleDateString('es-CL') : '—';
             var iniciales = escapeHtml((e.razon||'').split(' ').slice(0,2).map(function(w){ return w.charAt(0); }).join(''));  // s103: escape XSS
 
-            // Colores según estado
+            // Colores según estado — s126: porcelana (neutros sobre superficie oscura, sin cian/verde/ámbar Apple)
             var bgGrad = isOk
-              ? 'linear-gradient(135deg,#0a2540 0%,#0d3a6e 50%,#0a2a50 100%)'
-              : 'linear-gradient(135deg,#2a1a0a 0%,#4a2e10 50%,#3a2008 100%)';
-            var accentColor = isOk ? '#4fc3f7' : '#ffa726';
-            var statusBg = isOk ? 'rgba(52,199,89,.2)' : 'rgba(255,149,0,.2)';
-            var statusColor = isOk ? '#34c759' : '#ff9500';
+              ? 'linear-gradient(135deg,#101620 0%,#1a2435 50%,#10151f 100%)'
+              : 'linear-gradient(135deg,#1a1a1f 0%,#26262e 50%,#1a1a1f 100%)';
+            var accentColor = 'rgba(255,255,255,.85)';
+            var statusBg = isOk ? 'rgba(255,255,255,.12)' : 'rgba(224,112,122,.16)';
+            var statusColor = isOk ? 'rgba(255,255,255,.78)' : '#E0707A';
             var statusTxt = isOk ? '✅ Verificado' : '⏳ Pendiente';
 
             var card = document.createElement('div');
@@ -29017,7 +29018,7 @@ function renderPerfilDatos() {
 
           rows.forEach(function(r) {
             var esRetiro = r.estado === 'Listo para retiro';
-            var statusColor = esRetiro ? '#9DB8DC' : r.estado==='Entregado' ? '#34c759' : '#E8B34B';
+            var statusColor = esRetiro ? 'rgba(255,255,255,.82)' : r.estado==='Entregado' ? 'rgba(255,255,255,.72)' : 'rgba(255,255,255,.5)'; /* s126: porcelana neutra */
             var row = document.createElement('div');
             row.style.cssText = 'display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.04);border-radius:8px;padding:9px 10px;' + (esRetiro?'cursor:pointer;border:1px solid rgba(10,132,255,0.25)':'cursor:default;border:1px solid transparent');
             row.innerHTML =
@@ -33298,8 +33299,8 @@ function renderPerfilCertificaciones() {
       var t = CERT_TIPOS.find(function(x){ return x.id === c.tipo; }) || { icon:'📋', label:c.tipo, color:'#555', bg:'rgba(85,85,85,.1)' };
       var stIcon  = c.estado === 'verificado' ? '✅' : (c.estado === 'rechazado' ? '❌' : '⏳');
       var stLabel = c.estado === 'verificado' ? 'Verificado' : (c.estado === 'rechazado' ? 'Rechazado' : 'En revisión');
-      var stColor = c.estado === 'verificado' ? '#0A5C2E' : (c.estado === 'rechazado' ? '#CC0000' : '#8B6914');
-      var stBg    = c.estado === 'verificado' ? 'rgba(10,92,46,.08)' : (c.estado === 'rechazado' ? 'rgba(204,0,0,.08)' : 'rgba(139,89,20,.08)');
+      var stColor = c.estado === 'verificado' ? 'var(--green)' : (c.estado === 'rechazado' ? 'var(--red)' : 'var(--yellow)'); /* s126: tokens porcelana */
+      var stBg    = c.estado === 'verificado' ? 'var(--green-p)' : (c.estado === 'rechazado' ? 'var(--red-p)' : 'var(--yellow-p)');
       html += '<div style="background:#fff;border:1px solid var(--border1);border-radius:14px;padding:14px 16px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start">';
       html += '<div style="font-size:24px;line-height:1;padding-top:2px">' + t.icon + '</div>';
       html += '<div style="flex:1;min-width:0">';
@@ -42256,17 +42257,18 @@ function toggleDahuaTheme() {}
 function _isDark(){ return false; }
 
 function _dbStatusStyle(estado) {
+  // s126: paleta porcelana — tokens del sistema (igual que el resto del sitio); fuera colores Apple off-system
   var map = {
-    'abierto':           'background:rgba(255,204,0,.15);color:#8B6914',
-    'en_proceso':        'background:rgba(0,122,255,.1);color:#0055B3',
-    'esperando_cliente': 'background:rgba(236,72,153,.1);color:#9D174D',
-    'resuelto':          'background:rgba(48,209,88,.1);color:#1B7A34',
-    'cerrado':           'background:rgba(0,0,0,.05);color:rgba(0,0,0,.4)',
-    'en_despacho':       'background:rgba(0,122,255,.1);color:#0055B3',
-    'entregado':         'background:rgba(48,209,88,.1);color:#1B7A34',
-    'preparando':        'background:rgba(255,204,0,.15);color:#8B6914'
+    'abierto':           'background:var(--yellow-p);color:var(--yellow)',
+    'en_proceso':        'background:var(--blue-p);color:var(--blue)',
+    'esperando_cliente': 'background:var(--g6);color:var(--g2)',
+    'resuelto':          'background:var(--green-p);color:var(--green)',
+    'cerrado':           'background:var(--g6);color:var(--g3)',
+    'en_despacho':       'background:var(--blue-p);color:var(--blue)',
+    'entregado':         'background:var(--green-p);color:var(--green)',
+    'preparando':        'background:var(--yellow-p);color:var(--yellow)'
   };
-  return map[estado] || 'background:rgba(0,0,0,.05);color:rgba(0,0,0,.4)';
+  return map[estado] || 'background:var(--g6);color:var(--g3)';
 }
 
 
@@ -44648,7 +44650,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's125',
+  ver:   's126',
   fecha: 'Jueves 11 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
