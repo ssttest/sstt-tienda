@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s138 -->
+<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s139 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -4467,14 +4467,14 @@ nav {
 }
 .csm-continue {
   width:100%; padding:14px;
-  background:linear-gradient(180deg,var(--g2),var(--g1)); /* s137 */
+  background:linear-gradient(180deg,var(--red),var(--red2)); /* s139: grafito → señal (CTA primaria del cross-sell modal) */
   color:#fff; border:none; border-radius:50px;
   font-size:14px; font-weight:800; cursor:pointer;
   font-family:var(--font);
-  box-shadow:0 4px 16px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,.1);
+  box-shadow:0 4px 16px rgba(217,15,35,0.30), inset 0 1px 0 rgba(255,255,255,.18);
   transition:all .2s;
 }
-.csm-continue:hover { transform:translateY(-1px); box-shadow:0 6px 22px rgba(0,0,0,.3); }
+.csm-continue:hover { transform:translateY(-1px); box-shadow:0 6px 22px rgba(217,15,35,.42); }
 /* ── VIDEO MODAL ELIMINADO (FIX s17a) ──────────────────────────
    Bloque CSS de #vmod (modal de video legacy) eliminado en s17a.
    Selectores borrados: #vmod, #vmod.open, .vmod-inner, .vmod-hd,
@@ -44657,11 +44657,13 @@ function waUpdateWaLink(userMsg, reply) {
 
 
 // ── Versión/fecha centralizada · s101 ──────────────────────────────
-// s101: OBJETO único. Cambiar SOLO ver+fecha aquí; el JS rellena todos
-// los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
-// Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
+// s101/s139: FUENTE ÚNICA de versión. Cambiar SOLO ver+fecha en este objeto;
+// el JS rellena #updateTxt/#verChip y formatInstructions() ya derivan de aquí.
+// Único otro punto a mano cada sesión: el build-stamp del <head> (L2) — un
+// self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
+// (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s138', fecha:'Viernes 12 de Junio del 2026' };
+window.SSTT_VER = { ver:'s139', fecha:'Viernes 12 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -44669,6 +44671,23 @@ document.addEventListener('DOMContentLoaded', function() {
   var chip = document.getElementById('verChip');
   if (txt)  txt.textContent  = 'Última actualización: ' + v.fecha + ' · ' + v.ver;
   if (chip) chip.textContent = v.ver;
+  // s139: self-check de drift — el build-stamp del <head> (L2) no puede leerse
+  // desde JS salvo recorriendo los nodos comentario. Si su sNNN no coincide con
+  // SSTT_VER.ver, avisamos por consola (silencioso → ruidoso). Nunca lanza.
+  try {
+    var stamp = null;
+    var cn = document.childNodes;
+    for (var i = 0; i < cn.length; i++) {
+      if (cn[i].nodeType === 8 && /Generado/.test(cn[i].data || '')) { stamp = cn[i].data; break; }
+    }
+    if (stamp) {
+      var mm = stamp.match(/s(\d+)/);
+      var stampVer = mm ? ('s' + mm[1]) : null;
+      if (stampVer && stampVer !== v.ver) {
+        console.warn('[SSTT_VER] build-stamp del <head> ('+stampVer+') ≠ SSTT_VER.ver ('+v.ver+') — actualiza el comentario L2.');
+      }
+    }
+  } catch (e) {}
 });
 
 
@@ -90326,7 +90345,7 @@ window.generateShoppingFeed = function() {
       +'      <g:shipping><g:country>CL</g:country><g:service>Starken / Chilexpress</g:service><g:price>0 CLP</g:price></g:shipping>\n'
       +'    </item>');
   });
-  var ver = (window.SSTT_VER && window.SSTT_VER.ver) || 's101';
+  var ver = (window.SSTT_VER && window.SSTT_VER.ver) || 'dev';
   var xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
     +'<rss version="2.0" xmlns:g="http://base.google.com/ns/1.0">\n'
     +'  <channel>\n'
@@ -91747,7 +91766,7 @@ window.generateShoppingFeed = function() {
 
 <script id="sstt-colorlab-s135">
 /* ════════════════════════════════════════════════════════════════════
-   SSTT COLOR LAB · s138 — Rosa cromática de edición en vivo
+   SSTT COLOR LAB · desde s135 — Rosa cromática de edición en vivo
    Crosshair → extrae color de cualquier elemento · flor hexagonal de 19
    (paleta viva Porcelana & Señal) · arcos curvos LUM/SAT · hue ring ·
    alpha · aplica a elemento o a token global · registro de sesión
@@ -92476,7 +92495,7 @@ function renderLog(){
   }).join('');
 }
 function formatInstructions(){
-  var v=(window.SSTT_VER&&window.SSTT_VER.ver)||'s138';
+  var v=(window.SSTT_VER&&window.SSTT_VER.ver)||'dev';
   var lines=[];
   lines.push('═══ SSTT COLOR LAB · registro de sesión · '+v+' ═══');
   lines.push('Fecha: '+new Date().toLocaleString('es-CL'));
