@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s130 -->
+<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s131 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1201,7 +1201,7 @@ nav {
 .ptag-xh   { background:linear-gradient(135deg,#0a1628,#1B5FD4); color:#00B4E6; border-color:#1B5FD4; } /* Xinghan */
 .ptag-ir   { background:#f0f8f0; color:#2a7a2a; border-color:#b8d8b8; }       /* IR */
 .ptag-led  { background:#fffde8; color:#927700; border-color:#f0e080; }       /* LED */
-.ptag-hdd  { background:#f5f5f5; color:#444; border-color:#ddd; }             /* HDD/Mbps */
+.ptag-hdd  { background:#f5f5f5; color:#444; border-color:var(--g5); }             /* HDD/Mbps */
 .ptag-rec  { background:#fff0f0; color:#B40C1D; border-color:#f5b8b8; font-weight:800; } /* REC resolución grabador */
 .ptag-prot { background:#e8f4ff; color:#1a5fa8; border-color:#b8d8f5; font-weight:700; } /* IP/IK protección */
 .ptag-nema { background:#e8eeff; color:#3030a8; border-color:#b8c4f5; font-weight:700; } /* NEMA4X */
@@ -1867,7 +1867,7 @@ nav {
   border: 1px solid rgba(0,0,0,0.10);
   border-radius: 16px; padding: 12px 14px;
   cursor: pointer; transition: all .22s; font-size: 13px;
-  color: #111;
+  color: var(--black);
   box-shadow: 0 2px 10px rgba(0,0,0,0.06);
 }
 .pay-opt:hover {
@@ -1881,7 +1881,7 @@ nav {
   background: rgba(217,15,35,0.07);
   box-shadow: 0 4px 18px rgba(217,15,35,0.12), inset 0 1px 0 rgba(255,255,255,0.9);
 }
-.pay-name { font-weight: 600; color: #111; }
+.pay-name { font-weight: 600; color: var(--black); }
 .pay-sub { font-size: 11px; color: #666; margin-left: auto; }
 
 /* Login prompt */
@@ -2319,7 +2319,7 @@ nav {
 .pm-btn-secondary {
   background: rgba(255,255,255,0.62);
   border: 1px solid rgba(255,255,255,0.82);
-  color:#111; border-radius:50px;
+  color:var(--black); border-radius:50px;
   padding:11px 18px; font-size:13px; font-weight:600;
   display:flex; align-items:center; gap:6px;
   transition:all .2s; font-family:var(--font);
@@ -2343,7 +2343,7 @@ nav {
   backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
   box-shadow:inset 0 1px 0 rgba(255,255,255,.7);
 }
-.pm-btn-ghost:hover { background:rgba(255,255,255,.75); border-color:rgba(0,0,0,.2); color:#111; transform:scale(1.1); }
+.pm-btn-ghost:hover { background:rgba(255,255,255,.75); border-color:rgba(0,0,0,.2); color:var(--black); transform:scale(1.1); }
 .pm-copy-btn:hover { background:var(--black) !important; border-color:var(--black) !important; transform:scale(1.15) !important; }
 @keyframes pmCopyBounce { 0%{transform:scale(1)} 30%{transform:scale(1.3)} 60%{transform:scale(.9)} 100%{transform:scale(1)} }
 .pm-copied { animation: pmCopyBounce .35s ease-out; background: var(--green) !important; border-color: var(--green) !important; }
@@ -2379,7 +2379,7 @@ nav {
   border:1px solid rgba(255,255,255,0.88);
   border-radius:50px; padding:7px 16px;
   font-size:12px; font-weight:600;
-  color:#111; white-space:nowrap;
+  color:var(--black); white-space:nowrap;
   transition:all .2s cubic-bezier(.32,.72,0,1);
   cursor:default;
   backdrop-filter:blur(16px) saturate(160%);
@@ -2419,7 +2419,7 @@ nav {
   white-space:nowrap; font-family:var(--font);
   flex-shrink:0; letter-spacing:.05px;
 }
-.pm-tab:hover { color:#111 }
+.pm-tab:hover { color:var(--black) }
 .pm-tab.active { color:var(--blue); border-bottom-color:var(--blue); }
 
 /* ── PANELS ──────────────────────────────────────────────────── */
@@ -2617,7 +2617,7 @@ nav {
 .pm-spec-grp-hdr {
   display:flex; align-items:center; justify-content:space-between;
   padding:13px 18px;
-  font-size:12.5px; font-weight:700; color:#111;
+  font-size:12.5px; font-weight:700; color:var(--black);
   background:transparent; cursor:pointer;
   transition:background .15s;
   user-select:none; letter-spacing:.1px;
@@ -2625,7 +2625,7 @@ nav {
 }
 .pm-spec-grp-hdr:hover { background:rgba(255,255,255,.4) }
 .pmg-arrow {
-  font-size:11px; color:#ccc;
+  font-size:11px; color:var(--g4);
   transition:transform .22s cubic-bezier(.32,.72,0,1);
 }
 .pm-spec-grp-body { border-top:1px solid rgba(0,0,0,.05) }
@@ -2639,7 +2639,7 @@ nav {
 .pm-spec-row:last-child { border-bottom:none }
 .pm-spec-row:hover { background:rgba(255,255,255,.65) }
 .pm-spec-key { color:#999; font-weight:500 }
-.pm-spec-val { color:#111; font-weight:600 }
+.pm-spec-val { color:var(--black); font-weight:600 }
 
 /* PDF spec badge */
 .pm-pdf-badge {
@@ -2718,7 +2718,7 @@ nav {
   background:rgba(255,255,255,0.65);
   border:1px solid rgba(255,255,255,0.82);
   border-radius:16px; padding:14px 18px;
-  transition:all .22s cubic-bezier(.32,.72,0,1); color:#111;
+  transition:all .22s cubic-bezier(.32,.72,0,1); color:var(--black);
   text-decoration:none;
   backdrop-filter:blur(16px) saturate(160%);
   -webkit-backdrop-filter:blur(16px) saturate(160%);
@@ -2737,11 +2737,11 @@ nav {
 }
 .pm-dl-ico.pdf { background:rgba(217,15,35,.08); }
 .pm-dl-ico.web { background:rgba(30,95,168,.08); }
-.pm-dl-name { font-size:13px; font-weight:700; color:#111 }
+.pm-dl-name { font-size:13px; font-weight:700; color:var(--black) }
 .pm-dl-desc { font-size:11.5px; color:#999; margin-top:1px }
 .pm-dl-arr {
   margin-left:auto; font-size:18px;
-  color:#ddd; flex-shrink:0;
+  color:var(--g5); flex-shrink:0;
   transition:all .18s;
 }
 .pm-dl-item:hover .pm-dl-arr { color:var(--blue); transform:translateX(3px); }
@@ -2773,8 +2773,8 @@ nav {
 }
 .pm-rel-body { padding:8px 10px }
 .pm-rel-code { font-family:var(--font-m); font-size:10px; color:var(--blue); font-weight:600 }
-.pm-rel-name { font-size:11.5px; font-weight:600; color:#111; line-height:1.3; margin:3px 0 }
-.pm-rel-price { font-family:var(--font-d); font-size:15px; font-weight:800; color:#111 }
+.pm-rel-name { font-size:11.5px; font-weight:600; color:var(--black); line-height:1.3; margin:3px 0 }
+.pm-rel-price { font-family:var(--font-d); font-size:15px; font-weight:800; color:var(--black) }
 .pm-rel-add {
   width:100%; background:linear-gradient(135deg,#D90F23,#B40C1D);
   color:#fff; border:none; padding:8px;
@@ -4330,7 +4330,7 @@ nav {
   -webkit-backdrop-filter: blur(12px);
 }
 .pdf-viewer-btn.close-btn:hover {
-  background: rgba(255,255,255,0.9); color: #111;
+  background: rgba(255,255,255,0.9); color: var(--black);
   transform: translateY(-1px);
 }
 .pdf-viewer-iframe {
@@ -4402,7 +4402,7 @@ nav {
   flex-shrink:0;
 }
 .csm-title {
-  font-size:15px; font-weight:800; color:#111; letter-spacing:-.2px;
+  font-size:15px; font-weight:800; color:var(--black); letter-spacing:-.2px;
 }
 .csm-subtitle {
   font-size:11.5px; color:#888; margin-top:2px;
@@ -4417,7 +4417,7 @@ nav {
   box-shadow:0 2px 8px rgba(0,0,0,0.06);
   white-space:nowrap; flex-shrink:0;
 }
-.csm-skip:hover { background:rgba(255,255,255,.9); color:#111; }
+.csm-skip:hover { background:rgba(255,255,255,.9); color:var(--black); }
 .csm-list {
   overflow-y:auto; padding:0 14px 14px;
   display:flex; flex-direction:column; gap:8px;
@@ -4446,9 +4446,9 @@ nav {
 }
 .csm-info { flex:1; min-width:0; }
 .csm-sku  { font-family:var(--font-m); font-size:10px; color:var(--blue); font-weight:700; }
-.csm-name { font-size:12px; font-weight:600; color:#111; line-height:1.35;
+.csm-name { font-size:12px; font-weight:600; color:var(--black); line-height:1.35;
   display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
-.csm-price { font-family:var(--font-d); font-size:16px; font-weight:800; color:#111; white-space:nowrap; flex-shrink:0; }
+.csm-price { font-family:var(--font-d); font-size:16px; font-weight:800; color:var(--black); white-space:nowrap; flex-shrink:0; }
 .csm-add {
   width:32px; height:32px; border-radius:50%; border:none;
   background:linear-gradient(135deg,#D90F23,#B40C1D);
@@ -4467,7 +4467,7 @@ nav {
 }
 .csm-continue {
   width:100%; padding:14px;
-  background:linear-gradient(135deg,#111,#333);
+  background:linear-gradient(135deg,var(--black),#333);
   color:#fff; border:none; border-radius:50px;
   font-size:14px; font-weight:800; cursor:pointer;
   font-family:var(--font);
@@ -6231,7 +6231,7 @@ input[data-validated="1"]::after {
   background:rgba(255,255,255,0.65);
   backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
   box-shadow:0 2px 10px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9);
-  transition:all .2s; color:#111;
+  transition:all .2s; color:var(--black);
 }
 .ai-input-text::placeholder { color:rgba(0,0,0,0.32); }
 .ai-input-text:focus {
@@ -6558,7 +6558,7 @@ body.cart-open #proyectoListadoBtn {
   backdrop-filter:blur(24px) saturate(180%);
   -webkit-backdrop-filter:blur(24px) saturate(180%);
   box-shadow:0 2px 14px rgba(0,0,0,0.06), inset 0 1.5px 0 rgba(255,255,255,1);
-  color:#111; border-radius:4px 18px 18px 18px;
+  color:var(--black); border-radius:4px 18px 18px 18px;
 }
 .aim.user .aim-bub {
   background:linear-gradient(135deg,#1a73e8 0%,#6366f1 100%);
@@ -6619,7 +6619,7 @@ body.cart-open #proyectoListadoBtn {
   backdrop-filter:blur(16px) saturate(160%);
   -webkit-backdrop-filter:blur(16px) saturate(160%);
   box-shadow:0 2px 8px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9);
-  color:#111; border-radius:50px;
+  color:var(--black); border-radius:50px;
   padding:6px 13px; font-size:11px; font-weight:600;
   cursor:pointer; white-space:nowrap;
   transition:all .2s cubic-bezier(.32,.72,0,1); font-family:var(--font);
@@ -6649,7 +6649,7 @@ body.cart-open #proyectoListadoBtn {
   backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
   box-shadow:0 2px 10px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.9);
   transition:all .2s;
-  color:#111;
+  color:var(--black);
 }
 .aip-inp-txt::placeholder { color:rgba(0,0,0,0.32); }
 .aip-inp-txt:focus {
@@ -6743,7 +6743,7 @@ body.cart-open #proyectoListadoBtn {
   animation:fadeUp .22s cubic-bezier(.32,.72,0,1);
 }
 .tech-modal-head {
-  padding:20px 24px 16px;border-bottom:1px solid #eee;
+  padding:20px 24px 16px;border-bottom:1px solid var(--g6);
   display:flex;align-items:center;gap:14px;
 }
 .tech-modal-logo { width:52px;height:52px;flex-shrink:0; }
@@ -6765,7 +6765,7 @@ body.cart-open #proyectoListadoBtn {
   font-size:11px;font-weight:700;margin:3px;
 }
 .tech-modal-footer {
-  padding:14px 24px;border-top:1px solid #eee;
+  padding:14px 24px;border-top:1px solid var(--g6);
   display:flex;gap:10px;
 }
 .tech-modal-btn {
@@ -6776,7 +6776,7 @@ body.cart-open #proyectoListadoBtn {
 .tech-modal-btn-primary { background:#D90F23;color:#fff; }
 .tech-modal-btn-primary:hover { background:#B40C1D; }
 .tech-modal-btn-secondary { background:#f5f5f7;color:#1a1a1a; }
-.tech-modal-btn-secondary:hover { background:#eee; }
+.tech-modal-btn-secondary:hover { background:var(--g6); }
 
 .co-step {
   display: flex; flex-direction: column; align-items: center; gap: 3px;
@@ -7489,8 +7489,8 @@ body.cart-open #proyectoListadoBtn {
 @media (max-width: 600px), (pointer: coarse) {
   .footer-grid-main  { grid-template-columns: 1fr; gap:20px; }
   .footer-grid-trust { grid-template-columns: 1fr 1fr; }
-  .footer-trust-item { border-right:none !important; border-bottom:1px solid #eee; padding:10px 14px !important; }
-  .footer-trust-item:nth-child(odd)  { border-right:1px solid #eee !important; }
+  .footer-trust-item { border-right:none !important; border-bottom:1px solid var(--g6); padding:10px 14px !important; }
+  .footer-trust-item:nth-child(odd)  { border-right:1px solid var(--g6) !important; }
   .footer-trust-item:nth-child(even) { border-right:none !important; }
 }
 
@@ -7783,7 +7783,7 @@ body.cart-open #proyectoListadoBtn {
   letter-spacing: .4px; margin-bottom: 1px; color: #1E5FA8;
 }
 .ccs-item-name {
-  font-size: 11.5px; font-weight: 600; color: #111;
+  font-size: 11.5px; font-weight: 600; color: var(--black);
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3;
 }
 .ccs-item-price { font-size: 10.5px; color: #777; margin-top: 1px; }
@@ -7859,7 +7859,7 @@ body.cart-open #proyectoListadoBtn {
 .compat-alert-icon { flex-shrink: 0; font-size: 17px; line-height: 1.3; filter: grayscale(40%); }
 .compat-alert-text { flex: 1; min-width: 0; }
 .compat-alert-title {
-  font-weight: 700; font-size: 12px; color: #111;
+  font-weight: 700; font-size: 12px; color: var(--black);
   margin-bottom: 2px; line-height: 1.3;
 }
 .compat-alert-msg { font-size: 11.5px; color: #555; line-height: 1.45; margin-bottom: 4px; }
@@ -8073,7 +8073,7 @@ body.cart-open #proyectoListadoBtn {
   letter-spacing: -1px;
   margin-bottom: 6px;
   position: relative; z-index: 1;
-  background: linear-gradient(135deg, #111 0%, #1E5FA8 100%);
+  background: linear-gradient(135deg, var(--black) 0%, #1E5FA8 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -8129,7 +8129,7 @@ body.cart-open #proyectoListadoBtn {
 .fov-sr-input {
   width:100%; padding:9px 13px; border:1.5px solid rgba(0,0,0,.1);
   border-radius:11px; font-size:12.5px; font-family:var(--font);
-  background:#fafafa; color:#111; outline:none; transition:all .15s;
+  background:#fafafa; color:var(--black); outline:none; transition:all .15s;
   box-sizing:border-box;
 }
 .fov-sr-input:focus { border-color:#1E5FA8; background:#fff; box-shadow:0 0 0 3px rgba(30,95,168,.08); }
@@ -8148,7 +8148,7 @@ body.cart-open #proyectoListadoBtn {
 .fov-sr-item:last-child { border-bottom:none; }
 .fov-sr-icon { font-size:16px; flex-shrink:0; }
 .fov-sr-info { flex:1; min-width:0; }
-.fov-sr-name { font-size:12px; font-weight:600; color:#111;
+.fov-sr-name { font-size:12px; font-weight:600; color:var(--black);
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .fov-sr-meta { font-size:10px; color:#888; margin-top:1px; }
 .fov-sr-empty { padding:14px; text-align:center; color:#888; font-size:11px; }
@@ -8317,7 +8317,7 @@ body.cart-open #proyectoListadoBtn {
   font-size:11px; font-weight:700; cursor:pointer; text-align:center;
   background:#fafafa; color:#666; font-family:var(--font); transition:all .15s;
 }
-.fov-vtab.on { background:#111; color:#fff; border-color:#111; }
+.fov-vtab.on { background:var(--black); color:#fff; border-color:var(--black); }
 .fov-maps-mode {
   background:rgba(255,255,255,.06); color:rgba(255,255,255,.7);
   border:1px solid rgba(255,255,255,.12); padding:5px 10px;
@@ -8500,7 +8500,7 @@ body.cart-open #proyectoListadoBtn {
 .fov-track-line:last-of-type { border-bottom: none; }
 .fov-track-line-icon { font-size: 18px; text-align: center; padding-top: 2px; }
 .fov-track-line-body { color: #444; }
-.fov-track-line-body b { color: #111; }
+.fov-track-line-body b { color: var(--black); }
 
 .fov-track-rec {
   margin-top: 10px;
@@ -8613,7 +8613,7 @@ body.cart-open #proyectoListadoBtn {
   max-height: 60vh;
   overflow-y: auto;
 }
-.fov-info-tooltip-body b { color: #111; }
+.fov-info-tooltip-body b { color: var(--black); }
 
 /* Modo cliente: iconos ℹ siguen visibles pero más sutiles */
 .fov-client-mode .fov-info-icon,
@@ -8665,7 +8665,7 @@ body.cart-open #proyectoListadoBtn {
   font-weight: 900;
   letter-spacing: -1px;
   margin-bottom: 6px;
-  background: linear-gradient(135deg, #111 0%, #1E5FA8 100%);
+  background: linear-gradient(135deg, var(--black) 0%, #1E5FA8 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -8856,7 +8856,7 @@ body.cart-open #proyectoListadoBtn {
 .tools-menu-name {
   font-size: 14px;
   font-weight: 800;
-  color: #111;
+  color: var(--black);
   margin-bottom: 2px;
   letter-spacing: -.2px;
 }
@@ -11136,7 +11136,7 @@ body.cart-open #proyectoListadoBtn {
   font-weight: 900;
   letter-spacing: -1px;
   margin: 0 0 8px 0;
-  background: linear-gradient(135deg, #111, #c0392b);
+  background: linear-gradient(135deg, var(--black), #c0392b);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -17413,7 +17413,7 @@ body.cart-open #proyectoListadoBtn {
 .lk-v-warn{background:#FEFAE6;color:#986000;border:1px solid rgba(152,96,0,.35)}
 .lk-v-bad{background: var(--tool-fail-bg);color:#501313;border:1px solid rgba(217,15,35,.22)}
 .lk-recs{border: 1px solid var(--tool-border);border-radius:10px;overflow:hidden;margin-bottom:14px}
-.lk-recs-t{font-size:13px;font-weight:600;padding:10px 14px;border-bottom:1px solid #eee;background: var(--tool-panel)}
+.lk-recs-t{font-size:13px;font-weight:600;padding:10px 14px;border-bottom:1px solid var(--g6);background: var(--tool-panel)}
 .lk-rec-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #f0f0f0;transition:background .15s;gap:8px}
 .lk-rec-row:last-child{border-bottom:none}
 .lk-rec-row:hover{background:#f8f9fb}
@@ -17427,7 +17427,7 @@ body.cart-open #proyectoListadoBtn {
 .lk-badge-no{background: var(--tool-fail-bg);color:#B40C1D}
 .lk-add{font-size:11px;padding:5px 12px;border-radius:16px;border:1px solid #1E5FA8;background:#E6F1FB;color: var(--tool-accent);cursor:pointer;font-weight:600;transition:all .15s;white-space:nowrap}
 .lk-add:hover{background: var(--tool-accent);color:#fff}
-.lk-add-dis{opacity:.4;cursor:not-allowed;border-color:#ccc;background:#f5f5f5;color: var(--tool-light)}
+.lk-add-dis{opacity:.4;cursor:not-allowed;border-color:var(--g4);background:#f5f5f5;color: var(--tool-light)}
 .lk-alt-title{font-size:12px;font-weight:600;color:#986000;padding:8px 14px 4px;background:#FFFBF2}
 .lk-rec-alt{background:#FFFBF2}
 .lk-notes{font-size:10px;color: var(--tool-light);line-height:1.5;padding:8px 0}
@@ -17974,6 +17974,7 @@ window._gmapsReady = function() {
   --blue-p:#EDF3FA;
   --blue-p2:#D6E4F4;
   /* escala tinta → porcelana */
+  /* s131: 105 grises legacy tokenizados al ramp (#eee→--g6, #ddd→--g5, #ccc→--g4, #111→--black). 16 ocurrencias excluidas a propósito: atributos SVG fill/stroke (var() no resuelve), fallbacks var(--x,#hex), y el par acoplado selector [style*="...#eee"] + sus estilos inline. Manifest completo en SSTT_HANDOFF_COMPACT_s131.md */
   --black:#15171C;
   --g1:#2A2E35;
   --g2:#565D68;
@@ -21601,7 +21602,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <button class="fov-vtab" onclick="fovSetView('side',this)">↕ Lat.</button>
       <button class="fov-vtab" onclick="fovSetView('maps',this)" style="background:#1A7F3C;color:#fff;border-color:transparent">📍 Maps</button>
       <button class="fov-vtab" onclick="fovSetView('camera',this)" style="background:linear-gradient(135deg,#1E5FA8,#174B86);color:#fff;border-color:transparent">📱 Cámara</button>
-      <button class="fov-vtab fov-fs-btn" onclick="fovFullscreen()" title="Pantalla completa (modo horizontal)" aria-label="Pantalla completa (modo horizontal)" style="flex:0 0 auto;background:#111;color:#fff;border-color:#111;padding:7px 11px">⛶</button>
+      <button class="fov-vtab fov-fs-btn" onclick="fovFullscreen()" title="Pantalla completa (modo horizontal)" aria-label="Pantalla completa (modo horizontal)" style="flex:0 0 auto;background:var(--black);color:#fff;border-color:var(--black);padding:7px 11px">⛶</button>
     </div>
     <div id="fovViewport">
     <canvas id="fovCanvas" width="900" height="480"></canvas>
@@ -21655,7 +21656,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         </div>
         <div id="fovExifResult" style="display:none">
           <div style="position:relative;border-radius:10px;overflow:hidden;background:#000;margin-bottom:12px">
-            <img id="fovExifImg" alt="Imagen de cámara para análisis EXIF" style="width:100%;display:block;max-height:280px;object-fit:contain;background:#111">
+            <img id="fovExifImg" alt="Imagen de cámara para análisis EXIF" style="width:100%;display:block;max-height:280px;object-fit:contain;background:var(--black)">
             <div id="fovExifFrame" style="position:absolute;border:2px solid #ff3b30;box-sizing:border-box;pointer-events:none;box-shadow:0 0 15px rgba(255,59,48,.4)"></div>
             <div id="fovExifLbl" style="position:absolute;top:6px;left:6px;background:rgba(0,0,0,.75);padding:5px 9px;border-radius:6px;font-size:11px;font-weight:800"></div>
           </div>
@@ -21700,7 +21701,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         </div>
         <div id="fovAuditResult" style="display:none">
           <div style="position:relative;border-radius:10px;overflow:hidden;background:#000;margin-bottom:12px">
-            <img id="fovAuditImg" alt="Imagen de cámara para auditoría de campo" style="width:100%;display:block;max-height:240px;object-fit:contain;background:#111">
+            <img id="fovAuditImg" alt="Imagen de cámara para auditoría de campo" style="width:100%;display:block;max-height:240px;object-fit:contain;background:var(--black)">
           </div>
           <div id="fovAuditAnalysis"></div>
           <button onclick="document.getElementById('fovAuditFile').click()" style="margin-top:10px;width:100%;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);padding:8px;border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font)">↺ Cambiar foto</button>
@@ -21752,7 +21753,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <div style="font-size:11px;color:#fff;margin-bottom:5px">Ancho del objeto (cm)</div>
             <input type="number" id="fovCalibCustomW" min="1" max="100" step="0.1" value="14.5" style="width:100%;padding:8px;border-radius:7px;background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.15);font-family:var(--font);font-size:13px">
           </div>
-          <div style="background:rgba(255,255,255,.04);padding:10px;border-radius:8px;font-size:11px;color:#ccc;margin-bottom:12px;line-height:1.5">
+          <div style="background:rgba(255,255,255,.04);padding:10px;border-radius:8px;font-size:11px;color:var(--g4);margin-bottom:12px;line-height:1.5">
             <b style="color:#fff">Cómo medir 1 metro sin huincha:</b><br>
             • Un paso de adulto ≈ 70-75cm — da <b>1 paso y medio</b><br>
             • Brazos extendidos punta a punta ≈ tu altura<br>
@@ -21907,7 +21908,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         <div id="fovSvPano" style="position:absolute;inset:0;width:100%;height:100%"></div>
         <!-- Transparent FOV overlay canvas (on top of pano) -->
         <canvas id="fovSvCanvas" style="display:none;position:absolute;inset:0;width:100%;height:100%;z-index:6;pointer-events:none"></canvas>
-        <div id="fovSvInfo" style="display:none;position:absolute;bottom:10px;left:10px;right:10px;z-index:7;background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.1);padding:8px 12px;border-radius:8px;backdrop-filter:blur(10px);font-size:11px;color:#ccc">
+        <div id="fovSvInfo" style="display:none;position:absolute;bottom:10px;left:10px;right:10px;z-index:7;background:rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.1);padding:8px 12px;border-radius:8px;backdrop-filter:blur(10px);font-size:11px;color:var(--g4)">
           <span id="fovSvCamInfo"></span>
         </div>
         <div id="fovSvLoading" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:rgba(10,10,20,.8);z-index:15;font-size:13px;color:#aaa">
@@ -21924,7 +21925,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         </span>
       </div>
       <!-- Address badge -->
-      <div id="fovMapsAddrBadge" style="display:none;position:absolute;bottom:10px;left:10px;z-index:7;background:rgba(0,0,0,.7);padding:5px 10px;border-radius:6px;font-size:10px;color:#ccc;max-width:50%">
+      <div id="fovMapsAddrBadge" style="display:none;position:absolute;bottom:10px;left:10px;z-index:7;background:rgba(0,0,0,.7);padding:5px 10px;border-radius:6px;font-size:10px;color:var(--g4);max-width:50%">
         📍 <span id="fovMapsAddrText"></span>
       </div>
     </div>
@@ -22086,33 +22087,33 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <button onclick="showDirectorioInstaladores()" style="background:linear-gradient(135deg,#0A5C2E,#1A8C4E);color:#fff;border:none;border-radius:20px;padding:6px 16px;font-size:12px;font-weight:700;cursor:pointer">Ver directorio →</button>
     </div>
   </div>
-  <div class="footer-trust-bar" style="background:#f8f9fa;border-bottom:1px solid #eee;padding:16px 0">
+  <div class="footer-trust-bar" style="background:#f8f9fa;border-bottom:1px solid var(--g6);padding:16px 0">
     <div class="wrap footer-grid-trust" style="max-width:1200px;gap:0">
-      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee;cursor:pointer" onclick="event.preventDefault();showSeguimiento();" title="Ver estado de tu compra">
+      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid var(--g6);cursor:pointer" onclick="event.preventDefault();showSeguimiento();" title="Ver estado de tu compra">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#D90F23" stroke-width="1.5"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
         <div>
-          <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">Estado de compra</div>
+          <div style="font-size:12px;font-weight:800;color:var(--black);text-transform:uppercase;letter-spacing:.3px">Estado de compra</div>
           <div style="font-size:11px;color:#D90F23;margin-top:1px;font-weight:600">Seguimiento online →</div>
         </div>
       </div>
-      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
+      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid var(--g6)">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#D90F23" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
         <div>
-          <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">Contáctanos</div>
+          <div style="font-size:12px;font-weight:800;color:var(--black);text-transform:uppercase;letter-spacing:.3px">Contáctanos</div>
           <div style="font-size:11px;color:#888;margin-top:1px">Escríbenos</div>
         </div>
       </div>
-      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid #eee">
+      <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px;border-right:1px solid var(--g6)">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#D90F23" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.56 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
         <div>
-          <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">+56 2 2204 2119</div>
+          <div style="font-size:12px;font-weight:800;color:var(--black);text-transform:uppercase;letter-spacing:.3px">+56 2 2204 2119</div>
           <div style="font-size:11px;color:#888;margin-top:1px">Lunes a Jueves 8:30–17:15 · Viernes 8:30–17:45 hrs</div>
         </div>
       </div>
       <div class="footer-trust-item" style="display:flex;align-items:center;gap:12px;padding:8px 20px">
         <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#D90F23" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
         <div>
-          <div style="font-size:12px;font-weight:800;color:#111;text-transform:uppercase;letter-spacing:.3px">Centro de ayuda</div>
+          <div style="font-size:12px;font-weight:800;color:var(--black);text-transform:uppercase;letter-spacing:.3px">Centro de ayuda</div>
           <div style="font-size:11px;color:#888;margin-top:1px">Estamos para ayudarte</div>
         </div>
       </div>
@@ -22126,7 +22127,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <!-- Brand -->
       <div>
         <div style="margin-bottom:14px">
-          <div style="font-family:var(--font-d);font-size:26px;font-weight:900;color:#111;letter-spacing:-.5px">SSTT®</div>
+          <div style="font-family:var(--font-d);font-size:26px;font-weight:900;color:var(--black);letter-spacing:-.5px">SSTT®</div>
           <div style="font-size:10px;color:#999;margin-top:2px;text-transform:uppercase;letter-spacing:.4px">SpA · Distribuidor Oficial Dahua · Chile</div>
         </div>
         <div style="display:inline-flex;align-items:center;gap:7px;background:#fff0f0;border:1px solid #fcc;border-radius:6px;padding:4px 10px;margin-bottom:14px">
@@ -22191,13 +22192,13 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <div>
         <div class="footer-col-title" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #D90F23;display:inline-block">Sobre SSTT</div>
         <div class="footer-col-links" style="display:flex;flex-direction:column;gap:10px">
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Acerca de Nosotros <span style="color:#ccc">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Política de Privacidad <span style="color:#ccc">›</span></a>
-          <a href="#" onclick="event.preventDefault();cookieConsentReopen()" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">🍪 Preferencias de cookies <span style="color:#ccc">›</span></a>
-          <a href="#" onclick="event.preventDefault();showDevolucionesModal()" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">↩️ Política de devoluciones <span style="color:#ccc">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Garantía Dahua <span style="color:#ccc">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Trabaja Con Nosotros <span style="color:#ccc">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">¿Cómo llegar? <span style="color:#ccc">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Acerca de Nosotros <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Política de Privacidad <span style="color:var(--g4)">›</span></a>
+          <a href="#" onclick="event.preventDefault();cookieConsentReopen()" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">🍪 Preferencias de cookies <span style="color:var(--g4)">›</span></a>
+          <a href="#" onclick="event.preventDefault();showDevolucionesModal()" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">↩️ Política de devoluciones <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Garantía Dahua <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Trabaja Con Nosotros <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">¿Cómo llegar? <span style="color:var(--g4)">›</span></a>
         </div>
       </div>
 
@@ -22205,11 +22206,11 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <div>
         <div class="footer-col-title" style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:#999;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #D90F23;display:inline-block">Servicios</div>
         <div class="footer-col-links" style="display:flex;flex-direction:column;gap:10px">
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Estado de tu compra <span style="color:#ccc">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Retiros y Despachos <span style="color:#ccc">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Formas de Pago <span style="color:#ccc">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Facturación Electrónica <span style="color:#ccc">›</span></a>
-          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Soporte Técnico <span style="color:#ccc">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Estado de tu compra <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Retiros y Despachos <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Formas de Pago <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Facturación Electrónica <span style="color:var(--g4)">›</span></a>
+          <a href="#" style="font-size:13px;color:#444;text-decoration:none;display:flex;align-items:center;justify-content:space-between;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#444'">Soporte Técnico <span style="color:var(--g4)">›</span></a>
         </div>
       </div>
 
@@ -22248,9 +22249,9 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <span style="font-size:12px;color:#aaa">SSTT SpA © 2026 | Distribución autorizada Dahua Technology para Chile. Todos los derechos reservados.</span>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
         <a href="#" style="font-size:11px;color:#aaa;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#aaa'">Política de privacidad</a>
-        <span style="color:#ddd">·</span>
+        <span style="color:var(--g5)">·</span>
         <a href="#" style="font-size:11px;color:#aaa;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#aaa'">Términos de uso</a>
-        <span style="color:#ddd">·</span>
+        <span style="color:var(--g5)">·</span>
         <a href="#" style="font-size:11px;color:#aaa;text-decoration:none;transition:color .15s" onmouseover="this.style.color='#D90F23'" onmouseout="this.style.color='#aaa'">Garantías</a>
       </div>
     </div>
@@ -28488,7 +28489,7 @@ function renderPerfilDatos() {
               '<td style="padding:7px 10px;font-size:11px;color:#222;flex:1">' + it.desc + '</td>' +
               '<td style="padding:7px 10px;font-size:11px;text-align:center;color:#334">' + it.qty + '</td>' +
               '<td style="padding:7px 10px;font-size:11px;text-align:right;color:#334">' + it.u + '</td>' +
-              '<td style="padding:7px 10px;font-size:11px;text-align:right;font-weight:700;color:#111">' + it.t + '</td>' +
+              '<td style="padding:7px 10px;font-size:11px;text-align:right;font-weight:700;color:var(--black)">' + it.t + '</td>' +
             '</tr>';
           }).join('');
 
@@ -28516,7 +28517,7 @@ function renderPerfilDatos() {
             '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0;border-bottom:2px solid #f0f0f0">' +
               '<div style="padding:12px 22px;border-right:1px solid #f0f0f0">' +
                 '<div style="font-size:9px;font-weight:700;color:#999;letter-spacing:.1em;margin-bottom:4px">SEÑOR(ES)</div>' +
-                '<div style="font-size:12px;font-weight:700;color:#111">' + razonSocial + '</div>' +
+                '<div style="font-size:12px;font-weight:700;color:var(--black)">' + razonSocial + '</div>' +
                 '<div style="font-size:11px;color:#555">RUT: ' + rutEmpresa + '</div>' +
                 '<div style="font-size:11px;color:#555">Giro: ' + giro + '</div>' +
                 '<div style="font-size:11px;color:#555">' + direccion + ', ' + comuna + '</div>' +
@@ -28546,7 +28547,7 @@ function renderPerfilDatos() {
               '<div style="min-width:180px">' +
                 '<div style="display:flex;justify-content:space-between;font-size:12px;color:#555;margin-bottom:4px"><span>Neto:</span><span>' + fac.neto + '</span></div>' +
                 '<div style="display:flex;justify-content:space-between;font-size:12px;color:#555;margin-bottom:8px"><span>IVA 19%:</span><span>' + fac.iva + '</span></div>' +
-                '<div style="display:flex;justify-content:space-between;font-size:15px;font-weight:900;color:#111;border-top:2px solid #111;padding-top:6px"><span>TOTAL:</span><span>' + fac.monto + '</span></div>' +
+                '<div style="display:flex;justify-content:space-between;font-size:15px;font-weight:900;color:var(--black);border-top:2px solid var(--black);padding-top:6px"><span>TOTAL:</span><span>' + fac.monto + '</span></div>' +
               '</div>' +
             '</div>' +
             // Footer
@@ -28628,7 +28629,7 @@ function renderPerfilDatos() {
             '<div style="background:#f8f9fa;padding:16px 22px;border-bottom:2px solid #e8eaed;display:flex;align-items:center;gap:12px">' +
               '<div style="font-size:24px">🇨🇱</div>' +
               '<div>' +
-                '<div style="font-size:13px;font-weight:800;color:#111;letter-spacing:.02em">Verificación e-RUT</div>' +
+                '<div style="font-size:13px;font-weight:800;color:var(--black);letter-spacing:.02em">Verificación e-RUT</div>' +
                 '<div style="font-size:10px;color:#666">Servicio de Impuestos Internos · www.sii.cl</div>' +
               '</div>' +
               '<div style="margin-left:auto;background:' + checkBg + ';color:' + checkColor + ';border:1.5px solid ' + checkColor + '33;border-radius:20px;padding:4px 12px;font-size:10px;font-weight:800;letter-spacing:.08em">' + checkLabel + '</div>' +
@@ -31683,7 +31684,7 @@ function _pmBuildModal(id) {
     });
     fbtHTML += '</div>';
     fbtHTML += '<div style="margin-top:12px;border-top:1px solid rgba(30,95,168,0.1);padding-top:12px">';
-    fbtHTML += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><input type="checkbox" checked disabled style="width:15px;height:15px;accent-color:#1E5FA8"><span style="font-size:12px;font-weight:700;color:#111">' + escapeHtml(p.nombre) + '</span><span style="font-size:12px;color:#666;margin-left:auto;white-space:nowrap">' + (typeof fmtP === 'function' ? fmtP(p) : '') + '</span></div>';
+    fbtHTML += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><input type="checkbox" checked disabled style="width:15px;height:15px;accent-color:#1E5FA8"><span style="font-size:12px;font-weight:700;color:var(--black)">' + escapeHtml(p.nombre) + '</span><span style="font-size:12px;color:#666;margin-left:auto;white-space:nowrap">' + (typeof fmtP === 'function' ? fmtP(p) : '') + '</span></div>';
     fbtItems.forEach(function(it, idx) {
       fbtHTML += '<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><input type="checkbox" checked class="pm-fbt-chk" data-id="' + it.id + '" data-precio="' + ((typeof itemNeto === 'function') ? itemNeto(it) : it.ptotal) + '" onchange="pmFbtUpdate(' + p.id + ')" style="width:15px;height:15px;accent-color:#1E5FA8"><span style="font-size:12px;color:#333;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escapeHtml(it.nombre) + '</span><span style="font-size:12px;color:#666;white-space:nowrap">' + (typeof fmtP === 'function' ? fmtP(it) : '') + '</span></div>';
     });
@@ -33670,7 +33671,7 @@ function renderPerfilNewsletter() {
   html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between">';
   html += '<div><div style="font-size:13px;font-weight:700;color:var(--g1)">Recibir newsletter</div><div style="font-size:11px;color:var(--g3);margin-top:2px">Novedades y lanzamientos Dahua</div></div>';
   html += '<label style="position:relative;display:inline-block;width:44px;height:24px;cursor:pointer"><input type="checkbox" id="nwsActivo" style="opacity:0;width:0;height:0"' + (activo ? ' checked' : '') + '>';
-  html += '<span style="position:absolute;top:0;left:0;right:0;bottom:0;background:' + (activo ? 'var(--black)' : '#ccc') + ';border-radius:24px;transition:.3s"><span style="position:absolute;height:18px;width:18px;left:' + (activo ? '23px' : '3px') + ';bottom:3px;background:#fff;border-radius:50%;transition:.3s"></span></span></label></div>';
+  html += '<span style="position:absolute;top:0;left:0;right:0;bottom:0;background:' + (activo ? 'var(--black)' : 'var(--g4)') + ';border-radius:24px;transition:.3s"><span style="position:absolute;height:18px;width:18px;left:' + (activo ? '23px' : '3px') + ';bottom:3px;background:#fff;border-radius:50%;transition:.3s"></span></span></label></div>';
   html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:var(--g1);margin-bottom:8px">Email</div>';
   html += '<input id="nwsEmail" type="email" value="' + emailVal.replace(/"/g, '&quot;') + '" placeholder="tu@email.com" style="width:100%;box-sizing:border-box;padding:10px 12px;border:1.5px solid rgba(0,82,204,.2);border-radius:10px;font-size:13px;outline:none"></div>';
   html += '<div style="background:#fff;border:1px solid var(--border2);border-radius:12px;padding:14px;margin-bottom:14px"><div style="font-size:12px;font-weight:700;color:var(--g1);margin-bottom:8px">Frecuencia</div><div style="display:flex;gap:8px">';
@@ -33692,7 +33693,7 @@ function renderPerfilNewsletter() {
   var cbActivo = document.getElementById('nwsActivo');
   if (cbActivo) cbActivo.addEventListener('change', function() {
     var s = this.parentNode.querySelector('span'), d = s ? s.querySelector('span') : null;
-    if (s) s.style.background = this.checked ? '#15171C' : '#ccc';
+    if (s) s.style.background = this.checked ? '#15171C' : 'var(--g4)';
     if (d) d.style.left = this.checked ? '23px' : '3px';
   });
 }
@@ -33732,7 +33733,7 @@ function cookieConsentShowBanner() {
         '<a href="#" onclick="cookieConsentShowDetails();return false" style="font-size:11.5px;color:#1E5FA8;font-weight:600;text-decoration:none;display:inline-block;margin-top:6px">Más detalles · Política de privacidad</a>' +
       '</div>' +
       '<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">' +
-        '<button onclick="cookieConsentReject()" style="background:transparent;border:1px solid #ccc;color:#445;padding:10px 16px;border-radius:8px;font-weight:600;font-size:12.5px;cursor:pointer;font-family:inherit;white-space:nowrap">Solo necesarias</button>' +
+        '<button onclick="cookieConsentReject()" style="background:transparent;border:1px solid var(--g4);color:#445;padding:10px 16px;border-radius:8px;font-weight:600;font-size:12.5px;cursor:pointer;font-family:inherit;white-space:nowrap">Solo necesarias</button>' +
         '<button onclick="cookieConsentShowDetails()" style="background:#fff;border:1px solid #1E5FA8;color:#1E5FA8;padding:10px 16px;border-radius:8px;font-weight:700;font-size:12.5px;cursor:pointer;font-family:inherit;white-space:nowrap">Personalizar</button>' +
         '<button onclick="cookieConsentAcceptAll()" style="background:linear-gradient(135deg,#1E5FA8,#003d80);color:#fff;border:none;padding:10px 18px;border-radius:8px;font-weight:800;font-size:12.5px;cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(30,95,168,0.3);white-space:nowrap">Aceptar todas</button>' +
       '</div>' +
@@ -33740,7 +33741,7 @@ function cookieConsentShowBanner() {
 
   if (!document.getElementById('ccBannerCSS')) {
     var s = document.createElement('style'); s.id = 'ccBannerCSS';
-    s.textContent = '@keyframes ccBannerIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}@keyframes ccBannerOut{to{transform:translateY(100%);opacity:0}}.cc-toggle{position:relative;display:inline-block;width:42px;height:24px}.cc-toggle input{opacity:0;width:0;height:0}.cc-toggle-slider{position:absolute;cursor:pointer;inset:0;background:#ccc;transition:.3s;border-radius:24px}.cc-toggle-slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:#fff;transition:.3s;border-radius:50%}.cc-toggle input:checked+.cc-toggle-slider{background:#1E5FA8}.cc-toggle input:checked+.cc-toggle-slider:before{transform:translateX(18px)}.cc-toggle input:disabled+.cc-toggle-slider{opacity:.6;cursor:not-allowed}@media(max-width:680px){#cookieConsentBanner > div{flex-direction:column;gap:12px}#cookieConsentBanner button{width:100%}}';
+    s.textContent = '@keyframes ccBannerIn{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}@keyframes ccBannerOut{to{transform:translateY(100%);opacity:0}}.cc-toggle{position:relative;display:inline-block;width:42px;height:24px}.cc-toggle input{opacity:0;width:0;height:0}.cc-toggle-slider{position:absolute;cursor:pointer;inset:0;background:var(--g4);transition:.3s;border-radius:24px}.cc-toggle-slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:#fff;transition:.3s;border-radius:50%}.cc-toggle input:checked+.cc-toggle-slider{background:#1E5FA8}.cc-toggle input:checked+.cc-toggle-slider:before{transform:translateX(18px)}.cc-toggle input:disabled+.cc-toggle-slider{opacity:.6;cursor:not-allowed}@media(max-width:680px){#cookieConsentBanner > div{flex-direction:column;gap:12px}#cookieConsentBanner button{width:100%}}';
     document.head.appendChild(s);
   }
   document.body.appendChild(div);
@@ -33795,7 +33796,7 @@ function cookieConsentShowDetails() {
       '</div>' +
 
       '<div style="display:flex;gap:8px;justify-content:flex-end">' +
-        '<button onclick="cookieConsentReject()" style="background:transparent;border:1px solid #ccc;color:#445;padding:10px 16px;border-radius:8px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit">Rechazar todas</button>' +
+        '<button onclick="cookieConsentReject()" style="background:transparent;border:1px solid var(--g4);color:#445;padding:10px 16px;border-radius:8px;font-weight:600;font-size:12px;cursor:pointer;font-family:inherit">Rechazar todas</button>' +
         '<button onclick="cookieConsentSaveCustom()" style="background:linear-gradient(135deg,#1E5FA8,#003d80);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit;box-shadow:0 2px 8px rgba(30,95,168,0.3)">Guardar preferencias</button>' +
       '</div>' +
     '</div>';
@@ -35156,9 +35157,9 @@ function rwBundleRender(producto, related) {
   html += '<div class="rw-bundle-row" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:#fff;border:1px solid rgba(30,95,168,0.15);border-radius:10px;margin-bottom:8px">';
   html += '<input type="checkbox" checked disabled style="width:18px;height:18px;accent-color:#1E5FA8">';
   html += '<img src="' + (typeof imgProxyUrl === 'function' ? imgProxyUrl(producto.codigo) : '') + '" style="width:42px;height:42px;border-radius:6px;object-fit:cover;background:#f0f0f5;flex-shrink:0" onerror="this.style.opacity=.3">';
-  html += '<div style="flex:1;min-width:0"><div style="font-size:11px;color:#666;font-family:monospace">' + producto.codigo + '</div><div style="font-size:12.5px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escapeHtml(producto.nombre) + '</div></div>';
+  html += '<div style="flex:1;min-width:0"><div style="font-size:11px;color:#666;font-family:monospace">' + producto.codigo + '</div><div style="font-size:12.5px;font-weight:600;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escapeHtml(producto.nombre) + '</div></div>';
   html += '<div style="font-size:11px;color:#1E5FA8;font-weight:700;background:rgba(30,95,168,0.1);padding:3px 8px;border-radius:6px;white-space:nowrap">Principal</div>';
-  html += '<div style="font-weight:700;color:#111;font-size:13px;white-space:nowrap">' + (typeof fmtP === 'function' ? fmtP(producto) : '$' + producto.ptotal) + '</div>';
+  html += '<div style="font-weight:700;color:var(--black);font-size:13px;white-space:nowrap">' + (typeof fmtP === 'function' ? fmtP(producto) : '$' + producto.ptotal) + '</div>';
   html += '</div>';
 
   // Items sugeridos (seleccionables)
@@ -35167,12 +35168,12 @@ function rwBundleRender(producto, related) {
     html += '<input type="checkbox" checked class="rw-bundle-chk" data-codigo="' + it.codigo + '" data-id="' + it.id + '" data-precio="' + ((typeof itemNeto === 'function') ? itemNeto(it) : it.ptotal) + '" onchange="rwBundleUpdate(\''+producto.id+'\')" style="width:18px;height:18px;accent-color:#1E5FA8">';
     html += '<img src="' + (typeof imgProxyUrl === 'function' ? imgProxyUrl(it.codigo) : '') + '" style="width:42px;height:42px;border-radius:6px;object-fit:cover;background:#f0f0f5;flex-shrink:0;cursor:pointer" onclick="closeProdModal();setTimeout(()=>openProdModal(' + it.id + '),200)" onerror="this.style.opacity=.3">';
     html += '<div style="flex:1;min-width:0;cursor:pointer" onclick="closeProdModal();setTimeout(()=>openProdModal(' + it.id + '),200)">';
-    html += '<div style="font-size:11px;color:#666;font-family:monospace">' + it.codigo + '</div><div style="font-size:12.5px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escapeHtml(it.nombre) + '</div></div>';
+    html += '<div style="font-size:11px;color:#666;font-family:monospace">' + it.codigo + '</div><div style="font-size:12.5px;font-weight:600;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escapeHtml(it.nombre) + '</div></div>';
     var stStats = rwReviewsStats(it.codigo);
     if (stStats.count > 0) {
       html += '<div style="display:flex;align-items:center;gap:3px;font-size:11px;color:#666;white-space:nowrap">' + rwStarsHTML(stStats.avg, 10) + '<span>(' + stStats.count + ')</span></div>';
     }
-    html += '<div style="font-weight:700;color:#111;font-size:13px;white-space:nowrap">' + (typeof fmtP === 'function' ? fmtP(it) : '$' + it.ptotal) + '</div>';
+    html += '<div style="font-weight:700;color:var(--black);font-size:13px;white-space:nowrap">' + (typeof fmtP === 'function' ? fmtP(it) : '$' + it.ptotal) + '</div>';
     html += '</div>';
   });
 
@@ -40390,7 +40391,7 @@ function aiGuideSearch() {
       resp += '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">' +
         '<button onclick="aiAddAllToCart()" style="background:#D90F23;color:#fff;border:none;border-radius:10px;padding:8px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🛒 Agregar todo al carro (' + aiLastProds.length + ')</button>' +
         '<button onclick="aiAskAPI()" style="background:var(--black);color:#fff;border:none;border-radius:10px;padding:8px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🤖 Análisis IA</button>' +
-        '<button onclick="aiGuideReset()" style="background:#f5f5f7;color:var(--g1);border:1.5px solid #ddd;border-radius:10px;padding:8px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🔄 Nueva búsqueda</button>' +
+        '<button onclick="aiGuideReset()" style="background:#f5f5f7;color:var(--g1);border:1.5px solid var(--g5);border-radius:10px;padding:8px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🔄 Nueva búsqueda</button>' +
       '</div>';
       aiAddMsg('bot', resp, aiLastProds);
       aiSpeak('Encontré ' + localResult.totalFound + ' productos. Aquí los más relevantes.');
@@ -42746,7 +42747,7 @@ window.mktSubmitInterest = function() {
     var revHTML = revs.length ? revs.map(function(r){
       return '<div style="border-top:1px solid #eee;padding:11px 0">'
         + '<div style="display:flex;align-items:center;gap:8px;margin-bottom:3px">'
-          + '<strong style="font-size:12.5px;color:#111">'+esc(r.a)+'</strong>'
+          + '<strong style="font-size:12.5px;color:var(--black)">'+esc(r.a)+'</strong>'
           + '<span style="color:#F59E0B;font-size:12px">'+stars(r.r)+'</span>'
           + '<span style="margin-left:auto;font-size:10.5px;color:#999">'+esc(r.f)+'</span>'
         + '</div>'
@@ -42759,9 +42760,9 @@ window.mktSubmitInterest = function() {
       var precio=(typeof fmtP==='function')?fmtP(p):('$'+p.ptotal.toLocaleString('es-CL'));
       return '<div style="display:flex;align-items:center;gap:10px;border-top:1px solid #f0f0f0;padding:8px 0;cursor:pointer" onclick="mktSellerCloseModal();setTimeout(function(){openProdModal('+p.id+')},150)">'
         + '<img src="'+img+'" style="width:48px;height:48px;border-radius:8px;object-fit:cover;background:#f8fafc;flex-shrink:0">'
-        + '<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(p.nombre)+'</div>'
+        + '<div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(p.nombre)+'</div>'
         + '<div style="font-size:11px;color:#666">'+esc(p.marca||'')+'</div></div>'
-        + '<div style="font-size:13px;font-weight:800;color:#111;white-space:nowrap">'+precio+'</div></div>';
+        + '<div style="font-size:13px;font-weight:800;color:var(--black);white-space:nowrap">'+precio+'</div></div>';
     }).join('');
 
     var avgRev = revs.length ? (revs.reduce(function(a,r){return a+r.r;},0)/revs.length).toFixed(1) : s.rating;
@@ -42781,18 +42782,18 @@ window.mktSubmitInterest = function() {
         + '</div>'
         + '<button onclick="mktSellerCloseModal()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer">✕</button>'
       + '</div>'
-      + '<div style="display:flex;gap:0;border-bottom:1px solid #eee;text-align:center">'
-        + '<div style="flex:1;padding:13px"><div style="font-size:19px;font-weight:900;color:#111">'+s.productos+'</div><div style="font-size:10.5px;color:var(--g3)">Productos</div></div>'
-        + '<div style="flex:1;padding:13px;border-left:1px solid #eee"><div style="font-size:19px;font-weight:900;color:#111">'+s.ventas+'</div><div style="font-size:10.5px;color:var(--g3)">Ventas</div></div>'
-        + '<div style="flex:1;padding:13px;border-left:1px solid #eee"><div style="font-size:19px;font-weight:900;color:#F59E0B">'+avgRev+' ★</div><div style="font-size:10.5px;color:var(--g3)">'+revs.length+' reseñas</div></div>'
+      + '<div style="display:flex;gap:0;border-bottom:1px solid var(--g6);text-align:center">'
+        + '<div style="flex:1;padding:13px"><div style="font-size:19px;font-weight:900;color:var(--black)">'+s.productos+'</div><div style="font-size:10.5px;color:var(--g3)">Productos</div></div>'
+        + '<div style="flex:1;padding:13px;border-left:1px solid var(--g6)"><div style="font-size:19px;font-weight:900;color:var(--black)">'+s.ventas+'</div><div style="font-size:10.5px;color:var(--g3)">Ventas</div></div>'
+        + '<div style="flex:1;padding:13px;border-left:1px solid var(--g6)"><div style="font-size:19px;font-weight:900;color:#F59E0B">'+avgRev+' ★</div><div style="font-size:10.5px;color:var(--g3)">'+revs.length+' reseñas</div></div>'
       + '</div>'
       + '<div style="padding:16px 20px">'
         + '<div style="font-size:11.5px;color:#666;margin-bottom:4px">Especialidad</div>'
-        + '<div style="font-size:13px;font-weight:600;color:#111;margin-bottom:3px">'+esc(s.especialidad)+'</div>'
+        + '<div style="font-size:13px;font-weight:600;color:var(--black);margin-bottom:3px">'+esc(s.especialidad)+'</div>'
         + '<div style="font-size:11.5px;color:#9a3412;font-weight:700;margin-bottom:14px">'+esc(s.marca||'')+'</div>'
-        + '<div style="font-size:13.5px;font-weight:800;color:#111;margin:0 0 2px">⭐ Reseñas del vendedor</div>'
+        + '<div style="font-size:13.5px;font-weight:800;color:var(--black);margin:0 0 2px">⭐ Reseñas del vendedor</div>'
         + revHTML
-        + (prodHTML?('<div style="font-size:13.5px;font-weight:800;color:#111;margin:16px 0 2px">📦 Productos de '+esc(s.nombre)+'</div>'+prodHTML):'')
+        + (prodHTML?('<div style="font-size:13.5px;font-weight:800;color:var(--black);margin:16px 0 2px">📦 Productos de '+esc(s.nombre)+'</div>'+prodHTML):'')
       + '</div>'
       + '</div>';
     modal.style.display='flex';
@@ -44597,7 +44598,7 @@ function waRenderProductStrip(products, intro){
     html+='<div style="display:flex;align-items:center;gap:8px;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;padding:6px;margin-bottom:5px">'+
       '<img src="'+img+'" onerror="this.style.opacity=.25" alt="" style="width:42px;height:42px;object-fit:contain;border-radius:6px;background:#f4f4f6;flex-shrink:0">'+
       '<div style="flex:1;min-width:0">'+
-        '<div style="font-size:11px;font-weight:800;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(feat?'<span style="color:#f1c40f">\u2605</span> ':'')+escapeHtml(p.codigo)+'</div>'+
+        '<div style="font-size:11px;font-weight:800;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(feat?'<span style="color:#f1c40f">\u2605</span> ':'')+escapeHtml(p.codigo)+'</div>'+
         '<div style="font-size:10px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+escapeHtml((p.nombre||'').slice(0,44))+'</div>'+
         '<div style="font-size:11px;font-weight:700;color:#1E5FA8">'+fmt(precio)+' neto</div>'+
       '</div>'+
@@ -44659,7 +44660,7 @@ function waUpdateWaLink(userMsg, reply) {
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/#333/#888/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
 window.SSTT_VER = {
-  ver:   's130',
+  ver:   's131',
   fecha: 'Jueves 11 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
@@ -45463,7 +45464,7 @@ function renderCrossSell() {
       '<img src="'+(typeof imgProxyUrl==='function'?imgProxyUrl(p.codigo):'')+'" alt="'+escapeHtml((p.nombre||''))+'" style="width:36px;height:36px;object-fit:contain;border-radius:6px;background:#f5f5f7" onerror="this.style.opacity=.3">'+
       '<div style="flex:1;min-width:0">'+
         badgeHtml+
-        '<div style="font-size:11px;font-weight:600;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(p.nombre||'').slice(0,45)+'</div>'+
+        '<div style="font-size:11px;font-weight:600;color:var(--black);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+(p.nombre||'').slice(0,45)+'</div>'+
         '<div style="font-size:10px;color:#666">'+p.codigo+' · '+fmt(itemNeto(p))+' neto</div>'+
       '</div>'+
       '<button onclick="event.stopPropagation();addCart(PRODUCTS.find(function(x){return x.id==='+p.id+'}));renderCrossSell()" '+
@@ -50906,7 +50907,7 @@ window.fovPlanInitAutocomplete = function() {
         .then(function(data) {
           if (!data.predictions || !data.predictions.length) { dropdown.style.display = 'none'; return; }
           dropdown.innerHTML = data.predictions.map(function(p) {
-            return '<div style="padding:8px 12px;font-size:12px;color:#ddd;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.06);transition:background .15s" onmouseover="this.style.background=\'rgba(255,255,255,.1)\'" onmouseout="this.style.background=\'none\'" data-pid="'+p.place_id+'">'+p.description+'</div>';
+            return '<div style="padding:8px 12px;font-size:12px;color:var(--g5);cursor:pointer;border-bottom:1px solid rgba(255,255,255,.06);transition:background .15s" onmouseover="this.style.background=\'rgba(255,255,255,.1)\'" onmouseout="this.style.background=\'none\'" data-pid="'+p.place_id+'">'+p.description+'</div>';
           }).join('');
           dropdown.style.display = 'block';
           dropdown.querySelectorAll('div').forEach(function(el) {
@@ -63995,7 +63996,7 @@ if (document.readyState === 'loading') {
 
     // Nota técnica
     if (a.nota_tecnica) {
-      html += '<div style="font-size:11px;color:var(--tool-light);font-style:italic;padding:8px 11px;border-left:2px solid #ddd;margin-bottom:14px;line-height:1.5">' + a.nota_tecnica + '</div>';
+      html += '<div style="font-size:11px;color:var(--tool-light);font-style:italic;padding:8px 11px;border-left:2px solid var(--g5);margin-bottom:14px;line-height:1.5">' + a.nota_tecnica + '</div>';
     }
 
     // Acciones
