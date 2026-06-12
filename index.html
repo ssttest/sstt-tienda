@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s143 -->
+<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s144 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -8094,6 +8094,10 @@ body.cart-open #proyectoListadoBtn {
   box-shadow:0 4px 18px rgba(0,0,0,.05);
   transition:all .2s;
 }
+/* s144 · EXCEPCIÓN CONSCIENTE a Porcelana & Señal: la paleta del simulador FOV / comparador
+   es codificación FUNCIONAL de datos (identidad Cámara A/B + paleta categórica multicam de 8),
+   NO cromo. Cian #00aaff = Cámara A · naranja #ff6b35 = Cámara B. Misma lógica que el WhatsApp
+   verde: NO neutralizar en pases de-azul. La paleta categórica vive en chipColors/lensColors. */
 .fov-cam-box.fov-cam-a { border-top:3px solid #00aaff; }
 .fov-cam-box.fov-cam-b { border-top:3px solid #ff6b35; }
 .fov-cam-hdr { display:flex; align-items:center; gap:7px; margin-bottom:11px; }
@@ -44759,7 +44763,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s143', fecha:'Viernes 12 de Junio del 2026' };
+window.SSTT_VER = { ver:'s144', fecha:'Viernes 12 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
