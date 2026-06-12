@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s136 -->
+<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s137 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1357,14 +1357,14 @@ nav {
   pointer-events: none;
 }
 .tech-badge + .tech-badge { left: auto; right: 6px; }
-/* ── Tech badges premium — solo tecnologías Dahua superiores ── */
-.tech-fc    { background:var(--g7),rgba(180,55,0,.90));    color:#fff; } /* WizColor / Full-Color */
-.tech-tioc  { background:var(--g7),rgba(140,0,10,.90));    color:#fff; } /* TiOC */
-.tech-ws    { background:var(--g7),rgba(0,40,140,.90));    color:#fff; } /* WizSense */
-.tech-wm    { background:var(--g7),rgba(55,0,140,.90));    color:#fff; } /* WizMind */
-.tech-acu   { background:var(--g7),rgba(0,95,120,.90));   color:#fff; } /* AcuPick */
-.tech-xh    { background:var(--g7),rgba(27,95,212,.90));   color:#00B4E6; letter-spacing:.3px; } /* Xinghan AI */
-.tech-4k    { background:var(--g7),rgba(100,0,0,.90));    color:#fff; } /* 4K */
+/* ── Tech badges premium — solo tecnologías Dahua superiores ── (gradients reparados s137) */
+.tech-fc    { background:linear-gradient(180deg,rgba(180,55,0,.80),rgba(180,55,0,.95));    color:#fff; } /* WizColor / Full-Color */
+.tech-tioc  { background:linear-gradient(180deg,rgba(140,0,10,.80),rgba(140,0,10,.95));    color:#fff; } /* TiOC */
+.tech-ws    { background:linear-gradient(180deg,rgba(0,40,140,.80),rgba(0,40,140,.95));    color:#fff; } /* WizSense */
+.tech-wm    { background:linear-gradient(180deg,rgba(55,0,140,.80),rgba(55,0,140,.95));    color:#fff; } /* WizMind */
+.tech-acu   { background:linear-gradient(180deg,rgba(0,95,120,.80),rgba(0,95,120,.95));   color:#fff; } /* AcuPick */
+.tech-xh    { background:linear-gradient(180deg,rgba(27,95,212,.80),rgba(27,95,212,.95));   color:#00B4E6; letter-spacing:.3px; } /* Xinghan AI */
+.tech-4k    { background:linear-gradient(180deg,rgba(100,0,0,.80),rgba(100,0,0,.95));    color:#fff; } /* 4K */
 /* Max 3 badges visibles: posición izquierda, derecha, arriba-izquierda */
 .tech-badge:nth-child(1) { bottom:6px; left:6px; }
 .tech-badge:nth-child(2) { bottom:6px; left:auto; right:6px; }
@@ -2306,7 +2306,7 @@ nav {
 }
 .pm-btn-primary::before {
   content:''; position:absolute; inset:0; border-radius:50px;
-  background:var(--g7) 0%,rgba(255,255,255,0) 60%);
+  background:linear-gradient(180deg,rgba(255,255,255,.25) 0%,rgba(255,255,255,0) 60%); /* s137 gloss */
   pointer-events:none;
 }
 .pm-btn-primary:hover {
@@ -4467,7 +4467,7 @@ nav {
 }
 .csm-continue {
   width:100%; padding:14px;
-  background:var(--g7),var(--g1));
+  background:linear-gradient(180deg,var(--g2),var(--g1)); /* s137 */
   color:#fff; border:none; border-radius:50px;
   font-size:14px; font-weight:800; cursor:pointer;
   font-family:var(--font);
@@ -8064,7 +8064,7 @@ body.cart-open #proyectoListadoBtn {
 }
 .fov-hero-badge {
   display:inline-flex; align-items:center; gap:6px;
-  background:var(--g7),rgba(99,102,241,.08));
+  background:linear-gradient(var(--g7),rgba(99,102,241,.08));
   border:1px solid rgba(30,95,168,.2); border-radius:50px;
   padding:5px 14px; font-size:11px; font-weight:800;
   color:#15171C; text-transform:uppercase; letter-spacing:.5px; margin-bottom:10px;
@@ -8283,7 +8283,7 @@ body.cart-open #proyectoListadoBtn {
   display:flex; align-items:center; gap:10px;
   padding:10px 12px; margin-bottom:12px;
   border-radius:11px;
-  background:var(--g7),rgba(0,180,230,.04));
+  background:linear-gradient(var(--g7),rgba(0,180,230,.04));
   border:1px solid rgba(30,95,168,.12);
 }
 .fov-multi-icon { font-size:22px; flex-shrink:0; line-height:1; }
@@ -20693,7 +20693,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
     <div style="background:rgba(20,20,22,.92);backdrop-filter:blur(40px) saturate(180%);-webkit-backdrop-filter:blur(40px) saturate(180%);padding:16px 20px;display:flex;align-items:center;
       justify-content:space-between;border-radius:20px 20px 0 0;position:sticky;top:0;z-index:2;border-bottom:.5px solid rgba(255,255,255,.06)">
       <div style="display:flex;align-items:center;gap:12px">
-        <div style="width:34px;height:34px;background:var(--g7),rgba(255,255,255,.05));border:.5px solid rgba(255,255,255,.12);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2),inset 0 .5px 0 rgba(255,255,255,.15)">
+        <div style="width:34px;height:34px;background:linear-gradient(var(--g7),rgba(255,255,255,.05));border:.5px solid rgba(255,255,255,.12);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.2),inset 0 .5px 0 rgba(255,255,255,.15)">
           <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="rgba(255,255,255,.85)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="7" r="3.5"/><path d="M4 17.5c0-3.3 2.7-6 6-6s6 2.7 6 6"/></svg>
         </div>
         <div>
@@ -21784,7 +21784,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       </div>
       <!-- Controles inferiores -->
       <div style="padding:10px 12px;background:rgba(255,255,255,.03);border-top:1px solid rgba(255,255,255,.08);font-size:11px;color:#bbb">
-        <div id="fovCamComparator" style="display:none;margin-bottom:10px;padding:8px 10px;background:var(--g7),rgba(255,159,67,.05));border-left:3px solid #ff3b30;border-radius:6px">
+        <div id="fovCamComparator" style="display:none;margin-bottom:10px;padding:8px 10px;background:linear-gradient(var(--g7),rgba(255,159,67,.05));border-left:3px solid #ff3b30;border-radius:6px">
           <div id="fovCamCoverageLine" style="font-size:11px;font-weight:700;color:#fff;margin-bottom:3px"></div>
           <div id="fovCamPercentLine" style="font-size:13px;font-weight:800;color:#ff3b30"></div>
         </div>
@@ -31838,7 +31838,7 @@ function _pmBuildModal(id) {
               }
               const _isCam = ['camaras-ip','camaras-hdcvi','camaras-ptz'].includes(p.cat);
               const _hasMM = /\d+\.?\d*\s*mm/i.test(p.nombre||'');
-              const _fovBtn = (_isCam && _hasMM) ? `<button class="pm-btn-ghost" onclick="pmSimularFOV(${id})" title="Simular campo visual" style="background:var(--g7),rgba(99,102,241,.06));border:1px solid rgba(30,95,168,.2);color:#15171C;display:inline-flex;align-items:center;gap:5px;font-weight:700">
+              const _fovBtn = (_isCam && _hasMM) ? `<button class="pm-btn-ghost" onclick="pmSimularFOV(${id})" title="Simular campo visual" style="background:linear-gradient(var(--g7),rgba(99,102,241,.06));border:1px solid rgba(30,95,168,.2);color:#15171C;display:inline-flex;align-items:center;gap:5px;font-weight:700">
                 <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="3"/><path d="M20.188 10.934c.326.427.326 1.705 0 2.132C18.768 14.99 15.636 18 12 18c-3.636 0-6.768-3.01-8.188-4.934-.326-.427-.326-1.705 0-2.132C5.232 9.01 8.364 6 12 6c3.636 0 6.768 3.01 8.188 4.934z"/></svg>
                 Simular FOV
               </button>` : '';
@@ -44661,7 +44661,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s136', fecha:'Viernes 12 de Junio del 2026' };
+window.SSTT_VER = { ver:'s137', fecha:'Viernes 12 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -46927,7 +46927,7 @@ function renderPanel(which, r) {
       '<div class="fov-spec"><div class="fov-spec-val">'+r.ppmNow.toFixed(0)+'</div><div class="fov-spec-lbl">px/m</div></div>' +
     '</div>' +
     (r.thermalDRI ?
-      '<div class="fov-spec-meta" style="background:var(--g7),rgba(255,159,67,.06));color:#c0392b;font-weight:700">' +
+      '<div class="fov-spec-meta" style="background:linear-gradient(var(--g7),rgba(255,159,67,.06));color:#c0392b;font-weight:700">' +
         '🔥 Térmica Dahua · Sensor ' + r.cam.sensor.wPx + '×' + r.cam.sensor.hPx + ' · ' +
         r.cam.sensor.pixelPitch + 'µm pixel · NETD ≤' + r.cam.sensor.netd + 'mK' +
       '</div>' +
@@ -46970,7 +46970,7 @@ function renderPanel(which, r) {
     // Si es híbrida, mostrar la iluminación del canal óptico
     var isHybrid = r.cam.focal.thermal && r.cam.focal.thermal.opticalFocal;
     var ptzZoom = r.cam.focal.thermal && r.cam.focal.thermal.ptzZoom;
-    infraHTML = '<div class="fov-infra-row" style="border-left:3px solid #27ae60;background:var(--g7),rgba(39,174,96,.02))">'+
+    infraHTML = '<div class="fov-infra-row" style="border-left:3px solid #27ae60;background:linear-gradient(var(--g7),rgba(39,174,96,.02))">'+
       '<div class="fov-infra-icon">🌡️</div>'+
       '<div class="fov-infra-info">'+
         '<div class="fov-infra-title" style="color:#1e7b42">Visión térmica pasiva · 24/7</div>'+
@@ -91727,7 +91727,7 @@ window.generateShoppingFeed = function() {
 
 <script id="sstt-colorlab-s135">
 /* ════════════════════════════════════════════════════════════════════
-   SSTT COLOR LAB · s136 — Rosa cromática de edición en vivo
+   SSTT COLOR LAB · s137 — Rosa cromática de edición en vivo
    Crosshair → extrae color de cualquier elemento · flor hexagonal de 19
    (paleta viva Porcelana & Señal) · arcos curvos LUM/SAT · hue ring ·
    alpha · aplica a elemento o a token global · registro de sesión
@@ -92456,7 +92456,7 @@ function renderLog(){
   }).join('');
 }
 function formatInstructions(){
-  var v=(window.SSTT_VER&&window.SSTT_VER.ver)||'s136';
+  var v=(window.SSTT_VER&&window.SSTT_VER.ver)||'s137';
   var lines=[];
   lines.push('═══ SSTT COLOR LAB · registro de sesión · '+v+' ═══');
   lines.push('Fecha: '+new Date().toLocaleString('es-CL'));
