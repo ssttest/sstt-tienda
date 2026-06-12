@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s139 -->
+<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s140 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1886,8 +1886,8 @@ nav {
 
 /* Login prompt */
 #loginPrompt {
-  background: linear-gradient(135deg,var(--blue-p),rgba(234,241,251,.5));
-  border: 1px solid var(--blue-p2); border-radius: 16px;
+  background: var(--g7); /* s140: porcelana, antes gradiente azul */
+  border: 1px solid var(--border); border-radius: var(--r-lg);
   padding: 12px 15px; margin-bottom: 10px;
 }
 
@@ -18627,6 +18627,107 @@ textarea:focus-visible,
 .trow span:last-child{ font-family:var(--font-m); font-weight:600; letter-spacing:-.2px; }
 .trow-total span:last-child{ font-weight:600; letter-spacing:-.6px; }
 
+/* ══ s140: Carro "mesón de despacho" — espacio, color tinta/señal, visibilidad por paso ══ */
+
+/* 1) Stepper porcelana: pasos transparentes (el mega-selector de superficies les ponía
+   fondo blanco + sombra y se veían como cajas), done = tinta con ✓, línea alineada. */
+.co-stepper{ padding:8px 16px 6px; }
+.co-step, .co-step.active, .co-step.done{
+  background:transparent !important;
+  border:none !important;
+  box-shadow:none !important;
+  border-radius:0 !important;
+}
+.co-step.done .co-step-num{
+  background:#FFFFFF; color:transparent;
+  border:1px solid var(--g4); box-shadow:none; position:relative;
+}
+.co-step.done .co-step-num::after{
+  content:'\2713'; position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:11px; color:var(--g2);
+}
+.co-step.done .co-step-lbl{ color:var(--g2); }
+.co-step-line{ background:var(--g5); }
+.co-step-line.done{ background:var(--g3); }
+
+/* 2) Header: acciones de gestión del carro (Cargar/Vaciar) solo en paso 1 */
+#cartDrawer:not([data-costep="0"]) .cart-head button[onclick*="openOrderImport"],
+#cartDrawer:not([data-costep="0"]) #clearCartBtn{ display:none !important; }
+
+/* 3) Sticky por paso: cada paso muestra solo lo que ese paso decide.
+   Paso 1 = decidir compra (cross-sell, cupón, puntos, guardar carro).
+   Pasos 2-3 = solo el total ancla + CTA. Paso 4 = solo CTA (resumen vive en el panel). */
+#cartDrawer:not([data-costep="0"]) #cartEmailCapture,
+#cartDrawer:not([data-costep="0"]) #puntosCanjeWidget,
+#cartDrawer:not([data-costep="0"]) #cuponGCToggle,
+#cartDrawer:not([data-costep="0"]) #cuponGCBody{ display:none !important; }
+#cartDrawer[data-costep="1"] .totals .trow:not(.trow-total),
+#cartDrawer[data-costep="2"] .totals .trow:not(.trow-total){ display:none !important; }
+#cartDrawer[data-costep="1"] .totals .trow-total,
+#cartDrawer[data-costep="2"] .totals .trow-total{
+  border-top:none; margin-top:0; padding-top:2px !important; font-size:15px;
+}
+#cartDrawer[data-costep="1"] .totals .trow-total span:last-child,
+#cartDrawer[data-costep="2"] .totals .trow-total span:last-child{ font-size:20px; }
+
+/* 4) Sticky compacto: paddings que pagan renta */
+.cart-sticky{ padding:10px 14px 14px; }
+#cotizaWaBtn{
+  padding:12px !important; font-size:14px !important;
+  box-shadow:0 3px 12px rgba(37,211,102,.25) !important;
+}
+#cotizaEmailBtn{ padding:2px 0 6px !important; }
+#cuponGCToggle{ padding:7px 12px !important; }
+.compat-pill, .ccs-pill{ padding:7px 10px; }
+
+/* 5) El total con IVA es EL número: señal (único acento fuerte del carro junto al CTA) */
+.trow-total span:last-child{ color:var(--red); }
+
+/* 6) Línea de item: SKU mono gris, monto mono tinta (misma gramática que la grilla),
+   controles de cantidad cuadrados con hairline */
+.citem-code{ color:var(--g2); }
+.citem-price{
+  font-family:var(--font-m); font-size:15px; font-weight:600;
+  letter-spacing:-.2px; color:var(--black);
+}
+.qbtn{
+  width:26px; height:26px; border-radius:var(--r);
+  background:#FFFFFF; border:1px solid var(--g5);
+}
+.qbtn:hover{ background:var(--g7); border-color:var(--g3); }
+@media (pointer:coarse){ .qbtn{ width:32px; height:32px; } }
+.qval-input{ border-radius:var(--r); }
+.citem-del:hover{ color:var(--red); }
+
+/* 7) Títulos de sección del carro: ícono y texto juntos (space-between los separaba
+   a extremos opuestos cuando el título traía svg) */
+#cartDrawer .cs-title{ justify-content:flex-start; gap:6px; }
+
+/* 8) Captura email colapsada (paso 1): una línea hasta que el usuario la pida */
+.cart-email-min{ margin:6px 0; }
+.cart-email-min .ce-open{
+  display:flex; align-items:center; gap:6px; width:100%;
+  background:transparent; border:1px dashed var(--g5); border-radius:var(--r-lg);
+  padding:7px 11px; font-size:11.5px; color:var(--g2); font-weight:600;
+  cursor:pointer; font-family:var(--font); text-align:left;
+}
+.cart-email-min .ce-open:hover{ border-color:var(--g3); color:var(--g1); background:var(--g7); }
+
+/* 9) Móvil chico (Fold cerrado / 320): solo el paso activo lleva etiqueta y el
+   sticky se reduce al mínimo decisivo — Total + CTAs (el desglose vive en paso 4) */
+@media (max-width:374px){
+  .cart-drawer .co-step:not(.active) .co-step-lbl{ display:none !important; }
+  #cartDrawer[data-costep="0"] .totals .trow:not(.trow-total){ display:none !important; }
+  #cartDrawer[data-costep="0"] .totals .trow-total{ border-top:none; margin-top:0; padding-top:2px !important; font-size:14px; }
+  #cartDrawer[data-costep="0"] .totals .trow-total span:last-child{ font-size:19px; }
+  .compat-pill, .ccs-pill{ padding:5px 8px; }
+  #cuponGCToggle{ padding:5px 10px !important; }
+  .cart-email-min .ce-open{ padding:5px 9px; font-size:10.5px; }
+  .cart-sticky{ padding:8px 10px 10px; }
+}
+/* ══ fin s140 ══ */
+
 /* ── Responsive ── */
 @media (max-width:980px){
   header{ margin:0; border-radius:0; }
@@ -20248,7 +20349,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
 
 <!-- CART DRAWER -->
 <div class="cart-overlay" id="cartOverlay"></div>
-<aside class="cart-drawer" id="cartDrawer" onclick="event.stopPropagation()">
+<aside class="cart-drawer" id="cartDrawer" data-costep="0" onclick="event.stopPropagation()">
 
   <!-- ══ HEADER FIJO ══════════════════════════════════════════ -->
   <div class="cart-head">
@@ -20326,7 +20427,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <!-- ─────────── PASO 1: CARRO ─────────── -->
       <div class="co-panel" id="coP1">
         <div class="cart-empty" id="cartEmpty">
-          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="#ccc" stroke-width="1.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke-width="1.5" style="stroke:var(--g4)"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           <p>Tu carro está vacío</p>
           <small>Agrega productos desde el catálogo</small>
         </div>
@@ -20337,19 +20438,19 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <div class="co-panel" id="coP2">
 
         <!-- Login suave -->
-        <div class="cs" id="loginPrompt" style="background:var(--blue-p);border-color:var(--blue-p2);display:none">
+        <div class="cs" id="loginPrompt" style="display:none">
           <div style="display:flex;align-items:center;gap:10px;justify-content:space-between">
             <div>
-              <div style="font-size:12px;font-weight:700;color:var(--blue-d)">¿Tienes cuenta?</div>
+              <div style="font-size:12px;font-weight:700;color:var(--black)">¿Tienes cuenta?</div>
               <div style="font-size:11px;color:var(--muted);margin-top:2px">Inicia sesión para autocompletar tus datos</div>
             </div>
-            <button onclick="openModal('login')" style="background:var(--blue);color:#fff;border:none;border-radius:var(--r-sm);padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font)">Ingresar</button>
+            <button onclick="openModal('login')" style="background:var(--black);color:#fff;border:none;border-radius:var(--r);padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font)">Ingresar</button>
           </div>
         </div>
 
         <!-- Tipo documento -->
         <div class="cs">
-          <div class="cs-title">💳 Facturación</div>
+          <!-- s140: cs-title "Facturación" eliminado — el header del drawer y el stepper ya nombran el paso -->
           <div class="doc-toggle" id="docToggle" style="margin-bottom:14px">
             <div class="dtog on" id="dtBoleta" onclick="setDoc('boleta')">
               <span class="dtog-icon">🧾</span>Boleta Electrónica
@@ -20440,10 +20541,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <!-- ─────────── PASO 3: ENVÍO ─────────── -->
       <div class="co-panel" id="coP3">
         <div class="cs">
-          <div class="cs-title">
-            <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            Despacho / Retiro
-          </div>
+          <!-- s140: cs-title "Despacho / Retiro" eliminado — redundante con header + stepper -->
           <!-- Toggle 3 opciones -->
           <div class="doc-toggle" style="margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px">
             <div class="dtog on" id="dtDespacho" onclick="setEntrega('despacho')" style="flex-direction:column;padding:8px 4px;gap:2px;text-align:center;font-size:11px">
@@ -20469,18 +20567,18 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
               <input type="text" id="cRegionAuto" class="finput" placeholder="Región" style="margin:0" readonly>
             </div>
             <!-- Destinatario -->
-            <div style="background:var(--blue-p);border:1px solid var(--blue-p2);border-radius:10px;
-              padding:10px 13px;font-size:12px;color:var(--blue);margin-bottom:8px;
+            <div style="background:var(--g7);border:1px solid var(--border);border-radius:var(--r-lg);
+              padding:10px 13px;font-size:12px;color:var(--g1);margin-bottom:8px;
               display:flex;align-items:center;justify-content:space-between;gap:8px">
               <span>👤 Destinatario: <strong id="despDestinatarioLabel">igual al comprador</strong></span>
               <button onclick="togglePersonalizarDespacho()" id="btnPersonalizar"
-                style="background:var(--blue);color:#fff;border:none;border-radius:8px;
+                style="background:var(--black);color:#fff;border:none;border-radius:var(--r);
                 padding:4px 10px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--font)">
                 ✏️ Editar
               </button>
             </div>
-            <div id="despPersonalizar" style="display:none;background:rgba(30,95,168,.04);
-              border:1.5px solid var(--blue-p2);border-radius:12px;padding:12px 14px;margin-bottom:8px">
+            <div id="despPersonalizar" style="display:none;background:var(--g7);
+              border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px;margin-bottom:8px">
               <input type="text" id="despNombre" class="finput" placeholder="Nombre de quien recibe *" style="margin:0 0 8px" oninput="actualizarDestinatario()">
               <input type="text" id="despAtencion" class="finput" placeholder="Atención a (opcional)" style="margin:0">
             </div>
@@ -20493,8 +20591,8 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
           </div>
 
           <!-- AGENCIA -->
-          <div id="secAgencia" style="display:none;background:var(--blue-p);border:1px solid var(--blue-p2);border-radius:12px;padding:12px 14px">
-            <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:8px">🏢 Despacho a agencia courier</div>
+          <div id="secAgencia" style="display:none;background:var(--g7);border:1px solid var(--border);border-radius:var(--r-lg);padding:12px 14px">
+            <div style="font-size:12px;font-weight:700;color:var(--black);margin-bottom:8px">🏢 Despacho a agencia courier</div>
             <div style="font-size:11.5px;color:var(--muted);margin-bottom:10px;line-height:1.5">El pedido llega a la sucursal más cercana. Debes retirarlo con tu cédula.</div>
             <select id="cCourierAgencia" class="finput" style="margin-bottom:8px">
               <option value="">Selecciona courier *</option>
@@ -20542,7 +20640,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <div class="co-panel" id="coP4">
 
         <!-- Resumen compacto -->
-        <div class="cs" id="coResumen" style="background:rgba(30,95,168,.04);border-color:var(--blue-p2)">
+        <div class="cs" id="coResumen">
           <div class="cs-title" style="margin-bottom:10px">📋 Resumen del pedido</div>
           <div id="coResumenItems" style="font-size:12.5px;display:flex;flex-direction:column;gap:6px"></div>
           <div style="border-top:1px solid var(--border);margin-top:10px;padding-top:10px">
@@ -20584,9 +20682,8 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
 
         <!-- T&C + botón cotización -->
         <div style="margin-bottom:10px;padding:0 2px">
-          <label style="display:flex;align-items:flex-start;gap:9px;font-size:12px;color:var(--muted);cursor:pointer;line-height:1.5">
-            <input type="checkbox" id="coTyC" style="margin-top:2px;flex-shrink:0">
-            He leído y acepto los <a href="#" style="color:var(--blue)">términos y condiciones</a> de SSTT SpA.
+          <label style="display:block;font-size:12px;color:var(--muted);cursor:pointer;line-height:1.55">
+            <input type="checkbox" id="coTyC" style="vertical-align:-2px;margin-right:7px">He leído y acepto los <a href="#" style="color:var(--black);font-weight:600">términos y condiciones</a> de SSTT SpA.
           </label>
         </div>
 
@@ -20598,17 +20695,8 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
           📄 Generar Cotización
         </button>
 
-        <!-- Finalizar compra -->
-        <button class="pay-now-btn" onclick="checkout()">
-          <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Finalizar compra
-        </button>
-        <div class="pay-badges">
-          <span class="pb2 pb2-wp">WebPay Plus</span>
-          <span class="pb2 pb2-tr">Transferencia BCI</span>
-          <span class="pb2 pb2-kh">Khipu</span>
-          <span class="pb2 pb2-bs">Bsale</span>
-        </div>
+        <!-- s140: el CTA "Finalizar compra" único vive en el sticky (#coNextBtn, señal).
+             Botón duplicado + badges de pago eliminados (redundantes con el selector de método). -->
       </div>
 
     </div><!-- /co-track -->
@@ -20623,7 +20711,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
     <div id="cartShipBar"></div><!-- s100 -->
     <div id="coStickyTotals">
       <!-- s128: Cupón + Gift card fusionados en un solo ítem colapsable (flecha ↓ despliega) -->
-      <div id="cuponGCToggle" onclick="toggleCuponGC()" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;padding:9px 12px;background:var(--g7);border:1px solid var(--border);border-radius:10px;cursor:pointer;user-select:none">
+      <div id="cuponGCToggle" onclick="toggleCuponGC()" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;padding:7px 12px;background:var(--g7);border:1px solid var(--border);border-radius:10px;cursor:pointer;user-select:none">
         <span style="display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--g1)"><span style="font-size:14px">🏷️</span>Cupón o gift card</span>
         <svg id="cuponGCArrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g3)" stroke-width="2.2" style="transition:transform .25s ease"><path d="M6 9l6 6 6-6"/></svg>
       </div>
@@ -20636,7 +20724,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <div class="totals" style="margin-bottom:4px">
         <div class="trow"><span>Subtotal neto</span><span id="tNeto">$0</span></div>
         <div class="trow"><span>IVA (19%)</span><span id="tIva">$0</span></div>
-        <div class="trow"><span id="tShipLbl">Despacho</span><span id="tShip">—</span></div>
+        <div class="trow" id="tShipRow"><span id="tShipLbl">Despacho</span><span id="tShip">—</span></div>
         <div class="trow" id="tDescCertRow" style="display:none;color:var(--g1);font-weight:700"><span>🏅 Desc. instalador cert.</span><span id="tDescCert">—</span></div>
         <div class="trow" id="tDescVolRow" style="display:none;color:var(--g1);font-weight:700"><span>📦 Dcto. volumen</span><span id="tDescVol">—</span></div>
         <div class="trow" id="tDescCuponRow" style="display:none;color:var(--g1);font-weight:700"><span>🏷️ Cupón descuento</span><span id="tDescCupon">—</span></div>
@@ -20667,7 +20755,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       style="display:flex;align-items:center;justify-content:center;gap:6px;width:100%;
              background:transparent;color:var(--blue);border:none;padding:2px 0 8px;
              font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font)">
-      &rgba(3; Prefiero cotizar por email
+      &#9993; Prefiero cotizar por email
     </button>
     <!-- Botón secundario: checkout formal con datos (factura/despacho) -->
     <button id="coNextBtn" class="pay-now-btn" style="margin-bottom:0;background:transparent;color:var(--g1,#444);border:1.5px solid var(--g5,#d2d2d7);box-shadow:none;font-size:12.5px;font-weight:600" onclick="event.stopPropagation();checkoutNext()">
@@ -27227,6 +27315,11 @@ function calcTotals() {
   if ((el = document.getElementById('tShip')))  el.textContent = ((_eg && _eg.aplica) || (_promoRes && _promoRes.envioGratis)) ? 'Gratis' : (ship > 0 ? fmt(ship) : (S.shipCourier || '—'));
   if ((el = document.getElementById('tShipLbl'))) el.textContent = S.shipCourier ? 'Despacho ('+S.shipCourier+')' : 'Despacho';
   if ((el = document.getElementById('tTotal'))) el.textContent = fmt(total);
+  // s140: fila Despacho solo cuando aporta info (cotizado / gratis / pasos Envío-Pago)
+  var _shipRow = document.getElementById('tShipRow');
+  if (_shipRow) _shipRow.style.display = (S.shipCourier || ship > 0 || (_eg && _eg.aplica) || (_promoRes && _promoRes.envioGratis) || (typeof coStep !== 'undefined' && coStep >= 2)) ? '' : 'none';
+  // s140: desglose disponible para updateCoResumen (paso 4)
+  window._lastTotals = { neto: netoConCupon, iva: ivaConCupon, ship: ship, total: total, envioGratis: !!((_eg && _eg.aplica) || (_promoRes && _promoRes.envioGratis)) };
   // s100: booster pack — barra despacho + trust + email
   try { if (typeof s100ShipBar==='function') s100ShipBar(neto); } catch(e){}
   try { if (typeof s100CartEnhance==='function') s100CartEnhance(); } catch(e){}
@@ -27333,7 +27426,7 @@ function renderCart() {
       <img class="citem-img" src="${imgProxyUrl(p.codigo)}" alt="${escapeHtml(p.nombre)}" onerror="this.style.opacity='.3'">
       <div>
         <div class="citem-name">
-          ${p.qty > 1 ? '<span style="display:inline-flex;align-items:center;justify-content:center;background:var(--red);color:#fff;font-size:9px;font-weight:800;border-radius:50%;width:16px;height:16px;margin-right:4px;flex-shrink:0">'+p.qty+'</span>' : ''}${p.nombre.length>50?p.nombre.slice(0,50)+'…':p.nombre}
+          ${p.nombre.length>50?p.nombre.slice(0,50)+'…':p.nombre}
         </div>
         <div class="citem-code">${p.codigo}</div>
         <div class="citem-qty">
@@ -33725,7 +33818,7 @@ function cookieConsentShowBanner() {
   if (document.getElementById('cookieConsentBanner')) return;
   var div = document.createElement('div');
   div.id = 'cookieConsentBanner';
-  div.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:99998;background:rgba(255,255,255,0.98);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-top:1px solid rgba(0,0,0,0.1);padding:20px;box-shadow:0 -8px 32px rgba(0,0,0,0.12);animation:ccBannerIn .4s cubic-bezier(.32,.72,0,1) both;font-family:inherit';
+  div.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9990;background:rgba(255,255,255,0.98);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);border-top:1px solid rgba(0,0,0,0.1);padding:20px;box-shadow:0 -8px 32px rgba(0,0,0,0.12);animation:ccBannerIn .4s cubic-bezier(.32,.72,0,1) both;font-family:inherit';
   div.innerHTML =
     '<div style="max-width:920px;margin:0 auto;display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap">' +
       '<div style="font-size:30px;flex-shrink:0">🍪</div>' +
@@ -44663,7 +44756,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s139', fecha:'Viernes 12 de Junio del 2026' };
+window.SSTT_VER = { ver:'s140', fecha:'Viernes 12 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -45188,7 +45281,7 @@ document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeTech
 // ══ CHECKOUT 4 PASOS ══════════════════════════════════════════
 var coStep = 0;
 var CO_STEPS = ['coP1','coP2','coP3','coP4'];
-var CO_TITLES = ['Tu Carro','Datos de Facturación','Despacho / Envío','Pago y Confirmación'];
+var CO_TITLES = ['Tu Carro','Facturación','Despacho','Pago']; // s140: cortos — el stepper ya nombra el paso; los largos quebraban el header a 2 líneas
 var CO_BTNS   = ['Continuar → Datos','Continuar → Envío','Continuar → Pago','Finalizar compra'];
 
 // s128: toggle del ítem fusionado Cupón/Gift card (colapsado por defecto; flecha ↓ despliega los 2 widgets)
@@ -45350,6 +45443,11 @@ function checkoutGoTo(step, force) {
   if (step > 0 && !S.cart.length) { return; }
   if (!force && step > coStep + 1) return;
   coStep = step;
+  // s140: visibilidad por paso vía CSS declarativo ([data-costep] en #cartDrawer)
+  var _dr = document.getElementById('cartDrawer');
+  if (_dr) _dr.setAttribute('data-costep', String(step));
+  // s140: refresca totales (y con ello la barra de envío gratis del paso 3)
+  try { calcTotals(); } catch(e) {}
   // Mover el track
   var track = document.getElementById('coTrack');
   var isMobile = window.matchMedia('(max-width:768px)').matches;
@@ -45393,7 +45491,7 @@ function checkoutGoTo(step, force) {
     nextBtn.textContent = CO_BTNS[step];
     // Guardar el paso actual en el botón para que el listener lo lea
     nextBtn.dataset.step = step;
-    nextBtn.style.background = step === 3 ? 'var(--green,#1A7F3C)' : 'var(--black)';
+    nextBtn.style.background = step === 3 ? 'var(--red,#D90F23)' : 'var(--black)'; // s140: cierre = señal
   }
   // P1 s87: WhatsApp = cierre primario en paso 0; checkout formal = secundario
   var _waBtn = document.getElementById('cotizaWaBtn');
@@ -45432,6 +45530,47 @@ function checkoutGoTo(step, force) {
   // Actualizar resumen en paso 4
   if (step === 3) updateCoResumen();
 }
+
+// s140: updateCoResumen no existía — checkoutGoTo(3) la llamaba y lanzaba ReferenceError,
+// dejando el "Resumen del pedido" del paso Pago completamente vacío. Pinta items, montos
+// (desde window._lastTotals que deja calcTotals) y el pie nombre · documento · envío.
+function updateCoResumen() {
+  try {
+    var t = window._lastTotals || {};
+    var esc = (typeof escapeHtml === 'function') ? escapeHtml : function(x){ return String(x); };
+    var list = document.getElementById('coResumenItems');
+    if (list) {
+      list.innerHTML = S.cart.map(function(c){
+        var nm = (c.nombre || c.codigo || ''); if (nm.length > 38) nm = nm.slice(0, 38) + '\u2026';
+        return '<div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline">' +
+          '<span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--g1)">' +
+          (c.qty > 1 ? '<b style="color:var(--black)">' + c.qty + '\u00d7</b> ' : '') + esc(nm) + '</span>' +
+          '<span style="font-family:var(--font-m);font-weight:600;color:var(--black);white-space:nowrap">' + fmt(getTramoPrice(c).neto * c.qty) + '</span></div>';
+      }).join('');
+    }
+    var el;
+    if ((el = document.getElementById('tNeto2')))  el.textContent = (t.neto  != null) ? fmt(t.neto)  : '\u2014';
+    if ((el = document.getElementById('tIva2')))   el.textContent = (t.iva   != null) ? fmt(t.iva)   : '\u2014';
+    if ((el = document.getElementById('tShip2')))  el.textContent = t.envioGratis ? 'Gratis' : (t.ship > 0 ? fmt(t.ship) : (S.shipCourier || 'Por cotizar'));
+    if ((el = document.getElementById('tShipLbl2'))) el.textContent = S.shipCourier ? ('Despacho (' + S.shipCourier + ')') : ((typeof entregaType !== 'undefined' && entregaType === 'retiro') ? 'Retiro en tienda' : 'Despacho');
+    if ((el = document.getElementById('tTotal2'))) el.textContent = (t.total != null) ? fmt(t.total) : '\u2014';
+    var nombre = '';
+    try {
+      nombre = (typeof docType !== 'undefined' && docType === 'factura')
+        ? (((document.getElementById('cRazon') || {}).value) || '').trim()
+        : (((document.getElementById('cNombre') || {}).value) || '').trim();
+    } catch(e) {}
+    if ((el = document.getElementById('coResumenNombre'))) el.textContent = nombre || '\u2014';
+    if ((el = document.getElementById('coResumenDoc'))) el.textContent = (typeof docType !== 'undefined' && docType === 'factura') ? 'Factura electr\u00f3nica' : 'Boleta electr\u00f3nica';
+    var envTxt = 'Despacho a domicilio';
+    if (typeof entregaType !== 'undefined') {
+      if (entregaType === 'retiro') envTxt = 'Retiro en tienda';
+      else if (entregaType === 'agencia') envTxt = 'Despacho a agencia';
+    }
+    if ((el = document.getElementById('coResumenEnvio'))) el.textContent = envTxt;
+  } catch(e) { console.warn('[coResumen]', e); }
+}
+window.updateCoResumen = updateCoResumen;
 
 function renderCrossSell() {
   var wrap = document.getElementById('csCrossSell');
@@ -88309,7 +88448,7 @@ function _getKBMatches(chatHistory) {
       var style = document.createElement('style');
       style.id = 'sstt-low-tier-perf';
       style.textContent = [
-        '* { backdrop-filter: blur(6px) !important; -webkit-backdrop-filter: blur(6px) !important; }',
+        '* { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }', // s140: era blur(6px) en * — cada elemento (body incluido) se volvía containing block y rompía TODO position:fixed (drawer del carro cortado en móviles low-tier). none = más barato y sin efecto colateral.
         '.sstt-liquid-glass, [class*="glass"] { backdrop-filter: blur(6px) saturate(140%) !important; }',
         '#aiFab svg { animation: none !important; }',
         '.lg-orb, .lg-orb-one, .lg-orb-two, .lg-orb-three { display:none !important; }'
@@ -90542,10 +90681,21 @@ window.generateShoppingFeed = function() {
       el.innerHTML='<div class="cart-email"><div class="ce-ok"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Te avisaremos sobre tu carro a <b>'+esc(saved)+'</b></div></div>';
       return;
     }
+    // s140: colapsado por defecto — una línea; el input aparece al tocar
+    if (!el._ceOpen){
+      el.innerHTML='<div class="cart-email cart-email-min"><button type="button" class="ce-open" onclick="s100CartEmailOpen()">&#128190; &iquest;Sin tiempo ahora? Guardar carro por email</button></div>';
+      return;
+    }
     el.innerHTML='<div class="cart-email">'
-      +'<div class="ce-lbl"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>&iquest;Sin tiempo ahora? Te guardamos el carro</div>'
       +'<div class="ce-row"><input type="email" id="cartEmailInput" placeholder="tu@correo.cl" autocomplete="email">'
       +'<button onclick="s100SaveCartEmail()">Guardar</button></div></div>';
+  };
+
+  // s140: expandir captura de email y enfocar
+  window.s100CartEmailOpen = function(){
+    var el=document.getElementById('cartEmailCapture'); if(!el) return;
+    el._ceOpen = true; window.s100CartEmail();
+    var i=document.getElementById('cartEmailInput'); if(i) i.focus();
   };
 
   window.s100SaveCartEmail = function(){
