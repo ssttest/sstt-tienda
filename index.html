@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s126 -->
+<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s129 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -20619,10 +20619,17 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
     <div id="cartCrossSell"></div>
     <div id="cartShipBar"></div><!-- s100 -->
     <div id="coStickyTotals">
-      <!-- s98: Widget cupón descuento (demo simulado) -->
-      <div id="cuponWidget" style="margin-bottom:6px;padding:8px 10px;background:var(--g7);border:1px solid var(--border);border-radius:10px"></div>
-      <!-- s98: Widget gift card (demo simulado) -->
-      <div id="giftcardWidget" style="margin-bottom:6px;padding:8px 10px;background:var(--g7);border:1px solid var(--border);border-radius:10px"></div>
+      <!-- s128: Cupón + Gift card fusionados en un solo ítem colapsable (flecha ↓ despliega) -->
+      <div id="cuponGCToggle" onclick="toggleCuponGC()" style="display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px;padding:9px 12px;background:var(--g7);border:1px solid var(--border);border-radius:10px;cursor:pointer;user-select:none">
+        <span style="display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--g1)"><span style="font-size:14px">🏷️</span>Cupón o gift card</span>
+        <svg id="cuponGCArrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--g3)" stroke-width="2.2" style="transition:transform .25s ease"><path d="M6 9l6 6 6-6"/></svg>
+      </div>
+      <div id="cuponGCBody" style="display:none">
+        <!-- s98: Widget cupón descuento (demo simulado) -->
+        <div id="cuponWidget" style="margin-bottom:6px;padding:8px 10px;background:var(--g7);border:1px solid var(--border);border-radius:10px"></div>
+        <!-- s98: Widget gift card (demo simulado) -->
+        <div id="giftcardWidget" style="margin-bottom:6px;padding:8px 10px;background:var(--g7);border:1px solid var(--border);border-radius:10px"></div>
+      </div>
       <div class="totals" style="margin-bottom:4px">
         <div class="trow"><span>Subtotal neto</span><span id="tNeto">$0</span></div>
         <div class="trow"><span>IVA (19%)</span><span id="tIva">$0</span></div>
@@ -40210,7 +40217,7 @@ function aiMakeOptions(title, options, stateKey) {
   html += '<div style="display:flex;flex-wrap:wrap;gap:5px">';
   options.forEach(function(opt) {
     html += '<button onclick="aiSelectOption(this,\'' + stateKey + '\',\'' + opt.value.replace(/'/g,"\\'") + '\',\'' + opt.label.replace(/'/g,"\\'") + '\')" ' +
-      'style="background:#f5f5f7;color:#1a1a1a;border:1.5px solid #e0e0e0;border-radius:20px;' +
+      'style="background:#f5f5f7;color:var(--black);border:1.5px solid var(--g5);border-radius:20px;' +
       'padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;' +
       'font-family:inherit">' + opt.label + '</button>';
   });
@@ -40220,9 +40227,9 @@ function aiMakeOptions(title, options, stateKey) {
 
 function aiSelectOption(btn, stateKey, value, label) {
   // Marcar visualmente
-  btn.style.background = '#1a1a1a';
+  btn.style.background = 'var(--black)';
   btn.style.color = '#fff';
-  btn.style.borderColor = '#1a1a1a';
+  btn.style.borderColor = 'var(--black)';
   btn.disabled = true;
 
   // Guardar en estado
@@ -40381,8 +40388,8 @@ function aiGuideSearch() {
       var resp = 'Encontré <strong>' + localResult.totalFound + '</strong> producto' + (localResult.totalFound!==1?'s':'') + ':';
       resp += '<div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">' +
         '<button onclick="aiAddAllToCart()" style="background:#D90F23;color:#fff;border:none;border-radius:10px;padding:8px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🛒 Agregar todo al carro (' + aiLastProds.length + ')</button>' +
-        '<button onclick="aiAskAPI()" style="background:#1a1a1a;color:#fff;border:none;border-radius:10px;padding:8px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🤖 Análisis IA</button>' +
-        '<button onclick="aiGuideReset()" style="background:#f5f5f7;color:#333;border:1.5px solid #ddd;border-radius:10px;padding:8px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🔄 Nueva búsqueda</button>' +
+        '<button onclick="aiAskAPI()" style="background:var(--black);color:#fff;border:none;border-radius:10px;padding:8px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🤖 Análisis IA</button>' +
+        '<button onclick="aiGuideReset()" style="background:#f5f5f7;color:var(--g1);border:1.5px solid #ddd;border-radius:10px;padding:8px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit">🔄 Nueva búsqueda</button>' +
       '</div>';
       aiAddMsg('bot', resp, aiLastProds);
       aiSpeak('Encontré ' + localResult.totalFound + ' productos. Aquí los más relevantes.');
@@ -41192,7 +41199,7 @@ function aiSend(fromVoice) {
         '<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>' +
         'Agregar todo al carro (' + aiLastProds.length + ')' +
       '</button>' +
-      '<button onclick="aiAskAPI()" style="background:#1a1a1a;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)">🤖 Pedir asesoría IA</button>' +
+      '<button onclick="aiAskAPI()" style="background:var(--black);color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)">🤖 Pedir asesoría IA</button>' +
     '</div>';
 
     aiAddMsg('bot', respText + actionBtns, aiLastProds);
@@ -41302,7 +41309,7 @@ function aiSend(fromVoice) {
           '<svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>' +
           'Agregar todo al carro (' + prods.length + ')' +
         '</button>' +
-        '<button onclick="aiOpenCart()" style="background:#1a1a1a;color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)">' +
+        '<button onclick="aiOpenCart()" style="background:var(--black);color:#fff;border:none;border-radius:10px;padding:9px 14px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:var(--font)">' +
           'Ver carro' +
         '</button>' +
       '</div>';
@@ -42027,7 +42034,7 @@ window.addEventListener('pagehide', aiReleaseAllMic);
           '<path d="M20 3C20 3 23 15 34 15C34 15 23 17 20 29C20 29 17 17 6 15C6 15 17 15 20 3Z" fill="url(#gHP)"/>' +
         '</svg>' +
         '<div style="flex:1">' +
-          '<div style="font-size:13px;font-weight:700;color:#1a1a1a;letter-spacing:-.2px">Asesor de Ventas</div>' +
+          '<div style="font-size:13px;font-weight:700;color:var(--black);letter-spacing:-.2px">Asesor de Ventas</div>' +
           '<div style="font-size:10px;margin-top:1px;font-weight:400;display:flex;align-items:center;gap:5px"><span class="ai-status-dot" id="orbStatusDot"></span><span class="ai-status-lbl online" id="orbStatusLbl">En línea</span></div>' +
         '</div>' +
         // s108: 🎙️ del header eliminado — voz unificada en el único mic del composer (aiVoiceTap)
@@ -42039,7 +42046,7 @@ window.addEventListener('pagehide', aiReleaseAllMic);
       '<div id="aiMsgs" style="flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:10px;scrollbar-width:thin">' +
         '<div style="display:flex;gap:8px;align-items:flex-end">' +
           '<div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,'+RED+',#ff6b6b);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;box-shadow:0 2px 8px rgba(217,15,35,0.3)">✦</div>' +
-          '<div style="max-width:82%;padding:10px 14px;border-radius:6px 18px 18px 18px;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,0.07);font-size:13px;line-height:1.55;color:#1a1a1a;box-shadow:0 1px 4px rgba(0,0,0,0.06)">' +
+          '<div style="max-width:82%;padding:10px 14px;border-radius:6px 18px 18px 18px;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,0.07);font-size:13px;line-height:1.55;color:var(--black);box-shadow:0 1px 4px rgba(0,0,0,0.06)">' +
             'Hola, soy el Asesor de Ventas de SSTT. Cuéntame qué necesitas — puedo recomendarte productos, armar cotizaciones o resolver dudas de compatibilidad.' +
           '</div>' +
         '</div>' +
@@ -42052,11 +42059,11 @@ window.addEventListener('pagehide', aiReleaseAllMic);
       // Chips — ocultos por defecto, aparecen contextualmente
       '<div id="aiChips" style="display:none;gap:4px;flex-wrap:wrap;padding:0 12px 8px">' +
         ['📹 Full-Color IP 2.8mm','🖥️ Grabador 16ch 5MP','🏗️ Kit 4 cámaras HDCVI','🔭 Exterior IK10','📡 Varifocal 8MP','💰 Las 4 IP más baratas']
-          .map(function(t){ return '<span onclick="aiChip(this)" style="background:rgba(255,255,255,0.7);color:#1a1a1a;border:1px solid rgba(0,0,0,0.1);border-radius:16px;padding:5px 11px;font-size:11.5px;font-weight:500;cursor:pointer;white-space:nowrap;backdrop-filter:blur(8px)">'+t+'</span>'; }).join('') +
+          .map(function(t){ return '<span onclick="aiChip(this)" style="background:rgba(255,255,255,0.7);color:var(--black);border:1px solid rgba(0,0,0,0.1);border-radius:16px;padding:5px 11px;font-size:11.5px;font-weight:500;cursor:pointer;white-space:nowrap;backdrop-filter:blur(8px)">'+t+'</span>'; }).join('') +
       '</div>' +
       // Input — glass + textarea auto-expandible borde a borde en mobile
       '<div id="aiInputRow" style="padding:10px 12px;border-top:1px solid rgba(0,0,0,0.06);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;background:rgba(255,255,255,0.5);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)">' +
-        '<textarea id="aiInp" rows="1" placeholder="Escríbeme lo que necesitas…" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();aiSend();}" oninput="this.style.height=\'auto\';this.style.height=Math.min(this.scrollHeight,140)+\'px\'" style="flex:1;border:1px solid rgba(0,0,0,0.1);border-radius:16px;padding:11px 14px;font-size:14px;outline:none;background:rgba(255,255,255,0.85);font-family:inherit;color:#1a1a1a;resize:none;overflow-y:auto;line-height:1.45;min-height:44px;max-height:140px;display:block;width:0;box-sizing:border-box"></textarea>' +
+        '<textarea id="aiInp" rows="1" placeholder="Escríbeme lo que necesitas…" onkeydown="if(event.key===\'Enter\'&&!event.shiftKey){event.preventDefault();aiSend();}" oninput="this.style.height=\'auto\';this.style.height=Math.min(this.scrollHeight,140)+\'px\'" style="flex:1;border:1px solid rgba(0,0,0,0.1);border-radius:16px;padding:11px 14px;font-size:14px;outline:none;background:rgba(255,255,255,0.85);font-family:inherit;color:var(--black);resize:none;overflow-y:auto;line-height:1.45;min-height:44px;max-height:140px;display:block;width:0;box-sizing:border-box"></textarea>' +
         '<div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">' +
           '<button onclick="aiVoiceTap()" id="aiMicBtn" class="ai-mic ai-mic--off" title="Hablar" aria-pressed="false">' + // s108: único control de voz (estado por clase)
             '<svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><rect x="9" y="2" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 19v3M8 22h8"/></svg>' +
@@ -42774,9 +42781,9 @@ window.mktSubmitInterest = function() {
         + '<button onclick="mktSellerCloseModal()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,.2);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer">✕</button>'
       + '</div>'
       + '<div style="display:flex;gap:0;border-bottom:1px solid #eee;text-align:center">'
-        + '<div style="flex:1;padding:13px"><div style="font-size:19px;font-weight:900;color:#111">'+s.productos+'</div><div style="font-size:10.5px;color:#888">Productos</div></div>'
-        + '<div style="flex:1;padding:13px;border-left:1px solid #eee"><div style="font-size:19px;font-weight:900;color:#111">'+s.ventas+'</div><div style="font-size:10.5px;color:#888">Ventas</div></div>'
-        + '<div style="flex:1;padding:13px;border-left:1px solid #eee"><div style="font-size:19px;font-weight:900;color:#F59E0B">'+avgRev+' ★</div><div style="font-size:10.5px;color:#888">'+revs.length+' reseñas</div></div>'
+        + '<div style="flex:1;padding:13px"><div style="font-size:19px;font-weight:900;color:#111">'+s.productos+'</div><div style="font-size:10.5px;color:var(--g3)">Productos</div></div>'
+        + '<div style="flex:1;padding:13px;border-left:1px solid #eee"><div style="font-size:19px;font-weight:900;color:#111">'+s.ventas+'</div><div style="font-size:10.5px;color:var(--g3)">Ventas</div></div>'
+        + '<div style="flex:1;padding:13px;border-left:1px solid #eee"><div style="font-size:19px;font-weight:900;color:#F59E0B">'+avgRev+' ★</div><div style="font-size:10.5px;color:var(--g3)">'+revs.length+' reseñas</div></div>'
       + '</div>'
       + '<div style="padding:16px 20px">'
         + '<div style="font-size:11.5px;color:#666;margin-bottom:4px">Especialidad</div>'
@@ -44649,8 +44656,9 @@ function waUpdateWaLink(userMsg, reply) {
 // s101: OBJETO único. Cambiar SOLO ver+fecha aquí; el JS rellena todos
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
+// s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/#333/#888/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
 window.SSTT_VER = {
-  ver:   's126',
+  ver:   's129',
   fecha: 'Jueves 11 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
@@ -45162,6 +45170,17 @@ var coStep = 0;
 var CO_STEPS = ['coP1','coP2','coP3','coP4'];
 var CO_TITLES = ['Tu Carro','Datos de Facturación','Despacho / Envío','Pago y Confirmación'];
 var CO_BTNS   = ['Continuar → Datos','Continuar → Envío','Continuar → Pago','Finalizar compra'];
+
+// s128: toggle del ítem fusionado Cupón/Gift card (colapsado por defecto; flecha ↓ despliega los 2 widgets)
+function toggleCuponGC(){
+  var b=document.getElementById('cuponGCBody');
+  var a=document.getElementById('cuponGCArrow');
+  if(!b) return;
+  var abierto = b.style.display!=='none';
+  b.style.display = abierto ? 'none' : 'block';
+  if(a) a.style.transform = abierto ? 'rotate(0deg)' : 'rotate(180deg)';
+}
+window.toggleCuponGC = toggleCuponGC;
 
 
 function cartCrossSellRender() {
@@ -49714,7 +49733,7 @@ function fovCamUpdateResSim(rA) {
   else if (ppmAtD >= 125) quality = '<span style="color:#27ae60">Reconocimiento</span> (persona conocida)';
   else if (ppmAtD >= 62) quality = '<span style="color:#f39c12">Observación</span> (acción visible)';
   else if (ppmAtD >= 25) quality = '<span style="color:#e74c3c">Detección</span> (presencia)';
-  else quality = '<span style="color:#888">Insuficiente</span> (silueta apenas)';
+  else quality = '<span style="color:var(--g3)">Insuficiente</span> (silueta apenas)';
   info.innerHTML = 'A '+d+'m la <b>'+rA.cam.cod+'</b> ve un ancho de <b>'+widAtD.toFixed(1)+'m</b> con densidad de <b>'+ppmAtD.toFixed(0)+' px/m</b> → '+quality;
 }
 
@@ -50316,7 +50335,7 @@ function fovPlanRenderCamChips() {
   var chips = document.getElementById('fovMapsCamChips');
   if (!chips) return;
   if (FOVTRACK.items.length === 0) {
-    chips.innerHTML = '<div style="font-size:11px;color:#888;padding:4px">Selecciona cámaras en el simulador para usarlas en el plano</div>';
+    chips.innerHTML = '<div style="font-size:11px;color:var(--g3);padding:4px">Selecciona cámaras en el simulador para usarlas en el plano</div>';
     return;
   }
   chips.innerHTML = FOVTRACK.items.slice(0, 8).map(function(it, i){
@@ -50791,13 +50810,13 @@ function fovPlanUpdateInfo() {
       html += '<b style="color:#fff">'+(it.isThermal?'🔥 ':'')+(FOVPLAN.selectedIdx+1)+' · '+it.cod+'</b>';
       html += '<button onclick="fovPlanRemoveCam('+FOVPLAN.selectedIdx+')" style="background:rgba(217,15,35,.2);color:#ff6b7e;border:1px solid rgba(217,15,35,.3);padding:4px 8px;border-radius:5px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font)">Quitar</button>';
       html += '</div>';
-      html += '<div style="font-size:10px;color:#bbb;line-height:1.5">'+it.mp+'MP · '+(typeof it.focal==='number'?it.focal.toFixed(1):it.focal)+'mm · '+r.angH.toFixed(0)+'° H · alcance '+(r.thermalDRI?r.thermalDRI.human.D.toFixed(0):r.doriDists[0].toFixed(0))+'m</div>';
+      html += '<div style="font-size:10px;color:var(--g4);line-height:1.5">'+it.mp+'MP · '+(typeof it.focal==='number'?it.focal.toFixed(1):it.focal)+'mm · '+r.angH.toFixed(0)+'° H · alcance '+(r.thermalDRI?r.thermalDRI.human.D.toFixed(0):r.doriDists[0].toFixed(0))+'m</div>';
       // s54: DORI level selector
       var doriColors = ['#e74c3c','#f39c12','#27ae60','#2980b9'];
       var doriNames = ['Detectar','Observar','Reconocer','Identificar'];
       var curDori = c.doriLevel || 0;
       html += '<div style="display:flex;gap:4px;margin-top:5px;align-items:center">';
-      html += '<span style="font-size:9px;color:#888;margin-right:2px">DORI:</span>';
+      html += '<span style="font-size:9px;color:var(--g3);margin-right:2px">DORI:</span>';
       for (var di = 0; di < 4; di++) {
         var isAct = di === curDori;
         var dd = r.doriDists ? r.doriDists[di] : 0;
@@ -50808,7 +50827,7 @@ function fovPlanUpdateInfo() {
       html += '</div>';
       // s54: Rotation controls
       html += '<div style="display:flex;align-items:center;gap:8px;margin-top:6px">';
-      html += '<span style="font-size:10px;color:#888">Girar:</span>';
+      html += '<span style="font-size:10px;color:var(--g3)">Girar:</span>';
       html += '<button onclick="fovPlanRotateCam('+FOVPLAN.selectedIdx+',-45)" style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);width:30px;height:26px;border-radius:5px;font-size:13px;cursor:pointer;font-family:var(--font)" title="Girar 45° izquierda">↺</button>';
       html += '<button onclick="fovPlanRotateCam('+FOVPLAN.selectedIdx+',-15)" style="background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15);width:30px;height:26px;border-radius:5px;font-size:11px;cursor:pointer;font-family:var(--font)" title="Girar 15° izquierda">↺15°</button>';
       html += '<span style="font-size:10px;color:#fff;min-width:35px;text-align:center">'+Math.round(((c.rot % 360) + 360) % 360)+'°</span>';
@@ -51891,7 +51910,7 @@ function _fovSvUpdateInfo() {
     var dd = rA.doriDists || [30,12,6,3];
     var dl = FOVSTREET.doriLevel;
     html += ' · <span style="color:' + doriColors[dl] + '">' + doriNames[dl] + ' ' + Math.round(dd[dl]) + 'm</span>';
-    html += ' <span style="font-size:9px;color:#888">(click en el cono para alternar DORI)</span>';
+    html += ' <span style="font-size:9px;color:var(--g3)">(click en el cono para alternar DORI)</span>';
   }
   if (FOVSTREET.activeCamIdx >= 0) {
     var ac = FOVPLAN.cameras[FOVSTREET.activeCamIdx];
@@ -52001,7 +52020,7 @@ window.fovPreviewUpdate = function() {
              ppmAtD >= 125 ? '<span style="color:#27ae60;font-weight:800">Reconocimiento</span>' :
              ppmAtD >= 62  ? '<span style="color:#f39c12;font-weight:800">Observación</span>' :
              ppmAtD >= 25  ? '<span style="color:#e74c3c;font-weight:800">Detección</span>' :
-                             '<span style="color:#888;font-weight:800">Insuficiente</span>';
+                             '<span style="color:var(--g3);font-weight:800">Insuficiente</span>';
     }
     html += '<div class="fov-prev-card">';
     html += '<canvas id="' + canvasId + '" class="fov-prev-canvas"></canvas>';
@@ -52127,7 +52146,7 @@ window.fovAuditLoad = function(file) {
   document.getElementById('fovAuditResult').style.display = 'block';
 
   var analysisEl = document.getElementById('fovAuditAnalysis');
-  analysisEl.innerHTML = '<div style="text-align:center;padding:20px;color:#888"><div style="font-size:24px">⏳</div>Analizando imagen...</div>';
+  analysisEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--g3)"><div style="font-size:24px">⏳</div>Analizando imagen...</div>';
 
   // Cargar imagen para análisis
   var imgObj = new Image();
@@ -55113,7 +55132,7 @@ function fovQwBuildResult() {
   var top = candidates.slice(0, 4);
 
   if (top.length === 0) {
-    return '<div style="text-align:center;padding:30px;color:#888"><div style="font-size:36px">😕</div><div style="margin-top:10px;font-weight:700">No encontramos cámaras que cumplan estos requisitos exactamente</div><div style="margin-top:6px;font-size:12px">Considera revisar requisitos: distancia, iluminación o tipo</div><button onclick="fovOpenQuickWin()" class="fov-qw-restart">↺ Empezar de nuevo</button></div>';
+    return '<div style="text-align:center;padding:30px;color:var(--g3)"><div style="font-size:36px">😕</div><div style="margin-top:10px;font-weight:700">No encontramos cámaras que cumplan estos requisitos exactamente</div><div style="margin-top:6px;font-size:12px">Considera revisar requisitos: distancia, iluminación o tipo</div><button onclick="fovOpenQuickWin()" class="fov-qw-restart">↺ Empezar de nuevo</button></div>';
   }
 
   var html = '<div class="fov-qw-result">';
@@ -57125,23 +57144,23 @@ if (document.readyState === 'loading') {
     var camSuggestions = bomCollectCamSuggestions(camMP);
     if (camSuggestions.length > 0 && fovItems.length === 0) {
       html += '<div style="margin-bottom:8px">';
-      html += '<div style="font-size:10px;color:#888;margin-bottom:4px;font-weight:700">📌 Seleccionar modelo del catálogo (recientes, FOV, fichas visitadas)</div>';
+      html += '<div style="font-size:10px;color:var(--g3);margin-bottom:4px;font-weight:700">📌 Seleccionar modelo del catálogo (recientes, FOV, fichas visitadas)</div>';
       html += '<div id="bomCamSuggest" style="display:flex;flex-wrap:wrap;gap:4px;max-height:120px;overflow-y:auto;padding:2px">';
       camSuggestions.forEach(function(cs){
         var isSelected = (saved.selectedCamCod === cs.codigo);
         html += '<button type="button" onclick="bomSelectCamModel(\''+cs.codigo+'\')" style="';
         html += 'display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:6px;font-size:10px;font-family:var(--font);cursor:pointer;transition:all .15s;';
-        html += isSelected ? 'background:#1E5FA8;color:#fff;border:1.5px solid #1E5FA8;' : 'background:rgba(30,95,168,.06);color:#333;border:1px solid rgba(30,95,168,.2);';
+        html += isSelected ? 'background:#1E5FA8;color:#fff;border:1.5px solid #1E5FA8;' : 'background:rgba(30,95,168,.06);color:var(--g1);border:1px solid rgba(30,95,168,.2);';
         html += '">';
         html += '<span style="font-size:8px;padding:1px 4px;border-radius:3px;font-weight:700;' +
-          (cs.source==='fov' ? 'background:#27ae60;color:#fff' : cs.source==='viewed' ? 'background:#f39c12;color:#fff' : cs.source==='cart' ? 'background:#e74c3c;color:#fff' : 'background:#888;color:#fff') +
+          (cs.source==='fov' ? 'background:#27ae60;color:#fff' : cs.source==='viewed' ? 'background:#f39c12;color:#fff' : cs.source==='cart' ? 'background:#e74c3c;color:#fff' : 'background:var(--g3);color:#fff') +
           '">' + (cs.source==='fov'?'FOV':cs.source==='viewed'?'VISTA':cs.source==='cart'?'CARRO':'CAT') + '</span>';
         html += '<span style="font-weight:600">'+cs.codigo+'</span>';
         html += '<span style="opacity:.7">'+cs.mp+'MP · $'+tP(cs).toLocaleString("es-CL")+'</span>';
         html += '</button>';
       });
       html += '</div>';
-      html += '<button type="button" onclick="bomClearCamModel()" style="margin-top:4px;font-size:9px;color:#888;background:none;border:none;cursor:pointer;font-family:var(--font);text-decoration:underline">✕ Usar auto-selección</button>';
+      html += '<button type="button" onclick="bomClearCamModel()" style="margin-top:4px;font-size:9px;color:var(--g3);background:none;border:none;cursor:pointer;font-family:var(--font);text-decoration:underline">✕ Usar auto-selección</button>';
       html += '</div>';
     }
 
@@ -90185,7 +90204,7 @@ window.toolOut=(function(){
       if(navigator.clipboard){navigator.clipboard.writeText(s).then(function(){toast('Resumen copiado');}).catch(function(){toast('No se pudo copiar');});}},
     print:function(){var w=window.open('','_blank');if(!w){toast('Permite ventanas emergentes');return;}
       var c=el();var inner=c?c.innerHTML:'';
-      w.document.write('<html><head><meta charset="utf-8"><title>SSTT - '+title()+'</title></head><body style="font-family:system-ui,-apple-system,sans-serif;padding:28px;max-width:820px;margin:auto;color:#1a2433"><div style="border-bottom:2px solid #1E5FA8;padding-bottom:8px;margin-bottom:18px"><b style="color:#1E5FA8;font-size:18px">SSTT</b> &mdash; '+title()+'</div>'+inner+'<div style="margin-top:24px;font-size:11px;color:#888">Generado en ssttest.github.io/sstt-tienda</div></body></html>');
+      w.document.write('<html><head><meta charset="utf-8"><title>SSTT - '+title()+'</title></head><body style="font-family:system-ui,-apple-system,sans-serif;padding:28px;max-width:820px;margin:auto;color:#1a2433"><div style="border-bottom:2px solid #1E5FA8;padding-bottom:8px;margin-bottom:18px"><b style="color:#1E5FA8;font-size:18px">SSTT</b> &mdash; '+title()+'</div>'+inner+'<div style="margin-top:24px;font-size:11px;color:var(--g3)">Generado en ssttest.github.io/sstt-tienda</div></body></html>');
       w.document.close();setTimeout(function(){try{w.print();}catch(e){}},450);},
     share:function(){var url=location.origin+location.pathname+'#tool='+cur;
       var data={title:'SSTT - '+title(),text:title()+' - Meson Tecnico SSTT',url:url};
@@ -90465,6 +90484,8 @@ window.generateShoppingFeed = function() {
   // ── Carro: barra envío gratis (regla s102) + retiro gratis (real) ──
   window.s100ShipBar = function(neto){
     var el=document.getElementById('cartShipBar'); if(!el) return;
+    // s128: envío gratis + retiro pertenecen al paso 3 (Envío). Fuera del carro (paso 1) y datos (paso 2).
+    if (!(typeof coStep !== 'undefined' && coStep === 2)) { el.innerHTML=''; return; }
     var html='';
     var info = (typeof window.envioGratisCalc==='function') ? window.envioGratisCalc(neto, _envioMetodoSel()) : null;
     if (info){
@@ -90482,6 +90503,7 @@ window.generateShoppingFeed = function() {
   // ── Carro: trust strip ──
   window.s100CartTrust = function(){
     var el=document.getElementById('cartTrustStrip'); if(!el) return;
+    el.innerHTML=''; return; // s129: trust strip eliminado del carro (decisión Jorge). Para revertir, quitar esta línea.
     el.innerHTML='<div class="cart-trust">'
       +'<div class="ct-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>Compra segura &middot; SSL</div>'
       +'<div class="ct-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E5FA8" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Garant&iacute;a oficial Dahua</div>'
@@ -91005,7 +91027,7 @@ window.generateShoppingFeed = function() {
           '<div class="sadm-row" style="gap:7px"><b style="font-size:14px">'+esc(c.code)+'</b>' +
             '<span class="sadm-tag '+(c.activo?'sadm-on':'sadm-off')+'">'+(c.activo?'ACTIVO':'OFF')+'</span></div>' +
           '<div class="sadm-row" style="gap:6px">' +
-            '<button data-act="cup-tog" data-id="'+esc(c.code)+'" style="'+BTN+';background:'+(c.activo?'#e8f5e9':'#eef')+';color:#333">'+(c.activo?'Desactivar':'Activar')+'</button>' +
+            '<button data-act="cup-tog" data-id="'+esc(c.code)+'" style="'+BTN+';background:'+(c.activo?'#e8f5e9':'#eef')+';color:var(--g1)">'+(c.activo?'Desactivar':'Activar')+'</button>' +
             '<button data-act="cup-del" data-id="'+esc(c.code)+'" class="sadm-del" style="'+BTN+'">Eliminar</button>' +
           '</div></div>' +
         '<div class="sadm-grid" style="margin-top:9px">' +
@@ -91052,7 +91074,7 @@ window.generateShoppingFeed = function() {
           '<div class="sadm-row" style="gap:7px"><b style="font-size:14px">'+esc(g.code)+'</b>' +
             '<span class="sadm-tag '+(g.activo?'sadm-on':'sadm-off')+'">'+(g.activo?'ACTIVA':'OFF')+'</span></div>' +
           '<div class="sadm-row" style="gap:6px">' +
-            '<button data-act="gc-tog" data-id="'+esc(g.code)+'" style="'+BTN+';background:'+(g.activo?'#f3e5f5':'#eef')+';color:#333">'+(g.activo?'Desactivar':'Activar')+'</button>' +
+            '<button data-act="gc-tog" data-id="'+esc(g.code)+'" style="'+BTN+';background:'+(g.activo?'#f3e5f5':'#eef')+';color:var(--g1)">'+(g.activo?'Desactivar':'Activar')+'</button>' +
             '<button data-act="gc-del" data-id="'+esc(g.code)+'" class="sadm-del" style="'+BTN+'">Eliminar</button>' +
           '</div></div>' +
         '<div class="sadm-grid" style="margin-top:9px">' +
@@ -91086,7 +91108,7 @@ window.generateShoppingFeed = function() {
           '<div class="sadm-row" style="gap:7px"><b style="font-size:13.5px">'+esc(p.nombre)+'</b>' +
             '<span class="sadm-tag '+(p.activo?'sadm-on':'sadm-off')+'">'+(p.activo?'ACTIVA':'OFF')+'</span></div>' +
           '<div class="sadm-row" style="gap:6px">' +
-            '<button data-act="promo-tog" data-id="'+esc(p.id)+'" style="'+BTN+';background:'+(p.activo?'#fff3e0':'#eef')+';color:#333">'+(p.activo?'Desactivar':'Activar')+'</button>' +
+            '<button data-act="promo-tog" data-id="'+esc(p.id)+'" style="'+BTN+';background:'+(p.activo?'#fff3e0':'#eef')+';color:var(--g1)">'+(p.activo?'Desactivar':'Activar')+'</button>' +
             '<button data-act="promo-del" data-id="'+esc(p.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button>' +
           '</div></div>' +
         '<div class="sadm-grid" style="margin-top:9px">' +
@@ -91393,7 +91415,7 @@ window.generateShoppingFeed = function() {
       var pr=kitPrecio(k);
       return '<div class="sadm-card">'+
         '<div class="sadm-row" style="justify-content:space-between"><div class="sadm-row" style="gap:7px"><b style="font-size:13.5px">🧰 '+esc(k.nombre)+'</b><span class="sadm-tag '+(k.activo?'sadm-on':'sadm-off')+'">'+(k.activo?'ACTIVO':'OFF')+'</span></div>'+
-          '<div class="sadm-row" style="gap:6px"><button data-act="kit-tog" data-id="'+esc(k.id)+'" style="'+BTN+';background:'+(k.activo?'#fff3e0':'#eef')+';color:#333">'+(k.activo?'Desactivar':'Activar')+'</button><button data-act="kit-del" data-id="'+esc(k.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button></div></div>'+
+          '<div class="sadm-row" style="gap:6px"><button data-act="kit-tog" data-id="'+esc(k.id)+'" style="'+BTN+';background:'+(k.activo?'#fff3e0':'#eef')+';color:var(--g1)">'+(k.activo?'Desactivar':'Activar')+'</button><button data-act="kit-del" data-id="'+esc(k.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button></div></div>'+
         '<div class="sadm-grid" style="margin-top:9px">'+
           fld('Nombre','<input data-kind="kit" data-id="'+esc(k.id)+'" data-field="nombre" value="'+esc(k.nombre)+'" style="'+INP+'">')+
           fld('Descripción','<input data-kind="kit" data-id="'+esc(k.id)+'" data-field="descripcion" value="'+esc(k.descripcion||'')+'" style="'+INP+'">')+
