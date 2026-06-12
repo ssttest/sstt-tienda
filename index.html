@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s135 -->
+<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s136 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -39,9 +39,9 @@
   --blue-p:   #EAF1FB;
   --blue-p2:  #C0D4F0;
   --black:    #1A1A1A;
-  --g1:       rgba(333;
+  --g1:       #333333;
   --g2:       #555555;
-  --g3:       rgba(888;
+  --g3:       #888888;
   --g4:       #BBBBBB;
   --g5:       #E0E0E0;
   --g6:       #F5F5F5;
@@ -6300,10 +6300,12 @@ input[data-validated="1"]::after {
   inherits: false;
 }
 
+@keyframes sstt_orbpulse_a { /* s136: wrapper restaurado (pasos huerfanos sin opener) */
   40%  { box-shadow: 0 4px 12px rgba(0,0,0,.3),0 20px 50px rgba(0,0,0,.4),inset 0 0 0 2px rgba(2,2,5,0.98),inset 0 2px 4px rgba(0,0,0,0.55),inset 0 -1px 3px rgba(255,255,255,0.12),0 0 0 2px rgba(148,158,200,0.75),0 0 0 3.5px rgba(222,230,255,0.92),0 0 0 5px rgba(0,0,0,0.82),-2.5px -2px 0 5px rgba(240,245,255,1.0),2.5px 3px 0 5px rgba(1,1,3,0.98),0 12px 40px rgba(120,135,195,0.40); }
   70%  { box-shadow: 0 4px 12px rgba(0,0,0,.3),0 20px 50px rgba(0,0,0,.4),inset 0 0 0 2px rgba(2,2,5,0.98),inset 0 2px 4px rgba(0,0,0,0.55),inset 0 -1px 3px rgba(255,255,255,0.12),0 0 0 2px rgba(128,138,178,0.75),0 0 0 3.5px rgba(198,206,238,0.92),0 0 0 5px rgba(0,0,0,0.82),-2.5px -2px 0 5px rgba(240,245,255,0.82),2.5px 3px 0 5px rgba(1,1,3,0.98),0 12px 40px rgba(120,135,195,0.40); }
   100% { box-shadow: 0 4px 12px rgba(0,0,0,.3),0 20px 50px rgba(0,0,0,.4),inset 0 0 0 2px rgba(2,2,5,0.98),inset 0 2px 4px rgba(0,0,0,0.55),inset 0 -1px 3px rgba(255,255,255,0.12),0 0 0 2px rgba(110,118,155,0.75),0 0 0 3.5px rgba(175,183,218,0.92),0 0 0 5px rgba(0,0,0,0.82),-2.5px -2px 0 5px rgba(240,245,255,0.75),2.5px 3px 0 5px rgba(1,1,3,0.98),0 12px 40px rgba(120,135,195,0.40); }
 }
+@keyframes sstt_orbpulse_b { /* s136: wrapper restaurado (pasos huerfanos sin opener) */
   33%  { box-shadow: 0 4px 12px rgba(0,0,0,.3),0 20px 50px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06),0 0 0 1.5px rgba(5,5,8,0.95),0 0 0 3.5px rgba(218,226,255,0.90),0 0 0 5px rgba(3,3,5,0.92),-2px -1.5px 0 5px rgba(245,248,255,1.00),2px 1.5px 0 5px rgba(2,2,4,0.98),0 0 28px rgba(140,152,205,0.52); }
   66%  { box-shadow: 0 4px 12px rgba(0,0,0,.3),0 20px 50px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06),0 0 0 1.5px rgba(5,5,8,0.95),0 0 0 3.5px rgba(195,205,238,0.90),0 0 0 5px rgba(3,3,5,0.92),-2px -1.5px 0 5px rgba(245,248,255,0.88),2px 1.5px 0 5px rgba(2,2,4,0.98),0 0 28px rgba(140,152,205,0.40); }
   100% { box-shadow: 0 4px 12px rgba(0,0,0,.3),0 20px 50px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.06),0 0 0 1.5px rgba(5,5,8,0.95),0 0 0 3.5px rgba(178,186,218,0.90),0 0 0 5px rgba(3,3,5,0.92),-2px -1.5px 0 5px rgba(245,248,255,0.80),2px 1.5px 0 5px rgba(2,2,4,0.98),0 0 28px rgba(140,152,205,0.32); }
@@ -44659,8 +44661,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s135', fecha:'Viernes 12 de Junio del 2026' };
-};
+window.SSTT_VER = { ver:'s136', fecha:'Viernes 12 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -91726,7 +91727,7 @@ window.generateShoppingFeed = function() {
 
 <script id="sstt-colorlab-s135">
 /* ════════════════════════════════════════════════════════════════════
-   SSTT COLOR LAB · s135 — Rosa cromática de edición en vivo
+   SSTT COLOR LAB · s136 — Rosa cromática de edición en vivo
    Crosshair → extrae color de cualquier elemento · flor hexagonal de 19
    (paleta viva Porcelana & Señal) · arcos curvos LUM/SAT · hue ring ·
    alpha · aplica a elemento o a token global · registro de sesión
@@ -92455,7 +92456,7 @@ function renderLog(){
   }).join('');
 }
 function formatInstructions(){
-  var v=(window.SSTT_VER&&window.SSTT_VER.ver)||'s135';
+  var v=(window.SSTT_VER&&window.SSTT_VER.ver)||'s136';
   var lines=[];
   lines.push('═══ SSTT COLOR LAB · registro de sesión · '+v+' ═══');
   lines.push('Fecha: '+new Date().toLocaleString('es-CL'));
