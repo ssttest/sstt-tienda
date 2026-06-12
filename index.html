@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s129 -->
+<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s130 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -29254,7 +29254,8 @@ function renderPerfilSoporte() {
       if (t.tipo === 'servicio_tecnico' && t.equipo) {
         html += '<div style="background:var(--g6);border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:11px">';
         html += '<div style="font-weight:700;margin-bottom:2px">Equipo: ' + t.equipo + '</div>';
-        if (t.serie) html += '<div>Serie: <span style="font-family:var(--mono)">' + t.serie + '</span></div>';
+        // s130: --mono no existe (tokens reales: --font/--font-d/--font-m); caía a fuente del sistema → monospace intencional restaurado
+        if (t.serie) html += '<div>Serie: <span style="font-family:var(--font-m)">' + t.serie + '</span></div>';
         if (t.problema) html += '<div>Problema: ' + t.problema + '</div>';
         html += '</div>';
       }
@@ -44658,7 +44659,7 @@ function waUpdateWaLink(userMsg, reply) {
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/#333/#888/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
 window.SSTT_VER = {
-  ver:   's129',
+  ver:   's130',
   fecha: 'Jueves 11 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
