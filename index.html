@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s124 -->
+<!-- SSTT Tienda · Generado: Jueves 11 de Junio del 2026 · s125 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1286,8 +1286,8 @@ nav {
 .pca-btn-light { background: var(--g6);   color: var(--black); border: 1px solid var(--g5); }
 .pca-btn-light:hover { background: var(--g5); }
 .pca-btn-light.added { background: var(--black); color: #fff; border-color: var(--black); }
-.pca-btn-blue  { background: #1B5FD4; color: #fff; }
-.pca-btn-blue:hover { background: #1450b8; }
+.pca-btn-blue  { background: var(--blue); color: #fff; } /* s125: #1B5FD4 -> token */
+.pca-btn-blue:hover { background: var(--blue2); }
 .btn-add {
   background: var(--red);
   color: var(--white);
@@ -5278,7 +5278,7 @@ nav {
 .dtbl tr:last-child td { border-bottom:none }
 .dtbl tr:nth-child(even) td { background:var(--g6) }
 .dori-d { background:var(--blue-p)!important; color:var(--blue); font-weight:700; border-radius:3px; padding:3px 8px; display:inline-block }
-.dori-o { background:#FFF9E6!important; color:#A06800; font-weight:700; border-radius:3px; padding:3px 8px; display:inline-block }
+.dori-o { background:var(--yellow-p)!important; color:var(--yellow); font-weight:700; border-radius:3px; padding:3px 8px; display:inline-block } /* s125: amber -> warn token */
 .dori-r { background:var(--orange-p)!important; color:var(--orange); font-weight:700; border-radius:3px; padding:3px 8px; display:inline-block }
 .dori-i { background:var(--red-p)!important; color:var(--red); font-weight:700; border-radius:3px; padding:3px 8px; display:inline-block }
 
@@ -7543,17 +7543,17 @@ body.cart-open #proyectoListadoBtn {
 }
 /* Cards enterprise */
 .pcard.is-enterprise {
-  border-color: rgba(0,180,230,.25) !important;
+  border-color: var(--blue-p2) !important; /* s125: cian -> sistema */
 }
 .pcard.is-enterprise:hover {
-  border-color: #00B4E6 !important;
-  box-shadow: 0 4px 20px rgba(0,180,230,.15) !important;
+  border-color: var(--blue) !important;
+  box-shadow: var(--shadow) !important;
 }
 /* Badge enterprise en cards */
 .enterprise-badge {
   position: absolute; top: 8px; left: 8px; z-index: 2;
-  background: linear-gradient(135deg, #0A1628, #1B5FD4);
-  color: #00B4E6; border: 1px solid rgba(0,180,230,.3);
+  background: var(--blue); /* s125: navy/cian -> sistema */
+  color: #fff; border: 1px solid var(--blue2);
   border-radius: 4px; padding: 2px 7px;
   font-size: 9px; font-weight: 800; text-transform: uppercase;
   letter-spacing: .5px;
@@ -7669,15 +7669,15 @@ body.cart-open #proyectoListadoBtn {
 /* Botón "Solicitar Cotización" */
 .btn-cotizar-proyecto {
   width: 100%; border: none; border-radius: 8px;
-  background: linear-gradient(135deg, #0A1628, #1B3A6A);
-  color: #00B4E6; font-weight: 800; font-size: 12px;
+  background: var(--black); /* s125: navy/cian -> ink sistema */
+  color: #fff; font-weight: 800; font-size: 12px;
   padding: 9px 12px; cursor: pointer; font-family: var(--font);
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  transition: all .18s; border: 1px solid rgba(0,180,230,.25);
+  transition: all .18s; border: 1px solid var(--black);
 }
 .btn-cotizar-proyecto:hover {
-  background: linear-gradient(135deg, #0D1F40, #1B5FD4);
-  box-shadow: 0 4px 16px rgba(0,180,230,.25);
+  background: var(--g1);
+  box-shadow: var(--shadow);
   color: #fff;
 }
 /* Modal "Declarar Proyecto" */
@@ -7693,26 +7693,27 @@ body.cart-open #proyectoListadoBtn {
   overflow-y: auto; box-shadow: 0 24px 80px rgba(0,0,0,.3);
   animation: fadeUp .22s cubic-bezier(.32,.72,0,1);
 }
-.proyecto-modal-head {
-  background: linear-gradient(135deg, #0A1628, #1B3A6A);
-  color: #fff; padding: 20px 24px; border-radius: 20px 20px 0 0;
+.proyecto-modal-head { /* s125: navy premium -> porcelana sistema */
+  background: var(--blue-p);
+  color: var(--black); padding: 20px 24px; border-radius: 20px 20px 0 0;
+  border-bottom: 1px solid var(--blue-p2);
 }
 .proyecto-modal-body { padding: 20px 24px 24px; }
 .proyecto-modal-body label {
   font-size: 11px; font-weight: 800; text-transform: uppercase;
-  letter-spacing: .4px; color: #666; display: block; margin-bottom: 4px; margin-top: 12px;
+  letter-spacing: .4px; color: var(--g2); display: block; margin-bottom: 4px; margin-top: 12px;
 }
 .proyecto-modal-body select,
 .proyecto-modal-body input,
 .proyecto-modal-body textarea {
-  width: 100%; border: 1.5px solid #e0e0e0; border-radius: 10px;
+  width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
   padding: 10px 13px; font-size: 13px; font-family: var(--font);
-  outline: none; transition: border-color .15s; background: #fafafa;
+  outline: none; transition: border-color .15s; background: var(--g7);
   box-sizing: border-box;
 }
 .proyecto-modal-body select:focus,
 .proyecto-modal-body input:focus,
-.proyecto-modal-body textarea:focus { border-color: #1B5FD4; background: #fff; }
+.proyecto-modal-body textarea:focus { border-color: var(--blue); background: #fff; } /* s125: #1B5FD4 -> sistema */
 .proyecto-modal-body textarea { resize: vertical; min-height: 80px; }
 /* Precio oculto enterprise */
 .price-hidden {
@@ -8214,13 +8215,13 @@ body.cart-open #proyectoListadoBtn {
 .fov-dori-row {
   display:flex; align-items:center; gap:8px;
   padding:6px 9px; border-radius:9px;
-  background:#fafafa; border:1px solid rgba(0,0,0,.04);
+  background:var(--g7); border:1px solid rgba(0,0,0,.04); /* s125: #fafafa -> token */
   margin-bottom:4px;
 }
 .fov-dori-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-.fov-dori-name { font-size:10.5px; font-weight:700; color:#333; flex:1; }
-.fov-dori-dist { font-size:12px; font-weight:800; color:#1E5FA8; }
-.fov-dori-ppm { font-size:9px; color:#aaa; }
+.fov-dori-name { font-size:10.5px; font-weight:700; color:var(--g1); flex:1; } /* s125: #333 -> token */
+.fov-dori-dist { font-size:12px; font-weight:800; color:var(--blue); } /* s125: #1E5FA8 -> token */
+.fov-dori-ppm { font-size:9px; color:var(--g3); } /* s125: #aaa -> token */
 .fov-infra-row {
   display:flex; align-items:center; gap:10px;
   padding:9px 11px; margin-top:8px;
@@ -18996,7 +18997,6 @@ textarea:focus-visible,
 }
 
 /* Modales oscuros internos: preservar blanco cuando el fondo realmente es oscuro */
-.sstt-liquid-glass .proyecto-modal-head,
 .sstt-liquid-glass .dark-panel,
 .sstt-liquid-glass .scene-dark,
 .sstt-liquid-glass [style*="background:rgba(0,180,230"],
@@ -19006,7 +19006,6 @@ textarea:focus-visible,
 .sstt-liquid-glass [style*="background: rgba(0,0,0"]{
   color:#fff !important;
 }
-.sstt-liquid-glass .proyecto-modal-head *,
 .sstt-liquid-glass .dark-panel *,
 .sstt-liquid-glass .scene-dark *,
 .sstt-liquid-glass [style*="background:#0"] *,
@@ -19770,22 +19769,22 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
   <div class="proyecto-modal-wrap">
     <div class="proyecto-modal-head">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
-        <div style="width:40px;height:40px;background:rgba(0,180,230,.2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🏢</div>
+        <div style="width:40px;height:40px;background:var(--blue-p2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🏢</div>
         <div>
-          <div style="font-size:16px;font-weight:800;color:#fff">Declarar Proyecto</div>
-          <div style="font-size:12px;color:rgba(255,255,255,.55);margin-top:2px">Tu ingeniero de preventa revisará la solicitud en máx. 24 horas hábiles</div>
+          <div style="font-size:16px;font-weight:800;color:var(--black)">Declarar Proyecto</div>
+          <div style="font-size:12px;color:var(--g2);margin-top:2px">Tu ingeniero de preventa revisará la solicitud en máx. 24 horas hábiles</div>
         </div>
-        <button onclick="cerrarProyectoModal()" style="margin-left:auto;background:rgba(255,255,255,.1);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">✕</button>
+        <button onclick="cerrarProyectoModal()" style="margin-left:auto;background:var(--g6);border:none;color:var(--g2);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center">✕</button>
       </div>
-      <div id="proyectoListadoHeader" style="display:none;background:rgba(0,180,230,.08);border-top:1px solid rgba(0,180,230,.2);padding:8px 16px;font-size:11px">
-        <div style="color:#00B4E6;font-weight:700;margin-bottom:4px" id="proyectoListadoCount"></div>
+      <div id="proyectoListadoHeader" style="display:none;background:var(--blue-p);border-top:1px solid var(--blue-p2);padding:8px 16px;font-size:11px">
+        <div style="color:var(--blue);font-weight:700;margin-bottom:4px" id="proyectoListadoCount"></div>
         <div id="proyectoListadoDetalle" style="display:flex;flex-wrap:wrap;gap:4px"></div>
         <button onclick="_proyectoListado=[];actualizarBtnListadoProyecto();document.getElementById('proyectoListadoHeader').style.display='none'"
-          style="margin-top:6px;background:none;border:none;color:rgba(255,255,255,.4);font-size:10px;cursor:pointer;font-family:var(--font);text-decoration:underline">
+          style="margin-top:6px;background:none;border:none;color:var(--g3);font-size:10px;cursor:pointer;font-family:var(--font);text-decoration:underline">
           Limpiar lista
         </button>
       </div>
-      <div id="proyectoProductoInfo" style="background:rgba(0,180,230,.1);border:1px solid rgba(0,180,230,.25);border-radius:10px;padding:10px 12px;font-size:12px;color:#00B4E6"></div>
+      <div id="proyectoProductoInfo" style="background:var(--blue-p);border:1px solid var(--blue-p2);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--blue)"></div>
     </div>
     <div class="proyecto-modal-body">
 
@@ -19855,12 +19854,10 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
 
       <div id="pyError" style="display:none;background:#fff0f0;border:1px solid #fcc;border-radius:8px;padding:10px;font-size:12px;color:#c00;margin-top:12px"></div>
 
-      <button onclick="enviarProyecto()" style="width:100%;margin-top:16px;background:linear-gradient(135deg,#0A1628,#1B5FD4);color:#fff;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s"
-        onmouseover="this.style.background='linear-gradient(135deg,#0D1F40,#2A4FD4)'"
-        onmouseout="this.style.background='linear-gradient(135deg,#0A1628,#1B5FD4)'">
+      <button onclick="enviarProyecto()" class="pca-btn-primary" style="width:100%;margin-top:16px;border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:8px;transition:all .18s"><!-- s125: navy -> ink sistema -->
         📤 Enviar solicitud al equipo de preventa
       </button>
-      <div style="text-align:center;font-size:11px;color:#aaa;margin-top:8px">Respuesta en máx. 24 horas hábiles · Tu información es confidencial</div>
+      <div style="text-align:center;font-size:11px;color:var(--g3);margin-top:8px">Respuesta en máx. 24 horas hábiles · Tu información es confidencial</div>
     </div>
   </div>
 </div>
@@ -26072,7 +26069,7 @@ window.renderProductCard = function(p) {
               if (typeof B2B !== 'undefined' && B2B.canSeePriceEnterprise()) {
                 return `<div class="price-neto">Neto ${fmt(itemNeto(p))} + IVA ${fmt(p.piva)}</div>
                          <div class="price-total">${fmt(p.ptotal)}</div>
-                         <div class="price-sub" style="color:#1B5FD4">Precio Integrador Certificado</div>`;
+                         <div class="price-sub" style="color:var(--blue)">Precio Integrador Certificado</div>`;
               }
               return `<div class="price-hidden">
                 <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -31740,12 +31737,12 @@ function _pmBuildModal(id) {
             const _canPrice = _b2bType !== 'enterprise' || (typeof B2B !== 'undefined' && B2B.canSeePriceEnterprise());
             if (_b2bType === 'enterprise') {
               // Badge proyecto en modal
-              return `<div style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#0A1628,#1B3A6A);
-                border:1px solid rgba(0,180,230,.3);border-radius:10px;padding:10px 16px;margin-bottom:4px">
+              return `<div style="display:inline-flex;align-items:center;gap:8px;background:var(--blue-p);
+                border:1px solid var(--blue-p2);border-radius:10px;padding:10px 16px;margin-bottom:4px"><!-- s125: navy/cian -> porcelana -->
                 <span style="font-size:18px">🏢</span>
                 <div>
-                  <div style="font-size:12px;font-weight:800;color:#00B4E6;text-transform:uppercase;letter-spacing:.5px">Producto de Proyecto Corporativo</div>
-                  <div style="font-size:11px;color:rgba(255,255,255,.6);margin-top:2px">Requiere declaración de proyecto — precio bajo solicitud</div>
+                  <div style="font-size:12px;font-weight:800;color:var(--blue);text-transform:uppercase;letter-spacing:.5px">Producto de Proyecto Corporativo</div>
+                  <div style="font-size:11px;color:var(--g2);margin-top:2px">Requiere declaración de proyecto — precio bajo solicitud</div>
                 </div>
               </div>`;
             }
@@ -31821,8 +31818,8 @@ function _pmBuildModal(id) {
             ${(()=>{
               const _b2bType = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
               if (_b2bType === 'enterprise') {
-                return `<button class="pm-btn-primary" style="background:linear-gradient(135deg,#0A1628,#1B5FD4);color:#00B4E6;border:1px solid rgba(0,180,230,.3)"
-                  onclick="closeProdModal();abrirProyectoModal(${id})">
+                return `<button class="pm-btn-primary" style="background:var(--black);color:#fff;border:1px solid var(--black)"
+                  onclick="closeProdModal();abrirProyectoModal(${id})"><!-- s125: navy/cian -> ink sistema -->
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                   Declarar Proyecto / Cotizar
                 </button>`;
@@ -43082,21 +43079,21 @@ function abrirProyectoModal(prodId, modoListado) {
     if (p) {
       // Mostrar producto actual + listado acumulado
       var listHtml = _proyectoListado.length > 0
-        ? '<div style="margin-top:8px;border-top:1px solid rgba(0,180,230,.2);padding-top:8px">' +
-          '<div style="font-size:10px;color:#00B4E6;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">'+
+        ? '<div style="margin-top:8px;border-top:1px solid var(--blue-p2);padding-top:8px">' +
+          '<div style="font-size:10px;color:var(--blue);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px">'+
           'Productos en esta solicitud ('+(_proyectoListado.length + (p ? 1 : 0))+')</div>' +
           _proyectoListado.concat(p ? [p] : []).map(function(x){
-            return '<div style="font-size:11px;color:rgba(255,255,255,.7);padding:2px 0">· ' + x.codigo + '</div>';
+            return '<div style="font-size:11px;color:var(--g2);padding:2px 0">· ' + x.codigo + '</div>';
           }).join('') + '</div>'
         : '';
-      info.innerHTML = '<strong style="color:#00B4E6">' + p.codigo + '</strong> — ' +
+      info.innerHTML = '<strong style="color:var(--blue)">' + p.codigo + '</strong> — ' +
         p.nombre.slice(0, 70) + (p.nombre.length > 70 ? '…' : '') + listHtml;
     } else {
       // Sin producto específico — solo el listado
       info.innerHTML = _proyectoListado.length > 0
-        ? '<div style="font-size:11px;color:#00B4E6;font-weight:700;margin-bottom:4px">'+_proyectoListado.length+' producto(s) en tu solicitud:</div>' +
-          _proyectoListado.map(function(x){ return '<div style="font-size:11px;color:rgba(255,255,255,.7)">· '+x.codigo+'</div>'; }).join('')
-        : '<span style="color:rgba(255,255,255,.5)">Sin productos seleccionados aún</span>';
+        ? '<div style="font-size:11px;color:var(--blue);font-weight:700;margin-bottom:4px">'+_proyectoListado.length+' producto(s) en tu solicitud:</div>' +
+          _proyectoListado.map(function(x){ return '<div style="font-size:11px;color:var(--g2)">· '+x.codigo+'</div>'; }).join('')
+        : '<span style="color:var(--g3)">Sin productos seleccionados aún</span>';
     }
   }
   var m = document.getElementById('proyectoModal');
@@ -43135,9 +43132,9 @@ function cerrarProyectoModal() {
 function toggleChk(input, lblId) {
   var lbl = document.getElementById(lblId);
   if (lbl) {
-    lbl.style.borderColor = input.checked ? '#1B5FD4' : '#e0e0e0';
-    lbl.style.background  = input.checked ? '#f0f4ff' : '';
-    lbl.style.color       = input.checked ? '#1B5FD4' : '#444';
+    lbl.style.borderColor = input.checked ? 'var(--blue)' : 'var(--border)'; /* s125 */
+    lbl.style.background  = input.checked ? 'var(--blue-p)' : '';
+    lbl.style.color       = input.checked ? 'var(--blue)' : 'var(--g2)';
   }
 }
 
@@ -43206,14 +43203,14 @@ function enviarProyecto() {
     _proyectoListado = []; _proyectoProducto = null; actualizarBtnListadoProyecto();
   wrap.innerHTML = '<div style="text-align:center;padding:40px 20px">' +
       '<div style="font-size:48px;margin-bottom:16px">✅</div>' +
-      '<div style="font-size:18px;font-weight:800;color:#0A1628;margin-bottom:8px">¡Solicitud enviada!</div>' +
-      '<div style="font-size:13px;color:#666;line-height:1.6;margin-bottom:20px">Tu solicitud de proyecto fue recibida.<br>Nuestro ingeniero de preventa revisará los detalles<br>y te contactará en máx. <strong>24 horas hábiles</strong>.</div>' +
-      '<div style="background:#f0f4ff;border:1px solid #c0d0f0;border-radius:12px;padding:12px 16px;font-size:12px;color:#1B5FD4;margin-bottom:20px">' +
+      '<div style="font-size:18px;font-weight:800;color:var(--black);margin-bottom:8px">¡Solicitud enviada!</div>' +
+      '<div style="font-size:13px;color:var(--g2);line-height:1.6;margin-bottom:20px">Tu solicitud de proyecto fue recibida.<br>Nuestro ingeniero de preventa revisará los detalles<br>y te contactará en máx. <strong>24 horas hábiles</strong>.</div>' +
+      '<div style="background:var(--blue-p);border:1px solid var(--blue-p2);border-radius:12px;padding:12px 16px;font-size:12px;color:var(--blue);margin-bottom:20px">' +
         '📋 Producto: <strong>' + payload.producto + '</strong><br>' +
         '🏢 Empresa: <strong>' + payload.usuarioFinal + '</strong><br>' +
         '💰 Presupuesto: <strong>' + payload.presupuesto + '</strong>' +
       '</div>' +
-      '<button onclick="cerrarProyectoModal()" style="background:linear-gradient(135deg,#0A1628,#1B5FD4);color:#fff;border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(var(--font))">Cerrar</button>' +
+      '<button onclick="cerrarProyectoModal()" class="pca-btn-primary" style="border:none;border-radius:12px;padding:12px 24px;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--font)">Cerrar</button>' + /* s125: navy -> ink sistema */
     '</div>';
   }
   showToast('📤 Solicitud de proyecto enviada — respuesta en 24 hrs');
@@ -44651,7 +44648,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 window.SSTT_VER = {
-  ver:   's124',
+  ver:   's125',
   fecha: 'Jueves 11 de Junio del 2026'
 };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
@@ -44886,11 +44883,11 @@ function actualizarBtnListadoProyecto() {
     btn = document.createElement('button');
     btn.id = 'proyectoBtnFloat';
     btn.style.cssText = 'position:fixed;bottom:90px;left:20px;z-index:9000;' +
-      'background:linear-gradient(135deg,#0A1628,#1B5FD4);color:#00B4E6;' +
-      'border:1.5px solid rgba(0,180,230,.4);border-radius:14px;' +
+      'background:var(--black);color:#fff;' + /* s125: navy/cian -> ink sistema */
+      'border:1.5px solid var(--black);border-radius:14px;' +
       'padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;' +
       'font-family:var(--font);display:none;align-items:center;gap:7px;' +
-      'box-shadow:0 4px 20px rgba(0,180,230,.25);transition:all .2s';
+      'box-shadow:var(--shadow-md);transition:all .2s';
     btn.onclick = function() { abrirProyectoModal(null); };
     document.body.appendChild(btn);
   }
@@ -44927,9 +44924,9 @@ function getTechProducts(terms) {
   if (!matches.length) return '<p style="font-size:12px;color:#999">Busca en el catálogo con el botón de abajo</p>';
   return '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">' +
     matches.map(function(p) {
-      return '<div onclick="closeTechModal();openProdModal('+p.id+')" style="padding:8px;background:#f9f9f9;border-radius:8px;cursor:pointer;border:1px solid #eee;transition:all .15s" onmouseover="this.style.borderColor=\'#1B5FD4\'" onmouseout="this.style.borderColor=\'#eee\'">' +
+      return '<div onclick="closeTechModal();openProdModal('+p.id+')" style="padding:8px;background:var(--g7);border-radius:8px;cursor:pointer;border:1px solid var(--border2);transition:all .15s" onmouseover="this.style.borderColor=\'var(--blue)\'" onmouseout="this.style.borderColor=\'var(--border2)\'">' +
         '<img src="'+imgProxyUrl(p.codigo)+'" alt="'+escapeHtml(p.nombre)+'" onerror="this.style.display=\'none\'" style="width:100%;height:50px;object-fit:contain;margin-bottom:4px">' +
-        '<div style="font-size:10px;color:#1B5FD4;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+p.codigo+'</div>' +
+        '<div style="font-size:10px;color:var(--blue);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+p.codigo+'</div>' +
         '<div style="font-size:11px;font-weight:700;color:#D90F23">'+fmtP(p)+'</div>' +
         '</div>';
     }).join('') +
