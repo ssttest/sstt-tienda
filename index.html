@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s137 -->
+<!-- SSTT Tienda · Generado: Viernes 12 de Junio del 2026 · s138 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -44661,7 +44661,7 @@ function waUpdateWaLink(userMsg, reply) {
 // los elementos DOM. El comentario del <head> (L2) se actualiza aparte.
 // Para cambiar en cada sesión: (1) comentario L2, (2) ver, (3) fecha.
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s137', fecha:'Viernes 12 de Junio del 2026' };
+window.SSTT_VER = { ver:'s138', fecha:'Viernes 12 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -90600,6 +90600,14 @@ window.generateShoppingFeed = function() {
       return !!(typeof USER!=='undefined' && USER && USER.email && ADM.indexOf(String(USER.email).toLowerCase())>=0);
     } catch(e){ return false; }
   }
+  // s138: quién puede abrir Color Lab desde la consola — los 3 correos demo (BIP incluido),
+  // SIN heredar gobernanza (cupones/tarifas/IA siguen gated por isAdmin()).
+  function canColorLab(){
+    try {
+      var COL = ['jgalvez@outlook.com','cristian.nahum.h@gmail.com','yeyson.farias@gmail.com'];
+      return !!(typeof USER!=='undefined' && USER && USER.email && COL.indexOf(String(USER.email).toLowerCase())>=0);
+    } catch(e){ return false; }
+  }
 
   // ── Seeds (idempotentes) ──
   function seedPromos(){
@@ -91014,6 +91022,7 @@ window.generateShoppingFeed = function() {
         'Es una <b>demo single-file</b>: vive en este navegador. Para que tus clientes lo vean en sus dispositivos y no se pueda saltar, migra a server-side (Onda 2) — el código del panel no cambia, solo el adaptador de datos.</div>' +
         '<div style="margin-top:10px" class="sadm-row">' +
           '<button data-act="reseed" style="'+BTN+';background:#fff3e0;color:#C2410C;border:1px solid #ffcc80">↺ Restaurar datos demo</button>' +
+          '<button data-act="colorlab" style="'+BTN+';background:#15171C;color:#fff">🎨 Color Lab</button>' +
         '</div>' +
       '</div>';
   }
@@ -91456,6 +91465,8 @@ window.generateShoppingFeed = function() {
       seedAll(); renderBody(); toast('Datos demo restaurados'); try { calcTotals(); } catch(_){}
       return;
     }
+    // s138: abrir Color Lab desde la consola (cierra el panel para no tapar la rosa cromática)
+    if (act==='colorlab'){ try { if(window.SSTT_COLORLAB){ close(); SSTT_COLORLAB.open(); } else toast('Color Lab no disponible'); } catch(_){} return; }
     // CUPONES
     if (act==='cup-tog'){ var arr=rwCuponGetAll(); var c=arr.find(function(x){return x.code===el.getAttribute('data-id');}); if(c){c.activo=!c.activo; rwCuponSaveAll(arr); renderBody(); calcSafe();} return; }
     if (act==='cup-del'){ if(!confirm('¿Eliminar cupón '+el.getAttribute('data-id')+'?')) return; var a=rwCuponGetAll().filter(function(x){return x.code!==el.getAttribute('data-id');}); rwCuponSaveAll(a); renderBody(); calcSafe(); return; }
@@ -91681,18 +91692,27 @@ window.generateShoppingFeed = function() {
   }
 
   // ── Open / Close / Launcher ──
-  function open(){ if(!isAdmin()){ toast('Solo administradores'); return; } mount(); seedAll(); renderTabs(); renderBody(); var ov=document.getElementById('sadmOverlay'); if(ov){ ov.classList.add('on'); } }
+  function open(){
+    // s138: correo demo no-admin (BIP) → lanza Color Lab directo, sin consola de gobernanza.
+    if(!isAdmin()){
+      if(canColorLab()){ try { if(window.SSTT_COLORLAB) SSTT_COLORLAB.open(); else toast('Color Lab no disponible'); } catch(_){} return; }
+      toast('Solo administradores'); return;
+    }
+    mount(); seedAll(); renderTabs(); renderBody(); var ov=document.getElementById('sadmOverlay'); if(ov){ ov.classList.add('on'); }
+  }
   function close(){ var ov=document.getElementById('sadmOverlay'); if(ov) ov.classList.remove('on'); }
 
   function launcher(){
     var b=document.getElementById('sadmLauncher');
     if(!b){
       injectCSS();
-      b=document.createElement('button'); b.id='sadmLauncher'; b.innerHTML='🛠️ Admin';
+      b=document.createElement('button'); b.id='sadmLauncher';
       b.addEventListener('click', open);
       document.body.appendChild(b);
     }
-    b.classList.toggle('on', isAdmin());
+    // s138: admin → consola; correo demo no-admin (BIP) → lanzador directo de Color Lab.
+    b.innerHTML = isAdmin() ? '🛠️ Admin' : '🎨 Color Lab';
+    b.classList.toggle('on', canColorLab());
   }
   function refresh(){ try { launcher(); applyBannerMaintenance(); } catch(e){} }
 
@@ -91727,7 +91747,7 @@ window.generateShoppingFeed = function() {
 
 <script id="sstt-colorlab-s135">
 /* ════════════════════════════════════════════════════════════════════
-   SSTT COLOR LAB · s137 — Rosa cromática de edición en vivo
+   SSTT COLOR LAB · s138 — Rosa cromática de edición en vivo
    Crosshair → extrae color de cualquier elemento · flor hexagonal de 19
    (paleta viva Porcelana & Señal) · arcos curvos LUM/SAT · hue ring ·
    alpha · aplica a elemento o a token global · registro de sesión
@@ -92456,7 +92476,7 @@ function renderLog(){
   }).join('');
 }
 function formatInstructions(){
-  var v=(window.SSTT_VER&&window.SSTT_VER.ver)||'s137';
+  var v=(window.SSTT_VER&&window.SSTT_VER.ver)||'s138';
   var lines=[];
   lines.push('═══ SSTT COLOR LAB · registro de sesión · '+v+' ═══');
   lines.push('Fecha: '+new Date().toLocaleString('es-CL'));
@@ -92509,7 +92529,15 @@ function toast(msg){
 }
 
 /* ── API pública ───────────────────────────────────────────────── */
+function colabAllowed(){
+  // s138: Color Lab solo abre con sesión iniciada en uno de los 3 correos demo.
+  try {
+    var COL=['jgalvez@outlook.com','cristian.nahum.h@gmail.com','yeyson.farias@gmail.com'];
+    return !!(typeof USER!=='undefined' && USER && USER.email && COL.indexOf(String(USER.email).toLowerCase())>=0);
+  } catch(e){ return false; }
+}
 function openLab(){
+  if(!colabAllowed()){ try{ toast('Color Lab: inicia sesión con un correo autorizado'); }catch(e){} return; }
   if(!root) build();
   if(S.open) return;
   S.open=true; root.style.display='';
