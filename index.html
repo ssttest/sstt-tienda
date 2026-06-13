@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 13 de Junio del 2026 · s147 -->
+<!-- SSTT Tienda · Generado: Sábado 13 de Junio del 2026 · s152 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
 <meta name="referrer" content="no-referrer-when-downgrade">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://camaras-de-seguridad-dahua.sstt.cl https://*.cloudflare.com https://*.workers.dev https://maps.googleapis.com https://maps.gstatic.com https://*.ggpht.com https://streetviewpixels-pa.googleapis.com https://*.google.com; connect-src 'self' https://sstt-proxy.ryanodina.workers.dev https://maps.googleapis.com https://*.dahuasecurity.com https://cdn1.dori.cl; worker-src 'self' blob: https://cdnjs.cloudflare.com; media-src 'self' blob: https://sstt-proxy.ryanodina.workers.dev; frame-src https://docs.google.com; object-src 'none'; base-uri 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://maps.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://camaras-de-seguridad-dahua.sstt.cl https://*.cloudflare.com https://*.workers.dev https://maps.googleapis.com https://maps.gstatic.com https://*.ggpht.com https://streetviewpixels-pa.googleapis.com https://*.google.com; connect-src 'self' https://sstt-proxy.ryanodina.workers.dev https://maps.googleapis.com https://*.dahuasecurity.com https://cdn1.dori.cl; worker-src 'self' blob: https://cdnjs.cloudflare.com; media-src 'self' blob: https://sstt-proxy.ryanodina.workers.dev; frame-src https://docs.google.com https://www.google.com https://maps.google.com; object-src 'none'; base-uri 'self';">
 <link rel="preconnect" href="https://camaras-de-seguridad-dahua.sstt.cl">
 <link rel="dns-prefetch" href="https://camaras-de-seguridad-dahua.sstt.cl">
 <title>SSTT® — Cámaras de Seguridad Dahua Chile | Distribuidor Oficial · Precios y Stock</title>
@@ -2486,7 +2486,7 @@ nav {
 .rw-stats {
   display: grid; grid-template-columns: auto 1fr;
   gap: 20px; padding: 16px;
-  background: linear-gradient(135deg, #f8f9fb, #fff);
+  background: linear-gradient(135deg, #F6F6F3, #fff);
   border: 1px solid var(--g5); border-radius: 12px;
   margin-bottom: 16px;
 }
@@ -16066,7 +16066,7 @@ body.cart-open #proyectoListadoBtn {
 }
 .fov-pdf-modal-footer {
   padding: 14px 20px;
-  background: #f8f9fb;
+  background: #F6F6F3;
   border-top: 1px solid rgba(0,0,0,.06);
   display: flex; gap: 8px; justify-content: flex-end;
 }
@@ -17428,7 +17428,7 @@ body.cart-open #proyectoListadoBtn {
 .lk-recs-t{font-size:13px;font-weight:600;padding:10px 14px;border-bottom:1px solid var(--g6);background: var(--tool-panel)}
 .lk-rec-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid #f0f0f0;transition:background .15s;gap:8px}
 .lk-rec-row:last-child{border-bottom:none}
-.lk-rec-row:hover{background:#f8f9fb}
+.lk-rec-row:hover{background:#F6F6F3}
 .lk-rec-info{flex:1;min-width:0}
 .lk-rec-name{font-size:13px;font-weight:500}
 .lk-rec-meta{font-size:11px;color: var(--tool-light);margin-top:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
@@ -18775,19 +18775,11 @@ body.cart-open #ssttCostHud{ display:none !important; }
   --lg-ink:#071426;
   --lg-ink-2:#18314f;
   --lg-ink-3:#506278;
-  --lg-white:#FFFFFF;
-  --lg-blue:#D90F23;
-  --lg-blue-2:#0071E3;
-  --lg-blue-3:#005BBB;
-  --lg-cyan:#64D2FF;
-  --lg-red:#FF453A;
-  --lg-red-2:#E6362E;
-  --lg-green:#32D74B;
+  /* s152: --lg-* huérfanos eliminados (0 usos): white, blue, blue-2, blue-3, red, red-2, green, glass-strong, stroke-dark */
+  /* s148: --lg-cyan:#64D2FF eliminado — token huerfano, 0 usos en toda la fuente */
   --lg-glass:linear-gradient(180deg, rgba(255,255,255,.84), rgba(255,255,255,.58));
-  --lg-glass-strong:linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.70));
   --lg-glass-blue:linear-gradient(180deg, rgba(10,132,255,.94), rgba(0,113,227,.84));
   --lg-stroke:rgba(255,255,255,.72);
-  --lg-stroke-dark:rgba(7,20,38,.10);
   --lg-soft-shadow:0 18px 44px rgba(25,67,121,.13), inset 0 1px 0 rgba(255,255,255,.86);
   --lg-deep-shadow:0 30px 90px rgba(13,41,82,.24), inset 0 1px 0 rgba(255,255,255,.24);
   --lg-radius-xl:34px;
@@ -22257,6 +22249,14 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
               Waze
             </a>
           </span>
+          <!-- s151: mapa showroom · iframe directo (siempre visible; lazy hasta scroll al footer) -->
+          <div class="ft-mapwrap" style="margin:2px 0 2px 21px;max-width:340px">
+            <iframe
+              src="https://www.google.com/maps?q=General+Jos%C3%A9+Artigas+3028,+%C3%91u%C3%B1oa,+Santiago&output=embed"
+              title="Mapa del showroom SSTT — General José Artigas 3028, Ñuñoa, Santiago"
+              loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+              style="width:100%;height:148px;border:1px solid var(--g5);border-radius:10px;display:block"></iframe>
+          </div>
           <span style="display:flex;align-items:center;gap:7px">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--g3)" stroke-width="1.8" style="flex-shrink:0"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
             <span>Lunes a Jueves 8:30–17:15 · Viernes 8:30–17:45 hrs</span>
@@ -33156,7 +33156,7 @@ function showConfianzaModal() {
   if (document.getElementById('confianzaModal')) return;
   var m = document.createElement('div');
   m.id = 'confianzaModal';
-  m.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(10,22,40,0.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:ccBannerIn .3s ease-out;font-family:inherit';
+  m.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(21,23,28,0.62);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:ccBannerIn .3s ease-out;font-family:inherit';
   m.innerHTML =
     '<div style="background:#fff;border-radius:18px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.4)">' +
       // Header
@@ -33171,15 +33171,15 @@ function showConfianzaModal() {
 
       // Body con beneficios
       '<div style="padding:24px">' +
-        '<div style="font-weight:800;font-size:14px;color:#0A1628;margin-bottom:12px">¿Qué significa comprar en un distribuidor oficial?</div>' +
+        '<div style="font-weight:800;font-size:14px;color:#15171C;margin-bottom:12px">¿Qué significa comprar en un distribuidor oficial?</div>' +
         confianzaItem('🛡️', 'Garantía oficial 2 años', 'Todos los equipos Dahua tienen 2 años de garantía directa del fabricante. Sin trámites adicionales, tu compra está respaldada.') +
         confianzaItem('✅', 'Productos 100% originales', 'No vendemos clones ni versiones grises. Cada equipo viene con su packaging original, serie verificable y documentación oficial.') +
         confianzaItem('🔧', 'Soporte técnico certificado', 'Nuestro Mesón Técnico es atendido por personal capacitado por Dahua. Acceso a herramientas oficiales como SmartPSS, DSS Pro y DMSS.') +
         confianzaItem('📋', 'Documentación tributaria', 'Factura electrónica emitida automáticamente vía Bsale, certificada por el SII. RUT 76.047.629-3.') +
-        confianzaItem('🌐', 'Verificación oficial', 'Puedes confirmar que somos distribuidor oficial en <a href="https://www.dahuasecurity.com/where-to-buy" target="_blank" rel="noopener" style="color:#15171C;font-weight:700">dahuasecurity.com/where-to-buy</a>') +
+        confianzaItem('🌐', 'Verificación oficial', 'Puedes confirmar que somos distribuidor oficial en <a href="https://www.dahuasecurity.com/where-to-buy" target="_blank" rel="noopener" style="color:#D90F23;font-weight:700">dahuasecurity.com/where-to-buy</a>') +
 
-        '<div style="background:#f8f9fb;border-radius:12px;padding:14px 16px;margin-top:14px;font-size:11.5px;color:#555;line-height:1.55">' +
-          '<b style="color:#0A1628">SSTT SpA</b> · RUT 76.047.629-3 · Iniciación de actividades SII desde 2019 · General José Artigas 3028, Ñuñoa, Santiago' +
+        '<div style="background:#F6F6F3;border-radius:12px;padding:14px 16px;margin-top:14px;font-size:11.5px;color:#555;line-height:1.55">' +
+          '<b style="color:#15171C">SSTT SpA</b> · RUT 76.047.629-3 · Iniciación de actividades SII desde 2019 · General José Artigas 3028, Ñuñoa, Santiago' +
         '</div>' +
       '</div>' +
     '</div>';
@@ -33191,7 +33191,7 @@ function confianzaItem(icon, titulo, texto) {
   return '<div style="display:flex;gap:12px;margin-bottom:14px;align-items:flex-start">' +
     '<div style="font-size:22px;flex-shrink:0;width:36px;text-align:center">' + icon + '</div>' +
     '<div style="flex:1;line-height:1.4">' +
-      '<div style="font-weight:700;font-size:13px;color:#0A1628;margin-bottom:2px">' + titulo + '</div>' +
+      '<div style="font-weight:700;font-size:13px;color:#15171C;margin-bottom:2px">' + titulo + '</div>' +
       '<div style="font-size:12.5px;color:#555;line-height:1.5">' + texto + '</div>' +
     '</div>' +
   '</div>';
@@ -33293,13 +33293,13 @@ function showDevolucionesModal() {
   if (document.getElementById('devolucionesModal')) return;
   var m = document.createElement('div');
   m.id = 'devolucionesModal';
-  m.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(10,22,40,0.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:ccBannerIn .3s ease-out;font-family:inherit';
+  m.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(21,23,28,0.62);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:ccBannerIn .3s ease-out;font-family:inherit';
   m.innerHTML =
     '<div style="background:#fff;border-radius:18px;max-width:560px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.4)">' +
-      '<div style="background:var(--g7);color:#0A1628;padding:24px;border-radius:18px 18px 0 0;position:relative">' +
-        '<button onclick="document.getElementById(\'devolucionesModal\').remove()" style="position:absolute;top:14px;right:14px;background:rgba(0,0,0,0.1);border:none;color:#0A1628;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer">✕</button>' +
+      '<div style="background:#F6F6F3;color:#15171C;padding:24px;border-radius:18px 18px 0 0;position:relative;border-bottom:2px solid #D90F23">' +
+        '<button onclick="document.getElementById(\'devolucionesModal\').remove()" style="position:absolute;top:14px;right:14px;background:rgba(21,23,28,0.08);border:none;color:#15171C;width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer">✕</button>' +
         '<div style="font-weight:900;font-size:18px;letter-spacing:-.01em;margin-bottom:4px">↩️ Política de devoluciones</div>' +
-        '<div style="font-size:12.5px;opacity:0.8">Tu compra protegida por la Ley del Consumidor (Ley 19.496)</div>' +
+        '<div style="font-size:12.5px;color:#5b5e66">Tu compra protegida por la Ley del Consumidor (Ley 19.496)</div>' +
       '</div>' +
       '<div style="padding:24px">' +
         confianzaItem('🗓️', '10 días para arrepentirse', 'Tienes 10 días corridos desde la entrega para devolver el producto si no quedaste conforme. El equipo debe estar sin uso, con packaging y accesorios completos.') +
@@ -33308,8 +33308,8 @@ function showDevolucionesModal() {
         confianzaItem('💸', 'Reembolso del 100%', 'Si devuelves dentro de los 10 días, te reembolsamos el total pagado por la misma vía de pago original (5-10 días hábiles).') +
         confianzaItem('🚚', 'Despacho de la devolución', 'Si la falla es nuestra responsabilidad o del fabricante, SSTT cubre el costo del retiro. Si es por arrepentimiento, el cliente paga el envío de retorno.') +
 
-        '<div style="background:#fff8e1;border-left:3px solid #D4A03C;border-radius:0 10px 10px 0;padding:12px 14px;margin-top:14px;font-size:12px;color:#5a3d00;line-height:1.5">' +
-          '<b>📞 Para iniciar una devolución</b> contacta al Mesón Técnico SSTT o escribe a <a href="mailto:postventa@sstt.cl" style="color:var(--black);font-weight:700">postventa@sstt.cl</a> con tu N° de factura y motivo.' +
+        '<div style="background:#F6F6F3;border-left:3px solid #D90F23;border-radius:0 10px 10px 0;padding:12px 14px;margin-top:14px;font-size:12px;color:#2A2E35;line-height:1.5">' +
+          '<b>📞 Para iniciar una devolución</b> contacta al Mesón Técnico SSTT o escribe a <a href="mailto:postventa@sstt.cl" style="color:#D90F23;font-weight:700">postventa@sstt.cl</a> con tu N° de factura y motivo.' +
         '</div>' +
       '</div>' +
     '</div>';
@@ -33928,7 +33928,7 @@ function cookieConsentShowBanner() {
     '<div style="max-width:920px;margin:0 auto;display:flex;align-items:flex-start;gap:18px;flex-wrap:wrap">' +
       '<div style="font-size:30px;flex-shrink:0">🍪</div>' +
       '<div style="flex:1;min-width:250px">' +
-        '<div style="font-weight:800;font-size:15px;color:#0A1628;margin-bottom:6px">Tu privacidad es importante</div>' +
+        '<div style="font-weight:800;font-size:15px;color:#15171C;margin-bottom:6px">Tu privacidad es importante</div>' +
         '<div style="font-size:12.5px;line-height:1.5;color:var(--g2)">Usamos cookies para mejorar tu experiencia. Las cookies <b>necesarias</b> son indispensables para que el sitio funcione (carro, login). Las cookies <b>analíticas</b> nos ayudan a entender cómo usas el sitio. Las de <b>marketing</b> permiten mostrarte ofertas relevantes. Tú decides.</div>' +
         '<a href="#" onclick="cookieConsentShowDetails();return false" style="font-size:11.5px;color:#15171C;font-weight:600;text-decoration:none;display:inline-block;margin-top:6px">Más detalles · Política de privacidad</a>' +
       '</div>' +
@@ -33967,31 +33967,31 @@ function cookieConsentShowDetails() {
   var existing = cookieConsentGet() || { analytics: true, marketing: false };
   var modal = document.createElement('div');
   modal.id = 'cookieConsentModal';
-  modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(10,22,40,0.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:ccBannerIn .3s ease-out;font-family:inherit';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(21,23,28,0.62);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;animation:ccBannerIn .3s ease-out;font-family:inherit';
   modal.innerHTML =
     '<div style="background:#fff;border-radius:18px;max-width:520px;width:100%;max-height:88vh;overflow-y:auto;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,0.4)">' +
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">' +
         '<div style="font-size:24px">🛡️</div>' +
-        '<div style="font-weight:800;font-size:17px;color:#0A1628">Centro de privacidad</div>' +
+        '<div style="font-weight:800;font-size:17px;color:#15171C">Centro de privacidad</div>' +
         '<button onclick="document.getElementById(\'cookieConsentModal\').remove()" style="margin-left:auto;background:transparent;border:none;font-size:20px;color:var(--g3);cursor:pointer">✕</button>' +
       '</div>' +
       '<div style="font-size:12.5px;color:var(--g2);line-height:1.5;margin-bottom:18px">Controla qué cookies y trackers usamos. Tu elección se guarda en este dispositivo y puedes cambiarla cuando quieras.</div>' +
 
       // Necesarias (siempre on)
-      '<div style="background:#f8f9fb;border-radius:12px;padding:14px 16px;margin-bottom:10px">' +
-        '<div style="display:flex;align-items:center;gap:10px"><div style="flex:1"><div style="font-weight:700;font-size:13px;color:#0A1628">🔧 Necesarias</div><div style="font-size:11.5px;color:var(--g2);margin-top:2px">Carro de compras, sesión, idioma. <b>Indispensables — no se pueden desactivar.</b></div></div>' +
+      '<div style="background:#F6F6F3;border-radius:12px;padding:14px 16px;margin-bottom:10px">' +
+        '<div style="display:flex;align-items:center;gap:10px"><div style="flex:1"><div style="font-weight:700;font-size:13px;color:#15171C">🔧 Necesarias</div><div style="font-size:11.5px;color:var(--g2);margin-top:2px">Carro de compras, sesión, idioma. <b>Indispensables — no se pueden desactivar.</b></div></div>' +
         '<label class="cc-toggle"><input type="checkbox" checked disabled><span class="cc-toggle-slider"></span></label></div>' +
       '</div>' +
 
       // Analíticas
-      '<div style="background:#f8f9fb;border-radius:12px;padding:14px 16px;margin-bottom:10px">' +
-        '<div style="display:flex;align-items:center;gap:10px"><div style="flex:1"><div style="font-weight:700;font-size:13px;color:#0A1628">📊 Analíticas</div><div style="font-size:11.5px;color:var(--g2);margin-top:2px">Google Analytics. Nos ayudan a saber qué productos miras más para mejorar el catálogo. <b>Datos anonimizados.</b></div></div>' +
+      '<div style="background:#F6F6F3;border-radius:12px;padding:14px 16px;margin-bottom:10px">' +
+        '<div style="display:flex;align-items:center;gap:10px"><div style="flex:1"><div style="font-weight:700;font-size:13px;color:#15171C">📊 Analíticas</div><div style="font-size:11.5px;color:var(--g2);margin-top:2px">Google Analytics. Nos ayudan a saber qué productos miras más para mejorar el catálogo. <b>Datos anonimizados.</b></div></div>' +
         '<label class="cc-toggle"><input type="checkbox" id="ccTogAnalytics"' + (existing.analytics?' checked':'') + '><span class="cc-toggle-slider"></span></label></div>' +
       '</div>' +
 
       // Marketing
-      '<div style="background:#f8f9fb;border-radius:12px;padding:14px 16px;margin-bottom:18px">' +
-        '<div style="display:flex;align-items:center;gap:10px"><div style="flex:1"><div style="font-weight:700;font-size:13px;color:#0A1628">🎯 Marketing</div><div style="font-size:11.5px;color:var(--g2);margin-top:2px">Permite mostrar ofertas relevantes en Google y redes sociales. Si las activas, podremos enviarte promociones personalizadas.</div></div>' +
+      '<div style="background:#F6F6F3;border-radius:12px;padding:14px 16px;margin-bottom:18px">' +
+        '<div style="display:flex;align-items:center;gap:10px"><div style="flex:1"><div style="font-weight:700;font-size:13px;color:#15171C">🎯 Marketing</div><div style="font-size:11.5px;color:var(--g2);margin-top:2px">Permite mostrar ofertas relevantes en Google y redes sociales. Si las activas, podremos enviarte promociones personalizadas.</div></div>' +
         '<label class="cc-toggle"><input type="checkbox" id="ccTogMarketing"' + (existing.marketing?' checked':'') + '><span class="cc-toggle-slider"></span></label></div>' +
       '</div>' +
 
@@ -44861,7 +44861,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s147', fecha:'Sábado 13 de Junio del 2026' };
+window.SSTT_VER = { ver:'s152', fecha:'Sábado 13 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -90911,7 +90911,7 @@ window.generateShoppingFeed = function() {
     });
   }
   function seedMerch(){ if (STORE.get(K_MERCH) != null) return; STORE.set(K_MERCH, { hidden:[], pinned:[], stockOut:[], badges:{} }); }
-  function seedBanner(){ if (STORE.get(K_BANNER) != null) return; STORE.set(K_BANNER, { banner:{on:false,text:'',color:'#1B2CC1'}, maint:{on:false,msg:'Estamos en mantención. Volvemos pronto.'} }); }
+  function seedBanner(){ if (STORE.get(K_BANNER) != null) return; STORE.set(K_BANNER, { banner:{on:false,text:'',color:'#D90F23'}, maint:{on:false,msg:'Estamos en mantención. Volvemos pronto.'} }); }
   function seedKits(){ if (STORE.get(K_KITS) != null) return; STORE.set(K_KITS, [
     { id:'KIT-DEMO4CAM', nombre:'Kit 4 cámaras IP + NVR', descripcion:'Solución básica de videovigilancia para hogar o pyme.', items:[{codigo:'IPC-HFW2849S-S-IL',qty:4},{codigo:'DHI-NVR2108HS-8P',qty:1}], pricing:'descuento', descuento:8, precioFijo:0, activo:false }
   ]); }
@@ -90988,7 +90988,7 @@ window.generateShoppingFeed = function() {
   }
 
   // ── Banner / mantención (se aplican a TODOS los visitantes; mantención exime al admin) ──
-  function getBanner(){ var b=STORE.get(K_BANNER,{})||{}; if(!b.banner)b.banner={on:false,text:'',color:'#1B2CC1'}; if(!b.maint)b.maint={on:false,msg:''}; return b; }
+  function getBanner(){ var b=STORE.get(K_BANNER,{})||{}; if(!b.banner)b.banner={on:false,text:'',color:'#D90F23'}; if(!b.maint)b.maint={on:false,msg:''}; return b; }
   function saveBanner(b){ STORE.set(K_BANNER, b); }
   function applyBannerMaintenance(){
     try {
@@ -90996,13 +90996,13 @@ window.generateShoppingFeed = function() {
       var bar=document.getElementById('sadmBanner');
       if (cfg.banner && cfg.banner.on && cfg.banner.text){
         if(!bar){ bar=document.createElement('div'); bar.id='sadmBanner'; document.body.appendChild(bar); }
-        bar.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99988;background:'+(cfg.banner.color||'#1B2CC1')+';color:#fff;text-align:center;font:700 13px/1.3 system-ui,sans-serif;padding:9px 14px;box-shadow:0 2px 10px rgba(0,0,0,.2)';
+        bar.style.cssText='position:fixed;top:0;left:0;right:0;z-index:99988;background:'+(cfg.banner.color||'#D90F23')+';color:#fff;text-align:center;font:700 13px/1.3 system-ui,sans-serif;padding:9px 14px;box-shadow:0 2px 10px rgba(0,0,0,.2)';
         bar.textContent=cfg.banner.text;
       } else if (bar){ bar.parentNode && bar.parentNode.removeChild(bar); }
       var ov=document.getElementById('sadmMaint');
       if (cfg.maint && cfg.maint.on && !isAdmin()){
         if(!ov){ ov=document.createElement('div'); ov.id='sadmMaint'; document.body.appendChild(ov); }
-        ov.style.cssText='position:fixed;inset:0;z-index:2147482600;background:#0A1628;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;font-family:system-ui,sans-serif';
+        ov.style.cssText='position:fixed;inset:0;z-index:2147482600;background:#15171C;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;font-family:system-ui,sans-serif';
         ov.innerHTML='<div style="font-size:46px;margin-bottom:14px">🛠️</div><div style="font-size:20px;font-weight:800;margin-bottom:8px">En mantención</div><div style="font-size:14px;opacity:.85;max-width:420px">'+esc(cfg.maint.msg||'')+'</div>';
       } else if (ov){ ov.parentNode && ov.parentNode.removeChild(ov); }
     } catch(e){}
@@ -91072,11 +91072,11 @@ window.generateShoppingFeed = function() {
     var body = (!kits.length)
       ? '<div style="padding:30px;text-align:center;color:#667;font-size:14px">No hay kits disponibles por ahora.</div>'
       : kits.map(function(k){ var pr=kitPrecio(k); return '<div style="border:1px solid #e3e5ea;border-radius:14px;padding:14px 16px;margin-bottom:12px">'+
-          '<div style="font-weight:800;font-size:15px;color:#0A1628">🧰 '+esc(k.nombre)+'</div>'+
+          '<div style="font-weight:800;font-size:15px;color:#15171C">🧰 '+esc(k.nombre)+'</div>'+
           (k.descripcion?'<div style="font-size:12.5px;color:#667;margin-top:3px">'+esc(k.descripcion)+'</div>':'')+
           '<div style="font-size:12px;color:var(--g2);margin-top:8px">'+(k.items||[]).map(function(it){return (it.qty||1)+'× '+esc(it.codigo);}).join('  ·  ')+'</div>'+
           '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;gap:10px;flex-wrap:wrap">'+
-            '<div><div style="font-size:20px;font-weight:900;color:#0A1628">'+fmt(pr.total)+'</div>'+(pr.ahorro>0?'<div style="font-size:11px;color:#1A8C4E;font-weight:700">Ahorras '+fmt(pr.ahorro)+' vs comprar suelto</div>':'<div style="font-size:11px;color:#889">Neto '+fmt(pr.neto)+' + IVA</div>')+'</div>'+
+            '<div><div style="font-size:20px;font-weight:900;color:#15171C">'+fmt(pr.total)+'</div>'+(pr.ahorro>0?'<div style="font-size:11px;color:#1A8C4E;font-weight:700">Ahorras '+fmt(pr.ahorro)+' vs comprar suelto</div>':'<div style="font-size:11px;color:#889">Neto '+fmt(pr.neto)+' + IVA</div>')+'</div>'+
             '<button onclick="SSTT_kitAdd(&#39;'+esc(k.id)+'&#39;)" style="background:#C2410C;color:#fff;border:none;border-radius:10px;padding:11px 16px;font-weight:800;font-size:13px;cursor:pointer">Agregar kit al carro</button>'+
           '</div></div>'; }).join('');
     ov.innerHTML='<div style="width:100%;max-width:640px;background:#fff;border-radius:18px;overflow:hidden;margin:auto 0;font-family:system-ui,sans-serif;box-shadow:0 24px 70px rgba(0,0,0,.4)">'+
@@ -91196,14 +91196,14 @@ window.generateShoppingFeed = function() {
     st.textContent =
       '#sadmOverlay{position:fixed;inset:0;z-index:2147482000;background:rgba(8,12,22,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:flex-start;justify-content:center;padding:24px 14px;overflow:auto}' +
       '#sadmOverlay.on{display:flex}' +
-      '#sadmPanel{width:100%;max-width:920px;background:var(--bg,#fff);color:var(--text,#0A1628);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;font-family:var(--font,system-ui);margin:auto 0}' +
+      '#sadmPanel{width:100%;max-width:920px;background:var(--bg,#fff);color:var(--text,#15171C);border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);overflow:hidden;font-family:var(--font,system-ui);margin:auto 0}' +
       '.sadm-head{display:flex;align-items:center;gap:10px;padding:14px 18px;background:#15171C;color:#fff}' +
       '.sadm-head h3{margin:0;font-size:16px;font-weight:800;flex:1}' +
       '.sadm-badge{font-size:9px;background:#FFB800;color:#000;padding:2px 7px;border-radius:4px;font-weight:800;letter-spacing:.4px}' +
       '.sadm-x{background:rgba(255,255,255,.14);color:#fff;border:none;width:30px;height:30px;border-radius:8px;font-size:17px;cursor:pointer;line-height:1}' +
       '.sadm-tabs{display:flex;gap:4px;flex-wrap:wrap;padding:10px 14px 0;background:var(--bg2,#f6f7f9)}' +
       '.sadm-tab{border:none;background:transparent;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer;border-radius:9px 9px 0 0;color:var(--muted,#667);font-family:var(--font,system-ui)}' +
-      '.sadm-tab.on{background:var(--bg,#fff);color:var(--text,#0A1628);box-shadow:0 -2px 0 #D90F23 inset}' +
+      '.sadm-tab.on{background:var(--bg,#fff);color:var(--text,#15171C);box-shadow:0 -2px 0 #D90F23 inset}' +
       '#sadmBody{padding:16px 18px;max-height:64vh;overflow:auto}' +
       '.sadm-card{border:1px solid var(--border,#e5e7eb);border-radius:11px;padding:12px;margin-bottom:10px;background:var(--bg,#fff)}' +
       '.sadm-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}' +
@@ -91212,7 +91212,7 @@ window.generateShoppingFeed = function() {
       '.sadm-tag{font-size:10px;padding:2px 7px;border-radius:5px;font-weight:800}' +
       '.sadm-on{background:#1A8C4E;color:#fff}.sadm-off{background:#e5e7eb;color:#667}' +
       '.sadm-del{background:#fde8e8;color:#C62828}' +
-      '.sadm-sec-title{font-size:13px;font-weight:800;margin:2px 0 8px;color:var(--text,#0A1628)}' +
+      '.sadm-sec-title{font-size:13px;font-weight:800;margin:2px 0 8px;color:var(--text,#15171C)}' +
       '.sadm-note{font-size:11px;color:var(--muted,#778);line-height:1.5}' +
       '.sadm-mini{font-size:11px;color:var(--muted,#778)}' +
       /* s119: subido sobre #fabRow (antes right:16/bottom:16/z99990 = misma esquina que la fila de FABs → quedaba detrás del orbe IA) */
@@ -91311,7 +91311,7 @@ window.generateShoppingFeed = function() {
           '<div class="sadm-row" style="gap:7px"><b style="font-size:14px">'+esc(c.code)+'</b>' +
             '<span class="sadm-tag '+(c.activo?'sadm-on':'sadm-off')+'">'+(c.activo?'ACTIVO':'OFF')+'</span></div>' +
           '<div class="sadm-row" style="gap:6px">' +
-            '<button data-act="cup-tog" data-id="'+esc(c.code)+'" style="'+BTN+';background:'+(c.activo?'#e8f5e9':'#eef')+';color:var(--g1)">'+(c.activo?'Desactivar':'Activar')+'</button>' +
+            '<button data-act="cup-tog" data-id="'+esc(c.code)+'" style="'+BTN+';background:'+(c.activo?'#e8f5e9':'var(--g6)')+';color:var(--g1)">'+(c.activo?'Desactivar':'Activar')+'</button>' +
             '<button data-act="cup-del" data-id="'+esc(c.code)+'" class="sadm-del" style="'+BTN+'">Eliminar</button>' +
           '</div></div>' +
         '<div class="sadm-grid" style="margin-top:9px">' +
@@ -91358,7 +91358,7 @@ window.generateShoppingFeed = function() {
           '<div class="sadm-row" style="gap:7px"><b style="font-size:14px">'+esc(g.code)+'</b>' +
             '<span class="sadm-tag '+(g.activo?'sadm-on':'sadm-off')+'">'+(g.activo?'ACTIVA':'OFF')+'</span></div>' +
           '<div class="sadm-row" style="gap:6px">' +
-            '<button data-act="gc-tog" data-id="'+esc(g.code)+'" style="'+BTN+';background:'+(g.activo?'#f3e5f5':'#eef')+';color:var(--g1)">'+(g.activo?'Desactivar':'Activar')+'</button>' +
+            '<button data-act="gc-tog" data-id="'+esc(g.code)+'" style="'+BTN+';background:'+(g.activo?'#f3e5f5':'var(--g6)')+';color:var(--g1)">'+(g.activo?'Desactivar':'Activar')+'</button>' +
             '<button data-act="gc-del" data-id="'+esc(g.code)+'" class="sadm-del" style="'+BTN+'">Eliminar</button>' +
           '</div></div>' +
         '<div class="sadm-grid" style="margin-top:9px">' +
@@ -91392,7 +91392,7 @@ window.generateShoppingFeed = function() {
           '<div class="sadm-row" style="gap:7px"><b style="font-size:13.5px">'+esc(p.nombre)+'</b>' +
             '<span class="sadm-tag '+(p.activo?'sadm-on':'sadm-off')+'">'+(p.activo?'ACTIVA':'OFF')+'</span></div>' +
           '<div class="sadm-row" style="gap:6px">' +
-            '<button data-act="promo-tog" data-id="'+esc(p.id)+'" style="'+BTN+';background:'+(p.activo?'#fff3e0':'#eef')+';color:var(--g1)">'+(p.activo?'Desactivar':'Activar')+'</button>' +
+            '<button data-act="promo-tog" data-id="'+esc(p.id)+'" style="'+BTN+';background:'+(p.activo?'#fff3e0':'var(--g6)')+';color:var(--g1)">'+(p.activo?'Desactivar':'Activar')+'</button>' +
             '<button data-act="promo-del" data-id="'+esc(p.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button>' +
           '</div></div>' +
         '<div class="sadm-grid" style="margin-top:9px">' +
@@ -91517,8 +91517,8 @@ window.generateShoppingFeed = function() {
     // Kill switches
     var h = '<div class="sadm-sec-title">Interruptores globales</div>' +
       '<div class="sadm-card"><div class="sadm-row" style="gap:10px;flex-wrap:wrap">' +
-        '<button data-act="ia-kill" style="'+BTN+';background:'+(p.killAll?'#fdecec':'#eef')+';color:'+(p.killAll?'#B91C1C':'var(--g1)')+'">'+(p.killAll?'⏸️ IA PAUSADA — reactivar':'⏸️ Pausar toda IA')+'</button>' +
-        '<button data-act="ia-killtts" style="'+BTN+';background:'+(p.killTTS?'#fdecec':'#eef')+';color:'+(p.killTTS?'#B91C1C':'var(--g1)')+'">'+(p.killTTS?'🔇 TTS PAUSADO — reactivar':'🔇 Pausar TTS')+'</button>' +
+        '<button data-act="ia-kill" style="'+BTN+';background:'+(p.killAll?'#fdecec':'var(--g6)')+';color:'+(p.killAll?'#B91C1C':'var(--g1)')+'">'+(p.killAll?'⏸️ IA PAUSADA — reactivar':'⏸️ Pausar toda IA')+'</button>' +
+        '<button data-act="ia-killtts" style="'+BTN+';background:'+(p.killTTS?'#fdecec':'var(--g6)')+';color:'+(p.killTTS?'#B91C1C':'var(--g1)')+'">'+(p.killTTS?'🔇 TTS PAUSADO — reactivar':'🔇 Pausar TTS')+'</button>' +
         '<span class="sadm-mini" style="flex:1">Botón de pánico para ElevenLabs. Pausar = todo cae a voz de navegador (costo $0).</span>' +
       '</div></div>';
     // Motor TTS
@@ -91629,17 +91629,17 @@ window.generateShoppingFeed = function() {
   // ── VIEW: Banner / mantención ──
   function viewBanner(){
     var cfg=getBanner(); var b=cfg.banner, mt=cfg.maint;
-    var COLORS=[['#1B2CC1','Azul'],['#C2410C','Naranja'],['#1A8C4E','Verde'],['#B91C1C','Rojo'],['#0A1628','Navy']];
+    var COLORS=[['#D90F23','Señal'],['#1B2CC1','Azul'],['#C2410C','Naranja'],['#1A8C4E','Verde'],['#B91C1C','Rojo'],['#0A1628','Navy']];
     var h='<div class="sadm-sec-title">Banner global</div>'+
       '<div class="sadm-card">'+
-        '<div class="sadm-row" style="gap:10px;flex-wrap:wrap"><button data-act="ban-tog" style="'+BTN+';background:'+(b.on?'#1A8C4E':'#eef')+';color:'+(b.on?'#fff':'var(--g1)')+'">'+(b.on?'✅ Banner ACTIVO':'Banner apagado')+'</button><span class="sadm-mini" style="flex:1">Barra fija arriba, visible para todos.</span></div>'+
+        '<div class="sadm-row" style="gap:10px;flex-wrap:wrap"><button data-act="ban-tog" style="'+BTN+';background:'+(b.on?'#1A8C4E':'var(--g6)')+';color:'+(b.on?'#fff':'var(--g1)')+'">'+(b.on?'✅ Banner ACTIVO':'Banner apagado')+'</button><span class="sadm-mini" style="flex:1">Barra fija arriba, visible para todos.</span></div>'+
         '<div class="sadm-grid" style="margin-top:9px">'+
           fld('Texto', '<input data-kind="ban-text" value="'+esc(b.text)+'" placeholder="🚚 Envío gratis sobre $150.000" style="'+INP+'">')+
           fld('Color', '<select data-kind="ban-color" style="'+INP+'">'+COLORS.map(function(o){return '<option value="'+o[0]+'"'+(b.color===o[0]?' selected':'')+'>'+o[1]+'</option>';}).join('')+'</select>')+
         '</div></div>'+
       '<div class="sadm-sec-title" style="margin-top:14px">Modo mantención</div>'+
       '<div class="sadm-card">'+
-        '<div class="sadm-row" style="gap:10px;flex-wrap:wrap"><button data-act="maint-tog" style="'+BTN+';background:'+(mt.on?'#B91C1C':'#eef')+';color:'+(mt.on?'#fff':'var(--g1)')+'">'+(mt.on?'🛠️ MANTENCIÓN ACTIVA':'Mantención apagada')+'</button><span class="sadm-mini" style="flex:1">Bloquea el sitio a los visitantes. <b>Tú (admin) lo sigues viendo</b>.</span></div>'+
+        '<div class="sadm-row" style="gap:10px;flex-wrap:wrap"><button data-act="maint-tog" style="'+BTN+';background:'+(mt.on?'#B91C1C':'var(--g6)')+';color:'+(mt.on?'#fff':'var(--g1)')+'">'+(mt.on?'🛠️ MANTENCIÓN ACTIVA':'Mantención apagada')+'</button><span class="sadm-mini" style="flex:1">Bloquea el sitio a los visitantes. <b>Tú (admin) lo sigues viendo</b>.</span></div>'+
         '<div style="margin-top:9px">'+fld('Mensaje', '<input data-kind="maint-msg" value="'+esc(mt.msg)+'" style="'+INP+'">')+'</div>'+
       '</div>';
     return h;
@@ -91653,7 +91653,7 @@ window.generateShoppingFeed = function() {
     if(!revs.length) h+='<div class="sadm-card sadm-mini">Sin reseñas.</div>';
     h+=revs.map(function(r){ var it=r.it; return '<div class="sadm-card" style="'+(it.oculto?'opacity:.55':'')+'">'+
       '<div class="sadm-row" style="justify-content:space-between;gap:8px"><div style="font-size:12px"><b style="color:#D4A03C">'+('★'.repeat(Math.max(0,it.rating||0)))+'</b> <b>'+esc(it.autor||'?')+'</b> <span class="sadm-mini">'+esc(r.cod)+(it.oculto?' · OCULTA':'')+'</span></div>'+
-        '<div class="sadm-row" style="gap:6px"><button data-act="mod-rev-tog" data-cod="'+esc(r.cod)+'" data-id="'+esc(it.id)+'" style="'+BTN+';background:#eef">'+(it.oculto?'Mostrar':'Ocultar')+'</button><button data-act="mod-rev-del" data-cod="'+esc(r.cod)+'" data-id="'+esc(it.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button></div></div>'+
+        '<div class="sadm-row" style="gap:6px"><button data-act="mod-rev-tog" data-cod="'+esc(r.cod)+'" data-id="'+esc(it.id)+'" style="'+BTN+';background:var(--g6)">'+(it.oculto?'Mostrar':'Ocultar')+'</button><button data-act="mod-rev-del" data-cod="'+esc(r.cod)+'" data-id="'+esc(it.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button></div></div>'+
       (it.titulo?'<div style="font-size:12px;font-weight:700;margin-top:5px">'+esc(it.titulo)+'</div>':'')+
       '<div class="sadm-mini" style="margin-top:3px">'+esc(String(it.texto||'').slice(0,160))+'</div></div>';
     }).join('');
@@ -91661,7 +91661,7 @@ window.generateShoppingFeed = function() {
     if(!qas.length) h+='<div class="sadm-card sadm-mini">Sin preguntas.</div>';
     h+=qas.map(function(q){ var it=q.it; return '<div class="sadm-card" style="'+(it.oculto?'opacity:.55':'')+'">'+
       '<div class="sadm-row" style="justify-content:space-between;gap:8px"><div style="font-size:12px"><b>'+esc(it.autor||'?')+'</b> <span class="sadm-mini">'+esc(q.cod)+(it.oculto?' · OCULTA':'')+'</span></div>'+
-        '<div class="sadm-row" style="gap:6px"><button data-act="mod-qa-tog" data-cod="'+esc(q.cod)+'" data-id="'+esc(it.id)+'" style="'+BTN+';background:#eef">'+(it.oculto?'Mostrar':'Ocultar')+'</button><button data-act="mod-qa-del" data-cod="'+esc(q.cod)+'" data-id="'+esc(it.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button></div></div>'+
+        '<div class="sadm-row" style="gap:6px"><button data-act="mod-qa-tog" data-cod="'+esc(q.cod)+'" data-id="'+esc(it.id)+'" style="'+BTN+';background:var(--g6)">'+(it.oculto?'Mostrar':'Ocultar')+'</button><button data-act="mod-qa-del" data-cod="'+esc(q.cod)+'" data-id="'+esc(it.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button></div></div>'+
       '<div class="sadm-mini" style="margin-top:3px">'+esc(String(it.pregunta||it.texto||'').slice(0,160))+'</div></div>';
     }).join('');
     return h;
@@ -91677,7 +91677,7 @@ window.generateShoppingFeed = function() {
     var gc=(typeof rwGiftcardGetAll==='function')?rwGiftcardGetAll():[];
     var pr=getPromos(); var ti=getTiers(); var m=getMerch();
     var nProd=(typeof PRODUCTS!=='undefined')?PRODUCTS.length:0;
-    function card(label,val,color){ return '<div class="sadm-card" style="text-align:center"><div style="font-size:22px;font-weight:900;color:'+(color||'#0A1628')+'">'+val+'</div><div class="sadm-mini" style="margin-top:2px">'+label+'</div></div>'; }
+    function card(label,val,color){ return '<div class="sadm-card" style="text-align:center"><div style="font-size:22px;font-weight:900;color:'+(color||'#15171C')+'">'+val+'</div><div class="sadm-mini" style="margin-top:2px">'+label+'</div></div>'; }
     var h='<div class="sadm-sec-title">Gasto IA de la sesión (CLP)</div>'+
       '<div class="sadm-grid">'+card('🤖 Claude',fmt(cost.claude),'#15171C')+card('🔊 ElevenLabs',fmt(cost.eleven),'#15171C')+card('Σ Total',fmt(cost.total),'#B91C1C')+'</div>'+
       '<div class="sadm-grid" style="margin-top:8px">'+card('Llamadas Claude',cc.toLocaleString('es-CL'))+card('Chars 11Labs',ec.toLocaleString('es-CL'),'#15171C')+card('Tope mes',(cap?cap.toLocaleString('es-CL'):'∞'))+'</div>'+
@@ -91699,7 +91699,7 @@ window.generateShoppingFeed = function() {
       var pr=kitPrecio(k);
       return '<div class="sadm-card">'+
         '<div class="sadm-row" style="justify-content:space-between"><div class="sadm-row" style="gap:7px"><b style="font-size:13.5px">🧰 '+esc(k.nombre)+'</b><span class="sadm-tag '+(k.activo?'sadm-on':'sadm-off')+'">'+(k.activo?'ACTIVO':'OFF')+'</span></div>'+
-          '<div class="sadm-row" style="gap:6px"><button data-act="kit-tog" data-id="'+esc(k.id)+'" style="'+BTN+';background:'+(k.activo?'#fff3e0':'#eef')+';color:var(--g1)">'+(k.activo?'Desactivar':'Activar')+'</button><button data-act="kit-del" data-id="'+esc(k.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button></div></div>'+
+          '<div class="sadm-row" style="gap:6px"><button data-act="kit-tog" data-id="'+esc(k.id)+'" style="'+BTN+';background:'+(k.activo?'#fff3e0':'var(--g6)')+';color:var(--g1)">'+(k.activo?'Desactivar':'Activar')+'</button><button data-act="kit-del" data-id="'+esc(k.id)+'" class="sadm-del" style="'+BTN+'">Eliminar</button></div></div>'+
         '<div class="sadm-grid" style="margin-top:9px">'+
           fld('Nombre','<input data-kind="kit" data-id="'+esc(k.id)+'" data-field="nombre" value="'+esc(k.nombre)+'" style="'+INP+'">')+
           fld('Descripción','<input data-kind="kit" data-id="'+esc(k.id)+'" data-field="descripcion" value="'+esc(k.descripcion||'')+'" style="'+INP+'">')+
