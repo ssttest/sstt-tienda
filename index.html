@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 13 de Junio del 2026 · s152 -->
+<!-- SSTT Tienda · Generado: Sábado 13 de Junio del 2026 · s156 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -1137,6 +1137,8 @@ nav {
 }
 .pb-normal { background: var(--black); color: var(--white) }
 .pb-bajo   { background: var(--red);   color: var(--white) }
+/* s153: en cards Proyecto, el badge de stock baja para NO quedar tapado por el badge "Proyecto" (top:8px). Especificidad 0,2,0 + !important le gana a .pbadge{top:10px!important} (L~18396). */
+.pbadge.pbadge-ent { top: 32px !important; left: 8px !important; } /* s154: + left:8px para alinear bajo el badge "Proyecto" (left:8px), pisa el left:10px de liquid-glass */
 .pb-new    { background: var(--blue);  color: var(--white) }
 .pb-out    { background: var(--g4);    color: var(--white) }
 .pb-stock  { background: var(--tool-ok-bg); color: var(--green) }
@@ -6749,7 +6751,7 @@ body.cart-open #proyectoListadoBtn {
   display:flex;align-items:center;gap:14px;
 }
 .tech-modal-logo { width:52px;height:52px;flex-shrink:0; }
-.tech-modal-title { font-size:22px;font-weight:800;color:#0A1628; }
+.tech-modal-title { font-size:22px;font-weight:800;color:#15171C; } /* s155: navy #0A1628 -> ink */
 .tech-modal-sub { font-size:12px;color:var(--g3);margin-top:2px; }
 .tech-modal-close {
   margin-left:auto;background:none;border:none;cursor:pointer;
@@ -17203,7 +17205,7 @@ body.cart-open #proyectoListadoBtn {
 }
 .ms-item-hero .ms-item-name {
   font-weight: 800;
-  color: #0a1628;
+  color: #15171C; /* s156: navy #0a1628 -> ink */
 }
 .ms-item-badge {
   display: inline-block;
@@ -18772,7 +18774,7 @@ body.cart-open #ssttCostHud{ display:none !important; }
 <!-- SSTT Redesign V3 · Fine Liquid Glass Audit Pass -->
 <style id="sstt-liquid-glass-v3">
 :root{
-  --lg-ink:#071426;
+  --lg-ink:#15171C; /* s156: navy #071426 -> ink (token + 6 hardcodes pcard-name/price-total/textarea/ms-item/footer pasaron en el mismo barrido) */
   --lg-ink-2:#18314f;
   --lg-ink-3:#506278;
   /* s152: --lg-* huérfanos eliminados (0 usos): white, blue, blue-2, blue-3, red, red-2, green, glass-strong, stroke-dark */
@@ -19004,15 +19006,15 @@ body.cart-open #ssttCostHud{ display:none !important; }
     linear-gradient(180deg, rgba(242,248,255,.96), rgba(229,239,251,.72)) !important;
 }
 .sstt-liquid-glass .pcard-name{
-  color:#071426 !important;
+  color:#15171C !important;
   font-weight:700 !important;
 }
 .sstt-liquid-glass .price-total{
-  color:#071426 !important;
+  color:#15171C !important;
   font-size:26px !important;
 }
 .sstt-liquid-glass .pcard-quickview{
-  background:rgba(7,20,38,.78) !important;
+  background:rgba(21,23,28,.78) !important; /* s156: navy -> ink */
   color:#fff !important;
 }
 .sstt-liquid-glass .pcard-quickview *{ color:#fff !important; }
@@ -19146,7 +19148,7 @@ body.cart-open #ssttCostHud{ display:none !important; }
 .sstt-liquid-glass input,
 .sstt-liquid-glass select,
 .sstt-liquid-glass textarea{
-  color:#071426 !important;
+  color:#15171C !important;
   caret-color:#D90F23;
 }
 .sstt-liquid-glass input::placeholder,
@@ -19157,7 +19159,7 @@ body.cart-open #ssttCostHud{ display:none !important; }
 
 /* Dropdowns */
 .sstt-liquid-glass .ms-item{
-  color:#071426 !important;
+  color:#15171C !important;
   background:rgba(255,255,255,.58) !important;
   border-radius:20px !important;
 }
@@ -19467,7 +19469,7 @@ button,
 #proyectoModal{
   -webkit-backdrop-filter:none !important;
   backdrop-filter:none !important;
-  background:rgba(7,20,38,.38) !important;
+  background:rgba(21,23,28,.38) !important; /* s155: navy rgba(7,20,38) -> ink rgba(21,23,28) — regla compartida cmpOverlay/scene/proyectoModal */
 }
 
 /* 12) Accessibility / low power */
@@ -19540,11 +19542,11 @@ button,
 .sstt-liquid-glass .pcard,
 .sstt-liquid-glass #cartDrawer,
 .sstt-liquid-glass footer{
-  color:#071426 !important;
+  color:#15171C !important;
 }
 .sstt-liquid-glass .price-total,
 .sstt-liquid-glass .pcard-name{
-  color:#071426 !important;
+  color:#15171C !important;
 }
 .sstt-liquid-glass .price-neto,
 .sstt-liquid-glass .price-sub,
@@ -26078,6 +26080,7 @@ window.renderProductCard = function(p) {
     // s119: merchandising — forzar "Sin stock" y badge custom desde panel admin (defensivo)
     try { if (window.SSTT_ADMIN && SSTT_ADMIN.merchForcedStock && SSTT_ADMIN.merchForcedStock(p.codigo)) _bm = BADGE_MAP.sin_stock; } catch(e){}
     var lbl = _bm[0], cls = _bm[1];
+    var _isEnt = (typeof B2B !== 'undefined' && B2B.classify(p) === 'enterprise'); // s153: card Proyecto -> badge stock se apila debajo del badge "Proyecto"
     var _merchBadge = '';
     try { if (window.SSTT_ADMIN && SSTT_ADMIN.merchBadge){ var _mb = SSTT_ADMIN.merchBadge(p.codigo); if(_mb) _merchBadge = '<span class="pbadge" style="background:'+(_mb.color||'#C2410C')+';color:#fff;left:6px;top:34px">'+escapeHtml(_mb.text)+'</span>'; } } catch(e){}
     const tags = getTags(p.nombre, p.codigo);
@@ -26092,7 +26095,7 @@ window.renderProductCard = function(p) {
         <img class="pcard-img loading" src="${imgProxyUrl(p.codigo)}" alt="${escapeHtml(p.nombre)} - ${p.codigo} Dahua" loading="lazy"
              onload="this.classList.remove('loading');this.previousElementSibling.style.display='none'"
              onerror="imgFallback(this,'${p.codigo}','${p.cat}')">
-        <span class="pbadge ${cls}">${lbl}</span>
+        <span class="pbadge ${cls}${_isEnt ? ' pbadge-ent' : ''}">${lbl}</span>
         ${_merchBadge}
         ${(typeof window._camFeatured==='function' && window._camFeatured(p)) ? '<span class="pcard-feat-star" title="Tecnologia destacada">&#9733;</span>' : ''}
         ${(window.SSTT_TOPVENTAS && window.SSTT_TOPVENTAS[(p.codigo||'').toString().toUpperCase()]) ? '<span class="pcard-top-badge" title="Entre los mas vendidos">&#128293; Top ventas</span>' : ''}
@@ -28607,7 +28610,7 @@ function renderPerfilDatos() {
           card.onclick = nextVista;
           card.innerHTML =
             // Header factura
-            '<div style="background:#0A1628;color:#fff;padding:18px 22px 14px">' +
+            '<div style="background:#15171C;color:#fff;padding:18px 22px 14px">' +/* s155: navy #0A1628 -> ink */
               '<div style="display:flex;justify-content:space-between;align-items:flex-start">' +
                 '<div>' +
                   '<div style="font-size:22px;font-weight:900;letter-spacing:.15em;color:#fff">SSTT SpA</div>' +
@@ -42129,7 +42132,7 @@ window.addEventListener('pagehide', aiReleaseAllMic);
     // Colores de marca SSTT
     var RED  = '#D90F23';
     var DARK = '#1a1a1a';
-    var NAVY = '#0a1628';
+    /* s156: var NAVY ('#0a1628') eliminada — dead code, 0 usos en todo el archivo */
 
     // ── Calcular posición segura (dentro del viewport) ──
     var isMobile = window.innerWidth < 700 || matchMedia('(pointer: coarse)').matches; /* FIX s23a: foldables/touch */
@@ -44861,7 +44864,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s152', fecha:'Sábado 13 de Junio del 2026' };
+window.SSTT_VER = { ver:'s156', fecha:'Sábado 13 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
