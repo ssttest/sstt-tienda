@@ -63897,7 +63897,7 @@ if (document.readyState === 'loading') {
         '<div style="font-size:42px;line-height:1;margin-bottom:8px">📷</div>' +
         '<h3 style="margin:0 0 6px;font-size:18px;color:var(--tool-accent);font-weight:700">Auditor de sistema instalado <span class="ai-status-dot" style="display:inline-block;vertical-align:middle;margin-left:6px"></span></h3>' +
         '<p style="margin:0 0 14px;color:var(--tool-muted);font-size:13px;line-height:1.5">' +
-          'Sube una captura tomada desde tu app DMSS y la IA evalúa si tu cámara cumple con lo que necesitas ver.' +
+          'Sube una imagen exportada desde la app DMSS (usa el botón de guardar/descargar imagen, no un screenshot) y la IA evalúa si tu cámara cumple con lo que necesitas ver.' +
         '</p>' +
       '</div>' +
       '<div style="background:#FEFAE6;border:1px solid #F0C74E;border-radius:12px;padding:13px 14px;margin-bottom:12px">' +
@@ -63906,8 +63906,7 @@ if (document.readyState === 'loading') {
           '<div style="flex:1">' +
             '<div style="font-weight:700;font-size:13px;color:#986000;margin-bottom:4px">Esta herramienta usa recursos de IA</div>' +
             '<div style="font-size:12px;color:#986000;line-height:1.45">' +
-              'Cada análisis tiene un costo aproximado de <b>USD $0.06</b> que SSTT asume. ' +
-              'Hoy es <b>gratis en modo PREVIEW</b> (1 cámara por análisis).' +
+              'En modo <b>PREVIEW</b> puedes analizar 1 cámara por análisis.' +
             '</div>' +
           '</div>' +
         '</div>' +
@@ -63939,7 +63938,7 @@ if (document.readyState === 'loading') {
 
     c.innerHTML =
       '<div style="font-size:13px;color:var(--tool-fg2);margin-bottom:10px;line-height:1.45">' +
-        'Sube una <b>captura desde DMSS</b> de la cámara que quieres auditar.' +
+        'Sube una imagen de la cámara que quieres auditar. <b>Recomendado:</b> descárgala con la app DMSS (toca el ícono de guardar/descargar imagen dentro del visor en vivo) en vez de tomar un screenshot — sale más nítida y sin recortes de la interfaz.' +
       '</div>' +
       (hasFile ?
         '<div style="background:#EAF6EE;border:1px solid #98C9A8;border-radius:11px;padding:11px;margin-bottom:12px;display:flex;gap:10px;align-items:center">' +
@@ -63952,10 +63951,13 @@ if (document.readyState === 'loading') {
         '</div>'
         :
         '<label style="display:block;border:2px dashed #ccd5e5;border-radius:13px;padding:24px 16px;text-align:center;cursor:pointer;background:#fafbfd;margin-bottom:12px;transition:all .15s" ' +
-        'onmouseover="this.style.borderColor=\'#15171C\';this.style.background=\'#f0f6ff\'" onmouseout="this.style.borderColor=\'#ccd5e5\';this.style.background=\'#fafbfd\'">' +
+        'onmouseover="this.style.borderColor=\'#15171C\';this.style.background=\'#f0f6ff\'" onmouseout="this.style.borderColor=\'#ccd5e5\';this.style.background=\'#fafbfd\'" ' +
+        'ondragover="event.preventDefault();this.style.borderColor=\'#15171C\';this.style.background=\'#f0f6ff\'" ' +
+        'ondragleave="this.style.borderColor=\'#ccd5e5\';this.style.background=\'#fafbfd\'" ' +
+        'ondrop="audHandleDrop(event)">' +
           '<div style="font-size:32px;margin-bottom:6px">📤</div>' +
-          '<div style="font-size:13px;font-weight:600;color:var(--tool-accent);margin-bottom:3px">Toca para subir captura</div>' +
-          '<div style="font-size:11px;color:var(--tool-light)">JPG, PNG o WebP — máximo 4 MB</div>' +
+          '<div style="font-size:13px;font-weight:600;color:var(--tool-accent);margin-bottom:3px">Toca o arrastra la imagen aquí</div>' +
+          '<div style="font-size:11px;color:var(--tool-light)">JPG, PNG o WebP — máximo 10 MB</div>' +
           '<input type="file" accept="image/jpeg,image/png,image/webp" onchange="audHandleFile(event)" style="display:none">' +
         '</label>'
       ) +
@@ -64014,11 +64016,10 @@ if (document.readyState === 'loading') {
     return (bytes/(1024*1024)).toFixed(2) + ' MB';
   };
 
-  window.audHandleFile = function(ev) {
-    var file = ev.target.files && ev.target.files[0];
+  window.audProcessFile = function(file) {  // s158: lógica compartida (input + drag&drop)
     if (!file) return;
-    if (file.size > 4 * 1024 * 1024) {
-      window.audState.error = 'La imagen supera 4 MB. Toma la captura con menor resolución o reduce calidad.';
+    if (file.size > 10 * 1024 * 1024) {
+      window.audState.error = 'La imagen supera 10 MB. Descárgala desde DMSS o reduce la calidad.';
       audRenderStep1();
       return;
     }
@@ -64029,22 +64030,55 @@ if (document.readyState === 'loading') {
     }
     var reader = new FileReader();
     reader.onload = function(e) {
-      var b64 = (e.target.result || '').split(',')[1] || '';
-      window.audState.file = {
-        name: file.name,
-        size: file.size,
-        mediaType: file.type,
-        base64: b64,
-        type: 'image'
+      var src = e.target.result || '';
+      var img = new Image();
+      img.onload = function() {
+        // s158: reducir a borde largo <=1568px (lo que la API de visión usa) -> base64 liviano, evita rechazo por tamaño
+        var maxEdge = 1568;
+        var w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
+        var scale = Math.min(1, maxEdge / Math.max(w, h));
+        var ow = Math.max(1, Math.round(w * scale)), oh = Math.max(1, Math.round(h * scale));
+        var out, mt;
+        try {
+          var cv = document.createElement('canvas');
+          cv.width = ow; cv.height = oh;
+          cv.getContext('2d').drawImage(img, 0, 0, ow, oh);
+          out = cv.toDataURL('image/jpeg', 0.85);
+          mt = 'image/jpeg';
+        } catch (err) {
+          out = src; mt = file.type;  // fallback: usar original si el canvas falla
+        }
+        window.audState.file = {
+          name: file.name,
+          size: file.size,          // tamaño original subido (para mostrar)
+          mediaType: mt,
+          base64: (out.split(',')[1] || ''),
+          type: 'image'
+        };
+        window.audState.error = null;
+        audRenderStep1();
       };
-      window.audState.error = null;
-      audRenderStep1();
+      img.onerror = function() {
+        window.audState.error = 'No se pudo leer la imagen.';
+        audRenderStep1();
+      };
+      img.src = src;
     };
     reader.onerror = function() {
       window.audState.error = 'No se pudo leer la imagen.';
       audRenderStep1();
     };
     reader.readAsDataURL(file);
+  };
+
+  window.audHandleFile = function(ev) {
+    audProcessFile(ev.target.files && ev.target.files[0]);
+  };
+
+  window.audHandleDrop = function(ev) {  // s158: soltar archivo en el área
+    ev.preventDefault();
+    var dt = ev.dataTransfer;
+    audProcessFile(dt && dt.files && dt.files[0]);
   };
 
   window.audSubmit = function() {
@@ -64281,6 +64315,8 @@ if (document.readyState === 'loading') {
       alert('PDF no disponible: la librería jsPDF no cargó. Recarga la página.');
       return;
     }
+    var sFile = window.audState.file;  // s158: imagen enviada (para incrustar en el PDF)
+    function audBuildPDF(imgData, imgW, imgH) {  // s158: build envuelto para esperar la carga async de la imagen
     var jsPDF = window.jspdf.jsPDF;
     var doc = new jsPDF({ unit: 'mm', format: 'a4' });
     var a = window.audState.analysis;
@@ -64338,6 +64374,20 @@ if (document.readyState === 'loading') {
     );
     doc.text(ctxLines, 14, y);
     y += ctxLines.length * 4.5 + 4;
+
+    // s158: Imagen analizada (la imagen DMSS enviada por el usuario)
+    if (imgData && imgW && imgH) {
+      if (y > ph - 50) { doc.addPage(); y = 16; }
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(11);
+      doc.setTextColor(40, 40, 40);
+      doc.text('Imagen analizada', 14, y); y += 5;
+      var maxW = pw - 28, maxH = 95;
+      var dispW = maxW, dispH = dispW * (imgH / imgW);
+      if (dispH > maxH) { dispH = maxH; dispW = dispH * (imgW / imgH); }
+      if (y + dispH > ph - 15) { doc.addPage(); y = 16; }
+      try { doc.addImage(imgData, 'JPEG', 14, y, dispW, dispH); } catch (e) {}
+      y += dispH + 6;
+    }
 
     // Tabla evaluación por objetivo
     if (a.evaluacion_por_objetivo && a.evaluacion_por_objetivo.length && doc.autoTable) {
@@ -64431,6 +64481,25 @@ if (document.readyState === 'loading') {
 
     var fname = 'auditoria-sstt-' + new Date().toISOString().slice(0, 10) + '.pdf';
     doc.save(fname);
+    }  // fin audBuildPDF
+
+    // s158: si hay imagen, convertirla a JPEG vía canvas (uniforma JPG/PNG/WebP) y recién ahí construir el PDF
+    if (sFile && sFile.base64) {
+      var img = new Image();
+      img.onload = function() {
+        try {
+          var cv = document.createElement('canvas');
+          cv.width = img.naturalWidth || img.width;
+          cv.height = img.naturalHeight || img.height;
+          cv.getContext('2d').drawImage(img, 0, 0);
+          audBuildPDF(cv.toDataURL('image/jpeg', 0.85), cv.width, cv.height);
+        } catch (e) { audBuildPDF(null); }
+      };
+      img.onerror = function() { audBuildPDF(null); };
+      img.src = 'data:' + sFile.mediaType + ';base64,' + sFile.base64;
+    } else {
+      audBuildPDF(null);
+    }
   };
 
   // ── Acordeón del Mesón Técnico ──
