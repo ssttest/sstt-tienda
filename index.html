@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Sábado 13 de Junio del 2026 · s157 -->
+<!-- SSTT Tienda · Generado: Martes 16 de Junio del 2026 · s158 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -44864,7 +44864,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s157', fecha:'Sábado 13 de Junio del 2026' };
+window.SSTT_VER = { ver:'s158', fecha:'Martes 16 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -63221,7 +63221,7 @@ if (document.readyState === 'loading') {
           '<line x1="12" y1="3" x2="12" y2="15"/>' +
         '</svg>' +
         '<p class="ac-drop-t">Subir imagen o PDF</p>' +
-        '<p class="ac-drop-s">Foto WhatsApp, screenshot, PDF · máx 4 MB</p>' +
+        '<p class="ac-drop-s">Foto WhatsApp, screenshot, PDF · máx 10 MB</p>' +
         '<div class="ac-input-types">' +
           '<span class="ac-type-pill">JPG</span>' +
           '<span class="ac-type-pill">PNG</span>' +
@@ -63273,9 +63273,9 @@ if (document.readyState === 'loading') {
   window.acHandleFile = function(event) {
     var f = event.target.files[0];
     if (!f) return;
-    var maxSize = 4 * 1024 * 1024; // 4 MB
+    var maxSize = 10 * 1024 * 1024; // s158: 10 MB
     if (f.size > maxSize) {
-      window.acState.error = 'El archivo supera 4 MB. Toma una foto con menor resolución o comprime el PDF.';
+      window.acState.error = 'El archivo supera 10 MB. Toma una foto con menor resolución o comprime el PDF.';
       acRenderStep1();
       return;
     }
