@@ -6322,8 +6322,12 @@ input[data-validated="1"]::after {
   width: 36px !important;
   height: 36px !important;
   border-radius: 50% !important;
-  /* s97: cuerpo embossed spec (fill #2B2B35); anillo iridiscente se mantiene en ::before */
-  background: #2B2B35 !important;
+  /* s159: orb de cristal iridiscente — reemplaza el cuerpo titanio embossed */
+  background:
+    radial-gradient(circle at 37% 30%, rgba(255,255,255,.55) 0%, rgba(255,255,255,.12) 24%, rgba(200,222,255,.05) 48%, rgba(255,255,255,0) 66%),
+    radial-gradient(circle at 50% 58%, rgba(150,210,255,.28), rgba(150,210,255,0) 52%),
+    rgba(255,255,255,0.05) !important;
+  backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px);
   border: none !important;
   cursor: pointer;
   display: flex !important;
@@ -6333,63 +6337,50 @@ input[data-validated="1"]::after {
   visibility: visible !important;
   opacity: 1 !important;
   overflow: visible !important;
-  /* s97: emboss spec (stroke 1px inside + 5 inner shadows) + sombra exterior */
+  /* s159: shell de cristal — specular superior + rim + tinte violeta/cian interno + sombra suave */
   box-shadow:
-    inset 0 0 0 1px #3D3D49,
-    inset -3px 0 0 0 #3D3D49,
-    inset 3px 0 0 0 #3D3D49,
-    inset 0 -3px 0 0 #171720,
-    inset 0 2px 0 0 #7E7E8B,
-    inset 0 3px 0 0 #171720,
-    0 4px 16px rgba(0,0,0,0.55), 0 2px 6px rgba(0,0,0,0.35) !important;
+    inset 0 1px 1px rgba(255,255,255,.75),
+    inset 0 0 0 1px rgba(255,255,255,.40),
+    inset -4px -5px 10px rgba(120,90,210,.30),
+    inset 4px 5px 9px rgba(110,205,255,.20),
+    0 3px 12px rgba(40,60,120,.22) !important;
 }
 
-/* Anillo iridiscente: conic-gradient girando DETRÁS del cuerpo titanio */
+/* s159: anillo iridiscente arcoíris girando DETRÁS del cristal */
 #aiFab::before {
   content: '';
   position: absolute;
-  inset: -2px;           /* 2px extra = grosor del anillo visible */
+  inset: -2px;           /* grosor del anillo visible */
   border-radius: 50%;
-  z-index: -1;           /* detrás del fondo titanio del botón */
+  z-index: -1;           /* detrás del cuerpo de cristal */
+  filter: blur(1px);
   background: conic-gradient(
     from var(--aiFab-angle, 0deg),
-    /* base oscura titanio */
-    rgba(60,62,80,0.7)        0deg,
-    rgba(90,95,120,0.8)       8deg,
-    /* destello blanco — specular highlight */
-    rgba(230,238,255,0.95)   14deg,
-    rgba(255,255,255,1.00)   19deg,
-    rgba(238,245,255,0.92)   24deg,
-    /* azul hielo */
-    rgba(155,195,240,0.85)   32deg,
-    rgba(125,170,228,0.78)   44deg,
-    /* lavanda perlada */
-    rgba(170,160,215,0.72)   58deg,
-    rgba(150,143,205,0.65)   75deg,
-    /* gris nacarado */
-    rgba(125,130,162,0.55)   95deg,
-    rgba(100,104,132,0.48)  118deg,
-    /* zona oscura: metal sin luz directa */
-    rgba(62,64,83,0.35)     155deg,
-    rgba(46,48,62,0.28)     210deg,
-    rgba(50,52,68,0.33)     260deg,
-    rgba(62,66,86,0.40)     295deg,
-    /* segundo destello más tenue */
-    rgba(165,180,225,0.68)  318deg,
-    rgba(205,218,252,0.82)  330deg,
-    rgba(255,255,255,0.90)  336deg,
-    rgba(195,210,248,0.75)  342deg,
-    /* cierre */
-    rgba(85,90,112,0.52)    354deg,
-    rgba(60,62,80,0.70)     360deg
+    rgba(255,138,42,.55)    0deg,
+    rgba(255,214,107,.65)  38deg,
+    rgba(255,255,255,.95)  62deg,
+    rgba(41,231,255,.70)  120deg,
+    rgba(56,108,255,.65)  200deg,
+    rgba(155,77,255,.62)  280deg,
+    rgba(255,214,107,.60) 330deg,
+    rgba(255,138,42,.55)  360deg
   );
   animation: aiFabSpin 4s linear infinite;
 }
 
-/* Reflejo especular interno — highlight superior izquierdo */
+/* s159: banda iridiscente arcoíris (zona inferior-central del orb) */
 #aiFab::after {
-  /* s97: highlight especular desactivado — el brillo superior lo aporta el inner-shadow #7E7E8B del spec */
-  content: none;
+  content: '';
+  position: absolute;
+  left: 20%; right: 20%;
+  bottom: 30%;
+  height: 16%;
+  border-radius: 50%;
+  z-index: 1;
+  background: linear-gradient(90deg,#ff8a2a,#ffd66b,#ffffff,#29e7ff,#386cff,#9b4dff);
+  filter: blur(1.4px) saturate(1.1);
+  opacity: .85;
+  pointer-events: none;
 }
 
 @keyframes aiFabSpin {
@@ -6398,16 +6389,14 @@ input[data-validated="1"]::after {
 }
 
 #aiFab:hover {
-  transform: scale(1.08) !important;
-  /* s97: hover preserva el emboss del spec + sombra exterior reforzada */
+  transform: scale(1.25) !important;   /* s159: crece 25% al hover */
+  /* s159: sombra de cristal reforzada en hover */
   box-shadow:
-    inset 0 0 0 1px #3D3D49,
-    inset -3px 0 0 0 #3D3D49,
-    inset 3px 0 0 0 #3D3D49,
-    inset 0 -3px 0 0 #171720,
-    inset 0 2px 0 0 #7E7E8B,
-    inset 0 3px 0 0 #171720,
-    0 8px 26px rgba(0,0,0,0.62), 0 2px 8px rgba(0,0,0,0.42) !important;
+    inset 0 1px 1px rgba(255,255,255,.80),
+    inset 0 0 0 1px rgba(255,255,255,.50),
+    inset -4px -5px 10px rgba(120,90,210,.34),
+    inset 4px 5px 9px rgba(110,205,255,.24),
+    0 6px 20px rgba(40,60,120,.30) !important;
 }
 #aiFab:hover::before { animation-duration: 2s; }
 @media(max-width:768px) { #aiFab { bottom:20px !important; right:14px !important; width:54px; height:54px; } }
@@ -9795,15 +9784,17 @@ body.cart-open #proyectoListadoBtn {
   margin-bottom: 16px;
   border: 1.5px solid;
 }
-.norm-status.pass {
-  background: linear-gradient(135deg, rgba(46,204,113,.08), rgba(39,174,96,.03));
-  border-color: rgba(46,204,113,.3);
+.norm-status.pass { /* s159: arbol de pascua -> tokens sistema (Porcelana & Senal) */
+  background: var(--tool-ok-bg);
+  border-color: rgba(26,127,60,.28);
 }
 .norm-status.fail {
-  background: linear-gradient(135deg, rgba(231,76,60,.08), rgba(192,57,43,.03));
-  border-color: rgba(231,76,60,.3);
+  background: var(--tool-fail-bg);
+  border-color: rgba(180,12,29,.28);
 }
-.norm-status-icon { font-size: 36px; }
+.norm-status-icon { font-size: 34px; font-weight: 900; line-height: 1; }
+.norm-status.pass .norm-status-icon { color: var(--tool-ok); }   /* s159: emoji multicolor -> glifo senal */
+.norm-status.fail .norm-status-icon { color: var(--tool-fail); }
 .norm-status-title {
   font-size: 18px;
   font-weight: 900;
@@ -9840,13 +9831,13 @@ body.cart-open #proyectoListadoBtn {
   border-radius: 10px;
   border: 1px solid;
 }
-.norm-check.pass {
-  background: rgba(46,204,113,.06);
-  border-color: rgba(46,204,113,.2);
+.norm-check.pass { /* s159 */
+  background: var(--tool-ok-bg);
+  border-color: rgba(26,127,60,.20);
 }
 .norm-check.fail {
-  background: rgba(231,76,60,.06);
-  border-color: rgba(231,76,60,.2);
+  background: var(--tool-fail-bg);
+  border-color: rgba(180,12,29,.20);
 }
 .norm-check-icon {
   width: 28px; height: 28px;
@@ -9859,7 +9850,7 @@ body.cart-open #proyectoListadoBtn {
   flex-shrink: 0;
 }
 .norm-check.pass .norm-check-icon {
-  background: #27ae60; color: #fff;
+  background: var(--tool-ok); color: #fff; /* s159: #27ae60 -> token */
 }
 .norm-check.fail .norm-check-icon {
   background: var(--tool-fail); color: #fff;
@@ -9914,9 +9905,9 @@ body.cart-open #proyectoListadoBtn {
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-.norm-fixes {
-  background: linear-gradient(135deg, rgba(243,156,18,.08), rgba(243,156,18,.02));
-  border: 1px solid rgba(243,156,18,.25);
+.norm-fixes { /* s159: naranja -> token warn sistema */
+  background: var(--tool-warn-bg);
+  border: 1px solid rgba(152,96,0,.22);
   border-radius: 12px;
   padding: 14px 16px;
 }
@@ -41739,10 +41730,10 @@ function aiMicStop() {
   aiMicSetState(aiAutoMic ? 'active' : 'off');
   var fab = document.getElementById('aiFab');
   // s97: restaurar el cuerpo embossed del spec (variante B) tras salir de modo voz
-  if (fab) { fab.style.borderColor = ''; fab.style.setProperty('box-shadow',
-    'inset 0 0 0 1px #3D3D49,inset -3px 0 0 0 #3D3D49,inset 3px 0 0 0 #3D3D49,' +
-    'inset 0 -3px 0 0 #171720,inset 0 2px 0 0 #7E7E8B,inset 0 3px 0 0 #171720,' +
-    '0 4px 16px rgba(0,0,0,0.55),0 2px 6px rgba(0,0,0,0.35)'); }
+  if (fab) { fab.style.borderColor = ''; fab.style.setProperty('box-shadow', /* s159: glass */
+    'inset 0 1px 1px rgba(255,255,255,.75),inset 0 0 0 1px rgba(255,255,255,.40),' +
+    'inset -4px -5px 10px rgba(120,90,210,.30),inset 4px 5px 9px rgba(110,205,255,.20),' +
+    '0 3px 12px rgba(40,60,120,.22)'); }
 }
 
 // Pre-inicializar SR al cargar (solicita permiso una sola vez)
@@ -42156,7 +42147,7 @@ window.addEventListener('pagehide', aiReleaseAllMic);
       'width:'+fabSize+'px',
       'height:'+fabSize+'px',
       'border-radius:50%',
-      'background:#2B2B35',
+      'background:transparent',  // s159: el look real lo da la regla CSS #aiFab (cristal)
       'border:none',
       /* s97: box-shadow emboss se aplica vía setProperty tras appendChild (cssText lo rechazaba) */
       'cursor:pointer',
@@ -42170,9 +42161,7 @@ window.addEventListener('pagehide', aiReleaseAllMic);
     // Interior del orb: fondo dotted-map + globo cian + órbitas + halo + estrella(persiste para toggle voz)
     // Nota: fabSize varía mobile/desktop (44/50). El SVG usa viewBox 100x100 y se escala al 100%.
     fab.innerHTML =
-      '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:2;line-height:1;user-select:none">' +
-        '<span style="font-family:ui-rounded,\'SF Pro Display\',\'Inter\',system-ui,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.04em;color:#FFFFFF;text-shadow:0 -1px 0 #494955,0 2px 0 #171720">IA</span>' +
-      '</div>' +
+      // s159: 'IA' eliminado — orb de cristal puro (el look lo da la regla CSS #aiFab)
       // Contenedor interior — mantiene IDs para toggle de voz
       '<div id="aiFabInner" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;position:relative;z-index:2;pointer-events:none">' +
         '<div id="aiFabStar" style="transition:opacity .3s,transform .3s;opacity:0;width:0;height:0"></div>' +
@@ -42187,7 +42176,7 @@ window.addEventListener('pagehide', aiReleaseAllMic);
 
     // ── Efecto hover: anillo iridiscente se acelera y el botón crece ──
     fab.addEventListener('mouseenter', function() {
-      this.style.transform = 'scale(1.08)';
+      this.style.transform = 'scale(1.25)'; // s159
     });
     fab.addEventListener('mouseleave', function() {
       this.style.transform = '';
@@ -58796,7 +58785,7 @@ if (document.readyState === 'loading') {
     var html = '<div class="norm-result-wrap">';
     // Status banner
     html += '<div class="norm-status '+(allPass?'pass':'fail')+'">';
-    html += '<div class="norm-status-icon">'+(allPass?'✅':'⚠️')+'</div>';
+    html += '<div class="norm-status-icon">'+(allPass?'✓':'✗')+'</div>'; // s159: emoji -> glifo monocromo (color via CSS)
     html += '<div class="norm-status-text">';
     html += '<div class="norm-status-title">'+(allPass?'Cumple con la normativa':'No cumple — revisar requisitos')+'</div>';
     html += '<div class="norm-status-sub">'+n.icon+' '+n.name+'</div>';
@@ -63290,16 +63279,52 @@ if (document.readyState === 'loading') {
 
     var reader = new FileReader();
     reader.onload = function(e) {
-      var b64 = e.target.result.split(',')[1];
-      window.acState.file = {
-        type: f.type === 'application/pdf' ? 'document' : 'image',
-        mediaType: f.type,
-        base64: b64,
-        name: f.name,
-        size: f.size
+      var src = e.target.result || '';
+      // PDF: sin reducción por canvas (no se reescalan) — se envía tal cual
+      if (f.type === 'application/pdf') {
+        window.acState.file = {
+          type: 'document',
+          mediaType: f.type,
+          base64: (src.split(',')[1] || ''),
+          name: f.name,
+          size: f.size
+        };
+        window.acState.error = null;
+        acRenderStep1();
+        return;
+      }
+      // s159: imagen — reducir a borde largo <=1568px, JPEG 0.85 (igual que el Auditor) -> base64 liviano, evita rechazo por tamaño
+      var img = new Image();
+      img.onload = function() {
+        var maxEdge = 1568;
+        var w = img.naturalWidth || img.width, h = img.naturalHeight || img.height;
+        var scale = Math.min(1, maxEdge / Math.max(w, h));
+        var ow = Math.max(1, Math.round(w * scale)), oh = Math.max(1, Math.round(h * scale));
+        var out, mt;
+        try {
+          var cv = document.createElement('canvas');
+          cv.width = ow; cv.height = oh;
+          cv.getContext('2d').drawImage(img, 0, 0, ow, oh);
+          out = cv.toDataURL('image/jpeg', 0.85);
+          mt = 'image/jpeg';
+        } catch (err) {
+          out = src; mt = f.type;  // fallback: original si el canvas falla
+        }
+        window.acState.file = {
+          type: 'image',
+          mediaType: mt,
+          base64: (out.split(',')[1] || ''),
+          name: f.name,
+          size: f.size           // tamaño original subido (para mostrar)
+        };
+        window.acState.error = null;
+        acRenderStep1();
       };
-      window.acState.error = null;
-      acRenderStep1();
+      img.onerror = function() {
+        window.acState.error = 'No se pudo leer la imagen.';
+        acRenderStep1();
+      };
+      img.src = src;
     };
     reader.onerror = function() {
       window.acState.error = 'No se pudo leer el archivo.';
@@ -66158,7 +66183,7 @@ if (document.readyState === 'loading') {
   #fabRow .ac-fab svg { width: 18px !important; height: 18px !important; }
   #fabRow .wiz-fab:hover,
   #fabRow .ac-fab:hover { transform: translateY(-1px) !important; animation: none !important; }
-  #fabRow #aiFab:hover  { transform: scale(1.10) !important; animation: none !important; }
+  #fabRow #aiFab:hover  { transform: scale(1.25) !important; animation: none !important; } /* s159 */
   #fabRow .wiz-fab-label,
   #fabRow .ac-fab-label { display: none !important; }
   body.cart-open #fabRow { opacity: 0 !important; pointer-events: none !important; }
@@ -66238,10 +66263,10 @@ if (document.readyState === 'loading') {
     ai.style.overflow = 'visible';
     // s97: re-aplicar el emboss del spec DESPUÉS del wipe de box-shadow de arriba
     // (la regla CSS #aiFab base no gana dentro de #fabRow). Variante B = anillo (::before) + cuerpo embossed.
-    ai.style.setProperty('box-shadow',
-      'inset 0 0 0 1px #3D3D49,inset -3px 0 0 0 #3D3D49,inset 3px 0 0 0 #3D3D49,' +
-      'inset 0 -3px 0 0 #171720,inset 0 2px 0 0 #7E7E8B,inset 0 3px 0 0 #171720,' +
-      '0 4px 16px rgba(0,0,0,0.55),0 2px 6px rgba(0,0,0,0.35)');
+    ai.style.setProperty('box-shadow', /* s159: glass */
+      'inset 0 1px 1px rgba(255,255,255,.75),inset 0 0 0 1px rgba(255,255,255,.40),' +
+      'inset -4px -5px 10px rgba(120,90,210,.30),inset 4px 5px 9px rgba(110,205,255,.20),' +
+      '0 3px 12px rgba(40,60,120,.22)');
 
   }, 100);
 })();
