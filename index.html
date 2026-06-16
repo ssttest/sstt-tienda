@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Martes 16 de Junio del 2026 · s158 -->
+<!-- SSTT Tienda · Generado: Martes 16 de Junio del 2026 · s159 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -43312,6 +43312,7 @@ function abrirProyectoModal(prodId, modoListado) {
   }
   var m = document.getElementById('proyectoModal');
   if (m) m.classList.add('open');
+  document.body.style.overflow = 'hidden'; // s159: lock fondo — el modal es flotante (position:fixed), evita que el sitio se deslice al abrirlo (igual que carro/prodModal)
   // Actualizar header de listado
   var lh = document.getElementById('proyectoListadoHeader');
   var lc = document.getElementById('proyectoListadoCount');
@@ -43341,6 +43342,7 @@ function abrirProyectoModal(prodId, modoListado) {
 function cerrarProyectoModal() {
   var m = document.getElementById('proyectoModal');
   if (m) m.classList.remove('open');
+  document.body.style.overflow = ''; // s159: restaura scroll del fondo
 }
 
 function toggleChk(input, lblId) {
@@ -44864,7 +44866,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s158', fecha:'Martes 16 de Junio del 2026' };
+window.SSTT_VER = { ver:'s159', fecha:'Martes 16 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -89418,6 +89420,12 @@ function _camFeatured(p){
   return /xinghan|tioc|wizmind|wizcolor|full[- ]?color|fullcolor/.test(s);
 }
 window._camFeatured=_camFeatured;
+// s159 FIX orden 'destacados' en carga inicial:
+// el render() de INIT (~L32512, bloque <script> anterior) corre ANTES de que esta IIFE
+// asigne window._camTechScore (~L89414). Sin esa fn, el sort 'destacados' usa el fallback
+// function(){return 0;} -> todos los scores 0 -> colapsa a precio asc -> accesorios baratos
+// (splitters) arriba en vez de las camaras destacadas. Re-render UNA vez ya con scoring real.
+try{ if(typeof render==='function' && typeof S!=='undefined' && !S.q && (!S.sort||S.sort==='destacados')) render(); }catch(e){}
 
 function plannerRenderCamList(q){
   var list=document.getElementById('plannerCamList');if(!list)return;
