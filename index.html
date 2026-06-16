@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Martes 16 de Junio del 2026 · s159 -->
+<!-- SSTT Tienda · Generado: Martes 16 de Junio del 2026 · s160 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -17174,10 +17174,14 @@ body.cart-open #proyectoListadoBtn {
   opacity: 0; transition: opacity .12s; flex-shrink: 0;
 }
 .ms-item:hover .ms-item-go { opacity: 1; color: var(--blue); }
+/* s160: iconos de linea monocromos (Porcelana & Senal) reemplazan emoji multicolor del hub */
+.ms-item-ico { color: var(--text); }
+.ms-item-ico svg { width: 17px; height: 17px; display: block; }
+.ms-acc-ico svg { width: 18px; height: 18px; display: block; }
 
 /* ── Item destacado — resalta el Simulador FOV en el menú ── */
 .ms-item-hero {
-  background: linear-gradient(135deg, rgba(21,23,28,0.04) 0%, rgba(0,180,230,0.03) 100%);
+  background: linear-gradient(135deg, rgba(21,23,28,0.05) 0%, rgba(21,23,28,0.015) 100%);
   border-left: 3px solid var(--tool-accent) !important;
   position: relative;
 }
@@ -17187,7 +17191,7 @@ body.cart-open #proyectoListadoBtn {
    nativa (a ras y redondeado, sin clip). --tool-accent (#15171C) = inicio del degradado previo.
    Tombstone: ::before eliminado. */
 .ms-item-hero:hover {
-  background: linear-gradient(135deg, rgba(21,23,28,0.08) 0%, rgba(0,180,230,0.06) 100%);
+  background: linear-gradient(135deg, rgba(21,23,28,0.09) 0%, rgba(21,23,28,0.03) 100%);
 }
 .ms-item-hero .ms-item-go {
   opacity: 1;
@@ -21284,7 +21288,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
   <div class="ms-acc" id="acc-client">
     <button class="ms-acc-head" type="button" onclick="msToggle('acc-client')">
       <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
-      <div class="ms-acc-ico" style="background:#FBEEF0;color:#D90F23">👤</div>
+      <div class="ms-acc-ico" style="background:#FBEEF0;color:#D90F23"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-3.6 3.6-6 8-6s8 2.4 8 6"/></svg></div>
       <div class="ms-acc-text">
         <div class="ms-acc-label">Para el cliente final</div>
         <div class="ms-acc-sub">Asistente de descubrimiento + analizador de cotización</div>
@@ -21320,7 +21324,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <div class="ms-acc open" id="acc-sim">
         <button class="ms-acc-head" type="button" onclick="msToggle('acc-sim')">
           <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
-          <div class="ms-acc-ico" style="background:#EAF1FB;color:#15171C">📐</div>
+          <div class="ms-acc-ico" style="background:var(--g6);color:var(--text)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16"/><path d="M4 4l16 16"/><path d="M9 17l1.4-1.4"/></svg></div>
           <div class="ms-acc-text">
             <div class="ms-acc-label">Simuladores</div>
             <div class="ms-acc-sub">Visualizar y comparar antes de instalar</div>
@@ -21329,7 +21333,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         </button>
         <div class="ms-acc-body">
           <button class="ms-item ms-item-hero" type="button" onclick="document.querySelector('.fov-tool-title').scrollIntoView({behavior:'smooth',block:'start'})">
-            <div class="ms-item-ico" style="background:#15171C;color:#fff">📐</div>
+            <div class="ms-item-ico" style="background:#15171C;color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.6"/><path d="M6.4 11.2 18 6"/><path d="M6.4 12.8 18 18"/><path d="M18 6a13 13 0 0 1 0 12"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Simulador FOV</div>
               <div class="ms-item-desc">Campo visual 3D + DORI + comparador dual + cálculo de focal/cobertura</div>
@@ -21337,7 +21341,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">ver abajo ↓</span>
           </button>
           <button class="ms-item ms-item-hero" type="button" onclick="toolsOpen('ssttPlanner',this)">
-            <div class="ms-item-ico" style="background:#15171C;color:#fff">🗺️</div>
+            <div class="ms-item-ico" style="background:#15171C;color:#fff"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="1.6"/><path d="M3 10h11"/><path d="M14 3v18"/><path d="M14 14h7"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">SSTT Planner</div>
               <div class="ms-item-desc">Diseñador de proyectos: plano + drag & drop + FOV real + BOM al carro</div>
@@ -21345,7 +21349,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('compareCams',this)">
-            <div class="ms-item-ico">⚡</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7.5" height="17" rx="1.3"/><rect x="13" y="3.5" width="7.5" height="17" rx="1.3"/><path d="M5.5 11h3.5M5.5 14.5h3.5M15 9.5h3.5M15 13h3.5"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Comparador inteligente</div>
               <div class="ms-item-desc">Análisis técnico side-by-side + recomendación contextual</div>
@@ -21353,7 +21357,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('camFinder',this)">
-            <div class="ms-item-ico">🔍</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="8.5" width="13" height="7" rx="3.5"/><circle cx="6" cy="12" r="1.7"/><path d="M15.5 12h3"/><path d="M10 15.5v2.5M7.5 18h5"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Buscador de cámaras</div>
               <div class="ms-item-desc">Filtros avanzados: resolución, forma, nocturna, lente, funciones</div>
@@ -21361,7 +21365,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('recFinder',this)">
-            <div class="ms-item-ico">🖥️</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="5" rx="1.2"/><rect x="3" y="13" width="18" height="5" rx="1.2"/><path d="M6.5 8.5h.01M6.5 15.5h.01"/><path d="M14.5 8.5h3M14.5 15.5h3"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Buscador de grabadores</div>
               <div class="ms-item-desc">Filtros: canales, PoE, bahías, IA, RAID, bandwidth</div>
@@ -21375,7 +21379,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <div class="ms-acc" id="acc-calc">
         <button class="ms-acc-head" type="button" onclick="msToggle('acc-calc')">
           <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
-          <div class="ms-acc-ico" style="background:#EAF6EE;color:#1A7F3C">🧮</div>
+          <div class="ms-acc-ico" style="background:var(--g6);color:var(--text)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01M8.5 16h.01M12 16h.01M15.5 16h.01"/></svg></div>
           <div class="ms-acc-text">
             <div class="ms-acc-label">Calculadoras de dimensionamiento</div>
             <div class="ms-acc-sub">Discos, red, energía y materiales</div>
@@ -21384,7 +21388,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         </button>
         <div class="ms-acc-body">
           <button class="ms-item" type="button" onclick="toolsOpen('hddGuide',this)">
-            <div class="ms-item-ico">💾</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/><path d="M14.8 14.8 17.5 17.5"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Discos duros CCTV</div>
               <div class="ms-item-desc">Storage + retención + 5 estrategias de ahorro + códecs</div>
@@ -21392,7 +21396,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('lprGuide',this)">
-            <div class="ms-item-ico">🚗</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 16v-3.2L7 8h10l2 4.8V16"/><path d="M3 16h18"/><circle cx="7.5" cy="16.5" r="1.6"/><circle cx="16.5" cy="16.5" r="1.6"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Captura de patentes</div>
               <div class="ms-item-desc">Calculadora LPR + shutter speed + 3 tipos de cámaras</div>
@@ -21400,7 +21404,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('bwCalc',this)">
-            <div class="ms-item-ico">📡</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 21V7"/><path d="M3 11l4-4 4 4"/><path d="M17 3v14"/><path d="M21 13l-4 4-4-4"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Ancho de banda</div>
               <div class="ms-item-desc">Visualización remota + estimación consumo + planes ISP chilenos</div>
@@ -21408,7 +21412,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('poeBudget',this)">
-            <div class="ms-item-ico">⚡</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4.5 13.5H11l-1 8.5L19.5 10H13z"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Presupuesto PoE</div>
               <div class="ms-item-desc">Watts por cámara vs capacidad real del switch</div>
@@ -21416,7 +21420,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('cableCalc',this)">
-            <div class="ms-item-ico">📏</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2v5M15 2v5"/><path d="M7 7h10v3a5 5 0 0 1-5 5h0a5 5 0 0 1-5-5z"/><path d="M12 15v6"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Cable y voltaje</div>
               <div class="ms-item-desc">Caída de voltaje 12VDC + estimación de materiales + guía UTP/CCA</div>
@@ -21424,7 +21428,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('sdEdge',this)">
-            <div class="ms-item-ico">💿</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M9 3.5v3M11.5 3.5v3M14 5v1.5"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">SD edge</div>
               <div class="ms-item-desc">Retención en cámara + memorias microSD del catálogo</div>
@@ -21432,7 +21436,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('linkCalc',this)">
-            <div class="ms-item-ico">📡</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12v9"/><circle cx="12" cy="10" r="1.6"/><path d="M8.6 6.6a5 5 0 0 0 0 6.8M15.4 6.6a5 5 0 0 1 0 6.8"/><path d="M6 4a8.5 8.5 0 0 0 0 12M18 4a8.5 8.5 0 0 1 0 12"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Enlace inalámbrico</div>
               <div class="ms-item-desc">Calculadora PtP/PtMP: FSPL, Fresnel, margen y recomendación</div>
@@ -21440,7 +21444,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('irCoverage',this)">
-            <div class="ms-item-ico">🔦</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4 6.6 6.6 0 0 0 20 14.5z"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Cobertura IR nocturna</div>
               <div class="ms-item-desc">Zona iluminada real según distancia IR, ángulo y altura de montaje</div>
@@ -21448,7 +21452,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('recTime',this)">
-            <div class="ms-item-ico">⏱️</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Tiempo de grabación</div>
               <div class="ms-item-desc">¿Cuántos días graba tu disco? Inverso del HDD Guide: TB → días</div>
@@ -21456,7 +21460,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('raidCalc',this)">
-            <div class="ms-item-ico">🛡️</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="2.6"/><path d="M5 6v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6V6"/><path d="M5 12v6c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6v-6"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Calculadora RAID</div>
               <div class="ms-item-desc">Espacio útil por nivel RAID + equipos Dahua compatibles del catálogo</div>
@@ -21464,7 +21468,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('upsCalc',this)">
-            <div class="ms-item-ico">🔋</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="15" height="8" rx="2"/><path d="M21 11v2"/><path d="M10.5 9.5 8.5 12.2H10l-.5 2.3L11.5 12H10z"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">UPS</div>
               <div class="ms-item-desc">Calculadora eléctrica + autonomía del sistema</div>
@@ -21478,7 +21482,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <div class="ms-acc" id="acc-eval">
         <button class="ms-acc-head" type="button" onclick="msToggle('acc-eval')">
           <svg class="ms-acc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg>
-          <div class="ms-acc-ico" style="background:#FFF3E8;color:#C05000">📚</div>
+          <div class="ms-acc-ico" style="background:var(--g6);color:var(--text)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-1.5-1.2-4-2-6.5-2A1.5 1.5 0 0 0 4 5.5v11A1.5 1.5 0 0 0 5.5 18c2.5 0 5 .8 6.5 2"/><path d="M12 6c1.5-1.2 4-2 6.5-2A1.5 1.5 0 0 1 20 5.5v11A1.5 1.5 0 0 1 18.5 18c-2.5 0-5 .8-6.5 2"/><path d="M12 6v14"/></svg></div>
           <div class="ms-acc-text">
             <div class="ms-acc-label">Evaluación y guías</div>
             <div class="ms-acc-sub">Auditar, comparar tecnologías y aprender</div>
@@ -21487,7 +21491,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
         </button>
         <div class="ms-acc-body">
           <button class="ms-item" type="button" onclick="audOpen()">
-            <div class="ms-item-ico">📷</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M3 14l4-3 3 2 4-4 3 3"/><circle cx="8" cy="8.5" r="1.3"/><path d="M9 21h6M12 17v4"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Auditor de sistema instalado <span style="display:inline-block;background:#15171C;color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;margin-left:4px;vertical-align:middle;letter-spacing:.3px">PREVIEW</span></div>
               <div class="ms-item-desc">Sube una captura desde DMSS y la IA evalúa si tu sistema cumple con lo que necesitas ver</div>
@@ -21495,7 +21499,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('readyCheck',this)">
-            <div class="ms-item-ico">🔍</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M8.5 12l2.2 2.2 4.3-4.3"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Auditoría CCTV</div>
               <div class="ms-item-desc">¿Tu sistema cumple? Evaluación de seguridad + normativa chilena</div>
@@ -21503,7 +21507,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('normCheck',this)">
-            <div class="ms-item-ico">⚖️</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M7 21h10"/><path d="M5 7h14"/><path d="M5 7 2.5 13a3 3 0 0 0 5 0z"/><path d="M19 7l-2.5 6a3 3 0 0 0 5 0z"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Normativa chilena</div>
               <div class="ms-item-desc">Retención por sector regulado: bancos, retail, minería, transporte</div>
@@ -21511,7 +21515,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('hdcviVsIp',this)">
-            <div class="ms-item-ico">⚖️</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4l3.5 3.5L16 11"/><path d="M19.5 7.5H9a4 4 0 0 0-4 4"/><path d="M8 20l-3.5-3.5L8 13"/><path d="M4.5 16.5H15a4 4 0 0 0 4-4"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">HDCVI vs IP</div>
               <div class="ms-item-desc">Comparador técnico + casos de uso reales</div>
@@ -21519,7 +21523,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
             <span class="ms-item-go">abrir →</span>
           </button>
           <button class="ms-item" type="button" onclick="toolsOpen('concepts',this)">
-            <div class="ms-item-ico">💡</div>
+            <div class="ms-item-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 21h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg></div>
             <div class="ms-item-body">
               <div class="ms-item-name">Conceptos rápidos</div>
               <div class="ms-item-desc">WDR, IR, códecs, IA, disuasión y más en fichas visuales</div>
@@ -44855,7 +44859,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s159', fecha:'Martes 16 de Junio del 2026' };
+window.SSTT_VER = { ver:'s160', fecha:'Martes 16 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
