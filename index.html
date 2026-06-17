@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Miércoles 17 de Junio del 2026 · s161 -->
+<!-- SSTT Tienda · Generado: Miércoles 17 de Junio del 2026 · s162 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -42357,7 +42357,7 @@ window.addEventListener('pagehide', aiReleaseAllMic);
         '.ai-vs-ring.r1{width:min(214px,58vw);height:min(214px,58vw);border-color:rgba(255,255,255,.7)}' +
         '.ai-vs-ring.r2{width:min(250px,68vw);height:min(250px,68vw);border-width:1.5px;border-color:var(--vsC,rgba(255,255,255,.25));opacity:.55}' +
         '.ai-vs-ring.r3{width:min(290px,78vw);height:min(290px,78vw);border-color:rgba(255,255,255,.22);opacity:.5}' +
-        '.ai-vs-shell{position:relative;width:min(192px,52vw);height:min(192px,52vw);border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.72);box-shadow:inset 10px 14px 22px rgba(255,255,255,.6),inset -10px -14px 26px rgba(255,80,55,.18),0 18px 50px var(--vsCbd,rgba(255,48,36,.3));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:3;transition:box-shadow .4s}' +
+        '.ai-vs-shell{position:relative;width:min(192px,52vw);height:min(192px,52vw);border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.72);box-shadow:inset 10px 14px 22px rgba(255,255,255,.6),inset -10px -14px 26px rgba(82,100,130,.18)/*s162: cálida rgba(255,80,55)->fría rgba(82,100,130)*/,0 18px 50px var(--vsCbd,rgba(255,48,36,.3));backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:3;transition:box-shadow .4s}' +
         '.ai-vs-shell::after{content:"";position:absolute;width:60px;height:60px;border-radius:50%;top:14px;left:26px;background:radial-gradient(circle,rgba(255,255,255,.4),transparent 64%);filter:blur(8px);pointer-events:none}' +
         '.ai-vs-orb{position:relative;width:min(128px,36vw);height:min(128px,36vw);border-radius:50%;cursor:pointer;overflow:hidden;flex:0 0 auto;border:1px solid rgba(21,23,28,.07);background:radial-gradient(circle at 50% 72%,rgba(217,15,35,calc(.08 + var(--aiAmp,0)*.30)),rgba(217,15,35,0) 56%),radial-gradient(circle at 38% 28%,#ffffff 0%,rgba(255,255,255,.45) 28%,rgba(246,246,243,.16) 58%,rgba(255,255,255,0) 74%),linear-gradient(160deg,rgba(255,255,255,.55),rgba(246,246,243,.10) 50%,rgba(220,222,226,.22));box-shadow:0 0 0 calc(6px + var(--aiAmp,0)*16px) var(--vsCbd,rgba(217,15,35,.30)),0 0 0 calc(14px + var(--aiAmp,0)*26px) var(--vsCbg,rgba(217,15,35,.10)),inset 0 2px 2px rgba(255,255,255,.85),inset 5px 5px 12px rgba(255,255,255,.55),inset -7px -9px 18px rgba(21,23,28,.12),inset 0 -10px 20px rgba(217,15,35,calc(.05 + var(--aiAmp,0)*.18)),0 12px 30px rgba(40,44,54,.16);animation:aiVsBreathe 3s cubic-bezier(.2,.8,.2,1) infinite;filter:brightness(calc(1 + var(--aiAmp,0)*.10));transition:box-shadow .1s ease-out,filter .1s ease-out;z-index:4}' + /* s113: corona suavizada — la transición glissa el halo con --aiAmp (sin strobe por frame). s114: corona 16→20/26→32px y brillo .14→.22 para que reaccione más notorio; offsets base (9/19px, brillo 1) intactos → reposo igual */
         '.ai-vs-orb::before{content:none}' +
@@ -44877,7 +44877,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s161', fecha:'Miércoles 17 de Junio del 2026' };
+window.SSTT_VER = { ver:'s162', fecha:'Miércoles 17 de Junio del 2026' }; // s162
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -92261,7 +92261,7 @@ window.generateShoppingFeed = function() {
    (paleta viva Porcelana & Señal) · arcos curvos LUM/SAT · hue ring ·
    alpha · aplica a elemento o a token global · registro de sesión
    copiable como instrucciones de edición definitiva.
-   Activación: Ctrl+Alt+C · window.SSTT_COLORLAB.open() · ?colorlab=1
+   Activación: Ctrl+Shift+L (s162; antes Ctrl+Alt+C) · window.SSTT_COLORLAB.open() · ?colorlab=1
    Autocontenido: inyecta su propio <style>, no toca el CSS del sitio.
    ════════════════════════════════════════════════════════════════════ */
 (function SSTT_COLORLAB_IIFE(){
@@ -92518,7 +92518,7 @@ function build(){
     + '<button class="sstcl-ibtn" id="sstclPick" title="Extraer de un elemento (crosshair)">'+ICONS.cross+'</button>'
     + '<button class="sstcl-ibtn" id="sstclDrop" title="Gotero de píxel (EyeDropper)">'+ICONS.drop+'</button>'
     + '<button class="sstcl-ibtn" id="sstclLogB" title="Registro de sesión" style="position:relative">'+ICONS.list+'<span class="sstcl-logn" id="sstclLogN" style="display:none">0</span></button>'
-    + '<button class="sstcl-ibtn" id="sstclX" title="Cerrar (Ctrl+Alt+C)">'+ICONS.x+'</button>';
+    + '<button class="sstcl-ibtn" id="sstclX" title="Cerrar (Ctrl+Shift+L)">'+ICONS.x+'</button>';  // s162: title rebind Ctrl+Alt+C -> Ctrl+Shift+L
   root.appendChild(pill);
 
   /* plato */
@@ -92772,7 +92772,7 @@ function bind(){
 
   q('#sstclX').addEventListener('click', closeLab);
   document.addEventListener('keydown', function(e){
-    if(e.ctrlKey && e.altKey && (e.key==='c'||e.key==='C')){ e.preventDefault(); api.toggle(); }
+    if(e.ctrlKey && e.shiftKey && (e.key==='l'||e.key==='L')){ e.preventDefault(); api.toggle(); }  // s162: rebind Ctrl+Alt+C -> Ctrl+Shift+L (lo interceptaba M365 Copilot a nivel OS)
     if(e.key==='Escape' && S.picking) stopPicking(true);
   });
 }
@@ -93064,13 +93064,13 @@ window.SSTT_COLORLAB=api;
 
 /* atajo registrado aunque esté cerrado */
 document.addEventListener('keydown', function(e){
-  if(e.ctrlKey && e.altKey && (e.key==='c'||e.key==='C') && !root){ e.preventDefault(); openLab(); }
+  if(e.ctrlKey && e.shiftKey && (e.key==='l'||e.key==='L') && !root){ e.preventDefault(); openLab(); }  // s162: rebind -> Ctrl+Shift+L
 });
 /* auto-open por query */
 try{
   if(/[?&]colorlab=1/.test(location.search) || localStorage.getItem('sstt_colorlab_auto')==='1') openLab();
 }catch(e){}
-try{ console.log('%cSSTT COLOR LAB s135','background:#D90F23;color:#fff;font-weight:800;padding:2px 8px;border-radius:4px', '· Ctrl+Alt+C · SSTT_COLORLAB.open()'); }catch(e){}
+try{ console.log('%cSSTT COLOR LAB s135','background:#D90F23;color:#fff;font-weight:800;padding:2px 8px;border-radius:4px', '· Ctrl+Shift+L · SSTT_COLORLAB.open()'); }catch(e){}
 })();
 </script>
 
