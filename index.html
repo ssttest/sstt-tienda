@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Martes 16 de Junio del 2026 · s160 -->
+<!-- SSTT Tienda · Generado: Miércoles 17 de Junio del 2026 · s161 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -6399,6 +6399,23 @@ input[data-validated="1"]::after {
     0 6px 20px rgba(40,60,120,.30) !important;
 }
 #aiFab:hover::before { animation-duration: 2s; }
+/* s161: Opción A — orb del Asesor extraído de #fabRow → flotante independiente arrastrable */
+#aiFab.aiFab-float {
+  position: fixed !important;
+  bottom: auto !important; right: auto !important;   /* posicionado por left/top inline */
+  z-index: 99991 !important;                          /* sobre #fabRow (99990), bajo #aiPanel (99998) */
+  width: 36px !important; height: 36px !important;
+  touch-action: none;                                 /* el arrastre táctil no dispara scroll */
+}
+#aiFab.aiFab-float.dragging {
+  animation: none !important;                         /* sin "breathe" mientras se arrastra */
+  transition: none !important;                        /* seguimiento 1:1 del puntero */
+  cursor: grabbing !important;
+}
+#aiFab.aiFab-float.dragging:hover { transform: none !important; }  /* sin scale durante el arrastre */
+@media (max-width: 768px), (pointer: coarse) {
+  #aiFab.aiFab-float { width: 30px !important; height: 30px !important; bottom: auto !important; right: auto !important; }
+}
 @media(max-width:768px) { #aiFab { bottom:20px !important; right:14px !important; width:54px; height:54px; } }
 /* Ocultar flotantes cuando el cart está abierto */
 body.cart-open #aiFab,
@@ -40983,6 +41000,7 @@ function aiToggle() {
   if (aiPanelOpen) {
     p.style.display = 'flex';
     p.classList.add('open');
+    try { aiAnchorPanel(); } catch(e){}  // s161: ancla el panel al rect real del orb (desktop)
     setTimeout(function(){
       document.getElementById('aiInp').focus();
       // s26e: no mostrar wizard al abrir — conversación libre primero
@@ -44859,7 +44877,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s160', fecha:'Martes 16 de Junio del 2026' };
+window.SSTT_VER = { ver:'s161', fecha:'Miércoles 17 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -66157,7 +66175,7 @@ if (document.readyState === 'loading') {
   /* ── Fila FAB — uniforme y elegante ── */
   #fabRow {
     position: fixed;
-    right: 16px;
+    right: 58px; /* s161: reserva la esquina derecha para el orb IA flotante (Wiz·Comparar a su izquierda) */
     bottom: 16px;
     display: flex;
     flex-direction: row;
@@ -66192,7 +66210,7 @@ if (document.readyState === 'loading') {
   #fabRow .ac-fab-label { display: none !important; }
   body.cart-open #fabRow { opacity: 0 !important; pointer-events: none !important; }
   @media (max-width: 768px), (pointer: coarse) {
-    #fabRow { gap: 5px; right: 12px; bottom: 12px; }
+    #fabRow { gap: 5px; right: 51px; bottom: 12px; } /* s161: reserva esquina para el orb IA flotante (orb 30px @16px margen + gap) */
     #fabRow .wiz-fab,
     #fabRow .ac-fab,
     #fabRow #aiFab {
@@ -66238,42 +66256,150 @@ if (document.readyState === 'loading') {
 
     clearInterval(poll);
 
-    // Evitar doble-mount
-    if (document.getElementById('fabRow')) return;
+    // s161: Opción A — la fila SOLO lleva Wiz · Comparar; el orb IA (#aiFab) sale a flotante arrastrable.
+    if (!document.getElementById('fabRow')) {
+      // Crear contenedor fila
+      var row = document.createElement('div');
+      row.id = 'fabRow';
 
-    // Crear contenedor fila
-    var row = document.createElement('div');
-    row.id = 'fabRow';
+      // Orden: Wiz · Comparar(ac)
+      row.appendChild(wiz);
+      row.appendChild(ac);
+      document.body.appendChild(row);
 
-    // Orden: Wiz · Comparar(ac) · AI
-    row.appendChild(wiz);
-    row.appendChild(ac);
-    row.appendChild(ai);
-    document.body.appendChild(row);
+      // Limpiar inline styles de posicionamiento — mantener bg, size, border-radius
+      [wiz, ac].forEach(function(f){            // s161: el orb ya no entra a la fila
+        f.style.position = '';
+        f.style.right = '';
+        f.style.bottom = '';
+        f.style.transform = '';
+        f.style.opacity = '';
+        f.style.zIndex = '';
+        f.style.pointerEvents = '';
+        f.style.boxShadow = '';
+      });
+    }
 
-    // Limpiar inline styles de posicionamiento — mantener bg, size, border-radius
-    [wiz, ac, ai].forEach(function(f){
-      f.style.position = '';
-      f.style.right = '';
-      f.style.bottom = '';
-      f.style.transform = '';
-      f.style.opacity = '';
-      f.style.zIndex = '';
-      f.style.pointerEvents = '';
-      f.style.boxShadow = '';
-    });
-    // Asegurar que el aiFab sea círculo perfecto
-    ai.style.borderRadius = '50%';
-    ai.style.overflow = 'visible';
-    // s97: re-aplicar el emboss del spec DESPUÉS del wipe de box-shadow de arriba
-    // (la regla CSS #aiFab base no gana dentro de #fabRow). Variante B = anillo (::before) + cuerpo embossed.
-    ai.style.setProperty('box-shadow', /* s159: glass */
-      'inset 0 1px 1px rgba(255,255,255,.75),inset 0 0 0 1px rgba(255,255,255,.40),' +
-      'inset -4px -5px 10px rgba(120,90,210,.30),inset 4px 5px 9px rgba(110,205,255,.20),' +
-      '0 3px 12px rgba(40,60,120,.22)');
+    // s161: el orb pasa a flotante independiente (su look de cristal lo da la regla CSS base #aiFab).
+    try { initAiFabFloat(ai); } catch(e){}
 
   }, 100);
 })();
+</script>
+
+<script>
+/* s161: Opción A — orb del Asesor flotante e independiente (arrastrable) + re-anclaje del panel */
+// Hace de #aiFab un FAB arrastrable: persistencia en localStorage, clamp al viewport en resize,
+// umbral click-vs-arrastre (>4px no abre el panel) y re-anclaje de #aiPanel al rect real del orb.
+function initAiFabFloat(fab){
+  if (!fab || fab._floatInit) return;            // idempotente
+  fab._floatInit = true;
+
+  fab.classList.add('aiFab-float');
+  fab.style.bottom = '';                         // s161: limpiar el anclaje inline de creación
+  fab.style.right  = '';                         //        (ahora se posiciona por left/top)
+
+  var KEY = 'sstt_aifab_pos';
+  var MARGIN = 12;
+  function sz(){ return fab.offsetWidth || 36; }
+  function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+  function defPos(){ var s = sz(); return { left: window.innerWidth - s - 16, top: window.innerHeight - s - 16 }; }
+  function apply(l, t){
+    var s = sz();
+    l = clamp(l, MARGIN, window.innerWidth  - s - MARGIN);
+    t = clamp(t, MARGIN, window.innerHeight - s - MARGIN);
+    fab.style.left = l + 'px';
+    fab.style.top  = t + 'px';
+  }
+
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch(e){}
+  var placed = !!(saved && typeof saved.left === 'number' && typeof saved.top === 'number');
+  var p0 = placed ? saved : defPos();
+  apply(p0.left, p0.top);
+
+  var down = false, moved = false, sx = 0, sy = 0, ox = 0, oy = 0, pid = null;
+  var TH = 4;                                     // umbral px: por debajo = click, no arrastre
+
+  fab.addEventListener('pointerdown', function(e){
+    if (e.button > 0) return;                     // solo botón principal / toque
+    down = true; moved = false;
+    sx = e.clientX; sy = e.clientY;
+    var r = fab.getBoundingClientRect();
+    ox = r.left; oy = r.top; pid = e.pointerId;
+  });
+  fab.addEventListener('pointermove', function(e){
+    if (!down) return;
+    var dx = e.clientX - sx, dy = e.clientY - sy;
+    if (!moved && (Math.abs(dx) > TH || Math.abs(dy) > TH)){
+      moved = true;
+      fab.classList.add('dragging');
+      try { fab.setPointerCapture(pid); } catch(_){}  // capturar solo tras superar el umbral
+    }
+    if (moved){ e.preventDefault(); apply(ox + dx, oy + dy); }
+  });
+  function end(){
+    if (!down) return;
+    down = false;
+    if (moved){
+      fab.classList.remove('dragging');
+      try { if (pid != null) fab.releasePointerCapture(pid); } catch(_){}
+      var r = fab.getBoundingClientRect();
+      placed = true;
+      try { localStorage.setItem(KEY, JSON.stringify({ left: Math.round(r.left), top: Math.round(r.top) })); } catch(_){}
+      fab._suppressClick = true;                   // suprimir el click sintético que sigue al pointerup
+      setTimeout(function(){ fab._suppressClick = false; }, 60);
+      try { if (window.aiPanelOpen) aiAnchorPanel(); } catch(_){}
+    }
+    pid = null;
+  }
+  fab.addEventListener('pointerup', end);
+  fab.addEventListener('pointercancel', end);
+
+  // Bloquear el click tras un arrastre (no abrir el panel). Captura + stopImmediatePropagation
+  // para ganarle al onclick=aiToggle del propio botón. El tap normal NO entra aquí (sin _suppressClick).
+  fab.addEventListener('click', function(e){
+    if (fab._suppressClick){ e.stopImmediatePropagation(); e.preventDefault(); }
+  }, true);
+
+  // Resize: sin arrastrar previo → re-anclar a la esquina; ya arrastrado → clamp a viewport.
+  window.addEventListener('resize', function(){
+    if (placed){ var r = fab.getBoundingClientRect(); apply(r.left, r.top); }
+    else { var d = defPos(); apply(d.left, d.top); }
+    try { if (window.aiPanelOpen) aiAnchorPanel(); } catch(_){}
+  });
+}
+
+// s161: ancla #aiPanel al rect real del orb en desktop. En mobile/coarse el panel es
+// bottom-sheet por CSS !important — ahí limpiamos el inline de desktop y dejamos mandar al CSS.
+function aiAnchorPanel(){
+  var p = document.getElementById('aiPanel'); if (!p) return;
+  var isMobile = false;
+  try { isMobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches; } catch(e){}
+  if (isMobile){
+    p.style.left = ''; p.style.top = ''; p.style.right = ''; p.style.bottom = '';
+    return;
+  }
+  var fab = document.getElementById('aiFab'); if (!fab) return;
+  var r  = fab.getBoundingClientRect();
+  var pw = p.offsetWidth  || 375;
+  var ph = p.offsetHeight || Math.round(window.innerHeight * 0.5);
+  var M = 8, GAP = 10;
+  // Horizontal: alinear el borde derecho del panel con el del orb (clamp dentro del viewport).
+  var left = Math.max(M, Math.min(r.right - pw, window.innerWidth - pw - M));
+  p.style.right = 'auto';
+  p.style.left  = Math.round(left) + 'px';
+  // Vertical: preferir arriba (anclado por bottom → el crecimiento empuja hacia arriba);
+  // si no cabe arriba ni hay más sitio abajo, anclar por top debajo del orb.
+  var spaceAbove = r.top - GAP;
+  if (spaceAbove >= ph || spaceAbove >= (window.innerHeight - r.bottom - GAP)){
+    p.style.top    = 'auto';
+    p.style.bottom = Math.round(window.innerHeight - r.top + GAP) + 'px';
+  } else {
+    p.style.bottom = 'auto';
+    p.style.top    = Math.round(Math.min(r.bottom + GAP, window.innerHeight - ph - M)) + 'px';
+  }
+}
 </script>
 
 
