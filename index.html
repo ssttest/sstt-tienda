@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Jueves 18 de Junio del 2026 · s167 -->
+<!-- SSTT Tienda · Generado: Lunes 22 de Junio del 2026 · s170 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -4626,9 +4626,9 @@ nav {
   0%, 100% { transform: scale(1) rotate(0deg); opacity: .85; filter: drop-shadow(0 0 0px rgba(74,222,128,0)); }
   50%      { transform: scale(1.7) rotate(15deg); opacity: 1; filter: drop-shadow(0 0 6px rgba(74,222,128,.6)); }
 }
-.ai-status-dot.offline::before {
-  background-color: #f87171;
-  animation: sparkleDead 1.4s ease-in-out infinite;
+.ai-status-dot.offline::before { /* s168: IA offline = gris quieto, sin destello rojo (principio s164) */
+  background-color: var(--g3);
+  animation: none;
 }
 @keyframes sparkleDead {
   0%, 100% { transform: scale(1) rotate(0deg); opacity: .7; filter: drop-shadow(0 0 0px rgba(248,113,113,0)); }
@@ -4636,7 +4636,7 @@ nav {
 }
 .ai-status-lbl { font-size: 10px; font-weight: 600; }
 .ai-status-lbl.online { color: #4ade80; }
-.ai-status-lbl.offline { color: #f87171; }
+.ai-status-lbl.offline { color: var(--g3); } /* s168: rojo offline → gris */
 .chat-online.offline { color: var(--g3); } /* s163: rojo offline → gris */
 
 /* Messages area */
@@ -6989,7 +6989,7 @@ body.cart-open #proyectoListadoBtn {
   -webkit-mask-size:contain;mask-size:contain;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
   animation:sparkleAlive 2.2s ease-in-out infinite;
 }
-.wap-dot-off::before { background-color:#f87171 !important; animation:sparkleDead 1.4s ease-in-out infinite !important; }
+.wap-dot-off::before { background-color:var(--g3) !important; animation:none !important; } /* s168: IA offline = gris quieto, sin destello rojo (principio s164) */
 @keyframes waPulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 .wap-close {
   background: rgba(0,0,0,.06); border: none; border-radius: 50%;
@@ -11136,7 +11136,7 @@ body.cart-open #proyectoListadoBtn {
   overflow: hidden;
 }
 .ready-header::before {
-  content: '🚨';
+  content: '⚠︎';
   position: absolute;
   font-size: 180px;
   top: -40px; right: -30px;
@@ -15012,7 +15012,7 @@ body.cart-open #proyectoListadoBtn {
   transition: all .15s;
 }
 .fov-norm-btn:hover {
-  background: #9b59b6; color: #fff; border-color: #9b59b6;
+  background: #D90F23; color: #fff; border-color: #D90F23; /* s169 P&S-3: púrpura→señal */
 }
 .fov-norm-modal-content { font-size: 13px; color: var(--tool-fg2); }
 .fov-norm-header {
@@ -17012,7 +17012,7 @@ body.cart-open #proyectoListadoBtn {
   line-height: 1.5;
 }
 .ac-counter-diff strong {
-  color: #1A7F3C;
+  color: #15171C; /* s169 P&S: verde decorativo→tinta */
 }
 
 /* Disclaimer */
@@ -19961,7 +19961,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
           <input type="checkbox" value="ISO27001" onchange="toggleChk(this,'chkISO')"> ISO 27001
         </label>
         <label style="all:unset;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#444;cursor:pointer;padding:5px 10px;border:1.5px solid #e0e0e0;border-radius:8px;transition:all .15s" id="chkSernac">
-          <input type="checkbox" value="Ley19628" onchange="toggleChk(this,'chkSernac')"> Ley 19.628 (Datos)
+          <input type="checkbox" value="Ley19628" onchange="toggleChk(this,'chkSernac')"> Ley 21.719 (Datos)
         </label>
         <label style="all:unset;display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:#444;cursor:pointer;padding:5px 10px;border:1.5px solid #e0e0e0;border-radius:8px;transition:all .15s" id="chkOnvif">
           <input type="checkbox" value="ONVIF" onchange="toggleChk(this,'chkOnvif')"> ONVIF Profile T
@@ -21718,7 +21718,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
     <div class="fov-view-tabs" id="fovViewTabs">
       <button class="fov-vtab on" onclick="fovSetView('top',this)">👁 Sup.</button>
       <button class="fov-vtab" onclick="fovSetView('side',this)">↕ Lat.</button>
-      <button class="fov-vtab" onclick="fovSetView('maps',this)" style="background:#1A7F3C;color:#fff;border-color:transparent">📍 Maps</button>
+      <button class="fov-vtab" onclick="fovSetView('maps',this)" style="background:#15171C;color:#fff;border-color:transparent">📍 Maps</button>
       <button class="fov-vtab" onclick="fovSetView('camera',this)" style="background:#15171C;color:#fff;border-color:transparent">📱 Cámara</button>
       <button class="fov-vtab fov-fs-btn" onclick="fovFullscreen()" title="Pantalla completa (modo horizontal)" aria-label="Pantalla completa (modo horizontal)" style="flex:0 0 auto;background:var(--black);color:#fff;border-color:var(--black);padding:7px 11px">⛶</button>
     </div>
@@ -21815,7 +21815,7 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
           <div style="font-size:14px;color:#fff;font-weight:700">Audita el sistema actual del cliente</div>
           <div style="font-size:11px;margin:6px 0 14px;opacity:.7;line-height:1.5">Sube una foto donde se vea la cámara instalada o una imagen típica que captura. Estimo qué cámara probablemente tienen, su limitación, y qué upgrade ofrecerle.</div>
           <input type="file" accept="image/*" id="fovAuditFile" onchange="fovAuditLoad(this.files[0])" style="display:none">
-          <button onclick="document.getElementById('fovAuditFile').click()" style="background:#9b59b6;color:#fff;border:none;padding:11px 22px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--font);box-shadow:0 4px 12px rgba(155,89,182,.25)">📤 Subir foto a analizar</button>
+          <button onclick="document.getElementById('fovAuditFile').click()" style="background:#D90F23;color:#fff;border:none;padding:11px 22px;border-radius:9px;font-weight:700;font-size:13px;cursor:pointer;font-family:var(--font);box-shadow:0 4px 12px rgba(155,89,182,.25)">📤 Subir foto a analizar</button>
         </div>
         <div id="fovAuditResult" style="display:none">
           <div style="position:relative;border-radius:10px;overflow:hidden;background:#000;margin-bottom:12px">
@@ -26089,7 +26089,7 @@ function imgFallback(el, codigo, cat) {
 const CAT_ICONS = {
   'camaras-ip':'📷','camaras-hdcvi':'📹','camaras-ptz':'🔭',
   'nvr':'🖥️','switches':'🔌','accesorios':'🔧',
-  'alarmas':'🚨','videoporteros':'🔔','acceso':'🔑','especiales':'⚡'
+  'alarmas':'⚠︎','videoporteros':'🔔','acceso':'🔑','especiales':'⚡'
 };
 function catIcon(cat) { return CAT_ICONS[cat] || '📷'; }
 // s107: tarjeta de producto reutilizable (catálogo + Marketplace usan el MISMO formato)
@@ -26851,7 +26851,7 @@ function _renderCatSheetHTML() {
       {k:'_nvr_ent', label:'Enterprise', virtual:true},
     ]},
     {sec:'Switches PoE',     icon:'🔌', catId:'switches',      virtual:false, items:[]},
-    {sec:'Alarmas',          icon:'🚨', catId:'alarmas',       virtual:false, items:[]},
+    {sec:'Alarmas',          icon:'⚠︎', catId:'alarmas',       virtual:false, items:[]},
     {sec:'Control Acceso',   icon:'🔐', catId:'acceso',        virtual:false, items:[]},
     {sec:'Videoporteros',    icon:'🔔', catId:'videoporteros', virtual:false, items:[]},
     {sec:'Accesorios',       icon:'🔧', catId:'accesorios',    virtual:false, items:[]},
@@ -27375,12 +27375,12 @@ function addCart(p) {
   try {
     const tipo = typeof B2B !== 'undefined' ? B2B.classify(p) : 'smb';
     if (tipo === 'enterprise') {
-      showToast('⚠️ Producto de proyecto — usa "Declarar Proyecto / Cotizar"');
+      showToast('⚠︎ Producto de proyecto — usa "Declarar Proyecto / Cotizar"');
       abrirProyectoModal(p.id);
       return;
     }
     if (S.cart.some(c => typeof B2B !== 'undefined' && B2B.classify(c) === 'enterprise')) {
-      showToast('⚠️ Tu carro tiene productos de proyecto. Vacíalo primero.');
+      showToast('⚠︎ Tu carro tiene productos de proyecto. Vacíalo primero.');
       openCart(); return;
     }
     const ex = S.cart.find(c => c.id === p.id);
@@ -28750,7 +28750,7 @@ function renderPerfilDatos() {
           var checkOk = erutValido;
           var checkColor = checkOk ? '#15171C' : '#B40C1D';
           var checkBg = checkOk ? '#e8f5ec' : '#FBEEF0';
-          var checkIcon = checkOk ? '✓' : '⚠️';
+          var checkIcon = checkOk ? '✓' : '⚠︎';
           var checkLabel = checkOk ? 'VERIFICADO' : 'PENDIENTE';
 
           card.innerHTML =
@@ -28778,7 +28778,7 @@ function renderPerfilDatos() {
                 mkVerRow('Domicilio', direccion + ', ' + comuna) +
                 mkVerRow('Retira', nombreCompleto) +
                 mkVerRow('Validez e-RUT', checkOk ? '✓ Vigente hasta ' + vencErut : '✕ No registrado') +
-                mkVerRow('Proceso ventas', checkOk ? '✓ Aprobado por Ventas SSTT' : '⚠️ Requiere validación') +
+                mkVerRow('Proceso ventas', checkOk ? '✓ Aprobado por Ventas SSTT' : '⚠︎ Requiere validación') +
               '</div>' +
               '<div style="margin-top:14px;font-size:10px;color:#bbb;text-align:center;font-style:italic">Tap para volver a la factura →</div>' +
             '</div>';
@@ -29444,7 +29444,7 @@ function guardarTicket() {
   var asunto = document.getElementById('ftAsunto')?.value.trim();
   var desc = document.getElementById('ftDesc')?.value.trim();
   var tipo = document.getElementById('ftTipo')?.value || 'soporte';
-  if (!asunto) { showToast('⚠️ El asunto es obligatorio'); return; }
+  if (!asunto) { showToast('⚠︎ El asunto es obligatorio'); return; }
   var hoy = new Date().toISOString().split('T')[0];
   var tickets = _loadTickets();
   var num = (tickets.length + 1).toString().padStart(4, '0');
@@ -29465,7 +29465,7 @@ function guardarTicket() {
 }
 // Función pública para crear ticket desde el chat
 window.crearTicketDesdeSoporte = function(asunto, descripcion, tipo) {
-  if (!USER) { showToast('⚠️ Debes iniciar sesión para crear un ticket'); return; }
+  if (!USER) { showToast('⚠︎ Debes iniciar sesión para crear un ticket'); return; }
   var hoy = new Date().toISOString().split('T')[0];
   var tickets = _loadTickets();
   var num = (tickets.length + 1).toString().padStart(4, '0');
@@ -29542,7 +29542,7 @@ function guardarDatosPersonales() {
   const email    = document.getElementById('pEmail')?.value.trim();
   const rut      = document.getElementById('pRut')?.value.trim();
   const tel      = document.getElementById('pTel')?.value.trim();
-  if (!nombre || !email) { showToast('⚠️ Nombre y email son obligatorios'); return; }
+  if (!nombre || !email) { showToast('⚠︎ Nombre y email son obligatorios'); return; }
   saveUser({ ...USER, nombre, apellido, email, rut, tel });
 
   showToast('✓ Datos guardados');
@@ -29635,7 +29635,7 @@ function guardarDireccion() {
   const nombre = document.getElementById('fdNombre')?.value.trim();
   const dir    = document.getElementById('fdDir')?.value.trim();
   const comuna = document.getElementById('fdComuna')?.value.trim();
-  if (!alias || !dir || !comuna) { showToast('⚠️ Alias, dirección y comuna son obligatorios'); return; }
+  if (!alias || !dir || !comuna) { showToast('⚠︎ Alias, dirección y comuna son obligatorios'); return; }
   const nueva = {
     alias, nombre, dir,
     depto:  document.getElementById('fdDepto')?.value.trim() || '',
@@ -29703,7 +29703,7 @@ function renderPerfilFacturacion() {
       <div style="color:var(--black)">${erut.razon} · RUT ${erut.rut}</div>
       <div style="color:var(--g3);font-size:11px">Vence: ${new Date(erut.vencimiento).toLocaleDateString('es-CL')}</div>
     </div>` : `<div style="background:var(--orange-p);border:1px solid #F0C88A;border-radius:10px;padding:10px 12px;margin-bottom:12px;font-size:12px;color:var(--orange)">
-      ⚠️ Sin e-RUT validado — <button onclick="closeModal();setTimeout(()=>{openCart();setTimeout(()=>document.querySelector('[onclick=abrirErutModal]')?.click(),500)},200)" style="background:none;border:none;color:var(--blue);font-weight:700;cursor:pointer;font-family:var(--font);text-decoration:underline;font-size:12px">Validar ahora</button>
+      ⚠︎ Sin e-RUT validado — <button onclick="closeModal();setTimeout(()=>{openCart();setTimeout(()=>document.querySelector('[onclick=abrirErutModal]')?.click(),500)},200)" style="background:none;border:none;color:var(--blue);font-weight:700;cursor:pointer;font-family:var(--font);text-decoration:underline;font-size:12px">Validar ahora</button>
     </div>`}
     <div id="listaFacts">
       ${facts.length ? facts.map((f,i) => renderFactCard(f,i)).join('') : '<div style="text-align:center;padding:20px;color:var(--g3);font-size:13px">Sin datos de facturación guardados</div>'}
@@ -29790,7 +29790,7 @@ function guardarFacturacionPerfil() {
   const giro   = document.getElementById('ffGiro')?.value.trim();
   const dir    = document.getElementById('ffDir')?.value.trim();
   const comuna = document.getElementById('ffComuna')?.value.trim();
-  if (!alias||!rut||!razon||!dir) { showToast('⚠️ Alias, RUT, razón social y dirección son obligatorios'); return; }
+  if (!alias||!rut||!razon||!dir) { showToast('⚠︎ Alias, RUT, razón social y dirección son obligatorios'); return; }
   const nueva = { alias, rut, razon, giro, dir, comuna, region: document.getElementById('ffRegion')?.value.trim()||'' };
   const facts = cargarFacturacion();
   const idx   = parseInt(document.getElementById('ffEditIdx')?.value??'-1');
@@ -30045,7 +30045,7 @@ function guardarPago() {
   var alias = document.getElementById('fpAlias')?.value.trim();
   var banco = document.getElementById('fpBanco')?.value.trim();
   var tipo  = document.getElementById('fpTipo')?.value;
-  if (!alias || !banco) { showToast('⚠️ Alias y banco son obligatorios'); return; }
+  if (!alias || !banco) { showToast('⚠︎ Alias y banco son obligatorios'); return; }
   var pago = { tipo: tipo, alias: alias, banco: banco, estado: 'activa' };
   if (tipo === 'transferencia') {
     pago.tipoCuenta   = document.getElementById('fpTipoCuenta')?.value || '';
@@ -30053,7 +30053,7 @@ function guardarPago() {
     pago.titular      = document.getElementById('fpTitular')?.value.trim() || '';
     pago.rutTitular   = document.getElementById('fpRutTitular')?.value.trim() || '';
     pago.emailComp    = document.getElementById('fpEmailComp')?.value.trim() || '';
-    if (!pago.tipoCuenta || !pago.numeroCuenta || !pago.titular) { showToast('⚠️ Completa tipo, número de cuenta y titular'); return; }
+    if (!pago.tipoCuenta || !pago.numeroCuenta || !pago.titular) { showToast('⚠︎ Completa tipo, número de cuenta y titular'); return; }
   } else {
     pago.plaza = document.getElementById('fpPlaza')?.value.trim() || 'Santiago';
   }
@@ -30924,7 +30924,7 @@ function _loginRateCheck() {
 }
 
 function submitLogin() {
-  // s103: ⚠️ DEMO-ONLY — autenticacion client-side SIN contrasena (allowlist de 3 correos demo).
+  // s103: ⚠︎ DEMO-ONLY — autenticacion client-side SIN contrasena (allowlist de 3 correos demo).
   //        NO es seguridad real: el control vive en el browser y es manipulable (DevTools).
   //        Reemplazar por auth server-side (token/sesion) antes de Onda 2. Ref: auditoria s102.
   var hp = document.getElementById('lHoneypot');
@@ -31093,7 +31093,7 @@ function soporteLoadImg(input) {
   var file = input.files[0];
   if (!file) return;
   // s47d: SECURITY — file size limit 5MB (audit A3)
-  if (file.size > 5 * 1024 * 1024) { showToast('⚠️ La imagen no puede superar 5 MB'); input.value = ''; return; }
+  if (file.size > 5 * 1024 * 1024) { showToast('⚠︎ La imagen no puede superar 5 MB'); input.value = ''; return; }
   _soporteImgType = file.type || 'image/jpeg';
   var reader = new FileReader();
   reader.onload = function(e) {
@@ -31186,7 +31186,7 @@ async function sendAIMessage(fromVoice) {
   } catch(e) {
     hideAITyping();
     console.error('[sendAIMessage]', e.name, e.message, e.stack); // s34: telemetría mínima (patrón s33 §5.1)
-    addAIMsg('ai', '⚠️ No pude conectarme al servicio de IA ahora mismo. Escríbenos directamente a ventas@sstt.cl para asistencia técnica.');
+    addAIMsg('ai', '⚠︎ No pude conectarme al servicio de IA ahora mismo. Escríbenos directamente a ventas@sstt.cl para asistencia técnica.');
   }
   qs('sendBtn').disabled = false;
   inp?.focus();
@@ -31311,7 +31311,7 @@ function pmSeries(p) {
   if (p.mkt) return {name:(p.marca||'Marketplace'), bg:'var(--g2)', icon:'🏪'}; // s107
   if (/wizsense/.test(n))            return {name:'WizSense Series',   bg:'var(--navy)', icon:'🧠'};
   if (/wizmind/.test(n))             return {name:'WizMind Series',    bg:'var(--navy)', icon:'🤖'};
-  if (/tioc|disuasion activa/.test(n)) return {name:'TiOC 2.0',       bg:'var(--navy)', icon:'🚨'};
+  if (/tioc|disuasion activa/.test(n)) return {name:'TiOC 2.0',       bg:'var(--navy)', icon:'⚠︎'};
   if (/wizcolor|full.?color/.test(n))  return {name:'Full-Color',      bg:'var(--navy)', icon:'🌈'};
   if (/lpr|patente|plate/.test(n))   return {name:'LPR / ANPR',        bg:'var(--navy)', icon:'🚗'};
   if (p.cat==='camaras-ptz'||/ptz/.test(n)) return {name:'PTZ Series', bg:'var(--navy)', icon:'🔄'};
@@ -31320,7 +31320,7 @@ function pmSeries(p) {
   if (p.cat==='switches')            return {name:'Switch PoE',         bg:'var(--navy)', icon:'🔌'};
   if (p.cat==='acceso')              return {name:'Control de Acceso',  bg:'var(--navy)', icon:'🔐'};
   if (p.cat==='videoporteros')       return {name:'Video Portero',      bg:'var(--navy)', icon:'🔔'};
-  if (p.cat==='alarmas')             return {name:'Alarmas',            bg:'var(--navy)', icon:'🚨'};
+  if (p.cat==='alarmas')             return {name:'Alarmas',            bg:'var(--navy)', icon:'⚠︎'};
   return {name:'Dahua Technology', bg:'var(--navy)', icon:'📷'};
 }
 
@@ -31558,7 +31558,7 @@ function pmHighlights(p) {
   const zoom = n.match(/\b(\d+)x\b/i);
   if (zoom && p.cat==='camaras-ptz')  hl.push({v:zoom[1]+'× óptico',l:'Zoom',i:'🔭'});
   // Extras
-  if (/tioc|disuasion activa/.test(n)) hl.push({v:'TiOC 2.0',l:'Disuasión',i:'🚨'});
+  if (/tioc|disuasion activa/.test(n)) hl.push({v:'TiOC 2.0',l:'Disuasión',i:'⚠︎'});
   if (/lpr|patente/.test(n))          hl.push({v:'LPR',    l:'Patentes',    i:'🚗'});
   if (/micro.?sd|slot.*sd/.test(n))   hl.push({v:'MicroSD',l:'Almacenamiento',i:'💾'});
   if (/hi.?poe/.test(n))              hl.push({v:'Hi-PoE', l:'Alimentación',i:'⚡'});
@@ -31656,7 +31656,7 @@ function _pmBuildModal(id) {
   const topSpecs = specGrp.flatMap(g=>g.rows).slice(0,8);
   const qsIcons = {'Resolución':'🎯','Frame rate':'🎬','Sensor':'📸','Lente':'🔭','Smart IR':'📡',
     'WDR':'☀️','PoE':'🔌','Protección intemperie':'💧','Anti-vandálico':'🛡️','SMD+':'🧠',
-    'Serie IA':'🤖','IVS':'⚡','LPR/ANPR':'🚗','TiOC 2.0':'🚨','Compresión':'📦',
+    'Serie IA':'🤖','IVS':'⚡','LPR/ANPR':'🚗','TiOC 2.0':'⚠︎','Compresión':'📦',
     'App móvil':'📱','Garantía':'✓','Canales IP':'📺','Bahías HDD':'💾','Gestión':'🖥️'};
   const qsHTML = topSpecs.map(([k,v]) => `
     <div class="pm-qs-card">
@@ -32075,7 +32075,7 @@ function pmSimularFOV(id) {
         return;
       }
     }
-    showToast('⚠️ Esta cámara aún no está en el simulador');
+    showToast('⚠︎ Esta cámara aún no está en el simulador');
   }, 250);
 }
 window.pmSimularFOV = pmSimularFOV;
@@ -32223,7 +32223,7 @@ function cotToCart(cotId) {
 
   if (blocking.length) {
     const list = blocking.map(w => `• ${w.codigo}: ${w.msg}`).join('\n');
-    if (!confirm(`⚠️ Hay problemas con algunos productos:\n\n${list}\n\nEstos ítems NO se agregarán al carro. ¿Continuar con los disponibles?`)) return;
+    if (!confirm(`⚠︎ Hay problemas con algunos productos:\n\n${list}\n\nEstos ítems NO se agregarán al carro. ¿Continuar con los disponibles?`)) return;
   }
 
   // Apply price updates silently and add to cart
@@ -32302,7 +32302,7 @@ function renderCotList() {
               <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
                 <strong style="font-size:13px">${c.nombre}</strong>
                 ${estadoBadge(c.estado)}
-                ${hasWarn ? '<span style="font-size:10px;color:var(--orange)">⚠️ ' + warns.length + ' aviso' + (warns.length!==1?'s':'') + '</span>' : ''}
+                ${hasWarn ? '<span style="font-size:10px;color:var(--orange)">⚠︎ ' + warns.length + ' aviso' + (warns.length!==1?'s':'') + '</span>' : ''}
               </div>
               <div style="font-size:11px;color:var(--muted)">
                 <span style="font-family:'IBM Plex Mono',monospace">${c.id}</span>
@@ -32339,7 +32339,7 @@ function renderCotDetail(cot, warns) {
   return `
     <div style="padding:14px">
       ${warns.length ? `<div style="background:var(--orange-p);border:1px solid #f0c8a0;border-radius:var(--r-sm);padding:9px 12px;margin-bottom:12px;font-size:12px;color:var(--orange)">
-        <strong>⚠️ Avisos de validación:</strong><br>
+        <strong>⚠︎ Avisos de validación:</strong><br>
         ${warns.map(w=>`• <strong>${w.codigo}:</strong> ${w.msg}`).join('<br>')}
       </div>` : ''}
       ${!cot.items.length ? '<p style="font-size:13px;color:var(--muted);text-align:center;padding:10px 0">Sin ítems. Agrega productos desde el catálogo.</p>' : `
@@ -32360,7 +32360,7 @@ function renderCotDetail(cot, warns) {
                     <div>
                       <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">${item.codigo}</div>
                       <div style="font-size:11px;font-weight:600;line-height:1.3">${item.nombre.slice(0,50)}…</div>
-                      ${w ? `<div style="font-size:10px;color:var(--orange)">⚠️ ${w.msg}</div>` : ''}
+                      ${w ? `<div style="font-size:10px;color:var(--orange)">⚠︎ ${w.msg}</div>` : ''}
                     </div>
                   </div>
                 </td>
@@ -32429,7 +32429,7 @@ function revalidateCot(cotId) {
   saveCots(cots);
   renderCotList();
   if (!warns.length) showToast('✓ Precios y stock validados — todo correcto');
-  else showToast('⚠️ ' + warns.length + ' aviso(s) detectado(s)');
+  else showToast('⚠︎ ' + warns.length + ' aviso(s) detectado(s)');
 }
 
 function newCotDialog() {
@@ -33230,67 +33230,102 @@ function _fpRow(icon, titulo, texto){
       '<div style="font-size:12.5px;color:#5b5e66;line-height:1.55">' + texto + '</div>' +
     '</div></div>';
 }
+/* s169: set-SVG monocromo para íconos del footer (P&S-2) — heredan currentColor (tinta/señal) */
+function _fpIco(n){
+  var P={
+    'shield-lock':'<path d="M12 3l7 2.5v5.6c0 4.2-3 7.4-7 8.6-4-1.2-7-4.4-7-8.6V5.5L12 3z"/><rect x="9.4" y="11" width="5.2" height="4.4" rx=".8"/><path d="M10.5 11V9.7a1.5 1.5 0 0 1 3 0V11"/>',
+    'target':'<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.7"/><circle cx="12" cy="12" r="1.2"/>',
+    'globe':'<circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.4 2.4 3.7 5.4 3.7 8.5S14.4 18.1 12 20.5C9.6 18.1 8.3 15.1 8.3 12S9.6 5.9 12 3.5z"/>',
+    'robot':'<rect x="4.5" y="8" width="15" height="11" rx="2.5"/><path d="M12 8V5"/><circle cx="12" cy="3.7" r="1.2"/><circle cx="9" cy="13" r="1.05"/><circle cx="15" cy="13" r="1.05"/><path d="M9.7 16.2h4.6"/>',
+    'cookie':'<path d="M20.4 11.4A8.5 8.5 0 1 1 12 3.5a3 3 0 0 0 3 3 3 3 0 0 0 3 3 3 3 0 0 0 2.4 1.9z"/><circle cx="9" cy="9.6" r=".75"/><circle cx="13.4" cy="13.4" r=".75"/><circle cx="9.4" cy="15" r=".75"/><circle cx="15.4" cy="9" r=".55"/>',
+    'hand':'<path d="M8.5 12.4V6a1.4 1.4 0 0 1 2.8 0v4.4m0 0V4.7a1.4 1.4 0 0 1 2.8 0v5.7m0 0V6.4a1.4 1.4 0 0 1 2.8 0V14c0 3.3-2.2 5.9-5.5 5.9-1.9 0-3.3-.8-4.4-2.4l-2-2.8a1.4 1.4 0 0 1 2.1-1.8l1.3 1.4z"/>',
+    'lock':'<rect x="5.5" y="10.5" width="13" height="9.5" rx="2"/><path d="M8.5 10.5V7.6a3.5 3.5 0 0 1 7 0v2.9"/><circle cx="12" cy="15" r="1.1"/>',
+    'clipboard':'<rect x="5.5" y="5" width="13" height="15" rx="2"/><rect x="9" y="3.2" width="6" height="3.2" rx="1"/><path d="M8.6 11h6.8M8.6 14.4h6.8"/>',
+    'coins':'<ellipse cx="12" cy="7" rx="6.4" ry="2.7"/><path d="M5.6 7v5c0 1.5 2.9 2.7 6.4 2.7s6.4-1.2 6.4-2.7V7"/><path d="M5.6 12v5c0 1.5 2.9 2.7 6.4 2.7s6.4-1.2 6.4-2.7v-5"/>',
+    'image':'<rect x="4" y="5" width="16" height="14" rx="2"/><circle cx="9" cy="10" r="1.4"/><path d="M4.5 17l4.5-4.5 3 3L16 11l3.5 3.5"/>',
+    'copyright':'<circle cx="12" cy="12" r="8.5"/><path d="M14.6 9.6a3.2 3.2 0 1 0 0 4.8"/>',
+    'receipt':'<path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h4"/>',
+    'building':'<rect x="5.5" y="3.5" width="13" height="16.5" rx="1.2"/><path d="M9 7h2M13 7h2M9 10.5h2M13 10.5h2M9 14h2M13 14h2"/><path d="M10.5 20v-3h3v3"/>',
+    'user':'<circle cx="12" cy="8" r="3.5"/><path d="M5.5 19.5a6.5 6.5 0 0 1 13 0"/>',
+    'mail':'<rect x="4" y="6" width="16" height="12" rx="2"/><path d="M4.5 7.5L12 13l7.5-5.5"/>',
+    'pin':'<path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.6"/>',
+    'tools':'<path d="M15.5 4.4a4 4 0 0 0-4.6 5.3L4.6 16a1.8 1.8 0 1 0 2.5 2.5l6.2-6.3a4 4 0 0 0 5.3-4.6l-2.5 2.5-2.4-.7-.7-2.4z"/>',
+    'shield':'<path d="M12 3l7 2.5v5.6c0 4.3-3 7.4-7 8.6-4-1.2-7-4.3-7-8.6V5.5L12 3z"/><path d="M9 12l2.2 2.2L15.5 10"/>',
+    'scale':'<path d="M12 4.2v15.6M7 19.8h10"/><path d="M5.4 8.2 18.6 8.2M12 6.4 6 8.2M12 6.4 18 8.2"/><path d="M6 8.2 3.6 13a2.4 2.4 0 0 0 4.8 0L6 8.2zM18 8.2 15.6 13a2.4 2.4 0 0 0 4.8 0L18 8.2z"/>',
+    'refresh':'<path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 3.8v3.7h-3.7"/>',
+    'x':'<path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/>',
+    'handshake':'<path d="M3 8.5 6 7l3.2 1.5M21 8.5 18 7l-3.2 1.5"/><path d="M9.2 8.5 12 10.8 14.8 8.5"/><path d="M12 10.8l2.6 2.6a1.4 1.4 0 0 1-2 2l-1.1-1.1-1.3 1.3a1.4 1.4 0 0 1-2-2L9.6 10"/><path d="M3 8.5v5l2 1M21 8.5v5l-2 1"/>',
+    'file':'<path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/><path d="M9.5 12h5M9.5 15h5"/>',
+    'chart-up':'<path d="M4 18l5-5 3 3 7-7"/><path d="M16 9h4v4"/>',
+    'package':'<path d="M12 3l8 4.2v8.6L12 20l-8-4.2V7.2L12 3z"/><path d="M4.2 7.5 12 11.5l7.8-4M12 11.5V20"/>',
+    'store':'<path d="M4.5 9.8V20h15V9.8"/><path d="M3 9.5 4.5 4.5h15L21 9.5a2.4 2.4 0 0 1-4.8 0 2.4 2.4 0 0 1-4.4 0 2.4 2.4 0 0 1-4.4 0A2.4 2.4 0 0 1 3 9.5z"/><path d="M9.8 20v-4.8h4.4V20"/>',
+    'timer':'<circle cx="12" cy="13.8" r="6.8"/><path d="M12 13.8V10M9.6 2.6h4.8M12 7V2.6M18.6 8.2 20 6.8"/>',
+    'card':'<rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M6.5 14.5h4"/>',
+    'bank':'<path d="M4 10h16M5 10 12 5l7 5M6 10v7M10 10v7M14 10v7M18 10v7M3.5 20h17"/>'
+  };
+  return '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-3px">'+(P[n]||'')+'</svg>';
+}
 function _fpNote(html){
   return '<div style="background:#FBEEF0;border-left:3px solid #D90F23;border-radius:0 10px 10px 0;padding:12px 14px;margin-top:14px;font-size:12px;color:#15171C;line-height:1.55">' + html + '</div>';
 }
 var SSTT_FOOTER_PAGES = {
-  acerca: { icon:'🏢', titulo:'Acerca de Nosotros', sub:'Distribuidor oficial Dahua Technology en Chile',
+  acerca: { icon:_fpIco('building'), titulo:'Acerca de Nosotros', sub:'Distribuidor oficial Dahua Technology en Chile',
     body:
-      _fpRow('🏢','Distribuidor oficial Dahua','SSTT SpA es distribuidor autorizado de Dahua Technology para Chile. Importamos directo, con stock real en Santiago y respaldo de fábrica.') +
-      _fpRow('🎯','Enfocados en el canal','Trabajamos con integradores, instaladores y revendedores de seguridad electrónica: precios netos + IVA, condiciones mayoristas y asesoría técnica especializada.') +
-      _fpRow('📍','Showroom y bodega en Ñuñoa','General José Artigas 3028, Ñuñoa · Santiago. Puedes ver equipos funcionando, retirar pedidos y recibir asesoría presencial.') +
-      _fpRow('🛠️','Soporte técnico local','Mesón técnico en Chile que conoce los productos de verdad. No quedas solo frente a la documentación de fábrica.') +
+      _fpRow(_fpIco('building'),'Distribuidor oficial Dahua','SSTT SpA es distribuidor autorizado de Dahua Technology para Chile. Importamos directo, con stock real en Santiago y respaldo de fábrica.') +
+      _fpRow(_fpIco('target'),'Enfocados en el canal','Trabajamos con integradores, instaladores y revendedores de seguridad electrónica: precios netos + IVA, condiciones mayoristas y asesoría técnica especializada.') +
+      _fpRow(_fpIco('pin'),'Showroom y bodega en Ñuñoa','General José Artigas 3028, Ñuñoa · Santiago. Puedes ver equipos funcionando, retirar pedidos y recibir asesoría presencial.') +
+      _fpRow(_fpIco('tools'),'Soporte técnico local','Mesón técnico en Chile que conoce los productos de verdad. No quedas solo frente a la documentación de fábrica.') +
       _fpNote('¿Quieres conocernos? Visítanos en el showroom o escríbenos a <a href="mailto:ventas@sstt.cl" style="color:#D90F23;font-weight:700">ventas@sstt.cl</a>.') },
-  garantia: { icon:'🛡️', titulo:'Garantía Dahua', sub:'Respaldo oficial gestionado por SSTT en Chile',
+  garantia: { icon:_fpIco('shield'), titulo:'Garantía Dahua', sub:'Respaldo oficial gestionado por SSTT en Chile',
     body:
-      _fpRow('🛡️','3 años de garantía oficial','Todos los equipos Dahua que vendemos tienen garantía de fábrica de 3 años, gestionada por SSTT directamente en Chile.') +
-      _fpRow('⚖️','Primeros 6 meses · Ley del Consumidor','Ante una falla no atribuible al uso, puedes solicitar reparación, cambio o devolución del dinero (Ley 19.496, Art. 20).') +
-      _fpRow('🔄','RMA sin complicaciones','SSTT gestiona el RMA con Dahua por ti. No tienes que lidiar con trámites ni envíos al extranjero.') +
-      _fpRow('✕','Qué no cubre','Daños por mala instalación, sobretensión sin protección, manipulación indebida o uso fuera de especificación.') +
+      _fpRow(_fpIco('shield'),'3 años de garantía oficial','Todos los equipos Dahua que vendemos tienen garantía de fábrica de 3 años, gestionada por SSTT directamente en Chile.') +
+      _fpRow(_fpIco('scale'),'Primeros 6 meses · Ley del Consumidor','Ante una falla no atribuible al uso, puedes solicitar reparación, cambio o devolución del dinero (Ley 19.496, Art. 20).') +
+      _fpRow(_fpIco('refresh'),'RMA sin complicaciones','SSTT gestiona el RMA con Dahua por ti. No tienes que lidiar con trámites ni envíos al extranjero.') +
+      _fpRow(_fpIco('x'),'Qué no cubre','Daños por mala instalación, sobretensión sin protección, manipulación indebida o uso fuera de especificación.') +
       _fpNote('Para activar la garantía guarda tu factura. Postventa: <a href="mailto:postventa@sstt.cl" style="color:#D90F23;font-weight:700">postventa@sstt.cl</a> · +56 2 2225 7011.') },
-  trabaja: { icon:'🤝', titulo:'Trabaja Con Nosotros', sub:'Súmate a una distribuidora oficial Dahua en expansión',
+  trabaja: { icon:_fpIco('handshake'), titulo:'Trabaja Con Nosotros', sub:'Súmate a una distribuidora oficial Dahua en expansión',
     body:
-      _fpRow('🤝','Súmate al equipo','Buscamos personas apasionadas por la tecnología de seguridad: ventas técnicas, soporte, logística y desarrollo.') +
-      _fpRow('📄','Envíanos tu CV','Manda tu currículum indicando el área de interés. Revisamos cada postulación y te contactamos si hay match.') +
-      _fpRow('📈','Crecimiento real','Empresa en expansión, distribuidora oficial Dahua, con proyectos activos de e-commerce e inteligencia artificial.') +
+      _fpRow(_fpIco('handshake'),'Súmate al equipo','Buscamos personas apasionadas por la tecnología de seguridad: ventas técnicas, soporte, logística y desarrollo.') +
+      _fpRow(_fpIco('file'),'Envíanos tu CV','Manda tu currículum indicando el área de interés. Revisamos cada postulación y te contactamos si hay match.') +
+      _fpRow(_fpIco('chart-up'),'Crecimiento real','Empresa en expansión, distribuidora oficial Dahua, con proyectos activos de e-commerce e inteligencia artificial.') +
       _fpNote('Postulaciones: <a href="mailto:rrhh@sstt.cl" style="color:#D90F23;font-weight:700">rrhh@sstt.cl</a>.') },
-  despacho: { icon:'📦', titulo:'Retiros y Despachos', sub:'Retiro en showroom o envío a todo Chile',
+  despacho: { icon:_fpIco('package'), titulo:'Retiros y Despachos', sub:'Retiro en showroom o envío a todo Chile',
     body:
-      _fpRow('🏬','Retiro en showroom','Retira sin costo en General José Artigas 3028, Ñuñoa. Te avisamos cuando tu pedido esté listo. L–J 8:30–17:15 · V 8:30–17:45.') +
-      _fpRow('📦','Despacho a todo Chile','Enviamos con Chilexpress, Starken y Bluexpress. El costo se calcula según peso, volumen y destino.') +
-      _fpRow('⏱️','Plazos','Pedidos con stock se despachan en 24–48 hrs hábiles. Santiago suele llegar al día siguiente; regiones 2–4 días hábiles según courier.') +
-      _fpRow('📍','Seguimiento','Al despachar te entregamos el N° de seguimiento del courier para que sigas tu pedido.') +
+      _fpRow(_fpIco('store'),'Retiro en showroom','Retira sin costo en General José Artigas 3028, Ñuñoa. Te avisamos cuando tu pedido esté listo. L–J 8:30–17:15 · V 8:30–17:45.') +
+      _fpRow(_fpIco('package'),'Despacho a todo Chile','Enviamos con Chilexpress, Starken y Bluexpress. El costo se calcula según peso, volumen y destino.') +
+      _fpRow(_fpIco('timer'),'Plazos','Pedidos con stock se despachan en 24–48 hrs hábiles. Santiago suele llegar al día siguiente; regiones 2–4 días hábiles según courier.') +
+      _fpRow(_fpIco('pin'),'Seguimiento','Al despachar te entregamos el N° de seguimiento del courier para que sigas tu pedido.') +
       _fpNote('¿Dudas con tu envío? Escríbenos a <a href="mailto:ventas@sstt.cl" style="color:#D90F23;font-weight:700">ventas@sstt.cl</a> o llama al +56 2 2204 2119.') },
-  pago: { icon:'💳', titulo:'Formas de Pago', sub:'Pago seguro · precios netos + IVA',
+  pago: { icon:_fpIco('card'), titulo:'Formas de Pago', sub:'Pago seguro · precios netos + IVA',
     body:
-      _fpRow('💳','WebPay Plus','Débito, crédito y RedCompra a través de Transbank. Pago en línea certificado y seguro.') +
-      _fpRow('🏦','Transferencia bancaria','Para pedidos mayoristas. Te enviamos los datos de transferencia al confirmar tu orden.') +
-      _fpRow('🤝','Condiciones mayoristas','Clientes con cuenta aprobada pueden acceder a crédito y condiciones especiales según volumen.') +
-      _fpRow('🧾','Precios netos + IVA','Los precios se muestran en valor neto; el IVA (19%) se agrega en el checkout.') +
+      _fpRow(_fpIco('card'),'WebPay Plus','Débito, crédito y RedCompra a través de Transbank. Pago en línea certificado y seguro.') +
+      _fpRow(_fpIco('bank'),'Transferencia bancaria','Para pedidos mayoristas. Te enviamos los datos de transferencia al confirmar tu orden.') +
+      _fpRow(_fpIco('handshake'),'Condiciones mayoristas','Clientes con cuenta aprobada pueden acceder a crédito y condiciones especiales según volumen.') +
+      _fpRow(_fpIco('receipt'),'Precios netos + IVA','Los precios se muestran en valor neto; el IVA (19%) se agrega en el checkout.') +
       _fpNote('Para coordinar tu pago o activar condiciones mayoristas, escríbenos a <a href="mailto:ventas@sstt.cl" style="color:#D90F23;font-weight:700">ventas@sstt.cl</a>.') },
-  factura: { icon:'🧾', titulo:'Facturación Electrónica', sub:'Documentos tributarios autorizados por el SII',
+  factura: { icon:_fpIco('receipt'), titulo:'Facturación Electrónica', sub:'Documentos tributarios autorizados por el SII',
     body:
-      _fpRow('🧾','Factura electrónica SII','Emitimos factura electrónica autorizada por el SII para compras con RUT de empresa.') +
-      _fpRow('🏢','Para tu empresa','Ingresa tu RUT y razón social en el checkout para recibir factura con crédito fiscal de IVA.') +
-      _fpRow('👤','Boleta para personas','Si compras como persona natural, emitimos boleta electrónica.') +
-      _fpRow('📧','Recepción del DTE','Recibes el documento tributario electrónico por correo al confirmarse el pago.') +
+      _fpRow(_fpIco('receipt'),'Factura electrónica SII','Emitimos factura electrónica autorizada por el SII para compras con RUT de empresa.') +
+      _fpRow(_fpIco('building'),'Para tu empresa','Ingresa tu RUT y razón social en el checkout para recibir factura con crédito fiscal de IVA.') +
+      _fpRow(_fpIco('user'),'Boleta para personas','Si compras como persona natural, emitimos boleta electrónica.') +
+      _fpRow(_fpIco('mail'),'Recepción del DTE','Recibes el documento tributario electrónico por correo al confirmarse el pago.') +
       _fpNote('¿Datos de facturación a corregir? Escríbenos a <a href="mailto:ventas@sstt.cl" style="color:#D90F23;font-weight:700">ventas@sstt.cl</a> con tu N° de orden.') },
-  privacidad: { icon:'🔐', titulo:'Política de privacidad', sub:'Conforme a la Ley 21.719 de protección de datos personales', /* s167 */
+  privacidad: { icon:_fpIco('shield-lock'), titulo:'Política de privacidad', sub:'Conforme a la Ley 21.719 de protección de datos personales', /* s167 */
     body:
-      _fpRow('🔐','Responsable del tratamiento','SSTT SpA, distribuidor oficial Dahua Technology en Chile. Showroom: General José Artigas 3028, Ñuñoa, Santiago. Contacto: ventas@sstt.cl.') +
-      _fpRow('🎯','Finalidades y base de licitud','Usamos tus datos para procesar pedidos, emitir documentos tributarios (SII), despachar productos y darte soporte — base: ejecución del contrato y obligación legal tributaria. La analítica y las comunicaciones comerciales se tratan solo con tu consentimiento. No vendemos tus datos a terceros.') +
-      _fpRow('🌐','Transferencias internacionales','Algunas funciones de asistencia por IA y voz se procesan en servidores fuera de Chile (Anthropic y ElevenLabs, EE.UU.). Aplicamos resguardos contractuales para proteger tu información en esas transferencias.') +
-      _fpRow('🤖','Tratamiento automatizado e IA','El sitio ofrece asistentes de IA (asesor, auditor de proyecto, comparador) que procesan tus consultas de forma automatizada para entregarte recomendaciones. Tienes derecho a oponerte y a solicitar intervención humana escribiéndonos.') +
-      _fpRow('🍪','Cookies','Usamos cookies necesarias y, solo con tu consentimiento, analíticas y de marketing. Puedes ajustar tus preferencias cuando quieras.') +
-      _fpRow('✋','Tus derechos','Puedes ejercer acceso, rectificación, supresión, portabilidad y oposición sobre tus datos, e impugnar decisiones automatizadas, escribiéndonos.') +
-      _fpRow('🔒','Conservación y seguridad','Conservamos tus datos mientras dure la relación comercial y por los plazos que exige la ley tributaria. Aplicamos medidas de seguridad (conexión cifrada HTTPS y acceso restringido) para protegerlos.') +
+      _fpRow(_fpIco('shield-lock'),'Responsable del tratamiento','SSTT SpA, distribuidor oficial Dahua Technology en Chile. Showroom: General José Artigas 3028, Ñuñoa, Santiago. Contacto: ventas@sstt.cl.') +
+      _fpRow(_fpIco('target'),'Finalidades y base de licitud','Usamos tus datos para procesar pedidos, emitir documentos tributarios (SII), despachar productos y darte soporte — base: ejecución del contrato y obligación legal tributaria. La analítica y las comunicaciones comerciales se tratan solo con tu consentimiento. No vendemos tus datos a terceros.') +
+      _fpRow(_fpIco('globe'),'Transferencias internacionales','Algunas funciones de asistencia por IA y voz se procesan en servidores fuera de Chile (Anthropic y ElevenLabs, EE.UU.). Aplicamos resguardos contractuales para proteger tu información en esas transferencias.') +
+      _fpRow(_fpIco('robot'),'Tratamiento automatizado e IA','El sitio ofrece asistentes de IA (asesor, auditor de proyecto, comparador) que procesan tus consultas de forma automatizada para entregarte recomendaciones. Tienes derecho a oponerte y a solicitar intervención humana escribiéndonos.') +
+      _fpRow(_fpIco('cookie'),'Cookies','Usamos cookies necesarias y, solo con tu consentimiento, analíticas y de marketing. Puedes ajustar tus preferencias cuando quieras.') +
+      _fpRow(_fpIco('hand'),'Tus derechos','Puedes ejercer acceso, rectificación, supresión, portabilidad y oposición sobre tus datos, e impugnar decisiones automatizadas, escribiéndonos.') +
+      _fpRow(_fpIco('lock'),'Conservación y seguridad','Conservamos tus datos mientras dure la relación comercial y por los plazos que exige la ley tributaria. Aplicamos medidas de seguridad (conexión cifrada HTTPS y acceso restringido) para protegerlos.') +
       _fpNote('Solicitudes de privacidad y ejercicio de derechos: <a href="mailto:ventas@sstt.cl" style="color:#D90F23;font-weight:700">ventas@sstt.cl</a>. Ajusta tus <a href="#" onclick="event.preventDefault();document.getElementById(\'footerPageModal\').remove();cookieConsentReopen()" style="color:#D90F23;font-weight:700">preferencias de cookies</a> cuando quieras. Última actualización: Junio 2026.') },
-  terminos: { icon:'📋', titulo:'Términos de uso', sub:'Condiciones de uso de SSTT Tienda',
+  terminos: { icon:_fpIco('clipboard'), titulo:'Términos de uso', sub:'Condiciones de uso de SSTT Tienda',
     body:
-      _fpRow('📋','Uso del sitio','Al usar SSTT Tienda aceptas estos términos. El sitio está destinado a la compra de productos de seguridad electrónica.') +
-      _fpRow('💰','Precios y stock','Precios en pesos chilenos, netos + IVA. Stock y precios pueden cambiar sin previo aviso; se confirman al procesar el pedido.') +
-      _fpRow('🖼️','Productos','Imágenes y especificaciones son referenciales; prevalecen las fichas técnicas oficiales de Dahua.') +
-      _fpRow('©️','Propiedad intelectual','Marcas, logos y contenidos pertenecen a SSTT SpA y/o a sus titulares. Dahua® es marca registrada de Dahua Technology.') +
+      _fpRow(_fpIco('clipboard'),'Uso del sitio','Al usar SSTT Tienda aceptas estos términos. El sitio está destinado a la compra de productos de seguridad electrónica.') +
+      _fpRow(_fpIco('coins'),'Precios y stock','Precios en pesos chilenos, netos + IVA. Stock y precios pueden cambiar sin previo aviso; se confirman al procesar el pedido.') +
+      _fpRow(_fpIco('image'),'Productos','Imágenes y especificaciones son referenciales; prevalecen las fichas técnicas oficiales de Dahua.') +
+      _fpRow(_fpIco('copyright'),'Propiedad intelectual','Marcas, logos y contenidos pertenecen a SSTT SpA y/o a sus titulares. Dahua® es marca registrada de Dahua Technology.') +
       _fpNote('SSTT SpA © 2026 · Distribución autorizada Dahua Technology para Chile. Dudas: <a href="mailto:ventas@sstt.cl" style="color:#D90F23;font-weight:700">ventas@sstt.cl</a>.') }
 };
 function showFooterPage(key){
@@ -33496,7 +33531,7 @@ function renderPerfilCertificaciones() {
 
   // Banner estado
   if (esCert) {
-    html += '<div style="background:linear-gradient(165deg,#14613A,#1A7F3C);border-radius:14px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px">';
+    html += '<div style="background:#15171C;border-radius:14px;padding:18px 20px;margin-bottom:20px;display:flex;align-items:center;gap:14px">';
     html += '<div style="font-size:32px;line-height:1">🏅</div>';
     html += '<div><div style="color:#fff;font-size:15px;font-weight:700">Instalador Certificado Dahua</div>';
     html += '<div style="color:rgba(255,255,255,.75);font-size:12px;margin-top:2px">' + verificadas.length + ' certificación' + (verificadas.length > 1 ? 'es' : '') + ' verificada' + (verificadas.length > 1 ? 's' : '') + ' · Apareces en el directorio público</div>';
@@ -33823,7 +33858,7 @@ var NWS_CATS = [
   {id:'camaras-ptz',   label:'Cámaras PTZ',     ico:'🔄'},
   {id:'nvr',           label:'NVR / XVR',       ico:'💾'},
   {id:'switches',      label:'Switches PoE',    ico:'🔌'},
-  {id:'alarmas',       label:'Alarmas',         ico:'🚨'},
+  {id:'alarmas',       label:'Alarmas',         ico:'⚠︎'},
   {id:'acceso',        label:'Control Acceso',  ico:'🔐'},
   {id:'videoporteros', label:'Videoporteros',   ico:'🔔'},
   {id:'redes',         label:'Redes',           ico:'🌐'},
@@ -34261,7 +34296,7 @@ function puntosCanjeAplicarUI() {
   var pts = parseInt(inp ? inp.value : 0);
   if (!pts) { alert('Indica cuántos puntos quieres canjear (mínimo 100, múltiplos de 100)'); return; }
   var r = puntosCanjeAplicar(pts);
-  if (!r.ok) { alert('⚠️ ' + r.msg); return; }
+  if (!r.ok) { alert('⚠︎ ' + r.msg); return; }
   rwToast('Descuento aplicado: -$' + r.descuento.toLocaleString('es-CL'));
   puntosCanjeWidgetRender();
   if (typeof calcTotals === 'function') calcTotals();
@@ -34482,8 +34517,8 @@ function rwSeedDemoData() {
   localStorage.setItem('sstt_reviews_seeded_v1', '1');
 }
 // ══════════════════════════════════════════════════════════════════════
-// s105: ⚠️ SEED MASIVO DEMO — reviews + 1 pregunta Q&A para TODOS los productos
-// ⚠️ TEMPORAL / DEMO — ELIMINAR ANTES DE PRODUCCIÓN (Jorge: "después eliminaremos").
+// s105: ⚠︎ SEED MASIVO DEMO — reviews + 1 pregunta Q&A para TODOS los productos
+// ⚠︎ TEMPORAL / DEMO — ELIMINAR ANTES DE PRODUCCIÓN (Jorge: "después eliminaremos").
 //   • Desactivar sin borrar código: poner RW_SEED_ALL_DEMO = false.
 //   • Purgar datos ya sembrados (consola):
 //       ['sstt_reviews_v1','sstt_qa_v1','sstt_review_votes_v1',
@@ -35184,7 +35219,7 @@ function rwCuponAplicarInput() {
 function rwCuponShowError(msg) {
   var el = document.getElementById('cuponError');
   if (!el) return;
-  el.textContent = '⚠️ ' + msg;
+  el.textContent = '⚠︎ ' + msg;
   el.style.display = 'block';
 }
 window.rwCuponAplicarInput = rwCuponAplicarInput;
@@ -35332,7 +35367,7 @@ function rwGiftcardAplicarInput() {
 function rwGiftcardShowError(msg) {
   var el = document.getElementById('giftcardError');
   if (!el) return;
-  el.textContent = '⚠️ ' + msg;
+  el.textContent = '⚠︎ ' + msg;
   el.style.display = 'block';
 }
 window.rwGiftcardAplicarInput = rwGiftcardAplicarInput;
@@ -35578,7 +35613,7 @@ function renderPDFSpecs(id, specs, p) {
   const isMock = specs._source === 'nombre';
   const badge = isMock
     ? `<div style="background:var(--yellow-p);border:1px solid #daa520;border-radius:4px;padding:7px 12px;font-size:11px;color:var(--yellow);margin-bottom:12px;display:flex;gap:8px;align-items:center">
-        <span>⚠️</span><span>Especificaciones derivadas del nombre del producto. PDF no disponible para este modelo.</span>
+        <span>⚠︎</span><span>Especificaciones derivadas del nombre del producto. PDF no disponible para este modelo.</span>
        </div>`
     : `<div style="background:var(--green-p);border:1px solid #16a34a;border-radius:4px;padding:7px 12px;font-size:11px;color:var(--green);margin-bottom:12px;display:flex;gap:8px;align-items:center">
         <span>✓</span><span>Especificaciones extraídas del <strong>datasheet oficial PDF Dahua</strong> para <strong>${specs._codigo}</strong></span>
@@ -35705,13 +35740,13 @@ function cmpToggle(id) {
         'acceso':'Control de Acceso / Videoporteros',
         'alarmas':'Alarmas',
       };
-      showToastWarning(`⚠️ Solo puedes comparar productos del mismo tipo.\n"${p.codigo}" es ${labels[g1]||g1} y el comparador tiene ${labels[g2]||g2}.`);
+      showToastWarning(`⚠︎ Solo puedes comparar productos del mismo tipo.\n"${p.codigo}" es ${labels[g1]||g1} y el comparador tiene ${labels[g2]||g2}.`);
       return;
     }
   }
 
   if (CMP.items.length >= CMP.MAX) {
-    showToastWarning(`⚠️ Máximo ${CMP.MAX} productos a comparar`);
+    showToastWarning(`⚠︎ Máximo ${CMP.MAX} productos a comparar`);
     return;
   }
 
@@ -35734,7 +35769,7 @@ function showToastWarning(msg) {
 // ── COMPARADOR: Modal con specs reales del PDF ──────────────────────────
 async function cmpRenderModal() {
   const products = CMP.items;
-  if (products.length < 2) { showToast('⚠️ Agrega al menos 2 productos para comparar'); return; }
+  if (products.length < 2) { showToast('⚠︎ Agrega al menos 2 productos para comparar'); return; }
 
   // Mostrar modal con skeleton loader
   let modal = document.getElementById('cmpModal');
@@ -35839,7 +35874,7 @@ function cmpBuildTable(products, allSpecs, modal) {
   const srcBadge = (specs) => {
     if (specs._source === 'sstt_data') return `<span style="background:var(--green-p);color:var(--green);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700">✓ Catálogo</span>`;
     if (specs._source === 'pdf' || specs._source === 'pdf+catalogo') return `<span style="background:var(--green-p);color:var(--green);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700">✓ PDF</span>`;
-    return `<span style="background:var(--yellow-p);color:var(--yellow);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700">⚠️ Estimado</span>`;
+    return `<span style="background:var(--yellow-p);color:var(--yellow);font-size:9px;padding:2px 6px;border-radius:3px;font-weight:700">⚠︎ Estimado</span>`;
   };
 
   const headerCols = products.map((p, i) => `
@@ -35994,10 +36029,10 @@ function cmpBuildTable(products, allSpecs, modal) {
 // ── Exportar comparación a PDF profesional ──────────────────────────────
 window.cmpExportPDF = function() {
   var products = CMP.items;
-  if (products.length < 2) { showToast('⚠️ Agrega al menos 2 productos'); return; }
+  if (products.length < 2) { showToast('⚠︎ Agrega al menos 2 productos'); return; }
 
   var jsPDFLib = window.jspdf || window.jsPDF;
-  if (!jsPDFLib || !jsPDFLib.jsPDF) { showToast('⚠️ Error cargando jsPDF'); return; }
+  if (!jsPDFLib || !jsPDFLib.jsPDF) { showToast('⚠︎ Error cargando jsPDF'); return; }
   var doc = new jsPDFLib.jsPDF({ unit: 'mm', format: 'a4', orientation: products.length > 3 ? 'landscape' : 'portrait' });
 
   var pw = doc.internal.pageSize.getWidth();
@@ -36512,10 +36547,10 @@ async function startCameraByIndex(idx) {
         NotAllowedError:       '🔒 Permiso denegado<br><small>Toca el candado 🔒 en la URL → Permisos → Cámara → Permitir</small>',
         PermissionDeniedError: '🔒 Permiso denegado<br><small>Toca el candado 🔒 en la URL → Permisos → Cámara → Permitir</small>',
         NotFoundError:         '📷 Cámara no encontrada<br><small>Usa "Subir foto" para continuar</small>',
-        NotReadableError:      '⚠️ Cámara en uso por otra app<br><small>Cierra otras apps y reintenta</small>',
+        NotReadableError:      '⚠︎ Cámara en uso por otra app<br><small>Cierra otras apps y reintenta</small>',
       };
-      const msg = msgs[e.name] || `⚠️ ${e.name}<br><small>${e.message}</small>`;
-      ph.innerHTML = `<div style="font-size:36px;margin-bottom:10px">⚠️</div>
+      const msg = msgs[e.name] || `⚠︎ ${e.name}<br><small>${e.message}</small>`;
+      ph.innerHTML = `<div style="font-size:36px;margin-bottom:10px">⚠︎</div>
         <div style="color:#fff;font-size:14px;font-weight:700;text-align:center;line-height:1.7">${msg}</div>`;
       ph.style.display = 'flex';
     }
@@ -36587,7 +36622,7 @@ function loadUploadedPhoto(event) {
   const file = event.target.files[0];
   if (!file) return;
   // s47d: file size limit 10MB (audit A3)
-  if (file.size > 10 * 1024 * 1024) { showToast('⚠️ La imagen no puede superar 10 MB'); event.target.value = ''; return; }
+  if (file.size > 10 * 1024 * 1024) { showToast('⚠︎ La imagen no puede superar 10 MB'); event.target.value = ''; return; }
   const reader = new FileReader();
   reader.onload = (e) => {
     const img = new Image();
@@ -36711,13 +36746,13 @@ function compressImage(dataUrl, maxSize, quality) {
 
 async function analyzeScene() { return runAnalysis(); }
 async function runAnalysis() {
-  if (_proxyAlive === false) { document.getElementById('analysisLoading').style.display='none'; addAIMsg('ai','⚠️ El servicio de IA no está disponible. Intenta de nuevo en unos minutos.'); closeSceneModal(); return; }
+  if (_proxyAlive === false) { document.getElementById('analysisLoading').style.display='none'; addAIMsg('ai','⚠︎ El servicio de IA no está disponible. Intenta de nuevo en unos minutos.'); closeSceneModal(); return; }
   // s47b: rate limit guard
   if (!aiRateGuard()) { document.getElementById('analysisLoading').style.display='none'; aiRateBlocked(document.getElementById('analysisContent')); return; }
   if (!sceneCapture) {
     document.getElementById('analysisLoading').style.display = 'none';
     document.getElementById('analysisResult').style.display = 'none';
-    addAIMsg('ai','⚠️ No hay imagen capturada. Vuelve al paso 1.');
+    addAIMsg('ai','⚠︎ No hay imagen capturada. Vuelve al paso 1.');
     closeSceneModal();
     return;
   }
@@ -36812,7 +36847,7 @@ async function runAnalysis() {
       document.getElementById('analysisLoading').style.display = 'none';
       document.getElementById('analysisResult').style.display = 'block';
       document.getElementById('analysisContent').innerHTML = `
-        <div style="color:var(--red);font-weight:700;font-size:15px;margin-bottom:10px">⚠️ Error de API</div>
+        <div style="color:var(--red);font-weight:700;font-size:15px;margin-bottom:10px">⚠︎ Error de API</div>
         <div style="background:#FFF0F0;border:1px solid #FFCCCC;border-radius:6px;padding:12px;font-size:12px;font-family:monospace;color:var(--g1)">${data.error.type}: ${data.error.message}</div>`;
       return;
     }
@@ -36834,7 +36869,7 @@ async function runAnalysis() {
       document.getElementById('analysisResult').style.display = 'block';
       _goToStepUI(3);
       document.getElementById('analysisContent').innerHTML = `
-        <div style="color:var(--red);font-weight:700;font-size:15px;margin-bottom:10px">⚠️ Error al parsear respuesta</div>
+        <div style="color:var(--red);font-weight:700;font-size:15px;margin-bottom:10px">⚠︎ Error al parsear respuesta</div>
         <div style="background:#FFF0F0;border:1px solid #FFCCCC;border-radius:6px;padding:12px;font-size:12px;font-family:monospace;color:var(--g1);white-space:pre-wrap;overflow:auto;max-height:200px">${raw.slice(0,500)}</div>`;
       return;
     }
@@ -36848,7 +36883,7 @@ async function runAnalysis() {
     document.getElementById('analysisResult').style.display = 'block';
     document.getElementById('analysisResult').style.display = 'block';
     document.getElementById('analysisContent').innerHTML = `
-      <div style="color:var(--red);font-weight:700;font-size:15px;margin-bottom:10px">⚠️ Error al analizar</div>
+      <div style="color:var(--red);font-weight:700;font-size:15px;margin-bottom:10px">⚠︎ Error al analizar</div>
       <div style="background:#FFF0F0;border:1px solid #FFCCCC;border-radius:6px;padding:12px;font-size:12px;font-family:monospace;color:var(--g1);white-space:pre-wrap;word-break:break-all">${e.name}: ${e.message}</div>
       <p style="font-size:12px;color:var(--g2);margin-top:10px">Revisa la consola del navegador (F12) para más detalles.</p>`;
   }
@@ -36894,7 +36929,7 @@ function renderAnalysisResult() {
     <p><strong>${_e(optico.focal_recomendada_mm) || '?'}mm</strong> · ${_e(optico.angulo_recomendado_grados) || '?'}° · mín <strong>${_e(optico.resolucion_minima) || '4MP'}</strong></p>
     <p style="font-size:12.5px;color:var(--g2)">${_e(optico.justificacion)}</p>
     ${a.resumen_instalacion ? `<h3>🔧 Instalación</h3><p>${_e(a.resumen_instalacion)}</p>` : ''}
-    ${a.advertencias?.length ? `<h3>⚠️ Advertencias</h3><ul>${a.advertencias.map(w=>`<li>${_e(w)}</li>`).join('')}</ul>` : ''}
+    ${a.advertencias?.length ? `<h3>⚠︎ Advertencias</h3><ul>${a.advertencias.map(w=>`<li>${_e(w)}</li>`).join('')}</ul>` : ''}
   `;
   document.getElementById('analysisContent').innerHTML = html_content;
 
@@ -37252,7 +37287,7 @@ ${a.resumen_instalacion || ''}
       addAIMsg('ai', content, extractAIProds(content));
     }).catch(()=>{
       hideAITyping();
-      addAIMsg('ai','⚠️ Error al procesar. Intenta nuevamente.');
+      addAIMsg('ai','⚠︎ Error al procesar. Intenta nuevamente.');
     });
   }, 300);
 }
@@ -38047,7 +38082,7 @@ function oiFileSelected(e) {
 
 function oiLoadFile(file) {
   // s47d: file size limit 5MB (audit A3)
-  if (file.size > 5 * 1024 * 1024) { showToast('⚠️ El archivo no puede superar 5 MB'); return; }
+  if (file.size > 5 * 1024 * 1024) { showToast('⚠︎ El archivo no puede superar 5 MB'); return; }
   const isPDF = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
   oiImageType = isPDF ? 'application/pdf' : (file.type || 'image/jpeg');
   const reader = new FileReader();
@@ -38104,10 +38139,10 @@ async function oiAnalyze() {
 
   // Validar input
   if (oiMode === 'img' && !oiImageB64) {
-    oiSetStatus('⚠️ Selecciona o arrastra una imagen primero', 'error'); return;
+    oiSetStatus('⚠︎ Selecciona o arrastra una imagen primero', 'error'); return;
   }
   if (oiMode === 'txt' && !document.getElementById('oiTextInput').value.trim()) {
-    oiSetStatus('⚠️ Ingresa el texto del pedido primero', 'error'); return;
+    oiSetStatus('⚠︎ Ingresa el texto del pedido primero', 'error'); return;
   }
 
   // Loading state
@@ -38269,7 +38304,7 @@ function oiRenderResult(result) {
   const missing = result.no_encontrados || items.filter(i => !i.codigo_catalogo).map(i => i.descripcion_original);
 
   if (!found.length) {
-    oiSetStatus('⚠️ No se encontraron productos en el catálogo. Verifica el pedido.', 'error');
+    oiSetStatus('⚠︎ No se encontraron productos en el catálogo. Verifica el pedido.', 'error');
     btn.disabled = false; ico.textContent = '🤖'; txt.textContent = 'Reintentar';
     return;
   }
@@ -38308,7 +38343,7 @@ function oiRenderResult(result) {
 
   const missingHTML = missing.length
     ? `<div style="margin-top:8px;padding:8px 10px;background:var(--orange-p);border-radius:8px;font-size:11.5px;color:var(--orange)">
-        ⚠️ Sin match en catálogo: ${missing.map(m=>escapeHtml(m)).join(', ')}
+        ⚠︎ Sin match en catálogo: ${missing.map(m=>escapeHtml(m)).join(', ')}
        </div>` : '';
 
   oiSetStatus(`
@@ -38330,7 +38365,7 @@ function oiRenderResult(result) {
   if (statusEl) setTimeout(() => statusEl.scrollTop = 0, 50);
 
   if (missing.length) {
-    showToast(`✓ ${added} productos al carro · ⚠️ ${missing.length} sin match`);
+    showToast(`✓ ${added} productos al carro · ⚠︎ ${missing.length} sin match`);
   } else {
     showToast(`✓ ${added} productos agregados al carro`);
   }
@@ -38358,12 +38393,12 @@ function tP(o) { return getTramoPrice(o).total; }
 
 function generarCotizacionPDF() {
   if (!S.cart || S.cart.length === 0) {
-    showToast('⚠️ El carro está vacío'); return;
+    showToast('⚠︎ El carro está vacío'); return;
   }
 
   const { jsPDF } = window.jspdf;
   if (!jsPDF) {
-    showToast('⚠️ Error cargando jsPDF'); return;
+    showToast('⚠︎ Error cargando jsPDF'); return;
   }
 
   const doc = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
@@ -38576,7 +38611,7 @@ function generarCotizacionPDF() {
 let cotEnv = 'pdf'; // 'pdf' | 'email' | 'whatsapp'
 
 function abrirModalCotizacion() {
-  if (!S.cart || !S.cart.length) { showToast('⚠️ El carro está vacío'); return; }
+  if (!S.cart || !S.cart.length) { showToast('⚠︎ El carro está vacío'); return; }
   document.getElementById('cotModal').style.display = 'flex';
   document.body.style.overflow = 'hidden';
   cotEnv = 'pdf';
@@ -38919,7 +38954,7 @@ window.checkout = function() {
   // Validar teléfono
   const telOk = validateCartTel();
   if (!telOk) {
-    showToast('⚠️ Ingresa un teléfono válido para el seguimiento del despacho');
+    showToast('⚠︎ Ingresa un teléfono válido para el seguimiento del despacho');
     qs('cTel')?.focus();
     qs('cTel')?.scrollIntoView({ behavior:'smooth', block:'center' });
     return;
@@ -38928,7 +38963,7 @@ window.checkout = function() {
   const emailOk = validateCartEmailTracking();
   const emailVal = document.getElementById('cEmailTracking')?.value.trim();
   if (!emailOk || !emailVal) {
-    showToast('⚠️ Ingresa un email válido para recibir el seguimiento del pedido');
+    showToast('⚠︎ Ingresa un email válido para recibir el seguimiento del pedido');
     document.getElementById('cEmailTracking')?.focus();
     document.getElementById('cEmailTracking')?.scrollIntoView({ behavior:'smooth', block:'center' });
     return;
@@ -39093,7 +39128,7 @@ function erutFileSelected(e) {
 
 function erutLoadFile(file) {
   // s47d: file size limit 5MB (audit A3)
-  if (file.size > 5 * 1024 * 1024) { showToast('⚠️ El archivo no puede superar 5 MB'); return; }
+  if (file.size > 5 * 1024 * 1024) { showToast('⚠︎ El archivo no puede superar 5 MB'); return; }
   erutFileType = file.type || 'application/pdf';
   const isPDF = erutFileType === 'application/pdf' || file.name.endsWith('.pdf');
   const reader = new FileReader();
@@ -39263,7 +39298,7 @@ async function erutVerificar() {
     const inp = document.getElementById('erutRutPersonal');
     const r   = validateRut(inp?.value || '');
     if (!r.ok) {
-      erutSetStatus('erutVerifStatus', '⚠️ Ingresa un RUT personal válido', 'warn');
+      erutSetStatus('erutVerifStatus', '⚠︎ Ingresa un RUT personal válido', 'warn');
       btn.disabled = false; ico.textContent = '✓'; txt.textContent = 'Verificar y guardar'; return;
     }
     rutPersonalFormateado = r.formatted;
@@ -39276,7 +39311,7 @@ async function erutVerificar() {
   } else {
     // Verificar por cédula con IA
     if (!erutCedulaB64) {
-      erutSetStatus('erutVerifStatus', '⚠️ Sube la foto de tu cédula primero', 'warn');
+      erutSetStatus('erutVerifStatus', '⚠︎ Sube la foto de tu cédula primero', 'warn');
       btn.disabled = false; ico.textContent = '✓'; txt.textContent = 'Verificar y guardar'; return;
     }
     erutSetStatus('erutVerifStatus', '🔄 La IA está leyendo tu cédula…', 'loading');
@@ -39301,7 +39336,7 @@ async function erutVerificar() {
       erutSetStatus('erutCedulaStatus',
         rutPersonalMatch
           ? '✓ Cédula leída: ' + rutPersonalFormateado
-          : '⚠️ RUT leído: ' + rutPersonalFormateado + ' — verificando…', 'loading');
+          : '⚠︎ RUT leído: ' + rutPersonalFormateado + ' — verificando…', 'loading');
     } catch(e) {
       erutSetStatus('erutVerifStatus', '✕ Error leyendo la cédula: ' + e.message, 'error');
       btn.disabled = false; ico.textContent = '✓'; txt.textContent = 'Verificar y guardar'; return;
@@ -39316,7 +39351,7 @@ async function erutVerificar() {
   } else {
     // No coincide pero igual se guarda como pendiente — SSTT verifica manualmente
     erutSetStatus('erutVerifStatus',
-      '⚠️ El RUT ingresado no coincide con el autorizado en el e-RUT (' + (erutDatos.rut_usuario || '—') + ').<br>' +
+      '⚠︎ El RUT ingresado no coincide con el autorizado en el e-RUT (' + (erutDatos.rut_usuario || '—') + ').<br>' +
       '<small>Se guardará como <strong>pendiente de verificación manual</strong> por SSTT. Podrás continuar pero el pedido puede requerir confirmación adicional.</small>', 'warn');
     erutGuardarValidado(rutPersonalFormateado, 'pendiente');
   }
@@ -39325,7 +39360,7 @@ async function erutVerificar() {
   setTimeout(() => {
     cerrarErutModal();
     erutActualizarBanner();
-    showToast(rutPersonalMatch ? '✓ e-RUT validado — datos autoccompletados' : '⚠️ Guardado como pendiente de verificación');
+    showToast(rutPersonalMatch ? '✓ e-RUT validado — datos autoccompletados' : '⚠︎ Guardado como pendiente de verificación');
   }, 1800);
 }
 
@@ -41372,7 +41407,7 @@ function aiSend(fromVoice) {
     var _hasConversation = aiHistory.length >= 3; // user+assistant+current user = 3
     if (_hasConversation) { /* follow-up en conversación activa — on-topic implícito */ }
     else {
-    aiAddMsg('bot', '⚠️ Este asistente está especializado en <strong>equipos de seguridad Dahua, CCTV y productos del catálogo SSTT</strong>. ' +
+    aiAddMsg('bot', '⚠︎ Este asistente está especializado en <strong>equipos de seguridad Dahua, CCTV y productos del catálogo SSTT</strong>. ' +
       'Puedo ayudarte con:<br><br>' +
       '• Recomendaciones de cámaras, grabadores, switches y accesorios<br>' +
       '• Soporte técnico y troubleshooting de equipos Dahua<br>' +
@@ -41550,7 +41585,7 @@ function aiSend(fromVoice) {
       var _ticketDesc = escapeHtml(_lastQ);
       cleanHtml += '<div style="margin-top:12px;padding:10px 12px;background:rgba(21,23,28,.04);border:.5px solid rgba(21,23,28,.12);border-radius:12px;font-size:12px;color:rgba(0,0,0,.5)">' +
         '¿No se resolvió tu problema? ' +
-        '<button onclick="if(!USER){showToast(\'⚠️ Inicia sesión para crear un ticket\');return;}var tid=crearTicketDesdeSoporte(\'' + _ticketAsunto.replace(/'/g,"\\'") + '\',\'' + _ticketDesc.replace(/'/g,"\\'") + '\',\'soporte\');if(tid)this.parentElement.innerHTML=\'✓ Ticket \'+tid+\' creado — revísalo en tu perfil\'" ' +
+        '<button onclick="if(!USER){showToast(\'⚠︎ Inicia sesión para crear un ticket\');return;}var tid=crearTicketDesdeSoporte(\'' + _ticketAsunto.replace(/'/g,"\\'") + '\',\'' + _ticketDesc.replace(/'/g,"\\'") + '\',\'soporte\');if(tid)this.parentElement.innerHTML=\'✓ Ticket \'+tid+\' creado — revísalo en tu perfil\'" ' +
         'style="background:rgba(21,23,28,.1);color:#15171C;border:.5px solid rgba(21,23,28,.2);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font);margin-left:6px">' +
         '🎫 Crear ticket de soporte</button></div>';
     }
@@ -41580,7 +41615,7 @@ function aiSend(fromVoice) {
   } catch(err) { // s108: red de seguridad — si algo falla antes del fetch, no dejar el typing pegado
     aiTypingStop();
     if (aiAutoMic) { aiVoiceUI('listening'); setTimeout(function(){ if (aiAutoMic && aiPanelOpen) aiMic(); }, 900); }
-    else aiAddMsg('bot', '⚠️ Ups, algo falló al procesar tu consulta. Intenta de nuevo.');
+    else aiAddMsg('bot', '⚠︎ Ups, algo falló al procesar tu consulta. Intenta de nuevo.');
     try { console.error('[SSTT] aiSend:', err); } catch(_){}
   }
 }
@@ -41708,7 +41743,7 @@ function aiInitSR() {
     }
     // no-speech / audio-capture / network / aborted: en modo voz NO molestamos con mensaje;
     // el onend re-arma la escucha (loop manos libres). Fuera de modo voz, avisamos.
-    if (!aiAutoMic && e.error !== 'aborted') aiAddMsg('bot', '⚠️ No te escuché bien. Intenta de nuevo.');
+    if (!aiAutoMic && e.error !== 'aborted') aiAddMsg('bot', '⚠︎ No te escuché bien. Intenta de nuevo.');
     aiMicStop();
   };
   aiSR.onend = function() {
@@ -41728,7 +41763,7 @@ function aiInitSR() {
 
 function aiMic() {
   var sr = aiInitSR();
-  if (!sr) { aiAddMsg('bot', '⚠️ Tu navegador no soporta voz. Usa Chrome o Edge.'); return; }
+  if (!sr) { aiAddMsg('bot', '⚠︎ Tu navegador no soporta voz. Usa Chrome o Edge.'); return; }
   if (aiRecording) {
     try { sr.stop(); } catch(e) {}
     aiMicStop();
@@ -41739,10 +41774,10 @@ function aiMic() {
     // Reiniciar estado sin destruir la instancia (mantiene el permiso)
     sr.abort();
     setTimeout(function() {
-      try { sr.start(); } catch(e) { aiSRArming = false; aiAddMsg('bot', '⚠️ Error al iniciar micrófono: ' + e.message); }
+      try { sr.start(); } catch(e) { aiSRArming = false; aiAddMsg('bot', '⚠︎ Error al iniciar micrófono: ' + e.message); }
     }, 100);
   } catch(e) {
-    try { sr.start(); } catch(e2) { aiSRArming = false; aiAddMsg('bot', '⚠️ Error de micrófono: ' + e2.message); }
+    try { sr.start(); } catch(e2) { aiSRArming = false; aiAddMsg('bot', '⚠︎ Error de micrófono: ' + e2.message); }
   }
 }
 
@@ -42818,13 +42853,13 @@ window.mktSubmitInterest = function() {
   var email = (document.getElementById('mktEmail') || {}).value || '';
   var tipo  = (document.getElementById('mktInterestForm') || {}).dataset.tipo || '';
   if (!email || !email.includes('@')) {
-    showToast('⚠️ Ingresa un email válido');
+    showToast('⚠︎ Ingresa un email válido');
     return;
   }
   // s167 E: consentimiento explícito obligatorio (Ley 21.719)
   var _mktConsent = document.getElementById('mktConsent');
   if (_mktConsent && !_mktConsent.checked) {
-    showToast('⚠️ Debes autorizar el uso de tu email según la Política de privacidad');
+    showToast('⚠︎ Debes autorizar el uso de tu email según la Política de privacidad');
     return;
   }
   // Demo: guardar en localStorage
@@ -43398,14 +43433,14 @@ function enviarProyecto() {
   }
   if (errores.length) {
     err.style.display = 'block';
-    err.innerHTML = '⚠️ Completa los campos requeridos: ' + errores.join(', ');
+    err.innerHTML = '⚠︎ Completa los campos requeridos: ' + errores.join(', ');
     return;
   }
   // s167 E: consentimiento explícito obligatorio (Ley 21.719)
   var _pyConsent = document.getElementById('pyConsent');
   if (_pyConsent && !_pyConsent.checked) {
     err.style.display = 'block';
-    err.innerHTML = '⚠️ Debes autorizar el tratamiento de tus datos conforme a la Política de privacidad para enviar la solicitud.';
+    err.innerHTML = '⚠︎ Debes autorizar el tratamiento de tus datos conforme a la Política de privacidad para enviar la solicitud.';
     return;
   }
   err.style.display = 'none';
@@ -43929,7 +43964,7 @@ function compatAnalizarCarro() {
           titulo: 'Excedes la cantidad de canales del grabador',
           mensaje: 'Tu ' + g.codigo + ' tiene ' + totalCH + ' canales pero tienes ' + totalCamaras + ' cámara' + (totalCamaras>1?'s':'') + ' en el carro.',
           solucion: 'Opciones: agregar otro grabador, o cambiar a un modelo de mayor capacidad (16CH, 32CH).',
-          icon: '⚠️'
+          icon: '⚠︎'
         });
       } else if (totalCamaras > 0 && totalCamaras <= totalCH && totalCH - totalCamaras >= Math.ceil(totalCH * 0.5)) {
         // Solo mostrar "espacio para crecer" si NO hay incompatibilidades de resolución o tecnología
@@ -43972,7 +44007,7 @@ function compatAnalizarCarro() {
           titulo: 'Excedes los canales IP del grabador híbrido',
           mensaje: 'El ' + g.codigo + ' acepta máx ' + (canalesIPDisp * g.qty) + ' cámara' + (canalesIPDisp>1?'s':'') + ' IP pero tienes ' + totalCamIP + '.',
           solucion: 'Reduce a ' + (canalesIPDisp * g.qty) + ' cámara' + (canalesIPDisp>1?'s':'') + ' IP o agrega un NVR para las restantes.',
-          icon: '⚠️'
+          icon: '⚠︎'
         });
       } else if (canalesIPDisp === 0 && camarasIP.length > 0) {
         alertas.push({
@@ -44452,7 +44487,7 @@ function compatRenderAlerts() {
   if (errores > 0) {
     pillClass = 'error';
     pillLabel = errores + ' incompatibilidad' + (errores>1?'es':'') + ' detectada' + (errores>1?'s':'');
-    pillIcon = '⚠️';
+    pillIcon = '⚠︎';
   } else if (warnings > 0) {
     pillClass = 'warning';
     pillLabel = warnings + ' advertencia' + (warnings>1?'s':'') + ' técnica' + (warnings>1?'s':'');
@@ -44660,7 +44695,7 @@ function waHideTyping() {
 }
 
 function waThink(userMsg) {
-  if (_proxyAlive === false) { waHideTyping(); waAddMsg('bot','⚠️ El servicio de IA no está disponible en este momento. Escríbenos directamente a ventas@sstt.cl.'); return; }
+  if (_proxyAlive === false) { waHideTyping(); waAddMsg('bot','⚠︎ El servicio de IA no está disponible en este momento. Escríbenos directamente a ventas@sstt.cl.'); return; }
   // s47b: rate limit guard
   if (!aiRateGuard()) { waHideTyping(); aiRateBlocked(document.getElementById('wapMsgs')); return; }
   waShowTyping();
@@ -44900,7 +44935,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s167', fecha:'Jueves 18 de Junio del 2026' };
+window.SSTT_VER = { ver:'s170', fecha:'Lunes 22 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -45498,7 +45533,7 @@ function cartCrossSellRender() {
   function catEmoji(cat) {
     var map = {'camaras-ip':'📷','camaras-hdcvi':'📹','camaras-ptz':'🔭',
                'nvr':'🖥️','switches':'🔌','accesorios':'🔧',
-               'alarmas':'🚨','acceso':'🔑','videoporteros':'🔔',
+               'alarmas':'⚠︎','acceso':'🔑','videoporteros':'🔔',
                'especiales':'💾','licencias':'📋','redes':'🌐'};
     return map[cat] || '📦';
   }
@@ -47287,9 +47322,9 @@ function renderPanel(which, r) {
     var infra = r.cam.infra;
     var infraIcon = infra.type === 'FullColorPro' || infra.type === 'PRO' ? '⭐' :
                     infra.type === 'WizColor' ? '💡' :
-                    infra.type === 'TiOC' ? '🚨' :
+                    infra.type === 'TiOC' ? '⚠︎' :
                     infra.type === 'SmartIR' ? '🧠' :
-                    infra.type === 'IR' ? '🌙' : '⚠️';
+                    infra.type === 'IR' ? '🌙' : '⚠︎';
     var infraColor = infra.unlimited ? '#27ae60' :
                      infra.hasLED ? '#f39c12' :
                      infra.irDist > 0 ? '#8e44ad' : 'var(--g3)';
@@ -47301,7 +47336,7 @@ function renderPanel(which, r) {
           '<div class="fov-infra-sub">✓ Iluminación efectiva en toda la escena</div>' :
           infra.irDist > 0 ?
             '<div class="fov-infra-sub">Alcance útil ~'+infra.irDist+'m</div>' :
-            '<div class="fov-infra-sub" style="color:#c00">⚠ Sólo útil con luz ambiente</div>'
+            '<div class="fov-infra-sub" style="color:#c00">⚠︎ Sólo útil con luz ambiente</div>'
         )+
       '</div>'+
     '</div>';
@@ -47363,7 +47398,7 @@ function renderPanel(which, r) {
       }
       techHTML += '</div>';
       if (pc.level === 'limitado' || pc.level === 'muy bajo') {
-        techHTML += '<div class="fov-tech-tip">⚠️ '+pc.desc+'</div>';
+        techHTML += '<div class="fov-tech-tip">⚠︎ '+pc.desc+'</div>';
       } else if (pc.level === 'excelente') {
         techHTML += '<div class="fov-tech-tip" style="color:#27ae60;background:rgba(39,174,96,.06);border-left-color:#27ae60">'+pc.icon+' '+pc.desc+'</div>';
       }
@@ -47836,7 +47871,7 @@ function drawIlluminationTop(ctx, cx, cy, scale, r, side) {
     range = infra.ledDist || infra.irDist || 30;
     fillColor = 'rgba(255,250,220,.22)';
     strokeColor = 'rgba(255,230,150,.7)';
-    label = infra.type === 'TiOC' ? '🚨 Luz blanca + Sirena' : '💡 LED '+range+'m';
+    label = infra.type === 'TiOC' ? '⚠︎ Luz blanca + Sirena' : '💡 LED '+range+'m';
   } else if (infra.irDist > 0) {
     // IR estándar o Smart IR
     range = infra.irDist;
@@ -48300,7 +48335,7 @@ function renderConclusion(rA, rB) {
       adviceT += '<p class="fov-conc-hint" style="border-left-color:#e67e22;background:rgba(230,126,34,.06)">🔥 <b>Detección de incendios</b>: puede detectar fuentes de calor anómalas (fuego, sobrecalentamiento eléctrico) hasta ~'+dri.fireDetection.toFixed(0)+'m — ideal para bodegas, subestaciones eléctricas, prevención forestal.</p>';
     }
     if (ts.hasTempMeasurement) {
-      adviceT += '<p class="fov-conc-hint" style="border-left-color:#9b59b6">🌡️ Esta cámara incluye <b>medición de temperatura</b> — mide la temperatura exacta de puntos específicos en la escena con precisión ±0.3°C (útil con Blackbody calibrador).</p>';
+      adviceT += '<p class="fov-conc-hint" style="border-left-color:#15171C">🌡️ Esta cámara incluye <b>medición de temperatura</b> — mide la temperatura exacta de puntos específicos en la escena con precisión ±0.3°C (útil con Blackbody calibrador).</p>';
     }
     el.innerHTML =
       '<div class="fov-conc-title">🔥 Análisis técnico térmico</div>' +
@@ -48348,7 +48383,7 @@ function renderConclusion(rA, rB) {
       'a <b>'+rA.focal.toFixed(1)+'mm</b> cubre un ángulo de <b>'+(rA.angTotalH||rA.angH).toFixed(0)+'°</b>' +
       (rA.multi && rA.angTotalH !== rA.angH ? ' (cada sensor ~'+rA.angH.toFixed(0)+'°)' : '') + ' ' +
       'y permite <b>'+rA.wid.toFixed(1)+'m de ancho</b> a '+FOV.dist+'m.</p>' +
-      (bestZone ? '<p>A '+FOV.dist+'m logra nivel <b style="color:'+DORI_COLORS[DORI_ZONES.findIndex(function(z){return z.name===bestZone;})]+'">'+bestZone+'</b>.</p>' : '<p>⚠️ A '+FOV.dist+'m no alcanza ni para detectar — acerca la cámara o usa un lente más largo.</p>') +
+      (bestZone ? '<p>A '+FOV.dist+'m logra nivel <b style="color:'+DORI_COLORS[DORI_ZONES.findIndex(function(z){return z.name===bestZone;})]+'">'+bestZone+'</b>.</p>' : '<p>⚠︎ A '+FOV.dist+'m no alcanza ni para detectar — acerca la cámara o usa un lente más largo.</p>') +
       '<p class="fov-conc-hint">💡 Para <b>identificar rostros</b> necesitas estar a máx. '+rA.doriDists[3].toFixed(1)+'m. Para <b>reconocer personas conocidas</b>, '+rA.doriDists[2].toFixed(1)+'m.</p>' +
       '<p class="fov-conc-hint">🚗 Para <b>leer patentes chilenas</b> con claridad, el auto debe estar a máx. <b>'+rA.plateDist.toFixed(1)+'m</b> y la cámara orientada hacia ella.</p>' +
       // Nota especial según tipo multisensor
@@ -48380,10 +48415,10 @@ function renderConclusion(rA, rB) {
         if (inf.hasLED) return '<p class="fov-conc-hint" style="border-left-color:#f39c12">💡 <b>'+inf.label+'</b>: aclara la escena con LED blanco hasta ~'+(inf.ledDist||inf.irDist)+'m. Intrusos la ven encendida — buena disuasión.</p>';
         if (inf.irDist > 0) {
           var idDist = rA.doriDists[3];
-          if (idDist > inf.irDist) return '<p class="fov-conc-hint" style="border-left-color:#c00;background:rgba(200,0,0,.04)">⚠️ <b>IR alcanza solo '+inf.irDist+'m</b> pero identificas hasta '+idDist.toFixed(1)+'m. De noche más allá de '+inf.irDist+'m no verás nada. Considera una cámara PRO/WizColor o agregar iluminador externo.</p>';
+          if (idDist > inf.irDist) return '<p class="fov-conc-hint" style="border-left-color:#c00;background:rgba(200,0,0,.04)">⚠︎ <b>IR alcanza solo '+inf.irDist+'m</b> pero identificas hasta '+idDist.toFixed(1)+'m. De noche más allá de '+inf.irDist+'m no verás nada. Considera una cámara PRO/WizColor o agregar iluminador externo.</p>';
           return '<p class="fov-conc-hint" style="border-left-color:#8e44ad">🌙 IR de '+inf.irDist+'m — cubre toda tu zona de identificación ('+idDist.toFixed(1)+'m). OK para visión nocturna.</p>';
         }
-        return '<p class="fov-conc-hint" style="border-left-color:#c00;background:rgba(200,0,0,.04)">⚠️ Sin iluminación propia. Sólo sirve con luz ambiente suficiente.</p>';
+        return '<p class="fov-conc-hint" style="border-left-color:#c00;background:rgba(200,0,0,.04)">⚠︎ Sin iluminación propia. Sólo sirve con luz ambiente suficiente.</p>';
       })();
     return;
   }
@@ -48672,7 +48707,7 @@ function fov3dInit() {
   }).catch(function(err) {
     console.error('3D load error:', err);
     document.getElementById('fov3dLoading').innerHTML =
-      '<div style="text-align:center;color:#fff"><div style="font-size:24px">⚠️</div>'+
+      '<div style="text-align:center;color:#fff"><div style="font-size:24px">⚠︎</div>'+
       '<div style="margin-top:6px">Error cargando vista 3D</div>'+
       '<div style="font-size:11px;opacity:.7;margin-top:3px">Verifica tu conexión</div></div>';
   });
@@ -49843,7 +49878,7 @@ function fovCamUpdateStatus() {
       comparator.style.background = 'linear-gradient(135deg,rgba(255,170,0,.12),rgba(255,170,0,.04))';
       coverageLine.innerHTML = '<b>'+rA.cam.cod+'</b>: '+rA.angH.toFixed(0)+'° H · Tu móvil: '+info.fov.toFixed(0)+'° H';
       percentLine.style.color = '#ffaa00';
-      percentLine.innerHTML = '⚠ La CCTV ve <b>'+pct.toFixed(0)+'% MÁS</b> ancho que tu móvil — la simulación no muestra todo lo que la cámara real captaría (lo que NO ves está fuera del frame de tu teléfono)';
+      percentLine.innerHTML = '⚠︎ La CCTV ve <b>'+pct.toFixed(0)+'% MÁS</b> ancho que tu móvil — la simulación no muestra todo lo que la cámara real captaría (lo que NO ves está fuera del frame de tu teléfono)';
     }
   } else if (comparator) {
     comparator.style.display = 'none';
@@ -50574,7 +50609,7 @@ window.fovPlanInit = function() {
 window.fovPlanLoadFile = function(file) {
   if (!file) return;
   // s47d: file size limit 10MB (audit A3)
-  if (file.size > 10 * 1024 * 1024) { showToast('⚠️ El archivo no puede superar 10 MB'); return; }
+  if (file.size > 10 * 1024 * 1024) { showToast('⚠︎ El archivo no puede superar 10 MB'); return; }
   var url = URL.createObjectURL(file);
   var img = new Image();
   img.onload = function() {
@@ -51596,11 +51631,11 @@ function _fovSvLoad() {
         ctx.fillStyle = '#0a0a14'; ctx.fillRect(0,0,w,h);
         ctx.fillStyle = '#ff6b7e'; ctx.font = 'bold 14px system-ui'; ctx.textAlign = 'center';
         if (err === 'NO_KEY') {
-          ctx.fillText('⚠️ API key de Google Maps no configurada', w/2, h/2 - 10);
+          ctx.fillText('⚠︎ API key de Google Maps no configurada', w/2, h/2 - 10);
           ctx.fillStyle = '#aaa'; ctx.font = '12px system-ui';
           ctx.fillText('Agrega /gmaps-key al proxy o configura sstt_gmaps_key en localStorage', w/2, h/2 + 15);
         } else {
-          ctx.fillText('⚠️ Error cargando Google Maps API', w/2, h/2 - 10);
+          ctx.fillText('⚠︎ Error cargando Google Maps API', w/2, h/2 - 10);
           ctx.fillStyle = '#aaa'; ctx.font = '12px system-ui';
           ctx.fillText('Verifica tu API key y conexión', w/2, h/2 + 15);
         }
@@ -51682,7 +51717,7 @@ function _fovSvInitPano() {
           var ctx = canvas.getContext('2d');
           ctx.fillStyle = '#1a1a2e'; ctx.fillRect(0,0,w,h);
           ctx.fillStyle = '#ff6b7e'; ctx.font = 'bold 14px system-ui'; ctx.textAlign = 'center';
-          ctx.fillText('⚠️ Street View no disponible en esta ubicación', w/2, h/2 - 10);
+          ctx.fillText('⚠︎ Street View no disponible en esta ubicación', w/2, h/2 - 10);
           ctx.fillStyle = '#aaa'; ctx.font = '12px system-ui';
           ctx.fillText('No hay cobertura panorámica aquí', w/2, h/2 + 15);
         }
@@ -52261,7 +52296,7 @@ var FOVPREV = {
 window.fovPreviewLoad = function(file) {
   if (!file) return;
   // s47d: file size limit 10MB (audit A3)
-  if (file.size > 10 * 1024 * 1024) { showToast('⚠️ La imagen no puede superar 10 MB'); return; }
+  if (file.size > 10 * 1024 * 1024) { showToast('⚠︎ La imagen no puede superar 10 MB'); return; }
   FOVPREV.loadedFile = file;
   var url = URL.createObjectURL(file);
   var img = new Image();
@@ -52428,7 +52463,7 @@ function fovPreviewRenderCanvas(canvasId, r, simDist) {
   ctx.fillText('@ ' + simDist + 'm', 4, 11);
   if (fovRatio >= 1) {
     ctx.fillStyle = '#ffaa00';
-    ctx.fillText('⚠ CCTV ve más ancho que tu foto', dispW - 145, 11);
+    ctx.fillText('⚠︎ CCTV ve más ancho que tu foto', dispW - 145, 11);
   }
 }
 
@@ -52442,7 +52477,7 @@ window.fovPreviewExportComparison = function() {
 window.fovAuditLoad = function(file) {
   if (!file) return;
   // s47d: file size limit 10MB (audit A3)
-  if (file.size > 10 * 1024 * 1024) { showToast('⚠️ La imagen no puede superar 10 MB'); return; }
+  if (file.size > 10 * 1024 * 1024) { showToast('⚠︎ La imagen no puede superar 10 MB'); return; }
   var url = URL.createObjectURL(file);
   var img = document.getElementById('fovAuditImg');
   img.src = url;
@@ -52515,10 +52550,10 @@ window.fovAuditLoad = function(file) {
     html += '<div class="fov-audit-line"><b>Recomendación:</b><br>' + upgradeReason + '</div>';
 
     if (avgLuma < 80) {
-      html += '<div class="fov-audit-line" style="background:rgba(243,156,18,.08);border-left:3px solid #f39c12;padding:8px 10px;border-radius:6px;margin-top:8px">⚠️ La imagen parece tomada en condiciones de baja luz. Si esto es típico del lugar, considera <b>WizColor</b> o <b>Pro/Full-Color</b> que mantienen color sin IR.</div>';
+      html += '<div class="fov-audit-line" style="background:rgba(243,156,18,.08);border-left:3px solid #f39c12;padding:8px 10px;border-radius:6px;margin-top:8px">⚠︎ La imagen parece tomada en condiciones de baja luz. Si esto es típico del lugar, considera <b>WizColor</b> o <b>Pro/Full-Color</b> que mantienen color sin IR.</div>';
     }
     if (avgContrast < 12) {
-      html += '<div class="fov-audit-line" style="background:rgba(231,76,60,.08);border-left:3px solid #e74c3c;padding:8px 10px;border-radius:6px;margin-top:8px">⚠️ Bajo contraste sugiere compresión agresiva o sensor de baja calidad (pixel pitch pequeño). Una cámara con sensor 1/1.8" o mayor mejorará drásticamente la nitidez en estas condiciones.</div>';
+      html += '<div class="fov-audit-line" style="background:rgba(231,76,60,.08);border-left:3px solid #e74c3c;padding:8px 10px;border-radius:6px;margin-top:8px">⚠︎ Bajo contraste sugiere compresión agresiva o sensor de baja calidad (pixel pitch pequeño). Una cámara con sensor 1/1.8" o mayor mejorará drásticamente la nitidez en estas condiciones.</div>';
     }
     html += '</div>';
 
@@ -52527,7 +52562,7 @@ window.fovAuditLoad = function(file) {
     html += '  <button onclick="fovAuditOpenQuickWin()" style="flex:1;background:#D90F23;color:#fff;border:none;padding:11px;border-radius:9px;font-weight:700;font-size:12px;cursor:pointer;font-family:var(--font)">⚡ Ver recomendaciones</button>';
     html += '</div>';
 
-    html += '<div class="fov-audit-disclaimer">⚠️ Esta auditoría es una estimación heurística basada en metadata visual de la imagen. Para diagnóstico exacto, recomendamos visita técnica.</div>';
+    html += '<div class="fov-audit-disclaimer">⚠︎ Esta auditoría es una estimación heurística basada en metadata visual de la imagen. Para diagnóstico exacto, recomendamos visita técnica.</div>';
     analysisEl.innerHTML = html;
   };
   imgObj.src = url;
@@ -52676,7 +52711,7 @@ window.fovCalibCancel = function() {
 window.fovExifLoad = function(file) {
   if (!file) return;
   // s47d: file size limit 10MB (audit A3)
-  if (file.size > 10 * 1024 * 1024) { showToast('⚠️ La imagen no puede superar 10 MB'); return; }
+  if (file.size > 10 * 1024 * 1024) { showToast('⚠︎ La imagen no puede superar 10 MB'); return; }
   var img = document.getElementById('fovExifImg');
   var url = URL.createObjectURL(file);
   img.src = url;
@@ -52714,7 +52749,7 @@ window.fovExifLoad = function(file) {
         if (ratio >= 1) {
           frame.style.cssText = 'position:absolute;left:0;top:0;right:0;bottom:0;border:2px solid #ffaa00';
           var pct = (ratio - 1) * 100;
-          lbl.innerHTML = '<span style="color:#ffaa00">⚠ ' + rA.cam.cod + ' ve ' + pct.toFixed(0) + '% MÁS ancho que esta foto</span>';
+          lbl.innerHTML = '<span style="color:#ffaa00">⚠︎ ' + rA.cam.cod + ' ve ' + pct.toFixed(0) + '% MÁS ancho que esta foto</span>';
         } else {
           var margin = (1 - ratio) * 50;
           var camAspect = rA.angH / rA.angV;
@@ -52750,9 +52785,9 @@ function pitchCategory(pitch_um) {
   if (pitch_um == null) return null;
   if (pitch_um >= 2.5)  return { level: 'excelente', color: '#27ae60', icon: '🌟', desc: 'Excelente baja luz · cada píxel recolecta mucha señal' };
   if (pitch_um >= 1.8)  return { level: 'muy bueno', color: '#2ecc71', icon: '✓',  desc: 'Buen desempeño en penumbra urbana · poco ruido' };
-  if (pitch_um >= 1.4)  return { level: 'aceptable', color: '#f39c12', icon: '⚠️', desc: 'Aceptable con algo de iluminación · ruido moderado de noche' };
-  if (pitch_um >= 1.0)  return { level: 'limitado',  color: '#e67e22', icon: '⚠️', desc: 'Sólo con buena iluminación · ruido visible de noche' };
-  return                       { level: 'muy bajo',  color: '#e74c3c', icon: '⚠',  desc: 'Requiere iluminación constante · alto ruido de noche' };
+  if (pitch_um >= 1.4)  return { level: 'aceptable', color: '#f39c12', icon: '⚠︎', desc: 'Aceptable con algo de iluminación · ruido moderado de noche' };
+  if (pitch_um >= 1.0)  return { level: 'limitado',  color: '#e67e22', icon: '⚠︎', desc: 'Sólo con buena iluminación · ruido visible de noche' };
+  return                       { level: 'muy bajo',  color: '#e74c3c', icon: '⚠︎',  desc: 'Requiere iluminación constante · alto ruido de noche' };
 }
 
 // F-number típico Dahua según familia/serie
@@ -52867,7 +52902,7 @@ function buildLightingRecommendation(cam, doriDists) {
     var deficit2 = night.maxDori - infra.irDist;
     if (deficit2 > 5) {
       msgs.push({
-        icon: '⚠️', color: '#f39c12',
+        icon: '⚠︎', color: '#f39c12',
         title: 'IR es la única fuente nocturna · limitada',
         body: 'De día puede identificar hasta <b>' + night.maxDori.toFixed(0) + 'm</b>, pero <b>de noche solo ve donde llega su IR (' + infra.irDist + 'm)</b>. Sin sensor Starlight, no aprovecha luz ambiente. Opciones: 1) iluminación artificial complementaria, 2) cámara con sensor Starlight (WizColor/Pro/Full-Color) que aprovecha cualquier luz, 3) cámara IR de mayor alcance.'
       });
@@ -53211,7 +53246,7 @@ function fovTrackBuildAnalysis() {
           icon = '⭐';
           msg = '<b>sensor Starlight + IR ' + n.nightRange.infra.irDist + 'm</b> — aprovecha cualquier luz ambiente, IR como respaldo en oscuridad total';
         } else if (n.nightRange.limited) {
-          icon = '⚠️';
+          icon = '⚠︎';
           msg = '<b>limitada a ' + n.nightRange.lightRange + 'm</b> por su ' + n.nightRange.lightType + ' (de día llega a ' + n.nightRange.maxDori.toFixed(0) + 'm). Sin sensor Starlight, no aprovecha luz ambiente';
         } else if (n.nightRange.lightRange) {
           icon = '✓';
@@ -53729,7 +53764,7 @@ function fovRenderProjectPanel() {
       html += '<div class="fov-proj-card-sub">' + psuRec.fuente.label + '</div>';
       html += '<div class="fov-proj-card-rec">Consumo estimado: '+psuRec.ampsRequeridos+'A para '+stats.cams+' cámaras HDCVI</div>';
     } else {
-      html += '<div class="fov-proj-card-big" style="color:#e67e22;font-size:14px">⚠ Múltiples fuentes</div>';
+      html += '<div class="fov-proj-card-big" style="color:#e67e22;font-size:14px">⚠︎ Múltiples fuentes</div>';
       html += '<div class="fov-proj-card-sub">' + psuRec.msg + '</div>';
     }
   } else if (stats.tipoSistema === 'mixto') {
@@ -53761,7 +53796,7 @@ function fovRenderProjectPanel() {
         html += '<div class="fov-proj-card-rec">'+stats.cams+' canal'+(stats.cams>1?'es':'')+' HDCVI · UTP cat5e + balun (o coaxial RG-59)</div>';
       }
     } else {
-      html += '<div class="fov-proj-card-big" style="color:#e74c3c;font-size:14px">⚠ Sobrecarga</div>';
+      html += '<div class="fov-proj-card-big" style="color:#e74c3c;font-size:14px">⚠︎ Sobrecarga</div>';
       html += '<div class="fov-proj-card-sub">' + xvrRec.msg + '</div>';
     }
   } else if (stats.tipoSistema === 'mixto') {
@@ -53773,7 +53808,7 @@ function fovRenderProjectPanel() {
       html += '<div class="fov-proj-card-sub">' + xvrMix.xvr.label + ' · Pentabrid (HDCVI+IP+AHD+TVI+CVBS) · ' + xvrMix.xvr.hdds + ' HDD slot' + (xvrMix.xvr.hdds>1?'s':'') + '</div>';
       html += '<div class="fov-proj-card-rec">'+stats.camsHdcvi+' canal'+(stats.camsHdcvi>1?'es':'')+' HDCVI (coaxial) + '+stats.camsIP+' canal'+(stats.camsIP>1?'es':'')+' IP (UTP) en un solo grabador</div>';
     } else {
-      html += '<div class="fov-proj-card-big" style="color:#e74c3c;font-size:14px">⚠ Sobrecarga</div>';
+      html += '<div class="fov-proj-card-big" style="color:#e74c3c;font-size:14px">⚠︎ Sobrecarga</div>';
       html += '<div class="fov-proj-card-sub">' + xvrMix.msg + '</div>';
     }
   } else {
@@ -53787,7 +53822,7 @@ function fovRenderProjectPanel() {
         html += '<div class="fov-proj-card-rec">Capacidad usada: '+Math.round(bitrateTotal*motionFactor*100/nvrRec.nvr.bw)+'%</div>';
       }
     } else {
-      html += '<div class="fov-proj-card-big" style="color:#e74c3c;font-size:14px">⚠ Sobrecarga</div>';
+      html += '<div class="fov-proj-card-big" style="color:#e74c3c;font-size:14px">⚠︎ Sobrecarga</div>';
       html += '<div class="fov-proj-card-sub">' + nvrRec.msg + '</div>';
     }
   }
@@ -53798,7 +53833,7 @@ function fovRenderProjectPanel() {
     if (nvrRec.ok) {
       var usagePct = Math.round((bitrateTotal*motionFactor*100)/nvrRec.nvr.bw);
       if (usagePct > 80) {
-        html += '<div class="fov-proj-warn">⚠️ <b>Cuello de botella:</b> Estás usando ' + usagePct + '% del bandwidth del NVR. Si agregas más cámaras o subes calidad, va a saturar. Considera el siguiente modelo: <b>' + (nvrRec.alternatives[0] ? nvrRec.alternatives[0].model : 'serie superior') + '</b></div>';
+        html += '<div class="fov-proj-warn">⚠︎ <b>Cuello de botella:</b> Estás usando ' + usagePct + '% del bandwidth del NVR. Si agregas más cámaras o subes calidad, va a saturar. Considera el siguiente modelo: <b>' + (nvrRec.alternatives[0] ? nvrRec.alternatives[0].model : 'serie superior') + '</b></div>';
       }
     } else {
       html += '<div class="fov-proj-warn" style="border-left-color:#e74c3c;background:rgba(231,76,60,.06)">🚫 <b>Configuración no viable con un solo NVR.</b> El bandwidth combinado (' + Math.round(bitrateTotal*motionFactor) + ' Mbps) excede la capacidad del NVR más grande del catálogo (1024 Mbps). Considera: 1) reducir resolución, 2) usar H.265+, 3) dividir en 2 NVRs por zonas, o 4) usar VMS profesional.</div>';
@@ -53877,8 +53912,8 @@ var FOV_TOOLTIPS = {
           '<b>Referencia técnica:</b><br>' +
           '🌟 <b>≥2.5µm</b>: excelente baja luz<br>' +
           '✓ <b>1.8–2.5µm</b>: muy bueno<br>' +
-          '⚠️ <b>1.4–1.8µm</b>: aceptable<br>' +
-          '⚠️ <b>&lt;1.4µm</b>: limitado, pide buena luz<br><br>' +
+          '⚠︎ <b>1.4–1.8µm</b>: aceptable<br>' +
+          '⚠︎ <b>&lt;1.4µm</b>: limitado, pide buena luz<br><br>' +
           '<b>El truco:</b> 4MP en sensor 1/1.8" tiene mejor pixel pitch que 8MP en sensor 1/2.5". Más megapíxeles no siempre es mejor.'
   },
   ir: {
@@ -54410,7 +54445,7 @@ function fovPresRender() {
     }
     if (enriched && enriched.nightRange.maxDori > 0) {
       var night = enriched.nightRange;
-      var nightIcon = night.infra.unlimited ? '🌟' : (night.limited ? '⚠️' : '✓');
+      var nightIcon = night.infra.unlimited ? '🌟' : (night.limited ? '⚠︎' : '✓');
       var nightDesc = night.infra.unlimited ? 'Iluminación profesional sin límite' :
                        night.limited ? 'Limitado a ' + night.lightRange + 'm por ' + night.lightType :
                        'IR cubre toda la zona útil';
@@ -54500,7 +54535,7 @@ var FOV_NORMS = {
       { key: 'access_id', label: 'Identificación en accesos', minPpm: 125 },
       { key: 'signage', label: 'Cartelería visible "video vigilado"' }
     ],
-    notes: 'Ley 19.628 de protección de datos personales: cámaras visibles, sin captación de zonas íntimas, retención mínima.'
+    notes: 'Ley 21.719 de protección de datos personales: cámaras visibles, sin captación de zonas íntimas, retención mínima.'
   },
   parking: {
     name: 'Estacionamientos / edificios',
@@ -55546,7 +55581,7 @@ window.fovTrackToCart = function() {
       if (typeof openCart === 'function') openCart();
     }, 800);
   } else {
-    showToast && showToast('⚠ No se pudieron agregar al carro', '#e74c3c');
+    showToast && showToast('⚠︎ No se pudieron agregar al carro', '#e74c3c');
   }
 };
 
@@ -56322,11 +56357,11 @@ if (document.readyState === 'loading') {
     // Diagnóstico
     var diagClass, diagIcon, diagTitle, diagMsg;
     if (!nightOk) {
-      diagClass = 'critical'; diagIcon = '🚨';
+      diagClass = 'critical'; diagIcon = '⚠︎';
       diagTitle = 'Configuración no funcional de noche';
       diagMsg = 'A los <b>'+distance+'m</b> con esta configuración, el voltaje en la cámara cae a <b>'+vAtCamNight.toFixed(2)+'V</b> al encender el IR — bajo el mínimo Dahua de 8.4V. La cámara funcionará de día pero <b>parpadeará, reiniciará o se apagará al encender los IR/LEDs</b>. Necesitas: cable más grueso, menos distancia, fuente más cerca, o más pares en paralelo.';
     } else if (nightMargin < 1.5) {
-      diagClass = 'warning'; diagIcon = '⚠️';
+      diagClass = 'warning'; diagIcon = '⚠︎';
       diagTitle = 'Marginal — funciona pero sin margen';
       diagMsg = 'Funcionará, pero con margen apretado de '+nightMargin.toFixed(2)+'V sobre el mínimo. Si la fuente baja un poco (envejecida, cargada con varias cámaras), o si la temperatura sube y aumenta la resistencia del cable, podrías tener cortes intermitentes. Considera mejorar.';
     } else {
@@ -56406,7 +56441,7 @@ if (document.readyState === 'loading') {
     html += '<p>Los instaladores frecuentemente usan <b>cable CCA</b> (Copper Clad Aluminum, alma de aluminio con baño de cobre) por ser hasta <b>50% más barato</b>. Es una mala economía. Las desventajas técnicas son varias:</p>';
     html += '<div class="cable-cca-grid">';
 
-    html += '<div class="cable-cca-card cable-cca-bad"><div class="cable-cca-h">⚠️ CCA (aleación aluminio)</div><ul>';
+    html += '<div class="cable-cca-card cable-cca-bad"><div class="cable-cca-h">⚠︎ CCA (aleación aluminio)</div><ul>';
     html += '<li><b>Conductividad ~62%</b> del cobre → 1.6× más resistencia → 1.6× más caída de voltaje a la misma distancia</li>';
     html += '<li><b>Frágil mecánicamente</b>: el aluminio se quiebra al doblarse repetidamente. Una vez instalado, si tienes que mover el cable, se corta internamente sin que se vea por fuera.</li>';
     html += '<li><b>Oxidación galvánica</b>: el contacto cobre-aluminio en los terminales genera corrosión que aumenta resistencia con el tiempo</li>';
@@ -56455,7 +56490,7 @@ if (document.readyState === 'loading') {
     html += '</div>';
     html += '</div>';
 
-    html += '<div class="cable-guide-tip">⚠️ <b>Importante</b>: ambos extremos del cable deben usar EL MISMO esquema de colores. Si en un lado usas azul para video, en el otro lado también. El balun no entiende colores — solo necesita que ambos cables del par lleguen a sus dos terminales correctamente.</div>';
+    html += '<div class="cable-guide-tip">⚠︎ <b>Importante</b>: ambos extremos del cable deben usar EL MISMO esquema de colores. Si en un lado usas azul para video, en el otro lado también. El balun no entiende colores — solo necesita que ambos cables del par lleguen a sus dos terminales correctamente.</div>';
 
     html += '<div class="cable-guide-tip cable-guide-warn">📌 <b>Sobre el "verde para video"</b>: algunos instaladores usan el par verde en lugar del azul. <b>Ambos funcionan</b> porque tienen la misma tasa de trenzado (los dos más altos del cable). La elección entre azul o verde es indiferente técnicamente — lo importante es <b>NO usar naranja o café para video</b> si tienes la opción.</div>';
     html += '</div>';
@@ -57804,7 +57839,7 @@ if (document.readyState === 'loading') {
     // Avisos críticos primero
     if (upsWarning || (hdd && hdd.insufficient) || (nvr && nvr.insufficient)) {
       html += '<div class="bom-warnings">';
-      html += '<div class="bom-warnings-title">⚠️ Avisos importantes</div>';
+      html += '<div class="bom-warnings-title">⚠︎ Avisos importantes</div>';
       if (upsWarning) {
         html += '<div class="bom-warning"><b>UPS supera capacidad del catálogo</b><br>'+upsWarning.message+'</div>';
       }
@@ -57962,7 +57997,7 @@ if (document.readyState === 'loading') {
       html += nvrInfo;
     }
     if (sw && !isXvr) html += '<div><b>Switch:</b> '+sw.item.ports+' puertos PoE para cámaras adicionales</div>';
-    if (ups) html += '<div><b>UPS:</b> '+ups.item.va+'VA, '+(ups.insufficient?'<span style="color:#c0392b">⚠ insuficiente para '+upsMinutes+' min</span>':'aprobado para '+upsMinutes+' min')+'</div>';
+    if (ups) html += '<div><b>UPS:</b> '+ups.item.va+'VA, '+(ups.insufficient?'<span style="color:#c0392b">⚠︎ insuficiente para '+upsMinutes+' min</span>':'aprobado para '+upsMinutes+' min')+'</div>';
     html += '</div></div>';
 
     html += '<div class="bom-actions">';
@@ -58050,7 +58085,7 @@ if (document.readyState === 'loading') {
   window.bomProjectExportPdf = function() {
     var projD = bomProjectSaveProjData();
     var jsPDFLib = window.jspdf || window.jsPDF;
-    if (!jsPDFLib || !jsPDFLib.jsPDF) { showToast('⚠️ Error cargando jsPDF'); return; }
+    if (!jsPDFLib || !jsPDFLib.jsPDF) { showToast('⚠︎ Error cargando jsPDF'); return; }
 
     var doc = new jsPDFLib.jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
     var pw = 210, ph = 297, ml = 14, mr = 14, cw = pw - ml - mr;
@@ -58361,7 +58396,7 @@ if (document.readyState === 'loading') {
 
     // Aviso anti-falsificación (destacado al inicio)
     html += '<div class="sd-fake-warn">';
-    html += '<div class="sd-fake-icon">⚠️</div>';
+    html += '<div class="sd-fake-icon">⚠︎</div>';
     html += '<div class="sd-fake-body">';
     html += '<div class="sd-fake-title">Cuidado con memorias falsificadas y de mercado informal</div>';
     html += '<div class="sd-fake-text">El mercado chileno está lleno de SD <b>falsificadas</b> que dicen "256GB" pero solo tienen 32GB reales, o que <b>se queman a los 3 meses</b> de uso 24/7. Una SD genérica de PC puesta en una cámara de seguridad típicamente <b>falla entre 2 y 6 meses</b>, perdiendo todas las grabaciones cuando más se necesitan. Las <b>memorias Dahua oficiales</b> que vendemos están diseñadas para CCTV continuo: ciclos de escritura intensivos, controlador con detección de errores, vida útil <b>5 años o más</b>.</div>';
@@ -58687,13 +58722,13 @@ if (document.readyState === 'loading') {
     // Modelo sugerido - SOLO catálogo SSTT
     var isInsuf = recommended.insufficientFromCatalog;
     html += '<div class="ups-rec' + (isInsuf ? ' ups-rec-warn-mode' : '') + '">';
-    html += '<div class="ups-rec-title">' + (isInsuf ? '⚠️ Stock SSTT insuficiente para tus requisitos' : '✓ UPS recomendado del catálogo SSTT') + '</div>';
+    html += '<div class="ups-rec-title">' + (isInsuf ? '⚠︎ Stock SSTT insuficiente para tus requisitos' : '✓ UPS recomendado del catálogo SSTT') + '</div>';
     html += '<div class="ups-rec-models"><b>'+recommended.model+'</b></div>';
     if (recommended.priceClp > 0) {
       html += '<div class="ups-rec-price">Precio: <b>$'+recommended.priceClp.toLocaleString('es-CL')+' CLP</b> (con IVA)</div>';
     }
     if (isInsuf) {
-      html += '<div class="ups-warn">⚠️ <b>Stock SSTT actual:</b> el UPS más grande disponible es de '+recommended.va+'VA, insuficiente para mantener '+minutesBackup+' minutos con tu sistema (~'+Math.round(va)+'VA reales necesarios).<br><br><b>Opciones dentro del catálogo SSTT:</b><ul style="margin:6px 0 0 18px;padding:0"><li>'+recommended.suggestedAlternative+'</li><li>Reducir el sistema cubierto (ej: solo NVR + router, sin cámaras)</li><li>Cotiza con SSTT capacidades superiores — el catálogo se está expandiendo y tendrás integración Bsale próximamente</li></ul></div>';
+      html += '<div class="ups-warn">⚠︎ <b>Stock SSTT actual:</b> el UPS más grande disponible es de '+recommended.va+'VA, insuficiente para mantener '+minutesBackup+' minutos con tu sistema (~'+Math.round(va)+'VA reales necesarios).<br><br><b>Opciones dentro del catálogo SSTT:</b><ul style="margin:6px 0 0 18px;padding:0"><li>'+recommended.suggestedAlternative+'</li><li>Reducir el sistema cubierto (ej: solo NVR + router, sin cámaras)</li><li>Cotiza con SSTT capacidades superiores — el catálogo se está expandiendo y tendrás integración Bsale próximamente</li></ul></div>';
     } else if (recommended.actualRuntime > minutesBackup * 1.3) {
       html += '<div class="ups-warn ups-warn-info">ℹ️ Este UPS tiene capacidad excedente. Si quieres ahorrar, considera reducir el tiempo de respaldo o consultar opciones más pequeñas.</div>';
     }
@@ -58747,7 +58782,7 @@ if (document.readyState === 'loading') {
     pharmacy: { name:'Farmacia / ISP', icon:'💊', minDays:60, minPpm:250, audio:false,
       desc:'Resolución ISP: cámaras fijas sobre dispensación de productos controlados con identificación clara del operario, 60 días retención.' },
     retailMinor: { name:'Retail con menores', icon:'🧒', minDays:30, minPpm:125, audio:false,
-      desc:'Ley 19.628: cámaras visibles, sin captación de zonas íntimas (baños, vestidores), cartelería visible, retención mínima 30 días.' },
+      desc:'Ley 21.719: cámaras visibles, sin captación de zonas íntimas (baños, vestidores), cartelería visible, retención mínima 30 días.' },
     parking: { name:'Estacionamientos', icon:'🅿️', minDays:30, minPpm:250, audio:false,
       desc:'Reglamento de copropiedad típico: lectura patentes en accesos (500 px/m), ID en lobby (250 px/m), retención 30 días.' },
     industrial: { name:'Industrial / bodega valor', icon:'🏭', minDays:60, minPpm:125, audio:false,
@@ -58755,7 +58790,7 @@ if (document.readyState === 'loading') {
     casino: { name:'Casino / juegos azar', icon:'🎰', minDays:180, minPpm:250, audio:true,
       desc:'SCJ (Superintendencia de Casinos): retención 6 meses, identificación obligatoria en mesas/cajas/accesos, audio.' },
     school: { name:'Establecimiento educacional', icon:'🏫', minDays:30, minPpm:125, audio:false,
-      desc:'Ley 19.628 + reglamento interno: cámaras en zonas comunes (no aulas/baños), retención 30 días, cartelería visible.' },
+      desc:'Ley 21.719 + reglamento interno: cámaras en zonas comunes (no aulas/baños), retención 30 días, cartelería visible.' },
     pharmacy_controlled: { name:'Farmacia · Sustancias controladas', icon:'💉', minDays:120, minPpm:250, audio:true,
       desc:'Decreto 466/84 + Ley 20.000: zona dispensación de psicotrópicos con identificación facial + audio + 120 días.' }
   };
@@ -58907,7 +58942,7 @@ if (document.readyState === 'loading') {
     }
     var rows = window._bomLastRows;
     if (!rows || rows.length === 0) {
-      showToast('⚠️ Genera primero el BOM con la calculadora');
+      showToast('⚠︎ Genera primero el BOM con la calculadora');
       return;
     }
 
@@ -58982,7 +59017,7 @@ if (document.readyState === 'loading') {
     var msg = '';
     if (replace) msg = '🧹 Carro vaciado · ';
     msg += '✓ ' + added + ' producto(s) · $' + addedAmount.toLocaleString('es-CL');
-    if (skipped > 0) msg += ' · ⚠️ ' + skipped + ' no encontrado(s)';
+    if (skipped > 0) msg += ' · ⚠︎ ' + skipped + ' no encontrado(s)';
     if (customSkipped > 0) msg += ' · 📦 ' + customSkipped + ' ítem(s) propio(s) en el BOM';
     showToast(msg);
 
@@ -59130,7 +59165,7 @@ if (document.readyState === 'loading') {
     html += '<tr><td><b>10 fps</b></td><td>Suficiente para vigilancia general. Si solo te interesa saber qué pasó (no la fluidez), funciona bien.</td></tr>';
     html += '<tr><td><b>5-7 fps</b></td><td>Solo para zonas de bajo movimiento (bodegas vacías, salas cerradas, perímetros interiores).</td></tr>';
     html += '</tbody></table>';
-    html += '<p class="hdd-strat-tip">⚠️ Para <b>lectura de patentes (LPR)</b>: el FPS NO es lo crítico. Lo importante es el <b>shutter speed</b> (tiempo de exposición) configurado para congelar el vehículo según su velocidad: <b>1/250s</b> hasta 30 km/h (parking, accesos), <b>1/500s</b> hasta 65 km/h (calle urbana), <b>1/1000s+</b> sobre 100 km/h (Bosch recomienda este valor por defecto). Igual o más importante: lente con focal adecuado para que la patente tenga ~150-250 px/m, buena iluminación frontal (IR específico LPR), y WDR para no cegarse con faros. Con 7-15 fps y shutter correcto basta — fue así como las cámaras Bosch antiguas leían patentes con resolución D1 y 420 TVL.</p>';
+    html += '<p class="hdd-strat-tip">⚠︎ Para <b>lectura de patentes (LPR)</b>: el FPS NO es lo crítico. Lo importante es el <b>shutter speed</b> (tiempo de exposición) configurado para congelar el vehículo según su velocidad: <b>1/250s</b> hasta 30 km/h (parking, accesos), <b>1/500s</b> hasta 65 km/h (calle urbana), <b>1/1000s+</b> sobre 100 km/h (Bosch recomienda este valor por defecto). Igual o más importante: lente con focal adecuado para que la patente tenga ~150-250 px/m, buena iluminación frontal (IR específico LPR), y WDR para no cegarse con faros. Con 7-15 fps y shutter correcto basta — fue así como las cámaras Bosch antiguas leían patentes con resolución D1 y 420 TVL.</p>';
     html += '</div></div>';
 
     // Estrategia 4: Detección por movimiento + IVS
@@ -59327,7 +59362,7 @@ if (document.readyState === 'loading') {
       html += '<div class="hdd-rec-price">$'+(tP(bestHdd)*hddMultiple).toLocaleString('es-CL')+'</div>';
       html += '</div>';
       if (hddMultiple > 1) {
-        html += '<div class="hdd-rec-warn">⚠️ Necesitas '+hddMultiple+' unidades. Considera RAID 5 o RAID 10 si el NVR lo soporta para redundancia.</div>';
+        html += '<div class="hdd-rec-warn">⚠︎ Necesitas '+hddMultiple+' unidades. Considera RAID 5 o RAID 10 si el NVR lo soporta para redundancia.</div>';
       }
       html += '</div>';
 
@@ -59690,19 +59725,19 @@ if (document.readyState === 'loading') {
       points:4, severity:'low', fix:'En zonas críticas (caja, bodega de valor) instala 2 cámaras desde ángulos opuestos. Una al menos oculta.' },
 
     // === CATEGORÍA 5: ACCESO OPERATIVO ===
-    { cat:'access', icon:'🚨', catName:'Acceso operativo',
+    { cat:'access', icon:'⚠︎', catName:'Acceso operativo',
       q:'¿Sabes el usuario y contraseña del NVR ahora mismo?',
       explain:'Es asombrosamente común que el dueño no sepa la clave porque "el técnico la puso". Cuando te roban, no puedes ver nada hasta que llamas al técnico.',
       points:8, severity:'critical', fix:'Pide al instalador que te muestre y entregue las credenciales. Guárdalas en lugar seguro (no Post-It en el monitor).' },
-    { cat:'access', icon:'🚨', catName:'Acceso operativo',
+    { cat:'access', icon:'⚠︎', catName:'Acceso operativo',
       q:'¿Tienes la app DMSS instalada y funcionando en tu celular?',
       explain:'Cuando pasa algo, no estás en el sitio. La app móvil es lo que te permite ver inmediatamente sin esperar a llegar al NVR físicamente.',
       points:6, severity:'high', fix:'Descarga DMSS (Dahua) en iOS/Android. Configura el NVR vía P2P con QR. Verifica que ves todas las cámaras desde la app.' },
-    { cat:'access', icon:'🚨', catName:'Acceso operativo',
+    { cat:'access', icon:'⚠︎', catName:'Acceso operativo',
       q:'¿Has hecho una "simulación" de exportar un video el último mes?',
       explain:'En el momento del robo no es buen momento para aprender a usar el NVR. Practicar antes te asegura que sabes hacerlo.',
       points:5, severity:'medium', fix:'Una vez al mes, exporta un fragmento de video aleatorio a USB o desde la app. Verifica que el archivo se reproduce.' },
-    { cat:'access', icon:'🚨', catName:'Acceso operativo',
+    { cat:'access', icon:'⚠︎', catName:'Acceso operativo',
       q:'¿Tienes el contacto directo de tu instalador / SSTT a mano?',
       explain:'Si algo falla en el momento crítico, necesitas soporte rápido. Buscar el contacto en mensajes viejos no es opción.',
       points:3, severity:'low', fix:'Guarda el contacto del instalador en favoritos del celular. SSTT: WhatsApp Business +56 9 XXXX XXXX.' },
@@ -59710,7 +59745,7 @@ if (document.readyState === 'loading') {
     // === CATEGORÍA 6: CUMPLIMIENTO LEGAL ===
     { cat:'legal', icon:'⚖️', catName:'Cumplimiento legal',
       q:'¿Tienes cartelería visible "Esta zona está siendo grabada"?',
-      explain:'Ley 19.628 (datos personales) requiere informar la captación. Sin cartelería, la grabación puede ser declarada inadmisible o derivar en demanda por privacidad.',
+      explain:'Ley 21.719 (datos personales) requiere informar la captación. Sin cartelería, la grabación puede ser declarada inadmisible o derivar en demanda por privacidad.',
       points:6, severity:'high', fix:'Imprime y pega cartel visible en accesos. SSTT puede entregarte plantilla profesional al solicitarla.' },
     { cat:'legal', icon:'⚖️', catName:'Cumplimiento legal',
       q:'¿Las cámaras evitan zonas íntimas (baños, vestidores, dormitorios ajenos)?',
@@ -59737,7 +59772,7 @@ if (document.readyState === 'loading') {
     retention:  { name:'Retención adecuada',    icon:'📅', color:'#9b59b6' },
     backup:     { name:'Respaldo y redundancia',icon:'☁️', color:'#16a085' },
     integrity:  { name:'Integridad',            icon:'🕐', color:'#e67e22' },
-    access:     { name:'Acceso operativo',      icon:'🚨', color:'#e74c3c' },
+    access:     { name:'Acceso operativo',      icon:'⚠︎', color:'#e74c3c' },
     legal:      { name:'Cumplimiento legal',    icon:'⚖️', color:'#34495e' },
     hardening:  { name:'Hardening seguridad',   icon:'🛡️', color:'#c0392b' }
   };
@@ -59748,7 +59783,7 @@ if (document.readyState === 'loading') {
 
     var html = '';
     html += '<div class="ready-header">';
-    html += '<div class="ready-eyebrow">⚠️ Test crítico — preparación ante incidente real</div>';
+    html += '<div class="ready-eyebrow">⚠︎ Test crítico — preparación ante incidente real</div>';
     html += '<h2 class="ready-title">¿Si te roban hoy, tu CCTV te servirá?</h2>';
     html += '<p class="ready-sub">22 verificaciones críticas en 7 categorías. Responde con honestidad para obtener un score real de qué tan preparado está tu sistema. <b>Las cámaras solo sirven si funcionan cuando las necesitas.</b></p>';
     html += '</div>';
@@ -60083,7 +60118,7 @@ if (document.readyState === 'loading') {
     html += '</div></div>';
 
     html += '<div class="lpr-config-step"><div class="lpr-step-num">2</div><div class="lpr-step-content"><div class="lpr-step-title">Cambiar Exposure Mode a "Manual"</div>';
-    html += '<p>El default es <code>Auto</code> (la cámara decide el shutter para igualar el resto de la imagen). Para LPR debes setear <b>Manual</b> y fijar el shutter. <span class="lpr-warn">⚠️ Atención: <b>NO uses "Shutter Priority"</b></span> — sube el gain al máximo cuando la luz baja, y el ruido alto deteriora el OCR. Manual te da control total.</p>';
+    html += '<p>El default es <code>Auto</code> (la cámara decide el shutter para igualar el resto de la imagen). Para LPR debes setear <b>Manual</b> y fijar el shutter. <span class="lpr-warn">⚠︎ Atención: <b>NO uses "Shutter Priority"</b></span> — sube el gain al máximo cuando la luz baja, y el ruido alto deteriora el OCR. Manual te da control total.</p>';
     html += '</div></div>';
 
     html += '<div class="lpr-config-step"><div class="lpr-step-num">3</div><div class="lpr-step-content"><div class="lpr-step-title">Setear Shutter Speed según la tabla</div>';
@@ -60174,7 +60209,7 @@ if (document.readyState === 'loading') {
     // === SECCIÓN 7: Codec — paradoja del Smart Codec en LPR ===
     html += '<div class="lpr-section">';
     html += '<div class="lpr-section-title">🎬 Codec de video — la paradoja del Smart Codec en LPR</div>';
-    html += '<div class="lpr-codec-warn">⚠️ <b>Mientras que para grabación general H.265+ Smart Codec ahorra hasta 90% de storage, para LPR puede ser perjudicial.</b> La razón es técnica:</div>';
+    html += '<div class="lpr-codec-warn">⚠︎ <b>Mientras que para grabación general H.265+ Smart Codec ahorra hasta 90% de storage, para LPR puede ser perjudicial.</b> La razón es técnica:</div>';
 
     html += '<div class="lpr-codec-explain">';
     html += '<p>Los codecs <b>Smart H.264+ / H.265+ / AI Codec</b> dividen la pantalla en una grilla de zonas y <b>solo actualizan en alta calidad las zonas con movimiento detectado</b>. Las zonas que el algoritmo considera "estáticas" (cielo, paredes, fondo) se comprimen agresivamente. Funciona excelente para vigilancia general porque el 95% de la escena no cambia.</p>';
@@ -60191,7 +60226,7 @@ if (document.readyState === 'loading') {
     html += '<div class="lpr-codec-table">';
     html += '<div class="lpr-codec-row lpr-codec-best"><div class="lpr-codec-name"><b>H.264 estándar</b><span>(no H.264+)</span></div><div class="lpr-codec-rec">✓ MEJOR para LPR · cada frame uniforme · OCR consistente</div><div class="lpr-codec-storage">+ storage (referencia 100%)</div></div>';
     html += '<div class="lpr-codec-row lpr-codec-good"><div class="lpr-codec-name"><b>H.265 estándar</b><span>(no H.265+)</span></div><div class="lpr-codec-rec">✓ BUENO · 50% menos storage que H.264 sin sacrificar calidad uniforme</div><div class="lpr-codec-storage">~50% del H.264</div></div>';
-    html += '<div class="lpr-codec-row lpr-codec-warn"><div class="lpr-codec-name"><b>H.264+ / H.265+</b><span>(Smart Codec)</span></div><div class="lpr-codec-rec">⚠️ Riesgoso para LPR · puede causar artefactos · usar solo si <b>ROI</b> está configurado en zona de patente</div><div class="lpr-codec-storage">~30% del H.264</div></div>';
+    html += '<div class="lpr-codec-row lpr-codec-warn"><div class="lpr-codec-name"><b>H.264+ / H.265+</b><span>(Smart Codec)</span></div><div class="lpr-codec-rec">⚠︎ Riesgoso para LPR · puede causar artefactos · usar solo si <b>ROI</b> está configurado en zona de patente</div><div class="lpr-codec-storage">~30% del H.264</div></div>';
     html += '<div class="lpr-codec-row lpr-codec-bad"><div class="lpr-codec-name"><b>AI Codec / WizMind</b></div><div class="lpr-codec-rec">✕ NO recomendado para LPR · prioriza humanos/vehículos pero suaviza detalle de caracteres pequeños</div><div class="lpr-codec-storage">~10% del H.264</div></div>';
     html += '</div>';
 
@@ -60418,7 +60453,7 @@ if (document.readyState === 'loading') {
           '<li><b>Cambiar el ángulo</b>: si apunta a un muro cercano, mover la cámara o ladearla para que los IR no peguen frontal a una superficie reflectante a corta distancia.</li>' +
           '<li><b>Usar cámara con IR de menor alcance</b> si el objetivo está siempre cerca: una IR30 puede ser mejor que una IR60 para áreas pequeñas.</li>' +
           '</ol>' +
-          '<p>⚠️ <b>Cuidado con superficies reflectantes</b>: vidrios, espejos, metal pulido, agua, e incluso paredes blancas devuelven mucha luz IR a la lente.</p>';
+          '<p>⚠︎ <b>Cuidado con superficies reflectantes</b>: vidrios, espejos, metal pulido, agua, e incluso paredes blancas devuelven mucha luz IR a la lente.</p>';
       }
     },
     {
@@ -60475,12 +60510,12 @@ if (document.readyState === 'loading') {
           '<li><b>Búsquedas más rápidas</b>: revisar 8 horas de video filtrado por humanos toma 5 minutos vs revisar 8 horas de motion crudo.</li>' +
           '</ul>' +
           '<p><b>Configuración</b>: en el menú de la cámara o NVR, ir a "Eventos" → "SMD" → activar y elegir el tipo de objeto (humano, vehículo o ambos). Ajustar sensibilidad si se requiere.</p>' +
-          '<p>⚠️ <b>Importante</b>: SMD+ requiere cámara WizSense. En cámaras de gama básica solo está el motion clásico.</p>';
+          '<p>⚠︎ <b>Importante</b>: SMD+ requiere cámara WizSense. En cámaras de gama básica solo está el motion clásico.</p>';
       }
     },
     {
       id: 'tioc',
-      icon: '🚨',
+      icon: '⚠︎',
       titulo: 'TiOC — Disuasión activa',
       sub: 'La cámara que ahuyenta antes de que pase algo',
       tags: ['IA', 'disuasión'],
@@ -60518,7 +60553,7 @@ if (document.readyState === 'loading') {
           '<tr><td><b>H.265+</b> (Smart H.265)</td><td>~70%</td><td>Vigilancia general. <b>Default recomendado</b> para la mayoría de casos.</td></tr>' +
           '<tr><td><b>AI Codec / WizMind</b></td><td>~85-90%</td><td>Cámaras WizMind con análisis IA. Comprime más en zonas sin objetos detectados (sin humano/vehículo).</td></tr>' +
           '</tbody></table>' +
-          '<p>⚠️ <b>Cuidado para LPR</b>: los Smart Codecs (H.264+/H.265+/AI) <b>pueden afectar el OCR de patentes</b> porque comprimen agresivamente las zonas de "fondo" donde aparece la patente brevemente. Para LPR, usa H.265 estándar (no "+"). Lee la guía LPR para más detalle.</p>' +
+          '<p>⚠︎ <b>Cuidado para LPR</b>: los Smart Codecs (H.264+/H.265+/AI) <b>pueden afectar el OCR de patentes</b> porque comprimen agresivamente las zonas de "fondo" donde aparece la patente brevemente. Para LPR, usa H.265 estándar (no "+"). Lee la guía LPR para más detalle.</p>' +
           '<p>💡 <b>Configuración recomendada</b>: H.265+ para grabación general, H.265 estándar para LPR/forense, sub stream siempre en H.264 para compatibilidad con clientes web.</p>';
       }
     },
@@ -60560,7 +60595,7 @@ if (document.readyState === 'loading') {
           '<tr><td>UTP + balun pasivo (4K)</td><td>100 m</td></tr>' +
           '</tbody></table>' +
           '<p><b>ePoE — la tecnología que cambia las reglas</b>: switches Dahua compatibles con ePoE permiten cámaras IP a <b>300m manteniendo 10 Mbps</b> (suficiente para 4MP H.265). Y hasta 800m a velocidades menores. Esto cambia proyectos que antes requerían fibra.</p>' +
-          '<p>⚠️ <b>Distancia para video ≠ distancia para alimentación</b>. UTP puede llevar el video 100-300m sin problema, pero el voltaje cae con la distancia. Usa la calculadora de Cable & energía para validar voltaje en cámara final, especialmente con IR alto.</p>';
+          '<p>⚠︎ <b>Distancia para video ≠ distancia para alimentación</b>. UTP puede llevar el video 100-300m sin problema, pero el voltaje cae con la distancia. Usa la calculadora de Cable & energía para validar voltaje en cámara final, especialmente con IR alto.</p>';
       }
     },
     {
@@ -61309,7 +61344,7 @@ if (document.readyState === 'loading') {
       return;
     }
     if (a.codigo === b.codigo) {
-      resultDiv.innerHTML = '<div class="cmp-empty">⚠️ Estás comparando la misma cámara contigo misma. Selecciona una distinta.</div>';
+      resultDiv.innerHTML = '<div class="cmp-empty">⚠︎ Estás comparando la misma cámara contigo misma. Selecciona una distinta.</div>';
       return;
     }
 
@@ -61420,10 +61455,10 @@ if (document.readyState === 'loading') {
   // Cargar A y B en el Simulador FOV en modo comparación
   window.cmpViewInFov = function() {
     var ca = COMPARE_STATE.camA, cb = COMPARE_STATE.camB;
-    if (!ca || !cb) { if (typeof showToast === 'function') showToast('⚠️ Selecciona ambas cámaras primero'); return; }
+    if (!ca || !cb) { if (typeof showToast === 'function') showToast('⚠︎ Selecciona ambas cámaras primero'); return; }
     // Verificar que estén en FOV.allCams (puede no estar si la cámara no es de las cats que el FOV indexa)
     if (!window.FOV || !FOV.allCams) {
-      if (typeof showToast === 'function') showToast('⚠️ Simulador FOV no está disponible');
+      if (typeof showToast === 'function') showToast('⚠︎ Simulador FOV no está disponible');
       return;
     }
     var inFovA = FOV.allCams.find(function(c){ return c.cod === ca.codigo; });
@@ -61432,7 +61467,7 @@ if (document.readyState === 'loading') {
       var miss = [];
       if (!inFovA) miss.push('A ('+ca.codigo+')');
       if (!inFovB) miss.push('B ('+cb.codigo+')');
-      if (typeof showToast === 'function') showToast('⚠️ El simulador no tiene foco en: '+miss.join(', ')+'. Requiere lente con focal numérico.');
+      if (typeof showToast === 'function') showToast('⚠︎ El simulador no tiene foco en: '+miss.join(', ')+'. Requiere lente con focal numérico.');
       return;
     }
     // Activar modo comparación si no lo está
@@ -61529,7 +61564,7 @@ if (document.readyState === 'loading') {
     html += '<div class="poe-card"><div class="poe-card-lbl">Consumo noche (IR ON)</div><div class="poe-card-val vdrop-orange">'+totalNight+'<span>W</span></div><div class="poe-card-sub">'+nCams+' cám × '+p.night+'W</div></div>';
     html += '<div class="poe-card"><div class="poe-card-lbl">Mínimo recomendado</div><div class="poe-card-val">'+marginNeeded.toFixed(0)+'<span>W</span></div><div class="poe-card-sub">consumo + 15% margen</div></div>';
     var resultColor = fail ? 'vdrop-fail' : (marginal ? 'vdrop-warn' : 'vdrop-ok');
-    var resultIcon = fail ? '🚨' : (marginal ? '⚠️' : '✓');
+    var resultIcon = fail ? '⚠︎' : (marginal ? '⚠︎' : '✓');
     html += '<div class="poe-card poe-card-result '+resultColor+'"><div class="poe-card-lbl">Tu switch ('+switchW+'W)</div><div class="poe-card-val">'+resultIcon+'</div><div class="poe-card-sub">'+(fail?'No alcanza':marginal?'Marginal':'OK con margen')+'</div></div>';
     html += '</div>';
 
@@ -62466,7 +62501,7 @@ if (document.readyState === 'loading') {
     html += '</div>';
 
     // Verdict
-    var vIco = r.vClass === 'lk-v-ok' ? '✓' : (r.vClass === 'lk-v-warn' ? '⚠️' : '✕');
+    var vIco = r.vClass === 'lk-v-ok' ? '✓' : (r.vClass === 'lk-v-warn' ? '⚠︎' : '✕');
     var vMsg = '';
     if (r.vClass === 'lk-v-ok') {
       vMsg = '<b>' + r.verdict + '.</b> Margen de +' + r.margin + ' dB supera los 10 dB recomendados. Throughput estimado: ~' + r.throughput + ' Mbps. Asegura línea de vista libre y altura mínima de montaje de ' + r.fresnel + ' m sobre obstáculos en el punto medio.';
@@ -63097,7 +63132,7 @@ if (document.readyState === 'loading') {
     try {
       var jsPDF = window.jspdf && window.jspdf.jsPDF ? window.jspdf.jsPDF : window.jsPDF;
       if (!jsPDF) {
-        if (typeof showToast === 'function') showToast('⚠️ jsPDF no disponible');
+        if (typeof showToast === 'function') showToast('⚠︎ jsPDF no disponible');
         return;
       }
       var doc = new jsPDF();
@@ -63387,7 +63422,7 @@ if (document.readyState === 'loading') {
 
   // ── STEP 2: análisis (llamada al Worker) ─────────────────────────
   window.acStartAnalysis = function() {
-    if (_proxyAlive === false) { alert('⚠️ El servicio de IA no está disponible en este momento. Intenta de nuevo en unos minutos.'); return; }
+    if (_proxyAlive === false) { alert('⚠︎ El servicio de IA no está disponible en este momento. Intenta de nuevo en unos minutos.'); return; }
     // s47b: rate limit guard
     if (!aiRateGuard()) { alert('⏳ Demasiadas consultas seguidas. Espera un momento.'); return; }
     if (window.acState.loading) return;
@@ -63580,7 +63615,7 @@ if (document.readyState === 'loading') {
     var faltan = (a.completitud && a.completitud.faltan) ? a.completitud.faltan : [];
     if (advs.length > 0 || faltan.length > 0) {
       html += '<div class="ac-summary">';
-      html += '<p class="ac-summary-h">⚠ Observaciones</p>';
+      html += '<p class="ac-summary-h">⚠︎ Observaciones</p>';
       html += '<ul class="ac-summary-list">';
       faltan.forEach(function(f) { html += '<li>Falta: ' + f + '</li>'; });
       advs.forEach(function(adv) { html += '<li>' + adv + '</li>'; });
@@ -63594,7 +63629,7 @@ if (document.readyState === 'loading') {
     // Productos detectados con verificación de catálogo
     html += '<div class="ac-section-h">Productos detectados</div>';
     (a.detectados || []).forEach(function(d) {
-      var precioIcon = d.en_catalogo === false ? '⚠️' : (d.precio_ok === false ? '💰' : '✓');
+      var precioIcon = d.en_catalogo === false ? '⚠︎' : (d.precio_ok === false ? '💰' : '✓');
       var precioNote = '';
       if (d.en_catalogo === false) precioNote = 'No encontrado en catálogo actual';
       else if (d.precio_ok === false && d.precio_catalogo) precioNote = 'Precio catálogo actual: $' + d.precio_catalogo.toLocaleString('es-CL');
@@ -63671,7 +63706,7 @@ if (document.readyState === 'loading') {
     // Advertencias
     if (a.advertencias && a.advertencias.length > 0) {
       html += '<div class="ac-summary">';
-      html += '<p class="ac-summary-h">⚠ Lo que falta o está flojo</p>';
+      html += '<p class="ac-summary-h">⚠︎ Lo que falta o está flojo</p>';
       html += '<ul class="ac-summary-list">';
       a.advertencias.forEach(function(adv) {
         html += '<li>' + adv + '</li>';
@@ -63814,7 +63849,7 @@ if (document.readyState === 'loading') {
     if (!a) return;
     try {
       var jsPDF = window.jspdf && window.jspdf.jsPDF ? window.jspdf.jsPDF : window.jsPDF;
-      if (!jsPDF) { if (typeof showToast === 'function') showToast('⚠️ jsPDF no disponible'); return; }
+      if (!jsPDF) { if (typeof showToast === 'function') showToast('⚠︎ jsPDF no disponible'); return; }
       var doc = new jsPDF();
       var y = 18;
       doc.setFontSize(15);
@@ -63975,7 +64010,7 @@ if (document.readyState === 'loading') {
       '</div>' +
       '<div style="background:#FEFAE6;border:1px solid #F0C74E;border-radius:12px;padding:13px 14px;margin-bottom:12px">' +
         '<div style="display:flex;gap:10px;align-items:flex-start">' +
-          '<div style="font-size:20px;line-height:1">⚠️</div>' +
+          '<div style="font-size:20px;line-height:1">⚠︎</div>' +
           '<div style="flex:1">' +
             '<div style="font-weight:700;font-size:13px;color:#986000;margin-bottom:4px">Esta herramienta usa recursos de IA</div>' +
             '<div style="font-size:12px;color:#986000;line-height:1.45">' +
@@ -64036,7 +64071,7 @@ if (document.readyState === 'loading') {
       ) +
       (s.error ?
         '<div style="background:#FBEEF0;border:1px solid rgba(217,15,35,.25);border-radius:9px;padding:9px 11px;margin-bottom:11px;font-size:12px;color:#B40C1D">' +
-          '⚠️ ' + s.error +
+          '⚠︎ ' + s.error +
         '</div>' : ''
       ) +
       '<div style="font-weight:600;font-size:12px;color:var(--tool-fg2);margin:14px 0 8px;text-transform:uppercase;letter-spacing:.4px">¿Qué necesitas ver?</div>' +
@@ -64155,7 +64190,7 @@ if (document.readyState === 'loading') {
   };
 
   window.audSubmit = function() {
-    if (_proxyAlive === false) { alert('⚠️ El servicio de IA no está disponible en este momento. Intenta de nuevo en unos minutos.'); return; }
+    if (_proxyAlive === false) { alert('⚠︎ El servicio de IA no está disponible en este momento. Intenta de nuevo en unos minutos.'); return; }
     // s47b: rate limit guard
     if (!aiRateGuard()) { alert('⏳ Demasiadas consultas seguidas. Espera un momento.'); return; }
     if (!audCanSubmit() || window.audState.loading) return;
@@ -64285,7 +64320,7 @@ if (document.readyState === 'loading') {
     var calMap = {
       excelente: { color: '#1A7F3C', bg: 'var(--tool-ok-bg)', label: 'Excelente', emoji: '✓' },
       buena: { color: '#1A7F3C', bg: '#EAF6EE', label: 'Buena', emoji: '✓' },
-      regular: { color: '#C05000', bg: '#FFF3E8', label: 'Regular', emoji: '⚠️' },
+      regular: { color: '#C05000', bg: '#FFF3E8', label: 'Regular', emoji: '⚠︎' },
       insuficiente: { color: '#B40C1D', bg: '#FBEEF0', label: 'Insuficiente', emoji: '✗' }
     };
     var cal = calMap[a.calificacion_general] || calMap.regular;
@@ -64310,7 +64345,7 @@ if (document.readyState === 'loading') {
       html += '<div style="font-weight:700;font-size:12px;color:var(--tool-fg2);margin:0 0 8px;text-transform:uppercase;letter-spacing:.4px">Por cada objetivo</div>';
       html += '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">';
       a.evaluacion_por_objetivo.forEach(function(o) {
-        var ico = o.cumple === true ? '✓' : (o.cumple === 'parcial' ? '⚠' : '✗');
+        var ico = o.cumple === true ? '✓' : (o.cumple === 'parcial' ? '⚠︎' : '✗');
         var col = o.cumple === true ? '#1A7F3C' : (o.cumple === 'parcial' ? '#C05000' : '#B40C1D');
         var bg = o.cumple === true ? '#EAF6EE' : (o.cumple === 'parcial' ? '#FFF3E8' : '#FBEEF0');
         html += '<div style="background:' + bg + ';border-left:3px solid ' + col + ';border-radius:8px;padding:9px 11px">' +
@@ -64326,7 +64361,7 @@ if (document.readyState === 'loading') {
 
     // Problemas
     if (a.problemas && a.problemas.length) {
-      html += '<div style="font-weight:700;font-size:12px;color:var(--tool-fg2);margin:0 0 8px;text-transform:uppercase;letter-spacing:.4px">⚠️ Problemas detectados</div>';
+      html += '<div style="font-weight:700;font-size:12px;color:var(--tool-fg2);margin:0 0 8px;text-transform:uppercase;letter-spacing:.4px">⚠︎ Problemas detectados</div>';
       html += '<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">';
       a.problemas.forEach(function(p) {
         var gCol = p.gravedad === 'alta' ? '#B40C1D' : (p.gravedad === 'media' ? '#C05000' : '#7A6500');
@@ -64950,7 +64985,7 @@ if (document.readyState === 'loading') {
     [5,10,15,20,30,50].forEach(function(d){
       var cov = 2 * d * Math.tan(fovH * Math.PI / 360);
       var p = resH / cov;
-      var lvl = p >= 250 ? 'Identificación ✓' : p >= 125 ? 'Reconocimiento ✓' : p >= 63 ? 'Observación ⚠️' : p >= 25 ? 'Solo detección ⚠️' : 'Insuficiente ✕';
+      var lvl = p >= 250 ? 'Identificación ✓' : p >= 125 ? 'Reconocimiento ✓' : p >= 63 ? 'Observación ⚠︎' : p >= 25 ? 'Solo detección ⚠︎' : 'Insuficiente ✕';
       var bold = d === Math.round(dist) ? ' style="background:var(--blue-p);font-weight:700"' : '';
       html += '<tr'+bold+'><td>'+d+' m</td><td>'+cov.toFixed(1)+' m</td><td><b>'+p.toFixed(0)+'</b></td><td>'+lvl+'</td></tr>';
     });
@@ -65230,7 +65265,7 @@ if (document.readyState === 'loading') {
     var bestPpm = invResH / bestWidth;
 
     // DORI at target distance
-    var ppmLabel = function(p){ return p >= 250 ? 'Identificación ✓' : p >= 125 ? 'Reconocimiento ✓' : p >= 63 ? 'Observación ⚠️' : p >= 25 ? 'Detección' : 'Insuficiente ✕'; };
+    var ppmLabel = function(p){ return p >= 250 ? 'Identificación ✓' : p >= 125 ? 'Reconocimiento ✓' : p >= 63 ? 'Observación ⚠︎' : p >= 25 ? 'Detección' : 'Insuficiente ✕'; };
     var ppmColor = function(p){ return p >= 250 ? '#27ae60' : p >= 125 ? '#f39c12' : p >= 63 ? '#e67e22' : '#e74c3c'; };
 
     var html = '';
@@ -65423,7 +65458,7 @@ if (document.readyState === 'loading') {
       html += '<span style="font-size:11px;color:var(--tool-muted)" id="ircFovHint">Calculado desde '+curFocal+'mm + sensor '+ircModel.sensor.name+'</span></div>';
       html += '<input type="hidden" id="ircFovH" value="'+curFov+'">';
       if (curFov < irAngleWide - 5) {
-        html += '<div class="cable-hint" style="color:var(--tool-fail,#dc2626)" id="ircFovWarn">⚠️ FOV ('+curFov+'°) menor que ángulo IR ('+irAngleWide+'°) — el IR ilumina '+Math.round((irAngleWide-curFov)/irAngleWide*100)+'% fuera del campo visual</div>';
+        html += '<div class="cable-hint" style="color:var(--tool-fail,#dc2626)" id="ircFovWarn">⚠︎ FOV ('+curFov+'°) menor que ángulo IR ('+irAngleWide+'°) — el IR ilumina '+Math.round((irAngleWide-curFov)/irAngleWide*100)+'% fuera del campo visual</div>';
       }
       html += '</div>';
     } else if (isFixedModel && !isLaserPTZ) {
@@ -65491,7 +65526,7 @@ if (document.readyState === 'loading') {
     var warn = document.getElementById('ircFovWarn');
     if (fov < irAngleWide - 5) {
       var pct = Math.round((irAngleWide - fov) / irAngleWide * 100);
-      var warnHtml = '⚠️ FOV (' + fov + '°) menor que ángulo IR (' + irAngleWide + '°) — el IR ilumina ' + pct + '% fuera del campo visual';
+      var warnHtml = '⚠︎ FOV (' + fov + '°) menor que ángulo IR (' + irAngleWide + '°) — el IR ilumina ' + pct + '% fuera del campo visual';
       if (warn) { warn.innerHTML = warnHtml; warn.style.display = ''; }
       else {
         var parent = fovH ? fovH.parentElement : null;
@@ -65619,7 +65654,7 @@ if (document.readyState === 'loading') {
     html += '</div></div>';
     // Coverage match card
     var matchColor = irCovers ? '#27ae60' : '#e74c3c';
-    var matchIcon = irCovers ? '✓' : '⚠️';
+    var matchIcon = irCovers ? '✓' : '⚠︎';
     html += '<div class="dori-card" style="border-left-color:'+matchColor+'"><div class="dori-card-icon" style="background:'+matchColor+'22;color:'+matchColor+'">'+matchIcon+'</div><div class="dori-card-info">';
     html += '<div class="dori-card-lbl">IR vs FOV cámara</div>';
     html += '<div class="dori-card-val">'+(irCovers ? 'Cubre' : 'No cubre')+'</div>';
@@ -65824,8 +65859,8 @@ if (document.readyState === 'loading') {
     html += '<div class="tool-big-val" style="color:'+daysColor+'">'+Math.floor(days)+'</div>';
     html += '<div style="font-size:14px;color:'+daysColor+';font-weight:600;margin:4px 0">días de grabación</div>';
     html += '<div style="font-size:11px;color:var(--tool-muted)">'+nCams+' cámaras × '+camMP+'MP × '+fps+'fps · '+codec.toUpperCase()+' · '+(hddTB < 1 ? '500 GB' : hddTB+' TB')+'</div>';
-    if (days < 7) html += '<div style="margin-top:8px;font-size:11px;color:var(--tool-fail);font-weight:600">⚠️ Menos de 1 semana — riesgo de perder evidencia antes de revisarla</div>';
-    else if (days < 15) html += '<div style="margin-top:8px;font-size:11px;color:#e67e22;font-weight:600">⚠️ Menos de 15 días — puede no cumplir normativa chilena (algunos recintos exigen 15-30 días)</div>';
+    if (days < 7) html += '<div style="margin-top:8px;font-size:11px;color:var(--tool-fail);font-weight:600">⚠︎ Menos de 1 semana — riesgo de perder evidencia antes de revisarla</div>';
+    else if (days < 15) html += '<div style="margin-top:8px;font-size:11px;color:#e67e22;font-weight:600">⚠︎ Menos de 15 días — puede no cumplir normativa chilena (algunos recintos exigen 15-30 días)</div>';
     else if (days >= 30) html += '<div style="margin-top:8px;font-size:11px;color:#27ae60;font-weight:600">✓ Más de 30 días — cumple la mayoría de normativas y da margen de seguridad</div>';
     html += '</div>';
 
@@ -65996,7 +66031,7 @@ if (document.readyState === 'loading') {
     var html = '';
 
     if (error) {
-      html += '<div class="tool-error">⚠️ '+error+'</div>';
+      html += '<div class="tool-error">⚠︎ '+error+'</div>';
     }
 
     // Main result
@@ -66005,7 +66040,7 @@ if (document.readyState === 'loading') {
     html += '<div class="tool-big-val" style="color:'+barColor+'">'+usable.toFixed(1)+' <span>TB útiles</span></div>';
     html += '<div class="tool-big-sub">de '+totalRaw+' TB brutos ('+pctUsable.toFixed(0)+'% aprovechable)</div>';
     if (tolerance > 0) html += '<div class="tool-big-note" style="color:#27ae60">🛡️ Tolera '+tolerance+' disco'+(tolerance>1?'s':'')+' fallando simultáneamente</div>';
-    if (level === '0') html += '<div class="tool-big-note" style="color:var(--tool-fail)">⚠️ SIN PROTECCIÓN — Si falla 1 disco, se pierde TODO</div>';
+    if (level === '0') html += '<div class="tool-big-note" style="color:var(--tool-fail)">⚠︎ SIN PROTECCIÓN — Si falla 1 disco, se pierde TODO</div>';
     html += '</div>';
 
     // Visual bar
@@ -66053,7 +66088,7 @@ if (document.readyState === 'loading') {
       var pct = totalRaw > 0 ? (u/totalRaw*100).toFixed(0) : '0';
       var sel = c.l === level ? ' style="background:var(--tool-accent)11;font-weight:700"' : '';
       var arrow = c.l === level ? ' ◀' : '';
-      html += '<tr'+sel+'><td>RAID '+c.name+arrow+'</td><td>'+(ok?u.toFixed(1)+' TB':'—')+'</td><td>'+(ok?pct+'%':'—')+'</td><td>'+(ok?c.t+' disco'+(c.t>1?'s':''):'—')+'</td><td>'+c.mn+(ok?'':'  ⚠️')+'</td></tr>';
+      html += '<tr'+sel+'><td>RAID '+c.name+arrow+'</td><td>'+(ok?u.toFixed(1)+' TB':'—')+'</td><td>'+(ok?pct+'%':'—')+'</td><td>'+(ok?c.t+' disco'+(c.t>1?'s':''):'—')+'</td><td>'+c.mn+(ok?'':'  ⚠︎')+'</td></tr>';
     });
     html += '</tbody></table></div>';
 
@@ -92082,7 +92117,7 @@ window.generateShoppingFeed = function() {
       var ex=k.items.filter(function(x){return _U(x.codigo)===_U(code);})[0];
       if(ex) ex.qty=(ex.qty||1)+qty; else k.items.push({codigo:code, qty:qty});
       saveKits(ks); renderBody();
-      toast(_prodExists(code) ? (code+' agregado al kit') : ('⚠️ '+code+' no existe (agregado igual)'));
+      toast(_prodExists(code) ? (code+' agregado al kit') : ('⚠︎ '+code+' no existe (agregado igual)'));
       return;
     }
     if (act==='kit-item-del'){
@@ -92202,7 +92237,7 @@ window.generateShoppingFeed = function() {
     var m=getMerch(); if(!m[listName]) m[listName]=[];
     if(m[listName].some(function(x){return _U(x)===_U(code);})){ toast('Ya está en la lista'); return; }
     m[listName].push(code); saveMerch(m); renderBody(); _catalogRefresh();
-    toast(_prodExists(code) ? (code+' → '+etiqueta) : ('⚠️ '+code+' no existe en el catálogo (guardado igual)'));
+    toast(_prodExists(code) ? (code+' → '+etiqueta) : ('⚠︎ '+code+' no existe en el catálogo (guardado igual)'));
   }
   function merchListDel(listName, code){
     var m=getMerch(); if(!m[listName]) return;
@@ -92215,7 +92250,7 @@ window.generateShoppingFeed = function() {
     var color=(document.getElementById('mNewBadgeColor')||{}).value || '#C2410C';
     if(!code || !text){ toast('Código y texto son obligatorios'); return; }
     var m=getMerch(); m.badges[code]={text:text, color:color}; saveMerch(m); renderBody(); _catalogRefresh();
-    toast(_prodExists(code) ? ('Badge agregado a '+code) : ('⚠️ '+code+' no existe (badge guardado igual)'));
+    toast(_prodExists(code) ? ('Badge agregado a '+code) : ('⚠︎ '+code+' no existe (badge guardado igual)'));
   }
   function kitAdd(){
     var nombre=((document.getElementById('kitNewNombre')||{}).value||'').trim();
