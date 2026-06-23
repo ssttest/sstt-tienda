@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Lunes 22 de Junio del 2026 · s172 -->
+<!-- SSTT Tienda · Generado: Martes 23 de Junio del 2026 · s173 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -10787,12 +10787,16 @@ body.cart-open #proyectoListadoBtn {
   overflow: hidden;
 }
 .hdd-strat-summary::before {
-  content:'🏆';
+  content:''; /* s173: 🏆 emoji → máscara monocroma (P&S: oro = loyalty) */
   position: absolute;
-  font-size: 80px;
+  width: 80px;
+  height: 80px;
   top: -10px;
   right: 0px;
   opacity: .08;
+  background: #15171C;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M8 4h8v3a4 4 0 0 1-3 3.87V14h2v2H8v-2h2v-3.13A4 4 0 0 1 8 7Z M7 18h10v2H7Z'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M8 4h8v3a4 4 0 0 1-3 3.87V14h2v2H8v-2h2v-3.13A4 4 0 0 1 8 7Z M7 18h10v2H7Z'/%3E%3C/svg%3E") center/contain no-repeat;
 }
 .hdd-strat-summary-title {
   font-size: 15px;
@@ -19933,16 +19937,16 @@ button,input,select,a,p,h1,h2,h3,span,div:not(.anim-paused){
       <label>Vertical del proyecto *</label>
       <select id="pyVertical">
         <option value="">Selecciona la industria…</option>
-        <option value="mineria">⛏️ Minería y Recursos Naturales</option>
-        <option value="gobierno">🏛️ Gobierno y Seguridad Pública</option>
-        <option value="infraestructura">🏗️ Infraestructura Crítica</option>
-        <option value="banca">🏦 Banca y Servicios Financieros</option>
-        <option value="retail">🛒 Retail y Cadena de Distribución</option>
-        <option value="salud">🏥 Salud y Farmacéutica</option>
-        <option value="educacion">🎓 Educación</option>
-        <option value="industria">🏭 Industria y Manufactura</option>
-        <option value="transporte">🚢 Transporte y Logística</option>
-        <option value="otro">🔧 Otro</option>
+        <option value="mineria">Minería y Recursos Naturales</option>
+        <option value="gobierno">Gobierno y Seguridad Pública</option>
+        <option value="infraestructura">Infraestructura Crítica</option>
+        <option value="banca">Banca y Servicios Financieros</option>
+        <option value="retail">Retail y Cadena de Distribución</option>
+        <option value="salud">Salud y Farmacéutica</option>
+        <option value="educacion">Educación</option>
+        <option value="industria">Industria y Manufactura</option>
+        <option value="transporte">Transporte y Logística</option>
+        <option value="otro">Otro</option>
       </select>
 
       <label>Número de cámaras estimado *</label>
@@ -29587,7 +29591,7 @@ function renderPerfilDirecciones() {
       <input class="finput" style="margin:0 0 7px" placeholder="Referencia (color puerta, etc.)" id="fdRef">
       <input type="hidden" id="fdEditIdx" value="-1">
       <div style="display:flex;gap:6px;margin-top:4px">
-        <button onclick="guardarDireccion()" style="flex:1;background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)">💾 Guardar</button>
+        <button onclick="guardarDireccion()" style="flex:1;background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)">${_ico('disk')} Guardar</button>
         <button onclick="cerrarFormDir()" style="background:var(--g5);color:var(--g2);border:none;border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer;font-family:var(--font)">Cancelar</button>
       </div>
     </div>`;
@@ -29597,16 +29601,16 @@ function renderDirCard(d, i) {
   return `<div style="background:#fff;border:1px solid var(--g5);border-radius:12px;padding:12px 14px;margin-bottom:8px;position:relative">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px">
       <div style="font-weight:700;font-size:13px;display:flex;align-items:center;gap:6px">
-        📍 ${d.alias || 'Dirección ' + (i+1)}
+        ${_ico('pin')} ${d.alias || 'Dirección ' + (i+1)}
         ${d.predeterminada ? '<span style="background:var(--green);color:#fff;font-size:9px;padding:1px 6px;border-radius:10px;font-weight:800">PREDETERMINADA</span>' : ''}
       </div>
       <div style="display:flex;gap:4px">
         <button onclick="usarDireccionEnCarro(${i})" title="Usar en el carro actual"
           style="background:var(--blue-p);color:var(--blue);border:none;border-radius:6px;padding:4px 8px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font)">Usar</button>
         <button onclick="editarDireccion(${i})"
-          style="background:var(--g6);color:var(--g2);border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-family:var(--font)">✏️</button>
+          style="background:var(--g6);color:var(--g2);border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-family:var(--font)">${_ico('pencil')}</button>
         <button onclick="eliminarDireccion(${i})"
-          style="background:var(--red-p);color:var(--red);border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-family:var(--font)">🗑</button>
+          style="background:var(--red-p);color:var(--red);border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-family:var(--font)">${_ico('trash')}</button>
       </div>
     </div>
     <div style="font-size:12.5px;color:var(--g2);line-height:1.55">
@@ -29732,7 +29736,7 @@ function renderPerfilFacturacion() {
       </div>
       <input type="hidden" id="ffEditIdx" value="-1">
       <div style="display:flex;gap:6px;margin-top:4px">
-        <button onclick="guardarFacturacionPerfil()" style="flex:1;background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)">💾 Guardar</button>
+        <button onclick="guardarFacturacionPerfil()" style="flex:1;background:var(--red);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:var(--font)">${_ico('disk')} Guardar</button>
         <button onclick="cerrarFormFact()" style="background:var(--g5);color:var(--g2);border:none;border-radius:8px;padding:10px 14px;font-size:13px;cursor:pointer;font-family:var(--font)">Cancelar</button>
       </div>
     </div>`;
@@ -29749,9 +29753,9 @@ function renderFactCard(f, i) {
         <button onclick="usarFacturacionEnCarro(${i})"
           style="background:var(--blue-p);color:var(--blue);border:none;border-radius:6px;padding:4px 8px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font)">Usar</button>
         <button onclick="editarFacturacion(${i})"
-          style="background:var(--g6);color:var(--g2);border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-family:var(--font)">✏️</button>
+          style="background:var(--g6);color:var(--g2);border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-family:var(--font)">${_ico('pencil')}</button>
         <button onclick="eliminarFacturacion(${i})"
-          style="background:var(--red-p);color:var(--red);border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-family:var(--font)">🗑</button>
+          style="background:var(--red-p);color:var(--red);border:none;border-radius:6px;padding:4px 8px;font-size:10px;cursor:pointer;font-family:var(--font)">${_ico('trash')}</button>
       </div>
     </div>
     <div style="font-size:12.5px;color:var(--g2);line-height:1.55">
@@ -32067,7 +32071,27 @@ function pmTab(name, btn) {
 // Paso 2 (Worker/reseñas web) y Paso 3 (fusión) se enchufan luego: cambiar DESC_TOOL
 // a un tool dedicado 'producto_desc' en el Worker, y/o src:'fusion' en el caché.
 const DESC_TOOL = 'chat_tecnico';   // swap a 'producto_desc' cuando exista server-side
-const AIDESC_VER = 'v1';
+const AIDESC_VER = 'v2'; // s173: invalidar caché v1 (prompt mejorado + inteligencia)
+
+// s173: detecta tecnologías IA/inteligencia de Dahua desde nombre+código del producto
+function pmDetectTech(p){
+  if(!p||!p.nombre) return {};
+  var nc = (p.nombre+' '+p.codigo).toLowerCase();
+  return {
+    wizsense:  /wizsense|wiz.?sense/i.test(nc),
+    wizmind:   /wizmind|wiz.?mind/i.test(nc),
+    acupick:   /acupick/i.test(nc),
+    xinghan:   /xinghan/i.test(nc),
+    tioc:      /tioc/i.test(nc) || /-pv-|-pv$/i.test(p.codigo||''),
+    fullcolor: /full.?color/i.test(nc) || (/-led-|-led\./.test(p.codigo||'') && !/tioc/i.test(nc)),
+    smd:       /smd\+?/i.test(nc),
+    smdplus:   /smd\s*\+|smd\s*plus/i.test(nc),
+    ivs:       /\bivs\b/i.test(nc),
+    starlight: /starlight/i.test(nc),
+    wdr:       /wdr/i.test(nc),
+    is4k:      /\b4k\b|8mp|8 mp/.test(nc)
+  };
+}
 function pmAIDescKey(codigo){ return 'sstt_aidesc_'+AIDESC_VER+'_'+codigo; }
 
 function pmAIDescQuiet(body, html){ body.innerHTML = '<div class="pm-aidesc-quiet">'+html+'</div>'; }
@@ -32116,11 +32140,13 @@ async function pmGenAIDesc(codigo, force){
   var specs = await pmWaitSpecs(codigo, p); // s172: espera a que el modal cargue la ficha (mejor calidad)
   body.innerHTML = '<div class="pm-aidesc-loading">'+_ico('sparkle')+'<span>Generando descripción…</span></div>';
   var sd = (typeof getSSTTData==='function') ? getSSTTData(codigo) : null;
+  var tech = pmDetectTech(p); // s173: tecnologías IA detectadas
   var ground = {
     codigo: codigo, nombre: p.nombre||'', marca: p.marca||'Dahua',
     categoria: (sd&&sd.c)||p.cat||'',
     bullets: (sd&&sd.s)? sd.s.slice(0,14) : [],
     caso_uso: (sd&&sd.u)||'',
+    inteligencia: tech, // s173: WizSense/WizMind/AcuPick/XingHan/SMD/IVS/TiOC/Full-Color
     ficha: specs ? { sensor:specs.sensor, resolucion:specs.resolucion, fps:specs.fps,
       apertura:specs.apertura, iluminacion_min:specs.iluminacion_min,
       focal:specs.focal, angulo:specs.angulo, alcance_ir:specs.alcance_ir, wdr:specs.wdr,
@@ -32128,17 +32154,27 @@ async function pmGenAIDesc(codigo, force){
       entradas_alarma:specs.entradas_alarma, salidas_alarma:specs.salidas_alarma,
       proteccion:specs.proteccion } : null
   };
-  var userMsg = 'Redacta una descripción breve (2 a 4 frases, máximo ~70 palabras) de este producto de '+
+  var userMsg = 'Redacta una descripción breve (2 a 4 frases, máximo ~80 palabras) de este producto de '+
     'seguridad electrónica para instaladores e integradores B2B en Chile. Explica (1) qué lo diferencia '+
     'fundamentalmente de otros modelos y (2) su uso apropiado.\n'+
     'Cuando los datos lo respalden, menciona los diferenciadores que más le importan a un instalador, SOLO si corresponden:\n'+
-    '• Tecnología key (Full-Color, WizSense, TiOC, AcuPick, etc.) y qué aporta.\n'+
+    '• Plataforma de inteligencia: identifica la plataforma IA del producto y explica la diferencia práctica para el instalador:\n'+
+    '  - IVS (Intelligent Video Surveillance): analítica básica embebida (cruce de línea, intrusión, conteo). Es el nivel base.\n'+
+    '  - SMD (Smart Motion Detection): detecta movimiento filtrando viento/lluvia/insectos. Reduce falsas alarmas.\n'+
+    '  - SMD+ / SMD Plus: además clasifica personas y vehículos (descarta animales/hojas). Mucho menos ruido en las notificaciones.\n'+
+    '  - WizSense: plataforma IA enfocada en precisión de detección humano/vehículo con deep-learning a bajo costo. Incluye SMD+ y perimetral inteligente. Gama más accesible con IA real.\n'+
+    '  - WizMind: plataforma IA premium con reconocimiento facial, metadatos avanzados, conteo de personas con mapa de calor, y analítica de comportamiento. Para proyectos de alta exigencia.\n'+
+    '  - AcuPick: búsqueda IA en tiempo real por atributos (color de ropa, tipo de vehículo, rostro). Permite encontrar eventos en segundos entre horas de grabación.\n'+
+    '  - XingHan (星翰): plataforma enterprise con NPU dedicado, analítica edge avanzada y capacidad multi-algoritmo simultáneo.\n'+
+    '  - TiOC (Three-in-One Camera): combina visión + luz blanca + sirena/alarma activa con detección IA. Disuasión en tiempo real.\n'+
+    '  - Full-Color: iluminación LED para imagen a color 24/7 sin depender de infrarrojo. Útil en escenas donde el color es evidencia.\n'+
+    '  Si el producto tiene más de una (ej: WizSense + TiOC), explica la combinación. Si solo tiene IVS sin SMD/WizSense, dilo.\n'+
     '• Lente/focal: implicancia práctica del focal — un 2.8mm abre más ángulo (más escena, menos alcance) '+
     'y un 3.6mm acerca y detalla (menos ángulo, más alcance); si es varifocal o motorizado, destaca la '+
     'versatilidad de ajustar el campo de visión en terreno.\n'+
     '• Audio: micrófono integrado, audio bidireccional, entrada/salida de audio.\n'+
     '• Alarma: entradas/salidas de alarma (I/O) para integrar sensores o relés.\n'+
-    'Tono técnico-comercial, español de Chile. NO recomiendes ni menciones otros productos o códigos, NO '+
+    'Tono técnico-comercial directo, español de Chile. NO recomiendes ni menciones otros productos o códigos, NO '+
     'incluyas enlaces, NO inventes especificaciones que no estén en los datos (si un dato no aparece, omítelo). '+
     'Responde SOLO con la descripción, sin encabezados ni viñetas.\n\nDatos del producto:\n'+
     JSON.stringify(ground);
@@ -32147,16 +32183,37 @@ async function pmGenAIDesc(codigo, force){
     var resp = await fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'},
       body: JSON.stringify({ tool:DESC_TOOL, messages:[{role:'user', content:userMsg}],
         context:{ modo:'producto_desc' } }) });
+    if (!resp.ok){ // s173: manejar HTTP errors del Worker
+      if (typeof console!=='undefined') console.warn('[pmGenAIDesc] HTTP', resp.status, resp.statusText);
+      pmAIDescFallback(body, codigo, sd); return;
+    }
     var data = await resp.json();
+    if (typeof console!=='undefined') console.log('[pmGenAIDesc] response:', JSON.stringify(data).slice(0,500)); // s173: debug
     var text = (data && data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '';
+    // s173: fallback — a veces chat_tecnico envuelve en data.text o data.reply
+    if (!text && data && typeof data.text === 'string') text = data.text;
+    if (!text && data && typeof data.reply === 'string') text = data.reply;
     text = String(text).replace(/\[\[PROD:[^\]]*\]\]/g,'').replace(/\s+/g,' ').trim(); // limpia tokens de chat_tecnico
-    if (!text){ pmAIDescQuiet(body, _ico('sparkle')+' No se pudo generar la descripción. '+
-      '<button class="pm-aidesc-regen" onclick="pmGenAIDesc(\''+codigo+'\',true)">Reintentar</button>'); return; }
+    if (!text){ pmAIDescFallback(body, codigo, sd); return; }
     try { localStorage.setItem(pmAIDescKey(codigo), JSON.stringify({ text:text, src:'local', ts:Date.now() })); } catch(e){}
     pmAIDescRender(body, codigo, text, true);
   } catch(e){
-    if (typeof console!=='undefined') console.error('[pmGenAIDesc]', e.name, e.message);
-    pmAIDescQuiet(body, _ico('sparkle')+' Descripción IA no disponible ahora. '+
+    if (typeof console!=='undefined') console.error('[pmGenAIDesc]', e.name, e.message, e.stack);
+    pmAIDescFallback(body, codigo, sd);
+  }
+}
+
+// s173: fallback — si la IA falla, muestra caso_uso + bullets de SSTT_DATA (mejor que nada)
+function pmAIDescFallback(body, codigo, sd){
+  if (sd && (sd.u || (sd.s && sd.s.length))){
+    var fb = sd.u ? String(sd.u).replace(/[<>]/g,'') : '';
+    if (!fb && sd.s) fb = sd.s.slice(0,4).join(' ').replace(/[<>]/g,'');
+    if (fb.length > 300) fb = fb.slice(0,297) + '…';
+    body.innerHTML = '<p class="pm-aidesc-text" style="color:var(--g2)">'+fb+'</p>'+
+      '<div class="pm-aidesc-foot">'+_ico('sparkle')+' Descripción desde catálogo SSTT (IA no disponible). '+
+      '<button class="pm-aidesc-regen" onclick="pmGenAIDesc(\''+codigo+'\',true)">Reintentar</button></div>';
+  } else {
+    pmAIDescQuiet(body, _ico('sparkle')+' No se pudo generar la descripción. '+
       '<button class="pm-aidesc-regen" onclick="pmGenAIDesc(\''+codigo+'\',true)">Reintentar</button>');
   }
 }
@@ -33453,6 +33510,9 @@ function _ico(n,sz){
     'wallet':'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h13a2 2 0 0 1 0 5H3"/><circle cx="16.5" cy="12.5" r=".8"/>',
     'trash':'<path d="M5 7h14M9 7V5h6v2M7 7l1 13h8l1-13"/>',
     'lab':'<path d="M9 3v6L5 18a2 2 0 0 0 2 2.6h10A2 2 0 0 0 19 18L15 9V3"/><path d="M8 3h8M7.5 14h9"/>',
+    'cloud':'<path d="M6.5 19A4.5 4.5 0 0 1 6 10a6 6 0 0 1 11.7 0A4.5 4.5 0 0 1 17.5 19z"/>',
+    'tree':'<path d="M12 3 6 12h3l-2 5h10l-2-5h3z"/><path d="M12 17v4"/>',
+    'flashlight':'<path d="M9 6h6l1 4v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V10z"/><path d="M10 13v7h4v-7"/><circle cx="12" cy="8" r="1" fill="currentColor"/>',
   };
   var s = sz || '1.05em';
   return '<svg viewBox="0 0 24 24" width="'+s+'" height="'+s+'" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline-block;vertical-align:-0.15em">'+(P[n]||'')+'</svg>';
@@ -33463,6 +33523,41 @@ function _fpIco(n){
 function _fpNote(html){
   return '<div style="background:#FBEEF0;border-left:3px solid #D90F23;border-radius:0 10px 10px 0;padding:12px 14px;margin-top:14px;font-size:12px;color:#15171C;line-height:1.55">' + html + '</div>';
 }
+// s173: P&S boot mutator — replace static HTML emoji with _ico() SVG at page load
+function _icoBootReplace(){
+  var EM={'\u{1F4CB}':'clipboard','\u{1F4CD}':'pin','\u{1F4F7}':'camera','\u{1F50D}':'search','\u{1F4F1}':'phone','\u{1F4E4}':'upload','\u{1F4C4}':'file','\u{1F5FA}':'map','\u{1F3AF}':'target','\u{1F4E6}':'package','\u{1F4B0}':'money-bag','\u{1F3EA}':'store','\u{1F916}':'robot','\u{1F4AC}':'chat','\u{2696}':'scale','\u{1F4B3}':'card','\u{1F381}':'gift','\u{1F527}':'wrench','\u{1F6D2}':'cart','\u{1F4A1}':'bulb','\u{1F525}':'flame','\u{1F697}':'car','\u{1F4BE}':'disk','\u{1F3E2}':'building','\u{1F512}':'lock','\u{1F511}':'key','\u{270F}':'pencil','\u{1F5D1}':'trash','\u{1F514}':'bell','\u{1F4D0}':'ruler-tri','\u{1F52D}':'telescope','\u{1F399}':'mic','\u{1F4DA}':'books','\u{1F4E5}':'download',
+'\u{26A1}':'bolt','\u{2764}':'heart','\u{1F90D}':'heart','\u{1F69A}':'truck','\u{1F441}':'eye','\u{1F3A4}':'mic','\u{2601}':'cloud','\u{1F550}':'timer','\u{1F9F0}':'toolbox','\u{1F9FE}':'receipt','\u{1F464}':'user','\u{1FAAA}':'id-card','\u{1F3AC}':'clapper','\u{1F6F0}':'satellite','\u{1F319}':'moon','\u{1F3AB}':'tag','\u{1F504}':'refresh','\u{1F3DB}':'building','\u{1F3E0}':'home','\u{1F3F7}':'tag','\u{1F332}':'tree','\u{1F4F9}':'video','\u{1F5BC}':'picture','\u{1F310}':'globe','\u{1F4F8}':'camera','\u{1F4DD}':'note','\u{1F3A5}':'video','\u{1F4CF}':'ruler','\u{1F44B}':'hand','\u{1F306}':'sun','\u{1F526}':'flashlight','\u{1F4FC}':'video','\u{1F3E6}':'bank','\u{1F9D2}':'user','\u{1F680}':'rocket','\u{1F4B5}':'cash','\u{1F4B6}':'coins','\u{1F4CA}':'bar-chart'};
+  var keys=Object.keys(EM).map(function(k){return k.replace(/[-\/\\^$*+?.()|[\]{}]/g,'\\$&');});
+  var re=new RegExp('('+keys.join('|')+')[\\uFE0E\\uFE0F]?','g');
+  // Target specific container areas (not the whole document)
+  var zones=['#carroSec','#checkoutSec','.fov-sidebar','.fov-preview-panel','.fov-audit-panel',
+    '.fov-calib-panel','.fov-maps-panel','.fov-scenarios','.fov-scenario-icon','.dori-legend','.dori-leg-item','#fovPdfPanel',
+    '#sceneModal','.scene-wizard','.cap-controls','.capture-placeholder',
+    '#cmpPanel','#cmpTrigger',
+    '#prodModal .pm-dl-row','#prodModal .pm-tab',
+    '#cotModal','#oiPanel','#erutModal','#proyectoForm','.hslide-tag','.track-step-label','.fov-conc-hint','#fovExportSection',
+    '#mktSection','#trackSection',
+    '#proyectoModal','#seguimientoPanel',
+    '.fov-vtab-row','.fov-cam-modes',
+    '.cs-title','.trow','.dtog-icon','.pm-dl-ico','.mkt-step-icon','.mkt-btn-primary','.mkt-btn-secondary','.track-step-circle','#cmpPanelBtn span','#cotGenIco','#oiAnalyzeBtnIcon','#erutBtnExtraerIco','#erutPreviewPDF'];
+  zones.forEach(function(sel){
+    try{
+      document.querySelectorAll(sel).forEach(function(el){
+        var h=el.innerHTML;
+        if(h.length>2000) return; // skip large containers
+        if(!re.test(h)) return;
+        re.lastIndex=0;
+        el.innerHTML=h.replace(re,function(m){
+          var base=m.replace(/[\uFE0E\uFE0F]/g,'');
+          return EM[base]?_ico(EM[base]):m;
+        });
+      });
+    }catch(e){}
+  });
+}
+// Run after DOM ready + initial render
+setTimeout(_icoBootReplace, 100);
+
 var SSTT_FOOTER_PAGES = {
   acerca: { icon:_fpIco('building'), titulo:'Acerca de Nosotros', sub:'Distribuidor oficial Dahua Technology en Chile',
     body:
@@ -35773,7 +35868,7 @@ async function openProdModal(id) {
   // Mostrar loader en el panel specs
   const loaderHTML = `
     <div id="pmPdfLoader" style="display:flex;flex-direction:column;align-items:center;gap:14px;padding:32px;text-align:center">
-      <div style="font-size:28px;animation:spin 1.2s linear infinite">⚙️</div>
+      <div style="animation:spin 1.2s linear infinite;color:var(--muted)">${_ico('gear','28px')}</div>
       <div style="font-size:14px;font-weight:700;color:var(--navy)">Leyendo ficha técnica oficial PDF…</div>
       <div style="font-size:12px;color:var(--muted)">Extrayendo especificaciones desde el datasheet Dahua</div>
       <div style="width:220px;height:4px;background:var(--border);border-radius:2px;overflow:hidden">
@@ -35975,11 +36070,11 @@ async function cmpRenderModal() {
   modal.innerHTML = `
     <div class="cmp-modal-wrap">
       <div class="cmp-modal-head">
-        <h2>⚖️ Comparando ${products.length} productos</h2>
+        <h2>${_ico('scale')} Comparando ${products.length} productos</h2>
         <button class="cmp-modal-x" onclick="closeCmpModal()">✕</button>
       </div>
       <div style="padding:48px;text-align:center">
-        <div style="font-size:32px;animation:spin 1.2s linear infinite;margin-bottom:16px">⚙️</div>
+        <div style="animation:spin 1.2s linear infinite;margin-bottom:16px;color:var(--muted)">${_ico('gear','32px')}</div>
         <div style="font-size:15px;font-weight:700;color:var(--navy);margin-bottom:8px">Analizando fichas técnicas PDF…</div>
         <div style="font-size:12px;color:var(--muted)">Extrayendo especificaciones reales de ${products.map(p=>p.codigo).join(', ')}</div>
         <div style="width:260px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin:20px auto 0">
@@ -36093,8 +36188,8 @@ function cmpBuildTable(products, allSpecs, modal) {
         } catch(e) { return ''; }
       })()}
       <div class="cmp-th-actions">
-        <button class="cmp-th-btn-cart" onclick="addCart(PRODUCTS.find(x=>x.id===${p.id}));showToast('✓ Agregado')">🛒 Carro</button>
-        <button class="cmp-th-btn-ficha" onclick="closeCmpModal();openProdModal(${p.id})">📋 Ficha</button>
+        <button class="cmp-th-btn-cart" onclick="addCart(PRODUCTS.find(x=>x.id===${p.id}));showToast('✓ Agregado')">${_ico('cart')} Carro</button>
+        <button class="cmp-th-btn-ficha" onclick="closeCmpModal();openProdModal(${p.id})">${_ico('clipboard')} Ficha</button>
         <button class="cmp-th-remove" onclick="cmpRemove(${p.id});if(CMP.items.length>=2)cmpBuildTable(CMP.items,CMP.items.map(x=>PDF_CACHE[x.codigo]||pmParseSpecsFlat(x)),document.getElementById('cmpModal'));else closeCmpModal()">✕</button>
       </div>
     </th>`).join('');
@@ -36180,7 +36275,7 @@ function cmpBuildTable(products, allSpecs, modal) {
   modal.innerHTML = `
     <div class="cmp-modal-wrap">
       <div class="cmp-modal-head">
-        <h2>⚖️ Comparando ${products.length} productos · ${allSpecs.filter(s=>s._source==='sstt_data'||s._source==='pdf'||s._source==='pdf+catalogo').length} con datos verificados</h2>
+        <h2>${_ico('scale')} Comparando ${products.length} productos · ${allSpecs.filter(s=>s._source==='sstt_data'||s._source==='pdf'||s._source==='pdf+catalogo').length} con datos verificados</h2>
         <div style="display:flex;gap:14px;font-size:10px;color:var(--muted);margin-top:4px;flex-wrap:wrap">
           <span><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#1A8C4E;vertical-align:middle;margin-right:3px"></span>PDF oficial Dahua</span>
           <span><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#15171C;vertical-align:middle;margin-right:3px"></span>Catálogo SSTT (por SKU)</span>
@@ -36212,7 +36307,7 @@ function cmpBuildTable(products, allSpecs, modal) {
         </table>
       </div>
       <div class="cmp-summary">
-        <h3>🤖 Análisis comparativo</h3>
+        <h3>${_ico('robot')} Análisis comparativo</h3>
         <p style="font-size:12px;color:var(--muted);margin-bottom:14px">
           Comparación basada en ${allSpecs.some(s=>s._source==='pdf+catalogo') ? 'fichas técnicas PDF Dahua + datos verificados por SKU' : allSpecs.some(s=>s._source==='pdf') ? 'fichas técnicas PDF Dahua' : allSpecs.some(s=>s._source==='sstt_data') ? 'datos curados del catálogo SSTT' : 'datos estimados'}.
           Celdas <span style="background:var(--green-p);color:var(--green);padding:1px 6px;border-radius:3px;font-weight:700">verdes ▲</span> = mejor valor · 
@@ -37119,10 +37214,10 @@ function renderAnalysisResult() {
   const escena = a.escena || {};
   const optico = a.analisis_optico || {};
   let html_content = `
-    <h3>📍 Escena detectada</h3>
+    <h3>${_ico('pin')} Escena detectada</h3>
     <p>${_e(escena.tipo) || '—'} · ${_e(escena.iluminacion) || '—'}</p>
     ${escena.desafios?.length ? `<ul>${escena.desafios.map(d=>`<li>${_e(d)}</li>`).join('')}</ul>` : ''}
-    <h3>🔭 Óptica recomendada</h3>
+    <h3>${_ico('telescope')} Óptica recomendada</h3>
     <p><strong>${_e(optico.focal_recomendada_mm) || '?'}mm</strong> · ${_e(optico.angulo_recomendado_grados) || '?'}° · mín <strong>${_e(optico.resolucion_minima) || '4MP'}</strong></p>
     <p style="font-size:12.5px;color:var(--g2)">${_e(optico.justificacion)}</p>
     ${a.resumen_instalacion ? `<h3>🔧 Instalación</h3><p>${_e(a.resumen_instalacion)}</p>` : ''}
@@ -37154,7 +37249,7 @@ function renderAnalysisResult() {
           <div class="arec-match">${rec.match_score}% compatibilidad</div>
           <div style="font-size:11px;color:var(--g2);margin-top:5px;line-height:1.4">${rec.razon}</div>
         </div>
-        <button class="arec-add" onclick="addToCart(${JSON.stringify(prod).replace(/"/g,'&quot;')})">🛒 Agregar al carro</button>`;
+        <button class="arec-add" onclick="addToCart(${JSON.stringify(prod).replace(/"/g,'&quot;')})">${_ico('cart')} Agregar al carro</button>`;
       card.onclick = (e) => { if (!e.target.classList.contains('arec-add')) openProdModal(prod.id||prod.codigo); };
       grid.appendChild(card);
     });
@@ -45132,7 +45227,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s172', fecha:'Lunes 22 de Junio del 2026' };
+window.SSTT_VER = { ver:'s173', fecha:'Martes 23 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
@@ -60285,7 +60380,7 @@ if (document.readyState === 'loading') {
     html += '</select></div>';
     html += '<div class="lpr-row"><label>Condición</label><select id="lprCondition" onchange="toolsLprUpdate()">';
     html += '<option value="day"'+(condition==='day'?' selected':'')+'>'+_ico('sun')+' Día (luz natural)</option>';
-    html += '<option value="dusk"'+(condition==='dusk'?' selected':'')+'>🌆 Tarde / sombra</option>';
+    html += '<option value="dusk"'+(condition==='dusk'?' selected':'')+'>Tarde / sombra</option>';
     html += '<option value="night"'+(condition==='night'?' selected':'')+'>'+_ico('moon')+' Noche (requiere IR LPR)</option>';
     html += '</select></div>';
     html += '</div>';
@@ -92738,6 +92833,57 @@ var CSS = ''
 +'.sstcl-logempty{text-align:center;color:#8A919C;font-size:11px;padding:18px 10px}'
 +'.sstcl-toast{position:fixed;z-index:2147483601;left:50%;bottom:34px;transform:translateX(-50%) translateY(16px);background:#15171C;color:#fff;font-size:12px;font-weight:700;padding:10px 18px;border-radius:999px;box-shadow:0 14px 40px rgba(21,23,28,.35);opacity:0;transition:all .3s cubic-bezier(.16,1,.3,1);font-family:var(--font,system-ui)}'
 +'.sstcl-toast.sstcl-show{opacity:1;transform:translateX(-50%) translateY(0)}'
+/* presets recomendados P&S */
++'.sstcl-presets{margin-top:6px;padding-top:0;border-top:1px solid rgba(229,230,226,.6);max-height:0;overflow:hidden;transition:max-height .35s cubic-bezier(.16,1,.3,1),padding-top .25s,opacity .25s;opacity:0}'
++'.sstcl-presets.sstcl-presets-open{max-height:280px;padding-top:8px;opacity:1;overflow-y:auto}'
++'.sstcl-presets-h{font-size:8px;font-weight:800;letter-spacing:.16em;color:#8A919C;font-family:var(--font-m,monospace);margin-bottom:0;display:flex;align-items:center;gap:5px;cursor:pointer;padding:8px 0 4px;transition:color .15s}'
++'.sstcl-presets-h svg{width:11px;height:11px;opacity:.55}'
++'.sstcl-presets-h:hover{color:#565D68}'
++'.sstcl-presets-h .sstcl-presets-arrow{margin-left:auto;transition:transform .25s;font-size:10px;opacity:.5}'
++'.sstcl-presets.sstcl-presets-open .sstcl-presets-arrow{transform:rotate(180deg)}'
++'.sstcl-pg{margin-bottom:6px}'
++'.sstcl-pg-label{font-size:7.5px;font-weight:800;letter-spacing:.12em;color:#C2C7CE;font-family:var(--font-m,monospace);margin-bottom:3px;text-transform:uppercase}'
++'.sstcl-pg-row{display:flex;gap:4px;flex-wrap:wrap}'
++'.sstcl-ps{width:22px;height:22px;border-radius:7px;cursor:pointer;position:relative;box-shadow:inset 0 0 0 1px rgba(21,23,28,.1),0 1px 3px rgba(21,23,28,.1);transition:transform .14s cubic-bezier(.2,.8,.2,1),box-shadow .18s}'
++'.sstcl-ps::after{content:"";position:absolute;inset:0;border-radius:7px;background:radial-gradient(ellipse 70% 50% at 35% 25%,rgba(255,255,255,.45),transparent 70%);pointer-events:none}'
++'.sstcl-ps:hover{transform:scale(1.22);z-index:3;box-shadow:inset 0 0 0 1px rgba(21,23,28,.12),0 3px 10px rgba(21,23,28,.22)}'
++'.sstcl-ps.sstcl-sel{box-shadow:inset 0 0 0 1px rgba(21,23,28,.12),0 0 0 2.5px rgba(217,15,35,.25)}'
++'.sstcl-ps-tip{position:absolute;bottom:-16px;left:50%;transform:translateX(-50%);font-size:7.5px;font-weight:700;color:#565D68;background:rgba(255,255,255,.95);border:1px solid #EFEFEC;border-radius:4px;padding:0 4px;white-space:nowrap;opacity:0;transition:opacity .15s;pointer-events:none;font-family:var(--font-m,monospace);z-index:9}'
++'.sstcl-ps:hover .sstcl-ps-tip{opacity:1}'
+/* liquid glass enhancements */
++'.sstcl-disc{background:radial-gradient(ellipse 60% 45% at 38% 28%,rgba(255,255,255,.98),rgba(246,246,243,.85) 50%,rgba(243,243,240,.78));backdrop-filter:blur(26px) saturate(1.45);-webkit-backdrop-filter:blur(26px) saturate(1.45);box-shadow:0 2px 8px rgba(21,23,28,.04),0 40px 100px rgba(21,23,28,.2),inset 0 1px 0 rgba(255,255,255,.9),inset 0 -24px 48px rgba(21,23,28,.04)}'
++'.sstcl-pill{backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);background:rgba(255,255,255,.82);box-shadow:0 1px 4px rgba(21,23,28,.04),0 20px 56px rgba(21,23,28,.18),inset 0 1px 0 rgba(255,255,255,.95)}'
++'.sstcl-foot{backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);background:rgba(255,255,255,.88);box-shadow:0 16px 50px rgba(21,23,28,.2),inset 0 1px 0 rgba(255,255,255,.9)}'
+/* s173: liquid glass — chips (flor hexagonal) */
++'.sstcl-chip{box-shadow:0 1px 2px rgba(21,23,28,.12),0 8px 22px rgba(21,23,28,.18),inset 0 -6px 14px rgba(21,23,28,.06)}'
++'.sstcl-chip::after{border:2px solid rgba(255,255,255,.85);box-shadow:inset 0 1px 2px rgba(255,255,255,.5);background:radial-gradient(ellipse 70% 50% at 35% 22%,rgba(255,255,255,.48),transparent 65%)}'
++'.sstcl-chip .sstcl-fill{opacity:.88}'
++'.sstcl-chip:hover{box-shadow:0 3px 8px rgba(21,23,28,.15),0 16px 38px rgba(21,23,28,.24),inset 0 -6px 14px rgba(21,23,28,.06)}'
++'.sstcl-chip:hover .sstcl-fill{opacity:.95}'
++'.sstcl-chip.sstcl-sel::after{border-color:rgba(217,15,35,.7);background:radial-gradient(ellipse 70% 50% at 35% 22%,rgba(255,255,255,.48),transparent 65%),linear-gradient(180deg,transparent 60%,rgba(217,15,35,.08));box-shadow:inset 0 1px 2px rgba(255,255,255,.5),0 0 0 3px rgba(217,15,35,.18)}'
++'.sstcl-chip.sstcl-center .sstcl-fill{opacity:1}'
+/* s173: liquid glass — hue ring */
++'.sstcl-huering{filter:saturate(.85) contrast(1.05);box-shadow:inset 0 2px 10px rgba(21,23,28,.22),inset 0 -2px 6px rgba(21,23,28,.08)}'
++'.sstcl-huedot{border:3.5px solid rgba(255,255,255,.95);box-shadow:0 2px 6px rgba(21,23,28,.45),0 8px 20px rgba(21,23,28,.15),inset 0 0 0 1px rgba(21,23,28,.12)}'
+/* s173: liquid glass — arc sliders */
++'.sstcl-arc .sstcl-trackline{stroke:rgba(255,255,255,.85);stroke-width:34;filter:drop-shadow(0 1px 2px rgba(21,23,28,.06))}'
++'.sstcl-arc .sstcl-track{stroke-width:28;filter:drop-shadow(0 4px 12px rgba(21,23,28,.14))}'
++'.sstcl-arc .sstcl-hndl{fill:rgba(255,255,255,.15);stroke:#fff;stroke-width:4.5;filter:drop-shadow(0 2px 8px rgba(21,23,28,.4));r:18}'
+/* s173: liquid glass — botones ibtn */
++'.sstcl-ibtn{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}'
++'.sstcl-ibtn:hover{background:rgba(243,243,240,.85);box-shadow:0 2px 8px rgba(21,23,28,.08),inset 0 1px 0 rgba(255,255,255,.6)}'
++'.sstcl-ibtn.sstcl-on{box-shadow:0 4px 14px rgba(21,23,28,.25),inset 0 1px 0 rgba(255,255,255,.08)}'
+/* s173: liquid glass — swatch principal */
++'.sstcl-sw{box-shadow:0 2px 4px rgba(21,23,28,.14),0 8px 20px rgba(21,23,28,.16)}'
++'.sstcl-sw::after{border:2px solid rgba(255,255,255,.8);box-shadow:inset 0 1px 3px rgba(255,255,255,.5),inset 0 -4px 10px rgba(21,23,28,.06)}'
+/* s173: liquid glass — log drawer */
++'.sstcl-logd{backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);background:rgba(255,255,255,.9);box-shadow:0 20px 60px rgba(21,23,28,.22),inset 0 1px 0 rgba(255,255,255,.9)}'
+/* s173: liquid glass — alpha bar */
++'.sstcl-alpha-bar{box-shadow:inset 0 1px 4px rgba(21,23,28,.2),0 1px 0 rgba(255,255,255,.5)}'
++'.sstcl-alpha-h{border:3.5px solid rgba(255,255,255,.95);box-shadow:0 2px 6px rgba(21,23,28,.35),inset 0 0 0 1px rgba(21,23,28,.08)}'
+/* s173: liquid glass — apply button glass reflection */
++'.sstcl-apply{background:linear-gradient(180deg,#E0121F,#C20E1B);box-shadow:0 4px 16px rgba(217,15,35,.35),0 1px 2px rgba(21,23,28,.08),inset 0 1px 0 rgba(255,255,255,.2)}'
++'.sstcl-apply:hover{background:linear-gradient(180deg,#C20E1B,#A00B17)}'
 /* responsive */
 +'@media (max-width:760px){#sstclRoot{right:6px;top:10px;transform:none;max-width:calc(100vw - 12px)}.sstcl-pill{gap:6px;padding:7px 8px 7px 7px}.sstcl-sw-wrap{width:38px;height:38px}.sstcl-hex{width:80px;font-size:14px}.sstcl-pill.sstcl-edit .sstcl-hex{width:96px}.sstcl-alpha-mini{display:none}.sstcl-ibtn{width:28px;height:28px}.sstcl-ibtn svg{width:15px;height:15px}.sstcl-sep{margin:0}.sstcl-plate-wrap{width:92vw;height:470px}.sstcl-plate.sstcl-openp{transform:translate(-50%,-50%) scale(.68)}.sstcl-plate{transform-origin:50% 42%}.sstcl-foot{transform:translateX(-50%) scale(1.32);transform-origin:50% 100%;bottom:14px;width:320px}.sstcl-logd{width:320px;max-width:92vw}}';
 
@@ -92818,7 +92964,8 @@ function build(){
     + '<div class="sstcl-actions">'
     +  '<button class="sstcl-apply" id="sstclApply" disabled>Aplicar en vivo</button>'
     +  '<button class="sstcl-ghost" id="sstclUndo" title="Deshacer último cambio">↩ Deshacer</button>'
-    + '</div>';
+    + '</div>'
+    + '<div class="sstcl-presets" id="sstclPresets"></div>';
   plate.appendChild(footEl);
   plateWrap.appendChild(plate);
   root.appendChild(plateWrap);
@@ -92843,6 +92990,7 @@ function build(){
   logList=q('#sstclLogL'); logBadge=q('#sstclLogN'); editBtn=q('#sstclEdit');
 
   buildFlower();
+  buildPresets();
   bind();
   setFromCss(tokenVal('--red','#D90F23'));
   syncUI();
@@ -92884,6 +93032,59 @@ function addChip(def, x, y, delay){
   });
   flowerEl.appendChild(el);
   chips.push({el:el, def:def});
+}
+
+/* ── presets P&S recomendados ──────────────────────────────────── */
+function buildPresets(){
+  var el=q('#sstclPresets'); if(!el) return;
+  var groups = [
+    { label:'SEÑAL', colors:[
+      {hex:'#D90F23',name:'Señal',v:'--red'},{hex:'#B40C1D',name:'Señal hover',v:'--red2'}
+    ]},
+    { label:'TINTA', colors:[
+      {hex:'#15171C',name:'Tinta',v:'--black'},{hex:'#2A2E35',name:'Tinta 2',v:'--g1'}
+    ]},
+    { label:'GRISES', colors:[
+      {hex:tokenVal('--g2','#565D68'),name:'g2',v:'--g2'},
+      {hex:tokenVal('--g3','#8A919C'),name:'g3',v:'--g3'},
+      {hex:tokenVal('--g4','#C2C7CE'),name:'g4',v:'--g4'}
+    ]},
+    { label:'SUPERFICIES', colors:[
+      {hex:tokenVal('--g5','#E5E6E2'),name:'Border',v:'--g5'},
+      {hex:tokenVal('--g6','#F3F3F0'),name:'g6',v:'--g6'},
+      {hex:tokenVal('--g7','#FAFAF8'),name:'g7',v:'--g7'},
+      {hex:tokenVal('--bg','#F6F6F3'),name:'Porcelana',v:'--bg'},
+      {hex:'#FFFFFF',name:'Blanco',v:'--glass-bg'}
+    ]},
+    { label:'FUNCIONAL', colors:[
+      {hex:tokenVal('--green','#1A7F3C'),name:'Verde',v:'--green'},
+      {hex:'#25D366',name:'WhatsApp',v:null},
+      {hex:'#D4A03C',name:'Oro ★',v:null}
+    ]}
+  ];
+  var html='<div class="sstcl-presets-h" onclick="this.parentNode.classList.toggle(\'sstcl-presets-open\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 2.5v5.6c0 4.2-3 7.4-7 8.6-4-1.2-7-4.4-7-8.6V5.5L12 3z"/></svg> PALETA P&S RECOMENDADA <span class="sstcl-presets-arrow">▼</span></div>';
+  groups.forEach(function(g){
+    html+='<div class="sstcl-pg"><div class="sstcl-pg-label">'+g.label+'</div><div class="sstcl-pg-row">';
+    g.colors.forEach(function(c){
+      html+='<div class="sstcl-ps" data-hex="'+c.hex+'"'+(c.v?' data-var="'+c.v+'"':'')+' style="background:'+c.hex+'" title="'+c.name+(c.v?' ('+c.v+')':'')+'">'
+        +'<span class="sstcl-ps-tip">'+c.name+'</span></div>';
+    });
+    html+='</div></div>';
+  });
+  el.innerHTML=html;
+  el.querySelectorAll('.sstcl-ps').forEach(function(sw){
+    sw.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      var hex=sw.dataset.hex, vr=sw.dataset.var||null;
+      setFromCss(hex);
+      // deselect flower chips, select this preset
+      chips.forEach(function(ch){ ch.el.classList.remove('sstcl-sel'); });
+      el.querySelectorAll('.sstcl-ps').forEach(function(s){ s.classList.remove('sstcl-sel'); });
+      sw.classList.add('sstcl-sel');
+      if(vr){ S.targetVar=vr; if(S.targetMode==='token') refreshTarget(); }
+      syncUI();
+    });
+  });
 }
 
 /* ── sync UI desde estado ──────────────────────────────────────── */
