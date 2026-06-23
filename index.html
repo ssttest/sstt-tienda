@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- SSTT Tienda · Generado: Lunes 22 de Junio del 2026 · s171 -->
+<!-- SSTT Tienda · Generado: Lunes 22 de Junio del 2026 · s172 -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -2670,6 +2670,17 @@ nav {
   margin-bottom: 20px; padding-bottom: 16px;
   border-bottom: 1px solid var(--g5);
 }
+/* s172 · Descripción IA — P&S: chrome neutro, IA nunca en rojo */
+.pm-aidesc { border:1px solid var(--g5); border-radius:12px; padding:14px 16px; margin-bottom:18px; background:var(--g7); }
+.pm-aidesc-head { display:flex; align-items:center; gap:7px; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.5px; color:var(--g2); margin-bottom:8px; }
+.pm-aidesc-tag { margin-left:auto; font-size:9.5px; font-weight:800; letter-spacing:.6px; color:var(--g3); border:1px solid var(--g4); border-radius:50px; padding:1px 8px; text-transform:none; }
+.pm-aidesc-text { font-size:13.5px; line-height:1.65; color:var(--tinta,#15171C); margin:0; }
+.pm-aidesc-quiet { font-size:12.5px; line-height:1.55; color:var(--g3); display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.pm-aidesc-loading { display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--g3); }
+.pm-aidesc-loading svg { animation:spin 1.2s linear infinite; }
+.pm-aidesc-foot { margin-top:10px; padding-top:9px; border-top:1px solid var(--g5); font-size:10.5px; line-height:1.5; color:var(--g3); display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+.pm-aidesc-regen { margin-left:auto; font-family:var(--font); font-size:10.5px; font-weight:700; color:var(--red,#D90F23); background:none; border:none; cursor:pointer; padding:2px 4px; }
+.pm-aidesc-regen:hover { text-decoration:underline; }
 .pm-desc-section { margin-bottom: 20px }
 .pm-desc-section h4 {
   font-size: 12px; font-weight: 800; text-transform: uppercase;
@@ -31590,6 +31601,7 @@ function pmDori(p) {
 function _pmBuildModal(id) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p) return;
+  window._pmCurCodigo = p.codigo; // s172: producto actual para descripción IA lazy
 
   const series  = pmSeries(p);
   const specGrp = pmParseSpecs(p);
@@ -31670,6 +31682,10 @@ function _pmBuildModal(id) {
   // Description auto-generated
   const catLabel = CATS[p.cat]||'Producto';
   const descHTML = `
+    <div class="pm-aidesc" id="pmAIDesc" data-codigo="${p.codigo}"><!-- s172 Paso 1: descripción IA (SSTT_DATA + ficha técnica) -->
+      <div class="pm-aidesc-head">${_ico('sparkle')}<span>Descripción inteligente SSTT</span><span class="pm-aidesc-tag">IA</span></div>
+      <div class="pm-aidesc-body" id="pmAIDescBody"><div class="pm-aidesc-quiet">Abre esta pestaña para generar una descripción del producto.</div></div>
+    </div>
     <p class="pm-desc-lead">
       El <strong>${p.codigo}</strong> es ${p.nombre.toLowerCase()}, ${p.mkt ? ('ofrecido en el <strong>Marketplace SSTT</strong> por un vendedor verificado del ecosistema (marca '+(p.marca||'')+').') : 'distribuido oficialmente en Chile por <strong>SSTT SpA</strong> — Distribuidor Regional Dahua.'}
       ${series.name!=='Dahua Technology'?`Pertenece a la línea <strong>${series.name}</strong>.`:''}
@@ -32009,8 +32025,10 @@ function _pmBuildModal(id) {
       <div class="pm-body">
         <div class="pm-panel active" id="pmP-specs">
           ${sstHTML}
+          <div id="pmPdfSpecsSlot"><!-- s172: SSTT primario arriba (intacto); PDF/name specs viven aquí, debajo -->
           <div class="pm-spec-accordion">${specsHTML}</div>
           <p style="font-size:11px;color:var(--light);margin-top:8px">* Especificaciones derivadas del nombre de producto. Para parámetros exactos (dimensiones, consumo, temperatura de operación, etc.) descarga la ficha técnica PDF oficial.</p>
+          </div>
         </div>
         <div class="pm-panel" id="pmP-desc">${descHTML}</div>
         <div class="pm-panel" id="pmP-dl">${dlHTML}</div>
@@ -32039,6 +32057,108 @@ function pmTab(name, btn) {
   if (btn) btn.classList.add('active');
   const el = document.getElementById('pmP-'+name);
   if (el) el.classList.add('active');
+  if (name === 'desc') { // s172: generación lazy de descripción IA al abrir la pestaña
+    var box = document.getElementById('pmAIDesc');
+    if (box && !box.dataset.loaded) { box.dataset.loaded = '1'; pmGenAIDesc(box.dataset.codigo); }
+  }
+}
+
+// ── s172 · Descripción IA del producto (Paso 1: SSTT_DATA + ficha técnica) ──
+// Paso 2 (Worker/reseñas web) y Paso 3 (fusión) se enchufan luego: cambiar DESC_TOOL
+// a un tool dedicado 'producto_desc' en el Worker, y/o src:'fusion' en el caché.
+const DESC_TOOL = 'chat_tecnico';   // swap a 'producto_desc' cuando exista server-side
+const AIDESC_VER = 'v1';
+function pmAIDescKey(codigo){ return 'sstt_aidesc_'+AIDESC_VER+'_'+codigo; }
+
+function pmAIDescQuiet(body, html){ body.innerHTML = '<div class="pm-aidesc-quiet">'+html+'</div>'; }
+
+function pmAIDescRender(body, codigo, text, fresh){
+  var safe = String(text).replace(/[<>]/g,'');
+  body.innerHTML = '<p class="pm-aidesc-text">'+safe+'</p>'+
+    '<div class="pm-aidesc-foot">'+_ico('sparkle')+' Generado por IA a partir de specs SSTT + ficha técnica. '+
+    'Puede contener imprecisiones — confirma en la ficha oficial.'+
+    ' <button class="pm-aidesc-regen" onclick="pmGenAIDesc(\''+codigo+'\',true)">Regenerar</button></div>';
+}
+
+// s172: espera (con timeout) a que el modal termine de cargar la ficha PDF. NO dispara un
+// segundo fetch: openProdModal ya llamó fetchSpecsFromPDF; aquí solo observamos PDF_CACHE/PDF_DONE.
+async function pmWaitSpecs(codigo, p){
+  if (typeof PDF_CACHE!=='undefined' && PDF_CACHE[codigo]) return PDF_CACHE[codigo];
+  if (p && p.mkt) return null; // Marketplace no tiene ficha Dahua
+  for (var i=0; i<32; i++){ // ~8s máx (32×250ms)
+    if (typeof PDF_CACHE!=='undefined' && PDF_CACHE[codigo]) return PDF_CACHE[codigo];
+    if (typeof PDF_DONE!=='undefined' && PDF_DONE[codigo]) break; // intento terminó (falló) → seguimos con bullets
+    await new Promise(function(r){ setTimeout(r, 250); });
+  }
+  return (typeof PDF_CACHE!=='undefined' && PDF_CACHE[codigo]) ? PDF_CACHE[codigo] : null;
+}
+
+async function pmGenAIDesc(codigo, force){
+  var body = document.getElementById('pmAIDescBody');
+  if (!body || !codigo) return;
+  // 1. caché (a menos que se fuerce regeneración)
+  if (!force){
+    try { var c = JSON.parse(localStorage.getItem(pmAIDescKey(codigo))||'null');
+      if (c && c.text){ pmAIDescRender(body, codigo, c.text, false); return; } } catch(e){}
+  }
+  // 2. estados quietos P&S (IA nunca en rojo)
+  if (typeof _proxyAlive !== 'undefined' && _proxyAlive === false){
+    pmAIDescQuiet(body, _ico('sparkle')+' Descripción IA no disponible ahora (sin conexión al servicio). '+
+      '<button class="pm-aidesc-regen" onclick="pmGenAIDesc(\''+codigo+'\',true)">Reintentar</button>'); return;
+  }
+  if (typeof aiRateGuard === 'function' && !aiRateGuard()){
+    pmAIDescQuiet(body, 'Demasiadas consultas seguidas. Espera un momento y reintenta.'); return;
+  }
+  // 3. loading quieto
+  body.innerHTML = '<div class="pm-aidesc-loading">'+_ico('sparkle')+'<span>Leyendo ficha técnica…</span></div>';
+  // 4. grounding: SSTT_DATA (descripción del distribuidor) + ficha técnica PDF
+  var p = (typeof PRODUCTS!=='undefined' ? PRODUCTS.find(function(x){return x.codigo===codigo;}) : null) || {};
+  var specs = await pmWaitSpecs(codigo, p); // s172: espera a que el modal cargue la ficha (mejor calidad)
+  body.innerHTML = '<div class="pm-aidesc-loading">'+_ico('sparkle')+'<span>Generando descripción…</span></div>';
+  var sd = (typeof getSSTTData==='function') ? getSSTTData(codigo) : null;
+  var ground = {
+    codigo: codigo, nombre: p.nombre||'', marca: p.marca||'Dahua',
+    categoria: (sd&&sd.c)||p.cat||'',
+    bullets: (sd&&sd.s)? sd.s.slice(0,14) : [],
+    caso_uso: (sd&&sd.u)||'',
+    ficha: specs ? { sensor:specs.sensor, resolucion:specs.resolucion, fps:specs.fps,
+      apertura:specs.apertura, iluminacion_min:specs.iluminacion_min,
+      focal:specs.focal, angulo:specs.angulo, alcance_ir:specs.alcance_ir, wdr:specs.wdr,
+      microfono:specs.microfono, audio:specs.audio, micro_sd:specs.micro_sd,
+      entradas_alarma:specs.entradas_alarma, salidas_alarma:specs.salidas_alarma,
+      proteccion:specs.proteccion } : null
+  };
+  var userMsg = 'Redacta una descripción breve (2 a 4 frases, máximo ~70 palabras) de este producto de '+
+    'seguridad electrónica para instaladores e integradores B2B en Chile. Explica (1) qué lo diferencia '+
+    'fundamentalmente de otros modelos y (2) su uso apropiado.\n'+
+    'Cuando los datos lo respalden, menciona los diferenciadores que más le importan a un instalador, SOLO si corresponden:\n'+
+    '• Tecnología key (Full-Color, WizSense, TiOC, AcuPick, etc.) y qué aporta.\n'+
+    '• Lente/focal: implicancia práctica del focal — un 2.8mm abre más ángulo (más escena, menos alcance) '+
+    'y un 3.6mm acerca y detalla (menos ángulo, más alcance); si es varifocal o motorizado, destaca la '+
+    'versatilidad de ajustar el campo de visión en terreno.\n'+
+    '• Audio: micrófono integrado, audio bidireccional, entrada/salida de audio.\n'+
+    '• Alarma: entradas/salidas de alarma (I/O) para integrar sensores o relés.\n'+
+    'Tono técnico-comercial, español de Chile. NO recomiendes ni menciones otros productos o códigos, NO '+
+    'incluyas enlaces, NO inventes especificaciones que no estén en los datos (si un dato no aparece, omítelo). '+
+    'Responde SOLO con la descripción, sin encabezados ni viñetas.\n\nDatos del producto:\n'+
+    JSON.stringify(ground);
+  // 5. llamada al proxy (reusa tool existente; system prompt vive en el Worker)
+  try{
+    var resp = await fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ tool:DESC_TOOL, messages:[{role:'user', content:userMsg}],
+        context:{ modo:'producto_desc' } }) });
+    var data = await resp.json();
+    var text = (data && data.content && data.content[0] && data.content[0].text) ? data.content[0].text : '';
+    text = String(text).replace(/\[\[PROD:[^\]]*\]\]/g,'').replace(/\s+/g,' ').trim(); // limpia tokens de chat_tecnico
+    if (!text){ pmAIDescQuiet(body, _ico('sparkle')+' No se pudo generar la descripción. '+
+      '<button class="pm-aidesc-regen" onclick="pmGenAIDesc(\''+codigo+'\',true)">Reintentar</button>'); return; }
+    try { localStorage.setItem(pmAIDescKey(codigo), JSON.stringify({ text:text, src:'local', ts:Date.now() })); } catch(e){}
+    pmAIDescRender(body, codigo, text, true);
+  } catch(e){
+    if (typeof console!=='undefined') console.error('[pmGenAIDesc]', e.name, e.message);
+    pmAIDescQuiet(body, _ico('sparkle')+' Descripción IA no disponible ahora. '+
+      '<button class="pm-aidesc-regen" onclick="pmGenAIDesc(\''+codigo+'\',true)">Reintentar</button>');
+  }
 }
 
 function pmToggleGroup(hdr) {
@@ -32701,6 +32821,7 @@ function cmpClear() {
 
 // ── Caché de specs extraídas desde PDF ──────────────────────────────────
 const PDF_CACHE = {};
+const PDF_DONE = {}; // s172: marca "intento de fetch PDF terminado" (éxito o fallo) por código
 
 // ── Categorías comparables entre sí ─────────────────────────────────────
 const CMP_GROUPS = {
@@ -35646,7 +35767,7 @@ async function openProdModal(id) {
   if (p.mkt) return; // s107: items Marketplace no tienen PDF Dahua
 
   // Luego enriquecer con PDF de forma asíncrona
-  const specsEl = document.getElementById('pmP-specs');
+  const specsEl = document.getElementById('pmPdfSpecsSlot') || document.getElementById('pmP-specs'); // s172: slot debajo de SSTT
   if (!specsEl) return;
 
   // Mostrar loader en el panel specs
@@ -35673,12 +35794,14 @@ async function openProdModal(id) {
     const loader = document.getElementById('pmPdfLoader');
     if (loader) loader.remove();
     if (accordion) accordion.style.opacity = '1';
+  } finally {
+    try { PDF_DONE[p.codigo] = 1; } catch(_){} // s172: señal "intento PDF terminado" para descripción IA
   }
 }
 
 // ── Renderizar specs reales del PDF en la ficha ─────────────────────────
 function renderPDFSpecs(id, specs, p) {
-  const specsEl = document.getElementById('pmP-specs');
+  const specsEl = document.getElementById('pmPdfSpecsSlot') || document.getElementById('pmP-specs'); // s172: no borrar SSTT (vive arriba del slot)
   if (!specsEl) return;
 
   const loader = document.getElementById('pmPdfLoader');
@@ -35686,10 +35809,10 @@ function renderPDFSpecs(id, specs, p) {
 
   const isMock = specs._source === 'nombre';
   const badge = isMock
-    ? `<div style="background:var(--yellow-p);border:1px solid #daa520;border-radius:4px;padding:7px 12px;font-size:11px;color:var(--yellow);margin-bottom:12px;display:flex;gap:8px;align-items:center">
+    ? `<div style="background:var(--g7);border:1px solid var(--g5);border-radius:4px;padding:7px 12px;font-size:11px;color:var(--g2);margin-bottom:12px;display:flex;gap:8px;align-items:center"><!-- s172: remanente amarillo chrome → neutral P&S; ⚠︎ monocromo lleva la cautela -->
         <span>⚠︎</span><span>Especificaciones derivadas del nombre del producto. PDF no disponible para este modelo.</span>
        </div>`
-    : `<div style="background:var(--green-p);border:1px solid #16a34a;border-radius:4px;padding:7px 12px;font-size:11px;color:var(--green);margin-bottom:12px;display:flex;gap:8px;align-items:center">
+    : `<div style="background:var(--g7);border:1px solid var(--g5);border-radius:4px;padding:7px 12px;font-size:11px;color:var(--g2);margin-bottom:12px;display:flex;gap:8px;align-items:center"><!-- s172: remanente verde chrome → neutral P&S -->
         <span>✓</span><span>Especificaciones extraídas del <strong>datasheet oficial PDF Dahua</strong> para <strong>${specs._codigo}</strong></span>
        </div>`;
 
@@ -45009,7 +45132,7 @@ function waUpdateWaLink(userMsg, reply) {
 // self-check en DOMContentLoaded console.warn-ea si L2 y SSTT_VER se desincronizan.
 // (El comentario header de Color Lab pasó a marcador de origen "desde s135", ya no es versión.)
 // s127: A1 Fase B Tier2 — 33 grises legacy del ramp (#1a1a1a/var(--g1)/var(--g3)/#bbb/#e0e0e0) -> tokens (--black/--g1/--g3/--g4/--g5) SOLO en contextos CSS-renderables (style inline / .style.X). Canvas/Chart/SVG-attr excluidos (var() no resuelve). Cero corrimiento de color (swaps exactos).
-window.SSTT_VER = { ver:'s171', fecha:'Lunes 22 de Junio del 2026' };
+window.SSTT_VER = { ver:'s172', fecha:'Lunes 22 de Junio del 2026' };
 // s101: DOM update en DOMContentLoaded (verChip está al final del body)
 document.addEventListener('DOMContentLoaded', function() {
   var v = window.SSTT_VER;
